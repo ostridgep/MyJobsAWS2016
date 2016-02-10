@@ -424,7 +424,12 @@ var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
 							content : 	[							
 										//kp,
  										new sap.m.Label({text:"Pin Code"}),
-										new sap.m.Input("Pin",{type: sap.m.InputType.Number}),
+										new sap.m.Input("Pin",{type: sap.m.InputType.Number}).addEventDelegate({
+										    //onAfterRendering: function(){
+										    onBeforeShow: function(evt){
+										    	sap.ui.getCore().byId("Pin").focus();
+										    }
+										}, this),
 										new sap.m.Label({text:""}),
 							       		new sap.m.Button( {
 							       			 text: "Login",
@@ -502,12 +507,8 @@ var formLogin = new sap.m.Dialog("dlgLogin",{
             ],
             beforeOpen:function(){
             	prepareLogin()
-            },
-            afterOpen:function(){
-            	if(pinExists){
-            		sap.ui.getCore().byId("Pin").focus();
-                	}
             }
+            
  })
 
 

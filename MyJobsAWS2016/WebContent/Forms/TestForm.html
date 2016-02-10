@@ -369,15 +369,12 @@ function DisplayTableContent(tab)
 str+="}"
     return str;
 }
+
 $(".btn-group > .btn").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
     $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
 });
-$(window).resize(function() {
 
-		location.href="#"
-		location.href="#"+document.activeElement.id
-	});
 
 
 function buildHeaderFields(){

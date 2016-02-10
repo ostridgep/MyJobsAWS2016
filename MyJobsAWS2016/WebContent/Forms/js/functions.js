@@ -24,3 +24,8 @@
     var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
     return dateTime;
 }
+$(window).resize(function() {
+	
+	 		location.href="#"
+	 		location.href="#"+document.activeElement.id
+	 	});
