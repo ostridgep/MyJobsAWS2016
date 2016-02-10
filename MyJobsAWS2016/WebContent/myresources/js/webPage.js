@@ -55,6 +55,7 @@ var formForms = new sap.m.Dialog("dlgForms",{
     verticalScrolling:true,
     modal: true,
     contentWidth:"1em",
+
     buttons: [
   
 
