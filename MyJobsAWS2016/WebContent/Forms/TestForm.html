@@ -376,7 +376,9 @@ $(".btn-group > .btn").click(function () {
 $(window).resize(function() {
 	 console.log($( window ).width()+":"+$( window ).height()+":"+$( window ).Top+$( window ).scrollTop())
 	 //alert(document.activeElement.id)
-	 $('html,body').animate({scrollTop: $(document.activeElement).offset().top-100}, 800);
+	// $('html,body').animate({scrollTop: $(document.activeElement).offset().top-100}, 800);
+		location.href="#"
+		location.href="#"+document.activeElement.id
 	});
 //	$(window).resize(function(){
 		//alert(document.activeElement.id)
@@ -385,6 +387,16 @@ $(window).resize(function() {
 //	       window.currentHeight;
 //	 });
 //Sort Out Header Fields
+function findPos(ele){
+	var curtop=0;
+	if (ele.offsetParent){
+		do {
+			curtop +=ele.offsetTop;
+			
+			} while(ele = ele.offsetParent);
+		return [curtop]
+		}
+	}
 function buildHeaderFields(){
 	var items = document.getElementsByTagName("*");
 	for (var i = items.length; i--;) {
