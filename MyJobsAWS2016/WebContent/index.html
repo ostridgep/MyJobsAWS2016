@@ -309,71 +309,7 @@ var formChangePassword = new sap.m.Dialog("dlgChangePassword",{
  				})
             ]
  })
-var formSettings = new sap.m.Dialog("dlgSettings",{
-    title:"Settings",
-    modal: true,
-    contentWidth:"1em",
-    buttons: [
-				new sap.m.Button("Save", {
-				    text: "Save",
-				    type: sap.m.ButtonType.Accept,
-				   tap: [ function(oEvt) {		
-					   if(sap.ui.getCore().byId("LogState").getState()){
-						   LogState="ON"
-						   
-					   }else{
-						   LogState="OFF"
-					   }
-					   
 
-					   formSettings.close()} ]
-				}),   
-				new sap.m.Button("Cancel", {
-				    text: "Cancel",
-				    type: sap.m.ButtonType.Reject,
-				    tap: [ function(oEvt) {		  
-						 
-				    	formSettings.close()
-						  } ]
-				})
-				],					
-    content:[
- 			new sap.ui.layout.form.SimpleForm({
-				minWidth : 1024,
-				maxContainerCols : 2,
-				content : [
-							
-
-							new sap.m.Label({text:""}),
-			                new sap.m.Button("DeleteAbsence", {
-							    text: "Delete All Absence Data",
-							    tap: [ function(oEvt) {		  
-									deleteAllAbsence(0) 
-							    	formSettings.close()
-									  } ]
-							}),
-							
-							new sap.m.Label({text:"Logging "}),
-							new sap.m.Switch('LogState',{
-								state: true,
-								type: sap.m.SwitchType.AcceptReject
-							}),
-							new sap.m.Button("deleteLog", {
-							    text: "Delete",
-							    tap: [ function(oEvt) {		  
-									deleteLog()
-									  } ]
-							})
-
-									 
-					
-			               
-			                 
-						]
- 					})
-
-            ]
- })
 var busycreateDB = new sap.m.BusyDialog('busycreateDB',{text:'Createing the Database', title: 'Database',
 	onAfterRendering:function(){
 		//alert("hello")
@@ -424,12 +360,7 @@ var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
 							content : 	[							
 										//kp,
  										new sap.m.Label({text:"Pin Code"}),
-										new sap.m.Input("Pin",{type: sap.m.InputType.Number}).addEventDelegate({
-										    //onAfterRendering: function(){
-										    onBeforeShow: function(evt){
-										    	sap.ui.getCore().byId("Pin").focus();
-										    }
-										}, this),
+										new sap.m.Input("Pin",{type: sap.m.InputType.Number}),
 										new sap.m.Label({text:""}),
 							       		new sap.m.Button( {
 							       			 text: "Login",
@@ -441,7 +372,11 @@ var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
 							       							}
 							       				        ]
 							       			 }) 
-										]
+										],
+									      afterOpen:function(){  
+									    	  sap.ui.getCore().byId("Pin").focus();
+									      	
+										  } 
 		 						})
 						)
 
