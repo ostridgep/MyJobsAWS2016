@@ -36,7 +36,7 @@ window.onload = function () {
 		if( pageName.indexOf("ProcessForm")<1){
 			
 			var div = document.createElement("div");	
-			div.style.height = "800px";
+			div.style.height = "1000px";
 			div.innerHTML = " ";
 			var lastChild = document.body.lastChild;
 			document.body.insertBefore(div, lastChild.nextSibling);
