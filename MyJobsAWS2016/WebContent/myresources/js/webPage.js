@@ -57,15 +57,7 @@ var formForms = new sap.m.Dialog("dlgForms",{
     contentWidth:"1em",
     buttons: [
   
-/* new sap.m.Button( {
-    text: "Route",
-    icon:"sap-icon://map-3",
-    type: sap.m.ButtonType.Accept,
-    tap: [ function(oEvt) {		  
-    	formMap.close()
-		formRoute.open();
-    	} ]   
-}), */
+
 
 					new sap.m.Button( {
 					    text: "Close",
@@ -139,7 +131,13 @@ var formForms = new sap.m.Dialog("dlgForms",{
 	
 	 })
 function showhideSaveButton(pageName){
-
+var scriptTag = "<SCRIPT>";
+	scriptTag += "$(window).resize(function() {";
+	scriptTag += "location.href=\"#\"";
+	scriptTag += "location.href=\"#\"+document.activeElement.id";
+	scriptTag += "}); ";
+	scriptTag = "</SCRIPT>";
+	
 	if( pageName.indexOf("formsindex")>0){
 		sap.ui.getCore().getElementById('formSaveButton').setVisible(false);
 		var MyIFrame = document.getElementById("formIframe");
@@ -155,11 +153,12 @@ function showhideSaveButton(pageName){
 	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;	
 	
-		
+		MyIFrame.contents().find("body").append(scriptTag)
 		
 	
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
+		
 	
 
 	}
