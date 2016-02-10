@@ -150,6 +150,8 @@ function showhideSaveButton(pageName){
 	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;	
 	
 		
+	
+		formForms.setTitle(MyIFrameDoc.title)
 		
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
@@ -279,9 +281,9 @@ var SQLStatement=''
 					{	
 	            		item = rowsArray[cntx];
 	            		if(item.type=="ALL"){
-	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"'>"+item["description"]+"</a></label>"				
+	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
 	            		}else{
-	            			doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"'>"+item["description"]+"</a></label>"   					
+	            			doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"   					
 	            		}
 	            	}	           
 	                                
@@ -294,7 +296,9 @@ var SQLStatement=''
 	            }        
 	            )
 	}
-
+function setDlgTitle(formTitle){
+	alert(formTitle)
+}
 	function buildJSONResponse(doc)
 	{
 		json=""
