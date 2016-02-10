@@ -33,6 +33,7 @@
 </style>
 <script type="text/javascript">
 var PinCodePos=1;
+var pinExists=false;
 sap.ui.core.Control.extend('KeyPad', {
   metadata: {
     events: {
@@ -411,6 +412,7 @@ var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
 			 function(transaction, results, rowsArray){
 					
 					if(rowsArray.length > 0 && rowsArray[0].pincode>100){
+						pinExists=true;
 						formLogin.destroyContent()
 						formLogin.addContent(
 						new sap.ui.layout.form.SimpleForm({
@@ -436,13 +438,10 @@ var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
 										]
 		 						})
 						)
-						sap.ui.getCore().getElementById("NewPassword1").setValue('');
-						sap.ui.getCore().getElementById("NewPassword2").setValue('');
-						sap.ui.getCore().getElementById("NewPassword3").setValue('');
-						sap.ui.getCore().getElementById("NewPassword4").setValue('');
+
 					}else{
 						
-						
+						pinExists=false;
 						 formLogin.addContent(
 								 new sap.ui.layout.form.SimpleForm({
 										title: "Enter your User & Password",
@@ -502,6 +501,11 @@ var formLogin = new sap.m.Dialog("dlgLogin",{
             ],
             beforeOpen:function(){
             	prepareLogin()
+            },
+            afterOpen:function(){
+            	if(pinExists){
+            		sap.ui.getCore().byId("Pin").focus();
+                	}
             }
  })
 
