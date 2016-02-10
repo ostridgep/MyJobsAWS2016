@@ -29,3 +29,17 @@ $(window).resize(function() {
 	 		location.href="#"
 	 		location.href="#"+document.activeElement.id
 	 	});
+window.onload = function () {
+	pageName=document.location.toString()
+	
+	if( pageName.indexOf("formsindex")<1){
+		if( pageName.indexOf("ProcessForm")<1){
+			
+			var div = document.createElement("div");	
+			div.style.height = "800px";
+			div.innerHTML = " ";
+			var lastChild = document.body.lastChild;
+			document.body.insertBefore(div, lastChild.nextSibling);
+		}
+	}
+};
