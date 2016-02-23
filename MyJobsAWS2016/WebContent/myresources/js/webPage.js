@@ -1,7 +1,7 @@
 var selectedWebPage
 currentPage=document.location.href;
 
-
+var theIFrameDoc=""
 var formWebPage = new sap.m.Dialog("dlgWebPage",{
    
    
@@ -152,10 +152,10 @@ function showhideSaveButton(pageName){
 		
 	
 		formForms.setTitle(MyIFrameDoc.title)
-		
+		theIFrameDoc=MyIFrameDoc;
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
-		
+		buildSelects(MyIFrameDoc);
 	
 
 	}
@@ -169,6 +169,7 @@ function updateMergeField(fld){
 	
 }
 function buildHeaderFields(formDoc){
+	
 	var items = formDoc.getElementsByTagName("*");
 	console.log("Building Header Fields"+items.length)
 	for (var i = items.length; i--;) {
@@ -209,6 +210,68 @@ function buildTables(formDoc){
 		    }
 		}
 	}
+function buildSelects(formDoc){
+	var items = formDoc.getElementsByTagName("SELECT");
+	console.log("Selects Found"+items.length)
+		for (var i = items.length; i--;) {
+		    //do sth like hide the element
+		    if(items[i].hasAttribute("merge")){
+		    	console.log("Found a Merge Select"+items[i].getAttribute("id")+items[i].getAttribute("merge"))
+					
+					buildOptions(items[i].getAttribute("merge"),items[i]);
+
+
+
+	    	
+		    	
+		    }
+		}
+	}
+function buildOptions(sql,fld){
+	html5sql.process(sql,
+			function(transaction, results, rowsArray){
+				for (var r=0; r < rowsArray.length; r++) {
+					
+					    
+					    var option = document.createElement("option");
+					    option.text = rowsArray[r].description;
+					    option.value = rowsArray[r].value;
+					    fld.appendChild(option);
+				}
+				
+	
+			},
+			 function(error, statement){
+				 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+			 }   
+		);
+}
+function buildRelatedSelect(fld,sql,val){
+	console.log(fld+":"+val+":"+sql)
+
+	var theSelect=theIFrameDoc.getElementById(fld)
+	
+for(var i = theSelect.options.length-1;i>0;i--)
+{
+	theSelect.removeChild(theSelect.options[i]);
+}
+		html5sql.process(sql+"'"+val+"'",
+				function(transaction, results, rowsArray){
+					for (var r=0; r < rowsArray.length; r++) {						    
+						    var option = document.createElement("option");
+						    option.text = rowsArray[r].description;
+						    option.value = rowsArray[r].value;
+						    theSelect.appendChild(option);
+					}
+					
+		
+				},
+				 function(error, statement){
+					 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+				 }   
+			);
+
+}
 	function cloneRow(row,table,cnt,dbArray) {
 
 	    var clone = row.cloneNode(true); // copy children too

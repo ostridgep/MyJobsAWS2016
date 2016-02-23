@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="css/bs.3.1.1.css" />
         <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
         
-        <title>Pollution Feedback</title>
+        <title>Pollution Feedbacktest</title>
     </head>
 <style>
 option {
@@ -48,7 +48,19 @@ option {
         
             <div class="form-group">
                 <div class="well row">
-                    <div class="col-md-6 col-sm-6">                       
+                    <div class="col-md-6 col-sm-6">   
+                     <select class="feedback-input" id="sapNotifType" name="sapNotifType" merge="select type as value, description as description from myrefnotiftypes"
+                    	 onChange="parent.buildRelatedSelect('sapPriorityType','select myrefprioritytypes.priority as value, myrefprioritytypes.description as description from myrefprioritytypes left join myrefnotiftypes on myrefnotiftypes.priority_type = myrefprioritytypes.type where myrefnotiftypes.type=',this.value)">
+                         
+                            <option class="opt-large" value="" selected>NotifTypes</option>
+                          
+
+                        </select>    
+                        <select class="feedback-input" id="sapPriorityType" name="sapPriorityType" >
+                            <option class="opt-large" value="" selected>Priority Types</option>
+                          
+
+                        </select>                   
                         <select class="feedback-input" id="pollutionsitetype" name="pollutionsitetype">
                             <option class="opt-large" value="" selected>Pollution Site Type</option>
                             <option class="opt-large" value="AN">Area Name</option>
@@ -225,7 +237,7 @@ option {
                             <td><label merge="mergecol" class="feedback-input-table"  id="shorttext" name="shorttext">shortext</label></td>
                             <td><input merge="mergecol" class="feedback-input-table"  id="duration"  name="duration"/></td>
                             <td><input merge="mergecol" class="feedback-input-table" type="TEXT" id="startdate"  name="startdate"></td>
-                             <td><input merge="mergecol" class="feedback-input-table" type="TEXT" id="enddate" name="enddate" ></td>
+                            <td><input merge="mergecol" class="feedback-input-table" type="TEXT" id="enddate" name="enddate" ></td>
                         </tr>                    
                     </table>
                    <table id="MyOperationInfo" class="table table-bordered" merge="MyOperationInfo">
@@ -245,6 +257,133 @@ option {
                         </tr>                    
                     </table>
                 </div>
+                
+                
+<!-- nested Tables -->
+<div class="well row">
+                    <table id="MyObjects" class="table table-bordered" >
+                        <tr >
+                            <th width="20%">Object</th>
+                            <th width="80%">Description</th>
+                            
+                        </tr>
+                        <tr>
+                            <td><label class="feedback-input-table" id="opno" name="opno">FL1</label></td>
+                            <td><label class="feedback-input-table"  id="shorttext" name="shorttext">Functional Location 1</label></td>
+                        </tr>                    
+                    	<TR>
+                    	<TD>Measurement Points</TD>
+                    	<TD>
+		                   <table id="MyMPoints" class="table table-bordered" >
+		                        <tr >
+		                            <th width="20%">Id</th>
+		                            <th width="40%">Description</th>
+		                            <th width="40%">Value</th>
+		                            
+		                            
+		                        </tr>
+		                        <tr">
+		                            <td><label class="feedback-input-table" >mp1</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 1</label></td>
+		                            <td>
+			                            <div class="btn-group btn-toggle" style="margin-left: 10px">
+	                               
+	                                    <button type="button" class="btn btn-lg btn-default">Yes</button>
+	                                    <button type="button"  class="btn btn-lg btn-primary active">No</button>
+	                               		 </div>
+                                	</td>
+		                           
+		                             
+		                        </tr>    
+		                        <tr">
+		                            <td><label class="feedback-input-table" >mp2</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 2</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr>                  
+		                    </table>
+		                   </TD>
+		                 </TR>
+		                <TR>
+                    	<TD>Characteristics</TD>
+                    	<TD>
+		                   <table id="MyChars" class="table table-bordered" >
+		                        <tr >
+		                            <th width="20%">Id</th>
+		                            <th width="40%">Description</th>
+		                            <th width="40%">Value</th>
+		                            
+		                            
+		                        </tr>
+		                        <tr">
+		                            <td><label class="feedback-input-table" >Char1</label></td>
+		                            <td><label class="feedback-input-table"  >Characteristic 1</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr>    
+		                        <tr">
+		                            <td><label class="feedback-input-table" >Char 2</label></td>
+		                            <td><label class="feedback-input-table"  >Characteristic 2</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr>                  
+		                    </table>
+		                   </TD>
+		                 </TR>
+		                 <tr>
+                            <td><label class="feedback-input-table" id="opno" name="opno">FL2</label></td>
+                            <td><label class="feedback-input-table"  id="shorttext" name="shorttext">Functional Location 2</label></td>
+                        </tr>                    
+                    	<TR>
+                    	<TD>Measurement Points</TD>
+                    	<TD>
+		                   <table id="MyMPoints" class="table table-bordered" >
+		                        <tr >
+		                            <th width="20%">Id</th>
+		                            <th width="40%">description</th>
+		                            <th width="40%">Value</th>
+		                            
+		                            
+		                        </tr>
+		                        <tr">
+		                            <td><label class="feedback-input-table" >mp1</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 1</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr>    
+		                        <tr">
+		                            <td><label class="feedback-input-table" >mp1</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 2</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr> 
+		                         <tr">
+		                            <td><label class="feedback-input-table" >mp3</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 3</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr> 
+		                         <tr">
+		                            <td><label class="feedback-input-table" >mp4</label></td>
+		                            <td><label class="feedback-input-table"  >Measurement Point 4</label></td>
+		                            <td><input class="feedback-input-table"  ></td>
+		                           
+		                             
+		                        </tr>                  
+		                    </table>
+		                   </TD>
+		                 </TR>
+		              </table>
+		              
+                </div>
+
+<!-- End of Nested Table -->
                  		<input type="button" name="FVals" value="Show Form Contents" onclick="DisplayFormValues()" id=""FVals""  />
                         <input type="submit" name="Save" value="SENDxx" onclick="alert('Save on Form Pressed')" id="Save"  />
                   

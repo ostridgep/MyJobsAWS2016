@@ -2308,7 +2308,7 @@ function emptyTables(type) {
 							SetConfigParam("LASTSYNC_REFERENCE", "20130316170000");
 							SetConfigParam("LASTSYNC_TRANSACTIONAL", "20130316224900");
 							SetConfigParam("LASTSYNC_UPLOAD", "20130316214900");
-							SetConfigParam("SERVERNAME", "http://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
+							SetConfigParam("SERVERNAME", "xxxx://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
 							SetConfigParam("SAPCLIENT", "120");
 							SetConfigParam("SAPSYSTEM", "AW2MYJOBS");
 							
@@ -2413,7 +2413,7 @@ function loadDemoData() {
 						SetConfigParam("LASTSYNC_REFERENCE", "20180316170000");
 						SetConfigParam("LASTSYNC_TRANSACTIONAL", "20180316224900");
 						SetConfigParam("LASTSYNC_UPLOAD", "20180316214900");
-						SetConfigParam("SERVERNAME", "xhttp://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobs/");
+						SetConfigParam("SERVERNAME", "XXXX://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobs/");
 						SetConfigParam("SAPCLIENT", "120");
 						//loadAssetXML("TestData\\T2_MPLT_ESVN.XML")
 						//loadAssetXML("TestData\\T2_MPLT_LSVM.XML")

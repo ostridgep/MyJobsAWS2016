@@ -1382,7 +1382,13 @@ var page  = new sap.m.Page('homePage',{
 	footer:new sap.m.Bar (
 			{
 				id : 'master-footer',
-				contentLeft : [],
+				contentLeft : [new sap.m.Button("MapShow", {
+	       			 
+	       			 icon:"sap-icon://map",
+	       				 press: [ function(){
+	       					window.open("geo:38.897096,-77.036545")
+	       						}]
+	       			 })],
 				
 			contentMiddle: [new sap.m.Button("LastSyncMess", {
       			 text:"",
