@@ -1585,7 +1585,7 @@ var detailFooterAWS = new sap.m.Bar({
 							  if(currentEquipment_GIS.length>6){
 								 
 								  x=convertToLatLon(currentEquipment_GIS)
-								  ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], '_system')
+								  ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_blank", 'location=yes,closebuttoncaption=Return')
 								  //ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return')
 								  ref1.addEventListener('exit', function(event) {
 		
@@ -1598,7 +1598,7 @@ var detailFooterAWS = new sap.m.Bar({
 								  {
 									 
 								  x=convertToLatLon(currentFuncLoc_GIS)
-								    ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], '_system')
+								    ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_blank", 'location=yes,closebuttoncaption=Return')
  								  //ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return')
 								  ref1.addEventListener('exit', function(event) {
 	
