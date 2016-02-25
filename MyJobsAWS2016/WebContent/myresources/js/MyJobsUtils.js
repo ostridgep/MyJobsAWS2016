@@ -92,25 +92,22 @@ function getTime()	{
 
 function convertEODDate(dt)
 {
-	x=dt.split(",")
-	d=x[0].split("/")
+	
+	x=dt.split(" ")
+	d=x[0].split("-")
 	t=x[1].split(":")
-	m=t[1].split(" ")
-	if(d[2].length<4){
-		d[2]="20"+d[2]
-		xdate=zeroFill1( d[1])+"."+zeroFill1( d[0])+"."+d[2];
-	}else{
-		xdate=zeroFill1( d[0])+"."+zeroFill1( d[1])+"."+d[2];
-	}
+	
+	
+	xdate=d[2]+"."+d[1]+"."+d[0];
+	
 	
 	t[0]=t[0].replace(' ','')
-	if(m[1]=="PM"){
-		hours=(parseInt(t[0])+12).toString()
-	}else{
-		hours=(parseInt(t[0])).toString()
-	}
+	
+	hours=(parseInt(t[0])).toString()
+
 		
-	xtime=zeroFill1(hours)+":"+zeroFill1(m[0])+":00"
+	xtime=zeroFill1(t[0])+":"+zeroFill1(t[1])+":00"
+	
 	return xdate+" "+xtime
 	}
 function getFormattedTime()	{			

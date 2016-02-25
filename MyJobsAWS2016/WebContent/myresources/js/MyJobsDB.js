@@ -2288,7 +2288,7 @@ function emptyTables(type) {
 						'DELETE FROM MyMenuBar;'+
 						'DELETE FROM MyJobDets;'+
 										'DELETE FROM  REFPAICODES;'+
-					'DELETE FROM  REFNOTIFICATIONTYPES;'+
+										'DELETE FROM  REFNOTIFICATIONTYPES;'+
 					'DELETE FROM  REFVARIANCESRFV;'+
 					'DELETE FROM  REFACTIVITY;'+
 					'DELETE FROM  MyForms;'+
@@ -2304,7 +2304,7 @@ function emptyTables(type) {
 							SetConfigParam("TRACE", "OFF");
 							SetConfigParam("SYNC_REFERENCE_FREQUENCY", "8400000");
 							SetConfigParam("SYNC_TRANSACTIONAL_FREQUENCY", "600000");
-							SetConfigParam("SYNC_UPLOAD_FREQUENCY", "300");
+							SetConfigParam("SYNC_UPLOAD_FREQUENCY", "2000");
 							SetConfigParam("LASTSYNC_REFERENCE", "20130316170000");
 							SetConfigParam("LASTSYNC_TRANSACTIONAL", "20130316224900");
 							SetConfigParam("LASTSYNC_UPLOAD", "20130316214900");

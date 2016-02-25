@@ -138,6 +138,8 @@ var formEndOfDay = new sap.m.Dialog("dlgEndOfDay",{
                                     			localStorage.getItem("EmployeeID"))
 										
                                        	
+                                       	
+                                       	
                                     	formEndOfDay.close()
                                               
                                                 } ]
@@ -156,20 +158,22 @@ var formEndOfDay = new sap.m.Dialog("dlgEndOfDay",{
                          minWidth : 1024,
                          maxContainerCols : 2,
                          content : [
-                                                     new sap.m.Label({text:"Work Completion Date/Time"}),
-                                                     new sap.m.DateTimeInput('EndOfDayWorkTime',{
-                     									width : "99%",
-                     									type : "DateTime",
-                										valueFormat: "yyyy-MM-dd hh:mm:ss",
-                     									dateValue : new Date()
-                     								}),
-                                                     new sap.m.Label({text:"Home Arrival Date/Time"}),
-                                                      new sap.m.DateTimeInput('EndOfDayHomeTime',{
-                      									width : "99%",
-                      									type : "DateTime",
-                      									valueFormat: "yyyy-MM-dd hh:mm:ss",
-                      									dateValue : new Date()
-                      								}),
+                                    new sap.m.Label({text:"Work Completion Date/Time"}),
+                                    new sap.m.DateTimeInput('EndOfDayWorkTime',{
+    									width : "99%",
+    									type : "DateTime",
+    									displayFormat: "yyyy-MM-dd HH:mm",
+    									valueFormat: "yyyy-MM-dd HH:mm:ss",
+    									dateValue : new Date()
+    								}),
+                                    new sap.m.Label({text:"Home Arrival Date/Time"}),
+                                     new sap.m.DateTimeInput('EndOfDayHomeTime',{
+     									width : "99%",
+     									type : "DateTime",
+     									displayFormat: "yyyy-MM-dd HH:mm",
+     									valueFormat: "yyyy-MM-dd HH:mm:ss",
+     									dateValue : new Date()
+     								}),
                                        
                                                      
                                                      
@@ -1063,7 +1067,7 @@ function setNotificationCounts()
 	sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(localStorage.getItem("LastSyncedDT")));
 
 		
-			html5sql.process("SELECT * FROM MyNotifications;",
+			html5sql.process("SELECT * FROM MyNotifications where type <> 'Z7';",
 			 
 			 function(transaction, results, rowsArray){
 				
