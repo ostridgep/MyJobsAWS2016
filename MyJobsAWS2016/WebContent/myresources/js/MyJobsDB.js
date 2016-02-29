@@ -818,8 +818,8 @@ function syncTransactional(){
 									localStorage.setItem('LastSyncTransactionalDetails','');
 									syncTransactionalDetsUpdated=false;
 									SAPServerPrefix=$.trim(rowsArray[0].paramvalue);
-									requestSAPData("MyJobsOrders.htm",'');
-									//requestSAPData("MyJobsOrdersObjects.htm",'');
+									requestSAPData("MyJobsOrdersTest.htm",'');
+									requestSAPData("MyJobsOrdersObjectsMP.htm",'');
 									requestSAPData("MyJobsNotifications.htm",'');
 									//requestSAPData("MyJobsMessages.htm",'');
 									
@@ -868,7 +868,7 @@ function syncTransactional1(){
 									SAPServerPrefix=$.trim(rowsArray[0].paramvalue);
 									requestSAPData1("MyJobsOrders.htm",'');
 									requestSAPData1("MyJobsOrders1.htm",'');
-									requestSAPData1("MyJobsOrdersObjects.htm",'');
+									requestSAPData1("MyJobsOrdersObjectsMP.htm",'');
 									requestSAPData1("MyJobsNotifications.htm",'');
 									//requestSAPData("MyJobsMessages.htm",'');
 									//requestSAPDataCall();
@@ -1433,7 +1433,8 @@ function syncReference(){
 							requestSAPData("MyJobsUsers.htm",'');
 							requestSAPData("MyJobsVehiclesDefault.htm",'');
 							requestSAPData("MyJobsVehicles.htm",'');
-							requestSAPDataPJO("getFormsJSON.php",'');
+							requestDEMOData('MyForms.json');
+							//requestSAPDataPJO("getFormsJSON.php",'');
 							//requestSAPData("MyJobsFunclocs.htm",'');
 							//requestSAPData("MyJobsEquipment.htm",'');
 						 }
@@ -1620,6 +1621,8 @@ function updateOrderLatLong(orderno, fname, latlong)
 
 function updateOperationStatus(orderno, opno, code, status)
 {
+	
+// Remove the Create NWWK for New Work and overide the CONF with NWWK
 	sqltimestamp=""
 	
 	if(code=='ACPT'){
@@ -1629,10 +1632,14 @@ function updateOperationStatus(orderno, opno, code, status)
 	}else if(code=='PARK'){
 		sqltimestamp=", park_date = '"+statusUpdateDate+"', park_time ='"+statusUpdateTime+"'"
 	}
-
+	
 	html5sql.process("update  myjobdets set status = '"+code+"', status_s = '"+code+"', status_l =  '"+code+"'"+sqltimestamp+" ,tconf_date = '"+statusUpdateDate+"', tconf_time = '"+statusUpdateTime+"' where  orderno = '"+orderno+"' and opno = '"+ opno+"';",
 		function(){
-				
+			if((code=='CONF')&&(followOnWork=="YES"))
+			{
+				code='NWWK'
+				status='New Work'
+			}
 				html5sql.process("insert into mystatus (orderno, opno, state,  stsma, status, actdate, acttime, statusdesc) values("+
 					 "'"+orderno+"','"+opno+"','NEW','ZMAM_1', '"+code+"','"+statusUpdateDate+"','"+statusUpdateTime+"','"+status+"');",				
 				function(){
@@ -1642,7 +1649,7 @@ function updateOperationStatus(orderno, opno, code, status)
 					if((code=='CONF')&&(followOnWork=="YES"))
     				{
     					// this is where we create the Follow on Work Status NWWK or MRWK
-    					createNewStatus(CurrentOrderNo, CurrentOpNo, "NWWK", "New Work")
+    					//createNewStatus(CurrentOrderNo, CurrentOpNo, "NWWK", "New Work")
     				}
 					 
 				 },
@@ -2710,6 +2717,7 @@ var orderlist="";
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
 				ordernos.push(MyOrders.order[cntx].orderno)
 				changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
+				console.log(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
 				stext=unescape(MyOrders.order[cntx].shorttext).replace(/'/g, "");;
 				stext=stext.replace("\/", "");;
 				stext=stext.replace(/&/g, "");;
@@ -2939,7 +2947,7 @@ var orderlist="";
 }
 function InsertOrder(sqlstatement,orderno,changeddatetime){
 	var sqlstatement1=""
-console.log(orderno)
+console.log(orderno+changeddatetime)
 
 	html5sql.process("select * from MyOrders where orderno = '"+orderno+"'",
 			 function(transaction, results, rowsArray){
@@ -2983,7 +2991,7 @@ console.log("OK")
 								);
 
 					}else{
-						cocole.log("Order Exists")
+						console.log("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 						//alert("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 					}
 

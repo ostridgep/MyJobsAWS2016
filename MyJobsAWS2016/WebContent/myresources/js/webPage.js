@@ -48,7 +48,7 @@ var formWebPage = new sap.m.Dialog("dlgWebPage",{
    	}
 	
 	 })
-var formForms = new sap.m.Dialog("dlgForms",{
+var formForms = new sap.m.Dialog("dlg",{
    // title:"Forms",
    
     horizontalScrolling:true,
