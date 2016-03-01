@@ -1,101 +1,174 @@
-{
-	"notification": [
-	
-	{
-		"notifno": "000010183230",
-		"type": "Z5",
-		"sortfield": "000001174485",
-		"priority": "",
-		"startdate": "20151116 143856",
-		"contact": "",
-		"shorttext": "text",
-		"longtext": "",
-		"funcloc": "LPORST-2E-AES-TS01-ATA001",
-		"equipment": "000000000001174485",
-		"orderno": "000050704165",
-		"reportedon": "20151116 143856",
-		"reportedby": "",
-		"plant": "NSAM",
-		"funclocgis": "",
-		"equipmentgis": "",
-		"cattype": "W", 
-		"pgroup": "SB",
-		"pcode": "XJ",
-		"changed_by": "",
-		"changed_date": "00000000",
-		"changed_time": "000000",
-				"pgrouptext": "",
-		"pcodetext": "",
-		"effect": [],
-		"item": [],
-		"cause": [],
-		"activity": [],
-		"task": [],
-		"partner": []
-	},
-	{
-		"notifno": "000010183799",
-		"type": "Z5",
-		"sortfield": "15390000",
-		"priority": "",
-		"startdate": "20151124 105751",
-		"contact": "",
-		"shorttext": "Example notification order AWX 5",
-		"longtext": "",
-		"funcloc": "LODSSP",
-		"equipment": "",
-		"orderno": "000050710118",
-		"reportedon": "20151124 105751",
-		"reportedby": "",
-		"plant": "NSAM",
-		"funclocgis": "",
-		"equipmentgis": "",
-		"cattype": "W",
-		"pgroup": "SB",
-		"pcode": "X1",
-		"changed_by": "",
-		"changed_date": "00000000",
-		"changed_time": "000000",
-		"pgrouptext": "",
-		"pcodetext": "",
-		"effect": [],
-		"item": [],
-		"cause": [],
-		"activity": [],
-		"task": [],
-		"partner": []
-	},
+{"notification":
+[
+    
+    {
+            "notifno": "000012698921",
+            "type": "Z5",
+            "sortfield": "13670000",
+            "priority": "",
+            "startdate": "20160301 151727",
+            "contact": "",
+    "shorttext": "Mechanical Repair",
+      "longtext": "",
+              "funcloc": "HUNTST",
+              "equipment": "",
+              "orderno": "000052150026",
+              "reportedon": "20160301 151727",
+              "reportedby": "",
+              "plant": "RSAM",
+              "funclocgis": "",
+              "equipmentgis": "",
+              "cattype": "W",
+              "pgroup": "SB",
+              "pcode": "XG",
+              "changed_by": "",
+              "changed_date": "00000000",
+              "changed_time": "000000",
+              "pcodetext": "",
+              "effect":
+                  [
+                  ],
+              "item":
+                  [
+                  
+                ],
+                 "cause":
+                  [
+                 ],
+                 "activity":
+                  [
+                  ],
+                 "task":
+                  [         ],
+                 "partner":
+                  [ ]
+},
+    {
+            "notifno": "000012698922",
+            "type": "Z5",
+            "sortfield": "",
+            "priority": "",
+            "startdate": "20160301 151838",
+            "contact": "",
+    "shorttext": "Electrical Fault/Investigation",
+      "longtext": "",
+              "funcloc": "HUNTST-2D-PSM-PS01-MOT001",
+              "equipment": "000000000001486587",
+              "orderno": "000052150027",
+              "reportedon": "20160301 151838",
+              "reportedby": "",
+              "plant": "RSAM",
+              "funclocgis": "",
+              "equipmentgis": "",
+              "cattype": "W",
+              "pgroup": "SB",
+              "pcode": "XI",
+              "changed_by": "",
+              "changed_date": "00000000",
+              "changed_time": "000000",
+              "pcodetext": "",
+              "effect":
+                  [
+                  ],
+              "item":
+                  [
+                  
+                ],
+                 "cause":
+                  [
+                 ],
+                 "activity":
+                  [
+                  ],
+                 "task":
+                  [         ],
+                 "partner":
+                  [ ]
+},
+    {
+            "notifno": "000012698923",
+            "type": "Z5",
+            "sortfield": "",
+            "priority": "",
+            "startdate": "20160301 151921",
+            "contact": "",
+    "shorttext": "Mechanical Repair",
+      "longtext": "",
+              "funcloc": "ALCOST-2F-SST-IQ01-PCV005",
+              "equipment": "000000000002052500",
+              "orderno": "000052150028",
+              "reportedon": "20160301 151921",
+              "reportedby": "",
+              "plant": "RSAM",
+              "funclocgis": "",
+              "equipmentgis": "",
+              "cattype": "W",
+              "pgroup": "SB",
+              "pcode": "XG",
+              "changed_by": "",
+              "changed_date": "00000000",
+              "changed_time": "000000",
+              "pcodetext": "",
+              "effect":
+                  [
+                  ],
+              "item":
+                  [
+                  
+                ],
+                 "cause":
+                  [
+                 ],
+                 "activity":
+                  [
+                  ],
+                 "task":
+                  [         ],
+                 "partner":
+                  [ ]
+},
+    {
+            "notifno": "000012698934",
+            "type": "Z5",
+            "sortfield": "19000000",
+            "priority": "",
+            "startdate": "20160301 152229",
+            "contact": "",
+    "shorttext": "Electrical Fault/Investigation",
+      "longtext": "",
+              "funcloc": "ALCOST",
+              "equipment": "",
+              "orderno": "000052150067",
+              "reportedon": "20160301 152229",
+              "reportedby": "",
+              "plant": "RSAM",
+              "funclocgis": "",
+              "equipmentgis": "",
+              "cattype": "W",
+              "pgroup": "SB",
+              "pcode": "XI",
+              "changed_by": "",
+              "changed_date": "00000000",
+              "changed_time": "000000",
+              "pcodetext": "",
+              "effect":
+                  [
+                  ],
+              "item":
+                  [
+                  
+                ],
+                 "cause":
+                  [
+                 ],
+                 "activity":
+                  [
+                  ],
+                 "task":
+                  [         ],
+                 "partner":
+                  [ ]
+}
 
-	{
-		"notifno": "000010183802",
-		"type": "Z4",
-		"sortfield": "15390000",
-		"priority": "",
-		"startdate": "20151124 142922",
-		"contact": "",
-		"shorttext": "LODSSP SPM2RA PUMP 2 RUN EXCESS",
-		"longtext": "",
-		"funcloc": "LODSSP",
-		"equipment": "",
-		"orderno": "000050710141",
-		"reportedon": "20151124 140000",
-		"reportedby": "KWILSON4",
-		"plant": "NSAM",
-		"funclocgis": "",
-		"equipmentgis": "",
-		"cattype": "W",
-		"pgroup": "AL",
-		"pcode": "ST",
-		"changed_by": "",
-		"changed_date": "00000000",
-		"changed_time": "000000",
-				"pgrouptext": "",
-		"pcodetext": "",
-		"effect": [],
-		"item": [],
-		"cause": [],
-		"activity": [],
-		"task": [],
-		"partner": []
-	}]
+]
 }
