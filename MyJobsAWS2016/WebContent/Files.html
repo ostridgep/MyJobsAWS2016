@@ -17,7 +17,7 @@
 <script type="text/javascript">
 function getImage() {
     // Retrieve image file location from specified source
-    
+    alert("1")
     navigator.camera.getPicture(uploadPhoto, function(message) {
 	alert('get picture failed');
 },{quality:100, destinationType:Camera.DestinationType.FILE_URI}
@@ -54,6 +54,7 @@ function fail(error) {
     alert("An error has occurred: Code = " = error.code);
 }
 </script>
+<BR><BR><BR>
 <button onclick="getImage();">Upload a Photo</button><BR><BR>
 <button onclick="window.location.href='Home.html'">Home</button>
 
