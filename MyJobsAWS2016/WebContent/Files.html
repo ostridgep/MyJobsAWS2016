@@ -41,8 +41,8 @@ function uploadPhoto(imageURI) {
     options.chunkedMode = false;
 alert(options.fileName)
     var ft = new FileTransfer();
-    //ft.upload(imageURI, "http://pjomyjobs.azurewebsites.net/FileUpload.php", win, fail, options);
-    ft.upload(imageURI, "http://192.168.1.20/FileUpload.php?user=POSTRIDGE&filename=x.jpg", win, fail, options);
+    ft.upload(imageURI, "http://pjomyjobs.azurewebsites.net/FileUpload.php", win, fail, options);
+    //ft.upload(imageURI, "http://192.168.1.20/FileUpload.php?user=POSTRIDGE&filename=x.jpg", win, fail, options);
 }
 
 function win(r) {
