@@ -108,7 +108,7 @@ function successMove(entry) {
     //Store imagepath in session for future use
     // like to store it in database
     sessionStorage.setItem('imagepath', entry.fullPath);
-    uploadPhoto1(entry.fullPath)
+    uploadPhoto1("file:"+entry.fullPath)
 }
 
 function resOnError(error) {
