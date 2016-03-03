@@ -26,15 +26,14 @@ function getImage() {
 }
 var theFolder;
 var theFile;
-
+var d = new Date();
+var n = d.getTime();
+//new file name
+var newFileName = n + ".jpg";
+var myFolderApp = "MyAppFolder";
 function uploadPhoto(imageURI) {
-	 var d = new Date();
-	    var n = d.getTime();
-	    //new file name
-	    var newFileName = n + ".jpg";
-	    var myFolderApp = "MyAppFolder";
-	    theFolder=myFolderApp;
-	    theFile=newFileName;
+	 
+	   
     var options = new FileUploadOptions();
     options.fileKey="file";
     options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
@@ -90,7 +89,7 @@ function movePic(file){
 //Callback function when the file system uri has been resolved
 function resolveOnSuccess(entry){ 
 
-   
+   alert("here")
 
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {      
     //The folder is created if doesn't exist
