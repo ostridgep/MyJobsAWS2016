@@ -17,7 +17,7 @@
 <script type="text/javascript">
 function getImage() {
     // Retrieve image file location from specified source
-    alert("1")
+   
     navigator.camera.getPicture(uploadPhoto, function(message) {
 	alert('get picture failed');
 },{quality:100, destinationType:Camera.DestinationType.FILE_URI}
@@ -27,19 +27,19 @@ function getImage() {
 
 
 function uploadPhoto(imageURI) {
-	alert("Good")
+	
     var options = new FileUploadOptions();
     options.fileKey="file";
     options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
     options.mimeType="image/jpeg";
 
     var params = new Object();
-    params.value1 = "test";
-    params.value2 = "param";
+    params.user = "POSTRIDGE;
+    params.filename = options.fileName;
 
     options.params = params;
     options.chunkedMode = false;
-alert(options.fileName)
+alert(options.fileName);
     var ft = new FileTransfer();
     ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
     //ft.upload(imageURI, "http://192.168.1.20/FileUpload.php?user=POSTRIDGE&filename=x.jpg", win, fail, options);
@@ -57,7 +57,7 @@ function fail(error) {
 }
 </script>
 
-<BR>19:44<BR><BR>
+<BR>15:50<BR><BR>
 <button onclick="getImage();">Upload a Photo</button><BR><BR>
 <button onclick="window.location.href='Home.html'">Home</button>
 
