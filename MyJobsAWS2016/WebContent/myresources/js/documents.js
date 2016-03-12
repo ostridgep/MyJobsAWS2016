@@ -377,6 +377,7 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             alert("about tio move")
             file.copyTo(opdir, newFileName, function () {
+            	alert(newFileName)
             	buildPhotoList()
                
             }, function () {
