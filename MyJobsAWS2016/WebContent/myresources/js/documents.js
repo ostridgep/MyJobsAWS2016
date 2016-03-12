@@ -1,4 +1,4 @@
-var photos = new Array()
+var docs = new Array()
 var downloadCount;
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
@@ -339,7 +339,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Private")
+    moveFile(imageData,cordova.file.dataDirectory + "files/MyJobs/Private/Photos")
     //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
 }
 
@@ -389,7 +389,7 @@ function moveFile(fileUri,dir) {
 
 function buildPhotoList(){
 	alert("building Photo List")
-	listFiles(cordova.file.dataDirectory+"MyJobs/Private/Photos")
+	listFiles(cordova.file.dataDirectory+"files/MyJobs/Private/Photos/")
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
@@ -412,7 +412,7 @@ function buildPhotoList(){
 }
 function buildGlobalList(){
 	alert("building Global List")
-	listFiles(cordova.file.dataDirectory+"MyJobs/Private/Download")
+	listFiles(cordova.file.dataDirectory+"/MyJobs/Private/Download/")
 	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
 	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
 	var docsLength = docs.length;
@@ -436,7 +436,7 @@ function buildGlobalList(){
 
 function listFiles(dir) {
   
-    alert("listing files")
+    alert("listing files"+dir)
     window.resolveLocalFileSystemURL(dir, function (dirEntry) {
         var directoryReader = dirEntry.createReader();
           directoryReader.readEntries(dirReadSuccess, dirReadfail);
@@ -468,12 +468,12 @@ function listFiles(dir) {
 
 function file_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
-    photos.push(f.name + ":" + f.type + ":" + f.size + ":" + d1.toString('yyyyMMdd') );
+    docs.push(f.name + ":" + f.type + ":" + f.size + ":" + d1.toString('yyyyMMdd') );
     alert("pushing to array")
 }
 function dirReadSuccess(entries) {
-	photos = new Array()
-   alert("photos found "+entries.length)
+	docs = new Array()
+   alert("docs found "+entries.length)
     var i;
     for (i = 0; i < entries.length; i++) {
        
