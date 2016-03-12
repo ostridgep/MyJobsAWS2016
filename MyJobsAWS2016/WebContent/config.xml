@@ -64,7 +64,10 @@
 
     <gap:plugin name="org.apache.cordova.media" />
     <gap:plugin name="org.apache.cordova.network-information" />
+ <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
 
+ <gap:plugin name="org.apache.cordova.file"  />
+ <gap:plugin name="org.apache.cordova.file-transfer" />
 
     <gap:plugin name="org.apache.cordova.vibration" />
 	<gap:splash src="splash.png" gap:platform="ios" width="320" height="480" />
@@ -75,10 +78,7 @@
 
     <!-- Third party plugins -->
     <!-- A list of available plugins are available at https://build.phonegap.com/plugins -->
- <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
 
- <gap:plugin name="cordova-plugin-file"  />
- <gap:plugin name="cordova-plugin-file-transfer" />
  
 
    
