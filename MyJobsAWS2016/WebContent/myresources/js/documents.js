@@ -308,7 +308,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos/")
+    //moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos/")
     moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/")
 }
 
