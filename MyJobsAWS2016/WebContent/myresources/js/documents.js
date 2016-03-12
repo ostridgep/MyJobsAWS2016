@@ -327,7 +327,7 @@ function buildDocumentTables(){
 //get photo and store locally
 function getPhoto() {
     // Take picture using device camera and retrieve image as base64-encoded string
-	alert("about to take photo"+cordova.file.dataDirectory)
+	alert("about to take photo"+cordova.file.applicationStorageDirectory)
 	
     navigator.camera.getPicture(onGetPhotoDataSuccess, onGetPhotoDataFail, { quality: 50 });
 }
@@ -342,7 +342,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
     //moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
-moveFile(imageData, cordova.file.dataDirectory)
+moveFile(imageData, cordova.file.applicationStorageDirectory)
 }
 
 //Callback function when the picture has not been successfully taken
@@ -391,7 +391,7 @@ function moveFile(fileUri,dir) {
 
 function buildPhotoList(){
 	alert("building Photo List")
-	listFiles(cordova.file.dataDirectory)
+	listFiles(cordova.file.applicationStorageDirectory)
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
