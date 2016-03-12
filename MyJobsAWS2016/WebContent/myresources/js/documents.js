@@ -1,4 +1,5 @@
 var photos = new Array()
+var downloadCount;
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
     modal: true,
@@ -29,6 +30,21 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                        	
                                     	getPhoto();
                                     	BuildPhotoList()
+                                              
+                                                } ]
+                                   
+                                }),   
+                                new sap.m.Button( {
+                                    text: "Photo",
+                                    type: 	sap.m.ButtonType.Accept,
+                                    tap: [ function(oEvt) { 
+                                    	
+                                    	
+                                       	
+                                       	
+                                       	
+                                    	downLoadMissing();
+                                    	//BuildPhotoList()
                                               
                                                 } ]
                                    
@@ -308,7 +324,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos")
+    moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global")
     //moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/")
 }
 
@@ -433,5 +449,54 @@ function dirReadFail(error) {
     alert("Failed to list directory contents: "+ error);
 }
 	
+function downloadMissing()
+{
+    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
+        downloadCount = 0
+        $op = document.querySelector("#remotecount");
+        $op.innerHTML = data.FILES.length;
+        var cnt = 0;
+        $.each(data.FILES, function (index) {
+            fileName = data.FILES[index].name;
+            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"files/Documents/MyJobs/Private/Download/"));
+            cnt = cnt + 1;
+           
+        });
+    });
+    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
+        downloadCount = 0
+        $op = document.querySelector("#remotecount");
+        $op.innerHTML = data.FILES.length;
+        var cnt = 0;
+        $.each(data.FILES, function (index) {
+            fileName = data.FILES[index].name;
+            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory +"files/Documents/MyJobs/Global/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "files/Documents/MyJobs/Global/Download/"));
+            cnt = cnt + 1;
+
+        });
+    });
+}
+
+function downloadAsset(fileName,dir) {
+    var fileTransfer = new FileTransfer();
+    x=fileName.split("/")
+    opMess("downloaded", "About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
+    fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.applicationStorageDirectory + dir + x[3],
+		function (entry) {
+		    console.log(cordova.file.applicationStorageDirectory + dir + x[3])
+		   
+		},
+		function (error) {
+		    
+		    opMess("downloaded", "download error source " + error.source);
+		    opMess("downloaded", "download error target " + error.target);
+		    opMess("downloaded", "upload error code: " + error.code);
+	
+		    
+		});
+}
+function appStart() {
+    alert(downloadCount+" Downloaded")
+}
 	
 
