@@ -308,8 +308,8 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    //moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos/")
-    moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/")
+    moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos")
+    //moveFile(imageData,cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/")
 }
 
 //Callback function when the picture has not been successfully taken
