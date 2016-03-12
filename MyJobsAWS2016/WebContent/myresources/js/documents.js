@@ -327,7 +327,8 @@ function buildDocumentTables(){
 //get photo and store locally
 function getPhoto() {
     // Take picture using device camera and retrieve image as base64-encoded string
-	alert("about to take photo")
+	alert("about to take photo"+cordova.file.dataDirectory+":"+cordova.file.applicationStorageDirectory+":"+cordova.file.cacheDirectory)
+	
     navigator.camera.getPicture(onGetPhotoDataSuccess, onGetPhotoDataFail, { quality: 50 });
 }
 
