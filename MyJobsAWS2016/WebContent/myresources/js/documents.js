@@ -474,8 +474,9 @@ function file_details_callback(f) {
     alert("pushing to array")
 }
 function dirReadSuccess(entries) {
+	 alert("docs found "+entries.length)
 	docs = new Array()
-   alert("docs found "+entries.length)
+  
     var i;
     for (i = 0; i < entries.length; i++) {
        
