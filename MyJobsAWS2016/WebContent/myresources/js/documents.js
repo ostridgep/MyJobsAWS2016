@@ -385,6 +385,7 @@ function moveFile(fileUri,dir) {
         }, errorMoveCallback);
     }, errorMoveCallback);
 }
+
 function buildPhotoList(){
 	alert("building Photo List")
 	listFiles(cordova.file.dataDirectory+"MyJobs/Private/Photos")
