@@ -328,7 +328,8 @@ function errorMoveCallback(error) {
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
-    var opdir = cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos/"
+    //var opdir = cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos/"
+	var opdir = dir;
     alert("moving to " + opdir);
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
