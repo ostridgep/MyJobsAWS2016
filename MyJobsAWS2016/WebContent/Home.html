@@ -48,6 +48,7 @@ font-size: 150%;
 <script src="myresources/js/MyJobsUtils.js"></script>
 <script src="myresources/js/NewNotif.js"></script>
 <script src="myresources/js/webPage.js"></script>
+<script src="myresources/js/documents.js"></script>
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">
@@ -133,6 +134,7 @@ var formEndOfDay = new sap.m.Dialog("dlgEndOfDay",{
                                     text: "Save",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
+                                    	
                                     	createAWSEODNotif(sap.ui.getCore().getElementById('EndOfDayWorkTime').getValue(),
                                     			sap.ui.getCore().getElementById('EndOfDayHomeTime').getValue(),
                                     			localStorage.getItem("EmployeeID"))
@@ -1191,7 +1193,7 @@ var tileContainer = new sap.m.TileContainer({
 			title:"Files",
 			icon:"sap-icon://documents",
 			
-			press:[ function(){window.location.href="Files.html"}]
+			press:[ function(){formDocuments.open()}]
 		
 		
 		}),
