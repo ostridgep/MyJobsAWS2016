@@ -5,6 +5,21 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     modal: true,
     contentWidth:"1em",
     buttons: [
+new sap.m.Button( {
+    text: "Photolist",
+    type: 	sap.m.ButtonType.Accept,
+    tap: [ function(oEvt) { 
+    	
+    	
+       	
+       	
+       	
+    	
+    	BuildPhotoList()
+              
+                } ]
+   
+}), 
                                 new sap.m.Button( {
                                     text: "Save",
                                     type: 	sap.m.ButtonType.Accept,
@@ -362,7 +377,7 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             alert("about tio move")
             file.copyTo(opdir, newFileName, function () {
-                alert("done moving" + opdir + newFileName);
+            	BuildPhotoList()
                
             }, function () {
                 alert("error moving");
