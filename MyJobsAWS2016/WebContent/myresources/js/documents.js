@@ -339,7 +339,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.dataDirectory + "files/MyJobs/Private/Photos")
+    moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Private/Photos")
     //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
 }
 
@@ -411,12 +411,12 @@ function buildPhotoList(){
 
 }
 function buildGlobalList(){
-	alert("building Global List")
-	listFiles(cordova.file.dataDirectory+"/MyJobs/Private/Download/")
+	alert("building Private List")
+	listFiles(cordova.file.dataDirectory+"MyJobs/Private/Download/")
 	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
 	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
 	var docsLength = docs.length;
-	alert("total Global"+docsLength)
+	alert("total Private"+docsLength)
 	for (var i = 0; i < docsLength; i++) {
 	    docsdets=docs[i].split(":");
 		opTable.addItem (new sap.m.ColumnListItem({
