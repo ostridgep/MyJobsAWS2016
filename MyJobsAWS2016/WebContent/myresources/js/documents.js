@@ -388,6 +388,7 @@ function moveFile(fileUri,dir) {
 }
 
 
+
 function buildPhotoList(){
 	alert("building Photo List")
 	listFiles(cordova.file.dataDirectory+"MyJobs/Private/Photos/")
