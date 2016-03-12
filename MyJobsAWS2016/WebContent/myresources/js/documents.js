@@ -327,7 +327,7 @@ function buildDocumentTables(){
 //get photo and store locally
 function getPhoto() {
     // Take picture using device camera and retrieve image as base64-encoded string
-	alert("about to take photo"+cordova.file.dataDirectory+":"+cordova.file.applicationStorageDirectory+":"+cordova.file.cacheDirectory)
+	alert("about to take photo"+cordova.file.dataDirectory)
 	
     navigator.camera.getPicture(onGetPhotoDataSuccess, onGetPhotoDataFail, { quality: 50 });
 }
@@ -341,7 +341,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData, cordova.file.dataDirectory+"files/MyJobs/Private/Photos/")
+    moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
     //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
 }
 
