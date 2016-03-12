@@ -332,6 +332,7 @@ function getPhoto() {
     navigator.camera.getPicture(onGetPhotoDataSuccess, onGetPhotoDataFail, { quality: 50 });
 }
 
+
 //Callback function when the picture has been successfully taken
 function onGetPhotoDataSuccess(imageData) {
     var currentdate = new Date();
