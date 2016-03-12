@@ -342,10 +342,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
     moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
-    moveFile(imageData, cordova.file.dataDirectory+"/MyJobs/Private/Photos/")
-    moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos")
-    moveFile(imageData, cordova.file.dataDirectory+"/MyJobs/Private/Photos")
-    //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
+moveFile(imageData, cordova.file.dataDirectory)
 }
 
 //Callback function when the picture has not been successfully taken
@@ -364,9 +361,9 @@ function errorMoveCallback(error) {
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
-    //var opdir = cordova.file.dataDirectory + "MyJobs/Global/Photos/"
+    
 	var opdir = dir;
-    alert("moving to " + opdir);
+    
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
        + (currentdate.getHours()).toString()
@@ -378,7 +375,7 @@ function moveFile(fileUri,dir) {
 
                        newFileName = datetime + fileExt;
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                           alert("checking op")
+                           alert("checking op"+opdir)
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             alert("about to move")
             file.copyTo(opdir, newFileName, function () {
