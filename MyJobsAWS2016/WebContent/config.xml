@@ -44,6 +44,7 @@
 
     <!-- Plugins -->
 
+
     <!-- Core plugins -->
     <gap:plugin name="org.apache.cordova.inappbrowser" spec="0.6.0" source="pgb" />
     <gap:plugin name="org.apache.cordova.battery-status" />
