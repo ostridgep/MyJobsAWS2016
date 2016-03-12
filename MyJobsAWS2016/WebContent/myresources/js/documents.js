@@ -15,8 +15,8 @@ new sap.m.Button( {
        	
        	
     	
-    	BuildPhotoList()
-        BuildGlobalList()      
+    	buildPhotoList()
+        buildGlobalList()      
                 } ]
    
 }), 
@@ -44,7 +44,7 @@ new sap.m.Button( {
                                        	
                                        	
                                     	getPhoto();
-                                    	BuildPhotoList()
+                                    	buildPhotoList()
                                               
                                                 } ]
                                    
@@ -59,7 +59,7 @@ new sap.m.Button( {
                                        	
                                        	
                                     	downloadMissing();
-                                    	//BuildPhotoList()
+                                    	//buildPhotoList()
                                               
                                                 } ]
                                    
@@ -377,7 +377,7 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             alert("about tio move")
             file.copyTo(opdir, newFileName, function () {
-            	BuildPhotoList()
+            	buildPhotoList()
                
             }, function () {
                 alert("error moving");
