@@ -315,7 +315,7 @@ function onGetPhotoDataFail(message) {
     alert('Failed to load picture because: ' + message);
 }
 function successMoveCallback(entry) {
-    console.log("New Path: " + entry.fullPath);
+ alert("New Path: " + entry.fullPath);
    
 }
 
@@ -345,19 +345,21 @@ function moveFile(fileUri) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             console.log("about tio move")
             file.copyTo(opdir, newFileName, function () {
-                console.log("done moving" + opdir + newFileName);
+                alert("done moving" + opdir + newFileName);
                
             }, function () {
-                console.log("error moving");
+                alert("error moving");
             });
         }, errorMoveCallback);
     }, errorMoveCallback);
 }
 function buildPhotoList(){
+	alert("building Photo List")
 	listFiles(cordova.file.applicationStorageDirectory+"files/Documents/MyJobs/Private/Photos/")
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
+	alert("total Photos"+photoLength)
 	for (var i = 0; i < photoLength; i++) {
 	    photodets=photos[i].split(":");
 		opTable.addItem (new sap.m.ColumnListItem({
@@ -376,7 +378,7 @@ function buildPhotoList(){
 }
 function listFiles(dir) {
   
-    console.log()
+    alert("listing files")
     window.resolveLocalFileSystemURL(dir, function (dirEntry) {
         var directoryReader = dirEntry.createReader();
           directoryReader.readEntries(dirReadSuccess, dirReadfail);
@@ -409,10 +411,11 @@ function listFiles(dir) {
 function file_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
     photos.push(f.name + ":" + f.type + ":" + f.size + ":" + d1.toString('yyyyMMdd') );
+    alert("pushing to array")
 }
 function dirReadSuccess(entries) {
 	photos = new Array()
-   
+   alert("photos found "+entries.length)
     var i;
     for (i = 0; i < entries.length; i++) {
        
@@ -426,7 +429,7 @@ function dirReadSuccess(entries) {
     }
 }
 function dirReadFail(error) {
-    opMess("local","Failed to list directory contents: "+ error);
+    alert("Failed to list directory contents: "+ error);
 }
 	
 	
