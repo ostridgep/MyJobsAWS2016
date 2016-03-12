@@ -35,7 +35,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                    
                                 }),   
                                 new sap.m.Button( {
-                                    text: "Photo",
+                                    text: "files",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
                                     	
@@ -453,8 +453,8 @@ function downloadMissing()
 {
     $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
         downloadCount = 0
-        $op = document.querySelector("#remotecount");
-        $op.innerHTML = data.FILES.length;
+        
+        alert("private"+data.FILES.length)
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
@@ -465,8 +465,7 @@ function downloadMissing()
     });
     $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
         downloadCount = 0
-        $op = document.querySelector("#remotecount");
-        $op.innerHTML = data.FILES.length;
+        alert("Global"+data.FILES.length)
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
@@ -480,17 +479,15 @@ function downloadMissing()
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    opMess("downloaded", "About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
+    alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
     fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.applicationStorageDirectory + dir + x[3],
 		function (entry) {
-		    console.log(cordova.file.applicationStorageDirectory + dir + x[3])
+		    alert(cordova.file.applicationStorageDirectory + dir + x[3])
 		   
 		},
 		function (error) {
 		    
-		    opMess("downloaded", "download error source " + error.source);
-		    opMess("downloaded", "download error target " + error.target);
-		    opMess("downloaded", "upload error code: " + error.code);
+		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});
