@@ -16,7 +16,7 @@ new sap.m.Button( {
        	
     	
     	BuildPhotoList()
-              
+        BuildGlobalList()      
                 } ]
    
 }), 
@@ -408,6 +408,30 @@ function buildPhotoList(){
 	
 
 }
+function buildGlobalList(){
+	alert("building Global List")
+	listFiles(cordova.file.dataDirectory+"MyJobs/Global/Download/")
+	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
+	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
+	var docsLength = docs.length;
+	alert("total Global"+docsLength)
+	for (var i = 0; i < docsLength; i++) {
+	    docsdets=docs[i].split(":");
+		opTable.addItem (new sap.m.ColumnListItem({
+			cells : 
+				[
+				new sap.m.Text({text: docsdets[0]}),
+	            new sap.m.Text({text: docsdets[1]}),
+	            new sap.m.Text({text: docsdets[2]}),
+				new sap.m.Text({text: docsdets[3]})   
+		 		]
+			}));
+	}
+	
+	
+
+}
+
 function listFiles(dir) {
   
     alert("listing files")
