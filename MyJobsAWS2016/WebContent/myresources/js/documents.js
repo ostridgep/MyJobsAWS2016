@@ -321,16 +321,14 @@ function successMoveCallback(entry) {
 }
 
 function errorMoveCallback(error) {
-    console.log("Error:" + error.code)
-    console.log("Error:" + error.source)
-    console.log("Error:" + error.target)
+    alert("Error:" + error.code+":" + error.source+":" + error.target)
     
 }
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri) {
     var opdir = cordova.file.applicationStorageDirectory + "files/Documents/MyJobs/Global/Photos"
-    console.log("moving exercises " + opdir);
+    alert("moving to " + opdir);
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
        + (currentdate.getHours()).toString()
@@ -342,9 +340,9 @@ function moveFile(fileUri) {
 
                        newFileName = datetime + fileExt;
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                           console.log("checking op")
+                           alert("checking op")
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-            console.log("about tio move")
+            alert("about tio move")
             file.copyTo(opdir, newFileName, function () {
                 alert("done moving" + opdir + newFileName);
                
