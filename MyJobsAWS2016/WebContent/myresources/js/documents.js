@@ -339,7 +339,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Private/Photos")
+    moveFile(imageData,cordova.file.dataDirectory)
     //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
 }
 
@@ -389,7 +389,7 @@ function moveFile(fileUri,dir) {
 
 function buildPhotoList(){
 	alert("building Photo List")
-	listFiles(cordova.file.dataDirectory+"files/MyJobs/Private/Photos/")
+	listFiles(cordova.file.dataDirectory)
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
