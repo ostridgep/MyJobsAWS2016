@@ -15,7 +15,7 @@ new sap.m.Button( {
        	
        	
     	
-    	buildPhotoList()
+    	
         buildGlobalList()      
                 } ]
    
@@ -44,7 +44,7 @@ new sap.m.Button( {
                                        	
                                        	
                                     	getPhoto();
-                                    	buildPhotoList()
+                                    	
                                               
                                                 } ]
                                    
@@ -339,7 +339,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-    moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global")
+    moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Private/Photos")
     //moveFile(imageData,cordova.file.dataDirectory + "MyJobs/Global/")
 }
 
