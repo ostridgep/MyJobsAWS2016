@@ -66,7 +66,7 @@ span.tip {
 <script src="myresources/js/NotificationFunctions.js"></script>
 <script src="myresources/js/Globals1.js"></script>
 <script src="myresources/js/DG5.js"></script>
-
+<script src="myresources/js/documents.js"></script>
 <script src="myresources/js/NewNotif.js"></script>
 <script src="myresources/js/webPage.js"></script>
 <style>
@@ -4054,7 +4054,64 @@ formtab=null;
 								           	     ]
      									})
      									]          	                
-         	                }),				            	                
+         	                }),		
+           	                new sap.m.IconTabFilter( 'JOBDOCS',{
+           	                	text:'Documents',
+         	                   key:'JobDocs',
+         	                  tooltip: 'Documents',
+         	                  icon: "sap-icon://documents",
+            	                   content:[
+     									new sap.m.Table("JobDocumentTable",{
+     										width:'100%',
+     										columns:[
+    										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
+    										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
+    										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
+    										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
+    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
+    										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
+    										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+    								           	     ]
+     									})
+     									]          	                
+         	                }),	
+         	               new sap.m.IconTabFilter( 'JOBPHOTOS',{
+          	                	text:'Photos',
+        	                   key:'JobPhotos',
+        	                  tooltip: 'Photos',
+        	                  icon: "sap-icon://attachment-photo",
+           	                   content:[
+    									new sap.m.Table("JobPhotoTable",{
+    										width:'100%',
+    										columns:[
+   										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
+   										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+   										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
+   										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
+   										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
+   										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+   								           	     ]
+    									}),
+    									new sap.m.Button( {
+    	                                    text: "Take Photo",
+    	                                    type: 	sap.m.ButtonType.Accept,
+    	                                    tap: [ function(oEvt) { 
+    	                                    	
+    	                                    	
+    	                                       	
+    	                                       	
+    	                                       	
+    	                                    	getPhoto();
+    	                                    	
+    	                                              
+    	                                                } ]
+    	                                   
+    	                                }),  
+    									]          	                
+        	                }),	
        	                ]
 
 

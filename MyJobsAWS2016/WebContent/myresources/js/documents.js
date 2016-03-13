@@ -359,6 +359,7 @@ function errorMoveCallback(error) {
     
 }
 
+
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
     
