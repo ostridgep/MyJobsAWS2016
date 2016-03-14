@@ -379,8 +379,8 @@ function moveFile(fileUri,dir) {
                            alert("checking op"+opdir)
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
             alert("about to move")
-            file.copyTo(opdir, newFileName, function () {
-            	alert("moved"+newFileName)
+            file.copyTo(opdir, newFileName, function (entry) {
+            	alert("moved"+newFileName+":::"+entry.fullPath)
             	buildPhotoList()
                
             }, function () {
