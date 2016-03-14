@@ -511,13 +511,28 @@ function downloadMissing()
 	        var cnt = 0;
 	        $.each(data.FILES, function (index) {
 	            fileName = data.FILES[index].name;
-	            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "files"));
+	            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory + data.FILES[index].name, appStart, downloadAsset1(data.FILES[index].name));
 	            cnt = cnt + 1;
 
 	        });
 	    });
 }
-
+function downloadAsset1(fileName) {
+    var fileTransfer = new FileTransfer();
+    x=fileName.split("/")
+    alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.dataDirectory  + x[3]);
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.dataDirectory+ x[3],
+		function (entry) {
+		    alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
+		   
+		},
+		function (error) {
+		    
+		    alert("xxdownload error " + error.source+ ":" + error.target+": " + error.code);
+	
+		    
+		});
+}
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
