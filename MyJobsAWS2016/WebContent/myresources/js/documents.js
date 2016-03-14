@@ -342,7 +342,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
     //moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
-moveFile(imageData, cordova.file.applicationStorageDirectory)
+moveFile(imageData, cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos)
 }
 
 //Callback function when the picture has not been successfully taken
@@ -376,12 +376,12 @@ function moveFile(fileUri,dir) {
 
                        newFileName = datetime + fileExt;
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                           alert("checking op"+opdir)
+                           
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-            alert("about to move")
+            
             file.copyTo(opdir, newFileName, function (entry) {
-            	alert("moved"+newFileName+":::"+entry.fullPath)
-            	buildPhotoList()
+            	alert("moved to "+entry.fullPath)
+            	
                
             }, function () {
                 alert("error moving");
@@ -392,7 +392,7 @@ function moveFile(fileUri,dir) {
 
 function buildPhotoList(){
 	alert("building Photo List")
-	listFiles(cordova.file.applicationStorageDirectory)
+	listFiles(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos)
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
@@ -415,7 +415,7 @@ function buildPhotoList(){
 }
 function buildGlobalList(){
 	alert("building Private List")
-	listFiles(cordova.file.dataDirectory+"files/MyJobs/Private/Download/")
+	listFiles(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Download/")
 	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
 	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
 	var docsLength = docs.length;
@@ -504,7 +504,8 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL(cordova.file.dataDirectory + "MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
+            
+            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"files/MyJobs/Private/Download/"));
             cnt = cnt + 1;
            
         });
@@ -515,7 +516,7 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL(cordova.file.dataDirectory +"MyJobs/Global/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory+"files/MyJobs/Global/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "files/MyJobs/Global/Download/"));
             cnt = cnt + 1;
 
         });
@@ -528,7 +529,7 @@ function downloadAsset(fileName,dir) {
     alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.dataDirectory + dir + x[3]);
     fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.dataDirectory + dir + x[3],
 		function (entry) {
-		    alert(cordova.file.dataDirectory + dir + x[3]+":::"+entry.fullPath)
+		    alert(cordova.file.applicationStorageDirectory + dir + x[3]+":::"+entry.fullPath)
 		   
 		},
 		function (error) {
