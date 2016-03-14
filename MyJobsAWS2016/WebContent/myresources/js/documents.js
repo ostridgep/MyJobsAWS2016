@@ -17,11 +17,9 @@ new sap.m.Button( {
        	
        	
        	
-    	
+   	
     	buildPhotoList();
-        buildGlobalList();
-        buildDownloadList();
-        buildUploadList();
+     
                 } ]
    
 }), 
