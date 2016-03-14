@@ -355,7 +355,7 @@ function successMoveCallback(entry) {
 }
 
 function errorMoveCallback(error) {
-    alert("Error:" + error.code+":" + error.source+":" + error.target)
+    alert("moveCallbackError:" + error.code+":" + error.source+":" + error.target)
     
 }
 
@@ -378,13 +378,15 @@ function moveFile(fileUri,dir) {
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
                            
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-            alert(opdir+":"+newFileName)
+           
             file.copyTo(opdir, newFileName, function (entry) {
             	alert("moved to "+entry.fullPath)
             	
                
             }, function (error) {
+            	alert(opdir+":"+newFileName)
                 alert("error moving:"+error.code+":"+error.source+":"+error.target);
+            	moveFile(fileUri,cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos")
             });
         }, errorMoveCallback);
     }, errorMoveCallback);
@@ -477,6 +479,7 @@ function dirReadFail(error) {
 function downloadMissing()
 {
 	alert("Got here")
+	/*
     $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
         downloadCount = 0
         
@@ -490,6 +493,7 @@ function downloadMissing()
            
         });
     });
+    */
     $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
         downloadCount = 0
         alert("Global"+data.FILES.length)
@@ -501,6 +505,17 @@ function downloadMissing()
 
         });
     });
+	 $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
+	        downloadCount = 0
+	        alert("Global"+data.FILES.length)
+	        var cnt = 0;
+	        $.each(data.FILES, function (index) {
+	            fileName = data.FILES[index].name;
+	            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "files"));
+	            cnt = cnt + 1;
+
+	        });
+	    });
 }
 
 function downloadAsset(fileName,dir) {
