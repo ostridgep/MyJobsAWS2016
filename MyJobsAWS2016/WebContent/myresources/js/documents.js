@@ -378,7 +378,7 @@ function moveFile(fileUri,dir) {
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
                            
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-            
+            alert(opdir+":"+newFileName)
             file.copyTo(opdir, newFileName, function (entry) {
             	alert("moved to "+entry.fullPath)
             	
@@ -444,29 +444,7 @@ function listFiles(dir) {
         var directoryReader = dirEntry.createReader();
           directoryReader.readEntries(dirReadSuccess, dirReadfail);
     });
-/*
-    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
-        $op = document.querySelector("#remotecount");
-        $op.innerHTML = data.FILES.length;
-        $.each(data.FILES, function (index) {
-            opMess("remote", "PrivateDownload:"+data.FILES[index].name + ": " + data.FILES[index].size + ": " + data.FILES[index].type + ": " + data.FILES[index].lastmod);
-        });
-    });
-    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
-        $op = document.querySelector("#remotecount");
-        $op.innerHTML = data.FILES.length;
-        $.each(data.FILES, function (index) {
-            opMess("remote", "GlobalDownload:"+data.FILES[index].name + ": " + data.FILES[index].size + ": " + data.FILES[index].type + ": " + data.FILES[index].lastmod);
-        });
-    });
-    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/POSTRIDGE/upload', function (data) {
-        $op = document.querySelector("#remotecount");
-        $op.innerHTML = data.FILES.length;
-        $.each(data.FILES, function (index) {
-            opMess("remote", "PrivateUpload:" + data.FILES[index].name + ": " + data.FILES[index].size + ": " + data.FILES[index].type + ": " + data.FILES[index].lastmod);
-        });
-    });
-    */
+
 }
 
 function file_details_callback(f) {
@@ -499,7 +477,7 @@ function dirReadFail(error) {
 function downloadMissing()
 {
 	alert("Got here")
-    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
+    $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
         downloadCount = 0
         
         alert("private"+data.FILES.length)
@@ -512,7 +490,7 @@ function downloadMissing()
            
         });
     });
-    $.getJSON('http://192.168.1.20/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
+    $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
         downloadCount = 0
         alert("Global"+data.FILES.length)
         var cnt = 0;
@@ -528,8 +506,8 @@ function downloadMissing()
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
-    fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.applicationStorageDirectory + dir + x[3],
+    alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.applicationStorageDirectory + dir + x[3],
 		function (entry) {
 		    alert(cordova.file.applicationStorageDirectory + dir + x[3]+":::"+entry.fullPath)
 		   
