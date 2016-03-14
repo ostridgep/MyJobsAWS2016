@@ -494,6 +494,7 @@ function dirReadFail(error) {
     alert("Failed to list directory contents: "+ error);
 }
 	
+
 function downloadMissing()
 {
 	alert("Got here")
