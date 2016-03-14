@@ -383,8 +383,8 @@ function moveFile(fileUri,dir) {
             	alert("moved to "+entry.fullPath)
             	
                
-            }, function () {
-                alert("error moving");
+            }, function (error) {
+                alert("error moving:"+error.code+":"+error.source+":"+error.target);
             });
         }, errorMoveCallback);
     }, errorMoveCallback);
@@ -415,7 +415,7 @@ function buildPhotoList(){
 }
 function buildGlobalList(){
 	alert("building Private List")
-	listFiles(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Download/")
+	listFiles(cordova.file.applicationStorageDirectory+"/files/MyJobs/Private/Download/")
 	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
 	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
 	var docsLength = docs.length;
@@ -526,8 +526,8 @@ function downloadMissing()
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.dataDirectory + dir + x[3]);
-    fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.dataDirectory + dir + x[3],
+    alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.applicationStorageDirectory + dir + x[3]);
+    fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.applicationStorageDirectory + dir + x[3],
 		function (entry) {
 		    alert(cordova.file.applicationStorageDirectory + dir + x[3]+":::"+entry.fullPath)
 		   
