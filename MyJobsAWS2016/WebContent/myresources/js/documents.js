@@ -392,7 +392,7 @@ function moveFile(fileUri,dir) {
 
 function buildPhotoList(){
 	alert("building Photo List")
-	listFiles(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos)
+	listFiles(cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos")
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 	var photoLength = photos.length;
