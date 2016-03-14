@@ -342,7 +342,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
     //moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
-moveFile(imageData, cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos)
+moveFile(imageData, cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos")
 }
 
 //Callback function when the picture has not been successfully taken
