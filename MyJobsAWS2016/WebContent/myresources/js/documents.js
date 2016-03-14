@@ -13,7 +13,7 @@ new sap.m.Button( {
     	
        	
        	
-    \   	
+       	
     	
     	
         buildGlobalList()      
