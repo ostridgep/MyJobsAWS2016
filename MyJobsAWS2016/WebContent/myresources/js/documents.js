@@ -342,7 +342,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
     //moveFile(imageData, cordova.file.dataDirectory+"MyJobs/Private/Photos/")
-moveFile(imageData, cordova.file.applicationStorageDirectory+"files/MyJobs/Private/Photos")
+moveFile(imageData, cordova.file.dataDirectory)
 }
 
 //Callback function when the picture has not been successfully taken
@@ -379,7 +379,7 @@ function moveFile(fileUri,dir) {
                            
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
            
-            file.copyTo(opdir, newFileName, function (entry) {
+            file.moveTo(opdir, newFileName, function (entry) {
             	alert("moved to "+entry.fullPath)
             	
                
@@ -511,7 +511,7 @@ function downloadMissing()
 	        var cnt = 0;
 	        $.each(data.FILES, function (index) {
 	            fileName = data.FILES[index].name;
-	            window.resolveLocalFileSystemURL(cordova.file.applicationStorageDirectory + data.FILES[index].name, appStart, downloadAsset1(data.FILES[index].name));
+	            window.resolveLocalFileSystemURL(cordova.file.dataDirectory + data.FILES[index].name, appStart, downloadAsset1(data.FILES[index].name));
 	            cnt = cnt + 1;
 
 	        });
