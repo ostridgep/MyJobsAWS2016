@@ -528,7 +528,7 @@ function downloadAsset(fileName,dir) {
     alert("About to start transfer " + "http://192.168.1.20/" + fileName + " to " + cordova.file.dataDirectory + dir + x[3]);
     fileTransfer.download("http://192.168.1.20/" + fileName, cordova.file.dataDirectory + dir + x[3],
 		function (entry) {
-		    //alert(cordova.file.dataDirectory + dir + x[3])
+		    alert(cordova.file.dataDirectory + dir + x[3]+":::"+entry.fullPath)
 		   
 		},
 		function (error) {
