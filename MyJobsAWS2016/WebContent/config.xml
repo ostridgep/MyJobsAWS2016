@@ -40,7 +40,7 @@
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 	<preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
 	<preference name="iosPersistentFileLocation" value="Library" />
-    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
     <!-- Plugins -->
 
@@ -66,7 +66,7 @@
     <gap:plugin name="org.apache.cordova.media" />
     <gap:plugin name="org.apache.cordova.network-information" />
  <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
-
+ <gap:plugin name="cordova-plugin-whitelist" />
  <gap:plugin name="org.apache.cordova.file"  />
  <gap:plugin name="org.apache.cordova.file-transfer" />
 
