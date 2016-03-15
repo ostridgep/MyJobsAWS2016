@@ -406,33 +406,21 @@ function buildPhotoList(){
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(photosReadSuccess, photosReadFail);
 	    });
-	
-	
-	
-	
-	var photoLength = privatephotos.length;
-	alert("total Photos"+photoLength)
-	for (var i = 0; i < photoLength; i++) {
-	    photodets=privatephotos[i].split(":");
-		opTable.addItem (new sap.m.ColumnListItem({
-			cells : 
-				[
-				new sap.m.Text({text: photodets[0]}),
-	            new sap.m.Text({text: photodets[1]}),
-	            new sap.m.Text({text: photodets[2]}),
-				new sap.m.Text({text: photodets[3]})   
-		 		]
-			}));
-	}
-	
-	
 
 }
 
 function photos_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
-    privatephotos.push(f.name + ":" + f.type + ":" + f.size + ":" + d1.toString('yyyyMMdd') );
-    alert("pushing to array")
+    var opTable = sap.ui.getCore().getElementById('PhotosTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
 }
 function photosReadSuccess(entries) {
 	 alert("photos found "+entries.length)
@@ -451,10 +439,54 @@ function photosReadSuccess(entries) {
     }
 }
 function photosReadFail(error) {
-    alert("Failed to list photos contents: "+ error);
+    alert("Failed to list Photos contents: "+ error);
 }
+function buildGlobalList(){
+	alert("building Global List")
+	
+	
+	sap.ui.getCore().getElementById('GlobalTable').destroyItems();
 
 
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
+	    	
+	        var directoryReader = dirEntry.createReader();
+	          directoryReader.readEntries(globalReadSuccess, globalReadFail);
+	    });
+
+}
+function global_details_callback(f) {
+    var d1 = new Date(f.lastModifiedDate);
+    var opTable = sap.ui.getCore().getElementById('GlobalTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
+}
+function globalReadSuccess(entries) {
+	 alert("global found "+entries.length)
+	
+  
+    var i;
+    for (i = 0; i < entries.length; i++) {
+       
+        if (entries[i].isFile) {
+            entries[i].file(global_details_callback);
+
+        } else {
+            console.log('globalDirectory - ' + entries[i].name);
+            
+        }
+    }
+}
+function globalReadFail(error) {
+    alert("Failed to list global contents: "+ error);
+}
 
 
 function downloadMissing()
