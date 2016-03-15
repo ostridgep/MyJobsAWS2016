@@ -484,7 +484,50 @@ function globalReadSuccess(entries) {
         }
     }
 }
-function globalReadFail(error) {
+function buildDownloadList(){
+	alert("building Global List")
+	
+	
+	sap.ui.getCore().getElementById('DownloadTable').destroyItems();
+
+
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+	    	
+	        var directoryReader = dirEntry.createReader();
+	          directoryReader.readEntries(downloadReadSuccess, downloadReadFail);
+	    });
+
+}
+function download_details_callback(f) {
+    var d1 = new Date(f.lastModifiedDate);
+    var opTable = sap.ui.getCore().getElementById('DownloadTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
+}
+function downloadReadSuccess(entries) {
+	 alert("download found "+entries.length)
+	
+  
+    var i;
+    for (i = 0; i < entries.length; i++) {
+       
+        if (entries[i].isFile) {
+            entries[i].file(download_details_callback);
+
+        } else {
+            console.log('downloadDirectory - ' + entries[i].name);
+            
+        }
+    }
+}
+function downloadReadFail(error) {
     alert("Failed to list global contents: "+ error);
 }
 
