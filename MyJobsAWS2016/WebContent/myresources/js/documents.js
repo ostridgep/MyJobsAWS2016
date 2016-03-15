@@ -404,7 +404,7 @@ function buildPhotoList(){
 	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(photosReadSuccess(), photosReadFail);
+	          directoryReader.readEntries(photosReadSuccess, photosReadFail);
 	    });
 	
 	
