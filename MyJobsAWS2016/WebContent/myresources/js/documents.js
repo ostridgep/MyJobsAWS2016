@@ -499,6 +499,7 @@ function buildDownloadList(){
 
 }
 
+
 function download_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
     var opTable = sap.ui.getCore().getElementById('DownloadTable');
