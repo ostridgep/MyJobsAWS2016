@@ -401,10 +401,10 @@ function buildPhotoList(){
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos", function (dirEntry) {
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(photosReadSuccess(), protosReadFail);
+	          directoryReader.readEntries(photosReadSuccess(), photosReadFail);
 	    });
 	
 	
