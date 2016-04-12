@@ -22,7 +22,13 @@ var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
 
 var xmlDoc="";
+function isTablet(customUA) {
+	  var ua = customUA || navigator.userAgent;
 
+	  if (device.os.name === device.os.OS.IOS) {
+	  return /ipad/i.test(ua);
+	  }	 
+}
 function sendSMS(to, message)
 {
     $.post("https://sms.cginotify.com/api/SMS/Send",{ LicenseKey: "hmJks0HcfKplAP2i4vuVrXxThFbj4JYfHmRRB1Dw", PhoneNumbers: to, Message : message}, function(data, status){
