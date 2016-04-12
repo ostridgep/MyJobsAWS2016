@@ -201,22 +201,57 @@
 	<div>
 		<a href="#close" title="Close" class="close">X</a>
 		<h2>Add Location</h2>
-		<Label>Flooding Type</Label>
+		<TABLE width="100%">
+		<TR>
+		<td width="50%">Flooding Type</td><td width="50%">SubType</td></TR>
+		<TR><TD>
 		<select class="feedback-input" id="LocationFloodType" name="LocationFloodType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="" disabled selected></option>
         </select>                   			
-		<Label>SubType</Label>
+		</TD><TD>
 		<select class="feedback-input" id="LocationFloodSubType" name="LocationFloodSubType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="" disabled selected></option>       
-        </select>                   			                    			
-		<Label>Severity</Label>
+        </select>  
+        </TD></TR>>                 			                    			
+		<tr><TD>Severity</td><td>Functional Location</td></tr>
+		<tr><TD>
 		<select class="feedback-input" id="LocationSeverity" name="LocationSeverity" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="" disabled selected></option>
         </select> 
-        <Label>Functional Location</Label>
+        </TD><TD>
         <input type="text" class="feedback-input-table" id="LocationFloc" />
+        </TD></tr>
+        <TR><TD colspan="2">
+        Comments</TD></TR>
+        <TR><td colspan="2">
+        <textarea id="LocationComments" name="LocationComments" rows="2" cols="100"></textarea></td></TR>
+        <TR><TD> <a href="#close"><button class="btn btn-small btn-danger">Cancel</button></a></TD><TD align="right"> <a href="javascript:saveLocation()"><button class="btn btn-smal btn-success">Add</button></a></TD> </TR>
+        </TABLE>
+        
+	</div>
+	</div>
+	<div id="LocationAdd1" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2>Add Location</h2>
+		<table>
+		<TR>Flooding Type</table>
+		<Label>Flooding Type</Label>
+		<select class="feedback-input" id="LocationFloodType1" name="LocationFloodType1" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+        </select>                   			
+		<Label>SubType</Label>
+		<select class="feedback-input" id="LocationFloodSubType" name="LocationFloodSubType1" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>       
+        </select>                   			                    			
+		<Label>Severity</Label>
+		<select class="feedback-input" id="LocationSeverity1" name="LocationSeverity1" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+        </select> 
+        <Label>Functional Location</Label>
+        <input type="text" class="feedback-input-table" id="LocationFloc1" />
         <Label>Comments</Label>
-        <textarea id="LocationComments" name="LocationComments" rows="4" cols="50"></textarea>
+        <textarea id="LocationComments1" name="LocationComments1" rows="4" cols="50"></textarea>
         <TABLE width="100%"><TR><TD> <a href="#close"><button class="btn btn-small btn-danger">Cancel</button></a></TD><TD align="right"> <a href="javascript:saveLocation()"><button class="btn btn-smal btn-success">Add</button></a></TD> </TR></TABLE>
         
 	</div>
