@@ -81,6 +81,49 @@ if(n==1){
 
 
 }
+function validateChanePassword(user,pw,newpw,newpwconf)
+{
+var SQLStatement=""
+var user=""
+var pw=""
+var pin=""
+
+
+	SQLStatement="SELECT * from MyUserDets where user = '"+user+"'"
+
+	
+	html5sql.process(SQLStatement,
+	 function(transaction, results, rowsArray){
+			if( rowsArray.length > 0) {
+				if(pw!=rowsArray[0].password){
+					showMessage("Existing Password is incorrect")
+				}else{
+					if(newpw!=newpwconf)	{
+						showMessage("New Passwords do not match")
+					}else{
+						if(pw.length<2){
+							showMessage("Invalid New Password")
+						}else{
+							ChangeUserPW(user, user, newpw)
+						}
+					}
+				}		
+
+			}else{
+			showMessage("Incorrect Username")
+					
+			}
+		
+	 },
+	 function(error, statement){
+		 showMessage("An Error Occured")
+		 return false
+	 }        
+	);			
+
+
+
+}
 jQuery.sap.require("sap.m.MessageBox");
 var LogState;
 
@@ -197,14 +240,50 @@ var formChangePassword = new sap.m.Dialog("dlgChangePassword",{
 					type: sap.m.ButtonType.Accept,
 				   text: "Save",
 				   tap: [ function(oEvt) {		
-						alert("Save Password")
-					    formChangePassword.close()} ]
+							SQLStatement="SELECT * from MyUserDets where user = '"+sap.ui.getCore().byId("CPUser").getValue()+"'"					
+							html5sql.process(SQLStatement,
+							 function(transaction, results, rowsArray){
+									if( rowsArray.length > 0) {
+										if(sap.ui.getCore().byId("CPOldPassword").getValue()!=rowsArray[0].password){
+											showMessage("Existing Password is incorrect")
+										}else{
+											if(sap.ui.getCore().byId("CPNewPassword").getValue()!=sap.ui.getCore().byId("CPNewPassword1").getValue())	{
+												showMessage("New Passwords do not match")
+											}else{
+												if(sap.ui.getCore().byId("CPNewPassword").getValue().length<2){
+													showMessage("Invalid New Password")
+												}else{
+													ChangeUserPW(sap.ui.getCore().byId("CPUser").getValue(), sap.ui.getCore().byId("CPUser").getValue(), sap.ui.getCore().byId("CPNewPassword").getValue())
+													formChangePassword.close()
+												}
+											}
+										}		
+					
+									}else{
+									showMessage("Incorrect Username")
+											
+									}
+								
+							 },
+							 function(error, statement){
+								 showMessage("An Error Occured")
+								
+							 }        
+							);			
+				   
+				   
+				   
+				   
+				   
+				   
+			   
+					    	} ]
 				}),   
 				new sap.m.Button({
 					type: sap.m.ButtonType.Reject,
 				    text: "Cancel",
 				    tap: [ function(oEvt) {		  
-						alert("Cancel") 
+						
 				    	formChangePassword.close()
 						  } ]
 				})
@@ -224,7 +303,14 @@ var formChangePassword = new sap.m.Dialog("dlgChangePassword",{
 							new sap.m.Input("CPNewPassword1",{type: sap.m.InputType.Password})    
 							]
  				})
-            ]
+            ],
+			beforeOpen:function(){
+				sap.ui.getCore().byId("CPUser").setValue('')
+				sap.ui.getCore().byId("CPOldPassword").setValue('')
+				sap.ui.getCore().byId("CPNewPassword").setValue('')
+				sap.ui.getCore().byId("CPNewPassword1").setValue('')
+			                
+			            }
  })
 
 var busycreateDB = new sap.m.BusyDialog('busycreateDB',{text:'Createing the Database', title: 'Database',

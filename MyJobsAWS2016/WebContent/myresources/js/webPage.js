@@ -1,3 +1,6 @@
+var formToOpen="Forms/formsindex.html"
+var formMode="Forms"
+var closeFormName=""
 var selectedWebPage
 currentPage=document.location.href;
 
@@ -86,10 +89,10 @@ var formForms = new sap.m.Dialog("dlg",{
 					    			x=w.split("#")
 					    			y=x[1]
 					    			z=y.split(":")
-					    			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json)
+					    			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode)
 					    		}else{
 					    		//Standalone Form
-					    			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json)
+					    			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode)
 					    		}
 					    		formForms.close()
 					    	}
@@ -114,7 +117,7 @@ var formForms = new sap.m.Dialog("dlg",{
     		
 
 			//content: ' <iframe id="formIframe" src="Forms/formsindex.html" onload="this.width=screen.width-170;this.height=screen.height;showhideSaveButton(this.contentWindow.location.toString())"></iframe>'
-			content: ' <iframe id="formIframe" src="Forms/formsindex.html" frameborder="0" style="width:100%"  width="100%"  onload="this.height=height= screen.height; showhideSaveButton(this.contentWindow.location.toString())"></iframe>'
+			content: ' <iframe id="formIframe" src="'+formToOpen+'" frameborder="0" style="width:100%"  width="100%"  onload="this.height=height= screen.height; showhideSaveButton(this.contentWindow.location.toString())"></iframe>'
 						
 
 		}))
@@ -132,7 +135,7 @@ var formForms = new sap.m.Dialog("dlg",{
 	
 	 })
 function showhideSaveButton(pageName){
-
+	
 	
 	if( pageName.indexOf("formsindex")>0){
 		sap.ui.getCore().getElementById('formSaveButton').setVisible(false);
@@ -149,8 +152,10 @@ function showhideSaveButton(pageName){
 	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;	
 	
-		
-	
+	//	formMode='Close' if coming from Close Page
+	//need to read the json values into an array
+	loadFormFields(MyIFrameDoc)
+
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
 		buildHeaderFields(MyIFrameDoc);
@@ -347,6 +352,7 @@ var SQLStatement=''
 	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
 	            		}else{
 	            			doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"   					
+	            		
 	            		}
 	            	}	           
 	                                
@@ -461,4 +467,61 @@ function setDlgTitle(formTitle){
 
 	str+="}"
 	    return str;
+	}
+	function isObject(element) {
+	    return element.constructor == Object;
+	}
+	function isIterable(element) {
+	    return isArray(element) || isObject(element);
+	}
+
+	function isArray(element) {
+	    return element.constructor == Array;
+	}
+	function loadFormFields(formDoc){
+		var items = formDoc.getElementsByTagName("*");
+
+		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
+		
+		html5sql.process(sqlstatement,
+				function(transaction, results, rowsArray){
+			
+					if( rowsArray.length > 0) {
+						
+						x=$.parseJSON(rowsArray[0].contents)
+						
+						for (var key in x.Feedback[0]) {
+						    if (x.Feedback[0].hasOwnProperty(key)) {
+						      var val = x.Feedback[0][key];
+						      
+						       if(isIterable(val)){
+								for (var key1 in val) {
+								    if (val.hasOwnProperty(key1)) {
+								      var val1 = val[key1];
+								      console.log("---tab--"+key+":"+key1+"-->"+val1);
+										for (var key2 in val1) {
+										    if (val1.hasOwnProperty(key2)) {
+										      var val2 = val1[key2];
+										      console.log("-------tab-fld---"+key2+"-->"+val2);
+										      
+										    }
+										  }
+								    }
+								  }
+						    	}else{
+						    		console.log(key+"field->"+val);
+						    		items[key].value=val
+						    	}
+						    }
+						  }
+										
+			
+					}
+
+				},
+				 function(error, statement){
+					 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+				 }   
+			);	
+
 	}

@@ -1618,7 +1618,8 @@ var detailFooterAWS = new sap.m.Bar({
 				    		 icon:"sap-icon://form",
 				    	
 				   			tap: 	[ function(oEvt) {		
-				   				
+				   				formToOpen="Forms/formsindex.html"
+				   			    formMode="Forms"
 		   						formForms.open()
 				   				
 				   							
@@ -5148,6 +5149,7 @@ function BuildChangeStatusReject(){
 		}
 
 function BuildCloseScreen(){
+	initCloseButtons();
 	sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(CurrentJobFL)
 	sap.ui.getCore().getElementById("Close_Equipment").setValue(CurrentJobEQ)
 	sap.ui.getCore().getElementById("Close_LongText").setValue("")

@@ -1,3 +1,4 @@
+
 var oLayout1 = new sap.ui.layout.form.GridLayout();
 var oLayout1a = new sap.ui.layout.form.GridLayout();
               var oLayout2 = new sap.ui.layout.form.ResponsiveLayout();
@@ -84,7 +85,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                          ],
 
                                                          change: function(oControlEvent) {
-                                                                
+                                                                setCloseButtons(oControlEvent.getParameter("selectedItem").getKey())
                                                                 BuildCloseProblemCodes(oControlEvent.getParameter("selectedItem").getKey());
                                                          }
                                                   }),
@@ -164,7 +165,65 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                     }
                                              }),
                                              ]
-                                      })
+                                      }),
+                                      new sap.ui.layout.form.FormElement({
+                                    	  label: "Flooding/DG5 Feedback",
+                                          fields: [new sap.m.Button('btnDG5', {
+                                        	  
+                  				    				text: 	"Create",
+                  				    				icon:"sap-icon://form",
+               				    	
+                  				    				tap: 	[ function(oEvt) {
+                  				    							formToOpen="Forms/flooding.html"
+                  				    								formMode="Close"
+                  				    									closeFormName="Flooding"
+                        				    							formForms.open()
+                  				    							} 
+                  				    							
+               				   			 					]   
+               										})
+                                                 
+                                          		]
+                                      	}),
+                                        new sap.ui.layout.form.FormElement({
+                                      	  label: "Polution",
+                                            fields: [new sap.m.Button('btnPollution', {
+                                          	  
+                    				    				text: 	"Create",
+                    				    				icon:"sap-icon://form",
+                 				    	
+                    				    				tap: 	[ function(oEvt) {
+                    				    							formToOpen="Forms/pollution.html"
+                    				    								formMode="Close"
+                    				    									closeFormName="Pollution"
+                            				    							formForms.open()
+                    				    							} 
+                    				    							
+                 				   			 					]   
+                 										})
+                                                   
+                                            		]
+                                        	}),
+                                            new sap.ui.layout.form.FormElement({
+                                          	  label: "Customer Feedback",
+                                                fields: [new sap.m.Button('btnFeedback', {
+                                              	  
+                        				    				text: 	"Create",
+                        				    				icon:"sap-icon://form",
+                     				    	
+                        				    				tap: 	[ function(oEvt) {
+                        				    							formToOpen="Forms/CustomerFeedback.html"
+                        				    							formMode="Close"
+                        				    								closeFormName="Feedback"
+                        				    							formForms.open()
+                        				    							} 
+                        				    							
+                     				   			 					]   
+                     										})
+                                                       
+                                                		]
+                                            	})
+              						
                                       ],
                                layoutData: new sap.ui.core.VariantLayoutData({
                                              multipleLayoutData: [new sap.ui.layout.ResponsiveFlowLayoutData({linebreak: true, minWidth: 400}),
@@ -255,6 +314,9 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
               
 
 function buildDG5Tabs(){
+	
+	
+	
        var tabBar  = new sap.m.IconTabBar('DG5tabBar',
                      {
                            expanded:'{device>/isNoPhone}',
@@ -291,5 +353,79 @@ function buildDG5Tabs(){
        return tabBar;
 
        }
+function setCloseButtons(key){
+	initCloseButtons()
+	if (key=="GEN-LE"){
+		sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
+		if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
+			sap.ui.getCore().getElementById('btnDG5').setText("Create");
+			
+		}
+	
+	}else{
+		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
+	
+	}
+	
+	if (key=="GEN-OP"){
+		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
+		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
+			sap.ui.getCore().getElementById('btnPollution').setText("Create");
+			
+		}
+		
+	}else{
+		sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
+		
+	}
+}
+function initCloseButtons(){
+	sap.ui.getCore().getElementById('btnFeedback').setEnabled(true);
+	sap.ui.getCore().getElementById('btnFeedback').setText("Create");
+	sap.ui.getCore().getElementById('btnFeedback').setType(sap.m.ButtonType.Accept);
+	sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
+	sap.ui.getCore().getElementById('btnDG5').setText("Not Required");
+	sap.ui.getCore().getElementById('btnDG5').setType(sap.m.ButtonType.Accept);
+	sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
+	sap.ui.getCore().getElementById('btnPollution').setText("Not Required");
+	sap.ui.getCore().getElementById('btnPollution').setType(sap.m.ButtonType.Accept);
+	sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"'"
+	
+	html5sql.process(sqlstatement,
+			function(transaction, results, rowsArray){
+		
+				if( rowsArray.length > 0) {
+					for (var n = 0; n < rowsArray.length; n++) {
+						
+						if(rowsArray[n].formname=='Flooding'){
+							
+						
+							sap.ui.getCore().getElementById('btnDG5').setText("Change");
+							sap.ui.getCore().getElementById('btnDG5').setType(sap.m.ButtonType.Emphasized);
+						}
+						if(rowsArray[n].formname=='Pollution'){
+							
+							
+							sap.ui.getCore().getElementById('btnPollution').setText("Change");
+							sap.ui.getCore().getElementById('btnPollution').setType(sap.m.ButtonType.Emphasized);
+						}
+						if(rowsArray[n].formname=='Feedback'){
+							
+							sap.ui.getCore().getElementById('btnFeedback').setEnabled(true);
+							sap.ui.getCore().getElementById('btnFeedback').setText("Change");
+							sap.ui.getCore().getElementById('btnFeedback').setType(sap.m.ButtonType.Emphasized);
+						}
 
+						
+					}
+									
+		
+				}
 
+			},
+			 function(error, statement){
+				 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+			 }   
+		);	
+
+}

@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+        <title>Customer Feedback</title>
+    </head>
+<body>
+    <div class="container">
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-6">
+                <div class="row">
+                    <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                </div>
+                <div class="row">
+                    <h1><b>Customer Feedback Form</b></h1>
+                </div>
+            </div>
+            <form   id="MyJobsForm" action="ProcessForm.html">
+            <input id="FormName" name="FormName" value="CustomerFeed" hidden>
+            <div class="col-md-6">
+                <div class="row">
+				<input class="form-control" id="workorder" merge="orderno" placeholder="Enter Work Order"/>
+                    <!--<label class="pull-right" id="workorderlabel"></label>-->
+                </div>
+                <div class="row">
+				<input class="form-control" id="functionallocation" merge="funcloc_desc" placeholder="Enter Functional Location"/>
+                    <!--<label class="pull-right"  value="~FunctionalLocation" id="functionallocationlabel"></label>-->
+                </div>
+            </div>
+
+        </div>
+        
+            <div class="form-group">
+
+
+
+                
+                <div class="well row">
+                    <table class="table table-bordered">
+                       
+                        <tr>
+                            <td width = "50%">Has the Customer been spoken to and updated?</td>
+                           
+                            <td>
+                             <input type="TEXT" id="spokentoV" name="spokentoV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="spokento" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                           
+                            <td width = "50%">Has a contact card been left with the Customer?</td>
+                           
+                            <td align="left">
+                             <input type="TEXT" id="contactcardV" name="contactcardV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="contactcard" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("contactcardV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("contactcardV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width = "50%">Please confirm how satisfied the Customer is with the actions you have taken</td>
+                           
+                           <td align="left">
+                        <select class="feedback-input" id="custsatifaction" name="custsatifaction"  merge="SELECT CODE as value, CODEDESC as description FROM CFCODES WHERE codegroup = 'CUST030' AND LEVEL='2' ORDER BY CODEDESC">
+                            <option value="" selected></option>
+
+
+                        </select> 
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td width = "50%">If Customer is Dissatisfied / Very Dissatisfied, please state why</td>
+                           
+                           <td align="left">
+                              <textarea id="reason" name="reason"  rows="4" cols="50" ></textarea>
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width = "50%">Is the Customer's issue 100% resolved?</td>
+                           
+                           <td align="left">
+                             <input type="TEXT" id="resolvedV" name="resolvedV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="resolved" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width = "50%">If no, what is the underlying cause of the problem?</td>
+                           
+                            <td align="left">
+                             <textarea id="cause" name="cause"  rows="4" cols="50" ></textarea>
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width = "50%">Is any further work required and has this been fully explained to the Customer?</td>
+                           
+                           <td align="left">
+                             <input type="TEXT" id="furtherworkV" name="furtherworkV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="furtherwork" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("furtherworkV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("furtherworkV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>                                                
+                        <tr>
+                            <td width = "50%">If yes, have you requested additional work to be raised?</td>
+                           
+                           <td align="left">
+                             <input type="TEXT" id="additionalworkV" name="additionalworkV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="additionalwork" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("additionalworkV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("additionalworkV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td width = "50%">Would this Customer's issue potentially benefit from being on a PPM Programme?/td>
+                           
+                             <td align="left">
+                             <input type="TEXT" id="ppmV" name="ppmV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="ppm" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("ppmV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("ppmV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>  
+						<tr>
+                            <td width = "50%">If yes, please provide details</td>
+                           
+                             <td align="left">
+                             <textarea id="ppmdetails" name="ppmdetails"  rows="4" cols="50" ></textarea>
+                               
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                
+                        <input type="submit" name="Save" value="SEND"  id="Save" hidden />
+                      
+
+
+            </div>
+
+        </form>
+    </div>
+    
+	
+<script>
+$(".btn-group > .btn").click(function () {
+    $(this).addClass("active").siblings().removeClass("active");
+    $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+});
+		
+	</script>
+	
+</body>
+</html>

@@ -23,7 +23,7 @@
                 </div>
             </div>
             <form   id="MyJobsForm" action="ProcessForm.html">
-            <input id="FormName" name="FormName" value="PollutionFeedback" hidden>
+            <input id="FormName" name="FormName" value="Pollution" hidden>
             <div class="col-md-6">
                 <div class="row">
 				<input class="form-control" id="workorder" merge="orderno" placeholder="Enter Work Order"/>
@@ -40,68 +40,35 @@
             <div class="form-group">
                 <div class="well row">
                     <div class="col-md-6 col-sm-6">                       
-                        <select class="feedback-input" id="pollutionsitetype" name="pollutionsitetype">
+                        <select class="feedback-input" id="pollutionsitetype" name="pollutionsitetype"  merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='PSI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value="" selected>Pollution Site Type</option>
-                            <option value="AN">Area Name</option>
-                            <option value="AS">Asset Short Code</option>
-                            <option value="HI">Highway</option>
-                            <option value="SN">Site Name</option>
+
 
                         </select>                     
-                        <select class="feedback-input" id="dischargetype" name="dischargetype">
+                        <select class="feedback-input" id="dischargetype" name="dischargetype"  merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='DIS' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value="" selected>Discharge Type</option>
-                            <option value="1">STW outfall</option>
-                            <option value="2">CSO</option>
-                            <option value="3">SWO</option>
-                            <option value="4">Overland Flow</option>
-                            <option value="CS">Combined Sewer Overflow</option>
-                            <option value="FS">Foul Sewer</option>
-                            <option value="OW">Other Water Industry Premises</option>
-                            <option value="PS">Pumping Station</option>
-                            <option value="RM">Rising Main</option>
-                            <option value="WT">Water Treatement Works</option>
-                            <option value="WD">Water Distribution System</option>
-                            <option value="SW">Surface Water Outfall</option>
-                            <option value="ST">Storm Tank</option>
-                            <option value="SE">Sewage Treatment Works</option>
+                           
                         </select>
-                        <select class="feedback-input" id="watercoursewidth" name="watercoursewidth">
+                        <select class="feedback-input" id="watercoursewidth" name="watercoursewidth" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='WCW' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value="" selected>Watercourse Width</option>
-                            <option value="1"><1M</option>
-                            <option value="2">1 to 5M</option>
-                            <option value="3">>5M</option>
+
                         </select>
-                        <select class="feedback-input" id="amenitiesimpact" name="amenitiesimpact">
+                        <select class="feedback-input" id="amenitiesimpact" name="amenitiesimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AMI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value="" selected>Amenities Impact</option>
-                            <option value="MA">Minor Access / Rear of Properties</option>
-                            <option value="PA">Public Access via footpath or highway</option>
-                            <option value="RE">Recreational area / park / watersports</option>
-                            <option value="PO">Potable abstraction point downstream</option>
+
                         </select>
                     </div>
 
                     <div class="col-md-6 col-sm-6">
                         <input name="pollutionsite" type="text" class="feedback-input" placeholder="Pollution Site" id="pollutionsite" />
-                        <select class="feedback-input" id="watercoursetype" name="watercoursetype">
+                        <select class="feedback-input" id="watercoursetype" name="watercoursetype" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='WCT' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  selected>Watercourse Type</option>
-                            <option value="DD">Dry Ditch</option>
-                            <option value="CA">Canal</option>
-                            <option value="LP">Lake/Pond</option>
-                            <option value="ST">Stream</option>
-                            <option value="FR">Flowing River</option>
+
                         </select>
                         <input name="sizeofimpact" type="text" class="feedback-input" placeholder="Size of Impact (m2)" id="sizeofimpact" />
-                        <select class="feedback-input" id="aestheticimpact" name="aestheticimpact">
+                        <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  selected>Aesthetic Impact</option>
-                            <option value="FS">Faint Smell / Odour</option>
-                            <option value="SS">Strong Smell</option>
-                            <option value="GW">Grey Water</option>
-                            <option value="FO">Foam / Scum / Iridescence</option>
-                            <option value="FA">Fats / Oils / Greases</option>
-                            <option value="IN">Industrial Chemicals</option>
-                            <option value="LI">Litter / Rags</option>
-                            <option value="SE">Sewage Fungus</option>
-                            <option value="FA">Faeces / Gross Litter</option>
+                            
                         </select>
                     </div>
                     

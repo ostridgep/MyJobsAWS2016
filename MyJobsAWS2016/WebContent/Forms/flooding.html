@@ -65,40 +65,42 @@
             </div>
             
             
-            <input id="FormName" name="FormName" value="PollutionFeedback" hidden>
+            <input id="FormName" name="FormName" value="Flooding" hidden>
                 <div class="form-group">
                     <div class="well row">
                         <div class="col-md-6 col-sm-6">
                             <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate" readonly />
-                            <select class="feedback-input" id="attendanceweather" name="attendanceweather">
-                                <option value="" disabled selected>Attendance Weather</option>
-                                <option value="01">Dry</option>
-                                <option value="02">Storm</option>
-                                <option value="03">Rain</option>
-                                <option value="04">Snow Melt</option>
-                            </select>
+
+                            
+                            <select class="feedback-input" id="attendanceweather" name="attendanceweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='ATW' AND LEVEL='2' ORDER BY CODEDESC">
+                    	 
+                         
+                           			<option value="" disabled selected>Attendance Weather</option>
+                          
+
+                        	</select> 
                         </div>
 
                         <div class="col-md-6 col-sm-6">
                             <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" readonly/>
-                            <select class="hideOnLoad feedback-input" id="floodweather" name="floodweather">
-                                <option value="" disabled selected>Flood Weather</option>
-                                <option value="01">Dry</option>
-                                <option value="02">Storm</option>
-                                <option value="03">Rain</option>
-                                <option value="04">Snow Melt</option>
+                         
+                            
+                            <select class="hideOnLoad feedback-input" id="floodweather" name="floodweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='FLW' AND LEVEL='2' ORDER BY CODEDESC">
+                    	 
+                         
+                           			<option value="" disabled selected>Attendance Weather</option>
+                          
+
+                        	
                             </select>
                         </div>
                     </div>
 
                     <div class="well row">
                         <div class="row ccol-md-6 col-sm-8">
-                            <select class="feedback-input cause" id="previousflooding" name="previousflooding" style="margin-left: 20px">
+                            <select class="feedback-input cause" id="previousflooding" name="previousflooding" style="margin-left: 20px" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='IPF' AND LEVEL='2' ORDER BY CODEDESC">
                                 <option value="" disabled selected>Is there any indication of previous flooding?</option>
-                                <option data-value="Blockage" value="01">None / Not Known</option>
-                                <option data-value="Collapse" value="02">Regular - every year</option>
-                                <option data-value="Equipment" value="03">Regular - every 2-3 years</option>
-                                <option data-value="Pumping" value="04">Regular - Infrequent    </option>
+                                
                             </select>
 
                         </div>
@@ -113,87 +115,38 @@
 
                     <div class="well row">
                         <div class="col-md-6 col-sm-6">
-                            <select class="feedback-input" id="floodingsource" name="floodingsource">
+                            <select class="feedback-input" id="floodingsource" name="floodingsource" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='FSO' AND LEVEL='2' ORDER BY CODEDESC">
                                 <option value="" disabled selected>Flooding Source</option>
-                                <option value="01">Field Run Off</option>
-                                <option value="02">River or Stream</option>
-                                <option value="03">Highway Drainage</option>
-                                <option value="04">Non-AW Sewer</option>
-                                <option value="05">Water Main</option>
-                                <option value="06">AW sewer</option>
-                                <option value="07">AW Pumping Station</option>
+
                             </select>
 
-                            <select class="feedback-input cause" id="causeofflood" name="causeofflood">
+                            <select class="feedback-input cause" id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
+                             onChange="parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
+                       
                                 <option value="" disabled selected>Cause of Flood</option>
-                                <option data-value="Blockage" value="B">Blockage</option>
-                                <option data-value="Collapse" value="C">Collapse</option>
-                                <option data-value="Equipment" value="O">Other Equipment Failure</option>
-                                <option data-value="Pumping" value="P">Pumping Station Failure</option>
-                                <option data-value="" value="W">P.S Failure due to 3rd Party</option>
-                                <option data-value="" value="X">Collapse due to 3rd Party</option>
-                                <option data-value="" value="Y">Blockage Due to 3rd Party</option>
-                                <option data-value="" value="X">Other Eq Failure due to 3rd Party</option>
+
                             </select>
 
-                            <select class="feedback-input root" id="rootcause" name="rootcause">
+                            <select class="feedback-input root" id="rootcause" name="rootcause" >
                                 <option class="blockage" disabled selected>Root Cause</option>
-                                <!--If Cause Code = B (Blockage)-->
-                                <option value="B1" class="blockage">FOG</option>
-                                <option value="B2" class="blockage">Non-flushable</option>
-                                <option value="B3" class="blockage">Rubble</option>
-                                <option value="B4" class="blockage">Silt</option>
-                                <option value="B5" class="blockage">Roots</option>
-                                <option value="B6" class="blockage">Unknown</option>
-                                <option value="B7" class="blockage">3rd Party (X)</option>
-                                <!--If Cause Code = C (Collapse)-->
-                                <option class="collapse" disabled selected>Root Cause</option>
-                                <option value="C1" class="collapse">Natural Collapse</option>
-                                <option value="C2" class="collapse">Caused by 3rd Party</option>
-                                <option value="C3" class="collapse">Burst Rising Main</option>
-                                <!--If Cause Code = E (Other Equipment Failure)-->
-                                <option class="collapse" disabled selected>Root Cause</option>
-                                <option value="E1" class="equipment">NRV Failure</option>
-                                <option value="E2" class="equipment">Hydrobrake Failure</option>
-                                <option value="E3" class="equipment">Leaking Valve</option>
-                                <option value="E4" class="equipment">Vacuum Pot Failure</option>
-                                <option value="E5" class="equipment">3rd Party (Z)</option>
-                                <option value="E6" class="equipment">Other</option>
-                                <!--If Cause Code = P (Pumping Station Failure)-->
-                                <option value="P1" class="pumping">Failure</option>
-                                <option value="P2" class="pumping">Vandalism</option>
-                                <option value="P3" class="pumping">3rd Party (W)</option>
-                                <option value="P4" class="pumping">Power Failure</option>
-                                <!--If Cause Code = J (Jetting)
-                                    <option value="J1" class="Collapse">Jetting Error</option>-->
-                                <!--If Cause Code = O (Overloaded)
-                                    <option value="O1" class="Collapse">Insufficient Sewer Capacity</option>
-                                    <option value="O2" class="Collapse">Insufficient PS Capacity</option>-->
+
                             </select>
                         </div>
 
                         <div class="col-md-6 col-sm-6">
-                            <select class="feedback-input" id="spillsize" name="spillsize">
+                            <select class="feedback-input" id="spillsize" name="spillsize" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='SPS' AND LEVEL='2' ORDER BY CODEDESC">
                                 <option value="" disabled selected>Spill Size</option>
-                                <option value="1">Small</option>
-                                <option value="2">Medium</option>
-                                <option value="3">Large</option>
+
                             </select>
 
-                            <select class="feedback-input" id="sewerstatus" name="sewerstatus">
+                            <select class="feedback-input" id="sewerstatus" name="sewerstatus" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='SWS' AND LEVEL='2' ORDER BY CODEDESC">
                                 <option value="" disabled selected>Sewer Status</option>
-                                <option value="01">Public</option>
-                                <option value="02">Private</option>
-                                <option value="03">Transfered</option>
+
                             </select>
 
-                            <select class="feedback-input" id="sewertype" name="sewertype">
+                            <select class="feedback-input" id="sewertype" name="sewertype" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='SWT' AND LEVEL='2' ORDER BY CODEDESC">
                                 <option value="" disabled selected>Sewer Type</option>
-                                <option value="01">Foul Sewer</option>
-                                <option value="02">Combined Sewer</option>
-                                <option value="03">Surface Sewer</option>
-                                <option value="04">Rising Main</option>
-                                <option value="05">Vacuum Sewer</option>
+
                             </select>
                         </div>
                     </div>
@@ -208,8 +161,34 @@
                             <input name="gridref" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                     </div>
+                    <div class="well row">  <!--Location Data-->
+						<table class="table table-bordered" id="location">
+                            <tr>
+                                <th width="15%">Flooding Type</th>
+                                <th width="15%">Flooding Sub Type</th>
+                                <th width="20%">Severity</th>
+                                <th width="20%">Location</th>
+                                <th width="25%">Comments</th>
+                                 <th width="5%"></th>
+                               
+                            </tr>
 
+                        </table>
+                        <button id="addnewlocation" onclick="location.href='#LocationAdd'" type="button" class="btn btn-small btn-success pull-right">New Location</button>
+                    </div>
+                    <div class="well row">  <!--Room Data-->
+						<table class="table table-bordered" id="room">
+                            <tr>
+                                <th  width="15%">Location</th>
+                                <th width="30%">Room</th>
+                                <th width="15%">Depth</th>
+                                <th width="35%">Comments</th>
+                                <th width="5%"></th>
+                            </tr>
 
+                        </table>
+                        <button id="addnewroom" onclick="showRoomDialogue()" type="button" class="btn btn-small btn-success pull-right">New Room</button>
+                    </div>
 
                             <input type="submit" name="Save" value="SEND" id="Save" hidden />
 
@@ -218,10 +197,85 @@
 
             </form>
         </div>
-
+    <div id="LocationAdd" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2>Add Location</h2>
+		<Label>Flooding Type</Label>
+		<select class="feedback-input" id="LocationFloodType" name="LocationFloodType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+        </select>                   			
+		<Label>SubType</Label>
+		<select class="feedback-input" id="LocationFloodSubType" name="LocationFloodSubType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>       
+        </select>                   			                    			
+		<Label>Severity</Label>
+		<select class="feedback-input" id="LocationSeverity" name="LocationSeverity" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+        </select> 
+        <Label>Functional Location</Label>
+        <input type="text" class="feedback-input-table" id="LocationFloc" />
+        <Label>Comments</Label>
+        <textarea id="LocationComments" name="LocationComments" rows="4" cols="50"></textarea>
+        <TABLE width="100%"><TR><TD> <a href="#close"><button class="btn btn-small btn-danger">Cancel</button></a></TD><TD align="right"> <a href="javascript:saveLocation()"><button class="btn btn-smal btn-success">Add</button></a></TD> </TR></TABLE>
+        
+	</div>
+	</div>
+	<div id="RoomAdd" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2>Add Room</h2>
+		<Label>Location</Label>
+		<select class="feedback-input" id="RoomLocSelect" name="RoomLocSelect" >
+                           			<option value="" disabled selected></option>
+                        		</select> 
+		<Label>Room</Label>
+		<select class="feedback-input" id="RoomSelect" name="RoomSelect" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRR' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+                        		</select> 
+		<Label>Depth</Label>
+		<select class="feedback-input" id="DepthSelect" name="DepthSelect" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRD' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="" disabled selected></option>
+                        		</select>
+        <Label>Comments</Label>
+        <textarea id="RoomComments" name="RoomComments" rows="4" cols="50"></textarea>
+        <TABLE width="100%"><TR><TD> <a href="#close"><button class="btn btn-small btn-danger">Cancel</button></a></TD><TD align="right"> <a href="javascript:saveRoom()"><button class="btn btn-smal btn-success">Add</button></a></TD> </TR></TABLE>
+        
+	</div>
+	</div>
     </body>
 
     <script>
+    function saveRoom() {
+    	
+    	addNewRoomRow()
+ 
+        		location.href="#close"
+        
+    }
+    function saveLocation() {
+    	addNewLocationRow()
+ 
+        		location.href="#close"
+        
+    }
+    function showRoomDialogue(){
+    	var select = document.getElementById("RoomLocSelect");
+    	var length = select.options.length;
+    	for (i = 0; i < length; i++) {
+    	  select.options[i] = null;
+    	}
+    	var table = document.getElementById("location");
+    	for (var i = 1, row; row = table.rows[i]; i++) {
+    	   x=row.cells[3].innerHTML.split("<")
+    	   
+    	   $('#RoomLocSelect')
+           	.append($("<option></option>")
+           	.attr("value",x[0])
+           	.text(x[0])); 
+    	}
+    	location.href='#RoomAdd'
+    }
     $("#attendancedate").datepicker({
         dateFormat: "dd/mm/yy"
     });    
@@ -233,5 +287,24 @@
     		location.href="#"
     		location.href="#"+document.activeElement.id
     	});
+    
+
+    function addNewLocationRow() {
+    	var rowCount = $('#location tr').length;
+    	
+        $('#location tr:last').after('<tr><td>'+$("#LocationFloodType>option:selected").html()+'<input type="text" class="feedback-input-table" id="loctype' + rowCount + '" value="'+document.getElementById("LocationFloodType").value+'" hidden/></td><td>'+$("#LocationFloodSubType>option:selected").html()+'<input type="text" class="feedback-input-table" id="locsubtype' + rowCount + '" value="'+document.getElementById("LocationFloodSubType").value+'" hidden /></td><td>'+$("#LocationSeverity>option:selected").html()+'<input type="text" class="feedback-input-table" id="locseverity' + rowCount + '" value="'+document.getElementById("LocationSeverity").value+'" hidden /></td><td>'+document.getElementById("LocationFloc").value+'<input type="text" class="feedback-input-table" id="locfloc' + rowCount + '" value="'+document.getElementById("LocationFloc").value+'" hidden  /></td><td>'+document.getElementById("LocationComments").value+'<input type="text" class="feedback-input-table" id="loccomments' + rowCount + '" value="'+document.getElementById("LocationComments").value+'" hidden  /></td><TD><button onclick="deleteLocation('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+    }
+  
+
+    function addNewRoomRow() {
+    	var rowCount = $('#room tr').length;
+        $('#room tr:last').after('<tr><td>'+$("#RoomLocSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomloc' + rowCount + '" value="'+document.getElementById("RoomLocSelect").value+'" HIDDEN/></td><td>'+$("#RoomSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomroom' + rowCount + '" value="'+document.getElementById("RoomSelect").value+'" hidden /><td>'+$("#DepthSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomdepth' + rowCount + '" value="'+document.getElementById("DepthSelect").value+'" hidden /></td><td>'+document.getElementById("RoomComments").value+'<input type="text" class="feedback-input-table" id="roomcomments' + rowCount + '" value="'+document.getElementById("RoomComments").value+'" hidden /></td><TD><button onclick="deleteRoom('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+    }
+    function deleteLocation(n){
+    	document.getElementById("location").deleteRow(n);
+    }
+    function deleteRoom(n){
+    	document.getElementById("room").deleteRow(n);
+    }
     </script>
 </html>

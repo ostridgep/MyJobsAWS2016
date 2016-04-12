@@ -1434,6 +1434,7 @@ function syncReference(){
 							requestSAPData("MyJobsVehiclesDefault.htm",'');
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
+							requestDEMOData('MyJobsDG5Codes.json');
 							//requestSAPDataPJO("getFormsJSON.php",'');
 							//requestSAPData("MyJobsFunclocs.htm",'');
 							//requestSAPData("MyJobsEquipment.htm",'');
@@ -1880,11 +1881,15 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 	 }        
 	);
 }
-function createFormsResponse(formname, order,opno,user,content)
+function createFormsResponse(formname, order,opno,user,content,mode)
 {
-	
+	if (mode=="Close"){
+		state = "Close"
+	}else{
+		state="NEW"
+	}
 	html5sql.process("INSERT INTO  MyFormsResponses (formname, orderno , opno, user, contents, date , time , state) VALUES ("+
-				 "'"+formname+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','NEW');",
+				 "'"+formname+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');",
 		 function(){
 			
 		 },
@@ -2122,6 +2127,13 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS REFNOTIFICATIONTYPES	( id integer primary key autoincrement, scenario TEXT, userid TEXT, level_number TEXT, notiftype TEXT, notifdesc TEXT, notifprofile TEXT, priotype TEXT,priority TEXT, prioritydesc TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS REFVARIANCESRFV		( id integer primary key autoincrement, scenario TEXT, userid TEXT, plant TEXT, work_cntr TEXT, job_activity TEXT, dev_reason TEXT, dev_reas_txt TEXT, mandate TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS REFACTIVITY			( id integer primary key autoincrement, scenario TEXT, work_center TEXT, activity TEXT, activity_desc TEXT, action TEXT, deflt TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT);'+
+
+
+					 
+					 
 					 'CREATE VIEW viewoperationstatus as SELECT orderno, opno, statusdesc FROM myuserstatus where type = "OV" GROUP BY orderno, opno Order by id desc ;'+
 
 					 'CREATE VIEW viewprioritycodes as select myrefordertypes.scenario, myrefordertypes.type as ordertype, myrefordertypes.priorityprofile, myrefprioritytypes.priority as priority, myrefprioritytypes.description as prioritydesc from myrefordertypes left join myrefprioritytypes on myrefordertypes.priorityprofile = myrefprioritytypes.type where myrefordertypes.scenario = myrefprioritytypes.scenario;';
@@ -2218,6 +2230,9 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  REFACTIVITY;'+
 					'DROP TABLE IF EXISTS  MyForms;'+
 					'DROP TABLE IF EXISTS  MyFormsResponses;'+
+					'DROP TABLE IF EXISTS  DG5REL;'+
+					'DROP TABLE IF EXISTS  DG5CODES;'+
+					'DROP TABLE IF EXISTS  CFCODES;'+
 						'DROP VIEW IF EXISTS viewoperationstatus;'+
 						'DROP TABLE IF EXISTS viewprioritycodes;';
 
@@ -2300,6 +2315,9 @@ function emptyTables(type) {
 					'DELETE FROM  REFACTIVITY;'+
 					'DELETE FROM  MyForms;'+
 					'DELETE FROM  MyFormsResponses;'+
+					'DELETE FROM  DG5REL;'+
+					'DELETE FROM  DG5CODES;'+
+					'DELETE FROM  CFCODES;'+
 						'DELETE FROM  GASSurveyHDR;';
 						
 						
@@ -2405,6 +2423,10 @@ function loadDemoData() {
 				'DELETE FROM  REFACTIVITY;'+
 				'DELETE FROM  MyForms;'+
 				'DELETE FROM  MyFormsResponses;'+
+				'DELETE FROM  DG5REL;'+
+				'DELETE FROM  DG5CODES;'+
+				'DELETE FROM  CFCODES;'+
+				
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2448,6 +2470,7 @@ function loadDemoData() {
 						requestDEMOData('MyForms.json');
 						requestDEMOData('MyJobsVehicles.json');
 						requestDEMOData('MyJobsVehiclesDefault.json');
+						requestDEMOData('MyJobsDG5Codes.json');
 						
 					
 						//requestDEMOData('GASSurvey.json');
@@ -2540,6 +2563,9 @@ function resetTables() {
 					'DELETE FROM  REFACTIVITY;'+
 					'DELETE FROM  MyForms;'+
 					'DELETE FROM  MyFormsResponses;'+
+					'DELETE FROM  DG5REL;'+
+					'DELETE FROM  DG5CODES;'+
+					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2660,7 +2686,12 @@ function requestDEMOData(page){
 				surveysCB(data);
 
 			}
-  })
+			if(page=='MyJobsDG5Codes.json'){
+							
+							dg5CB(data);
+			
+						}
+			  })
   .fail(function(data,status) {
     //alert( "error:"+status+":"+data );
   })
@@ -4789,3 +4820,104 @@ function BuildQuestionChildren(){
 	
 	
 }
+function dg5CB(data){
+	var sqlstatement="";
+
+	opMessage("Callback DG5 Data triggured");
+		    
+		if(data.dg5.length>0){
+				if(syncReferenceDetsUpdated){
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', DG5:'+String(data.dg5.length));
+				}else{
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'DG5:'+String(data.dg5.length));
+				}
+				opMessage("Deleting Existing Reference Data");
+				sqlstatement+='DELETE FROM DG5REL;';
+				sqlstatement+='DELETE FROM DG5CODES;';
+				sqlstatement+='DELETE FROM CFCODES;';
+
+				html5sql.process(sqlstatement,
+						 function(){
+							 
+						
+						
+				
+				cntx=0
+				
+					sqlstatement="";
+				opMessage("Loading dg5 Data");
+				//Loop and write DG5REL to DB
+		
+				opMessage("Loading "+data.dg5[cntx].cfcodes.length+" DG5REL");
+				
+				for(var opscnt=0; opscnt < data.dg5[cntx].cfcodes.length ; opscnt++)
+					{	
+
+					sqlstatement+='INSERT INTO CFCODES (level, catalog_type ,code_cat_group, codegroup,codegroup_text, long_text, code ,codedesc) VALUES ('+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].level+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].catalog_type+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].code_cat_group+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].codegroup+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].codegroup_text+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].long_text.replace(/'/g, "''")	+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].code+'",'+
+					 '"'+data.dg5[cntx].cfcodes[opscnt].codedesc+'");';
+					}
+					opMessage("Loading dg5 Data");
+					//Loop and write DG5REL to DB
+						
+					opMessage("Loading "+data.dg5[cntx].rel.length+" DG5REL");
+					
+					for(var opscnt=0; opscnt < data.dg5[cntx].rel.length ; opscnt++)
+						{	
+					
+						sqlstatement+='INSERT INTO DG5REL (catalogue, codegrp ,code, codedesc, dg5rel ,piarel) VALUES ('+
+							 '"'+data.dg5[cntx].rel[opscnt].catalogue+'",'+
+							 '"'+data.dg5[cntx].rel[opscnt].codegrp+'",'+
+							 '"'+data.dg5[cntx].rel[opscnt].code+'",'+
+							 '"'+data.dg5[cntx].rel[opscnt].codedesc+'",'+
+							 '"'+data.dg5[cntx].rel[opscnt].dg5rel+'",'+
+							 '"'+data.dg5[cntx].rel[opscnt].piarel+'");';
+						}
+					//Loop and write DG5CODES to DB
+					
+					opMessage("Loading "+data.dg5[cntx].codes.length+" DG5REL");
+					for(var opscnt=0; opscnt < data.dg5[cntx].codes.length ; opscnt++)
+						{	
+					
+						sqlstatement+='INSERT INTO DG5CODES (type, level ,coderef, description,code, codedesc, parenttype ,parentcode) VALUES ('+
+							 '"'+data.dg5[cntx].codes[opscnt].type+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].level+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].coderef+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].description+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].code+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].codedesc+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].parenttype+'",'+
+							 '"'+data.dg5[cntx].codes[opscnt].parentcode+'");';
+						}
+
+						
+
+
+							html5sql.process(sqlstatement,
+									 function(){
+										
+									
+									 },
+								 function(error, statement){
+										 opMessage("Error: " + error.message + " when processing " + statement);
+
+									 }        
+								);				
+			
+		
+				 },
+				 function(error, statement){
+					 opMessage("Error: " + error.message + " when processing " + statement);
+				 }        
+			);
+
+
+		}
+		
+	}
