@@ -2341,7 +2341,7 @@ function emptyTables(type) {
 							SetConfigParam("LASTSYNC_UPLOAD", "20130316214900");
 							SetConfigParam("SERVERNAME", "xxxx://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
 							SetConfigParam("SAPCLIENT", "120");
-							SetConfigParam("SAPSYSTEM", "AW2MYJOBS");
+							SetConfigParam("SAPSYSTEM", "");
 							
 							busycreateDB.close()
 							formLogin.open()

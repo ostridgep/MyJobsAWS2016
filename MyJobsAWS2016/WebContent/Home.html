@@ -631,6 +631,56 @@ var formPinCode = new sap.m.Dialog("dlgPinCode",{
 
             ]
  })
+var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
+    title:"Select Map Type",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+				   
+				new sap.m.Button({
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formMapSelect.close()
+						  } ]
+				})
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+							
+new sap.m.Button({
+    text: "Google Maps",
+    type: 	sap.m.ButtonType.Accept,
+   tap: [ function(oEvt) {		
+
+	   localStorage.setItem('MAPTYPE','Google')
+	   formMapSelect.close()} ]
+}),
+new sap.m.Button({
+    text: "Intergraph",
+    type: 	sap.m.ButtonType.Accept,
+   tap: [ function(oEvt) {		
+
+	    
+	   localStorage.setItem('MAPTYPE','Intergraph')
+	   
+		formMapSelect.close()} ]
+}),
+							
+
+									 
+					
+			               
+			                 
+						]
+ 					})
+
+            ]
+ })
 function loadConfigValues(){
 	sap.ui.getCore().getElementById('configServer').setValue(localStorage.getItem('ServerName'))
 	sap.ui.getCore().getElementById('configSAPClient').setValue(localStorage.getItem('SAPClient'))
@@ -900,13 +950,13 @@ var formSettings = new sap.m.Dialog("dlgSettings",{
 				maxContainerCols : 2,
 				content : [
 				           new sap.m.Label({text:""}),
-							new sap.m.Button("pinCode", {
-							    text: "Set Pincode & Vehicle Reg",
+							new sap.m.Button("selectMap", {
+							    text: "Select Map Type",
 							    type: 	sap.m.ButtonType.Accept,
 							    tap: [ function(oEvt) {		  
 									 
 							    	formSettings.close()
-							    	setCounts()
+							    	formMapSelect.open()
 							    	//loadPinCodeValues()
 							    	//formPinCode.open();
 									  } ]

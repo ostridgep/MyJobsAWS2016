@@ -162,7 +162,7 @@
                             <input name="assetref" type="text" class="feedback-input" placeholder="Asset Ref" id="assetref" />
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <input name="gridref" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
+                            <input name="gridref" onclick= "window.open('../GoogleMapsGetLocation.html', '_blank', 'location=yes,closebuttoncaption=Return')" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                     </div>
                     <div class="well row">  <!--Location Data-->
@@ -356,5 +356,10 @@
     }
     setLocationEmpty()
     setRoomEmpty()
+    
+    function MapClosed(){
+    	
+    	document.getElementById("gridref").value=localStorage.getItem('mapLocation')
+    }
     </script>
 </html>
