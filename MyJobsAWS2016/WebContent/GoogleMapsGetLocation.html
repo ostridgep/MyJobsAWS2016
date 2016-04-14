@@ -34,8 +34,9 @@ marker.addListener('click', function(event) {
     var lat = marker.getPosition().lat();
 	var lng = marker.getPosition().lng();
 	localStorage.setItem('mapLocation',lat+","+lng)
-	window.opener.MapClosed();
-	window.close()
+	alert(lat+","+lng)
+	//window.opener.MapClosed();
+	//window.close()
   });
   var infowindow = new google.maps.InfoWindow({
     content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
