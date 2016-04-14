@@ -266,6 +266,91 @@ var formLastSync = new sap.m.Dialog("dlgLastSync",{
 
             ]
  })
+var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
+    title:"MeasurementPoints",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formMeasPoints.close()
+						  } ]
+				})
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+							
+			                
+							new sap.m.Table("MPTable",{
+								
+								
+								columns:[
+								         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
+								        	 hAlign: 'Left',width: '10%', minScreenWidth : "" , demandPopin: false}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
+								        	 hAlign: 'Left',width: '40%',minScreenWidth : "" , demandPopin: true}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
+								        	 hAlign: 'Left',width: '15%', minScreenWidth : "" , demandPopin: false}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
+								        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),								        	 
+								         new sap.m.Column({header: new sap.m.Label({text:"Value"}),
+								        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true })       	                         
+						           	     ]
+						           	  
+
+							})
+
+									 
+					
+			               
+			                 
+						]
+ 					})
+
+            ],
+            contentWidth:"80%",
+            contentHeight: "80%",
+			 beforeOpen:function(){
+	            	BuildMeasPointTable();
+					}
+ })
+ function BuildMeasPointTable(){
+html5sql.process("select * from myjobdetsmpoints where object_id = 'SPALST' order by meas_point",
+		 function(transaction, results, rowsArray){
+			if(rowsArray.length>0){
+				var n = 0;
+				var opTable = sap.ui.getCore().getElementById('MPTable');
+				sap.ui.getCore().getElementById('MPTable').destroyItems();
+				while (n < rowsArray.length) {
+					
+			
+					opTable.addItem (new sap.m.ColumnListItem({
+						cells : 
+							[
+							new sap.m.Text({text: rowsArray[n].meas_point}),
+							new sap.m.Text({text: rowsArray[n].psort+" "+rowsArray[n].pttxt}),
+							new sap.m.Text({text: rowsArray[n].no_char}),
+							new sap.m.Text({text: rowsArray[n].no_deci}),
+							new sap.m.Text({text:  rowsArray[n].code_gp})   
+							]
+						}));
+					n++;
+				 }
+			
+		 }
+},
+		 function(error, statement){
+			 
+		 }        
+		);
+}
 var formDG5 = new sap.m.Dialog("dlgDG5",{
        title:"Job Close",
     modal: true,
@@ -1632,6 +1717,20 @@ var detailFooterAWS = new sap.m.Bar({
 				   				formToOpen="Forms/formsindex.html"
 				   			    formMode="Forms"
 		   						formForms.open()
+				   				
+				   							
+				   					
+				    					} 
+				   			 		]   
+							}
+						),
+						new sap.m.Button('btnMPOINTS', {
+				    		text: 	"mp",
+				    		 icon:"sap-icon://form",
+				    	
+				   			tap: 	[ function(oEvt) {		
+				   				
+				   				formMeasPoints.open()
 				   				
 				   							
 				   					

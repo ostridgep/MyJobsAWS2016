@@ -376,6 +376,494 @@
 
 
                 ],
+                 "jobdraw":
+                  [
+                ],
+                "jobmeaspoints":
+                  [{
+"meas_point":"000000106674",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Top Temperature" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000106674",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Top Temperature" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078118",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"TURBIDITY" ,
+"pttxt":"FE sample point" ,
+"format":"__" ,
+"no_char":"2 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"NTU" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078120",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FE sample point" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103329",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 6" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103325",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 2" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103326",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 3" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103328",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 5" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078119",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105002",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COD" ,
+"pttxt":"FE Sample Point" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103327",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 4" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078133",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 1" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105004",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"LIMED AMOUNT" ,
+"pttxt":"Limed amount in tonnes" ,
+"format":"_,___,___,___,___.__" ,
+"no_char":"15 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"TNH" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105003",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"LIME PH READING" ,
+"pttxt":"Lime pH reading" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078126",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"IST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078122",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078128",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"IST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078130",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078124",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078132",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103333",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 4" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103332",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 3" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103331",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 2" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103334",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 5" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103330",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 1" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103335",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 6" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000106642",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK LOW LEVEL" ,
+"pttxt":"Low Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106641",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK HIGH LEVEL" ,
+"pttxt":"High Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106673",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"CHECKED" ,
+"pttxt":"Has the check been completed" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000106642",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK LOW LEVEL" ,
+"pttxt":"Low Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106641",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK HIGH LEVEL" ,
+"pttxt":"High Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106673",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"CHECKED" ,
+"pttxt":"Has the check been completed" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+
+                ],
+                "jobmeascodes":
+                  [{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+
+                ],
+                
                  "tconf":
                   [  ],
 

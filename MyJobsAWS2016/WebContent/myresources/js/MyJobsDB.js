@@ -588,11 +588,11 @@ function SetAllConfigParam(p1,v1,p2,v2,p3,v3,p4,v4,p5,v5){
 //  User Maintenance Functions
 //
 //*************************************************************************************************************************
-function CreateUser(muser,vehiclereg, u, p, employeeid, pincode){
+function CreateUser(muser,vehiclereg, u, p, employeeid, pincode, maptype){
 	
 	opMessage("Creating User "+muser+":"+vehiclereg+":"+u+":"+p+":"+employeeid);
 
-	html5sql.process("delete from MyUserDets; INSERT INTO MyUserDets (mobileuser , vehiclereg, user, password ,employeeid, pincode) VALUES ('"+muser+"','" +vehiclereg+"','" +u+"','" +p+"','"+employeeid+"','" + pincode+"');",
+	html5sql.process("delete from MyUserDets; INSERT INTO MyUserDets (mobileuser , vehiclereg, user, password ,employeeid, pincode, maptype) VALUES ('"+muser+"','" +vehiclereg+"','" +u+"','" +p+"','"+employeeid+"','"+pincode+"','" + maptype+"');",
 	 function(){
 		//alert("User Created");
 	 },
@@ -600,6 +600,21 @@ function CreateUser(muser,vehiclereg, u, p, employeeid, pincode){
 		opMessage("Error: " + error.message + " when drop processing " + statement);
 	 }        
 	);
+
+}
+function updateMapType(maptype){
+
+	opMessage("Setting MAP Type = "+maptype);
+	//alert("UPDATE MyUserDets set maptype = '"+maptype+"' Where user = '"+localStorage.setItem("MobileUser")+"';")
+	html5sql.process("UPDATE MyUserDets set maptype = '"+maptype+"' Where user = '"+localStorage.getItem("MobileUser")+"';",
+	 function(){
+		localStorage.setItem("MAPTYPE",maptype)
+	 },
+	 function(error, statement){
+		opMessage("Error: " + error.message + " when drop processing " + statement);
+	 }        
+	);
+
 
 }
 function ChangeUserPW(muser, u, p){
@@ -616,7 +631,6 @@ function ChangeUserPW(muser, u, p){
 
 
 }
-
 function validateUser(u, p){
 var wait = true;
 var retVal= false;
@@ -2081,7 +2095,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT, maptype TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT);'+													
 					 'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT);'+
@@ -2119,6 +2133,8 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS Equipments			  	( id integer primary key autoincrement, eqid TEXT, description TEXT, flid TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyMenuBar 		        ( id integer primary key autoincrement, scenario TEXT, level TEXT, item TEXT, position TEXT, type TEXT,  subitem TEXT, command TEXT, item2 TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT);'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT);'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT);'+					 
 					 'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS TSNPJobs			    ( id integer primary key autoincrement, jobno TEXT, subtype TEXT,  description TEXT);'+
@@ -2239,6 +2255,9 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  DG5REL;'+
 					'DROP TABLE IF EXISTS  DG5CODES;'+
 					'DROP TABLE IF EXISTS  CFCODES;'+
+					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
+					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
+					 
 						'DROP VIEW IF EXISTS viewoperationstatus;'+
 						'DROP TABLE IF EXISTS viewprioritycodes;';
 
@@ -2324,6 +2343,8 @@ function emptyTables(type) {
 					'DELETE FROM  DG5REL;'+
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
+					'DELETE FROM  MyJobDetsMPoints;'+
+					'DELETE FROM  MyJobDetsMPCodes;'+
 						'DELETE FROM  GASSurveyHDR;';
 						
 						
@@ -2432,7 +2453,8 @@ function loadDemoData() {
 				'DELETE FROM  DG5REL;'+
 				'DELETE FROM  DG5CODES;'+
 				'DELETE FROM  CFCODES;'+
-				
+				'DELETE FROM  MyJobDetsMPoints;'+
+				'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2572,6 +2594,8 @@ function resetTables() {
 					'DELETE FROM  DG5REL;'+
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
+					'DELETE FROM  MyJobDetsMPoints;'+
+					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2722,35 +2746,37 @@ var orderlist="";
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'Orders:'+String(MyOrders.order.length));
 			}
 			opMessage("Deleting Existing Orders");
-			sqlDelete = 	'DELETE FROM MyOrders;'+
-							'DELETE FROM MyOperations;'+
-							'DELETE FROM MyJobDets;'+
-							'DELETE FROM MyOperationsSplit;'+
-							'DELETE FROM MyPartners;'+
-							'DELETE FROM MyMaterials;'+
-							'DELETE FROM MyAssets;'+
-		
-							'DELETE FROM MyTimeConfs;'+
-							
-							'DELETE FROM MyUserStatus;'+
-							'DELETE FROM MyOperationInfo;'+
-							'DELETE FROM MyStatus where state="SERVER";';
+			sqlstatementMP = 	'DELETE FROM MyJobDetsMPoints;'+
+							'DELETE FROM MyJobDetsMPCodes;';
 			
-/*			html5sql.process(sqlDelete,
-						 function(){
-							 //alert("Success del Tables");
-						 },
-						 function(error, statement){
-							 opMessage("Error: " + error.message + " when processing " + statement);
-						 }        
-				);*/
+			
 			opMessage("Loading "+MyOrders.order.length+" Orders");
-		
-	
+			
+				
 			for(var cntx=0; cntx < MyOrders.order.length ; cntx++)
 				{
 				if(cntx>0){
 					orderlist+=","	
+					}else{
+						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobmeascodes.length ; opscnt++)
+						{
+						sqlstatementMP+='INSERT INTO MyJobDetsMPCodes (code_gp,code,code_text) VALUES ('+
+						 
+						 '"'+MyOrders.order[cntx].jobmeascodes[opscnt].code_gp+  '","'+ MyOrders.order[cntx].jobmeascodes[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeascodes[opscnt].code_text+'");';
+				
+					
+						}
+						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobmeaspoints.length ; opscnt++)
+						{	
+					
+						sqlstatementMP+='INSERT INTO MyJobDetsMPoints (meas_point, object_id, object_desc, psort,pttxt,format,no_char,no_deci,code_gp,code,unit_meas,read_from) VALUES ('+
+							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].meas_point+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].object_id+  '","'+MyOrders.order[cntx].jobmeaspoints[opscnt].object_desc+  '",'+
+							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].psort+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].pttxt+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].format+  '",'+  
+							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].no_char+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].no_deci+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].code_gp+  '",'+
+							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
+					
+						}
+				
 					}
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
 				ordernos.push(MyOrders.order[cntx].orderno)
@@ -2972,6 +2998,16 @@ var orderlist="";
 					}else if(page=="Home.html"){
 						setCounts()
 					}
+			     alert(sqlstatementMP)
+				     html5sql.process(sqlstatementMP,
+							 function(){
+								 alert("Success del MP");
+							 },
+							 function(error, statement){
+								 alert("Error: " + error.message + " when processing " + statement);
+								 opMessage("Error: " + error.message + " when processing " + statement);
+							 }        
+					)
 					 },
 					 function(error, statement){
 					
@@ -4549,7 +4585,7 @@ opMessage("Callback Reference Data triggured");
 
 						html5sql.process(sqlstatement,
 								 function(){
-									 //alert("Success - Finished Loading Scenario");
+									BuildMenuBar();
 								
 								 },
 							 function(error, statement){

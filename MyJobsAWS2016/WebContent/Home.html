@@ -651,13 +651,15 @@ var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
 				minWidth : 1024,
 				maxContainerCols : 2,
 				content : [
-							
+new sap.m.Label({text:"Current Map Type"}),
+new sap.m.Input("CurrentMapType",{type: sap.m.InputType.Input, enabled: false}),
+new sap.m.Label({text:""}),							
 new sap.m.Button({
     text: "Google Maps",
     type: 	sap.m.ButtonType.Accept,
    tap: [ function(oEvt) {		
 
-	   localStorage.setItem('MAPTYPE','Google')
+	   updateMapType('Google')
 	   formMapSelect.close()} ]
 }),
 new sap.m.Button({
@@ -666,7 +668,7 @@ new sap.m.Button({
    tap: [ function(oEvt) {		
 
 	    
-	   localStorage.setItem('MAPTYPE','Intergraph')
+	   updateMapType('Intergraph')
 	   
 		formMapSelect.close()} ]
 }),
@@ -679,7 +681,12 @@ new sap.m.Button({
 						]
  					})
 
-            ]
+            ],
+beforeOpen:function(){
+    
+	sap.ui.getCore().getElementById('CurrentMapType').setValue(localStorage.getItem('MAPTYPE'));
+
+  }
  })
 function loadConfigValues(){
 	sap.ui.getCore().getElementById('configServer').setValue(localStorage.getItem('ServerName'))
@@ -1109,7 +1116,7 @@ function setOrderCounts()
 
 	 },
 	 function(error, statement){
-		 alert("jobs"+error+":"+statement)
+		 //alert("jobs"+error+":"+statement)
 	 }        
 	);
 	
