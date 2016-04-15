@@ -159,7 +159,7 @@
                             <input name="psshortcode" type="text" class="feedback-input" placeholder="PS Short Code" id="psshortcode" />
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <input name="assetref" type="text" class="feedback-input" placeholder="Asset Ref" id="assetref" />
+                            <input name="assetref" type="text" onclick= "window.open('../GoogleMapsGetLocation2.html','map')" class="feedback-input" placeholder="Asset Ref" id="assetref" />
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <input name="gridref" onclick= "openGoogleMapsGetLocation('../GoogleMapsGetLocation.html')" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
@@ -359,7 +359,7 @@
     
 function openGoogleMapsGetLocation(url){
 //open win and turn off location 
-var ref = window.open(url, '_blank', 'location=no');
+var ref = window.open(url, '_blank', 'location=yes');
 
 // attach listener to loadstart
 	ref.addEventListener('loadstart', function(event) { 
@@ -377,5 +377,9 @@ var ref = window.open(url, '_blank', 'location=no');
 	    }
 	});
 }
+    function setRef(ref){
+    	alert("setRef')
+    	document.getElementById("gridref").value=ref
+    }
     </script>
 </html>
