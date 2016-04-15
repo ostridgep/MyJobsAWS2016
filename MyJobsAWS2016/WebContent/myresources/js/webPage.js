@@ -1,9 +1,10 @@
 var formToOpen="Forms/formsindex.html"
 var formMode="Forms"
 var closeFormName=""
-var selectedWebPage
+var selectedWebPage=''
+var mapLocationField
 currentPage=document.location.href;
-
+alert
 var theIFrameDoc=""
 var formWebPage = new sap.m.Dialog("dlgWebPage",{
    
@@ -48,6 +49,63 @@ var formWebPage = new sap.m.Dialog("dlgWebPage",{
    	afterClose:function(){
    		
    		formWebPage.destroyContent()
+   	}
+	
+	 })
+var formGMaps = new sap.m.Dialog("dlgGMaps",{
+	   
+	title:"Map",  
+    horizontalScrolling:true,
+    verticalScrolling:true,
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+
+  
+					new sap.m.Button( {
+					    text: "Close",
+					    icon:"sap-icon://sys-cancel",
+					    type: sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+							 
+					    	formGMaps.close()} ]   
+					}),
+					
+					],					
+    content:[
+
+            ],
+            contentWidth:"80%",
+            contentHeight: "80%",
+      beforeOpen:function(){
+    	  
+     	   
+    	  formGMaps.addContent(new 		sap.ui.core.HTML({
+    		 
+			content: '<iframe id="GMapsPage" width="100%"  src="GoogleMapsGetLocation.html"></iframe>'
+
+ 
+		}))
+
+      },
+      afterOpen:function(){
+    	  localStorage.setItem('mapLocation','')
+    	  document.getElementById('GMapsPage').style.height=document.getElementById("dlgGMaps").offsetHeight-130+"px"  
+    	  
+      },
+   	afterClose:function(){
+   		if(localStorage.getItem('mapLocation')==''){
+   			
+   		}else{
+   			
+   			var MyIFrame = document.getElementById("formIframe");
+   			
+   			var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+	    	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
+	    	MyIFrameDoc.getElementById(mapLocationField).value=localStorage.getItem('mapLocation')
+   		}	
+   		
+   		formGMaps.destroyContent()
    	}
 	
 	 })
@@ -174,7 +232,7 @@ function updateMergeField(fld){
 	
 }
 function buildHeaderFields(formDoc){
-	
+	mapLocationField=''
 	var items = formDoc.getElementsByTagName("*");
 	console.log("Building Header Fields"+items.length)
 	for (var i = items.length; i--;) {
@@ -183,8 +241,13 @@ function buildHeaderFields(formDoc){
 	    	
 	    		if((items[i].tagName!="TABLE")&&(items[i].tagName!="TR")&&(items[i].tagName!="TH")){
 	    			
+	    			if(items[i].getAttribute("merge")=='mapLocation'){
+	    				mapLocationField=items[i].id
+	    			}else{
+	    				items[i].value=selectedJobArray[items[i].getAttribute("merge")]
+	    			}
+	    				
 	    			
-	    			items[i].value=selectedJobArray[items[i].getAttribute("merge")]
 	    				
 
 	    			

@@ -34,8 +34,9 @@ marker.addListener('click', function(event) {
     var lat = marker.getPosition().lat();
 	var lng = marker.getPosition().lng();
 	localStorage.setItem('mapLocation',lat+","+lng)
-	alert(lat+","+lng)
-	window.href="http://mobileapp/close/";
+	
+	
+	parent.formGMaps.close()
 
   });
   var infowindow = new google.maps.InfoWindow({
@@ -57,7 +58,6 @@ if (navigator.geolocation) {
 
 <body>
 <div id="googleMap" style="width:1024;height:800px;"></div>
-<a href="http://mobileapp/close/" id = "CloseMap">Close</a>
-<a href="http://mobileapp/cancel/" id = "Cancel">cancel</a>
+
 </body>
 </html>

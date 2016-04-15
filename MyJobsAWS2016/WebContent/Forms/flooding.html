@@ -7,6 +7,7 @@
         <script src="js/jqui.1.9.2.js"></script>
         <script src="js/bs.3.1.1.js"></script>
         <script src="js/functions.js"></script>
+
 		<script type="text/javascript" src="cordova.js"></script>
         <link rel="stylesheet" href="css/bs.3.1.1.css" />
         <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
@@ -162,7 +163,7 @@
                             <input name="assetref" type="text" onclick= "window.open('../GoogleMapsGetLocation2.html','map')" class="feedback-input" placeholder="Asset Ref" id="assetref" />
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <input name="gridref" onclick= "openGoogleMapsGetLocation('../GoogleMapsGetLocation.html')" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
+                            <input name="gridref" onclick= "parent.formGMaps.open()" merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                     </div>
                     <div class="well row">  <!--Location Data-->
@@ -377,9 +378,6 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    }
 	});
 }
-    function setRef(ref){
-    	alert('setRef')
-    	document.getElementById("gridref").value=ref
-    }
+
     </script>
 </html>
