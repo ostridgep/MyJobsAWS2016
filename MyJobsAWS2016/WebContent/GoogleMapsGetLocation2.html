@@ -35,7 +35,7 @@ marker.addListener('click', function(event) {
 	var lng = marker.getPosition().lng();
 	localStorage.setItem('mapLocation',lat+","+lng)
 	alert("2nd")
-	window.opener.document.getElementById("gridref").value=lat+","+lng
+	//window.opener.document.getElementById("gridref").value=lat+","+lng
 	window.close();
 
   });

@@ -358,7 +358,7 @@
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(url){
-//open win and turn off location 
+alert("opening"+url)
 var ref = window.open(url, '_blank', 'location=yes');
 
 // attach listener to loadstart
@@ -378,7 +378,7 @@ var ref = window.open(url, '_blank', 'location=yes');
 	});
 }
     function setRef(ref){
-    	alert("setRef')
+    	alert('setRef')
     	document.getElementById("gridref").value=ref
     }
     </script>
