@@ -1724,20 +1724,7 @@ var detailFooterAWS = new sap.m.Bar({
 				   			 		]   
 							}
 						),
-						new sap.m.Button('btnMPOINTS', {
-				    		text: 	"mp",
-				    		 icon:"sap-icon://form",
-				    	
-				   			tap: 	[ function(oEvt) {		
-				   				
-				   				formMeasPoints.open()
-				   				
-				   							
-				   					
-				    					} 
-				   			 		]   
-							}
-						),
+
 					],
 					contentMiddle : [
 					 				new sap.m.Button('btnStatusAccept', {
@@ -3100,7 +3087,12 @@ html5sql.process(SQLStatement,
 					   var iconsToDisplay=''
 					   for (var n=0;n <jobicons.length;n++)
 					   {
-							iconsToDisplay+='<img src="images/'+jobicons[n]+'" onclick="showMessage(\''+jobtooltip[n]+'\')">'
+						if(jobtooltip[n]=="Measurements"){
+							iconsToDisplay+='<img src="images/'+jobicons[n]+'" onclick="formMeasPoints.open()">'
+						}else{
+							iconsToDisplay+='<img src="images/'+jobicons[n]+'" onclick="showMessage(\''+jobtooltip[n]+'\')">'	
+						}
+							
 					   }
 					   if(priorityIcon.length>2){
 					   		priorityiconsToDisplay='<img src="images/'+item.priorityicon_filename+'" onclick="showMessage(\''+item.priorityicon_description+'\')">'
