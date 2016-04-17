@@ -367,7 +367,7 @@ function errorMoveCallback(error) {
 function moveFile(fileUri,dir) {
 	var opdir = new DirectoryEntry({fullPath: dir});
 
-    alert("hello")
+
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
        + (currentdate.getHours()).toString()
