@@ -318,7 +318,7 @@ var formChangePassword = new sap.m.Dialog("dlgChangePassword",{
 
 var busycreateDB = new sap.m.BusyDialog('busycreateDB',{text:'Createing the Database', title: 'Database',
 	onAfterRendering:function(){
-		//alert("hello")
+	
 	}
 })
 
@@ -526,19 +526,10 @@ var SAPCalls = [];
 				if( rowsArray.length <10) {
 
 					busycreateDB.open()
-
-					createDB(1)
 					
-/* 					sap.m.MessageBox.show("Database does not exist, Create?", {
-				         icon: sap.m.MessageBox.Icon.ERROR ,
-				         title: "Database Error",
-				         actions: [sap.m.MessageBox.Action.YES],
-				         onClose: function () {
-				        		 createDB(1)
-								formLogin.open()
-							}
-				       }
-				     ); */
+					createDB(1)
+						
+
 					
 					}else{
 						 

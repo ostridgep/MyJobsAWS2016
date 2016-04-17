@@ -378,6 +378,12 @@
                 ],
                  "jobdraw":
                   [
+                  {"orderno":"000052150067","zact": "","zite":"1" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24098663" ,"fname":"01-06-2015-09-46-20-554-51482751-0010_09_46_20-jBennett~IMGA0048.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"2" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102513" ,"fname":"01-06-2015-09-46-20-245-51482751-0010_09_46_20-jBennett~IMGA0049.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"3" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102516" ,"fname":"01-06-2015-09-46-20-474-51482751-0010_09_46_20-jBennett~IMGA0052.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"4" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102833" ,"fname":"01-06-2015-09-46-20-399-51482751-0010_09_46_20-jBennett~IMGA0051.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"5" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24098663" ,"fname":"01-06-2015-09-46-20-321-51482751-0010_09_46_20-jBennett~IMGA0050.JPG" ,"mime":"imagejpeg"}
+                  
                 ],
                 "jobmeaspoints":
                   [{
@@ -863,7 +869,7 @@
 
 
                 ],
-                
+            
                  "tconf":
                   [  ],
 
@@ -1263,6 +1269,9 @@
 
 
                 ],
+                "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],
                  "tconf":
                   [  ],
 
@@ -1662,6 +1671,9 @@
 
 
                 ],
+                 "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],               
                  "tconf":
                   [  ],
 
@@ -2061,6 +2073,9 @@
 
 
                 ],
+                                "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],
                  "tconf":
                   [  ],
 

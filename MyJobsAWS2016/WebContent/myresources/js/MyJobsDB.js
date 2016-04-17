@@ -2135,6 +2135,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT);'+					 
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT);'+					 
 					 'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS TSNPJobs			    ( id integer primary key autoincrement, jobno TEXT, subtype TEXT,  description TEXT);'+
@@ -2167,6 +2168,7 @@ function createTables(type) {
 							
 						 },
 						 function(error, statement){
+							
 							 opMessage("Error: " + error.message + " when create processing " + statement);
 							
 							 
@@ -2257,7 +2259,8 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  CFCODES;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
-					 
+					'DROP TABLE IF EXISTS  MyJobDetsDraw;'+
+					  
 						'DROP VIEW IF EXISTS viewoperationstatus;'+
 						'DROP TABLE IF EXISTS viewprioritycodes;';
 
@@ -2345,12 +2348,14 @@ function emptyTables(type) {
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
+					'DELETE FROM  MyJobDetsDraw;'+
 						'DELETE FROM  GASSurveyHDR;';
 						
 						
 
 						html5sql.process(sqlstatement,
 						 function(){
+							
 							demoDataLoaded=type;
 							
 							SetConfigParam("TRACE", "OFF");
@@ -2455,6 +2460,7 @@ function loadDemoData() {
 				'DELETE FROM  CFCODES;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
+				'DELETE FROM  MyJobDetsDraw;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2596,6 +2602,7 @@ function resetTables() {
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
+					'DELETE FROM  MyJobDetsDraw;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2794,10 +2801,19 @@ var orderlist="";
 					 '"'+MyOrders.order[cntx].houseno+ '","'+MyOrders.order[cntx].street+ '","'+MyOrders.order[cntx].district+ '","'+MyOrders.order[cntx].city+ '","'+MyOrders.order[cntx].postcode+ '","'+MyOrders.order[cntx].gis+'",'+ 
 					 '"'+MyOrders.order[cntx].property+  '","'+MyOrders.order[cntx].funcloc+  '","'+MyOrders.order[cntx].equipment+'",'+ 
 					 '"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
-				//Loop and write operations to DB
-				
+				//Loop and write Draw Files to DB
+	
 	 			//opMessage("Loading "+MyOrders.order[cntx].operation.length+" Operations");
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobdraw.length ; opscnt++)
+				{	
+				
+				sqlstatement+='INSERT INTO MyJobDetsDraw (orderno , zact, zite , zmandatoryfield , zurl , nodeid, fname, mime ) VALUES ('+
+					 '"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].zact+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].zite+  '","'+MyOrders.order[cntx].jobdraw[opscnt].zmandatoryfield+  '",'+
+					 '"'+MyOrders.order[cntx].jobdraw[opscnt].zurl+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].nodeid+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].fname+  '","'+  MyOrders.order[cntx].jobdraw[opscnt].mime +'");';
 
+			
+				}
+			
 				for(var opscnt=0; opscnt < MyOrders.order[cntx].operation.length ; opscnt++)
 					{	
 					
@@ -2987,6 +3003,7 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyUserStatus WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
 			
 			html5sql.process(sqldeleteorders,
 					 function(transaction, results, rowsArray){
@@ -3045,21 +3062,21 @@ console.log(orderno+changeddatetime)
 											'DELETE FROM MyTimeConfs where orderno = "'+orderno+'";'+
 											'DELETE FROM MyUserStatus where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationInfo where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsDraw where orderno = "'+orderno+'";'+
 											'DELETE FROM MyStatus where state="SERVER" and orderno = "'+orderno+'";'
 						}
 						console.log("about to Insert");
-						if(orderno=="000052172758") {
-							console.log("Failed"+sqlstatement)
-						         
-							}
+						
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
+						
 console.log("OK")
 									//addNewJobToList(orderno){
 			
 										
 								 },
 								 function(error, statement){
+									 
 									 console.log("Failed"+statement)
 								 }        
 								);

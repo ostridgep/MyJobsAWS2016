@@ -142,6 +142,7 @@ var previousFloc;
 var selectedFloc;
 var formtab=null;
 var tabBar=null;
+var selectedFormMPoint;
 var selectedFormQuestionGroup;
 var selectedFormQuestionGroupTitle;
 var CurrentOrderNo="";
@@ -289,18 +290,23 @@ var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
 							
 			                
 							new sap.m.Table("MPTable",{
-								
+								mode: sap.m.ListMode.SingleSelectMaster,
+								selectionChange: function(evt){
+
+									selectedMPoint=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()+":"+evt.getParameter("listItem").getCells()[3].getText()+":"+evt.getParameter("listItem").getCells()[4].getText()
+									formMPoint.open()
+							    },
 								
 								columns:[
 								         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
 								        	 hAlign: 'Left',width: '10%', minScreenWidth : "" , demandPopin: false}),
 								         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
 								        	 hAlign: 'Left',width: '40%',minScreenWidth : "" , demandPopin: true}),
-								         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Length"}),
 								        	 hAlign: 'Left',width: '15%', minScreenWidth : "" , demandPopin: false}),
-								         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Decimals"}),
 								        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),								        	 
-								         new sap.m.Column({header: new sap.m.Label({text:"Value"}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Group"}),
 								        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true })       	                         
 						           	     ]
 						           	  
@@ -1161,6 +1167,59 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 
             },
  })
+ var formMPoint = new sap.m.Dialog("dlgMPoint",{
+    	    title:"Measurement Point Document",
+    	    modal: true,
+    	    contentWidth:"1em",
+    	    buttons: [
+    	  
+    					new sap.m.Button( {
+    					    text: "Save",
+    					    type: 	sap.m.ButtonType.Accept,
+    					    tap: [ function(oEvt) {		  
+    							 
+    					    	formMPoint.close()
+    							  } ]
+    					}),
+    					new sap.m.Button( {
+    					    text: "Close",
+    					    type: 	sap.m.ButtonType.Reject,
+    					    tap: [ function(oEvt) {		  
+    							 
+    					    	formMPoint.close()
+    							  } ]
+    					})
+    					],	
+    		            contentWidth:"50%",
+    		            contentHeight: "50%",
+    	    content:[
+    	 				 			new sap.ui.layout.form.SimpleForm({
+    					minWidth : 1024,
+    					maxContainerCols : 2,
+    					content : [
+    								
+    				                new sap.m.Label({text:"ID"}),
+    								new sap.m.Input("MPointID",{type: sap.m.InputType.Input, enabled: false}),
+    				                new sap.m.Label({text:"Description"}),
+    								new sap.m.Input("MPointDescription",{type: sap.m.InputType.Input, enabled: false}),															 
+    				                new sap.m.Label({text:"Value"}),
+    								new sap.m.Input("MPointValue",{type: sap.m.InputType.Input}),
+    								new sap.m.Label({text:"Text"}),
+     								new sap.m.Input("MPointText",{type: sap.m.InputType.Input}),
+    				               
+    				                 
+    							]
+    	 					}),
+
+    	            ],
+    	            beforeOpen:function(){
+    	            	var x =selectedMPoint.split(":")
+    	            	sap.ui.getCore().byId("MPointID").setValue(x[0])
+    					sap.ui.getCore().byId("MPointDescription").setValue(x[1])
+    					//sap.ui.getCore().byId("CharacteristicValue").setValue(x[2])
+
+    	            },
+    	 })
 var formAssetMeasurementPoint = new sap.m.Dialog("dlgAssetMeasurementPoint",{
     title:"Asset Mdeasurement Point",
     modal: true,
@@ -4188,7 +4247,7 @@ formtab=null;
     									new sap.m.Table("JobPhotoTable",{
     										width:'100%',
     										columns:[
-   										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
    										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
    										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
@@ -4652,6 +4711,36 @@ html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and op
 			           
 						new sap.m.Text({text:  rowsArray[n].description})   
 				 		]
+					}));
+				n++;
+			 }
+
+		 },
+		 function(error, statement){
+			 //outputLogToDB(); 
+		 }        
+		);
+ // Build Docs Table
+html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
+		 function(transaction, results, rowsArray){
+			var n = 0;
+			var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
+;
+			opTable.removeAllItems();
+		
+			while (n < rowsArray.length) {
+				
+		
+				opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
+					
+					cells : 
+						[
+						new sap.m.Text({text: rowsArray[n].fname}),
+						new sap.m.Text({text: rowsArray[n].mime}),
+			            new sap.m.Text({text: ""}),
+						new sap.m.Text({text: rowsArray[n].nodeid})   
+				 		],
+
 					}));
 				n++;
 			 }

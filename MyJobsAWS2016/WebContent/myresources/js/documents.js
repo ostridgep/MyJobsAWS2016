@@ -344,7 +344,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
-   
+                    
 moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
 }
 
@@ -365,7 +365,7 @@ function errorMoveCallback(error) {
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
-    
+   
 	var opdir = dir;
     
     var currentdate = new Date();
@@ -378,12 +378,13 @@ function moveFile(fileUri,dir) {
                        fileExt = "." + oldFileUri.split('.').pop();
 
                        newFileName = datetime + fileExt;
+                       alert("Moving "+fileUri+" to "+dir+ " fn="+newFileName)
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                           
+                           alert("a1")
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-           
+                        	   alert("a2")
             file.moveTo(opdir, newFileName, function (entry) {
-            	//alert("moved to "+entry.fullPath)
+            	alert("moved to "+entry.fullPath)
             	
                
             }, function (error) {
