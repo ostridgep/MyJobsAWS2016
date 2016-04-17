@@ -345,7 +345,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
                     
-moveFile(imageData, "MyJobs/Private/Photos")
+moveFile(imageData, "Photos")
 }
 
 //Callback function when the picture has not been successfully taken
@@ -374,9 +374,9 @@ function onDirectoryFail(error) {
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
 	
-	var opdir = cordova.file.externalApplicationStorageDirectory+dir;
+	var opdir = cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/"+dir;
 alert("movingto:"+opdir)
-    var directoryEntry = cordova.file.externalApplicationStorageDirectory; // to get root path of directory
+    var directoryEntry = cordova.file.externalApplicationStorageDirectory+"MyJobs/Private"; // to get root path of directory
 alert("a1")
     directoryEntry.getDirectory(dir, {
         create: true,
