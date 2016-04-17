@@ -365,8 +365,8 @@ function errorMoveCallback(error) {
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
-   
-	var opdir = dir;
+	var opdir = new DirectoryEntry({fullPath: dir});
+
     
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
@@ -378,11 +378,11 @@ function moveFile(fileUri,dir) {
                        fileExt = "." + oldFileUri.split('.').pop();
 
                        newFileName = datetime + fileExt;
-                       alert("Moving "+fileUri+" to "+dir+ " fn="+newFileName)
+                    
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                           alert("a1")
+                          
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-                        	   alert("a2")
+                        	  
             file.moveTo(opdir, newFileName, function (entry) {
             	alert("moved to "+entry.fullPath)
             	

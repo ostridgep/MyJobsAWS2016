@@ -4753,7 +4753,52 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
 
 
 }
+function buildJobPhotoList(){
+	alert("building Photo List")
+	privatephotos = new Array()
+	var opTable = sap.ui.getCore().getElementById('JobPhotoTable');
+	opTable.destroyItems();
 
+
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+	    	
+	        var directoryReader = dirEntry.createReader();
+	          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);
+	    });
+
+}
+function jobPhotosReadSuccess(entries) {
+	 alert("photos found "+entries.length)
+	
+ 
+   var i;
+   for (i = 0; i < entries.length; i++) {
+      
+       if (entries[i].isFile) {
+           entries[i].file(job_photos_details_callback);
+
+       } else {
+           console.log('photosDirectory - ' + entries[i].name);
+           
+       }
+   }
+}
+function jobPhotosReadFail(error) {
+   alert("Failed to list Photos contents: "+ error);
+}
+function job_photos_details_callback(f) {
+    var d1 = new Date(f.lastModifiedDate);
+    var opTable = sap.ui.getCore().getElementById('JobPhotoTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
+}
 function rebuildTimeConfs()
 {
 
