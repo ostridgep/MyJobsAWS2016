@@ -4754,7 +4754,7 @@ buildJobPhotoList();
 
 }
 function buildJobPhotoList(){
-	alert("building Photo List")
+	
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById('JobPhotoTable');
 	opTable.destroyItems();
@@ -4768,7 +4768,7 @@ function buildJobPhotoList(){
 
 }
 function jobPhotosReadSuccess(entries) {
-	 alert("photos found "+entries.length)
+	
 	
  
    var i;
@@ -4784,7 +4784,7 @@ function jobPhotosReadSuccess(entries) {
    }
 }
 function jobPhotosReadFail(error) {
-   alert("Failed to list Photos contents: "+ error);
+   //alert("Failed to list Photos contents: "+ error);
 }
 function job_photos_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);

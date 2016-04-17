@@ -375,13 +375,14 @@ function onDirectoryFail(error) {
 function moveFile(fileUri,dir) {
 	
 	var opdir = cordova.file.externalApplicationStorageDirectory+dir;
-
+alert("movingto:"+opdir)
     var directoryEntry = cordova.file.externalApplicationStorageDirectory; // to get root path of directory
+alert("a1")
     directoryEntry.getDirectory(dir, {
         create: true,
         exclusive: false
     }, onDirectorySuccess, onDirectoryFail); // creating folder in sdcard
-    
+alert("a2")  
 
 
 
