@@ -345,7 +345,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     alert(imageData)
                     
-moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+moveFile(imageData, "MyJobs/Private/Photos")
 }
 
 //Callback function when the picture has not been successfully taken
@@ -361,11 +361,28 @@ function errorMoveCallback(error) {
     alert("moveCallbackError:" + error.code+":" + error.source+":" + error.target)
     
 }
+function onDirectorySuccess(parent) {
+    alert(" Directory created successfuly")
+}
 
+function onDirectoryFail(error) {
+    //Error while creating directory
+    alert("Unable to create new directory: " + error.code);
+
+}
 
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
-	var opdir = new DirectoryEntry({fullPath: dir});
+	
+	var opdir = cordova.file.externalApplicationStorageDirectory+dir;
+
+    var directoryEntry = cordova.file.externalApplicationStorageDirectory; // to get root path of directory
+    directoryEntry.getDirectory(dir, {
+        create: true,
+        exclusive: false
+    }, onDirectorySuccess, onDirectoryFail); // creating folder in sdcard
+    
+
 
 
     var currentdate = new Date();
@@ -378,11 +395,11 @@ function moveFile(fileUri,dir) {
                        fileExt = "." + oldFileUri.split('.').pop();
 
                        newFileName = datetime + fileExt;
-                    
+  alert("1")                  
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
-                          
+                    	   alert("2")                            
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
-                        	  
+                        	   alert("3")                        	  
             file.moveTo(opdir, newFileName, function (entry) {
             	alert("moved to "+entry.fullPath)
             	
