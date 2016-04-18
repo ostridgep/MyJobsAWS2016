@@ -12,20 +12,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     buttons: [
 
 
-                                new sap.m.Button( {
-                                    text: "BuildDirs",
-                                    type: 	sap.m.ButtonType.Accept,
-                                    tap: [ function(oEvt) { 
-                                    	
-                                    	
-
-                                       	
-                                       	
-                                	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, errorHandler);
-                                              
-                                                } ]
-                                   
-                                }), 
+ 
                                 new sap.m.Button( {
                                     text: "Save",
                                     type: 	sap.m.ButtonType.Accept,
@@ -402,18 +389,18 @@ function photosReadFail(error) {
 function buildDocumentsTableContent(tablename)
 
 {
-	
+	selectedDocTable=tablename;
 	var dir=""
-	if(selectedDocTable='DocumentsUploadTable'){
+	if(selectedDocTable=='DocumentsUploadTable'){
 		dir="MyJobs/Private/Upload/"
 	}
-	if(selectedDocTable='DocumentsDownloadTable'){
+	if(selectedDocTable=='DocumentsDownloadTable'){
 		dir="MyJobs/Private/Download/"
 	}
-	if(selectedDocTable='DocumentsGlobalTable'){
+	if(selectedDocTable=='DocumentsGlobalTable'){
 		dir="MyJobs/Global/Download/"
 	}
-	
+	alert("getting"+selectedDocTable+":"+dir)
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
 	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
@@ -474,69 +461,7 @@ function createDir(rootDirEntry, folders) {
   }, errorHandler);
 };
 
-function buildDirs(fs) {
 
-
-	
-    var entry=fs; 
-alert("Myj")
-    entry.getDirectory("MyJ", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir "+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJr "+error); 
-		    }); 
-alert("Myj/Global")
-    entry.getDirectory("MyJ/Global", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Global"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Global "+error); 
-		    }); 
-alert("Myj/Private")
-    entry.getDirectory("MyJ/Private", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Private"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Private "+error); 
-		    });
-alert("Myj/Private/Download")
-    entry.getDirectory("MyJ/Private/Download", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Private-Download"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Private-Download"+error); 
-		    });
-alert("Myj/Private/Upload")
-    entry.getDirectory("MyJ/Private/Upload", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Private-Upload"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Private-Upload"+error); 
-		    });
-alert("Myj/Private/Photos")
-entry.getDirectory("MyJ/Private/Photos", {create: true, exclusive: false}, 
-		function(dir){
-	    	 console.log("Created dir Private-Photos"+dir.name); 
-	    }, function(error){
-	    	 console.log("error Creating Di MyJ-Private-Photos"+error); 
-	    });
-alert("Myj/Global/Download")
-    entry.getDirectory("MyJ/Global/Download", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Global-Download"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Global-Download"+error); 
-		    });
-alert("Myj/Private/Upload")
-    entry.getDirectory("MyJ/Global/Upload", {create: true, exclusive: false}, 
-    		function(dir){
-		    	 console.log("Created dir Global-Upload"+dir.name); 
-		    }, function(error){
-		    	 console.log("error Creating Di MyJ-Global-Upload"+error); 
-		    });
-
-}
 
 function errorHandler(error){
 

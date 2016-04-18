@@ -4795,13 +4795,13 @@ buildJobPhotoList();
 
 }
 function buildJobPhotoList(){
-	alert("about to Build JobPhotos"+selectedPhotoDir)
+	
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById('JobPhotoTable');
 	opTable.destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(selectedPhotoDir, function (dirEntry) {
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);

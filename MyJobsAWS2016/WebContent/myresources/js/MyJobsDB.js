@@ -2164,7 +2164,7 @@ function createTables(type) {
 						 function(){
 							
 							emptyTables(type);
-							
+							window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, buildDirsErrorHandler);
 							
 						 },
 						 function(error, statement){
@@ -2175,6 +2175,73 @@ function createTables(type) {
 						 }        
 				);
 
+
+}
+function buildDirsErrorHandler(error){
+
+    alert("Failed to create The Directories: "+ error);
+}
+function buildDirs(fs) {
+
+
+	
+    var entry=fs; 
+
+    entry.getDirectory("MyJobs", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir "+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs "+error); 
+		    }); 
+
+    entry.getDirectory("MyJobs/Global", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Global"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Global "+error); 
+		    }); 
+
+    entry.getDirectory("MyJobs/Private", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Private"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Private "+error); 
+		    });
+
+    entry.getDirectory("MyJobs/Private/Download", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Private-Download"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Private-Download"+error); 
+		    });
+
+    entry.getDirectory("MyJobs/Private/Upload", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Private-Upload"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Private-Upload"+error); 
+		    });
+
+entry.getDirectory("MyJobs/Private/Photos", {create: true, exclusive: false}, 
+		function(dir){
+	    	 console.log("Created dir Private-Photos"+dir.name); 
+	    }, function(error){
+	    	 console.log("error Creating Di MyJobs-Private-Photos"+error); 
+	    });
+
+    entry.getDirectory("MyJobs/Global/Download", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Global-Download"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Global-Download"+error); 
+		    });
+
+    entry.getDirectory("MyJobs/Global/Upload", {create: true, exclusive: false}, 
+    		function(dir){
+		    	 console.log("Created dir Global-Upload"+dir.name); 
+		    }, function(error){
+		    	 console.log("error Creating Di MyJobs-Global-Upload"+error); 
+		    });
 
 }
 //*************************************************************************************************************************
