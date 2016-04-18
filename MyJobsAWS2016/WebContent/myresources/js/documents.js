@@ -536,7 +536,7 @@ alert("Myj/Private/Upload")
 		    });
 
 }
-f
+
 function errorHandler(error){
 
 	    alert("Failed to create The Directories: "+ error);
