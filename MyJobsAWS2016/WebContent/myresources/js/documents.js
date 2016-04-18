@@ -476,6 +476,7 @@ function createDir(rootDirEntry, folders) {
 
 function buildDirs(fs) {
 
+
 	
     var entry=fs; 
 alert("Myj")
