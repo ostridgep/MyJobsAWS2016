@@ -374,7 +374,7 @@ function onDirectoryFail(error) {
 // fileUri = file:///emu/0/android/cache/something.jpg
 function moveFile(fileUri,dir) {
 	
-	var opdir = "+dir;
+	var opdir = dir;
 
 
 
