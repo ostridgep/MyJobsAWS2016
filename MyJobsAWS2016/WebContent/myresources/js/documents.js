@@ -3,26 +3,14 @@ var privatedownload = new Array()
 var privateupload = new Array()
 var privatephotos = new Array()
 var downloadCount;
+var getPhotoCaller="DOC"
+	var selectedDocTable=""
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
     modal: true,
     contentWidth:"1em",
     buttons: [
-new sap.m.Button( {
-    text: "Photolist",
-    type: 	sap.m.ButtonType.Accept,
-    tap: [ function(oEvt) { 
-    	
-    	
-       	
-       	
-       	
-   	
-    	buildPhotoList();
-     
-                } ]
-   
-}), 
+
                                 new sap.m.Button( {
                                     text: "Save",
                                     type: 	sap.m.ButtonType.Accept,
@@ -46,7 +34,7 @@ new sap.m.Button( {
                                        	
                                        	
                                        	
-                                    	getPhoto();
+                                    	getPhoto("DOC");
                                     	
                                               
                                                 } ]
@@ -81,6 +69,7 @@ buildDocumentList()
             ],
             beforeOpen:function(){
             	buildDocumentTables()
+            	buildPhotoList();
             },
            contentWidth:"90%",
         	contentHeight: "90%",
@@ -258,77 +247,14 @@ function buildDocumentList(){
 	return docsTabBar
 }
 function buildDocumentTables(){
-	var n = 0;
-	var opTable = sap.ui.getCore().getElementById('DocumentsGlobalTable');
-	sap.ui.getCore().getElementById('DocumentsGlobalTable').destroyItems();
-	while (n < 4) {
-		
-
-		opTable.addItem (new sap.m.ColumnListItem({
-			cells : 
-				[
-				new sap.m.Text({text: "GFile"+n+".txt"}),
-	            new sap.m.Text({text: "Doc"}),
-	            new sap.m.Text({text: n*1000}),
-				new sap.m.Text({text:  "2016-01-01 13:0"+n})   
-		 		]
-			}));
-		n++;
-	 }
-	var n = 0;
-	var opTable = sap.ui.getCore().getElementById('DocumentsDownloadTable');
-	sap.ui.getCore().getElementById('DocumentsDownloadTable').destroyItems();
-	while (n < 4) {
-		
-
-		opTable.addItem (new sap.m.ColumnListItem({
-			cells : 
-				[
-				new sap.m.Text({text: "DownloadFile"+n+".txt"}),
-	            new sap.m.Text({text: "Doc"}),
-	            new sap.m.Text({text: n*1000}),
-				new sap.m.Text({text:  "2016-01-01 13:0"+n})   
-		 		]
-			}));
-		n++;
-	 }
-	var n = 0;
-	var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
-	sap.ui.getCore().getElementById('DocumentsUploadTable').destroyItems();
-	while (n < 4) {
-		
-
-		opTable.addItem (new sap.m.ColumnListItem({
-			cells : 
-				[
-				new sap.m.Text({text: "UploadFile"+n+".txt"}),
-	            new sap.m.Text({text: "Doc"}),
-	            new sap.m.Text({text: n*1000}),
-				new sap.m.Text({text:  "2016-01-01 13:0"+n})   
-		 		]
-			}));
-		n++;
-	 }
-	var n = 0;
-	var opTable = sap.ui.getCore().getElementById('PhotosTable');
-	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
-	while (n < 4) {
-		
-
-		opTable.addItem (new sap.m.ColumnListItem({
-			cells : 
-				[
-				new sap.m.Text({text: "PhotoFile"+n+".txt"}),
-	            new sap.m.Text({text: "Doc"}),
-	            new sap.m.Text({text: n*1000}),
-				new sap.m.Text({text:  "2016-01-01 13:0"+n})   
-		 		]
-			}));
-		n++;
-	 }
+	buildDocumentsTableContent('DocumentsGlobalTable')
+	buildDocumentsTableContent('DocumentsDownloadTable')
+	buildDocumentsTableContent('DocumentsUploadTable')
+	
 }
 //get photo and store locally
-function getPhoto() {
+function getPhoto(caller) {
+	getPhotoCaller=caller
     // Take picture using device camera and retrieve image as base64-encoded string
 	//alert("about to take photo"+cordova.file.externalApplicationStorageDirectory)
 	
@@ -343,7 +269,7 @@ function onGetPhotoDataSuccess(imageData) {
        + (currentdate.getHours()).toString()
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
-    alert(imageData)
+    
                     
 moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
 }
@@ -395,11 +321,16 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	alert("moved to "+entry.fullPath)
+            	if(getPhotoCaller=="JOB"){
+            		buildJobPhotoList();
+            	}
+            	if(getPhotoCaller=="JOB"){
+            		buildPhotoList();
+            	}
             	
                
             }, function (error) {
-            	alert(opdir+":"+newFileName)
+            	
                 alert("error moving:"+error.code+":"+error.source+":"+error.target);
             });
         }, errorMoveCallback);
@@ -407,7 +338,7 @@ function moveFile(fileUri,dir) {
 }
 
 function buildPhotoList(){
-	alert("building Photo List")
+	
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
@@ -435,7 +366,7 @@ function photos_details_callback(f) {
 		}));
 }
 function photosReadSuccess(entries) {
-	 alert("photos found "+entries.length)
+	
 	
   
     var i;
@@ -453,23 +384,39 @@ function photosReadSuccess(entries) {
 function photosReadFail(error) {
     alert("Failed to list Photos contents: "+ error);
 }
-function buildGlobalList(){
-	alert("building Global List")
+function buildDocumentsTableContent(tablename)
+
+{
 	
+	var dir=""
+	if(selectedDocTable='DocumentsUploadTable'){
+		dir="MyJobs/Private/Upload/"
+	}
+	if(selectedDocTable='DocumentsDownloadTable'){
+		dir="MyJobs/Private/Download/"
+	}
+	if(selectedDocTable='DocumentsGlobalTable'){
+		dir="MyJobs/Global/Download/"
+	}
 	
-	sap.ui.getCore().getElementById('GlobalTable').destroyItems();
+	privatephotos = new Array()
+	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
+	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+dir, function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(globalReadSuccess, globalReadFail);
+	          directoryReader.readEntries(docsReadSuccess, docsReadFail);
 	    });
 
 }
-function global_details_callback(f) {
+function docsReadFail(error) {
+    alert("Failed to list Photos contents: "+ error);
+}
+function docs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
-    var opTable = sap.ui.getCore().getElementById('GlobalTable');
+    var opTable = sap.ui.getCore().getElementById(selectedDocTable);
 	opTable.addItem (new sap.m.ColumnListItem({
 		cells : 
 			[
@@ -480,70 +427,23 @@ function global_details_callback(f) {
 	 		]
 		}));
 }
-function globalReadSuccess(entries) {
-	 alert("global found "+entries.length)
+function docsReadSuccess(entries) {
+	
 	
   
     var i;
     for (i = 0; i < entries.length; i++) {
        
         if (entries[i].isFile) {
-            entries[i].file(global_details_callback);
+            entries[i].file(photos_details_callback);
 
         } else {
-            console.log('globalDirectory - ' + entries[i].name);
+            console.log('docsDirectory - ' + entries[i].name);
             
         }
     }
 }
-function buildDownloadList(){
-	alert("building Global List")
-	
-	
-	sap.ui.getCore().getElementById('DownloadTable').destroyItems();
 
-
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
-	    	
-	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(downloadReadSuccess, downloadReadFail);
-	    });
-
-}
-
-
-function download_details_callback(f) {
-    var d1 = new Date(f.lastModifiedDate);
-    var opTable = sap.ui.getCore().getElementById('DownloadTable');
-	opTable.addItem (new sap.m.ColumnListItem({
-		cells : 
-			[
-			new sap.m.Text({text: f.name}),
-            new sap.m.Text({text: f.type}),
-            new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
-	 		]
-		}));
-}
-function downloadReadSuccess(entries) {
-	 alert("download found "+entries.length)
-	
-  
-    var i;
-    for (i = 0; i < entries.length; i++) {
-       
-        if (entries[i].isFile) {
-            entries[i].file(download_details_callback);
-
-        } else {
-            console.log('downloadDirectory - ' + entries[i].name);
-            
-        }
-    }
-}
-function downloadReadFail(error) {
-    alert("Failed to list global contents: "+ error);
-}
 
 
 function downloadMissing()
