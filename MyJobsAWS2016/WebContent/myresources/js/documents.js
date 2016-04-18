@@ -475,7 +475,7 @@ function createDir(rootDirEntry, folders) {
 };
 
 function buildDirs(fs) {
-	cordova.file.externalApplicationStorageDirectory
+alert("Into Buikd Dirs")	
 var GD = "MyJ/Global/Download"
 var GU = "MyJ/Global/Upload"
 var GP = "MyJ/Global/Photos"
@@ -484,42 +484,56 @@ var PU = "MyJ/Global/Upload"
 var PP = "MyJ/Global/Photos"
 	
     var entry=fs; 
+alert("Myj")
     entry.getDirectory("MyJ", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir "+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJr "+error); 
 		    }); 
+alert("Myj/Global")
     entry.getDirectory("MyJ/Global", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Global"+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJ-Global "+error); 
 		    }); 
+alert("Myj/Private")
     entry.getDirectory("MyJ/Private", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Private"+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJ-Private "+error); 
 		    });
+alert("Myj/Private/Download")
     entry.getDirectory("MyJ/Private/Download", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Private-Download"+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJ-Private-Download"+error); 
 		    });
+alert("Myj/Private/Upload")
     entry.getDirectory("MyJ/Private/Upload", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Private-Upload"+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJ-Private-Upload"+error); 
 		    });
+alert("Myj/Private/Photos")
+entry.getDirectory("MyJ/Private/Photos", {create: true, exclusive: false}, 
+		function(dir){
+	    	 console.log("Created dir Private-Photos"+dir.name); 
+	    }, function(error){
+	    	 console.log("error Creating Di MyJ-Private-Photos"+error); 
+	    });
+alert("Myj/Global/Download")
     entry.getDirectory("MyJ/Global/Download", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Global-Download"+dir.name); 
 		    }, function(error){
 		    	 console.log("error Creating Di MyJ-Global-Download"+error); 
 		    });
+alert("Myj/Private/Upload")
     entry.getDirectory("MyJ/Global/Upload", {create: true, exclusive: false}, 
     		function(dir){
 		    	 console.log("Created dir Global-Upload"+dir.name); 
