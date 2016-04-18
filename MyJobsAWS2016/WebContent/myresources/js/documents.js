@@ -4,13 +4,28 @@ var privateupload = new Array()
 var privatephotos = new Array()
 var downloadCount;
 var getPhotoCaller="DOC"
-	var selectedDocTable=""
+var selectedDocTable=""
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
     modal: true,
     contentWidth:"1em",
     buttons: [
 
+
+                                new sap.m.Button( {
+                                    text: "BuildDirs",
+                                    type: 	sap.m.ButtonType.Accept,
+                                    tap: [ function(oEvt) { 
+                                    	
+                                    	
+                                       	
+                                       	
+                                       	
+                                    	window.requestFileSystem(cordova.file.externalApplicationStorageDirectory, 1024*1024, buildDirs, errorHandler);
+                                              
+                                                } ]
+                                   
+                                }), 
                                 new sap.m.Button( {
                                     text: "Save",
                                     type: 	sap.m.ButtonType.Accept,
@@ -24,7 +39,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                               
                                                 } ]
                                    
-                                }),   
+                                }), 
                                 new sap.m.Button( {
                                     text: "Photo",
                                     type: 	sap.m.ButtonType.Accept,
@@ -50,7 +65,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                        	
                                        	
                                     	downloadMissing();
-                                    	//buildPhotoList()
+                                    	
                                               
                                                 } ]
                                    
@@ -444,6 +459,39 @@ function docsReadSuccess(entries) {
     }
 }
 
+
+
+function createDir(rootDirEntry, folders) {
+  // Throw out './' or '/' and move on to prevent something like '/foo/.//bar'.
+  if (folders[0] == '.' || folders[0] == '') {
+    folders = folders.slice(1);
+  }
+  rootDirEntry.getDirectory(folders[0], {create: true}, function(dirEntry) {
+    // Recursively add the new subfolder (if we still have another to create).
+    if (folders.length) {
+      createDir(dirEntry, folders.slice(1));
+    }
+  }, errorHandler);
+};
+
+function buildDirs(fs) {
+var GD = "MyJ/Global/Download"
+var GU = "MyJ/Global/Upload"
+var GP = "MyJ/Global/Photos"
+var PD = "MyJ/Global/Download"
+var PU = "MyJ/Global/Upload"
+var PP = "MyJ/Global/Photos"
+  createDir(fs.root, GD.split('/')); 
+  createDir(fs.root, GU.split('/')); 
+  createDir(fs.root, GP.split('/')); 
+  createDir(fs.root, PD.split('/')); 
+  createDir(fs.root, PU.split('/')); 
+  createDir(fs.root, PP.split('/')); 
+}
+function errorHandler(error){
+
+	    alert("Failed to create The Directories: "+ error);
+	}
 
 
 function downloadMissing()
