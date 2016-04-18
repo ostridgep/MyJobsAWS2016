@@ -165,6 +165,7 @@ var currentEquipment_GIS="";
 var currentFuncLoc_GIS=""; 
 var selectedJobArray=[];
 var selectedPhoto="";
+var selectedPhotoDir="";
 //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
 var flocList = new sap.m.List("flocList",{
 	mode: sap.m.ListMode.SingleSelectLeft,
@@ -223,6 +224,12 @@ function loadLastSyncValues(){
 	}
 	
 }
+try {
+	  selectedPhotoDir=cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"
+	}
+	catch(err) {
+		selectedPhotoDir="MyJobs/Private/Photos/"
+	}
 var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
     title:"Display Photo",
     modal: true,
@@ -240,7 +247,7 @@ var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
 				],					
     content:[
 			new sap.m.Image({
-				src: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/+selectedPhoto",
+				src: selectedPhotoDir+"MyJobs/Private/Photos/"+selectedPhoto,
 				alt: "test image",
 				decorative: false,
 				width: "400px",
@@ -4792,7 +4799,7 @@ function buildJobPhotoList(){
 	opTable.destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+	    window.resolveLocalFileSystemURL(selectedPhotoDir, function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);
