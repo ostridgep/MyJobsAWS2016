@@ -164,6 +164,7 @@ var selectedHistoryDocument='';
 var currentEquipment_GIS="";
 var currentFuncLoc_GIS=""; 
 var selectedJobArray=[];
+var selectedPhoto="";
 //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
 var flocList = new sap.m.List("flocList",{
 	mode: sap.m.ListMode.SingleSelectLeft,
@@ -222,6 +223,32 @@ function loadLastSyncValues(){
 	}
 	
 }
+var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
+    title:"Display Photo",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formDisplayPhoto.close()
+						  } ]
+				})
+				],					
+    content:[
+			new sap.m.Image({
+				src: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/+selectedPhoto",
+				alt: "test image",
+				decorative: false,
+				width: "400px",
+				height: "400px"
+			})
+
+            ]
+ })
 var formLastSync = new sap.m.Dialog("dlgLastSync",{
     title:"Last Synchronise",
     modal: true,
@@ -4243,6 +4270,11 @@ formtab=null;
         	                   key:'JobPhotos',
         	                  tooltip: 'Photos',
         	                  icon: "sap-icon://attachment-photo",
+        	                  mode: sap.m.ListMode.SingleSelectMaster,
+								selectionChange: function(evt){
+									selectedPhoto=evt.getParameter("listItem").getCells()[0].getText()
+									formDisplayPhoto.open()
+							    },
            	                   content:[
     									new sap.m.Table("JobPhotoTable",{
     										width:'100%',
