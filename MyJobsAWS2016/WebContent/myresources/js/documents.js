@@ -21,7 +21,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                        	
                                        	
                                        	
-                                    	window.requestFileSystem(cordova.file.externalApplicationStorageDirectory, 1024*1024, buildDirs, errorHandler);
+                                    	window.requestFileSystem(cordova.file.externalApplicationStorageDirectory, 0, buildDirs, errorHandler);
                                               
                                                 } ]
                                    
@@ -475,13 +475,7 @@ function createDir(rootDirEntry, folders) {
 };
 
 function buildDirs(fs) {
-alert("Into Buikd Dirs")	
-var GD = "MyJ/Global/Download"
-var GU = "MyJ/Global/Upload"
-var GP = "MyJ/Global/Photos"
-var PD = "MyJ/Global/Download"
-var PU = "MyJ/Global/Upload"
-var PP = "MyJ/Global/Photos"
+
 	
     var entry=fs; 
 alert("Myj")
@@ -573,7 +567,7 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL( + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
             cnt = cnt + 1;
 
         });

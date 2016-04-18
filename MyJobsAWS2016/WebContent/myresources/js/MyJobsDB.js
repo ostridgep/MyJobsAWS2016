@@ -3015,13 +3015,13 @@ var orderlist="";
 					}else if(page=="Home.html"){
 						setCounts()
 					}
-			     alert(sqlstatementMP)
+			   
 				     html5sql.process(sqlstatementMP,
 							 function(){
-								 alert("Success del MP");
+								 
 							 },
 							 function(error, statement){
-								 alert("Error: " + error.message + " when processing " + statement);
+								
 								 opMessage("Error: " + error.message + " when processing " + statement);
 							 }        
 					)
