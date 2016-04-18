@@ -18,10 +18,10 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                     tap: [ function(oEvt) { 
                                     	
                                     	
+
                                        	
                                        	
-                                       	
-                                    	window.requestFileSystem(cordova.file.externalApplicationStorageDirectory, 0, buildDirs, errorHandler);
+                                	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, errorHandler);
                                               
                                                 } ]
                                    
