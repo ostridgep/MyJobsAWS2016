@@ -249,9 +249,9 @@ function buildDocumentList(){
 	return docsTabBar
 }
 function buildDocumentTables(){
-	buildDocumentsTableContent('DocumentsGlobalTable')
-	buildDocumentsTableContent('DocumentsDownloadTable')
-	buildDocumentsTableContent('DocumentsUploadTable')
+	buildGlobalDownloads()
+	buildPrivateDownloads()
+	buildPrivateUploads()
 	
 }
 //get photo and store locally
@@ -386,39 +386,29 @@ function photosReadSuccess(entries) {
 function photosReadFail(error) {
     alert("Failed to list Photos contents: "+ error);
 }
-function buildDocumentsTableContent(tablename)
+function buildGlobalDownloads()
 
 {
-	selectedDocTable=tablename;
-	var dir=""
-	if(selectedDocTable=='DocumentsUploadTable'){
-		dir="MyJobs/Private/Upload/"
-	}
-	if(selectedDocTable=='DocumentsDownloadTable'){
-		dir="MyJobs/Private/Download/"
-	}
-	if(selectedDocTable=='DocumentsGlobalTable'){
-		dir="MyJobs/Global/Download/"
-	}
+
 	alert("getting"+selectedDocTable+":"+dir)
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
 	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+dir, function (dirEntry) {
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(docsReadSuccess, docsReadFail);
+	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
 	    });
 
 }
-function docsReadFail(error) {
+function docsGDReadFail(error) {
     alert("Failed to list Photos contents: "+ error);
 }
-function docs_details_callback(f) {
+function gddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
-    var opTable = sap.ui.getCore().getElementById(selectedDocTable);
+    var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.addItem (new sap.m.ColumnListItem({
 		cells : 
 			[
@@ -429,7 +419,7 @@ function docs_details_callback(f) {
 	 		]
 		}));
 }
-function docsReadSuccess(entries) {
+function docsGDReadSuccess(entries) {
 	
 	
   
@@ -437,7 +427,55 @@ function docsReadSuccess(entries) {
     for (i = 0; i < entries.length; i++) {
        
         if (entries[i].isFile) {
-            entries[i].file(photos_details_callback);
+            entries[i].file(gddocs_details_callback);
+
+        } else {
+            console.log('docsDirectory - ' + entries[i].name);
+            
+        }
+    }
+}
+function buildPrivateUploads()
+
+{
+
+	privatephotos = new Array()
+	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
+	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
+
+
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
+	    	
+	        var directoryReader = dirEntry.createReader();
+	          directoryReader.readEntries(docsPUReadSuccess, docsPUReadFail);
+	    });
+
+}
+function docsPUReadFail(error) {
+    alert("Failed to list Photos contents: "+ error);
+}
+function pudocs_details_callback(f) {
+    var d1 = new Date(f.lastModifiedDate);
+    var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
+}
+function docsPUReadSuccess(entries) {
+	
+	
+  
+    var i;
+    for (i = 0; i < entries.length; i++) {
+       
+        if (entries[i].isFile) {
+            entries[i].file(pudocs_details_callback);
 
         } else {
             console.log('docsDirectory - ' + entries[i].name);
@@ -446,6 +484,54 @@ function docsReadSuccess(entries) {
     }
 }
 
+function buildPrivateDownloads()
+
+{
+
+	privatephotos = new Array()
+	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
+	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
+
+
+	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+	    	
+	        var directoryReader = dirEntry.createReader();
+	          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
+	    });
+
+}
+function docsPDReadFail(error) {
+    alert("Failed to list Photos contents: "+ error);
+}
+function pddocs_details_callback(f) {
+    var d1 = new Date(f.lastModifiedDate);
+    var opTable = sap.ui.getCore().getElementById('DocumentsDownloadTable');
+	opTable.addItem (new sap.m.ColumnListItem({
+		cells : 
+			[
+			new sap.m.Text({text: f.name}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+	 		]
+		}));
+}
+function docsPDReadSuccess(entries) {
+	
+	
+  
+    var i;
+    for (i = 0; i < entries.length; i++) {
+       
+        if (entries[i].isFile) {
+            entries[i].file(pddocs_details_callback);
+
+        } else {
+            console.log('docsDirectory - ' + entries[i].name);
+            
+        }
+    }
+}
 
 
 function createDir(rootDirEntry, folders) {

@@ -4279,13 +4279,15 @@ formtab=null;
         	                   key:'JobPhotos',
         	                  tooltip: 'Photos',
         	                  icon: "sap-icon://attachment-photo",
-        	                  mode: sap.m.ListMode.SingleSelectMaster,
-								selectionChange: function(evt){
-									selectedPhoto=evt.getParameter("listItem").getCells()[0].getText()
-									formDisplayPhoto.open()
-							    },
+        	                 
            	                   content:[
     									new sap.m.Table("JobPhotoTable",{
+    										 mode: sap.m.ListMode.SingleSelectMaster,
+    											selectionChange: function(evt){
+    												selectedPhoto=evt.getParameter("listItem").getCells()[0].getText()
+    												alert(selectedPhoto)
+    												formDisplayPhoto.open()
+    										    },
     										width:'100%',
     										columns:[
    										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
