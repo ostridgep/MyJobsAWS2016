@@ -5,6 +5,37 @@ var privatephotos = new Array()
 var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
+	var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
+	    title:"Display Photo",
+	    modal: true,
+	    contentWidth:"1em",
+	    buttons: [
+	   
+					new sap.m.Button( {
+					    text: "Cancel",
+					    type: 	sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+							 
+					    	formDisplayPhoto.close()
+							  } ]
+					})
+					],					
+	    content:[
+				new sap.m.Image({
+					src: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+selectedPhoto,
+					alt: "image",
+					decorative: false,
+					width: "400px",
+					height: "400px"
+				})
+
+	            ]
+	 })
+
+function showFile(file){
+	alert(file)
+	window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
+}
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
     modal: true,
@@ -118,14 +149,10 @@ function buildDocumentList(){
 	    	            									new sap.m.Table("DocumentsGlobalTable",{
 	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	            										selectionChange: function(evt){
-	    	            											
-	    	            											//selectedReserverMaterial=oEvt.getParameter("selectedItem").getKey()
-	    	            											
-	    	            											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
-	    	            											//selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
-	    	            											//formAssetCharacteristic.open()
-	    	            									    },
+	    	        											selectionChange: function(evt){
+
+	    	        												showFile("MyJobs/Global/Downloads/"+evt.getParameter("listItem").getCells()[0].getText())
+	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
 	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
@@ -152,14 +179,9 @@ function buildDocumentList(){
 	    	            									new sap.m.Table("DocumentsDownloadTable",{
 	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	            										selectionChange: function(evt){
-	    	            											
-	    	            											//selectedReserverMaterial=oEvt.getParameter("selectedItem").getKey()
-	    	            											
-	    	            											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
-	    	            											//selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
-	    	            											//formAssetCharacteristic.open()
-	    	            									    },
+	    	        											selectionChange: function(evt){
+	    	        												showFile("MyJobs/Private/Downloads/"+evt.getParameter("listItem").getCells()[0].getText())
+	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
 	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
@@ -216,16 +238,12 @@ function buildDocumentList(){
 	    	            	       	                   content:[
 	    	            	       	        	               
 	    	            									new sap.m.Table("PhotosTable",{
-	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	            										selectionChange: function(evt){
-	    	            											
-	    	            											//selectedReserverMaterial=oEvt.getParameter("selectedItem").getKey()
-	    	            											
-	    	            											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
-	    	            											//selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
-	    	            											//formAssetCharacteristic.open()
-	    	            									    },
+	    	        											selectionChange: function(evt){
+	    	        												selectedPhoto=evt.getParameter("listItem").getCells()[0].getText()
+	    	        												alert(selectedPhoto)
+	    	        												formDisplayPhoto.open()
+	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
 	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
@@ -390,7 +408,7 @@ function buildGlobalDownloads()
 
 {
 
-	alert("getting"+selectedDocTable+":"+dir)
+
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
 	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();

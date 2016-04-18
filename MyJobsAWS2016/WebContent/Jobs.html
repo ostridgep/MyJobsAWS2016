@@ -225,39 +225,8 @@ function loadLastSyncValues(){
 	
 }
 
-try {
-	  selectedPhotoDir=cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"
-	}
-	catch(err) {
-		alert("setting Photo dir"+err)
-		selectedPhotoDir="MyJobs/Private/Photos/"
-	}
-var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
-    title:"Display Photo",
-    modal: true,
-    contentWidth:"1em",
-    buttons: [
-   
-				new sap.m.Button( {
-				    text: "Cancel",
-				    type: 	sap.m.ButtonType.Reject,
-				    tap: [ function(oEvt) {		  
-						 
-				    	formDisplayPhoto.close()
-						  } ]
-				})
-				],					
-    content:[
-			new sap.m.Image({
-				src: selectedPhotoDir+"MyJobs/Private/Photos/"+selectedPhoto,
-				alt: "test image",
-				decorative: false,
-				width: "400px",
-				height: "400px"
-			})
 
-            ]
- })
+
 var formLastSync = new sap.m.Dialog("dlgLastSync",{
     title:"Last Synchronise",
     modal: true,
