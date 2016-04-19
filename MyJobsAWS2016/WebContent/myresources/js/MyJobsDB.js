@@ -2164,7 +2164,14 @@ function createTables(type) {
 						 function(){
 							
 							emptyTables(type);
-							window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, buildDirsErrorHandler);
+							try {
+								window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, buildDirsErrorHandler);
+							}
+							catch(err) {
+							   //Not in Cordova
+							}
+
+							
 							
 						 },
 						 function(error, statement){
@@ -2177,7 +2184,7 @@ function createTables(type) {
 
 
 }
-function buildDirserrorHandler(error){
+function buildDirsErrorHandler(error){
 
     alert("Failed to create The Directories: "+ error);
 }
