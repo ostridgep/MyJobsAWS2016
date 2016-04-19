@@ -39,16 +39,15 @@ font-size: 150%;
 <script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
+	try {
+		appDirectory=cordova.file.externalApplicationStorageDirectory;
+	}
+	catch(err) {
+	   
+	}
 	
 	</script>
-<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;">
-alert("Cordova Loaded")
-if(window.isCordovaApp){
-	appDirectory=cordova.file.externalApplicationStorageDirectory;
-}else{
-	console.log("Not Cordova")
-}
-</script>
+
 <script src="resources/sap-ui-core.js" type="text/javascript"
 	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
 	data-sap-ui-theme="sap_bluecrystal">
@@ -67,6 +66,7 @@ if(window.isCordovaApp){
 
 
 <script type="text/javascript">
+
 var MenuBar=["My AnglianWater","Vehicles","End of Day", "Jobs", "Reference Documents", "MC Web", "Office", "Assets", "Material"]
 var MenuBarType=["U","C","C", "M", "M", "U", "M", "M", "U"]
 var MyMenu=[]

@@ -50,17 +50,17 @@ span.tip {
 }
 </style>
 
+<script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
+	try {
+		appDirectory=cordova.file.externalApplicationStorageDirectory;
+	}
+	catch(err) {
+	   
+	}
 	
 	</script>
-<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;">
-alert("Cordova Loaded")
-if(window.isCordovaApp){
-	appDirectory=cordova.file.externalApplicationStorageDirectory;
-}else{
-	console.log("Not Cordova")
-}</script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
