@@ -49,13 +49,18 @@ span.tip {
     visibility: hidden;
 }
 </style>
-<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;"></script>
+
 <script>
 var appDirectory=""
-	if(window.isCordovaApp){
-		appDirectory=cordova.file.externalApplicationStorageDirectory;
-	}
+	
 	</script>
+<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;">
+alert("Cordova Loaded")
+if(window.isCordovaApp){
+	appDirectory=cordova.file.externalApplicationStorageDirectory;
+}else{
+	console.log("Not Cordova")
+}</script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
@@ -4772,12 +4777,18 @@ function buildJobPhotoList(){
 	var opTable = sap.ui.getCore().getElementById('JobPhotoTable');
 	opTable.destroyItems();
 
+	try {
+		 window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		    	
+		        var directoryReader = dirEntry.createReader();
+		          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);
+		    });
+	}
+	catch(err) {
+	   //Not in Cordova
+	}
 
-	    window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
-	    	
-	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);
-	    });
+	   
 
 }
 function jobPhotosReadSuccess(entries) {

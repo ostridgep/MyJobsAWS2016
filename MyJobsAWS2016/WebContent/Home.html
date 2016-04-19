@@ -39,10 +39,15 @@ font-size: 150%;
 <script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
-	if(window.isCordovaApp){
-		appDirectory=cordova.file.externalApplicationStorageDirectory;
-	}
+	
 	</script>
+<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;">
+alert("Cordova Loaded")
+if(window.isCordovaApp){
+	appDirectory=cordova.file.externalApplicationStorageDirectory;
+}else{
+	console.log("Not Cordova")
+}</script>
 <script src="resources/sap-ui-core.js" type="text/javascript"
 	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
 	data-sap-ui-theme="sap_bluecrystal">
