@@ -49,6 +49,7 @@ span.tip {
     visibility: hidden;
 }
 </style>
+<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;"></script>
 <script>
 var appDirectory=""
 	if(window.isCordovaApp){
@@ -60,7 +61,7 @@ var appDirectory=""
 <script src="myresources/js/bgsync.js"></script>
 <script src="myresources/js/MyJobsDB.js"></script>
 <script src="myresources/js/MyJobsUtils.js"></script>
-<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;"></script>
+
 
 <script type="text/javascript" src="barcodescanner.js"></script>
 <script src="myresources/js/jSignature.js"></script>
@@ -1884,14 +1885,7 @@ var detailFooterAWS = new sap.m.Bar({
 										}
 									)
 					 				],
-					 				contentRight: [new sap.m.Button("LastSyncMess", {
-					 	      			 text:"",
-					 	      			 
-					 	      				 press: [ function(){
-					 	      					loadLastSyncValues();
-					 	      					 sap.ui.getCore().byId("dlgLastSync").open(); ;
-					 	      						}]
-					 	      			 })]
+					 				contentRight: []
 	
 })
 var detailFooter = new sap.m.Bar({
@@ -4899,7 +4893,14 @@ function rebuildTimeConfs()
 					  							}]
 										 })
 								],
-						contentRight : [
+						contentRight : [new sap.m.Button("LastSyncMess", {
+		 	      			 text:"",
+		 	      			 
+	 	      				 press: [ function(){
+	 	      					loadLastSyncValues();
+	 	      					 sap.ui.getCore().byId("dlgLastSync").open(); ;
+	 	      						}]
+	 	      			 }),
 										new sap.m.Button("Syncit", {
 											//type: 	sap.m.ButtonType.Accept,
 						   					 //text: "Sync",
@@ -5712,7 +5713,8 @@ function startBGSync()
 		 localStorage.setItem('SAPCalling','false')
 		 syncUpload()
 		 syncDT=localStorage.getItem('LastSyncedDT')	
-		 sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(localStorage.getItem("LastSyncedDT")));
+		 x=localStorage.getItem("LastSyncedDT").split(" ");
+		 sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(x[1]));
 		// standardList.removeItem("Job:000050646820:0010").destroy()
 		 
 		
