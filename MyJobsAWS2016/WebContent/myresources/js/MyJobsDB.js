@@ -1944,6 +1944,36 @@ html5sql.process("INSERT INTO  MyTimeConfs (orderno , opno,reason,type, confno ,
 		 }        
 		);
 }
+function createMPDocument(order,opno,floc,eq,mpoint,code,val,text)
+{
+
+
+	html5sql.process("INSERT INTO  MyMPointDocs (orderno , opno, funcloc, equipment , meas_point , date , time , code, value, shorttext, state) VALUES ("+
+			 "'"+order+"','"+opno+"','"+floc+"','"+eq+"','"+mpoint+"','"+getDate()+"', '"+getTime()+"','"+code+"','"+val+"','"+text+"','');",
+	 function(){
+		
+	 },
+	 function(error, statement){
+		
+		opMessage("Error: " + error.message + " when createMPDoc processing " + statement);
+	 }        
+	);
+}
+function updateMPDocument(order,opno,floc,eq,mpoint,code,val,text)
+{
+  
+
+	html5sql.process("UPDATE MyMPointDocs set code = '"+code+"' , value = '"+ val+"', shorttext='"+text+"' where orderno = '"+order+"' and opno= '"+opno+"' and meas_point = '"+mpoint +"';",
+			
+	 function(){
+		
+	 },
+	 function(error, statement){
+		
+		opMessage("Error: " + error.message + " when createMPDoc processing " + statement);
+	 }        
+	);
+}
 function createTConf(order,opno,empid,type,startdate,enddate,duration,finalconf,comments)
 {
 
@@ -2091,6 +2121,8 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyEffects      		( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_id TEXT, effect_cat_typ TEXT, effect_codegrp TEXT, effect_code TEXT, txt_effectgrp TEXT, txt_effectcd TEXT, value TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyStatus     			( id integer primary key autoincrement, orderno TEXT, opno TEXT, stsma TEXT, status TEXT, statusdesc, state TEXT, actdate TEXT, acttime TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyTimeConfs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, confno TEXT, type TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT,act_work TEXT, rem_work TEXT, act_type TEXT, work_cntr TEXT, reason TEXT, longtext TEXT, duration TEXT, datestamp TEXT,  user TEXT,  empid TEXT, final TEXT, state TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyMPointDocs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, funcloc TEXT, equipment TEXT, meas_point TEXT, date TEXT, time TEXT, shorttext TEXT, value TEXT, code TEXT, state TEXT);'+
+
 					 'CREATE TABLE IF NOT EXISTS MyJobClose             ( id integer primary key autoincrement, orderno TEXT , opno TEXT, notifno TEXT, details TEXT, empid TEXT, work_cntr TEXT, state TEXT , closedate TEXT, closetime TEXT, funcloc  TEXT, equipment TEXT, inshift  TEXT, outofshift  TEXT, pgrp TEXT, pcode TEXT, agrp TEXT, acode TEXT, igrp TEXT, icode TEXT, followon  TEXT, variance TEXT, reason TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT);'+
@@ -2278,6 +2310,7 @@ function dropTables() {
 						'DROP TABLE IF EXISTS MyEffects;'+
 						'DROP TABLE IF EXISTS MyStatus;'+
 						'DROP TABLE IF EXISTS MyTimeConfs;'+
+						'DROP TABLE IF EXISTS MyMPointDocs;'+
 						'DROP TABLE IF EXISTS MyJobClose;'+
 						'DROP TABLE IF EXISTS MyNewJobs;'+
 						'DROP TABLE IF EXISTS MyWorkConfig;'+
@@ -2368,6 +2401,7 @@ function emptyTables(type) {
 						'DELETE FROM  MyEffects;'+
 						'DELETE FROM  MyStatus;'+
 						'DELETE FROM  MyTimeConfs;'+
+						'DELETE FROM  MyMPointDocs;'+
 						'DELETE FROM  MyJobClose;'+
 						'DELETE FROM  MyNewJobs;'+
 						'DELETE FROM  MyWorkConfig;'+
@@ -2480,6 +2514,7 @@ function loadDemoData() {
 					'DELETE FROM  MyEffects;'+
 					'DELETE FROM  MyStatus;'+
 					'DELETE FROM  MyTimeConfs;'+
+					'DELETE FROM  MyMPointDocs;'+
 					'DELETE FROM  MyJobClose;'+
 					'DELETE FROM  MyNewJobs;'+
 					'DELETE FROM  MyWorkConfig;'+
@@ -2626,6 +2661,7 @@ function resetTables() {
 					'DELETE FROM  MyEffects;'+
 					'DELETE FROM  MyStatus;'+
 					'DELETE FROM  MyTimeConfs;'+
+					'DELETE FROM  MyMPointDocs;'+
 					'DELETE FROM  MyJobClose;'+
 					'DELETE FROM  MyNewJobs;'+
 					'DELETE FROM  MyRefUsers;'+

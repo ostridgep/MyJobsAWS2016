@@ -6,6 +6,7 @@ var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
+	var appDirectory=""
 
 	var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
 	    title:"Display Photo",
@@ -24,14 +25,18 @@ var selectedPhoto=""
 					],					
 	    content:[
 				new sap.m.Image({
-					src: appDirectory+"MyJobs/Private/Photos/"+selectedPhoto,
+					src: selectedPhoto,
 					alt: "image",
 					decorative: false,
 					width: "400px",
 					height: "400px"
 				})
 
-	            ]
+	            ],
+	            ,
+	            beforeOpen:function(){
+	            	alert(selectedPhoto)
+	            }
 	 })
 
 function showFile(file){
@@ -163,7 +168,9 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }) ,
+	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -192,7 +199,9 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }) ,
+	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -225,7 +234,9 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
+	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -242,8 +253,8 @@ function buildDocumentList(){
 	    	            									new sap.m.Table("PhotosTable",{
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-	    	        												selectedPhoto=evt.getParameter("listItem").getCells()[0].getText()
-	    	        												alert(selectedPhoto)
+	    	        												var selectedPhoto=evt.getParameter("listItem").getCells()[0].getText();
+	    	        												
 	    	        												formDisplayPhoto.open()
 	    	        										    },
 	    	            										columns:[
@@ -254,7 +265,9 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true })       	                         
+	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
+	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})       	                         
 	    	            								           	     ]
 	    	            								           	  
 
@@ -292,8 +305,13 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getMinutes()).toString()
                        + (currentdate.getSeconds()).toString();
     
-                    
-moveFile(imageData, appDirectory+"MyJobs/Private/Photos")
+	  try {
+		  moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+		}
+		catch(err) {
+		   
+		}                    
+
 }
 
 //Callback function when the picture has not been successfully taken
@@ -365,7 +383,7 @@ function buildPhotoList(){
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	opTable.destroyItems();
 	try {
-		 window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		 window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(photosReadSuccess, photosReadFail);
@@ -421,7 +439,7 @@ function buildGlobalDownloads()
 	opTable.destroyItems();
 
 	try {
-		window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Global/Download/", function (dirEntry) {
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
@@ -445,7 +463,8 @@ function gddocs_details_callback(f) {
 			new sap.m.Text({text: f.name}),
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
+			new sap.m.Text({text: f.fullpath})
 	 		]
 		}));
 }
@@ -473,7 +492,7 @@ function buildPrivateUploads()
 	var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
 	opTable.destroyItems();
 	try {
-		window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsPUReadSuccess, docsPUReadFail);
@@ -528,7 +547,7 @@ function buildPrivateDownloads()
 	opTable.destroyItems();
 
 	try {
-		  window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+		  window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
@@ -608,7 +627,7 @@ function downloadMissing()
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
             
-            window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
+            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
             cnt = cnt + 1;
            
         });
@@ -631,7 +650,7 @@ function downloadAsset1(fileName) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
     alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.dataDirectory  + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, appDirectory+ x[3],
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
 		function (entry) {
 		    alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
 		   
@@ -646,8 +665,8 @@ function downloadAsset1(fileName) {
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + appDirectory + dir + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, appDirectory + dir + x[3],
+    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
 		function (entry) {
 		    //alert(entry.fullPath)
 		   

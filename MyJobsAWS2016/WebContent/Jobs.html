@@ -307,19 +307,26 @@ var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
 								selectionChange: function(evt){
 
 									selectedMPoint=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()+":"+evt.getParameter("listItem").getCells()[3].getText()+":"+evt.getParameter("listItem").getCells()[4].getText()
-									formMPoint.open()
+									if(currentStatus=="SITE"){
+										formMPoint.open()
+									}
+									
 							    },
 								
 								columns:[
 								         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
-								        	 hAlign: 'Left',width: '10%', minScreenWidth : "" , demandPopin: false}),
-								         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
-								        	 hAlign: 'Left',width: '40%',minScreenWidth : "" , demandPopin: true}),
-								         new sap.m.Column({header: new sap.m.Label({text:"Length"}),
 								        	 hAlign: 'Left',width: '15%', minScreenWidth : "" , demandPopin: false}),
-								         new sap.m.Column({header: new sap.m.Label({text:"Decimals"}),
-								        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),								        	 
-								         new sap.m.Column({header: new sap.m.Label({text:"Group"}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Position"}),
+								        	 hAlign: 'Left',width: '19%',minScreenWidth : "" , demandPopin: true}),
+							        	 new sap.m.Column({header: new sap.m.Label({text:"Description"}),
+									         hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true}),
+								         new sap.m.Column({header: new sap.m.Label({text:"UOM"}),
+								        	 hAlign: 'Left',width: '10%', minScreenWidth : "" , demandPopin: false}),
+								         new sap.m.Column({header: new sap.m.Label({text:"Code"}),
+								        	 hAlign: 'Left',width: '08%',minScreenWidth : "" , demandPopin: true}),			
+								         new sap.m.Column({header: new sap.m.Label({text:"Reading"}),
+								        	 hAlign: 'Left',width: '08%',minScreenWidth : "" , demandPopin: true}),	
+								         new sap.m.Column({header: new sap.m.Label({text:"Notes"}),
 								        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true })       	                         
 						           	     ]
 						           	  
@@ -338,11 +345,19 @@ var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
             contentHeight: "80%",
 			 beforeOpen:function(){
 	            	BuildMeasPointTable();
+	            	
+	            	
 					}
  })
  function BuildMeasPointTable(){
-html5sql.process("select * from myjobdetsmpoints where object_id = 'SPALST' order by meas_point",
+	if(CurrentJobEQ.length>0){
+		objectID=CurrentJobEQ;
+	}else{
+		objectID=CurrentJobFL;
+	}
+html5sql.process("select distinct mp.object_id, mp.meas_point, mp.psort, mp.pttxt , mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' order by mp.meas_point",
 		 function(transaction, results, rowsArray){
+
 			if(rowsArray.length>0){
 				var n = 0;
 				var opTable = sap.ui.getCore().getElementById('MPTable');
@@ -354,10 +369,12 @@ html5sql.process("select * from myjobdetsmpoints where object_id = 'SPALST' orde
 						cells : 
 							[
 							new sap.m.Text({text: rowsArray[n].meas_point}),
-							new sap.m.Text({text: rowsArray[n].psort+" "+rowsArray[n].pttxt}),
-							new sap.m.Text({text: rowsArray[n].no_char}),
-							new sap.m.Text({text: rowsArray[n].no_deci}),
-							new sap.m.Text({text:  rowsArray[n].code_gp})   
+							new sap.m.Text({text: rowsArray[n].psort}),
+							new sap.m.Text({text: rowsArray[n].pttxt}),
+							new sap.m.Text({text: rowsArray[n].unit_meas}),
+							new sap.m.Text({text: rowsArray[n].code}),
+							new sap.m.Text({text: rowsArray[n].value}),
+							new sap.m.Text({text: rowsArray[n].shorttext})   
 							]
 						}));
 					n++;
@@ -366,7 +383,7 @@ html5sql.process("select * from myjobdetsmpoints where object_id = 'SPALST' orde
 		 }
 },
 		 function(error, statement){
-			 
+	alert("Error: " + error.message + " when reading mps processing " + statement);
 		 }        
 		);
 }
@@ -1135,7 +1152,7 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     contentWidth:"1em",
     buttons: [
   
-				new sap.m.Button( {
+				new sap.m.Button({
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
 				    tap: [ function(oEvt) {		  
@@ -1186,12 +1203,35 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     	    contentWidth:"1em",
     	    buttons: [
     	  
-    					new sap.m.Button( {
+    					new sap.m.Button( "MPointSave",{
     					    text: "Save",
     					    type: 	sap.m.ButtonType.Accept,
-    					    tap: [ function(oEvt) {		  
-    							 
+    					    tap: [ function(oEvt) {		
+    					    	if(sap.ui.getCore().byId("MPointCode").getEnabled()){
+    					    		var mpcode=sap.ui.getCore().byId("MPointCode").getSelectedItem().getKey()
+    					    	}else{
+    					    		var mpcode=""
+    					    	}
+    					    	if(sap.ui.getCore().getElementById("MPointSave").getText()=="Create"){
+    							createMPDocument(CurrentOrderNo,CurrentOpNo,CurrentJobFL,CurrentJobEQ,
+    									sap.ui.getCore().byId("MPointID").getValue(),
+    									mpcode,
+    									sap.ui.getCore().byId("MPointValue").getValue(),
+    									sap.ui.getCore().byId("MPointText").getValue()
+    									
+    									) 
+    					    	}else{
+    					    		updateMPDocument(CurrentOrderNo,CurrentOpNo,CurrentJobFL,CurrentJobEQ,
+        									sap.ui.getCore().byId("MPointID").getValue(),
+        									mpcode,
+        									sap.ui.getCore().byId("MPointValue").getValue(),
+        									sap.ui.getCore().byId("MPointText").getValue()
+        									
+        									) 
+    					    	}
+    					    	
     					    	formMPoint.close()
+    					    	BuildMeasPointTable();
     							  } ]
     					}),
     					new sap.m.Button( {
@@ -1213,9 +1253,13 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     								
     				                new sap.m.Label({text:"ID"}),
     								new sap.m.Input("MPointID",{type: sap.m.InputType.Input, enabled: false}),
-    				                new sap.m.Label({text:"Description"}),
-    								new sap.m.Input("MPointDescription",{type: sap.m.InputType.Input, enabled: false}),															 
-    				                new sap.m.Label({text:"Value"}),
+    				                new sap.m.Label({text:"Position"}),
+    								new sap.m.Input("MPointPosition",{type: sap.m.InputType.Input, enabled: false}),	
+    								new sap.m.Label({text:"Description"}),
+     								new sap.m.Input("MPointDescription",{type: sap.m.InputType.Input, enabled: false}),	
+     								new sap.m.Label({text:"Code"}),
+    								new sap.m.Select('MPointCode',{}),
+    				                new sap.m.Label('MPointValueLabel',{text:"Reading"}),
     								new sap.m.Input("MPointValue",{type: sap.m.InputType.Input}),
     								new sap.m.Label({text:"Text"}),
      								new sap.m.Input("MPointText",{type: sap.m.InputType.Input}),
@@ -1226,13 +1270,119 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 
     	            ],
     	            beforeOpen:function(){
-    	            	var x =selectedMPoint.split(":")
-    	            	sap.ui.getCore().byId("MPointID").setValue(x[0])
-    					sap.ui.getCore().byId("MPointDescription").setValue(x[1])
-    					//sap.ui.getCore().byId("CharacteristicValue").setValue(x[2])
-
+      	            	var x =selectedMPoint.split(":")
+    	            	buildMpointDetails(x[0])
+  
+    	            	
     	            },
     	 })
+function buildMpointDetails(mp){
+    	  
+
+    	html5sql.process("select DISTINCT meas_point, psort, pttxt,format, no_char, no_deci, code_gp, unit_meas from myjobdetsmpoints where meas_point = '"+mp+"' order by meas_point",
+    			 function(transaction, results, rowsArray){
+
+    				if(rowsArray.length>0){
+    					
+    					sap.ui.getCore().byId("MPointID").setValue(rowsArray[0].meas_point)
+    					sap.ui.getCore().byId("MPointPosition").setValue(rowsArray[0].psort)
+    					sap.ui.getCore().byId("MPointDescription").setValue(rowsArray[0].pttxt)
+    					sap.ui.getCore().byId("MPointValueLabel").setText("Reading ("+rowsArray[0].unit_meas+")")
+						if(rowsArray[0].code_gp.length <1){
+							sap.ui.getCore().byId("MPointCode").setEnabled(false)
+							buildMPValues(mp,"NOCODE")
+						}else{
+							buildMPCodesSelect(rowsArray[0].code_gp,mp);	
+							sap.ui.getCore().byId("MPointCode").setEnabled(true)
+						}
+    					if(rowsArray[0].no_char=="0"){
+    						
+							sap.ui.getCore().byId("MPointValue").setEnabled(false);
+						}else{
+							sap.ui.getCore().byId("MPointValue").setEnabled(true);
+						}
+    					
+					}
+    			},
+    			 function(error, statement){
+    				alert(error) 
+    			 }        
+    			);
+    	}
+function buildMPValues(mp,type){
+
+			if(CurrentJobEQ.length>0){
+				objectID=CurrentJobEQ;
+			}else{
+				objectID=CurrentJobFL;
+			}
+		html5sql.process("select distinct mp.object_id, mp.meas_point, mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' and mp.meas_point = '"+mp+"' order by mp.meas_point",
+				 function(transaction, results, rowsArray){
+		
+					if(rowsArray.length>0){
+						
+						
+						if(rowsArray[0].value!=null){
+							sap.ui.getCore().getElementById("MPointSave").setText("Update")
+						
+							if(type=="CODE"){
+								sap.ui.getCore().getElementById("MPointCode").setSelectedItem("Code:"+rowsArray[0].code)
+							}
+							sap.ui.getCore().getElementById("MPointValue").setValue(rowsArray[0].value)
+							sap.ui.getCore().getElementById("MPointText").setValue(rowsArray[0].shorttext)					
+				 		}else{
+					
+					 	sap.ui.getCore().getElementById("MPointSave").setText("Create")
+					
+					
+						sap.ui.getCore().getElementById("MPointValue").setValue("")
+						sap.ui.getCore().getElementById("MPointText").setValue("")	
+				 		}
+				 }
+		},
+				 function(error, statement){
+			opMessage("Error: " + error.message + " when reading mpdets processing " + statement);
+				 }        
+				);
+		}
+function buildMPCodesSelect(cg,mp)
+       {
+
+
+       	SQLStatement="select DISTINCT code_gp, code, code_text from myjobdetsmpcodes where code_gp = '"+cg+"' order by id;"
+
+       	sap.ui.getCore().getElementById("MPointCode").destroyItems();
+       	sap.ui.getCore().getElementById("MPointCode").addItem(
+					 new sap.ui.core.Item("Code:-1",{
+						    enabled:true,
+							key:  "-1",
+							text: "[Please select]"
+						}))	
+       	html5sql.process(SQLStatement,
+       		 function(transaction, results, rowsArray){
+
+       		 				var n=0;
+       		 				
+       		 			 	while (n < rowsArray.length) {
+       		 			 	sap.ui.getCore().getElementById("MPointCode").addItem(
+       		 							 new sap.ui.core.Item("Code:"+rowsArray[n].code,{
+       		 									key:  rowsArray[n].code,
+       		 									text: rowsArray[n].code_text
+       		 								}))	
+       		 								
+       		 								
+       		 					n++;				 
+
+       		 			 	}
+       		 			buildMPValues(mp,"CODE")
+
+       			
+       		 },
+       		 function(error, statement){
+       			 //outputLogToDB(); 
+       		 }        
+       		);	 
+       }
 var formAssetMeasurementPoint = new sap.m.Dialog("dlgAssetMeasurementPoint",{
     title:"Asset Mdeasurement Point",
     modal: true,
@@ -3053,7 +3203,7 @@ var NLongtext=''
               SQLStatement+="left join myorders on myoperations.orderno = myorders.orderno "
                      SQLStatement+="left join mynotifications on myorders.notifno = mynotifications.notifno "
                      SQLStatement+="left join refnotificationtypes on mynotifications.type = refnotificationtypes.notiftype and refnotificationtypes.level_number='2'"
-                    	 SQLStatement+=" left join myrefordertypes on myorders.type = myrefordertypes.type "
+                  SQLStatement+=" left join myrefordertypes on myorders.type = myrefordertypes.type "
                      SQLStatement+=" where myoperations.orderno = '"+orderno+"'"
                      SQLStatement+=" and myoperations.opno = '"+opno+"'"
 
@@ -4773,7 +4923,7 @@ function buildJobPhotoList(){
 	opTable.destroyItems();
 
 	try {
-		 window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		 window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);
@@ -5761,12 +5911,6 @@ function refreshJobList(){
 </script>
 </body>
 <script>
-try {
-	appDirectory=cordova.file.externalApplicationStorageDirectory;
-	alert(appDirectory)
-}
-catch(err) {
-   alert("Not Cordova")
-}
+
 </script>
 </html>
