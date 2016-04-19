@@ -49,12 +49,19 @@ span.tip {
     visibility: hidden;
 }
 </style>
+<script>
+var appDirectory=""
+	if(window.isCordovaApp){
+		appDirectory=cordova.file.externalApplicationStorageDirectory;
+	}
+	</script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
 <script src="myresources/js/MyJobsDB.js"></script>
 <script src="myresources/js/MyJobsUtils.js"></script>
-<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="cordova.js" onload="javascript:window.isCordovaApp = true;"></script>
+
 <script type="text/javascript" src="barcodescanner.js"></script>
 <script src="myresources/js/jSignature.js"></script>
 
@@ -4772,7 +4779,7 @@ function buildJobPhotoList(){
 	opTable.destroyItems();
 
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+	    window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(jobPhotosReadSuccess, jobPhotosReadFail);

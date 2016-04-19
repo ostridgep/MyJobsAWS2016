@@ -5,6 +5,8 @@ var privatephotos = new Array()
 var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
+var selectedPhoto=""
+
 	var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
 	    title:"Display Photo",
 	    modal: true,
@@ -22,7 +24,7 @@ var selectedDocTable=""
 					],					
 	    content:[
 				new sap.m.Image({
-					src: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+selectedPhoto,
+					src: appDirectory+"MyJobs/Private/Photos/"+selectedPhoto,
 					alt: "image",
 					decorative: false,
 					width: "400px",
@@ -291,7 +293,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     
                     
-moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+moveFile(imageData, appDirectory+"MyJobs/Private/Photos")
 }
 
 //Callback function when the picture has not been successfully taken
@@ -361,14 +363,19 @@ function buildPhotoList(){
 	
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
-	sap.ui.getCore().getElementById('PhotosTable').destroyItems();
+	opTable.destroyItems();
+	try {
+		 window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		    	
+		        var directoryReader = dirEntry.createReader();
+		          directoryReader.readEntries(photosReadSuccess, photosReadFail);
+		    });
+	}
+	catch(err) {
+	   //Not in Cordova
+	}
 
-
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
-	    	
-	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(photosReadSuccess, photosReadFail);
-	    });
+	   
 
 }
 
@@ -410,15 +417,20 @@ function buildGlobalDownloads()
 
 
 	privatephotos = new Array()
-	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
-	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
+	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
+	opTable.destroyItems();
 
-
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
+	try {
+		window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Global/Download/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
 	    });
+	}
+	catch(err) {
+	   //Not in Cordova
+	}
+	    
 
 }
 function docsGDReadFail(error) {
@@ -458,15 +470,20 @@ function buildPrivateUploads()
 {
 
 	privatephotos = new Array()
-	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
-	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
-
-
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
+	var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
+	opTable.destroyItems();
+	try {
+		window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsPUReadSuccess, docsPUReadFail);
 	    });
+	}
+	catch(err) {
+	   //Not in Cordova
+	}
+
+	    
 
 }
 function docsPUReadFail(error) {
@@ -507,15 +524,21 @@ function buildPrivateDownloads()
 {
 
 	privatephotos = new Array()
-	var opTable = sap.ui.getCore().getElementById(selectedDocTable);
-	sap.ui.getCore().getElementById(selectedDocTable).destroyItems();
+	var opTable = sap.ui.getCore().getElementById('DocumentsDownloadTable');
+	opTable.destroyItems();
 
+	try {
+		  window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+		    	
+		        var directoryReader = dirEntry.createReader();
+		          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
+		    });
+	}
+	catch(err) {
+	   //Not in Cordova
+	}
 
-	    window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
-	    	
-	        var directoryReader = dirEntry.createReader();
-	          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
-	    });
+	  
 
 }
 function docsPDReadFail(error) {
@@ -585,7 +608,7 @@ function downloadMissing()
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
             
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
+            window.resolveLocalFileSystemURL(appDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
             cnt = cnt + 1;
            
         });
@@ -608,7 +631,7 @@ function downloadAsset1(fileName) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
     alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.dataDirectory  + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, appDirectory+ x[3],
 		function (entry) {
 		    alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
 		   
@@ -623,8 +646,8 @@ function downloadAsset1(fileName) {
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
+    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + appDirectory + dir + x[3]);
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, appDirectory + dir + x[3],
 		function (entry) {
 		    //alert(entry.fullPath)
 		   
