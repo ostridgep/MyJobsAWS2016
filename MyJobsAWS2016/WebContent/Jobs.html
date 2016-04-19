@@ -53,12 +53,7 @@ span.tip {
 <script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
-	try {
-		appDirectory=cordova.file.externalApplicationStorageDirectory;
-	}
-	catch(err) {
-	   
-	}
+
 	
 	</script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
@@ -5767,6 +5762,12 @@ function refreshJobList(){
 </body>
 <script>
 
-
+try {
+	appDirectory=cordova.file.externalApplicationStorageDirectory;
+	alert(appDirectory)
+}
+catch(err) {
+   alert("Not Cordova")
+}
 </script>
 </html>

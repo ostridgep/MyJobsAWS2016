@@ -39,12 +39,7 @@ font-size: 150%;
 <script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
-	try {
-		appDirectory=cordova.file.externalApplicationStorageDirectory;
-	}
-	catch(err) {
-	   
-	}
+
 	
 	</script>
 
@@ -1629,6 +1624,13 @@ function createVehicleDefect(equipment,reg, mpoint,mileage,mdate,mtime,mreadby,u
                                
            
     }
+try {
+	appDirectory=cordova.file.externalApplicationStorageDirectory;
+	alert(appDirectory)
+}
+catch(err) {
+	alert("Not Cordova")
+}
 </Script>
 </body>
 </html>
