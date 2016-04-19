@@ -2184,6 +2184,7 @@ function createTables(type) {
 
 
 }
+
 function buildDirsErrorHandler(error){
 
     alert("Failed to create The Directories: "+ error);

@@ -1607,6 +1607,7 @@ function SaveVehicleCheck(vreg,vdesc,vmileage,vtype){
    
      
    
+   
 function createVehicleDefect(equipment,reg, mpoint,mileage,mdate,mtime,mreadby,user,desc,longtext){
       html5sql.process("INSERT INTO MyVehicleCheck (state , equipment, reg, mpoint,mileage, mdate, mtime, mreadby, user, desc, longtext) VALUES ("+
                     "'NEW','"+equipment+"','"+reg+"','"+mpoint+"','"+mileage+"','"+mdate+"','"+mtime+"','"+mreadby+"','"+user+"','"+desc+"','"+longtext+"');",
