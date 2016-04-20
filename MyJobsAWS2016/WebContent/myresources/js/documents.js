@@ -275,7 +275,6 @@ function buildDocumentList(){
 	    	            					    }),
 	       	                ]
 
-
 				});
 	return docsTabBar
 }
