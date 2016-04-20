@@ -58,6 +58,7 @@ var selectedPhoto=""
 function showFile(file){
 	window.plugins.fileOpener.open(file)
 	//window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
+	
 }
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
     title:"Documents",
