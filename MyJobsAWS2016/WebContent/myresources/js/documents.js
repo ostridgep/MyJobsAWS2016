@@ -15,6 +15,14 @@ var selectedPhoto=""
 	    buttons: [
 	   
 					new sap.m.Button( {
+					    text: "Test",
+					    type: 	sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+							 
+					    	formDisplayPhoto.close()
+							  } ]
+					}),
+					new sap.m.Button( {
 					    text: "Cancel",
 					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {		  
@@ -24,12 +32,20 @@ var selectedPhoto=""
 					})
 					],					
 	    content:[
-				new sap.m.Image({
+				new sap.m.Image("img1",{
 					src: selectedPhoto,
-					alt: "image",
-					decorative: false,
-					width: "400px",
-					height: "400px"
+					width: "50px",
+					height: "50px"
+				}),
+				new sap.m.Image("Ig22",{
+					src: "images/Worker.jpg",
+					width: "50px",
+					height: "50px"
+				}),
+				new sap.m.Image("Ig22",{
+					src: "xWorker.jpg",
+					width: "50px",
+					height: "50px"
 				})
 
 	            ],
@@ -40,7 +56,7 @@ var selectedPhoto=""
 	 })
 
 function showFile(file){
-	alert(file)
+	
 	window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
 }
 var formDocuments = new sap.m.Dialog("dlgDocuments",{
