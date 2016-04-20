@@ -1,3 +1,51 @@
+function validateDecimal(value, decimals, length) { 
+x=value.split(".")
+nlen = length-decimals;
+
+if(decimals<2){
+	var rx = /^\d+(?:\.\d{1,1})?$/ 
+}
+if(decimals==2){
+	var rx = /^\d+(?:\.\d{1,2})?$/ 
+}
+if(decimals==3){
+	var rx = /^\d+(?:\.\d{1,3})?$/ 
+}
+if(decimals==4){
+	var rx = /^\d+(?:\.\d{1,4})?$/ 
+}
+if(decimals==5){
+	var rx = /^\d+(?:\.\d{1,5})?$/ 
+}
+
+    if(rx.test(value)) { 
+       vlen=x[0].length;
+       if (x.length>1){
+    	   vlen+=x[1].length
+       }
+       if(vlen>length){
+    	   //Number length is too Big
+    	   return(false)
+       }else{
+    	   if((x.length>1)&&(decimals==0)){
+    		   return false;
+    	   }else{
+    		   if(x[0].length>nlen){
+        		   return false;
+        	   }else{
+        		   return true;   
+        	   }   
+    	   }
+    	   
+       }
+       
+       
+    }
+    else { 
+       return false; 
+    } 
+}
+
 function showMessage(msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,
@@ -152,7 +200,10 @@ dtstamp=nowd+nowt;
 return dtstamp;
 }
 function formatDateTime(dt){
-
+if(dt=="undefined"){
+	return
+}
+	
 var formatteddt="";
 formatteddt=dt.substring(6,8)+"-"+dt.substring(4,6)+"-"+dt.substring(0,4)+" "+dt.substring(8,10)+":"+dt.substring(10,12)+":"+dt.substring(12,14);
 return formatteddt;

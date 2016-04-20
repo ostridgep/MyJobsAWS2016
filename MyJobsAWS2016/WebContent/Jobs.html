@@ -174,6 +174,8 @@ var currentFuncLoc_GIS="";
 var selectedJobArray=[];
 var selectedPhoto="";
 var selectedPhotoDir="";
+var selevctedMPDecimals=0;
+var selevctedMPLength=0;
 //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
 var flocList = new sap.m.List("flocList",{
 	mode: sap.m.ListMode.SingleSelectLeft,
@@ -1197,6 +1199,19 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 
             },
  })
+       var oInp = new sap.m.Input("MPointValue",{
+           liveChange : function(oEvent){
+              
+               var val = sap.ui.getCore().byId("MPointValue").getValue();
+               console.log("Checking"+val+":"+selevctedMPDecimals+":"+selevctedMPLength)
+               if(validateDecimal(val,selevctedMPDecimals,selevctedMPLength))            
+                   valueState = "Success";               
+               else
+                   valueState = "Error";
+               oEvent.getSource().setValueState(valueState);               
+             }
+       });
+       oInp.setType(sap.m.InputType.Number);
  var formMPoint = new sap.m.Dialog("dlgMPoint",{
     	    title:"Measurement Point Document",
     	    modal: true,
@@ -1207,10 +1222,22 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     					    text: "Save",
     					    type: 	sap.m.ButtonType.Accept,
     					    tap: [ function(oEvt) {		
+    					    	var eMess="Invalid "
+    					    	
     					    	if(sap.ui.getCore().byId("MPointCode").getEnabled()){
     					    		var mpcode=sap.ui.getCore().byId("MPointCode").getSelectedItem().getKey()
     					    	}else{
     					    		var mpcode=""
+    					    	}
+    					    	if(sap.ui.getCore().byId("MPointValue").getValueState()=="Error"){
+    					    		eMess+="Reading, "
+    					    	}
+    					    	if(mpcode=="-1"){
+    					    		eMess+="Code, "
+    					    	}
+    					    	if(eMess.length>8){
+    					    		showErrorMessage("Invalid Measurement Point Details",eMess)
+    					    		return
     					    	}
     					    	if(sap.ui.getCore().getElementById("MPointSave").getText()=="Create"){
     							createMPDocument(CurrentOrderNo,CurrentOpNo,CurrentJobFL,CurrentJobEQ,
@@ -1260,9 +1287,10 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
      								new sap.m.Label({text:"Code"}),
     								new sap.m.Select('MPointCode',{}),
     				                new sap.m.Label('MPointValueLabel',{text:"Reading"}),
-    								new sap.m.Input("MPointValue",{type: sap.m.InputType.Input}),
+    								oInp,
     								new sap.m.Label({text:"Text"}),
-     								new sap.m.Input("MPointText",{type: sap.m.InputType.Input}),
+     								new sap.m.Input("MPointText",{type: sap.m.InputType.Input})
+     								 
     				               
     				                 
     							]
@@ -1283,7 +1311,8 @@ function buildMpointDetails(mp){
     			 function(transaction, results, rowsArray){
 
     				if(rowsArray.length>0){
-    					
+    					selevctedMPLength=rowsArray[0].no_char;
+    					selevctedMPDecimals=rowsArray[0].no_deci;
     					sap.ui.getCore().byId("MPointID").setValue(rowsArray[0].meas_point)
     					sap.ui.getCore().byId("MPointPosition").setValue(rowsArray[0].psort)
     					sap.ui.getCore().byId("MPointDescription").setValue(rowsArray[0].pttxt)
@@ -1295,7 +1324,8 @@ function buildMpointDetails(mp){
 							buildMPCodesSelect(rowsArray[0].code_gp,mp);	
 							sap.ui.getCore().byId("MPointCode").setEnabled(true)
 						}
-    					if(rowsArray[0].no_char=="0"){
+    					
+    					if(rowsArray[0].no_char==0){
     						
 							sap.ui.getCore().byId("MPointValue").setEnabled(false);
 						}else{
@@ -5869,8 +5899,8 @@ function startBGSync()
 		 localStorage.setItem('SAPCalling','false')
 		 syncUpload()
 		 syncDT=localStorage.getItem('LastSyncedDT')	
-		 x=localStorage.getItem("LastSyncedDT").split(" ");
-		 sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(x[1]));
+		 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
+		 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
 		// standardList.removeItem("Job:000050646820:0010").destroy()
 		 
 		
