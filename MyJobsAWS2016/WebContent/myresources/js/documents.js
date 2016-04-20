@@ -388,7 +388,7 @@ function photos_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')})  ,
-			  new sap.m.Text({text: f.fullPath})
+			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+f.name})
 	 		]
 		}));
 }
@@ -446,7 +446,7 @@ function gddocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			new sap.m.Text({text: f.fullPath})
+			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/"+f.name})
 	 		]
 		}));
 }
@@ -500,7 +500,7 @@ function pudocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			 new sap.m.Text({text: f.fullPath})
+			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/"+f.name})
 	 		]
 		}));
 }
@@ -556,7 +556,7 @@ function pddocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			 new sap.m.Text({text: f.fullPath})   
+			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/"+f.name}) 
 	 		]
 		}));
 }
