@@ -48,23 +48,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     modal: true,
     contentWidth:"1em",
     buttons: [
-
-
  
-                                new sap.m.Button( {
-                                    text: "Save",
-                                    type: 	sap.m.ButtonType.Accept,
-                                    tap: [ function(oEvt) { 
-                                    	
-                                    	
-                                       	
-                                       	
-                                       	
-                                    	formDocuments.close()
-                                              
-                                                } ]
-                                   
-                                }), 
                                 new sap.m.Button( {
                                     text: "Photo",
                                     type: 	sap.m.ButtonType.Accept,
@@ -90,6 +74,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                        	
                                        	
                                     	downloadMissing();
+                                    	buildDocumentTables();
                                     	
                                               
                                                 } ]
@@ -158,7 +143,7 @@ function buildDocumentList(){
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
 
-	    	        												showFile("MyJobs/Global/Downloads/"+evt.getParameter("listItem").getCells()[0].getText())
+	    	        												showFile(+evt.getParameter("listItem").getCells()[4].getText())
 	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
@@ -189,7 +174,7 @@ function buildDocumentList(){
 	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-	    	        												showFile("MyJobs/Private/Downloads/"+evt.getParameter("listItem").getCells()[0].getText())
+	    	        												showFile(+evt.getParameter("listItem").getCells()[4].getText())
 	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
@@ -220,11 +205,7 @@ function buildDocumentList(){
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	            										selectionChange: function(evt){
 	    	            											
-	    	            											//selectedReserverMaterial=oEvt.getParameter("selectedItem").getKey()
-	    	            											
-	    	            											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
-	    	            											//selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
-	    	            											//formAssetCharacteristic.open()
+	    	            											showFile(+evt.getParameter("listItem").getCells()[4].getText())
 	    	            									    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
@@ -253,7 +234,7 @@ function buildDocumentList(){
 	    	            									new sap.m.Table("PhotosTable",{
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-	    	        												var selectedPhoto=evt.getParameter("listItem").getCells()[0].getText();
+	    	        												var selectedPhoto=evt.getParameter("listItem").getCells()[4].getText();
 	    	        												
 	    	        												formDisplayPhoto.open()
 	    	        										    },
@@ -406,7 +387,8 @@ function photos_details_callback(f) {
 			new sap.m.Text({text: f.name}),
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+			new sap.m.Text({text: d1.toString('yyyyMMdd')})  ,
+			  new sap.m.Text({text: f.fullPath})
 	 		]
 		}));
 }
@@ -464,7 +446,7 @@ function gddocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			new sap.m.Text({text: f.fullpath})
+			new sap.m.Text({text: f.fullPath})
 	 		]
 		}));
 }
@@ -517,7 +499,8 @@ function pudocs_details_callback(f) {
 			new sap.m.Text({text: f.name}),
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
+			 new sap.m.Text({text: f.fullPath})
 	 		]
 		}));
 }
@@ -572,7 +555,8 @@ function pddocs_details_callback(f) {
 			new sap.m.Text({text: f.name}),
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')})   
+			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
+			 new sap.m.Text({text: f.fullPath})   
 	 		]
 		}));
 }
