@@ -380,6 +380,12 @@ function buildPhotoList(){
 
 function photos_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
+    alert("Name="+f.name);
+    alert("path1="+f.fullPath);
+    alert("path2="+cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+f.name);
+    alert("fileSystem.root.toURL()="+f.toURL());
+    alert("fileSystem.root.toInternalURL()="+f.toInternalURL());
+    alert("fileSystem.root.nativeURL="+f.nativeURL);
     var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	opTable.addItem (new sap.m.ColumnListItem({
 		cells : 
@@ -388,7 +394,7 @@ function photos_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')})  ,
-			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+f.name})
+			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+f.name})
 	 		]
 		}));
 }
