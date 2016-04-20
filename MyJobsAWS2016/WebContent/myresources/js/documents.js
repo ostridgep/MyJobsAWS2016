@@ -250,9 +250,10 @@ function buildDocumentList(){
 	    	            									new sap.m.Table("PhotosTable",{
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-	    	        												selectedPhoto=evt.getParameter("listItem").getCells()[4].getText();
+	    	        												//selectedPhoto=evt.getParameter("listItem").getCells()[4].getText();
 	    	        												
-	    	        												formDisplayPhoto.open()
+	    	        												//formDisplayPhoto.open()
+	    	        												showFile(evt.getParameter("listItem").getCells()[4].getText())
 	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),

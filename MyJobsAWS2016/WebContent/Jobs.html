@@ -1,5 +1,5 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE >
+<>
 <head>
 <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"/> -->
 
@@ -57,7 +57,7 @@ var appDirectory=""
 	
 	</script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
-<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
 <script src="myresources/js/MyJobsDB.js"></script>
 <script src="myresources/js/MyJobsUtils.js"></script>
@@ -97,17 +97,17 @@ var appDirectory=""
 	}
 
 	/* Drawing the 'gripper' for touch-enabled devices */ 
-	html.touch #content {
+	.touch #content {
 		float:left;
 		width:92%;
 	}
-	html.touch #scrollgrabber {
+	.touch #scrollgrabber {
 		float:right;
 		width:4%;
 		margin-right:2%;
 		background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAFCAAAAACh79lDAAAAAXNSR0IArs4c6QAAABJJREFUCB1jmMmQxjCT4T/DfwAPLgOXlrt3IwAAAABJRU5ErkJggg==)
 	}
-	html.borderradius #scrollgrabber {
+	.borderradius #scrollgrabber {
 		border-radius: 1em;
 	}			
 			</style>
@@ -130,7 +130,7 @@ loadScript('http://maps.googleapis.com/maps/api/js?sensor=false',
 	}); */
 //directionsDisplay = new google.maps.DirectionsRenderer(); 
 //directionsService = new google.maps.DirectionsService(); 
-html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
+5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
 
 
 var statusUpdateDate="";
@@ -210,13 +210,13 @@ var Locs = [
                 lat: 45.4654,
                 lon: 9.1866,
                 title: 'Start',
-                html: '<h3>Start</h3>'
+                : '<h3>Start</h3>'
             },
             {
         		lat: 45.4654,
                 lon: 9.1866,
         		title: 'Finish',
-                html: '<h3>Finish</h3>'
+                : '<h3>Finish</h3>'
             }
         ];
 function loadLastSyncValues(){
@@ -357,7 +357,7 @@ var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
 	}else{
 		objectID=CurrentJobFL;
 	}
-html5sql.process("select distinct mp.object_id, mp.meas_point, mp.psort, mp.pttxt , mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' order by mp.meas_point",
+5sql.process("select distinct mp.object_id, mp.meas_point, mp.psort, mp.pttxt , mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' order by mp.meas_point",
 		 function(transaction, results, rowsArray){
 
 			if(rowsArray.length>0){
@@ -527,9 +527,9 @@ new sap.m.Button( {
 					prepareChangeStatus()
 					
 					localStorage.setItem('totalAccepted','0');
-					document.getElementById("JobHead_Status").innerHTML = "<Font color='RED'>Closed</font>";
+					document.getElementById("JobHead_Status").inner = "<Font color='RED'>Closed</font>";
 					
-					 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = "Closed";
+					 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = "Closed";
 					}else{
 						if (CloseError=="1"){
 						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment\n-Time Entries")
@@ -1307,7 +1307,7 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 function buildMpointDetails(mp){
     	  
 
-    	html5sql.process("select DISTINCT meas_point, psort, pttxt,format, no_char, no_deci, code_gp, unit_meas from myjobdetsmpoints where meas_point = '"+mp+"' order by meas_point",
+    	5sql.process("select DISTINCT meas_point, psort, pttxt,format, no_char, no_deci, code_gp, unit_meas from myjobdetsmpoints where meas_point = '"+mp+"' order by meas_point",
     			 function(transaction, results, rowsArray){
 
     				if(rowsArray.length>0){
@@ -1346,7 +1346,7 @@ function buildMPValues(mp,type){
 			}else{
 				objectID=CurrentJobFL;
 			}
-		html5sql.process("select distinct mp.object_id, mp.meas_point, mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' and mp.meas_point = '"+mp+"' order by mp.meas_point",
+		5sql.process("select distinct mp.object_id, mp.meas_point, mp.unit_meas, mpd.code, mpd.value, mpd.shorttext from myjobdetsmpoints as mp left JOIN mympointdocs as mpd  ON mp.meas_point = mpd.meas_point where object_id = '"+objectID+"' and mp.meas_point = '"+mp+"' order by mp.meas_point",
 				 function(transaction, results, rowsArray){
 		
 					if(rowsArray.length>0){
@@ -1388,7 +1388,7 @@ function buildMPCodesSelect(cg,mp)
 							key:  "-1",
 							text: "[Please select]"
 						}))	
-       	html5sql.process(SQLStatement,
+       	5sql.process(SQLStatement,
        		 function(transaction, results, rowsArray){
 
        		 				var n=0;
@@ -1553,7 +1553,7 @@ new sap.m.Button( {
             contentHeight: "85%",
       beforeOpen:function(){
     	  formSignature.destroyContent()
-    	  formSignature.addContent(new 		sap.ui.core.HTML({
+    	  formSignature.addContent(new 		sap.ui.core.({
 			content: '<div id="signatureparent"><div id="signature"></div></div><div id="scrollgrabber"></div>'
 
 
@@ -1646,7 +1646,7 @@ var formMap = new sap.m.Dialog("dlgMap",{
             contentWidth:"95%",
             contentHeight: "85%",
       beforeOpen:function(){
-    	  formMap.addContent(new 		sap.ui.core.HTML({
+    	  formMap.addContent(new 		sap.ui.core.({
 			content: ' <div id="map_canvas" style="height:350px;"></div>'
 
 
@@ -1707,7 +1707,7 @@ var formRoute = new sap.m.Dialog("dlgRoute",{
             contentWidth:"95%",
             contentHeight: "95%",
      beforeOpen:function(){
-    	 formRoute.addContent(new sap.ui.core.HTML({
+    	 formRoute.addContent(new sap.ui.core.({
        			//content: "<div  align='center'> <div id='gmap-route'></div><div id='route'></div><div id='controls'></div></div>"
     		 content: ' <div id="route_canvas" style="height:350px;"></div>'
        		}))
@@ -1966,7 +1966,7 @@ var detailFooterAWS = new sap.m.Bar({
 				    		 icon:"sap-icon://form",
 				    	
 				   			tap: 	[ function(oEvt) {		
-				   				formToOpen="Forms/formsindex.html"
+				   				formToOpen="Forms/formsindex."
 				   			    formMode="Forms"
 		   						formForms.open()
 				   				
@@ -2628,9 +2628,9 @@ function changeStatus(Status){
 	 }
 	currentStatus=Status;
 	prepareChangeStatus()
-	document.getElementById("JobHead_Status").innerHTML = "<Font color='"+StatusColour+"'>"+StatusText+"</font>";
+	document.getElementById("JobHead_Status").inner = "<Font color='"+StatusColour+"'>"+StatusText+"</font>";
 	
-	 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = StatusText;
+	 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = StatusText;
 	
 
 }
@@ -2684,7 +2684,7 @@ countStatus()
               SQLStatement+="left join myorders on myoperations.orderno = myorders.orderno "
                      SQLStatement+="left join mynotifications on myorders.notifno = mynotifications.notifno "
                      SQLStatement+=" where myoperationssplit.assignedto =  '"+EmployeeID+"' and myjobdets.status not in ('CLOSED', 'CONF', 'REJ1', 'REJ2') order by  MyOperations.orderno,  MyOperations.opno"
-html5sql.process(SQLStatement,
+5sql.process(SQLStatement,
               function(transaction, results, rowsArray){
 					
                      cnt = 0;
@@ -2773,7 +2773,7 @@ html5sql.process(SQLStatement,
                            standardList.addItem(
                            new sap.m.CustomListItem("Job:"+item.orderno+":"+item.opno,{
 							type:sap.m.ListType.Active,
-							  content: [new sap.ui.core.HTML({  
+							  content: [new sap.ui.core.({  
 							      content: 
 							    	    [
 "<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.operationdesc+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
@@ -2848,7 +2848,7 @@ function addNewJobToList(orderno,opno){
 	              SQLStatement+="left join myorders on myoperations.orderno = myorders.orderno "
 	                     SQLStatement+="left join mynotifications on myorders.notifno = mynotifications.notifno "
 	                     SQLStatement+=" where myjobdets.orderno = '"+orderno+"' and myjobdets.opno = '"+opno+"' and myoperationssplit.assignedto = '"+EmployeeID+"' and myjobdets.status not in ('CLOSED','CONF', 'REJ1', 'REJ2') order by  MyOperations.orderno,  MyOperations.opno"
-	html5sql.process(SQLStatement,
+	5sql.process(SQLStatement,
 	              function(transaction, results, rowsArray){
 		 
 	                     cnt = 0;
@@ -2937,7 +2937,7 @@ function addNewJobToList(orderno,opno){
 	                           standardList.addItem(
 	                           new sap.m.CustomListItem("Job:"+item.orderno+":"+item.opno,{
 								type:sap.m.ListType.Active,
-								  content: [new sap.ui.core.HTML({  
+								  content: [new sap.ui.core.({  
 								      content: 
 								    	    [
 	"<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.operationdesc+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
@@ -2969,7 +2969,7 @@ function addNewJobToList(orderno,opno){
 
 	}
 function buildDetails(){
-	var detsHead=new sap.ui.core.HTML('JobHeader',{  
+	var detsHead=new sap.ui.core.('JobHeader',{  
 	      content: 
 	    	    [
 "<TABLE width='100%' height='200' ><tr height='100'><TD valign='top' colspan='3' align='left' ><h3 id='JobHead_Description'>This is the Job Description</h3></TD><TD valign='top'  colspan='2' align='Right' ><h2 id='JobHead_JobNo'>000111111-0010</h2></TD></TR>"
@@ -3050,7 +3050,7 @@ function  buildHistoryForm(did){
 	}
 
 
-	html5sql.process(SQLStatement,
+	5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
 
 			 if (rowsArray.length>0){
@@ -3152,7 +3152,7 @@ function  getCurrentJob(aid){
 	                     SQLStatement+=" and myoperations.opno = '"+opno+"'"
 
 
-	html5sql.process(SQLStatement,
+	5sql.process(SQLStatement,
 			function(transaction, results, rowsArray){
 		alert(rowsArray.length)
 		//selectedJobArray
@@ -3238,7 +3238,7 @@ var NLongtext=''
                      SQLStatement+=" and myoperations.opno = '"+opno+"'"
 
 
-html5sql.process(SQLStatement,
+5sql.process(SQLStatement,
        function(transaction, results, rowsArray){
 	selectedJobArray=rowsArray[0];
               if (rowsArray.length>0){
@@ -3346,7 +3346,7 @@ html5sql.process(SQLStatement,
 					   }
                      oDetailPage.destroyContent()
                      //oDetailPage.addContent(buildDetails())
-		oDetailPage.addContent(	new sap.ui.core.HTML('JobHeader',{  
+		oDetailPage.addContent(	new sap.ui.core.('JobHeader',{  
 	      content: 
 	    	    [
 "<TABLE width='100%' height='200' ><tr height='100'><TD valign='top' colspan='3' align='left' ><h3>"+unescape(rowsArray[0].orderdesc)+"</h3></TD><TD valign='top'  colspan='2' align='Right' ><h2 id='JobHead_JobNo'>"+rowsArray[0].orderno+"-"+rowsArray[0].opno+"</h2></TD></TR>"
@@ -3447,7 +3447,7 @@ html5sql.process(SQLStatement,
 
                            buildDetailsTabContent(orderno,opno,"FORM",surveyID)
                      }else{
-                     html5sql.process("Select * from myitems where notifno = '"+currentNotifNo+"'",
+                     5sql.process("Select * from myitems where notifno = '"+currentNotifNo+"'",
                                   function(transaction, results, rowsArray){
                            
                                                cnt=0
@@ -3636,7 +3636,7 @@ function BuildFormAssets(assetid){
 
 				});
 
-		html5sql.process("select * from myassets where orderno = '"+CurrentOrderNo+"' and id = '"+assetid+"'",
+		5sql.process("select * from myassets where orderno = '"+CurrentOrderNo+"' and id = '"+assetid+"'",
 				 function(transaction, results, rowsArray){
 						if(rowsArray.length>0){
 							asset_id= rowsArray[0].id
@@ -3657,7 +3657,7 @@ function BuildFormAssets(assetid){
 							
 							
 	
-							html5sql.process("select * from assetclassvals where id = '"+assetid+"'",
+							5sql.process("select * from assetclassvals where id = '"+assetid+"'",
 									 function(transaction, results, rowsArray){
 											if(rowsArray.length>0){
 												var n = 0;
@@ -3682,7 +3682,7 @@ function BuildFormAssets(assetid){
 														
 
 											}
-											html5sql.process("select * from assetmeasurementpoints where id = '"+assetid+"'",
+											5sql.process("select * from assetmeasurementpoints where id = '"+assetid+"'",
 													 function(transaction, results, rowsArray){
 															if(rowsArray.length>0){
 																var n = 0;
@@ -3707,7 +3707,7 @@ function BuildFormAssets(assetid){
 																		
 
 															}
-															html5sql.process("Select * from MyNotifications",
+															5sql.process("Select * from MyNotifications",
 																	 function(transaction, results, rowsArray){
 
 																		cnt = 0;
@@ -3751,7 +3751,7 @@ function BuildFormAssets(assetid){
 																					  );
 																				  cnt++;
 																		 }
-																		html5sql.process("Select * from MyOrders",
+																		5sql.process("Select * from MyOrders",
 																				 function(transaction, results, rowsArray){
 
 																					cnt = 0;
@@ -3838,8 +3838,8 @@ function BuildFormAssets(assetid){
 }
 function BuildFormQuestions(x){
 	
-	var HTMLToOutput='';
-	var HTMLToOutput1='';
+	var ToOutput='';
+	var ToOutput1='';
 	var SQLStatement="";
 	var SQLStatement1="";
 	var CurrentGroup="";
@@ -3860,7 +3860,7 @@ SQLStatement1+="surveysubquestion.questionid = surveyquestion.questionid "
 SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestion.groupid = '"+groupID+"' order by surveyquestion.groupid, surveyquestion.questionid"	
 
 
-					html5sql.process(SQLStatement1,
+					5sql.process(SQLStatement1,
 							 function(transaction, results, rowsArray){
 									
 									for (var nq = 0; nq < rowsArray.length; nq++) {
@@ -3889,8 +3889,8 @@ SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestio
 }
 function saveFormQuestions(x){
 	
-	var HTMLToOutput='';
-	var HTMLToOutput1='';
+	var ToOutput='';
+	var ToOutput1='';
 	var SQLStatement="";
 	var SQLStatement1="";
 	var CurrentGroup="";
@@ -3911,7 +3911,7 @@ SQLStatement1+="surveysubquestion.questionid = surveyquestion.questionid "
 SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestion.groupid = '"+groupID+"' order by surveyquestion.groupid, surveyquestion.questionid"	
 
 
-					html5sql.process(SQLStatement1,
+					5sql.process(SQLStatement1,
 							 function(transaction, results, rowsArray){
 									
 									for (var nq = 0; nq < rowsArray.length; nq++) {
@@ -3938,8 +3938,8 @@ SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestio
 }
 function BuildQuestionHeaders(surveyID){
 	
-	var HTMLToOutput='';
-	var HTMLToOutput1='';
+	var ToOutput='';
+	var ToOutput1='';
 	var SQLStatement="";
 	var SQLStatement1="";
 	var CurrentGroup="";
@@ -3956,7 +3956,7 @@ function BuildQuestionHeaders(surveyID){
 					         ],
 					
 				})
-		html5sql.process(SQLStatement,
+		5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
 			
 				for (var n = 0; n < rowsArray.length-1; n++) {
@@ -4205,7 +4205,7 @@ function formChanged(oEvt){
 	//alert(sap.ui.getCore().getElementById(oEvt.getParameters().id).getText())
 	var SQLStatement="Select * from surveyquestionchildren where questionid = "+x[1]
 	//alert(SQLStatement)
-	html5sql.process(SQLStatement,
+	5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 					currentSQ=""
 					if( rowsArray.length>0) {
@@ -4434,9 +4434,10 @@ formtab=null;
     									new sap.m.Table("JobPhotoTable",{
     										 mode: sap.m.ListMode.SingleSelectMaster,
     											selectionChange: function(evt){
-    												selectedPhoto=evt.getParameter("listItem").getCells()[4].getText()
+    												//selectedPhoto=evt.getParameter("listItem").getCells()[4].getText()
     												
-    												formDisplayPhoto.open()
+    												//formDisplayPhoto.open()
+    												showFile(evt.getParameter("listItem").getCells()[4].getText())
     										    },
     										width:'100%',
     										columns:[
@@ -4568,7 +4569,7 @@ var phototab;
 var n = 0;
 var tabcontent;
 var tabcontentQ;
-	html5sql.process("SELECT * FROM mytasks where notifno = '"+notifno+"' and item_id = '"+tabid+"';",
+	5sql.process("SELECT * FROM mytasks where notifno = '"+notifno+"' and item_id = '"+tabid+"';",
 			 function(transaction, results, rowsArray){
 				tabcontent = sap.ui.getCore().getElementById('Task:'+tabid);
 				tabcontentQ = sap.ui.getCore().getElementById('TaskContent:'+tabid);
@@ -4600,7 +4601,7 @@ var tabcontentQ;
 							}));
 							
 							tabcontentQ.addContent (new sap.m.Label({text:"Signature Image"}));
-							//tabcontentQ.addContent (new sap.ui.core.HTML({content: '<img width= "10%" id="imagePreview'+tabid+'">'}))
+							//tabcontentQ.addContent (new sap.ui.core.({content: '<img width= "10%" id="imagePreview'+tabid+'">'}))
 							tabcontentQ.addContent (new sap.m.Image('signaturePreview'+tabid,{
 								width:"20%",
 								tap: [ function(oEvt) {		  
@@ -4621,7 +4622,7 @@ var tabcontentQ;
 								}));
 							
 								tabcontentQ.addContent (new sap.m.Label({text:"Image"}));
-								//tabcontentQ.addContent (new sap.ui.core.HTML({content: '<img width= "10%" id="imagePreview'+tabid+'">'}))
+								//tabcontentQ.addContent (new sap.ui.core.({content: '<img width= "10%" id="imagePreview'+tabid+'">'}))
 								tabcontentQ.addContent (new sap.m.Image('imagePreview'+tabid,{
 									width:"10%",
 									tap: [ function(oEvt) {		  
@@ -4662,7 +4663,7 @@ function saveTheData()
 {
 	x=selectedTab.split(":")
 	//alert("SELECT * FROM mytasks where notifno = '"+currentNotifNo+"' and item_id = '"+x[1]+"';")
-	html5sql.process("SELECT * FROM mytasks where notifno = '"+currentNotifNo+"' and item_id = '"+x[1]+"';",
+	5sql.process("SELECT * FROM mytasks where notifno = '"+currentNotifNo+"' and item_id = '"+x[1]+"';",
 			 function(transaction, results, rowsArray){
 			
 				n = 0;
@@ -4731,7 +4732,7 @@ function P100TabContData(notifno,tabid){
 	var tabcontentQ;
 	tabFieldCnt=0;
 	tabContents=[];
-		html5sql.process("SELECT * FROM mytasks where notifno = '"+notifno+"' and item_id = '"+tabid+"';",
+		5sql.process("SELECT * FROM mytasks where notifno = '"+notifno+"' and item_id = '"+tabid+"';",
 				 function(transaction, results, rowsArray){
 					tabFieldCnt=rowsArray.length
 					n = 0;
@@ -4755,7 +4756,7 @@ function P100TabContData(notifno,tabid){
 function setP100FieldVal(type,fldid,user,order,opno,item,task)	{
 
 	//alert(type+"-"+fldid+"-"+user+"-"+order+"-"+opno+"-"+item+"-"+task)
-	html5sql.process("select * from JobAnswers where orderno = '"+order+
+	5sql.process("select * from JobAnswers where orderno = '"+order+
 			"' and opno = '"+opno+"' and user = '"+user+"' and item = '"+item+"' and task = '"+task+"';",
 				function(transaction, results, rowsArray){
 					if(rowsArray.length>0){
@@ -4807,7 +4808,7 @@ if(Jtype=="Form"){
 
 
 //Assets
-html5sql.process("SELECT * FROM MyAssets where orderno = '"+orderNo+"' ;",
+5sql.process("SELECT * FROM MyAssets where orderno = '"+orderNo+"' ;",
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			var opTable = sap.ui.getCore().getElementById('AssetsTable');
@@ -4835,7 +4836,7 @@ html5sql.process("SELECT * FROM MyAssets where orderno = '"+orderNo+"' ;",
 		 }        
 		);	
 //Mpoints
-html5sql.process("SELECT * FROM MyPartners where orderno = '"+orderNo+"' ;",
+5sql.process("SELECT * FROM MyPartners where orderno = '"+orderNo+"' ;",
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			var opTable = sap.ui.getCore().getElementById('PartnersTable');
@@ -4861,7 +4862,7 @@ html5sql.process("SELECT * FROM MyPartners where orderno = '"+orderNo+"' ;",
 		 }        
 		);	
 //Materialss
-html5sql.process("SELECT * FROM MyMaterials where orderno = '"+orderNo+"';",
+5sql.process("SELECT * FROM MyMaterials where orderno = '"+orderNo+"';",
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			var opTable = sap.ui.getCore().getElementById('MaterialsTable');
@@ -4886,7 +4887,7 @@ html5sql.process("SELECT * FROM MyMaterials where orderno = '"+orderNo+"';",
 		 }        
 		);	
  //Time Confirmations
-html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and opno = '"+OpNo+"' ;",
+5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and opno = '"+OpNo+"' ;",
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			var opTable = sap.ui.getCore().getElementById('TConfsTable');
@@ -4916,7 +4917,7 @@ html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and op
 		 }        
 		);
  // Build Docs Table
-html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
+5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
@@ -5005,7 +5006,7 @@ function job_photos_details_callback(f) {
 function rebuildTimeConfs()
 {
 
-	html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' ;",
+	5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' ;",
 			 function(transaction, results, rowsArray){
 				var n = 0;
 				var opTable = sap.ui.getCore().getElementById('TConfsTable');
@@ -5047,7 +5048,7 @@ function rebuildTimeConfs()
 					 
 					 navButtonPress: function() {	
 						 
-						 window.location.href="Jobs.html"
+						 window.location.href="Jobs."
 					 }
 			}).addStyleClass("sapUiStdPage");
 
@@ -5060,7 +5061,7 @@ function rebuildTimeConfs()
 				 headerContent : new sap.m.Button({
                      icon: "sap-icon://home",
                      press : function() {
-                    	 window.location.href="Home.html"
+                    	 window.location.href="Home."
                      }
 }),
 				title : "Jobs",
@@ -5181,7 +5182,7 @@ formSelectFloc.setTitle(selectedFloc)
 
 var fidpos=fid.length
 
-html5sql.process(sqlstatement,
+5sql.process(sqlstatement,
 		 function(transaction, results, rowsArray){
 			var n = 0;
 			
@@ -5245,7 +5246,7 @@ function BuildTCEmployees(){
 	SQLStatement="SELECT * from Myrefusers "
 
 	
-		html5sql.process(SQLStatement,
+		5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
 				//alert(rowsArray.length)
 				for (var n = 0; n < rowsArray.length; n++) {
@@ -5275,7 +5276,7 @@ function BuildTCEmployees(){
 		
 	
 		formRoute.open()
-		//window.location.href='Route.html?PostCode='+PostCode+'&Job='+Job+'&SLat='+Start_lat+'&SLon='+Start_lon+'&ELat='+End_lat+'&ELon='+End_lon
+		//window.location.href='Route.?PostCode='+PostCode+'&Job='+Job+'&SLat='+Start_lat+'&SLon='+Start_lon+'&ELat='+End_lat+'&ELon='+End_lon
 	    
 	    
 	}
@@ -5383,7 +5384,7 @@ formSignature.close()
 function BuildChangeStatusOnSite(){
 	
 	
-	html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+	5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
 			 function(transaction, results, rowsArray){
 				
 				
@@ -5417,8 +5418,8 @@ function BuildChangeStatusPark(){
 		var SQLStatement="";
 		var FirstVal="";
 		SQLStatement="select * from refactivity where action = 'P'  and  work_center = '"+CurrentJobWorkCentre+"'"
-		var HTMLToOutput="";
-			html5sql.process(SQLStatement,
+		var ToOutput="";
+			5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 				
 				sap.ui.getCore().getElementById("StatusParkActivityCode").destroyItems();
@@ -5431,7 +5432,7 @@ function BuildChangeStatusPark(){
 									text: item.activity_desc
 								}))
 					}
-					html5sql.process("select * from refvariancesrfv where job_activity = 'PRK'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
+					5sql.process("select * from refvariancesrfv where job_activity = 'PRK'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
 							 function(transaction, results, rowsArray){
 								
 								sap.ui.getCore().getElementById("StatusParkReasonCode").destroyItems();
@@ -5448,7 +5449,7 @@ function BuildChangeStatusPark(){
 													text: item.dev_reas_txt
 												}))
 									}
-									html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+									5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
 											 function(transaction, results, rowsArray){
 												
 												
@@ -5493,8 +5494,8 @@ function BuildChangeStatusUpdate(){
 		var SQLStatement="";
 		var FirstVal="";
 		SQLStatement="select * from refactivity where action = 'P'  and  work_center = '"+CurrentJobWorkCentre+"'"
-		var HTMLToOutput="";
-			html5sql.process(SQLStatement,
+		var ToOutput="";
+			5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 				
  				sap.ui.getCore().getElementById("StatusUpdateActivityCode").destroyItems();
@@ -5507,7 +5508,7 @@ function BuildChangeStatusUpdate(){
 									text: item.activity_desc
 								}))
 					} 
-					html5sql.process("select * from refvariancesrfv where job_activity = 'UPD'  and  work_cntr = '"+CurrentJobWorkCentre+"' order  by dev_reas_txt",
+					5sql.process("select * from refvariancesrfv where job_activity = 'UPD'  and  work_cntr = '"+CurrentJobWorkCentre+"' order  by dev_reas_txt",
 							 function(transaction, results, rowsArray){
 						
 						 	sap.ui.getCore().getElementById("StatusUpdateVarianceCode").destroyItems();
@@ -5525,7 +5526,7 @@ function BuildChangeStatusUpdate(){
 												}))
 									}
 								
-									html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+									5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
 											 function(transaction, results, rowsArray){
 													if( rowsArray.length>0) {
 														
@@ -5564,8 +5565,8 @@ function BuildChangeStatusReject(){
 		var SQLStatement="";
 		var FirstVal="";
 		SQLStatement="select * from refactivity where action = 'P'  and  work_center = '"+CurrentJobWorkCentre+"'"
-		var HTMLToOutput="";
-					html5sql.process("select * from refvariancesrfv where job_activity = 'REJ'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
+		var ToOutput="";
+					5sql.process("select * from refvariancesrfv where job_activity = 'REJ'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
 							 function(transaction, results, rowsArray){
 								
 								sap.ui.getCore().getElementById("StatusRejectVarianceCode").destroyItems();
@@ -5613,8 +5614,8 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 		var FirstVal="";
 		SQLStatement="select * from refpaicodes where catalogue = 'P' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
 		
-		var HTMLToOutput="";
-			html5sql.process(SQLStatement,
+		var ToOutput="";
+			5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 				
 				sap.ui.getCore().getElementById("Close_ProblemGroup").destroyItems();
@@ -5639,7 +5640,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 								}))
 					}
 					SQLStatement="select * from refpaicodes where catalogue = 'R' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
-					html5sql.process(SQLStatement,
+					5sql.process(SQLStatement,
 							 function(transaction, results, rowsArray){
 						
 								sap.ui.getCore().getElementById("Close_ActionGroup").destroyItems();
@@ -5664,7 +5665,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 									}
 								
 									SQLStatement="select * from refpaicodes where catalogue = 'S' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
-									html5sql.process(SQLStatement,
+									5sql.process(SQLStatement,
 											 function(transaction, results, rowsArray){
 										
 												sap.ui.getCore().getElementById("Close_ImpactGroup").destroyItems();
@@ -5687,7 +5688,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 																	text: item.kurztext_group
 																}))
 													}
-													html5sql.process("select * from refvariancesrfv where job_activity = 'ADD'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
+													5sql.process("select * from refvariancesrfv where job_activity = 'ADD'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
 															 function(transaction, results, rowsArray){
 																
 																sap.ui.getCore().getElementById("Close_Variance").destroyItems();
@@ -5705,7 +5706,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 																				}))
 																	}
 
-																html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+																5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
 																		 function(transaction, results, rowsArray){
 																			
 																			
@@ -5756,8 +5757,8 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 		var FirstVal="";
 		SQLStatement="select * from refpaicodes where catalogue = 'P' and level='2' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' and codegrp = '"+grp+"' group  by code"
 		
-		var HTMLToOutput="";
-			html5sql.process(SQLStatement,
+		var ToOutput="";
+			5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 				
 				
@@ -5790,8 +5791,8 @@ function BuildCloseActionCodes(grp){
 	var FirstVal="";
 	SQLStatement="select * from refpaicodes where catalogue = 'R' and level='2' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' and codegrp = '"+grp+"' group  by code"
 	
-	var HTMLToOutput="";
-		html5sql.process(SQLStatement,
+	var ToOutput="";
+		5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
 			
 
@@ -5825,7 +5826,7 @@ function BuildCloseImpactCodes(grp){
 	SQLStatement="select * from refpaicodes where catalogue = 'S' and level='2' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' and codegrp = '"+grp+"' group  by code"
 	
 
-		html5sql.process(SQLStatement,
+		5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
 			
 			sap.ui.getCore().getElementById("Close_ImpactCode").destroyItems();
@@ -5888,7 +5889,7 @@ function startBGSync()
 /*     	  standardList.addItem(
                   new sap.m.CustomListItem("J"+tim,{
 					type:sap.m.ListType.Active,
-					  content: [new sap.ui.core.HTML({  
+					  content: [new sap.ui.core.({  
 					      content: 
 					    	    [
 "<H1>customItem"+tim+"</H1>"
@@ -5916,7 +5917,7 @@ function startBGSync()
    }
 }
 function refreshJobList(){
-	html5sql.process("Select orderno, opno from MyJobdets",
+	5sql.process("Select orderno, opno from MyJobdets",
 			 function(transaction, results, rowsArray){
 			
 				    console.log("found "+rowsArray.length+" Jobs")
@@ -5947,4 +5948,4 @@ function refreshJobList(){
 <script>
 
 </script>
-</html>
+</>
