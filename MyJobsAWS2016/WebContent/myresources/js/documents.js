@@ -42,7 +42,7 @@ var selectedPhoto=""
 					width: "50px",
 					height: "50px"
 				}),
-				new sap.m.Image("Ig22",{
+				new sap.m.Image("Ig3",{
 					src: "xWorker.jpg",
 					width: "50px",
 					height: "50px"
