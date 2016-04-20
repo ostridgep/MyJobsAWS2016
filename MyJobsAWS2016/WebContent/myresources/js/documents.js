@@ -33,7 +33,7 @@ var selectedPhoto=""
 				})
 
 	            ],
-	            ,
+	            
 	            beforeOpen:function(){
 	            	alert(selectedPhoto)
 	            }
@@ -170,7 +170,7 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }) ,
 	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -201,7 +201,7 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }) ,
 	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -236,7 +236,7 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
 	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})    
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})    
 	    	            								           	     ]
 	    	            								           	  
 
@@ -267,7 +267,7 @@ function buildDocumentList(){
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
 	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false demandPopin: false})       	                         
+		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})       	                         
 	    	            								           	     ]
 	    	            								           	  
 
