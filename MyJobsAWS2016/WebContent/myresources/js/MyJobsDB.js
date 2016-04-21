@@ -61,12 +61,13 @@ function requestSAPData1(page,params){
 }
 
 function requestSAPData(page,params){
-
+console.log("POST")
 
 	opMessage(SAPServerPrefix+page);
 	var myurl=SAPServerPrefix+page+SAPServerSuffix+params;
 	
 	$.ajax({
+	    type: "POST",
 	    dataType: "json",
 	    url: myurl,
 	    

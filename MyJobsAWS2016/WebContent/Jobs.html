@@ -2,7 +2,7 @@
 <html>
 <head>
 <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"/> -->
-
+<meta name=”viewport” content=”width=device-width, initial-scale=1”>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>MyJobs - Jobs</title>
 
@@ -5047,7 +5047,18 @@ function rebuildTimeConfs()
 			"detail",
 			{
 				title : "Job Details",
-				content : [],
+				headerContent : [new sap.m.Button({
+					title:"but",
+                    icon: "sap-icon://list",
+                    press : function() {
+                    	if(oSplitApp.getMode() ==sap.m.SplitAppMode.ShowHideMode){
+                    		oSplitApp.setMode(sap.m.SplitAppMode.HideMode)
+                    	}else{
+                    		oSplitApp.setMode(sap.m.SplitAppMode.ShowHideMode)	
+                    	}
+                    	
+                    }
+                    })],
 				footer: detailFooterAWS,
 				showNavButton: false,
 					 
@@ -5072,8 +5083,8 @@ function rebuildTimeConfs()
 				title : "Jobs",
 				
 				content : [ buildJobs()],
-				showNavButton: "{device>/isPhone}" ,
-				//showNavButton: true,
+				//showNavButton: "{device>/isPhone}" ,
+				showNavButton: false,
 				footer  : new sap.m.Bar (
 						{
 							id : 'master-footer',
@@ -5087,7 +5098,13 @@ function rebuildTimeConfs()
 					  						formNewNotif.open(); 
 					  						
 					  							}]
-										 })
+										 }),
+									new sap.m.Button({
+					                    icon: "sap-icon://list",
+					                    press : function() {
+					                    	oSplitApp.hideMaster()
+					                    }
+					                    })
 								],
 						contentRight : [new sap.m.Button("LastSyncMess", {
 		 	      			 text:"",
@@ -5118,6 +5135,7 @@ function rebuildTimeConfs()
 	var oSplitApp = new sap.m.SplitApp({
 		detailPages: [oDetailPage],
 		masterPages: [oMasterPage],
+		//mode:sap.m.SplitAppMode.HideMode,
 		initialDetail: "detail",
 		initialMaster: "master",
 		afterMasterOpen: function(){
