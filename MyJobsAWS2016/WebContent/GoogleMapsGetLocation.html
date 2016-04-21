@@ -44,13 +44,13 @@ marker.addListener('click', function(event) {
   });
   infowindow.open(map,marker);
 }
-
-google.maps.event.addDomListener(window, 'load', initialize);
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
     	myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         map.setCenter(myCenter);
     });
+google.maps.event.addDomListener(window, 'load', initialize);
+
 }
 
 </script>
