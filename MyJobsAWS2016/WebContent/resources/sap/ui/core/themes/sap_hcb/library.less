@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -24,8 +24,10 @@
 }
 
 .sapUiBLy {
-	background-color: fade(@sapHCStandardBG, 30%);
+	background-color: @sapHCStandardBG;
+	opacity: 0.3;
 }
+
 /* END "shared.less" */
 
 
@@ -74,6 +76,7 @@
 .sapUiBusy:after {
 	content: url(img/Busy.gif);
 }
+
 /* END "BusyIndicator.less" */
 
 /* START "Icon.less" */
@@ -118,11 +121,6 @@
 /* START "LocalBusyIndicator.less" */
 @sapUiLocalBusyIndicatorBG: fade(@sapHCStandardBG, 30%);
 @sapUiLocalBusyIndicatorBG_IE: @sapHCStandardBG;
-@sapUiLocalBusyIndicatorBoxSize: 4rem;
-
-@sapUiLocalBusyIndicatorBoxColor: @sapUiBase;
-@sapUiLocalBusyIndicatorBoxColorActive: @sapUiBaseBG;
-@sapUiLocalBusyIndicatorBoxTransitionDuration: ~"125ms";
 
 .sapUiLocalBusyIndicator {
 	background-color: @sapUiLocalBusyIndicatorBG;
@@ -132,45 +130,21 @@
 	bottom: 0;
 	right: 0;
 }
-HTML[data-sap-ui-browser='ie8'] .sapUiLocalBusyIndicator {
-	background-color: @sapUiLocalBusyIndicatorBG_IE;
+
+// Color the BusyIndicator with the standard FG color in HCB
+// The brandColor default is black, and thus invisible in HCB
+@sapUiLocalBusyIndicatorColor: @sapHCStandardFG;
+
+// move the busy indicator to the center in HCB
+.sapUiBusy {
+	margin: 0 auto;
 }
 
-.sapUiLocalBusyIndicatorAnimation {
-	background-color: @sapHCStandardBG;
-	border: 0.125rem solid @sapHCStandardFG;
-	border-radius: 1px;
-	box-shadow: 0 0 2.5rem 0.125rem fade(@sapHCStandardFG, 80%);
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: @sapUiLocalBusyIndicatorBoxSize;
-	height: @sapUiLocalBusyIndicatorBoxSize;
-	margin: -(@sapUiLocalBusyIndicatorBoxSize / 2) 0 0 -(@sapUiLocalBusyIndicatorBoxSize / 2);
+//hide the 2nd center/center busy indicator
+#sapUiBusyIndicator > .sapUiLocalBusyIndicator {
+	display: none;
 }
 
-.sapUiLocalBusyIndicatorBox {
-	width: .5rem;
-	height : .5rem;
-	background-color: @sapHCStandardBG;
-	border-radius: 1px;
-	-moz-border-radius: 1px;
-	-webkit-border-radius: 1px;
-	border: 1px solid @sapHCStandardFG;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	float: left;
-	margin: 1.75rem 0 0 .5rem;
-}
-
-.sapUiLocalBusyIndicatorBox.active {
-	background-color: @sapHCStandardFG;
-}
-
-.sapUiLocalBusyIndicatorBox:first-child {
-	margin-left: .75rem; 
-}
 /* END "LocalBusyIndicator.less" */
 
 /* START "Shadow.less" */
@@ -179,8 +153,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiLocalBusyIndicator {
 
 .sapUiShd {
 	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
 }
 /* END "Shadow.less" */
 

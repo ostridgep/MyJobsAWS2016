@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -12,16 +12,16 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	/**
 	 * Constructor for a new TextField.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
-	 * @param {object} [mSettings] initial settings for the new control
+	 * @param {string} [sID] id for the new control, generated automatically if no ID is given
+	 * @param {object} [mSettings] Initial settings for the new control
 	 *
 	 * @class
-	 * Control is used to enter text.
+	 * Renders a input field for text input.
 	 * @extends sap.ui.core.Control
 	 * @implements sap.ui.commons.ToolbarItem
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -37,14 +37,14 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		properties : {
 
 			/**
-			 * Text inside the textfield
-			 * @SecSource {return} The 'value' property of the TextField control and its subclasses represents unfiltered user input.
+			 * Text inside the <code>TextField</code>
+			 * @SecSource {return} The <code>value</code> property of the TextField control and its subclasses represents unfiltered user input.
 			 * Applications must ensure that the data is either validated / cleansed or that it is not used in a context which is sensible to XSS attacks.
 			 */
 			value : {type : "string", group : "Data", defaultValue : '', bindable : "bindable"},
 
 			/**
-			 * Direction of the text. Possible values: rtl, ltr.
+			 * Direction of the text. Possible values: "rtl", "ltr".
 			 */
 			textDirection : {type : "sap.ui.core.TextDirection", group : "Appearance", defaultValue : sap.ui.core.TextDirection.Inherit},
 
@@ -54,12 +54,13 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			enabled : {type : "boolean", group : "Behavior", defaultValue : true},
 
 			/**
-			 * Switches edit state of the control. Read-only fields have different colors, depending on customer setting.
+			 * Switches edit state of the control. Read-only fields have different colors, depending on theme setting.
 			 */
 			editable : {type : "boolean", group : "Behavior", defaultValue : true},
 
 			/**
-			 * Depending on theme the TextField is shown as required.
+			 * Depending on theme the <code>TextField</code> is shown as required.
+			 * If a <code>Label</code> is assigned to the <code>TextField</code> it will visualize the requires state too.
 			 */
 			required : {type : "boolean", group : "Appearance", defaultValue : false},
 
@@ -89,7 +90,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			imeMode : {type : "sap.ui.core.ImeMode", group : "Behavior", defaultValue : sap.ui.core.ImeMode.Auto},
 
 			/**
-			 * Font type. Standard, Monospace
+			 * Font type. valid values are Standard and Monospace.
 			 */
 			design : {type : "sap.ui.core.Design", group : "Appearance", defaultValue : sap.ui.core.Design.Standard},
 
@@ -104,7 +105,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			accessibleRole : {type : "sap.ui.core.AccessibleRole", group : "Accessibility", defaultValue : sap.ui.core.AccessibleRole.Textbox},
 
 			/**
-			 * The 'name' property to be used in the HTML code (e.g. for HTML forms that send data to the server via 'submit').
+			 * The <code>name</code> property to be used in the HTML code (e.g. for HTML forms that send data to the server via 'submit').
 			 */
 			name : {type : "string", group : "Misc", defaultValue : null},
 
@@ -117,12 +118,12 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		associations : {
 
 			/**
-			 * Association to controls / ids which describe this control (see WAI-ARIA attribute aria-describedby).
+			 * Association to controls / IDs which describe this control (see WAI-ARIA attribute aria-describedby).
 			 */
-			ariaDescribedBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaDescribedBy"}, 
+			ariaDescribedBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaDescribedBy"},
 
 			/**
-			 * Association to controls / ids which label this control (see WAI-ARIA attribute aria-labelledby).
+			 * Association to controls / IDs which label this control (see WAI-ARIA attribute aria-labelledby).
 			 */
 			ariaLabelledBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaLabelledBy"}
 		},
@@ -135,20 +136,22 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 				parameters : {
 
 					/**
-					 * The new / changed value of the textfield.
+					 * The new / changed value of the <code>TextField</code>.
 					 */
 					newValue : {type : "string"}
 				}
 			},
 
 			/**
-			 * This event if fired during typing into the TextField and returns the currently enterted value. This is not the content of the value property. The value property is only updated by ENTER and by leaving the control.
+			 * This event if fired during typing into the <code>TextField</code> and returns the currently entered value.
+			 * <b>Note:</b> This is not the content of the value property.
+			 * The value property is only updated by ENTER and by leaving the control.
 			 */
 			liveChange : {
 				parameters : {
 
 					/**
-					 * Current value of the Textfield.
+					 * Current visible value of the <code>TextField</code>.
 					 */
 					liveValue : {type : "string"}
 				}
@@ -343,7 +346,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			oEvent.stopPropagation();
 		}
 
-		if (!!!sap.ui.Device.browser.firefox) {
+		if (!sap.ui.Device.browser.firefox) {
 			this._doOnEscape(oEvent);
 		}
 
@@ -351,7 +354,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 	TextField.prototype.onkeydown = function(oEvent) {
 
-		if (oEvent.which == jQuery.sap.KeyCodes.Z && oEvent.ctrlKey) {
+		if (oEvent.which == jQuery.sap.KeyCodes.Z && oEvent.ctrlKey && !oEvent.altKey) {
 			// prevent browsers standard history logic because different in different browsers
 			oEvent.preventDefault();
 		}
@@ -428,13 +431,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		} else if ((sap.ui.Device.browser.msie && sap.ui.Device.browser.version < 10) &&
 					(oEvent.which === jQuery.sap.KeyCodes.DELETE || oEvent.which === jQuery.sap.KeyCodes.BACKSPACE)) {
 			this._fireLiveChange(oEvent);
-		}else if ((sap.ui.Device.browser.msie && sap.ui.Device.browser.version < 9) &&
-		          (oEvent.keyCode != jQuery.sap.KeyCodes.TAB && oEvent.keyCode != jQuery.sap.KeyCodes.ENTER
-		           && oEvent.keyCode != jQuery.sap.KeyCodes.F4)) {
-			// as IE8 has no oninput event
-			this._fireLiveChange(oEvent);
 		}
-
 	};
 
 	TextField.prototype.oninput = function(oEvent) {
@@ -653,6 +650,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			} else {
 				oInput.value =  newValue;
 			}
+			this._sRenderedValue = newValue;
 		}
 
 		return this;
@@ -698,28 +696,20 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 	};
 
-	/**
+	/*
 	 * Applies the focus info
-	 * overwrite of the Element method because in IE8 on rerendering focus is lost
+	 * overwrite of the Element method to set the just typed in text again
+	 * and restore the cursor position and selection.
 	 * @param {object} oFocusInfo Focus information
 	 * @return {object} reference to this
 	 * @protected
 	 */
 	TextField.prototype.applyFocusInfo = function (oFocusInfo) {
 
-		if (!!sap.ui.Device.browser.internet_explorer && sap.ui.Device.browser.version == 8) {
-			var oPos = this.getValue().length;
-			var that = this;
-			setTimeout(function(){
-				that.focus();
-				that._restoreUnsavedUserInput(oFocusInfo.userinput);
-				jQuery(that.getFocusDomRef()).cursorPos(oPos);
-			}, 0);
-		} else {
-			this.focus();
-			this._restoreUnsavedUserInput(oFocusInfo.userinput);
-		}
+		this.focus();
+		this._restoreUnsavedUserInput(oFocusInfo.userinput);
 		return this;
+
 	};
 
 	/**
@@ -733,7 +723,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Returns the current value of the TextField. In case of editing the TextField you can access the current value via this method. The validated value is accessible via the property value.
+	 * Returns the current value of the <code>TextField</code>.
+	 * In case of editing the <code>TextField</code> you can access the current value via this method.
+	 * The validated value is accessible via the property value.
 	 *
 	 * @return {string} live value
 	 * @public
@@ -802,26 +794,43 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 
 	TextField.prototype._getUnsavedUserInputInfo = function() {
+
 		var $tf = this.$();
 		if ($tf.length && $tf.hasClass("sapUiTfFoc") && !$tf.hasClass("sapUiTfPlace") && this.getEnabled() && this.getEditable()){
-			var sVal = jQuery(this.getInputDomRef()).val();
+			var $DomRef = jQuery(this.getInputDomRef());
+			var sVal = $DomRef.val();
 			var sValue = this.getValue();
-			if (sVal != sValue){
-				return {userinput: sVal, value: sValue};
+			var iSelStart = 0;
+			var iSelEnd = 0;
+			if (typeof ($DomRef.get(0).selectionStart) === "number") { // current browsers should know this
+				iSelStart = $DomRef.get(0).selectionStart;
+				iSelEnd = $DomRef.get(0).selectionEnd;
 			}
+
+			return {userinput: sVal, value: sValue, cursorPos: $DomRef.cursorPos(), selStart: iSelStart, selEnd: iSelEnd};
 		}
 		return null;
+
 	};
 
 	TextField.prototype._restoreUnsavedUserInput = function(oUnsavedUserInputInfo) {
+
 		if (oUnsavedUserInputInfo && this.getEnabled() && this.getEditable() && this.getValue() == oUnsavedUserInputInfo.value){
 			var sVal = oUnsavedUserInputInfo.userinput;
 			if ( sVal && sVal.length > this.getMaxLength() && this.getMaxLength() > 0) {
 				sVal = sVal.substring(0,this.getMaxLength());
 			}
 
-			jQuery(this.getInputDomRef()).val(sVal);
+			var $DomRef = jQuery(this.getInputDomRef());
+			if (sVal != oUnsavedUserInputInfo.value) {
+				$DomRef.val(sVal);
+			}
+			$DomRef.cursorPos(oUnsavedUserInputInfo.cursorPos);
+			if (oUnsavedUserInputInfo.selStart != oUnsavedUserInputInfo.selEnd) {
+				$DomRef.selectText(oUnsavedUserInputInfo.selStart, oUnsavedUserInputInfo.selEnd);
+			}
 		}
+
 	};
 
 

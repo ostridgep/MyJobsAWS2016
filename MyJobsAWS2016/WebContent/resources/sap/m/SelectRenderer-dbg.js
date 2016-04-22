@@ -1,11 +1,11 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueStateSupport'],
-	function(jQuery, Renderer, ValueStateSupport) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueStateSupport', 'sap/ui/core/IconPool'],
+	function(jQuery, Renderer, ValueStateSupport, IconPool) {
 		"use strict";
 
 		/**
@@ -35,7 +35,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 				CSS_CLASS = SelectRenderer.CSS_CLASS;
 
 			oRm.write("<div");
-			this.addStyleClass(oRm, oSelect);
+			this.addClass(oRm, oSelect);
 			oRm.addClass(CSS_CLASS);
 			oRm.addClass(CSS_CLASS + oSelect.getType());
 
@@ -66,6 +66,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 
 			if (sTooltip) {
 				oRm.writeAttributeEscaped("title", sTooltip);
+			} else if (sType === sap.m.SelectType.IconOnly) {
+				var oIconInfo = IconPool.getIconInfo(oSelect.getIcon());
+
+				if (oIconInfo) {
+					oRm.writeAttributeEscaped("title", oIconInfo.text);
+				}
 			}
 
 			if (bEnabled) {
@@ -151,7 +157,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 		 */
 		SelectRenderer.renderIcon = function(oRm, oSelect) {
 			oRm.writeIcon(oSelect.getIcon(), SelectRenderer.CSS_CLASS + "Icon", {
-				id: oSelect.getId() + "-icon"
+				id: oSelect.getId() + "-icon",
+				title: null
 			});
 		};
 
@@ -201,7 +208,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 			}
 
 			if (aItemsLength === 0) {
-				oRm.write("<option>" + sSelectedItemText + "</option>");
+				oRm.write("<option>");
+				oRm.writeEscaped(sSelectedItemText);
+				oRm.write("</option>");
 			}
 		};
 
@@ -212,7 +221,26 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 		 * @param {sap.ui.core.Control} oSelect An object representation of the control that should be rendered.
 		 * @protected
 		 */
-		SelectRenderer.addStyleClass = function(oRm, oSelect) {};
+		SelectRenderer.addClass = function(oRm, oSelect) {};
+
+		/**
+		 * Gets accessibility role.
+		 * To be overwritten by subclasses.
+		 *
+		 * @param {sap.ui.core.Control} oSelect An object representation of the control that should be rendered.
+		 * @protected
+		 */
+		SelectRenderer.getAriaRole = function(oSelect) {
+			switch (oSelect.getType()) {
+				case sap.m.SelectType.Default:
+					return "combobox";
+
+				case sap.m.SelectType.IconOnly:
+					return "button";
+
+				// no default
+			}
+		};
 
 		/**
 		 * Writes the accessibility state.
@@ -223,7 +251,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', 'sap/ui/core/ValueSt
 		 */
 		SelectRenderer.writeAccessibilityState = function(oRm, oSelect) {
 			oRm.writeAccessibilityState(oSelect, {
-				role: "combobox",
+				role: this.getAriaRole(oSelect),
 				expanded: oSelect.isOpen(),
 				live: "polite",
 				labelledby: {

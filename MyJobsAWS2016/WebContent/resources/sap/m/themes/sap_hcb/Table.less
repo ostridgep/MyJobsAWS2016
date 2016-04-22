@@ -1,7 +1,6 @@
 /* table */
 .sapMListTblHeader,
-.sapMListTblFooter,
-.sapMLIB.sapMListTblRow {
+.sapMListTblFooter {
 	background: @sapHCStandardBG;
 }
 
@@ -31,6 +30,7 @@
 .sapMListTblSelCol > .sapMLIBSelectD,
 .sapMListTblSelCol > .sapMLIBSelectM {
 	margin: 0;
+	padding: 0;
 }
 
 .sapMListTblUnreadCol {
@@ -41,11 +41,6 @@
 	font-size: @sapMFontMediumSize;
 	/* HCB Additional Style */
 	border: 1px solid @sapHCStandardFG;
-}
-
-html[data-sap-ui-browser^="ie"] .sapMListTbl{
-	/* ie does not show focus outline when border spacing is less than outline size */
-	border-spacing: 0.4px;
 }
 
 .sapMListTbl .sapMText,

@@ -32,6 +32,15 @@
 	border-color: @sapUiButtonActiveBorderColor;
 }
 
+.sapUiBtnS.sapUiBtnNorm.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtnS.sapUiBtnNorm.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
+}
+
 .sapUiBtnS.sapUiBtnNorm.sapUiToggleBtn.sapUiToggleBtnPressed > span.sapUiBtnIco {
 	color: @sapUiToggleButtonPressedTextColor;
 }
@@ -90,46 +99,44 @@ html[data-sap-ui-browser="ie9"] .sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active {
 	padding-right: 9px;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active {
-	padding-bottom: 4px;
-	padding-top: 1px;
-	padding-left: 7px;
-	padding-right: 9px;
-}
-
 html[data-sap-ui-browser^="ie"]  .sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active > .sapUiBtnTxt,
 html[data-sap-ui-browser^="ie"]  .sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active > .sapUiBtnIcoL,
 html[data-sap-ui-browser^="ie"]  .sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active > .sapUiBtnIcoR,
 html[data-sap-ui-browser^="ie"]  .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiToggleBtn:active > .sapUiBtnIco,
-html[data-sap-ui-browser='ie9'] .sapUiBtnS.sapUiBtnIconOnly.sapUiToggleBtn > .sapUiBtnIco,
-html[data-sap-ui-browser='ie8'] .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiToggleBtn > .sapUiBtnIco {
+html[data-sap-ui-browser='ie9'] .sapUiBtnS.sapUiBtnIconOnly.sapUiToggleBtn > .sapUiBtnIco {
 	margin-top: -3px;
 }
 
 .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:hover,
 .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:focus {
-	color: @sapUiToggleButtonPressedTextColor;
-	background-color: darken(@sapUiToggleButtonPressedHoverBackground, 7);
-	border: 1px solid darken(@sapUiToggleButtonPressedHoverBackground, 7);
+	background-color: @sapUiButtonHoverBackground;
 }
 
 .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed {
 	color: @sapUiToggleButtonPressedTextColor;
-	background-color: @sapUiToggleButtonPressedHoverBackground;
-	border: 1px solid @sapUiToggleButtonPressedHoverBackground;
+	background-color: @sapUiToggleButtonPressedBackground;
+	border: 1px solid @sapUiToggleButtonPressedBorderColor;
 }
 
 .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed:hover {
+	background-color: @sapUiToggleButtonPressedHoverBackground;
+	border: 1px solid @sapUiToggleButtonPressedHoverBorderColor;
+}
+
+.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active,
+.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed:active {
+/*	color: @sapUiButtonTextColor;*/
 	background-color: darken(@sapUiToggleButtonPressedHoverBackground, 7);
 	border: 1px solid darken(@sapUiToggleButtonPressedHoverBackground, 7);
 }
 
-.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn:active,
-.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed:active,
 .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
-/*	color: @sapUiButtonTextColor;*/
-	background-color: darken(@sapUiToggleButtonPressedHoverBackground, 7);
-	border: 1px solid darken(@sapUiToggleButtonPressedHoverBackground, 7);
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
 }
 
 /*.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnDsbl.sapUiToggleBtn,
@@ -157,6 +164,15 @@ html[data-sap-ui-browser='ie8'] .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiTo
 	color: @sapUiButtonEmphasizedTextColor;
 }
 
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
+}
+
 .sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiBtnStd.sapUiToggleBtn:focus,
 .sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiBtnStd.sapUiToggleBtn:hover,
 .sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
@@ -169,6 +185,16 @@ html[data-sap-ui-browser='ie8'] .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiTo
 	color: @sapUiButtonEmphasizedTextColor;
 }
 
+.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+html[data-sap-ui-browser^="ie"] .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
+}
 
 .sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiToggleBtn.sapUiToggleBtnPressed {
 	background-color: @sapUiButtonEmphasizedHoverBackground;
@@ -233,6 +259,17 @@ html[data-sap-ui-browser='ie8'] .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiTo
 	color: @sapUiTextSelection;
 }
 
+.sapUiBtnS.sapUiBtnAccept.sapUiBtnStd.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtnS.sapUiBtnAccept.sapUiBtnStd.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+html[data-sap-ui-browser^="ie"] .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
+}
+
 .sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiToggleBtn.sapUiToggleBtnPressed {
 	background-color: @sapUiButtonAcceptHoverBackground;
 	border-color: @sapUiButtonAcceptBorderColor;
@@ -284,6 +321,17 @@ html[data-sap-ui-browser='ie8'] .sapUiBtnS.sapUiBtnLite.sapUiBtnIconOnly.sapUiTo
 	background-image: none;
 	border-color: @sapUiButtonRejectHoverBackground;
 	color: @sapUiTextSelection;
+}
+
+.sapUiBtnS.sapUiBtnReject.sapUiBtnStd.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+.sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnReject.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiInvertedFocus;
+}
+
+/* override the custom button's outline in IE for the press state */
+html[data-sap-ui-browser^="ie"] .sapUiBtnS.sapUiBtnReject.sapUiBtnStd.sapUiToggleBtn.sapUiToggleBtnPressed:focus,
+html[data-sap-ui-browser^="ie"] .sapUiBtn.sapUiBtnS.sapUiBtnLite.sapUiBtnReject.sapUiToggleBtn.sapUiToggleBtnPressed:focus {
+	outline: 1px dotted @sapUiFocus;
 }
 
 .sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiToggleBtn.sapUiToggleBtnPressed {

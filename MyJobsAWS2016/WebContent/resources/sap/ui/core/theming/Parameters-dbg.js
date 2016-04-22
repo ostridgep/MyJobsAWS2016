@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,12 +10,9 @@
  * @public
  */
 
-sap.ui.define(['jquery.sap.global', 'sap/ui/core/Core', 'sap/ui/thirdparty/URI'],
-	function(jQuery, Core, URI1) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/thirdparty/URI'],
+	function(jQuery, URI) {
 	"use strict";
-
-		/*global URI *///declare unusual global vars for JSLint/SAPUI5 validation
-
 
 		/**
 		 * A helper used for (read-only) access to CSS parameters at runtime.

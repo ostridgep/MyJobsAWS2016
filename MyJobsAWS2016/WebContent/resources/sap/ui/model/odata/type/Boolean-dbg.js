@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -11,10 +11,10 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/model/FormatException',
 	"use strict";
 
 	/**
-	 * Returns the error message for the type.
+	 * Returns the locale-dependent error message for the type.
 	 *
 	 * @returns {string}
-	 *   the message
+	 *   the locale-dependent error message
 	 */
 	function getErrorMessage() {
 		return getMessage("EnterYesOrNo", [getText(true), getText(false)]);
@@ -80,7 +80,7 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/model/FormatException',
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.Boolean
 	 * @param {object} [oFormatOptions]
@@ -90,13 +90,11 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/model/FormatException',
 	 *   constraints; {@link #validateValue validateValue} throws an error if any constraint is
 	 *   violated
 	 * @param {boolean|string} [oConstraints.nullable=true]
-	 *   if <code>true</code>, the value <code>null</code> will be accepted
+	 *   if <code>true</code>, the value <code>null</code> is accepted
 	 * @public
 	 * @since 1.27.0
 	 */
-	var EdmBoolean = ODataType.extend("sap.ui.model.odata.type.Boolean",
-			/** @lends sap.ui.model.odata.type.Boolean.prototype */
-			{
+	var EdmBoolean = ODataType.extend("sap.ui.model.odata.type.Boolean", {
 				constructor : function (oFormatOptions, oConstraints) {
 					ODataType.apply(this, arguments);
 					setConstraints(this, oConstraints);
@@ -140,7 +138,7 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/model/FormatException',
 	 * Parses the given value from the given type to a boolean.
 	 *
 	 * @param {boolean|string} vValue
-	 *   the value to be parsed; the empty string and <code>null</code> will be parsed to
+	 *   the value to be parsed; the empty string and <code>null</code> are parsed to
 	 *   <code>null</code>
 	 * @param {string} sSourceType
 	 * 	 the source type (the expected type of <code>vValue</code>); may be "boolean" or "string".
@@ -162,8 +160,7 @@ sap.ui.define(['sap/ui/core/Core', 'sap/ui/model/FormatException',
 			case "boolean":
 				return vValue;
 			case "string":
-				// Do not use String#trim as it is not supported in IE8
-				sValue = jQuery.trim(vValue).toLowerCase();
+				sValue = vValue.trim().toLowerCase();
 				if (sValue === getText(true).toLowerCase()) {
 					return true;
 				}

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,10 +16,10 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var AbsoluteLayoutRenderer = {
 	};
-	
-	
+
+
 	(function() {
-	
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -28,7 +28,7 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	AbsoluteLayoutRenderer.render = function(oRenderManager, oControl){
 		var rm = oRenderManager;
-	
+
 		oControl.doBeforeRendering();
 
 		rm.write("<div");
@@ -44,7 +44,7 @@ sap.ui.define(['jquery.sap.global'],
 			rm.writeAttributeEscaped("title", sTooltip);
 		}
 		rm.write(">");
-	
+
 		var aPositions = oControl.getPositions();
 		if (aPositions && aPositions.length > 0) {
 			for (var index = 0; index < aPositions.length; index++) {
@@ -65,11 +65,11 @@ sap.ui.define(['jquery.sap.global'],
 				}
 			}
 		}
-	
+
 		rm.write("</div>");
 	};
-	
-	
+
+
 	/**
 	 * Updates the size of the layout.
 	 *
@@ -78,8 +78,8 @@ sap.ui.define(['jquery.sap.global'],
 	AbsoluteLayoutRenderer.updateLayoutSize = function(oLayout) {
 		jQuery(oLayout.getDomRef()).css("width", oLayout.getWidth()).css("height", oLayout.getHeight());
 	};
-	
-	
+
+
 	/**
 	 * Updates the scrolling mode of the layout.
 	 *
@@ -92,8 +92,8 @@ sap.ui.define(['jquery.sap.global'],
 		}
 		jLayout.addClass("sapUiLayoutAbsOvrflwY" + oLayout.getVerticalScrolling()).addClass("sapUiLayoutAbsOvrflwX" + oLayout.getHorizontalScrolling());
 	};
-	
-	
+
+
 	/**
 	 * Updates the styles of the given position in the Dom.
 	 *
@@ -102,8 +102,8 @@ sap.ui.define(['jquery.sap.global'],
 	AbsoluteLayoutRenderer.updatePositionStyles = function(oPosition) {
 		jQuery(oPosition.getDomRef()).attr("style", getComputedStyles(oPosition));
 	};
-	
-	
+
+
 	/**
 	 * Removes the given position from the Dom.
 	 *
@@ -112,8 +112,8 @@ sap.ui.define(['jquery.sap.global'],
 	AbsoluteLayoutRenderer.removePosition = function(oPosition) {
 		jQuery(oPosition.getDomRef()).remove();
 	};
-	
-	
+
+
 	/**
 	 * Removes all positions of the given layout from the Dom.
 	 *
@@ -122,8 +122,8 @@ sap.ui.define(['jquery.sap.global'],
 	AbsoluteLayoutRenderer.removeAllPositions = function(oLayout) {
 		jQuery(oLayout.getDomRef()).html("");
 	};
-	
-	
+
+
 	/**
 	 * Updates the styles and the content of the given position in the Dom.
 	 *
@@ -136,8 +136,8 @@ sap.ui.define(['jquery.sap.global'],
 		rm.flush(oPosition.getDomRef());
 		rm.destroy();
 	};
-	
-	
+
+
 	/**
 	 * Inserts the given position into the Dom incl. the content and updating the styles.
 	 *
@@ -154,18 +154,18 @@ sap.ui.define(['jquery.sap.global'],
 				break;
 			}
 		}
-	
+
 		var sHTML = "<div id=\"" + oPosition.getId() + "\" data-sap-ui=\"" + oPosition.getId() + "\" class=\"sapUiLayoutAbsPos\"></div>";
 		if (!oPredecessorPosition) {
 			jQuery(oLayout.getDomRef()).prepend(sHTML);
 		} else {
 			jQuery(oPredecessorPosition.getDomRef()).after(sHTML);
 		}
-	
+
 		AbsoluteLayoutRenderer.updatePositionedControl(oPosition);
 	};
-	
-	
+
+
 	/**
 	 * Computes and returns the CSS styles for the given position.
 	 *
@@ -173,13 +173,13 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var getComputedStyles = function(oPosition) {
 		var oPos = oPosition.getComputedPosition();
-	
+
 		var addStyle = function(oPosition, aBuffer, sPos, sVal){
 			if (sVal) {
 				aBuffer.push(sPos + ":" + sVal + ";");
 			}
 		};
-	
+
 		var aBuffer = [];
 		addStyle(oPosition, aBuffer, "top", oPos.top);
 		addStyle(oPosition, aBuffer, "bottom", oPos.bottom);
@@ -187,10 +187,10 @@ sap.ui.define(['jquery.sap.global'],
 		addStyle(oPosition, aBuffer, "right", oPos.right);
 		addStyle(oPosition, aBuffer, "width", oPos.width);
 		addStyle(oPosition, aBuffer, "height", oPos.height);
-	
+
 		return aBuffer.join("");
 	};
-	
+
 	}());
 
 	return AbsoluteLayoutRenderer;

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var DataSetSimpleViewRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -54,7 +54,7 @@ sap.ui.define(['jquery.sap.global'],
 		}
 		rm.write("</div>");
 	};
-	
+
 	DataSetSimpleViewRenderer.renderItem = function(rm, oControl, oItem){
 		rm.write("<div");
 		rm.addClass("sapUiUx3DSSVItem");
@@ -73,7 +73,7 @@ sap.ui.define(['jquery.sap.global'],
 		rm.renderControl(oItem.getAggregation("_template"));
 		rm.write("</div>");
 	};
-	
+
 
 	return DataSetSimpleViewRenderer;
 

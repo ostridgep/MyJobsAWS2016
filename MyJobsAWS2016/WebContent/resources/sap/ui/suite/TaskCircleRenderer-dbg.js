@@ -1,14 +1,17 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // provides default renderer for sap.ui.suite.TaskCircle
-sap.ui.define(['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/core/Core', './library'],
+	function(jQuery, Core, library) {
 	"use strict";
 
+
+	// shortcut
+	var TaskCircleColor = library.TaskCircleColor;
 
 	/**
 	 * TaskCircle renderer.
@@ -16,8 +19,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var TaskCircleRenderer = function() {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -27,7 +30,7 @@ sap.ui.define(['jquery.sap.global'],
 	TaskCircleRenderer.render = function(oRenderManager, oControl){
 	    // convenience variable
 		var rm = oRenderManager;
-	
+
 	    //calculate pixel size
 		var minvalue = oControl.getMinValue();
 		var maxvalue = oControl.getMaxValue();
@@ -44,18 +47,18 @@ sap.ui.define(['jquery.sap.global'],
 		var valuestring = value.toString();
 	    var color = oControl.getColor();
 	    var style = 'sapUiTaskCircleColorGray';
-	
+
 	    switch (color) {
-	       case sap.ui.suite.TaskCircleColor.Red:
+	       case TaskCircleColor.Red:
 	          style = 'sapUiTaskCircleColorRed';
 	          break;
-	       case sap.ui.suite.TaskCircleColor.Yellow:
+	       case TaskCircleColor.Yellow:
 	          style = 'sapUiTaskCircleColorYellow';
 	          break;
-	       case sap.ui.suite.TaskCircleColor.Green:
+	       case TaskCircleColor.Green:
 	          style = 'sapUiTaskCircleColorGreen';
 	          break;
-	       case sap.ui.suite.TaskCircleColor.Gray:
+	       case TaskCircleColor.Gray:
 	          style = 'sapUiTaskCircleColorGray';
 	          break;
 	    }
@@ -65,7 +68,7 @@ sap.ui.define(['jquery.sap.global'],
 	    if (value > maxvalue) {
 				maxvalue = value;
 	    }
-	
+
 	    var psmall = 24;
 	    if (minvalue > 10) {
 				psmall = 32;
@@ -74,26 +77,26 @@ sap.ui.define(['jquery.sap.global'],
 				psmall = 46;
 	    }
 	    var plarge = 62;
-	
+
 	    var circlesize = parseInt(Math.sqrt((value - minvalue) / (maxvalue - minvalue) * (plarge * plarge - psmall * psmall) + psmall * psmall), 10);
-	
+
 	    var digits = (value + '').length;
 	    var fontsize = circlesize * 0.55;
 	    if (digits > 1) {
 	       fontsize = circlesize / digits;
 	    }
-	
+
 		// write the HTML into the render manager
 	    rm.write("<div");
 	    rm.writeControlData(oControl);
 	    rm.writeAttribute('tabIndex', '0');
-	
+
 		if (oControl.getTooltip_AsString()) {
 			rm.writeAttributeEscaped("title", oControl.getTooltip_AsString());
 		} else {
 			rm.writeAttributeEscaped("title", valuestring);
 		}
-	
+
 	    //ARIA
 	    if ( sap.ui.getCore().getConfiguration().getAccessibility()) {
 		  rm.writeAttribute('role', 'progressbar');
@@ -101,9 +104,9 @@ sap.ui.define(['jquery.sap.global'],
 		  rm.writeAccessibilityState(oControl, {valuemax: maxvalue});
 		  rm.writeAccessibilityState(oControl, {valuenow: value});
 		}
-	
+
 	    rm.writeAttribute("class","sapUiTaskCircle " + style);
-	
+
 		rm.addStyle("width", circlesize + "px");
 		rm.addStyle("height", circlesize + "px");
 		rm.addStyle("line-height", circlesize + "px");
@@ -116,7 +119,7 @@ sap.ui.define(['jquery.sap.global'],
 	    rm.write(value);
 	    rm.write("</div>");
 	};
-	
+
 
 	return TaskCircleRenderer;
 

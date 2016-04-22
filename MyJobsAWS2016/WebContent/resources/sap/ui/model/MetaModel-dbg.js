@@ -1,11 +1,11 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global', './Model'],
-	function(jQuery, Model) {
+sap.ui.define(['./Model'],
+	function(Model) {
 	"use strict";
 
 	/**
@@ -16,14 +16,13 @@ sap.ui.define(['jquery.sap.global', './Model'],
 	 * @extends sap.ui.model.Model
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.model.MetaModel
 	 */
-	var MetaModel = Model.extend("sap.ui.model.MetaModel",
-		/** @lends sap.ui.model.MetaModel.prototype */ {
+	var MetaModel = Model.extend("sap.ui.model.MetaModel", {
 			constructor : function() {
 				Model.apply(this, arguments);
 			}
@@ -84,4 +83,4 @@ sap.ui.define(['jquery.sap.global', './Model'],
 
 	return MetaModel;
 
-}, /* bExport= */ true);
+});

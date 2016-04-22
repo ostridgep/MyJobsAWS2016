@@ -1,5 +1,7 @@
-/*
- * @copyright
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer'],
@@ -17,8 +19,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer'],
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
-	 * @param {sap.ui.core.RenderManager} oRm the RenderManager that can be used for writing to the render output buffer
-	 * @param {sap.ui.core.Control} oON an object representation of the control that should be rendered
+	 * @param {sap.ui.core.RenderManager} oRm The RenderManager that can be used for writing to the render output buffer
+	 * @param {sap.ui.core.Control} oON An object representation of the control that should be rendered
 	 */
 	ObjectNumberRenderer.render = function(oRm, oON) {
 		var sTooltip = oON.getTooltip_AsString(),
@@ -53,9 +55,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer'],
 		oRm.writeStyles();
 
 		// ARIA
-		oRm.writeAccessibilityState({
+		// when the status is "None" there is nothing for reading
+		if (oON.getState() !== sap.ui.core.ValueState.None) {
+			oRm.writeAccessibilityState({
 			labelledby: oON.getId() + "-state"
-		});
+			});
+		}
+
 
 		oRm.write(">");
 

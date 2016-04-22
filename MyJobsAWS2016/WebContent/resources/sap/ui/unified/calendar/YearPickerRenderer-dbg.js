@@ -1,11 +1,11 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/core/date/UniversalDate'],
+	function(jQuery, UniversalDate) {
 	"use strict";
 
 
@@ -26,7 +26,11 @@ sap.ui.define(['jquery.sap.global'],
 
 		var sTooltip = oYP.getTooltip_AsString();
 		var sId = oYP.getId();
-		var iCurrentYear = oYP.getYear();
+		var oCurrentDate = oYP._getDate();
+		var iCurrentYear = oCurrentDate.getUTCFullYear();
+		var iYears = oYP.getYears();
+		var iColumns = oYP.getColumns();
+		var sWidth = "";
 
 		oRm.write("<div");
 		oRm.writeControlData(oYP);
@@ -45,16 +49,29 @@ sap.ui.define(['jquery.sap.global'],
 
 		oRm.write(">"); // div element
 
-		var iYear = iCurrentYear - 10;
+		var iYear = iCurrentYear - Math.floor(iYears / 2);
+		var iMinYear = oYP._oMinDate.getUTCFullYear();
+		var iMaxYear = oYP._oMaxDate.getUTCFullYear();
 
-		if (iYear >= 9980) {
-			iYear = 9980;
-		}else if (iYear < 1) {
-			iYear = 1;
+		if (iYear >= iMaxYear - iYears) {
+			iYear = iMaxYear - iYears + 1;
+		}else if (iYear < iMinYear) {
+			iYear = iMinYear;
 		}
 
-		for ( var i = 0; i < 20; i++) {
-			if (i == 0 || i % oYP._iColumns == 0) {
+		var oDate = oYP._newUniversalDate(oCurrentDate);
+		oDate.setUTCFullYear(iYear);
+
+		if (iColumns > 0) {
+			sWidth = ( 100 / iColumns ) + "%";
+		} else {
+			sWidth = ( 100 / iYears ) + "%";
+		}
+
+		for ( var i = 0; i < iYears; i++) {
+			var sYyyymmdd = oYP._oFormatYyyymmdd.format(oDate.getJSDate(), true);
+
+			if (iColumns > 0 && i % iColumns == 0) {
 				// begin of row
 				oRm.write("<div");
 				oRm.writeAccessibilityState(null, {role: "row"});
@@ -62,20 +79,23 @@ sap.ui.define(['jquery.sap.global'],
 			}
 
 			oRm.write("<div");
-			oRm.writeAttribute("id", sId + "-y" + iYear);
-			oRm.addClass("sapUiCalYear");
-			if (iYear == iCurrentYear) {
-				oRm.addClass("sapUiCalYearSel");
+			oRm.writeAttribute("id", sId + "-y" + sYyyymmdd);
+			oRm.addClass("sapUiCalItem");
+			if ( oDate.getUTCFullYear() == iCurrentYear) {
+				oRm.addClass("sapUiCalItemSel");
 			}
 			oRm.writeAttribute("tabindex", "-1");
+			oRm.writeAttribute("data-sap-year-start", sYyyymmdd);
+			oRm.addStyle("width", sWidth);
 			oRm.writeClasses();
+			oRm.writeStyles();
 			oRm.writeAccessibilityState(null, {role: "gridcell"});
 			oRm.write(">"); // div element
-			oRm.write(iYear);
+			oRm.write(oYP._oYearFormat.format(oDate, true)); // to render era in Japanese
 			oRm.write("</div>");
-			iYear++;
+			oDate.setUTCFullYear(oDate.getUTCFullYear() + 1);
 
-			if ((i + 1) % oYP._iColumns == 0) {
+			if (iColumns > 0 && ((i + 1) % iColumns == 0)) {
 				// end of row
 				oRm.write("</div>");
 			}

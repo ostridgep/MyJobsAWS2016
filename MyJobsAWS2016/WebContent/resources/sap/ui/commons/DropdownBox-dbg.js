@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -13,14 +13,14 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 	/**
 	 * Constructor for a new DropdownBox.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given
-	 * @param {object} [mSettings] initial settings for the new control
+	 * @param {string} [sId] Id for the new control, generated automatically if no id is given
+	 * @param {object} [mSettings] Initial settings for the new control
 	 *
 	 * @class
-	 * The control provides a field that allows end users to an entry out of a list of pre-defined items. The choosable items can be provided in the form of complete list boxes or single list items.
-	 * Binding (see DataBinding) is also supported for list items.
+	 * The control provides a field that allows end users to an entry out of a list of pre-defined items.
+	 * The choosable items can be provided in the form of a complete <code>ListBox</code>, single <code>ListItems</code>.
 	 * @extends sap.ui.commons.ComboBox
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -48,13 +48,15 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			searchHelpAdditionalText : {type : "string", group : "Appearance", defaultValue : null},
 
 			/**
-			 * (optional) The src of the icon to use for the search help entry.
+			 * (optional) The URI of the icon to use for the search help entry.
 			 */
 			searchHelpIcon : {type : "sap.ui.core.URI", group : "Appearance", defaultValue : null},
 
 			/**
 			 * Maximum number of history items in the list.
-			 * If 0 no history is displayed or stored. The history is locally stored on the client. Therefore do not activate this feature when this control handles confidential data.
+			 *
+			 * If 0 no history is displayed or stored. The history is locally stored on the client.
+			 * Therefore do not activate this feature when this control handles confidential data.
 			 */
 			maxHistoryItems : {type : "int", group : "Behavior", defaultValue : 0}
 		},
@@ -167,7 +169,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 				// if no history ListBox is not changed -> update ListBox too
 				this._getListBox().insertItem(oItem, iIndex);
 			}
-			if (!this.bNoItemCheck) {
+			if (!this._bNoItemCheck) {
 				// history might be not up do date -> rebuild; suppose the text before cursor is just typed in to use filter
 				var $Ref = jQuery(this.getInputDomRef());
 				var iCursorPos = $Ref.cursorPos();
@@ -186,7 +188,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 				// if no history ListBox is not changed -> update ListBox too
 				this._getListBox().addItem(oItem);
 			}
-			if (!this.bNoItemCheck) {
+			if (!this._bNoItemCheck) {
 				// history might be not up do date -> rebuild; suppose the text before cursor is just typed in to use filter
 				var $Ref = jQuery(this.getInputDomRef());
 				var iCursorPos = $Ref.cursorPos();
@@ -229,7 +231,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 				// if no history ListBox is not changed -> update ListBox too
 				this._getListBox().removeItem(vOriginalElement);
 			}
-			if (!this.bNoItemCheck) {
+			if (!this._bNoItemCheck) {
 				// history might be not up do date -> rebuild; suppose the text before cursor is just typed in to use filter
 				var $Ref = jQuery(this.getInputDomRef());
 				var iCursorPos = $Ref.cursorPos();
@@ -317,7 +319,15 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 
 	DropdownBox.prototype._handleItemsChanged = function(oEvent, bDelayed){
 
-		if (this.bNoItemCheck) {
+		if (bDelayed) {
+			// Items are updated by binding. As items can be "reused" and have same IDSs,
+			// only one check at the end of all changes is needed
+			// only clear if really from an delayed call
+			this._sHandleItemsChanged = null;
+			this._bNoItemCheck = undefined;
+		}
+
+		if (this._bNoItemCheck) {
 			return;
 		}
 
@@ -498,13 +508,13 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			return;
 		}
 
-		if ((!!sap.ui.Device.browser.internet_explorer && (oEvent.which == jQuery.sap.KeyCodes.DELETE || oEvent.which == jQuery.sap.KeyCodes.BACKSPACE)) ||
-		   (!!sap.ui.Device.browser.webkit && (oEvent.which == jQuery.sap.KeyCodes.DELETE || oEvent.which == jQuery.sap.KeyCodes.BACKSPACE))) {
-			//as IE and Webkit do not fire keypress event for DELETE or BACKSPACE
+		if (!!sap.ui.Device.browser.webkit && (oEvent.which == jQuery.sap.KeyCodes.DELETE || oEvent.which == jQuery.sap.KeyCodes.BACKSPACE)) {
+			// Webkit do not fire keypress event for DELETE or BACKSPACE
+			// IE also fires no keypress but an input event, so it's handled there
 			this.onkeypress(oEvent);
 		}
 
-		if (!!!sap.ui.Device.browser.internet_explorer || oEvent.which !== jQuery.sap.KeyCodes.BACKSPACE) {
+		if (!sap.ui.Device.browser.internet_explorer || oEvent.which !== jQuery.sap.KeyCodes.BACKSPACE) {
 			return;
 		}
 
@@ -602,7 +612,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			var iCursorPos = $Ref.cursorPos();
 			if (this._iCursorPosBeforeBackspace !== iCursorPos) {
 				iCursorPos++;
-			} // 'normalize' cursor position for upcoming handling... especially IE8
+			} // 'normalize' cursor position for upcoming handling...
 			this._iCursorPosBeforeBackspace = null; // forget being called by backspace handling
 			bValid = this._doTypeAhead($Ref.val().substr(0, iCursorPos - 1), "");
 		} else if (!(bValid = this._doTypeAhead("", $Ref.val()))) {
@@ -722,12 +732,18 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			this._open();
 			this.noTypeAheadByOpen = undefined;
 		}
-		if (iKC === oKC.BACKSPACE) {// only happens in FF or other non-IE-browsers. IE does not support BACKSPACE in keypress
+		if (iKC === oKC.BACKSPACE) {// only happens in FF or other non-IE-browsers. Webkit or IE does not support BACKSPACE in keypress, but in Webkit it's called from keydown
 			this._doTypeAhead(sVal.substr(0, iCursorPos - 1), "");
 		} else {
 			this._doTypeAhead(sVal.substr(0, iCursorPos), oNewChar);
 		}
-		this._fireLiveChange(oEvent);
+
+		if (sVal != $Ref.val()) {
+			// only if really something changed
+			this._fireLiveChange(oEvent);
+		}
+
+		this._bFocusByOpen = undefined; // as selection is set by typeahead, so do not select all by focusin
 
 		oEvent.preventDefault();
 	};
@@ -949,7 +965,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			aItems = this.__aItems || oLB.getItems(),
 			iVisibleItemsCnt = aItems.length,
 			// filtering and history only apply when more than a certain number of items is there
-			bHistory = aItems.length > this._iItemsForHistory,
+			bHistory = this.getMaxHistoryItems() > 0 && aItems.length > this._iItemsForHistory,
 			bFilter = !bNoFilter && bHistory,
 			oNewValue = oValue + oNewChar,
 			oSpecials = new RegExp("[.*+?|()\\[\\]{}\\\\]", "g"), // .*+?|()[]{}\
@@ -1039,7 +1055,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 		}
 		// find and select the item and update the text and the selection in the inputfield
 		i = oLB.indexOfItem(oItem);
-		var oText = oItem.getText();
+		var sText = oItem.getText();
 		var iPos = i + 1;
 		var iSize = aCurrentItems.length;
 		if (aHistoryItems.length > 0) {
@@ -1058,11 +1074,11 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 				iPos = iPos - 2;
 			}
 		}
-		$Ref.attr("aria-posinset", iPos);
+		this._updatePosInSet( $Ref, iPos, (oItem.getAdditionalText ? oItem.getAdditionalText() : ""));
 		$Ref.attr("aria-setsize", iSize);
-		$Ref.val(oText);
+		$Ref.val(sText);
 		this._sTypedChars = oNewValue;
-		this._doSelect(oValue.length + iMove, oText.length);
+		this._doSelect(oValue.length + iMove, sText.length);
 
 		oLB.setSelectedIndex(i);
 		if (oSHI && i == 2) {
@@ -1079,7 +1095,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			jQuery.sap.delayedCall(300, $Ref, "removeClass", ["sapUiTfErr"]);
 			// move cursor back to old position and select from there
 			$Ref.cursorPos(oValue.length);
-			this._doSelect(oValue.length, oText.length);
+			this._doSelect(oValue.length, sText.length);
 		}
 		this.__doTypeAhead = false;
 		return bValid;
@@ -1098,7 +1114,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 		this._oValueBeforeOpen = this.$().val();
 
 		// remember we opening the popup (needed in applyFocusInfo called after rerendering of ListBox)
-		this._Opening = true;
+		this._bOpening = true;
 
 		if (!this.noTypeAheadByOpen) {
 			// there might be items with same text -> try to find out what is currently selected.
@@ -1142,7 +1158,7 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			this.__aItems = undefined;
 		}
 		this._oValueBeforeOpen = null;
-		this._Opening = undefined;
+		this._bOpening = undefined;
 		return this;
 	};
 
@@ -1270,32 +1286,23 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 	//***********************************************************
 
 	/**
-	 * Applies the focus info and ensures the typeAhead feature is re-established again.
+	 * Applies the focus info and ensures the cursor and selection is set again
 	 *
 	 * @param {object} oFocusInfo the focus information belonging to this dropdown
 	 * @returns {sap.ui.commons.DropdownBox} DropdownBox
 	 * @private
 	 */
 	DropdownBox.prototype.applyFocusInfo = function(oFocusInfo){
-		var $Inp = jQuery(this.getInputDomRef());
-		if (jQuery.sap.startsWithIgnoreCase(this.getValue(), oFocusInfo.sTypedChars)) {
-			$Inp.val(oFocusInfo.sTypedChars);
-			this.focus();
-			if (!this.getSelectedItemId() || sap.ui.getCore().byId(this.getSelectedItemId()).getText() != oFocusInfo.sTypedChars) {
-				// text entred before and is not the currently selected item -> just restore type-ahead
-				this._doTypeAhead(oFocusInfo.sTypedChars, "");
-			}
-			if (!this._Opening && (!this.oPopup || !this.oPopup.isOpen())) {
+
+		ComboBox.prototype.applyFocusInfo.apply(this, arguments);
+
+			if (!this._bOpening && (!this.oPopup || !this.oPopup.isOpen())) {
 				// as popup is not open restore listbox item like on popup close
 				this._cleanupClose(this._getListBox());
 			}
-		} else {
-			oFocusInfo.sTypedChars = "";
-			//	 $Inp.val(this.getValue()); // enable if really needed
-			this.focus();
-			this._doSelect();
-		}
+
 		return this;
+
 	};
 
 	/*
@@ -1312,15 +1319,9 @@ sap.ui.define(['jquery.sap.global', './ComboBox', './library', 'sap/ui/core/Hist
 			this.focus();
 		} else {
 			// we left the DropdownBox to another (unrelated) control and thus have to fire the change (if needed).
-			var $Inp = jQuery(this.getInputDomRef());
-			var sValue = $Inp.val();
-			if (!this.getSelectedItemId() || sap.ui.getCore().byId(this.getSelectedItemId()).getText() != sValue) {
-				// text entred before and is not the currently selected item -> just restore type-ahead
-				this._doTypeAhead(sValue, "");
-				if (!this._Opening && (!this.oPopup || !this.oPopup.isOpen())) {
-					// as popup is not open restore listbox item like on popup close
-					this._cleanupClose(this._getListBox());
-				}
+			if (this.oPopup && this.oPopup.isOpen()) {
+				// close Popup before it's autoclose to reset the listbox items
+				this._close();
 			}
 
 			sap.ui.commons.TextField.prototype.onsapfocusleave.apply(this, arguments);

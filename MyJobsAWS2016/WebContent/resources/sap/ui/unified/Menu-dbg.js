@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -12,22 +12,24 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 
 
 	/**
-	 * Constructor for a new Menu.
+	 * Constructor for a new Menu control.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given
-	 * @param {object} [mSettings] initial settings for the new control
+	 * @param {string} [sId] Id for the new control, generated automatically if no id is given
+	 * @param {object} [mSettings] Initial settings for the new control
 	 *
 	 * @class
-	 * A container for menu items. When the space in the browser is not large enough to display all defined items, a scroll bar is provided.
+	 * A menu is an interactive element which provides a choice of different actions to the user. These actions (items) can also be organized in submenus.
+	 * Like other dialog-like controls, the menu is not rendered within the control hierarchy. Instead it can be opened at a specified position via a function call.
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
+	 * @since 1.21.0
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.unified.Menu
-	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
+	 * @ui5-metamodel This control/element will also be described in the UI5 (legacy) design time meta model
 	 */
 	var Menu = Control.extend("sap.ui.unified.Menu", /** @lends sap.ui.unified.Menu.prototype */ { metadata : {
 
@@ -35,29 +37,29 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		properties : {
 
 			/**
-			 *
-			 * Disabled menus have other colors than enabled ones, depending on customer settings.
+			 * When a menu is disabled none of its items can be selected by the user.
+			 * The enabled property of an item (@link sap.ui.unified.MenuItemBase#getEnabled) has no effect when the menu of the item is disabled.
 			 */
 			enabled : {type : "boolean", group : "Behavior", defaultValue : true},
 
 			/**
-			 *
-			 * The label/description provided for screen readers
-			 * @deprecated Since version 1.27.0
-			 * Please use association ariaLabelledBy instead.
+			 * Accessible label / description of the menu for assistive technologies like screenreaders.
+			 * @deprecated Since version 1.27.0 Please use association <code>ariaLabelledBy</code> instead.
 			 */
 			ariaDescription : {type : "string", group : "Accessibility", defaultValue : null},
 
 			/**
-			 *
-			 * Max. number of items to be displayed before an overflow mechanimn appears. Values smaller than 1 mean infinite number of visible items.
-			 * The menu can not become larger than the screen height.
+			 * The maximum number of items which are displayed before an overflow mechanism takes effect.
+			 * A value smaller than 1 means an infinite number of visible items.
+			 * The overall height of the menu is limited by the height of the screen. If the maximum possible height is reached, an
+			 * overflow takes effect, even if the maximum number of visible items is not yet reached.
 			 */
 			maxVisibleItems : {type : "int", group : "Behavior", defaultValue : 0},
 
 			/**
-			 *
-			 * The number of items to be shifted up or down upon Page-up or Page-up key navigation. Values smaller than 1 mean infinite number of page items.
+			 * The keyboard can be used to navigate through the items of a menu. Beside the arrow keys for single steps and the <i>Home</i> / <i>End</i> keys for jumping
+			 * to the first / last item, the <i>Page Up</i> / <i>Page Down</i> keys can be used to jump an arbitrary number of items up or down. This number can be defined via the <code>pageSize</code> property.
+			 * For values smaller than 1, paging behaves in a similar way to when using the <i>Home</i> / <i>End</i> keys. If the value equals 1, the paging behavior is similar to that of the arrow keys.
 			 * @since 1.25.0
 			 */
 			pageSize : {type : "int", group : "Behavior", defaultValue : 5}
@@ -66,14 +68,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		aggregations : {
 
 			/**
-			 * Aggregation of menu items
+			 * The available actions to be displayed as items of the menu.
 			 */
 			items : {type : "sap.ui.unified.MenuItemBase", multiple : true, singularName : "item"}
 		},
 		associations : {
 
 			/**
-			 * Association to controls / ids which label this control (see WAI-ARIA attribute aria-labelledby).
+			 * Reference to accessible labels (ids of existing DOM elements or controls) for assistive technologies like screenreaders.
+			 * @see "WAI-ARIA Standard (attribute aria-labelledby)"
 			 * @since 1.26.3
 			 */
 			ariaLabelledBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaLabelledBy"}
@@ -81,15 +84,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		events : {
 
 			/**
-			 *
-			 * Provides the application an alternative option to listen to select events. This event is only fired on the root menu of a menu hierarchy.
-			 * Note that there is also a select event available for MenuItem; if the current event is used, the select event of a MenuItem becomes redundant.
+			 * Fired on the root menu of a menu hierarchy whenever a user selects an item within the menu or within one of its direct or indirect submenus.
+			 * <b>Note:</b> There is also a select event available for each single menu item. This event and the event of the menu items are redundant.
 			 */
 			itemSelect : {
 				parameters : {
 
 					/**
-					 * The selected item
+					 * The action (item) which was selected by the user.
 					 */
 					item : {type : "sap.ui.unified.MenuItemBase"}
 				}
@@ -105,6 +107,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 
 	(function(window) {
 
+	Menu.prototype.bCozySupported = true;
 
 	Menu.prototype.init = function(){
 		var that = this;
@@ -132,7 +135,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 	 */
 	Menu.prototype.exit = function(){
 		if (this.oPopup) {
-			this.oPopup.detachOpened(this._menuOpened, this);
 			this.oPopup.detachClosed(this._menuClosed, this);
 			this.oPopup.destroy();
 			delete this.oPopup;
@@ -173,6 +175,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 	 * @private
 	 */
 	Menu.prototype.onAfterRendering = function() {
+		if (this.$().parent().attr("id") != "sap-ui-static") {
+			jQuery.sap.log.error("sap.ui.unified.Menu: The Menu is popup based and must not be rendered directly as content of the page.");
+			this.close();
+			this.$().remove();
+		}
+
 		var aItems = this.getItems();
 
 		for (var i = 0; i < aItems.length; i++) {
@@ -188,6 +196,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		checkAndLimitHeight(this);
 	};
 
+	/**
+	 * Called whenever the theme is changed
+	 * @private
+	 */
 	Menu.prototype.onThemeChanged = function(){
 		if (this.getDomRef() && this.getPopup().getOpenState() === sap.ui.core.OpenState.OPEN) {
 			checkAndLimitHeight(this);
@@ -232,6 +244,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		return this;
 	};
 
+	/**
+	 * @private
+	 */
 	Menu.prototype._delayedRerenderItems = function(){
 		if (!this.getDomRef()) {
 			return;
@@ -251,6 +266,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		});
 	};
 
+	/**
+	 * @private
+	 */
 	Menu.prototype._resetDelayedRerenderItems = function(){
 		if (this._itemRerenderTimer) {
 			jQuery.sap.clearDelayedCall(this._itemRerenderTimer);
@@ -261,37 +279,24 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 
 
 	/**
-	 * Opens the menu
+	 * Opens the menu at the specified position.
 	 *
-	 * @param {boolean} bWithKeyboard
+	 * The position of the menu is defined relative to an element in the visible DOM by specifying
+	 * the docking location of the menu and of the related element.
 	 *
-	 *         An indicator whether the first item shall be highlighted, or not. It is highlighted in the case that the menu is opened via keyboard.
-	 * @param {object} oOpenerRef
+	 * See {@link sap.ui.core.Popup#open Popup#open} for further details about popup positioning.
 	 *
-	 *         DOMNode or sap.ui.core.Element that opens the menu; the DOMNode or sap.ui.core.Element will be focused again after the menu is closed. This parameter is optional.
-	 * @param {sap.ui.core.Dock} sMy
+	 * @param {boolean} bWithKeyboard Indicates whether or not the first item shall be highlighted when the menu is opened (keyboard case)
+	 * @param {sap.ui.core.Element|DOMRef} oOpenerRef The element which will get the focus back again after the menu was closed
+	 * @param {sap.ui.core.Dock} sMy The reference docking location of the menu for positioning the menu on the screen
+	 * @param {sap.ui.core.Dock} sAt The 'of' element's reference docking location for positioning the menu on the screen
+	 * @param {sap.ui.core.Element|DOMRef} oOf The menu is positioned relatively to this element based on the given dock locations
+	 * @param {string} [sOffset] The offset relative to the docking point, specified as a string with space-separated pixel values (e.g. "0 10" to move the popup 10 pixels to the right)
+	 * @param {sap.ui.core.Collision} [sCollision] The collision defines how the position of the menu should be adjusted in case it overflows the window in some direction
 	 *
-	 *         The popup content's reference position for docking.
-	 *         See also sap.ui.core.Popup.Dock and sap.ui.core.Popup.open.
-	 * @param {sap.ui.core.Dock} sAt
-	 *
-	 *         The 'of' element's reference point for docking to.
-	 *         See also sap.ui.core.Popup.Dock and sap.ui.core.Popup.open.
-	 * @param {object} oOf
-	 *
-	 *         The DOM element or sap.ui.core.Element to dock to.
-	 *         See also sap.ui.core.Popup.open.
-	 * @param {string} sOffset
-	 *
-	 *         The offset relative to the docking point, specified as a string with space-separated pixel values (e.g. "0 10" to move the popup 10 pixels to the right).
-	 *         See also sap.ui.core.Popup.open.
-	 * @param {sap.ui.core.Collision} sCollision
-	 *
-	 *         The collision defines how the position of an element should be adjusted in case it overflows the window in some direction.
-	 *         See also sap.ui.core.Popup.open.
 	 * @type void
 	 * @public
-	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
+	 * @ui5-metamodel This method will also be described in the UI5 (legacy) design time meta model
 	 */
 	Menu.prototype.open = function(bWithKeyboard, oOpenerRef, my, at, of, offset, collision){
 		if (this.bOpen) {
@@ -300,14 +305,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 
 		setItemToggleState(this, true);
 
-		
+
 		this.oOpenerRef = oOpenerRef;
 		this.bIgnoreOpenerDOMRef = false;
 
 		// Open the sap.ui.core.Popup
 		this.getPopup().open(0, my, at, of, offset || "0 0", collision || "_sapUiCommonsMenuFlip _sapUiCommonsMenuFlip", true);
 		this.bOpen = true;
-		
+
 		// Set the tab index of the menu and focus
 		var oDomRef = this.getDomRef();
 		jQuery(oDomRef).attr("tabIndex", 0).focus();
@@ -324,19 +329,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		}
 	};
 
-	/**
-	 * This function is called when the Menu was opened.
-	 *
-	 * @since 1.17.0
-	 * @private
-	 */
-	Menu.prototype._menuOpened = function() {
-		fnIe8RepaintBug(this);
-	};
-
 
 	/**
-	 * Closes the menu
+	 * Closes the menu.
 	 *
 	 * @type void
 	 * @public
@@ -572,7 +567,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		if (!sap.ui.Device.system.desktop) {
 			return;
 		}
-		fnIe8RepaintBug(this);
 
 		if (jQuery.sap.checkMouseEnterOrLeave(oEvent, this.getDomRef())) {
 			if (!this.oOpenedSubMenu || !this.oOpenedSubMenu.getParent() === this.oHoveredItem) {
@@ -604,6 +598,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		var isInMenuHierarchy = false,
 			touchEnabled = this.getPopup().touchEnabled;
 
+		this.bIgnoreOpenerDOMRef = false;
+
 		if (oEvent.type == "mousedown" || oEvent.type == "touchstart") {
 			// Suppress the delayed mouse event from mobile browser
 			if (touchEnabled && (oEvent.isMarked("delayedMouseEvent") || oEvent.isMarked("cancelAutoClose"))) {
@@ -630,10 +626,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 					that = that.oOpenedSubMenu;
 				}
 			}
+			if (!isInMenuHierarchy) {
+				this.bIgnoreOpenerDOMRef = true;
+			}
 		}
 
 		if (!isInMenuHierarchy) {
-			this.bIgnoreOpenerDOMRef = true;
 			this.close();
 		}
 	};
@@ -700,7 +698,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 		if (!this.oPopup) {
 			this.oPopup = new Popup(this, false, true, false); // content, modal, shadow, autoclose (TBD: standard popup autoclose)
 			this.oPopup.setDurations(0, 0);
-			this.oPopup.attachOpened(this._menuOpened, this);
 			this.oPopup.attachClosed(this._menuClosed, this);
 		}
 		return this.oPopup;
@@ -739,10 +736,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 
 	/**
 	 * Opens the submenu of the given item (if any).
-	 * 
-	 * @param {boolean} bWithKeyboard Whether the submenu is opened via keyboard 
+	 *
+	 * @param {boolean} bWithKeyboard Whether the submenu is opened via keyboard
 	 * @param {boolean} bWithHover Whether the submenu is opened on hover or not (click)
-	 * 
+	 *
 	 * @private
 	 */
 	Menu.prototype.openSubmenu = function(oItem, bWithKeyboard, bWithHover){
@@ -772,13 +769,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 			oSubMenu.open(bWithKeyboard, this, eDock.BeginTop, eDock.EndTop, oItem, "0 0");
 		}
 	};
-	
+
 	/**
 	 * Closes an open submenu (if any) of this menu.
-	 * 
+	 *
 	 * @param {boolean} bIfNotFixedOnly If true, the submenu is only close if it is not fixed (opened via hover and not via click)
 	 * @param {boolean} bIgnoreOpenerDOMRef If true, the focus is not set back to the opener dom ref (item) of the submenu
-	 * 
+	 *
 	 * @private
 	 */
 	Menu.prototype.closeSubmenu = function(bIfNotFixedOnly, bIgnoreOpenerDOMRef){
@@ -833,7 +830,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 	};
 
 	Menu.prototype.checkEnabled = function(oItem){
-		fnIe8RepaintBug(this);
 		return oItem && oItem.getEnabled() && this.getEnabled();
 	};
 
@@ -907,13 +903,48 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 	};
 
 	Menu.prototype.focus = function(){
-		var res = sap.ui.core.Control.prototype.focus.apply(this, arguments);
-		this._setActiveDescendant(this.oHoveredItem);
-		return res;
+		if (this.bOpen) {
+			Control.prototype.focus.apply(this, arguments);
+			this._setActiveDescendant(this.oHoveredItem);
+		}
+	};
+
+	/**
+	 * Checks whether the Menu should run with cozy design.
+	 * This function must only be called on the root menu (getRootMenu) to get proper results.
+	 *
+	 * @private
+	 */
+	Menu.prototype.isCozy = function(){
+		if (!this.bCozySupported) {
+			return false;
+		}
+
+		if (this.hasStyleClass("sapUiSizeCozy")) {
+			return true;
+		}
+
+		if (checkCozyMode(this.oOpenerRef)) {
+			return true;
+		}
+
+		if (checkCozyMode(this.getParent())) {
+			return true;
+		}
+
+		return false;
 	};
 
 
 	///////////////////////////////////////// Hidden Functions /////////////////////////////////////////
+
+	function checkCozyMode(oRef) {
+		if (!oRef) {
+			return false;
+		}
+		oRef = oRef.$ ? oRef.$() : jQuery(oRef);
+		return oRef.closest(".sapUiSizeCompact,.sapUiSizeCondensed,.sapUiSizeCozy").hasClass("sapUiSizeCozy");
+	}
 
 	function setItemToggleState(oMenu, bOpen){
 		var oParent = oMenu.getParent();
@@ -944,31 +975,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/Popup', 
 			$Menu.css("max-height", "").toggleClass("sapUiMnuScroll", false);
 		}
 	}
-
-
-	//IE 8 repainting bug when hovering over MenuItems with IconFont
-	var fnIe8RepaintBug = function() {};
-	if (sap.ui.Device.browser.internet_explorer && sap.ui.Device.browser.version < 9) {
-		fnIe8RepaintBug = function(oMenu, iDelay) {
-			if (iDelay === undefined) {
-				iDelay = 50;
-			}
-
-
-			/* In case of perdormance issues, the commented code around the delayedCall might help:
-			jQuery.sap.clearDelayedCall(oMenu.data("delayedRepaintId"));
-			var iDelayedId =  */
-			jQuery.sap.delayedCall(iDelay, oMenu, function() {
-				var $Elem = this.$(); // this is the Menu instance from the oMenu argument
-				if ($Elem.length > 0) {
-					var oDomRef = $Elem[0].firstChild;
-					sap.ui.core.RenderManager.forceRepaint(oDomRef);
-				}
-			});
-			/* oMenu.data("delayedRepaintId", iDelayedId); */
-		};
-	}
-
 
 	//**********************************************
 

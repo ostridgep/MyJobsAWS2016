@@ -1,11 +1,11 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides class sap.ui.core.PopupSupport
-sap.ui.define([ 'jquery.sap.global', './Element', './Control' ], function(jQuery, Element, Control) {
+sap.ui.define([ 'jquery.sap.global', 'sap/ui/Device', './Element', './Control'], function(jQuery, Device, Element, Control) {
 	"use strict";
 
 	/**
@@ -166,15 +166,15 @@ sap.ui.define([ 'jquery.sap.global', './Element', './Control' ], function(jQuery
 				sName = mParameters.that.getMetadata().getName(),
 				oFocusDomRef;
 
-			if ((!!!mParameters.$FocusablesContent ||  !!!mParameters.$FocusablesFooter) ||
+			if ((!mParameters.$FocusablesContent ||  !mParameters.$FocusablesFooter) ||
 				 (!mParameters.$FocusablesContent.length && !mParameters.$FocusablesFooter.length)) {
 				// if there is neither content nor footer content (yet) simply do nothing
 				return;
 			}
 			/*
 			 * It's not needed to check if buttons are set since
-			 * jQuery(":focusable", jQuery.sap.byId(this.getId() + "-fhfe")) or
-			 * jQuery(":sapFocusable", jQuery.sap.byId(this.getId() + "-fhfe"))
+			 * jQuery(":focusable", this.$("fhfe")) or
+			 * jQuery(":sapFocusable", this.$("fhfe"))
 			 * returns an empty array. Therefore these elements won't be found
 			 * via 'lastFocusableDomRef()'
 			 */
@@ -209,7 +209,7 @@ sap.ui.define([ 'jquery.sap.global', './Element', './Control' ], function(jQuery
 				 * isn't read when the focus happens too fast. Therefore a delay
 				 * is added to JAWS can read the newly focused element.
 				 */
-				var iDelay = sap.ui.Device.browser.msie && sap.ui.Device.browser.version === 9 ? 100 : 0;
+				var iDelay = Device.browser.msie && Device.browser.version === 9 ? 100 : 0;
 
 				jQuery.sap.delayedCall(iDelay, this, function() {
 					// if the element is a control the focus should be called

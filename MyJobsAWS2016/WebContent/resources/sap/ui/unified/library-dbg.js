@@ -1,13 +1,13 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 /**
  * Initialization Code and shared classes of library sap.ui.unified.
  */
-sap.ui.define(['jquery.sap.global', 
+sap.ui.define(['jquery.sap.global',
 	'sap/ui/core/library'], // library dependency
 	function(jQuery) {
 
@@ -19,14 +19,14 @@ sap.ui.define(['jquery.sap.global',
 	 * @namespace
 	 * @name sap.ui.unified
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @public
 	 */
 
 	// delegate further initialization of this library to the Core
 	sap.ui.getCore().initLibrary({
 		name : "sap.ui.unified",
-		version: "1.28.12",
+		version: "1.36.7",
 		dependencies : ["sap.ui.core"],
 		types: [
 			"sap.ui.unified.CalendarDayType",
@@ -34,12 +34,19 @@ sap.ui.define(['jquery.sap.global',
 		],
 		interfaces: [],
 		controls: [
+			"sap.ui.unified.calendar.DatesRow",
 			"sap.ui.unified.calendar.Header",
 			"sap.ui.unified.calendar.Month",
 			"sap.ui.unified.calendar.MonthPicker",
+			"sap.ui.unified.calendar.MonthsRow",
+			"sap.ui.unified.calendar.TimesRow",
 			"sap.ui.unified.calendar.YearPicker",
 			"sap.ui.unified.Calendar",
+			"sap.ui.unified.CalendarDateInterval",
+			"sap.ui.unified.CalendarMonthInterval",
+			"sap.ui.unified.CalendarTimeInterval",
 			"sap.ui.unified.CalendarLegend",
+			"sap.ui.unified.CalendarRow",
 			"sap.ui.unified.ContentSwitcher",
 			"sap.ui.unified.Currency",
 			"sap.ui.unified.FileUploader",
@@ -50,6 +57,7 @@ sap.ui.define(['jquery.sap.global',
 			"sap.ui.unified.SplitContainer"
 		],
 		elements: [
+			"sap.ui.unified.CalendarAppointment",
 			"sap.ui.unified.CalendarLegendItem",
 			"sap.ui.unified.DateRange",
 			"sap.ui.unified.DateTypeRange",
@@ -142,12 +150,42 @@ sap.ui.define(['jquery.sap.global',
 	};
 
 	/**
+	 * Type of a interval in a <code>CalendarRow</code>.
+	 *
+	 * @enum {string}
+	 * @public
+	 * @since 1.34.0
+	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
+	 */
+	sap.ui.unified.CalendarIntervalType = {
+
+		/**
+		 * one code>CalendarRow</code> interval has the size of one hour
+		 * @public
+		 */
+		Hour : "Hour",
+
+		/**
+		 * one code>CalendarRow</code> interval has the size of one day
+		 * @public
+		 */
+		Day : "Day",
+
+		/**
+		 * one code>CalendarRow</code> interval has the size of one Month
+		 * @public
+		 */
+		Month : "Month"
+
+	};
+
+	/**
 	 * Predefined animations for the ContentSwitcher
 	 *
 	 * @enum {string}
 	 * @public
 	 * @since 1.16.0
-	 * @experimental Since version 1.16.0. 
+	 * @experimental Since version 1.16.0.
 	 * API is not yet finished and might change completely
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
 	 */
@@ -254,12 +292,13 @@ sap.ui.define(['jquery.sap.global',
 
 	sap.ui.unified._iNumberOfOpenedShellOverlays = 0;
 
-	//factory for the FileUploader to create TextField an Button to be overwritten by commons and mobile library
+	//factory for the FileUploader to create TextField and Button to be overwritten by commons and mobile library
 	if (!sap.ui.unified.FileUploaderHelper) {
 		sap.ui.unified.FileUploaderHelper = {
 			createTextField: function(sId){ throw new Error("no TextField control available!"); }, /* must return a TextField control */
 			setTextFieldContent: function(oTextField, sWidth){ throw new Error("no TextField control available!"); },
 			createButton: function(){ throw new Error("no Button control available!"); }, /* must return a Button control */
+			addFormClass: function(){ return null; },
 			bFinal: false /* if true, the helper must not be overwritten by an other library */
 		};
 	}

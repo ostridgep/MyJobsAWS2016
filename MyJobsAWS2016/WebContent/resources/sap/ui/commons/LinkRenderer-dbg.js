@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,7 +16,7 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var LinkRenderer = {
 	};
-	
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -27,9 +27,9 @@ sap.ui.define(['jquery.sap.global'],
 		// Link is rendered as a "<a>" element
 		rm.write("<a");
 		rm.writeControlData(oLink);
-	
+
 		rm.writeAccessibilityState(oLink);
-	
+
 		if (!oLink.getEnabled()) {
 			rm.addClass("sapUiLnkDsbl");
 			rm.writeAttribute("disabled", "true");
@@ -37,11 +37,11 @@ sap.ui.define(['jquery.sap.global'],
 			rm.addClass("sapUiLnk");
 		}
 		rm.writeClasses();
-	
+
 		if (oLink.getTooltip_AsString()) {
 			rm.writeAttributeEscaped("title", oLink.getTooltip_AsString());
 		}
-	
+
 		if (oLink.getHref()) {
 			rm.writeAttributeEscaped("href", oLink.getHref());
 		}	else {
@@ -49,35 +49,35 @@ sap.ui.define(['jquery.sap.global'],
 			rm.writeAttribute("href", "javascript:void(0);");
 			/*eslint-enable no-script-url */
 		}
-	
+
 		if (oLink.getTarget()) {
 			rm.writeAttributeEscaped("target", oLink.getTarget());
 		}
-	
+
 		if (!oLink.getEnabled()) {
 			rm.writeAttribute("tabIndex", "-1");
 		} else {
 			rm.writeAttribute("tabIndex", "0");
 		}
-	
+
 		if (oLink.getWidth()) {
 			rm.addStyle("width", oLink.getWidth());
 		}
 		rm.writeStyles();
-	
+
 		// Close the opening tag
 		rm.write(">");
-	
+
 		// Write the Link text
 		if (oLink.getText()) {
 			rm.writeEscaped(oLink.getText());
 		}
-	
+
 		// Close the tag
 		rm.write("</a>");
-	
+
 	};
-	
+
 
 	return LinkRenderer;
 

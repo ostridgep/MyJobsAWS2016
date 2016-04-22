@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,7 +10,7 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 	function(ODataType, FormatException, ParseException, NumberFormat, ValidateException) {
 	"use strict";
 
-	var rInteger = /^[-+]?(\d+)$/,
+	var rInteger = /^[-+]?(\d+)$/, // user input for an Int64 w/o the sign
 		// The number range of an Int64
 		oRange = {minimum: "-9223372036854775808", maximum: "9223372036854775807"},
 		// The values Number.MIN_SAFE_INTEGER and Number.MAX_SAFE_INTEGER are the largest integer
@@ -63,6 +63,7 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 
 		if (!oType.oFormat) {
 			oFormatOptions = jQuery.extend({groupingEnabled: true}, oType.oFormatOptions);
+			oFormatOptions.parseAsString = true;
 			oType.oFormat = NumberFormat.getIntegerInstance(oFormatOptions);
 		}
 		return oType.oFormat;
@@ -127,7 +128,7 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @alias sap.ui.model.odata.type.Int64
@@ -138,13 +139,11 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 	 *   constraints; {@link #validateValue validateValue} throws an error if any constraint is
 	 *   violated
 	 * @param {boolean|string} [oConstraints.nullable=true]
-	 *   if <code>true</code>, the value <code>null</code> will be accepted
+	 *   if <code>true</code>, the value <code>null</code> is accepted
 	 * @public
 	 * @since 1.27.1
 	 */
-	var Int64 = ODataType.extend("sap.ui.model.odata.type.Int64",
-		/** @lends sap.ui.model.odata.type.Int64.prototype */
-		{
+	var Int64 = ODataType.extend("sap.ui.model.odata.type.Int64", {
 			constructor : function (oFormatOptions, oConstraints) {
 				ODataType.apply(this, arguments);
 				this.oFormatOptions = oFormatOptions;
@@ -216,16 +215,8 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 	 * Parses the given value, which is expected to be of the given type, to an Int64 in
 	 * <code>string</code> representation.
 	 *
-	 * If certain format options are defined and you parse a value with <code>sSourceType</code>
-	 * "string", floating point numbers will be used internally.
-	 * This may cause a loss of precision (e.g.
-	 * "1,234,567,890,123,456,789" will be parsed to "1234567890123456800"). The following options
-	 * do not cause this effect: decimals, decimalSeparator, groupingEnabled, groupingSeparator,
-	 * maxFractionDigits, maxIntegerDigits, minFractionDigits, minIntegerDigits, minusSign and
-	 * plusSign.
-	 *
 	 * @param {string|number} vValue
-	 *   the value to be parsed; the empty string and <code>null</code> will be parsed to
+	 *   the value to be parsed; the empty string and <code>null</code> are parsed to
 	 *   <code>null</code>
 	 * @param {string} sSourceType
 	 *   the source type (the expected type of <code>vValue</code>); may be "float", "int" or
@@ -246,8 +237,7 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 		}
 		switch (sSourceType) {
 		case "string":
-			sResult = ODataType.normalizeNumber(this.oFormatOptions, getFormatter(this), vValue,
-				/^0*(\d+)$/ );
+			sResult = getFormatter(this).parse(vValue);
 			if (!sResult) {
 				throw new ParseException(getText("EnterInt"));
 			}
@@ -286,7 +276,7 @@ sap.ui.define(['sap/ui/model/odata/type/ODataType', 'sap/ui/model/FormatExceptio
 		if (typeof sValue === "string") {
 			sErrorText = checkValueRange(this, sValue, oRange);
 			if (sErrorText) {
-				throw new ValidateException(sErrorText)
+				throw new ValidateException(sErrorText);
 			}
 			return;
 		}

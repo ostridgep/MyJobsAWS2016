@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -8,45 +8,6 @@
 sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 	function(jQuery, Device) {
 	"use strict";
-
-	/**
-	 * Shortcut for document.getElementById() with additionally an IE6/7 bug fixed.
-	 * Used to replace the jQuery.sap.domById when running in IE < v8.
-	 *
-	 * @param {string} sId the id of the DOM element to return
-	 * @param {Window} oWindow the window (optional)
-	 * @return {Element} the DOMNode identified by the given sId
-	 * @private
-	 */
-	var domByIdInternal = function(sId, oWindow) {
-
-		if (!oWindow) {
-			oWindow = window;
-		}
-		if (!sId || sId == "") {
-			return null;
-		}
-
-		var oDomRef = oWindow.document.getElementById(sId);
-
-		// IE also returns the element with the name or id whatever is first
-		// => the following line makes sure that this was the id
-		if (oDomRef && oDomRef.id == sId) {
-			return oDomRef;
-		}
-
-		// otherwise try to lookup the name
-		var oRefs = oWindow.document.getElementsByName(sId);
-		for (var i = 0;i < oRefs.length;i++) {
-			oDomRef = oRefs[i];
-			if (oDomRef && oDomRef.id == sId) {
-				return oDomRef;
-			}
-		}
-
-		return null;
-
-	};
 
 	/**
 	 * Shortcut for document.getElementById(), including a bug fix for older IE versions.
@@ -58,10 +19,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 	 * @function
 	 * @since 0.9.0
 	 */
-	jQuery.sap.domById = !!Device.browser.internet_explorer && Device.browser.version < 8 ? domByIdInternal : function domById(sId, oWindow) {
+	jQuery.sap.domById = function domById(sId, oWindow) {
 		return sId ? (oWindow || window).document.getElementById(sId) : null;
 	};
-
 
 	/**
 	 * Shortcut for jQuery("#" + id) with additionally the id being escaped properly.
@@ -242,7 +202,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 				oTextEditRange.moveEnd('character', iEnd - iStart);
 				oTextEditRange.select();
 			}
-		} catch (e) {}	// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		} catch (e) {
+			// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		}
 
 		return this;
 	};
@@ -270,7 +232,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			if (document.selection) {
 				return document.selection.createRange().text;
 			}
-		} catch (e) {}	// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		} catch (e) {
+			// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		}
 
 		return "";
 	};
@@ -522,7 +486,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		if (oDomRef) {
 
 			if (iPos === undefined) { // GETTER code
-				if (!!Device.browser.internet_explorer) {
+				if (!!Device.browser.internet_explorer || !!Device.browser.edge) {
 					return oDomRef.scrollWidth - oDomRef.scrollLeft - oDomRef.clientWidth;
 
 				} else if (!!Device.browser.webkit) {
@@ -974,6 +938,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		return _oScrollbarSize[sKey];
 	};
 
+	// handle weak dependency to sap/ui/core/Control
+	var _Control;
+
+	function getControl() {
+		return _Control || (_Control = sap.ui.require('sap/ui/core/Control'));
+	}
+
 	/**
 	 * Search ancestors of the given source DOM element for the specified CSS class name.
 	 * If the class name is found, set it to the root DOM element of the target control.
@@ -992,7 +963,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			return vDestination;
 		}
 
-		if (vSource instanceof sap.ui.core.Control) {
+		var Control = getControl();
+
+		if (Control && vSource instanceof Control) {
 			vSource = vSource.$();
 		} else if (typeof vSource === "string") {
 			vSource = jQuery.sap.byId(vSource);
@@ -1005,7 +978,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 
 		if (vDestination instanceof jQuery) {
 			vDestination.toggleClass(sStyleClass, bClassFound);
-		} else if (vDestination instanceof sap.ui.core.Control) {
+		} else if (Control && vDestination instanceof Control) {
 			vDestination.toggleStyleClass(sStyleClass, bClassFound);
 		} else {
 			jQuery.sap.assert(false, 'jQuery.sap.syncStyleClass(): vDestination must be a jQuery object or a Control');
@@ -1014,6 +987,245 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		return vDestination;
 	};
 
+	/**
+	 * Adds space separated value to the given attribute.
+	 * This method ignores when the value is already available for the given attribute.
+	 *
+	 * @this {jQuery} jQuery context
+	 * @param {string} sAttribute The name of the attribute.
+	 * @param {string} sValue The value of the attribute to be inserted.
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 * @private
+	 */
+	function addToAttributeList(sAttribute, sValue) {
+		var sAttributes = this.attr(sAttribute);
+		if (!sAttributes) {
+			return this.attr(sAttribute, sValue);
+		}
+
+		var aAttributes = sAttributes.split(" ");
+		if (aAttributes.indexOf(sValue) == -1) {
+			aAttributes.push(sValue);
+			this.attr(sAttribute, aAttributes.join(" "));
+		}
+
+		return this;
+	}
+
+	/**
+	 * Remove space separated value from the given attribute.
+	 *
+	 * @this {jQuery} jQuery context
+	 * @param {string} sAttribute The name of the attribute.
+	 * @param {string} sValue The value of the attribute to be inserted.
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 * @private
+	 */
+	function removeFromAttributeList(sAttribute, sValue) {
+		var sAttributes = this.attr(sAttribute) || "",
+			aAttributes = sAttributes.split(" "),
+			iIndex = aAttributes.indexOf(sValue);
+
+		if (iIndex == -1) {
+			return this;
+		}
+
+		aAttributes.splice(iIndex, 1);
+		if (aAttributes.length) {
+			this.attr(sAttribute, aAttributes.join(" "));
+		} else {
+			this.removeAttr(sAttribute);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Adds the given ID reference to the the aria-labelledby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#addAriaLabelledBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.addAriaLabelledBy = function (sId) {
+		return addToAttributeList.call(this, "aria-labelledby", sId);
+	};
+
+	/**
+	 * Removes the given ID reference from the aria-labelledby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#removeAriaLabelledBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.removeAriaLabelledBy = function (sId) {
+		return removeFromAttributeList.call(this, "aria-labelledby", sId);
+	};
+
+	/**
+	 * Adds the given ID reference to the aria-describedby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#addAriaDescribedBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.addAriaDescribedBy = function (sId) {
+		return addToAttributeList.call(this, "aria-describedby", sId);
+	};
+
+	/**
+	 * Removes the given ID reference from the aria-describedby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#removeAriaDescribedBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.removeAriaDescribedBy = function (sId) {
+		return removeFromAttributeList.call(this, "aria-describedby", sId);
+	};
+
+
+	/**
+	 * This method try to patch two HTML elements according to changed attributes.
+	 *
+	 * @param {HTMLElement} oOldDom existing element to be patched
+	 * @param {HTMLElement} oNewDom is the new node to patch old dom
+	 * @return {Boolean} true when patch is applied correctly or false when nodes are replaced.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @private
+	 */
+	function patchDOM(oOldDom, oNewDom) {
+
+		// start checking with most common use case and backwards compatible
+		if (oOldDom.childElementCount != oNewDom.childElementCount ||
+			oOldDom.tagName != oNewDom.tagName) {
+			oOldDom.parentNode.replaceChild(oNewDom, oOldDom);
+			return false;
+		}
+
+		// go with native... if nodes are equal there is nothing to do
+		// http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-isEqualNode
+		if (oOldDom.isEqualNode(oNewDom)) {
+			return true;
+		}
+
+		// remove outdated attributes from old dom
+		var aOldAttributes = oOldDom.attributes;
+		for (var i = 0, ii = aOldAttributes.length; i < ii; i++) {
+			var sAttrName = aOldAttributes[i].name;
+			if (oNewDom.getAttribute(sAttrName) === null) {
+				oOldDom.removeAttribute(sAttrName);
+				ii = ii - 1;
+				i = i - 1;
+			}
+		}
+
+		// patch new or changed attributes to the old dom
+		var aNewAttributes = oNewDom.attributes;
+		for (var i = 0, ii = aNewAttributes.length; i < ii; i++) {
+			var sAttrName = aNewAttributes[i].name,
+				vOldAttrValue = oOldDom.getAttribute(sAttrName),
+				vNewAttrValue = oNewDom.getAttribute(sAttrName);
+
+			if (vOldAttrValue === null || vOldAttrValue !== vNewAttrValue) {
+				oOldDom.setAttribute(sAttrName, vNewAttrValue);
+			}
+		}
+
+		// check whether more child nodes to continue or not
+		var iNewChildNodesCount = oNewDom.childNodes.length;
+		if (!iNewChildNodesCount && !oOldDom.hasChildNodes()) {
+			return true;
+		}
+
+		// maybe no more child elements
+		if (!oNewDom.childElementCount) {
+			// but child nodes(e.g. Text Nodes) still needs to be replaced
+			if (!iNewChildNodesCount) {
+				// new dom does not have any child node, so we can clean the old one
+				oOldDom.textContent = "";
+			} else if (iNewChildNodesCount == 1 && oNewDom.firstChild.nodeType == 3 /* TEXT_NODE */) {
+				// update the text content for the first text node
+				oOldDom.textContent = oNewDom.textContent;
+			} else {
+				// in case of comments or other node types are used
+				oOldDom.innerHTML = oNewDom.innerHTML;
+			}
+			return true;
+		}
+
+		// patch child nodes
+		for (var i = 0, r = 0, ii = iNewChildNodesCount; i < ii; i++) {
+			var oOldDomChildNode = oOldDom.childNodes[i],
+				oNewDomChildNode = oNewDom.childNodes[i - r];
+
+			if (oNewDomChildNode.nodeType == 1 /* ELEMENT_NODE */) {
+				// recursively patch child elements
+				if (!patchDOM(oOldDomChildNode, oNewDomChildNode)) {
+					// if patch is not possible we replace nodes
+					// in this case replaced node is removed
+					r = r + 1;
+				}
+			} else {
+				// when not element update only node values
+				oOldDomChildNode.nodeValue = oNewDomChildNode.nodeValue;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * This method try to replace two HTML elements according to changed attributes.
+	 * As a fallback it replaces DOM nodes.
+	 *
+	 * @param {HTMLElement} oOldDom existing element to be patched
+	 * @param {HTMLElement|String} vNewDom is the new node to patch old dom
+	 * @param {Boolean} bCleanData wheter jQuery data should be removed or not
+	 * @return {Boolean} true when patch is applied correctly or false when nodes are replaced.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @private
+	 */
+	jQuery.sap.replaceDOM = function(oOldDom, vNewDom, bCleanData) {
+		var oNewDom;
+		if (typeof vNewDom === "string") {
+			oNewDom = jQuery.parseHTML(vNewDom)[0];
+		} else {
+			oNewDom = vNewDom;
+		}
+
+		if (bCleanData) {
+			jQuery.cleanData([oOldDom]);
+			jQuery.cleanData(oOldDom.getElementsByTagName("*"));
+		}
+
+		return patchDOM(oOldDom, oNewDom);
+	};
+
 	return jQuery;
 
-}, /* bExport= */ false);
+});

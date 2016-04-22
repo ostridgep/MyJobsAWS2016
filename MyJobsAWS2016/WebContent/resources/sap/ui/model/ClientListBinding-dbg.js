@@ -1,14 +1,14 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides the JSON model implementation of a list binding
-sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterProcessor', './SorterProcessor'],
-	function(jQuery, FilterType, ListBinding, FilterProcessor, SorterProcessor) {
+sap.ui.define(['jquery.sap.global', './ChangeReason', './Filter', './FilterType', './ListBinding', './FilterProcessor', './Sorter', './SorterProcessor'],
+	function(jQuery, ChangeReason, Filter, FilterType, ListBinding, FilterProcessor, Sorter, SorterProcessor) {
 	"use strict";
-	
+
 	/**
 	 *
 	 * @class
@@ -20,26 +20,26 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 	 * @param {sap.ui.model.Sorter|sap.ui.model.Sorter[]} [aSorters] initial sort order (can be either a sorter or an array of sorters)
 	 * @param {sap.ui.model.Filter|sap.ui.model.Filter[]} [aFilters] predefined filter/s (can be either a filter or an array of filters)
 	 * @param {object} [mParameters]
-	 * 
+	 *
 	 * @alias sap.ui.model.ClientListBinding
 	 * @extends sap.ui.model.ListBinding
 	 */
 	var ClientListBinding = ListBinding.extend("sap.ui.model.ClientListBinding", /** @lends sap.ui.model.ClientListBinding.prototype */ {
-	
+
 		constructor : function(oModel, sPath, oContext, aSorters, aFilters, mParameters){
 			ListBinding.apply(this, arguments);
 			this.bIgnoreSuspend = false;
 			this.update();
 		},
-	
+
 		metadata : {
 			publicMethods : [
 				"getLength"
 			]
 		}
-	
+
 	});
-	
+
 	/**
 	 * Return contexts for the list or a specified subset of contexts
 	 * @param {int} [iStartIndex=0] the startIndex where to start the retrieval of contexts
@@ -56,24 +56,24 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 		if (!iLength) {
 			iLength = Math.min(this.iLength, this.oModel.iSizeLimit);
 		}
-		
+
 		var iEndIndex = Math.min(iStartIndex + iLength, this.aIndices.length),
 		oContext,
 		aContexts = [],
 		sPrefix = this.oModel.resolve(this.sPath, this.oContext);
-		
+
 		if (sPrefix && !jQuery.sap.endsWith(sPrefix, "/")) {
 			sPrefix += "/";
 		}
-	
+
 		for (var i = iStartIndex; i < iEndIndex; i++) {
 			oContext = this.oModel.getContext(sPrefix + this.aIndices[i]);
 			aContexts.push(oContext);
 		}
-		
+
 		return aContexts;
 	};
-	
+
 	/**
 	 * Setter for context
 	 * @param {Object} oContext the new context object
@@ -83,11 +83,11 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 			this.oContext = oContext;
 			if (this.isRelative()) {
 				this.update();
-				this._fireChange({reason: sap.ui.model.ChangeReason.Context});
+				this._fireChange({reason: ChangeReason.Context});
 			}
 		}
 	};
-	
+
 	/**
 	 * @see sap.ui.model.ListBinding.prototype.getLength
 	 *
@@ -95,7 +95,7 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 	ClientListBinding.prototype.getLength = function() {
 		return this.iLength;
 	};
-	
+
 	/**
 	 * Return the length of the list
 	 *
@@ -104,7 +104,7 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 	ClientListBinding.prototype._getLength = function() {
 		return this.aIndices.length;
 	};
-	
+
 	/**
 	 * Get indices of the list
 	 */
@@ -113,69 +113,75 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 		for (var i = 0; i < this.oList.length; i++) {
 			this.aIndices.push(i);
 		}
-	
+
 	};
-	
+
 	/**
 	 * @see sap.ui.model.ListBinding.prototype.sort
 	 */
 	ClientListBinding.prototype.sort = function(aSorters){
+		if (this.bSuspended) {
+			this.checkUpdate(true);
+		}
 		if (!aSorters) {
 			this.aSorters = null;
 			this.updateIndices();
 			this.applyFilter();
 		} else {
-			if (aSorters instanceof sap.ui.model.Sorter) {
+			if (aSorters instanceof Sorter) {
 				aSorters = [aSorters];
 			}
 			this.aSorters = aSorters;
 			this.applySort();
 		}
-		
+
 		this.bIgnoreSuspend = true;
-		
-		this._fireChange({reason: sap.ui.model.ChangeReason.Sort});
+
+		this._fireChange({reason: ChangeReason.Sort});
 		// TODO remove this if the sorter event gets removed which is deprecated
 		this._fireSort({sorter: aSorters});
 		this.bIgnoreSuspend = false;
-		
+
 		return this;
 	};
-	
+
 	/**
 	 * Sorts the list
 	 * @private
 	 */
 	ClientListBinding.prototype.applySort = function(){
 		var that = this;
-	
+
 		if (!this.aSorters || this.aSorters.length == 0) {
 			return;
 		}
-		
+
 		this.aIndices = SorterProcessor.apply(this.aIndices, this.aSorters, function(vRef, sPath) {
 			return that.oModel.getProperty(sPath, that.oList[vRef]);
 		});
 	};
-		
+
 	/**
 	 * Filters the list.
-	 * 
+	 *
 	 * Filters are first grouped according to their binding path.
 	 * All filters belonging to a group are ORed and after that the
 	 * results of all groups are ANDed.
 	 * Usually this means, all filters applied to a single table column
 	 * are ORed, while filters on different table columns are ANDed.
-	 * 
+	 *
 	 * @param {sap.ui.model.Filter[]} aFilters Array of filter objects
 	 * @param {sap.ui.model.FilterType} sFilterType Type of the filter which should be adjusted, if it is not given, the standard behaviour applies
-	 * @return {sap.ui.model.ListBinding} returns <code>this</code> to facilitate method chaining 
-	 * 
+	 * @return {sap.ui.model.ListBinding} returns <code>this</code> to facilitate method chaining
+	 *
 	 * @public
 	 */
 	ClientListBinding.prototype.filter = function(aFilters, sFilterType){
+		if (this.bSuspended) {
+			this.checkUpdate(true);
+		}
 		this.updateIndices();
-		if (aFilters instanceof sap.ui.model.Filter) {
+		if (aFilters instanceof Filter) {
 			aFilters = [aFilters];
 		}
 		if (sFilterType == FilterType.Application) {
@@ -196,10 +202,10 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 			this.applyFilter();
 		}
 		this.applySort();
-		
+
 		this.bIgnoreSuspend = true;
-		
-		this._fireChange({reason: sap.ui.model.ChangeReason.Filter});
+
+		this._fireChange({reason: ChangeReason.Filter});
 		// TODO remove this if the filter event gets removed which is deprecated
 		if (sFilterType == FilterType.Application) {
 			this._fireFilter({filters: this.aApplicationFilters});
@@ -207,10 +213,10 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 			this._fireFilter({filters: this.aFilters});
 		}
 		this.bIgnoreSuspend = false;
-		
+
 		return this;
 	};
-	
+
 	/**
 	 * Filters the list
 	 * Filters are first grouped according to their binding path.
@@ -226,16 +232,17 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 		if (!this.aFilters) {
 			return;
 		}
+
 		var aFilters = this.aFilters.concat(this.aApplicationFilters),
 			that = this;
-		
+
 		this.aIndices = FilterProcessor.apply(this.aIndices, aFilters, function(vRef, sPath) {
 			return that.oModel.getProperty(sPath, that.oList[vRef]);
 		});
-		
+
 		this.iLength = this.aIndices.length;
 	};
-	
+
 	/**
 	 * Get distinct values
 	 *
@@ -257,8 +264,8 @@ sap.ui.define(['jquery.sap.global', './FilterType', './ListBinding', './FilterPr
 		});
 		return aResult;
 	};
-	
+
 
 	return ClientListBinding;
 
-}, /* bExport= */ true);
+});

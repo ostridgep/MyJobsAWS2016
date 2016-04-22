@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
@@ -32,7 +32,7 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 		 * ]
 		 * </pre>
 		 *
-		 * The alternative way of defining routes is an Object.
+		 * The alternative way of defining routes is an Object.<br/>
 		 * If you choose this way, the name attribute is the name of the property.
 		 * <pre>
 		 * {
@@ -82,10 +82,10 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 		 * }
 		 * </pre>
 		 *
-		 * Since the xmlTarget does not specify its viewType, XML is taken from the config object. The jsTarget is specifying it, so the viewType will be JS.
-		 * @param {string|string[]} [oConfig.bypassed.target] One or multiple names of targets that will be displayed, if no route of the router is matched.
-		 * A typical use case is a not found page.
-		 * The current hash will be passed to the display event of the target.
+		 * Since the xmlTarget does not specify its viewType, XML is taken from the config object. The jsTarget is specifying it, so the viewType will be JS.<br/>
+		 * @param {string|string[]} [oConfig.bypassed.target] One or multiple names of targets that will be displayed, if no route of the router is matched.<br/>
+		 * A typical use case is a not found page.<br/>
+		 * The current hash will be passed to the display event of the target.<br/>
 		 * <b>Example:</b>
 		 * <pre>
 		 * <code>
@@ -113,9 +113,10 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 		 *     });
 		 * </code>
 		 * </pre>
-		 * @param {sap.ui.core.UIComponent} [oOwner] the Component of all the views that will be created by this Router,
-		 * will get forwarded to the {@link sap.ui.core.routing.Views#contructor}.
-		 * If you are using the componentMetadata to define your routes you should skip this parameter.
+		 * @param {boolean} [oConfig.async=false] @since 1.34. Whether the views which are loaded within this router instance asyncly. The default value is set to false.
+		 * @param {sap.ui.core.UIComponent} [oOwner] the Component of all the views that will be created by this Router,<br/>
+		 * will get forwarded to the {@link sap.ui.core.routing.Views#contructor}.<br/>
+		 * If you are using the componentMetadata to define your routes you should skip this parameter.<br/>
 		 * @param {object} [oTargetsConfig]
 		 * the target configuration, see {@link sap.m.routing.Targets#constructor} documentation (the options object).<br/>
 		 * You should use Targets to create and display views. The route should only contain routing relevant properties.<br/>
@@ -139,7 +140,9 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 		 *         viewNamespace: "my.application.namespace",
 		 *         viewType: "XML"
 		 *     },
-		 *     // You should only use this constructor when you are not using a router with a component. Please use the metadata of a component to define your routes and targets. The documentation can be found here: {@link sap.ui.core.UIComponent#.extend}.
+		 *     // You should only use this constructor when you are not using a router with a component.
+		 *     // Please use the metadata of a component to define your routes and targets.
+		 *     // The documentation can be found here: {@link sap.ui.core.UIComponent#.extend}.
 		 *     null,
 		 *     // Target config
 		 *     {
@@ -157,10 +160,11 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 		 * @since 1.28.1
 		 * @alias sap.m.routing.Router
 		 */
-		return Router.extend("sap.m.routing.Router", /** @lends sap.m.routing.Router.prototype */ {
+		var MobileRouter = Router.extend("sap.m.routing.Router", /** @lends sap.m.routing.Router.prototype */ {
 
 			constructor : function() {
 				this._oTargetHandler = new TargetHandler();
+
 				Router.prototype.constructor.apply(this, arguments);
 			},
 
@@ -197,7 +201,6 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 
 				// only if a route has a private target and does not use the targets instance of the router we need to inform the targethandler
 				if (oRoute._oTarget) {
-
 					oTargetConfig = oRoute._oTarget._oOptions;
 
 					this._oTargetHandler.addNavigation({
@@ -209,7 +212,6 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 						view: mArguments.view,
 						preservePageInSplitContainer: oTargetConfig.preservePageInSplitContainer
 					});
-
 				}
 
 				return Router.prototype.fireRouteMatched.apply(this, arguments);
@@ -229,10 +231,11 @@ sap.ui.define(['sap/ui/core/routing/Router', './TargetHandler', './Targets'],
 					askHistory: true
 				});
 
-
 				return Router.prototype.fireRoutePatternMatched.apply(this, arguments);
 			}
 
 		});
+
+		return MobileRouter;
 
 	}, /* bExport= */ true);

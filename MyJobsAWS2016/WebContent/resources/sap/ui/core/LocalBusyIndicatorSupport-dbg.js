@@ -1,18 +1,18 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides helper sap.ui.core.LocalBusyIndicatorSupport
-sap.ui.define(['jquery.sap.global', './Element'],
-	function(jQuery, Element) {
+sap.ui.define(['jquery.sap.global', './Control'],
+	function(jQuery, Control) {
 	"use strict";
 
 
 	/**
 	 * This class is only here for compatibility reasons. LBI works automatically with all controls
-	 * 
+	 *
 	 * @returns {sap.ui.core.LocalBusyIndicatorSupport}
 	 * @constructor
 	 * @private
@@ -21,27 +21,25 @@ sap.ui.define(['jquery.sap.global', './Element'],
 	 */
 	var LocalBusyIndicatorSupport = function() {
 		// "this" is the prototype now when called with apply()
-	
-		// Ensure only Element prototype is enhanced
-		if (this === sap.ui.core.Control.prototype) {
-	
+
+		// Ensure only Control prototype is enhanced
+		if (this === Control.prototype) {
+
 			/**
 			 * This function set the delay until the BusyIndicator is being shown
-			 * 
+			 *
 			 * @private
 			 * @param iDelay
 			 */
 			this.setDelay = function(iDelay) {
 				this.setBusyIndicatorDelay(iDelay);
 			};
-			
+
 		} else {
 			jQuery.sap.log.error("Only controls can use the LocalBusyIndicator", this);
 		}
 	};
-	
-	//moved here to fix the cyclic dependency LocalBusyIndicatorSupport, Element, control
-	
+
 
 	return LocalBusyIndicatorSupport;
 

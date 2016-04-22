@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -8,10 +8,10 @@
 sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider'],
 	function(jQuery, EventProvider) {
 	"use strict";
-	
+
 
 	/**
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.core.message
 	 * @public
@@ -27,7 +27,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider'],
 	 * @extends sap.ui.base.EventProvider
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -37,8 +37,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider'],
 
 		constructor : function () {
 			EventProvider.apply(this, arguments);
-			
-			this.mMessages = {};
+
+			this.mMessages = null;
 			this.id = jQuery.sap.uid();
 			sap.ui.getCore().getMessageManager().registerMessageProcessor(this);
 		},
@@ -149,14 +149,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider'],
 
 	/**
 	 * Returns the ID of the MessageProcessor instance
-	 * 
+	 *
 	 * @return {string} sId The MessageProcessor ID
 	 * @public
 	 */
 	MessageProcessor.prototype.getId = function() {
 		return this.id;
 	};
-	
+
 	/**
 	 * Destroys the MessageProcessor Instance
 	 * @public
@@ -165,7 +165,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider'],
 		sap.ui.getCore().getMessageManager().unregisterMessageProcessor(this);
 		EventProvider.prototype.destroy.apply(this, arguments);
 	};
-	
+
 	return MessageProcessor;
 
-}, /* bExport= */ true);
+});

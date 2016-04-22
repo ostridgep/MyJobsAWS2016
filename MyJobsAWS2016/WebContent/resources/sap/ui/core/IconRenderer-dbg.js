@@ -1,10 +1,9 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(["jquery.sap.global"],
-	function(jQuery) {
+sap.ui.define(['jquery.sap.global'], function(jQuery) {
 	"use strict";
 
 	/**
@@ -28,24 +27,25 @@ sap.ui.define(["jquery.sap.global"],
 			sColor = oControl.getColor(),
 			sBackgroundColor = oControl.getBackgroundColor(),
 			sSize = oControl.getSize(),
-			sTooltip = oControl.getTooltip_AsString();
+			sTooltip = oControl.getTooltip_AsString(),
+			bUseIconTooltip = oControl.getUseIconTooltip(),
+			bNoTabStop = oControl.getNoTabStop();
 
 		oRm.write("<span");
 		oRm.writeControlData(oControl);
+		oRm.writeAccessibilityState(oControl, oControl._getAccessibilityAttributes());
 
-		if (!oControl.getDecorative()) {
+		if (sTooltip || (bUseIconTooltip && oIconInfo)) {
+			oRm.writeAttributeEscaped("title", sTooltip || oIconInfo.text || oIconInfo.name);
+		}
+
+		if (oControl.hasListeners("press") && !bNoTabStop) {
 			oRm.writeAttribute("tabindex", 0);
 		}
 
-		if (sTooltip) {
-			oRm.writeAttributeEscaped("title", sTooltip);
-		}
-
 		if (oIconInfo) {
-			oRm.writeAttribute("data-sap-ui-icon-content", oIconInfo.content);
-			oRm.writeAttribute("role", "img");
-			oRm.writeAttributeEscaped("aria-label", sTooltip || oIconInfo.name);
-			oRm.addStyle("font-family", "'" + oIconInfo.fontFamily + "'");
+			oRm.writeAttributeEscaped("data-sap-ui-icon-content", oIconInfo.content);
+			oRm.addStyle("font-family", "'" + jQuery.sap.encodeHTML(oIconInfo.fontFamily) + "'");
 		}
 
 		if (sWidth) {
@@ -58,11 +58,11 @@ sap.ui.define(["jquery.sap.global"],
 		}
 
 		if (!(sColor in sap.ui.core.IconColor)) {
-			oRm.addStyle("color", sColor);
+			oRm.addStyle("color", jQuery.sap.encodeHTML(sColor));
 		}
 
 		if (!(sBackgroundColor in sap.ui.core.IconColor)) {
-			oRm.addStyle("background-color", sBackgroundColor);
+			oRm.addStyle("background-color", jQuery.sap.encodeHTML(sBackgroundColor));
 		}
 
 		if (sSize) {
@@ -73,6 +73,10 @@ sap.ui.define(["jquery.sap.global"],
 
 		if (oIconInfo && !oIconInfo.suppressMirroring) {
 			oRm.addClass("sapUiIconMirrorInRTL");
+		}
+
+		if (oControl.hasListeners("press")) {
+			oRm.addClass("sapUiIconPointer");
 		}
 
 		oRm.writeClasses();

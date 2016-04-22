@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,8 +14,8 @@ sap.ui.define(['jquery.sap.global', './TextFieldRenderer'],
 	 * @namespace
 	 */
 	var PasswordFieldRenderer = sap.ui.core.Renderer.extend(TextFieldRenderer);
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.fw.RenderManager}.
 	 *
@@ -23,15 +23,15 @@ sap.ui.define(['jquery.sap.global', './TextFieldRenderer'],
 	 * @param {sap.ui.fw.Control} oPasswordField an object representation of the control that should be rendered
 	 */
 	PasswordFieldRenderer.renderInnerAttributes = function(rm, oPasswordField) {
-	
+
 		if (sap.ui.Device.support.input.placeholder || oPasswordField.getValue() || !oPasswordField.getPlaceholder()) {
 			// if browser not supports placeholder on input tag, set the password type only if placeholder is not displayed
 			rm.writeAttribute('type', 'password');
 		}
-	
+
 	};
-	
-	
+
+
 	PasswordFieldRenderer.renderTextFieldEnabled = function(rm, oPasswordField) {
 		if (!oPasswordField.getEnabled() && !oPasswordField.getEditable()) {
 			// "disabled" may not be rendered because the Jaws screenreader then reads the password
@@ -43,12 +43,12 @@ sap.ui.define(['jquery.sap.global', './TextFieldRenderer'],
 			rm.writeAttribute('tabindex', '0'); // editable and readonly have a tab-stop
 		}
 	};
-	
-	
+
+
 	// this method uses "readonly" instead of "disabled" because with "disabled" the Jaws screenreader reads the password
 	PasswordFieldRenderer.setEnabled = function(oPasswordField, bEnabled) {
 		var oTfRef = oPasswordField.getDomRef();
-	
+
 		if (bEnabled) {
 			if (oPasswordField.getEditable()) {
 				jQuery(oTfRef).removeClass('sapUiTfDsbl').addClass('sapUiTfStd');
@@ -67,8 +67,8 @@ sap.ui.define(['jquery.sap.global', './TextFieldRenderer'],
 			}
 		}
 	};
-	
-	
+
+
 
 	return PasswordFieldRenderer;
 

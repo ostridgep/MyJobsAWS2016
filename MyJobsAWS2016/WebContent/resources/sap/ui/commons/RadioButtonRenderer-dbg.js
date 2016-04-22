@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -13,12 +13,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 	/**
 	 * RadioButton Renderer
 	 *
-	 * @author d046011
+	 * @author SAP SE
 	 * @namespace
 	 */
 	var RadioButtonRenderer = {
 	};
-	
+
 	/**
 	 * Renders the HTML for the RadioButton, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -28,13 +28,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 	RadioButtonRenderer.render = function(rm, oRadioButton) {
 		var sId = oRadioButton.getId();
 		var tooltip = oRadioButton.getTooltip_AsString();
-	
+
 		rm.addClass("sapUiRb");
-	
+
 		// Open the containing <span> tag
 		rm.write("<span");
 		rm.writeControlData(oRadioButton);
-	
+
 		// ARIA
 		rm.writeAccessibilityState(oRadioButton, {
 			role: "radio",
@@ -44,7 +44,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			labelledby: sId + "-label",
 			describedby: tooltip ? sId + "-Descr" : undefined
 		});
-	
+
 		// Collect state information
 		var enabled = oRadioButton.getEnabled() != null && oRadioButton.getEnabled();
 		var editable = oRadioButton.getEditable() != null && oRadioButton.getEditable();
@@ -54,15 +54,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			inErrorState = sap.ui.core.ValueState.Error == oRadioButton.getValueState();
 			inWarningState = sap.ui.core.ValueState.Warning == oRadioButton.getValueState();
 		}
-	
+
 		// Add classes and properties depending on the state
 		if (oRadioButton.getSelected()) {
 			rm.addClass("sapUiRbSel");
 		}
-	
+
 		var myTabIndex = 0;
 		var bReadOnly = false;
-	
+
 		if (!enabled) {
 			myTabIndex = -1;
 			bReadOnly = true;
@@ -85,21 +85,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			rm.addClass("sapUiRbInteractive");
 		}
 		rm.writeClasses();
-	
+
 		if (oRadioButton.getWidth() && oRadioButton.getWidth() != '') {
 			rm.writeAttribute("style", "width:" + oRadioButton.getWidth() + ";");
 		}
-	
+
 		rm.writeAttribute("tabIndex", myTabIndex);
-	
+
 		var tooltipToUse = ValueStateSupport.enrichTooltip(oRadioButton, tooltip ? tooltip : oRadioButton.getText());
 		if (tooltipToUse) {
 			rm.writeAttributeEscaped("title", tooltipToUse);
 		}
-	
+
 		rm.write(">"); // Close the containing <span> tag
-	
-	
+
+
 		// Write the real - potentially hidden - HTML RadioButton element
 		rm.write("<input type='radio' tabindex='-1' id='");
 		rm.write(sId);
@@ -119,10 +119,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 		if (oRadioButton.getKey()) {
 			rm.writeAttributeEscaped("value", oRadioButton.getKey());
 		}
-	
+
 		rm.write(" />"); // Close RadioButton-input-element
-	
-	
+
+
 		// Write the RadioButton label which also holds the background image
 		rm.write("<label id=\"" + sId + "-label\"");
 		rm.writeAttribute("for", sId + "-RB"); // Label for RadioButton, so a click toggles the state
@@ -134,7 +134,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			this.renderText(rm, oRadioButton.getText(), oRadioButton.getTextDirection());
 		}
 		rm.write("</label>");
-	
+
 		if (tooltip) {
 			// for ARIA the tooltip must be in a separate SPAN and assigned via aria-describedby.
 			// otherwise JAWS do not read it.
@@ -145,7 +145,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 		// Close the surrounding <span> element
 		rm.write("</span>");
 	};
-	
+
 	/**
 	 * Write RadioButton label - either flat, or, in case the text direction is different from the environment, within a <span> with an explicit "dir".
 	 */
@@ -159,9 +159,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			rm.write("</span>");
 		}
 	};
-	
+
 	RadioButtonRenderer.setSelected = function(oRadioButton, bSelected) {
-	
+
 		oRadioButton.$().toggleClass('sapUiRbSel', bSelected).attr('aria-checked', bSelected);
 		var $Dom = oRadioButton.getDomRef("RB");
 		if (bSelected) {
@@ -171,9 +171,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 			$Dom.checked = false;
 			$Dom.removeAttribute('checked');
 		}
-	
+
 	};
-	
+
 
 	return RadioButtonRenderer;
 

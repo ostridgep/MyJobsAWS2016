@@ -1,5 +1,7 @@
-/**
- * @copyright
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	function(jQuery, IconPool) {
@@ -89,7 +91,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			}
 		}
 	};
-	
+
 	/**
 	 * Gather all controls that should be rendered inside Object Header.
 	 *
@@ -120,7 +122,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			oOH.__controlsToBeRendered[oChild.getId()] = oChild;
 		}
 	};
-	
+
 	/**
 	 * Delete all controls that were empty and were not rendered inside Object Header.
 	 *
@@ -137,7 +139,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		}
 		delete oOH.__controlsToBeRendered;
 	};
-	
+
+
 	/**
 	 * Renders hidden div with ARIA descriptions of the favorite and flag icons.
 	 *
@@ -152,34 +155,34 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	ObjectHeaderRenderer._renderMarkersAria = function(oRM, oControl) {
 		var sAriaDescription = "", // ARIA description message
 			oLibraryResourceBundle = sap.ui.getCore().getLibraryResourceBundle("sap.m"); // get resource translation bundle
-		
+
 			// check if flag mark is set
 			if (oControl.getMarkFlagged()) {
 				sAriaDescription += (oLibraryResourceBundle.getText("ARIA_FLAG_MARK_VALUE") + " ");
 			}
-		
+
 			// check if favorite mark is set
 			if (oControl.getMarkFavorite()) {
 				sAriaDescription += (oLibraryResourceBundle.getText("ARIA_FAVORITE_MARK_VALUE") + " ");
 			}
-		
+
 			// if there is a description render ARIA node
-			if (sAriaDescription !== "") {	
+			if (sAriaDescription !== "") {
 				// BEGIN ARIA hidden node
 				oRM.write("<div");
-		
+
 				oRM.writeAttribute("id", oControl.getId() + "-markers-aria");
 				oRM.writeAttribute("aria-hidden", "false");
 				oRM.addClass("sapUiHidden");
 				oRM.writeClasses();
 				oRM.write(">");
 				oRM.writeEscaped(sAriaDescription);
-		
+
 				oRM.write("</div>");
 				// END ARIA hidden node
 			}
 	};
-	
+
 	/**
 	 * Returns the array of icons from ObjectHeader.
 	 *
@@ -477,7 +480,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	 * @private
 	 */
 	ObjectHeaderRenderer._renderTitle = function(oRM, oOH) {
-	
+
 		// Start title text and title arrow container
 		oOH._oTitleArrowIcon.setVisible(oOH.getShowTitleSelector());
 		if (oOH.getShowTitleSelector() && oOH._oTitleArrowIcon.getVisible()) {
@@ -488,6 +491,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		}
 
 		if (oOH.getTitle()) {
+			var sTitleLevel = (oOH.getTitleLevel() === sap.ui.core.TitleLevel.Auto) ? sap.ui.core.TitleLevel.H1 : oOH.getTitleLevel();
+
 			oOH._titleText.setText(oOH.getTitle());
 			// set text direction of the title
 			oOH._titleText.setTextDirection(oOH.getTitleTextDirection());
@@ -523,9 +528,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			}
 			oRM.writeClasses();
 			oRM.write(">");
-			oRM.write("<h1>");
+			oRM.write("<" + sTitleLevel + ">");
 			this._renderChildControl(oRM, oOH, oOH._titleText);
-			oRM.write("</h1>");
+			oRM.write("</" + sTitleLevel + ">");
 			if (oOH.getTitleActive()) {
 				oRM.write("</a>"); // End Title Text container
 			} else {
@@ -688,11 +693,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			this._renderResponsive(oRM, oOH);
 			return;
 		}
-		
+
 		// === old renderer, no changes here for downwards compatibility
 
 		this._computeChildControlsToBeRendered(oOH);
-		
+
 		var bCondensed = oOH.getCondensed();
 
 		oRM.write("<div"); // Start Main container
@@ -700,8 +705,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		oRM.addClass("sapMOH");
 		if (bCondensed) {
 			oRM.addClass("sapMOHC");
-			oRM.addClass("sapMOHBg" + oOH.getBackgroundDesign());
 		}
+
+		oRM.addClass("sapMOHBg" + oOH._getBackground());
 
 		oRM.writeClasses();
 		var sTooltip = oOH.getTooltip_AsString();
@@ -728,7 +734,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		oRM.write("<div class=\"sapMOHLastDivider\"/>");
 
 		oRM.write("</div>"); // End Main container\
-		
+
 		this._cleanupNotRenderedChildControls(oRM, oOH);
 
 	};
@@ -746,6 +752,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	 **/
 	ObjectHeaderRenderer._renderChildControl = function(oRM, oOH, oControl){
 		oRM.renderControl(oControl);
+		if (!oOH.getResponsive() && oOH.__controlsToBeRendered) { // if control is rendered remove it from the array
+			oOH.__controlsToBeRendered[oControl.getId()] = undefined;
+		}
 	};
 
 	/**
@@ -780,11 +789,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 
 		oRM.write("<div");
 		oRM.addClass("sapMOHR");
+
+		oRM.addClass("sapMOHRBg" + oOH._getBackground());
 		oRM.writeClasses();
 		oRM.write(">");
 		oRM.write("<div");
 
-		oRM.addClass("sapMOHRBg" + oOH.getBackgroundDesign());
 		if (sap.ui.Device.system.desktop && jQuery('html').hasClass("sapUiMedia-Std-Desktop") && oOH.getFullScreenOptimized() && oOH._iCountVisAttrStat >= 1 && oOH._iCountVisAttrStat <= 3) {
 			oRM.addClass("sapMOHRStatesOneOrThree");
 		}
@@ -835,7 +845,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	 **/
 	ObjectHeaderRenderer._renderResponsiveTitleBlock = function(oRM, oControl) {
 		var oLibraryResourceBundle = sap.ui.getCore().getLibraryResourceBundle("sap.m"); // get resource translation bundle
-		
+
 		// Title container displayed to the left of the number and number units container.
 		oRM.write("<div"); // Start Title and Number container (block1 and block2)
 		oRM.writeAttribute("id", oControl.getId() + "-titlenumdiv");
@@ -857,7 +867,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			}
 		}
 
-		if (!oControl.getAggregation("_objectNumber")) {
+		if (!oControl.getNumber()) {
 			oRM.addClass("sapMOHRTitleDivFull");
 		}
 		oRM.writeClasses();
@@ -910,7 +920,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		oRM.writeAttribute("id", oControl.getId() + "-states");
 		oRM.addClass("sapMOHRStates");
 		oRM.writeClasses();
-		oRM.write("\">");
+		oRM.write(">");
 		this._renderResponsiveRow(oRM, oControl);
 		oRM.write("</div>");
 	};
@@ -983,7 +993,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			iRenderCols = 1; // render one column
 			sClassColCount = 'sapMOHROneCols';
 		}
-		
+
 		this._renderResponsiveStatesColumn(oRM, oOH, iRenderCols, aVisibleAttrAndStat, iCountVisibleAttr, sClassColCount);
 	};
 
@@ -1017,7 +1027,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 				oRM.writeClasses();
 				oRM.write(">");
 			}
-		
+
 			if (i < iCountVisibleAttr) {
 				this._renderResponsiveAttribute(oRM, oOH, aVisibleAttrAndStat[i]);
 			} else {
@@ -1239,7 +1249,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 		oRM.writeAttribute("id", oOH.getId() + "-title");
 		oRM.addClass("sapMOHRTitle");
 
-		if (oOH.getTitleActive()) {
+		if (oOH.getTitle().length && oOH.getTitleActive()) {
 			oRM.addClass("sapMOHRTitleActive");
 		}
 		if (oOH.getShowTitleSelector()) {
@@ -1301,8 +1311,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	ObjectHeaderRenderer._renderResponsiveTitleAndArrow = function(oRM, oOH, nCutLen) {
 		var sOHTitle, sEllipsis = '', sTextDir = oOH.getTitleTextDirection();
 		var bMarkers = (oOH.getShowMarkers() && (oOH.getMarkFavorite() || oOH.getMarkFlagged()));
-		
-		oRM.write("<h1>");
+		var sTitleLevel = (oOH.getTitleLevel() === sap.ui.core.TitleLevel.Auto) ? sap.ui.core.TitleLevel.H1 : oOH.getTitleLevel();
+
+		oRM.write("<" + sTitleLevel + ">");
 		oRM.write("<span");
 		oRM.addClass("sapMOHRTitleTextContainer");
 		oRM.writeClasses();
@@ -1311,7 +1322,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			oRM.writeAttribute("dir", sTextDir.toLowerCase());
 		}
 		oRM.write(">");
-		if (oOH.getTitleActive()) {
+		if (oOH.getTitle().length && oOH.getTitleActive()) {
 			oRM.write("<a");
 			if (oOH.getTitleHref()) { // if title is link write it
 				oRM.writeAttributeEscaped("href", oOH.getTitleHref());
@@ -1391,7 +1402,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			this._renderChildControl(oRM, oOH, oOH._oTitleArrowIcon);
 			oRM.write("</span>"); // end title arrow container
 		}
-		oRM.write("</h1>");
+		oRM.write("</" + sTitleLevel + ">");
 
 	};
 

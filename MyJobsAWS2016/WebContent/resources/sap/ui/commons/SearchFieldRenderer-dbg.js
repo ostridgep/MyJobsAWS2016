@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var SearchFieldRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -47,30 +47,30 @@ sap.ui.define(['jquery.sap.global'],
 	    }
 	    rm.writeClasses();
 	    rm.writeStyles();
-	
+
 		/*rm.writeAccessibilityState(null, {
 			//role: "search",
 			owns: oControl._ctrl.getId() + (oControl.getShowExternalButton() ? (" "+oControl._btn.getId()) : "")
 		});*///CSN 1076183 2013: ARIA owns not required and leads to unexpected screen reader anouncements
-				
+
 	    rm.write(">");
 	    rm.renderControl(oControl._ctrl);
 	    if (oControl.getShowExternalButton()) {
 			rm.renderControl(oControl._btn);
 	    }
-	    
+
 		var rb = sap.ui.getCore().getLibraryResourceBundle("sap.ui.commons");
 	    rm.write("<span id='", oControl.getId(), "-label' style='display:none;' aria-hidden='true'>");
 		rm.writeEscaped(rb.getText("SEARCHFIELD_BUTTONTEXT"));
 		rm.write("</span>");
 	    rm.write("</div>");
 	};
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 	return SearchFieldRenderer;
 

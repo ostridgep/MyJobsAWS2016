@@ -30,12 +30,9 @@
 }
 
 .sapMSlt:not(.sapMSltDisabled),
-.sapMSlt:not(.sapMSltDisabled) > .sapMSltLabel {
+.sapMSlt:not(.sapMSltDisabled) > .sapMSltLabel,
+.sapMSltIconOnly:not(.sapMSltDisabled) .sapMSltIcon {
 	cursor: pointer;
-}
-
-.sapMSltDisabled {
-	pointer-events: none;
 }
 
 /* ------------------------------ */
@@ -71,10 +68,6 @@
 	vertical-align: top;
 }
 
-.sapMILI-CTX .sapMSltLabel {
-	text-align: end;
-}
-
 /* ------------------------------ */
 /* Select Icon                    */
 /* ------------------------------ */
@@ -82,6 +75,9 @@
 .sapMSltIcon {
 	position: absolute;
 	display: block;
+
+	/* prevent IE to focus the icon (non-focusable element) */
+	pointer-events: none;
 }
 
 .sapMSltAutoAdjustedWidth .sapMSltIcon {
@@ -101,12 +97,4 @@
 	padding: 0;
 	width: auto;
 	opacity: 0;
-}
-
-/* ------------------------------ */
-/* Select list                    */
-/* ------------------------------ */
-
-.sapMSltPicker-CTX .sapMSelectList {
-	border: none;
 }

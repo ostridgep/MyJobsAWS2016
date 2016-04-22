@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -24,18 +24,24 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	MonthPickerRenderer.render = function(oRm, oMP){
 
+		var iMonth = oMP.getMonth();
+		var iMonths = oMP.getMonths();
+		var iStartMonth = 0;
+		var iColumns = oMP.getColumns();
 		var sTooltip = oMP.getTooltip_AsString();
 		var oLocaleData = oMP._getLocaleData();
 		var sId = oMP.getId();
+		var sWidth = "";
+
 		var aMonthNames = [];
 		var aMonthNamesWide = [];
+		var sCalendarType = oMP.getPrimaryCalendarType();
 		if (oMP._bLongMonth || !oMP._bNamesLengthChecked) {
-			aMonthNames = oLocaleData.getMonthsStandAlone("wide");
+			aMonthNames = oLocaleData.getMonthsStandAlone("wide", sCalendarType);
 		} else {
-			aMonthNames = oLocaleData.getMonthsStandAlone("abbreviated");
-			aMonthNamesWide = oLocaleData.getMonthsStandAlone("wide");
+			aMonthNames = oLocaleData.getMonthsStandAlone("abbreviated", sCalendarType);
+			aMonthNamesWide = oLocaleData.getMonthsStandAlone("wide", sCalendarType);
 		}
-		var iMonth = oMP.getMonth();
 
 		oRm.write("<div");
 		oRm.writeControlData(oMP);
@@ -56,15 +62,31 @@ sap.ui.define(['jquery.sap.global'],
 
 		var mAccProps;
 
-		for ( var i = 0; i < 12; i++) {
+		if (iMonths > 12) {
+			iMonths = 12;
+		}else	if (iMonths < 12) {
+			// Month blocks should start with multiple of number of displayed months
+			iStartMonth = Math.floor( iMonth / iMonths) * iMonths;
+			if (iStartMonth + iMonths > 12) {
+				iStartMonth = 12 - iMonths;
+			}
+		}
+
+		if (iColumns > 0) {
+			sWidth = ( 100 / iColumns ) + "%";
+		} else {
+			sWidth = ( 100 / iMonths ) + "%";
+		}
+
+		for ( var i = 0; i < iMonths; i++) {
 			mAccProps = {
 					role: "gridcell"
 				};
 			if (!oMP._bLongMonth && oMP._bNamesLengthChecked) {
-				mAccProps["label"] = aMonthNamesWide[i];
+				mAccProps["label"] = aMonthNamesWide[i + iStartMonth];
 			}
 
-			if (i == 0 || i % oMP._iColumns == 0) {
+			if (iColumns > 0 && i % iColumns == 0) {
 				// begin of row
 				oRm.write("<div");
 				oRm.writeAccessibilityState(null, {role: "row"});
@@ -72,19 +94,21 @@ sap.ui.define(['jquery.sap.global'],
 			}
 
 			oRm.write("<div");
-			oRm.writeAttribute("id", sId + "-m" + i);
-			oRm.addClass("sapUiCalMonth");
-			if (i == iMonth) {
-				oRm.addClass("sapUiCalMonthSel");
+			oRm.writeAttribute("id", sId + "-m" + (i + iStartMonth));
+			oRm.addClass("sapUiCalItem");
+			if (i + iStartMonth == iMonth) {
+				oRm.addClass("sapUiCalItemSel");
 			}
 			oRm.writeAttribute("tabindex", "-1");
+			oRm.addStyle("width", sWidth);
 			oRm.writeClasses();
+			oRm.writeStyles();
 			oRm.writeAccessibilityState(null, mAccProps);
 			oRm.write(">"); // div element
-			oRm.write(aMonthNames[i]);
+			oRm.write(aMonthNames[i + iStartMonth]);
 			oRm.write("</div>");
 
-			if ((i + 1) % oMP._iColumns == 0) {
+			if (iColumns > 0 && ((i + 1) % iColumns == 0)) {
 				// end of row
 				oRm.write("</div>");
 			}

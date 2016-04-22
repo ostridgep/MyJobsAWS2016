@@ -2,28 +2,11 @@
 /* CSS for control sap.ui.analytics/AnalyticalTable.control */
 /* ======================================================== */
 
-.sapUiAnalyticalTable tr.sapUiAnalyticalTableDummy td {
-	border-right-width: 0;
-}
-
-.sapUiAnalyticalTable tr.sapUiAnalyticalTableDummy td:last-child {
-	border-right-width: 1px;
-}
-
-.sapUiAnalyticalTable .sapUiAnalyticalTableLoading {
-	margin-left: 40px;
-}
-
-/*******************************************************************************
- * CHILD CONTROL STYLES
- ******************************************************************************/
-
-.sapUiAnalyticalTable .sapUiTableCol .sapMLabel,
-.sapUiAnalyticalTable .sapUiTableCell > .sapMLabel,
-.sapUiAnalyticalTable .sapUiTableCell > .sapMText {
-	width: 100%;
-}
-
-.sapUiSizeCompact .sapUiAnalyticalTable .sapUiTableGroupIcon::before {
-	line-height: @sapUiTableRowHeight;
+// No checkboxes should be shown in group header of Analytical Table
+.sapUiSizeCompact, .sapUiSizeCozy{
+	.sapUiAnalyticalTable .sapUiTableRowHdrScr .sapUiTableRowHdr.sapUiTableGroupHeader::after,
+	.sapUiAnalyticalTable .sapUiTableRowHdrScr .sapUiTableRowHdr.sapUiTableRowHidden::after,
+	.sapUiAnalyticalTable.sapUiTableSelModeMultiToggle .sapUiTableRowHdr.sapUiAnalyticalTableSum::after {
+		display: none;
+	}
 }

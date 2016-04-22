@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -33,7 +33,7 @@ sap.ui.define(['jquery.sap.global'],
 				CSS_CLASS = SliderRenderer.CSS_CLASS;
 
 			oRm.write("<div");
-			oRm.addClass(CSS_CLASS);
+			this.addClass(oRm, oSlider);
 
 			if (!bEnabled) {
 				oRm.addClass(CSS_CLASS + "Disabled");
@@ -65,7 +65,7 @@ sap.ui.define(['jquery.sap.global'],
 				this.renderProgressIndicator(oRm, oSlider);
 			}
 
-			this.renderHandle(oRm, oSlider);
+			this.renderHandles(oRm, oSlider);
 			oRm.write("</div>");
 
 			if (oSlider.getName()) {
@@ -73,6 +73,17 @@ sap.ui.define(['jquery.sap.global'],
 			}
 
 			oRm.write("</div>");
+		};
+
+		/**
+		 * This method is reserved for derived classes to add extra CSS classes to the HTML root element of the control.
+		 *
+		 * @param {sap.ui.core.RenderManager} oRm The RenderManager that can be used for writing to the render output buffer.
+		 * @param {sap.ui.core.Control} oSlider An object representation of the control that should be rendered.
+		 * @since 1.36
+		 */
+		SliderRenderer.addClass = function(oRm, oSlider) {
+			oRm.addClass(SliderRenderer.CSS_CLASS);
 		};
 
 		SliderRenderer.renderProgressIndicator = function(oRm, oSlider) {
@@ -85,12 +96,25 @@ sap.ui.define(['jquery.sap.global'],
 			oRm.write(' aria-hidden="true"></div>');
 		};
 
-		SliderRenderer.renderHandle = function(oRm, oSlider) {
+		SliderRenderer.renderHandles = function(oRm, oSlider) {
+			this.renderHandle(oRm, oSlider,  {
+				id: oSlider.getId() + "-handle"
+			});
+		};
+
+		SliderRenderer.renderHandle = function(oRm, oSlider, mOptions) {
 			var bEnabled = oSlider.getEnabled();
 
 			oRm.write("<span");
-			oRm.writeAttribute("id", oSlider.getId() + "-handle");
-			oRm.writeAttribute("title", oSlider.getValue());
+
+			if (mOptions && (mOptions.id !== undefined)) {
+				oRm.writeAttributeEscaped("id", mOptions.id);
+			}
+
+			if (oSlider.getShowHandleTooltip()) {
+				this.writeHandleTooltip(oRm, oSlider);
+			}
+
 			oRm.addClass(SliderRenderer.CSS_CLASS + "Handle");
 			oRm.addStyle(sap.ui.getCore().getConfiguration().getRTL() ? "right" : "left", oSlider._sProgressValue);
 			this.writeAccessibilityState(oRm, oSlider);
@@ -104,6 +128,17 @@ sap.ui.define(['jquery.sap.global'],
 			oRm.write("></span>");
 		};
 
+		/**
+		 * Writes the handle tooltip.
+		 * To be overwritten by subclasses.
+		 *
+		 * @param {sap.ui.core.RenderManager} oRm The RenderManager that can be used for writing to the render output buffer.
+		 * @param {sap.ui.core.Control} oSlider An object representation of the control that should be rendered.
+		 */
+		SliderRenderer.writeHandleTooltip = function(oRm, oSlider) {
+			oRm.writeAttribute("title", oSlider.toFixed(oSlider.getValue()));
+		};
+
 		SliderRenderer.renderInput = function(oRm, oSlider) {
 			oRm.write('<input type="text"');
 			oRm.writeAttribute("id", oSlider.getId() + "-input");
@@ -115,7 +150,7 @@ sap.ui.define(['jquery.sap.global'],
 
 			oRm.writeClasses();
 			oRm.writeAttributeEscaped("name", oSlider.getName());
-			oRm.writeAttribute("value", oSlider.getValue());
+			oRm.writeAttribute("value", oSlider.toFixed(oSlider.getValue()));
 			oRm.write("/>");
 		};
 
@@ -127,14 +162,12 @@ sap.ui.define(['jquery.sap.global'],
 		 * @param {sap.ui.core.Control} oSlider An object representation of the control that should be rendered.
 		 */
 		SliderRenderer.writeAccessibilityState = function(oRm, oSlider) {
-			var fValue = oSlider.getValue();
-
 			oRm.writeAccessibilityState(oSlider, {
 				role: "slider",
 				orientation: "horizontal",
-				valuemin: oSlider.getMin(),
-				valuemax: oSlider.getMax(),
-				valuenow: fValue
+				valuemin: oSlider.toFixed(oSlider.getMin()),
+				valuemax: oSlider.toFixed(oSlider.getMax()),
+				valuenow: oSlider.toFixed(oSlider.getValue())
 			});
 		};
 

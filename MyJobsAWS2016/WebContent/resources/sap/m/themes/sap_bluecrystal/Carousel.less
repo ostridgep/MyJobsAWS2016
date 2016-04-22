@@ -3,37 +3,6 @@
 /* BlueCrystal theme                             */
 /* ============================================= */
 
-/*
-  Carousel control base styling
-*/
-.sapMCrslControls {
-	padding-top: 0.625rem;
-	text-align: center;
-}
-
-.sapMCrslControls a {
-	padding: 0.3125rem;
-	-webkit-user-select: none;
-	-moz-user-select: -moz-none;
-	user-select: none;
-	-webkit-user-drag: none;
-	-moz-user-drag: -moz-none;
-	user-drag: none;
-}
-
-.sapMCrslBulleted.sapMCrslBottomOffset {
-	position: absolute;
-	padding-top: 0;
-	bottom: 0.3125rem;
-	width: 100%;
-	z-index: 10;
-}
-
-.sapMCrslBulleted:not(.sapMCrslBottomOffset){
-	padding-bottom: 0.1875rem;
-	padding-top: 0.125rem;
-}
-
 /* Carousel controls: Bulleted */
 .sapMCrslBulleted > span {
 	text-indent: 2rem;
@@ -45,16 +14,12 @@
 	width: 0;
 	height: 0;
 	margin: 0 0.25rem;
-	color: @sapUiExtraDarkBorder;
-	background-color: @sapUiExtraDarkBorder;
+	color: lighten(@sapUiBase, 9.8);
+	background-color: lighten(@sapUiBase, 9.8);
 	-webkit-transition: background-color 0.1s ease-in;
 	-moz-transition: background-color 0.1s ease-in;
 	transition: background-color 0.1s ease-in;
-	-webkit-box-shadow: 0px 0px 0.0625rem 0.0625rem @sapUiLightestBorder;
-	-moz-box-shadow: 0px 0px 0.0625rem 0.0625rem @sapUiLightestBorder;
-	box-shadow: 0px 0px 0.0625rem 0.0625rem @sapUiLightestBorder;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
+	box-shadow: 0 0px 0.0625rem 0.0625rem @sapUiLightShadowTint;
 	border-radius: 50%;
 }
 
@@ -64,8 +29,8 @@
 }
 
 .sapMCrslBulleted > span.sapMCrslActive {
-	color: @sapUiHighlight;
-	background-color: @sapUiHighlight;
+	color: @sapUiSelected;
+	background-color: @sapUiSelected;
 }
 
 
@@ -77,6 +42,7 @@
 .sapMCrslHud a {
 	z-index: 2;
 	opacity: 0;
+	display: none;
 	position: absolute;
 	top: calc(50% - 3.875rem);
 	width: 3rem;
@@ -85,21 +51,13 @@
 	padding: 0;
 	text-decoration: none;
 	overflow: hidden;
-	background-color: @sapUiLightestBorder;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
+	background-color: @sapUiInvertedElement;
 	border-radius: 50%;
 	color: @sapUiInvertedElement;
 	-webkit-transition: opacity 0.1s ease-in;
 	-moz-transition: opacity 0.1s ease-in;
 	transition: opacity 0.1s ease-in;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	-webkit-box-shadow: fade(@sapUiShadowTint,30%) 0 0.0625rem 0.25rem;
-	-moz-box-shadow: fade(@sapUiShadowTint,30%) 0 0.0625rem 0.25rem;
-	-ms-box-shadow: fade(@sapUiShadowTint,30%) 0 0.0625rem 0.25rem;
-	box-shadow: 0px 0.0625rem 0.25rem fade(@sapUiShadowTint,30%);
+	box-shadow: 0 0.0625rem 0.25rem fade(@sapUiDarkShadowTint, 30);
 }
 
 .sapMCrsl{
@@ -113,11 +71,13 @@
 
 .sapMCrsl:hover .sapMCrslHud a {
 	opacity: 0.3;
+	display: block;
 }
 
 .sapMCrsl .sapMCrslHud a:hover,
 .sapMCrsl .sapMCrslHud a:focus {
 	opacity: 1;
+	display: block;
 }
 
 .sapMCrsl .sapMCrslHud.sapMCrslLeftmost a.sapMCrslPrev,
@@ -127,8 +87,6 @@
 }
 
 .sapMCrslHud .sapMCrslHudInner {
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
 	border-radius: 50%;
 	margin:0.25rem;
 	background-color: @sapUiHighlight;
@@ -202,4 +160,6 @@ html[dir='rtl'] .sapMCrslNext > .sapMCrslHudInner > .sapUiIcon,
 	padding-bottom: 1.6875rem;
 }
 
-
+.sapMCrslItem.sapMCrslTopOffset {
+  padding-top: 1.6875rem;
+}

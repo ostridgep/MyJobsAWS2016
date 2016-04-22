@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -19,19 +19,17 @@ sap.ui.define(['jquery.sap.global'],
 
 
 	/**
-	 * Renders the HTML for the given control, using the provided {@link sap.ui.fw.RenderManager}.
+	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
-	 * @param {sap.ui.fw.RenderManager} oRenderManager the RenderManager that can be used for writing to the Render-Output-Buffer
-	 * @param {sap.ui.fw.Control} oControl an object representation of the control that should be rendered
+	 * @param {sap.ui.core.RenderManager} oRenderManager the RenderManager that can be used for writing to the Render-Output-Buffer
+	 * @param {sap.ui.core.Control} oControl an object representation of the control that should be rendered
 	 */
-	ProgressIndicatorRenderer.render = function(oRenderManager, oProgressIndicator){
-		// .convenience variable
-		var rm = oRenderManager;
-		var widthControl = oProgressIndicator.getWidth();
-		var widthBar = oProgressIndicator.getPercentValue();
-		var tooltip = oProgressIndicator.getTooltip_AsString();
-		var displayValue = oProgressIndicator.getDisplayValue();
-		var widthBorder;
+	ProgressIndicatorRenderer.render = function (oRm, oProgressIndicator) {
+		var widthControl = oProgressIndicator.getWidth(),
+			widthBar = oProgressIndicator.getPercentValue(),
+			tooltip = oProgressIndicator.getTooltip_AsString(),
+			displayValue = oProgressIndicator.getDisplayValue(),
+			widthBorder;
 
 		oProgressIndicator.bRtl  = sap.ui.getCore().getConfiguration().getRTL();
 
@@ -41,129 +39,112 @@ sap.ui.define(['jquery.sap.global'],
 			widthBorder = '100%';
 		}
 
-		// write the HTML into the render manager
-		rm.write('<DIV');
-		rm.writeControlData(oProgressIndicator);
+		oRm.write('<DIV');
+		oRm.writeControlData(oProgressIndicator);
+		oRm.writeAttribute('tabIndex', '0');
 
-		rm.writeAttribute('tabIndex', '0');
-
-		//ARIA
-		if ( sap.ui.getCore().getConfiguration().getAccessibility()) {
-			rm.writeAttribute('role', 'progressbar');
-			rm.writeAccessibilityState(oProgressIndicator, {valuemin: '0%'});
-			rm.writeAccessibilityState(oProgressIndicator, {valuemax: '100%'});
-			rm.writeAccessibilityState(oProgressIndicator, {valuenow: widthBar + '%'});
+		if (sap.ui.getCore().getConfiguration().getAccessibility()) {
+			oRm.writeAccessibilityState(oProgressIndicator, {
+				role: 'progressbar',
+				valuemin: '0%',
+				valuenow: widthBar + '%',
+				valuemax: '100%'
+			});
 		}
 
 		if (displayValue) {
-			rm.writeAttributeEscaped('aria-valuetext', displayValue);
+			oRm.writeAttributeEscaped('aria-valuetext', displayValue);
 		}
 
 		if (tooltip) {
-			rm.writeAttributeEscaped('title', tooltip);
+			oRm.writeAttributeEscaped('title', tooltip);
 		}
 
-		if (oProgressIndicator.getWidth() && oProgressIndicator.getWidth() != '') {
-			rm.writeAttribute('style', 'height: 16px; width:' + widthControl + ';');
+		if (oProgressIndicator.getWidth() && oProgressIndicator.getWidth() !== '') {
+			oRm.writeAttribute('style', 'height: 16px; width:' + widthControl + ';');
 		}
 
-		rm.addClass('sapUiProgInd');
-		rm.writeClasses();
+		oRm.addClass('sapUiProgInd');
+		oRm.writeClasses();
 
-		rm.write('>');
+		oRm.write('>');
 
-		rm.write('<DIV');
-		rm.writeAttribute('id', oProgressIndicator.getId() + '-box');
+		oRm.write('<DIV');
+		oRm.writeAttribute('id', oProgressIndicator.getId() + '-box');
 
-		if (oProgressIndicator.getWidth() && oProgressIndicator.getWidth() != '') {
-			rm.writeAttribute('style', 'height: 16px; width:' + widthBorder + ';');
+		if (oProgressIndicator.getWidth() && oProgressIndicator.getWidth() !== '') {
+			oRm.writeAttribute('style', 'height: 16px; width:' + widthBorder + ';');
 		}
 
-		rm.addClass('sapUiProgIndBorder');
-		rm.writeClasses();
+		oRm.addClass('sapUiProgIndBorder');
+		oRm.writeClasses();
 
-		rm.write('>');
+		oRm.write('>');
 
-		rm.write('<DIV');
-		rm.writeAttribute('id', oProgressIndicator.getId() + '-bar');
-		rm.writeAttribute('onselectstart', "return false");
-		rm.writeAttribute('style', 'height: 14px; width:' + oProgressIndicator.getPercentValue() + '%;');
+		oRm.write('<DIV');
+		oRm.writeAttribute('id', oProgressIndicator.getId() + '-bar');
+		oRm.writeAttribute('onselectstart', "return false");
+		oRm.writeAttribute('style', 'height: 14px; width:' + oProgressIndicator.getPercentValue() + '%;');
 
 		var sBarColor = oProgressIndicator.getBarColor();
 		switch (sBarColor) {
 			case "POSITIVE":
-				rm.addClass('sapUiProgIndBarPos');
+				oRm.addClass('sapUiProgIndBarPos');
 				break;
 			case "NEGATIVE":
-				rm.addClass('sapUiProgIndBarNeg');
+				oRm.addClass('sapUiProgIndBarNeg');
 				break;
 			case "CRITICAL":
-				rm.addClass('sapUiProgIndBarCrit');
+				oRm.addClass('sapUiProgIndBarCrit');
 				break;
 			case "NEUTRAL":
-				rm.addClass('sapUiProgIndBar');
+				oRm.addClass('sapUiProgIndBar');
 				break;
 			default:
-				rm.addClass('sapUiProgIndBar');
+				oRm.addClass('sapUiProgIndBar');
 				break;
 		}
 
-		rm.writeClasses();
+		oRm.writeClasses();
 
-		rm.write('>');
+		oRm.write('>');
 
-		rm.write('<DIV');
-		rm.writeAttribute('id', oProgressIndicator.getId() + '-end');
+		oRm.write('<DIV');
+		oRm.writeAttribute('id', oProgressIndicator.getId() + '-end');
 
 		if (widthBar > 100) {
-			switch (sBarColor) {
-				case "POSITIVE":
-					rm.addClass('sapUiProgIndPosEnd');
-					break;
-				case "NEGATIVE":
-					rm.addClass('sapUiProgIndNegEnd');
-					break;
-				case "CRITICAL":
-					rm.addClass('sapUiProgIndCritEnd');
-					break;
-				case "NEUTRAL":
-					rm.addClass('sapUiProgIndEnd');
-					break;
-				default:
-					rm.addClass('sapUiProgIndEnd');
-					break;
-			}
+			oRm.addClass(oProgressIndicator._getProgIndTypeClass(sBarColor));
 		} else {
-			rm.addClass('sapUiProgIndEndHidden');
+			oRm.addClass('sapUiProgIndEndHidden');
 		}
 
-		rm.writeClasses();
+		oRm.writeClasses();
 		if (oProgressIndicator.bRtl) {
-			rm.writeAttribute('style', 'position: relative; right:' + widthBorder);
+			oRm.writeAttribute('style', 'position: relative; right:' + widthBorder);
 		} else {
-			rm.writeAttribute('style', 'position: relative; left:' + widthBorder);
+			oRm.writeAttribute('style', 'position: relative; left:' + widthBorder);
 		}
 
-		rm.write('>');
-		rm.write('</DIV>');
+		oRm.write('>');
+		oRm.write('</DIV>');
 
-		rm.write('<SPAN');
+		oRm.write('<SPAN');
 
-		rm.addClass('sapUiProgIndFont');
-		rm.writeClasses();
+		oRm.addClass('sapUiProgIndFont');
+		oRm.writeClasses();
 
-		rm.write('>');
+		oRm.write('>');
 
-		if (oProgressIndicator.getShowValue() && oProgressIndicator.getShowValue() == true) {
-			if (oProgressIndicator.getDisplayValue() && oProgressIndicator.getDisplayValue() != '') {
-				rm.writeEscaped(oProgressIndicator.getDisplayValue());
+		if (oProgressIndicator.getShowValue() && oProgressIndicator.getShowValue()) {
+			if (oProgressIndicator.getDisplayValue() && oProgressIndicator.getDisplayValue() !== '') {
+				oRm.writeEscaped(oProgressIndicator.getDisplayValue());
 			}
 		}
 
-		rm.write('</SPAN>');
-		rm.write('</DIV>');
-		rm.write('</DIV>');
-		rm.write('</DIV>');
+		oRm.write('</SPAN>');
+		oRm.write('</DIV>');
+		oRm.write('</DIV>');
+		oRm.write('</DIV>');
 	};
 
 	return ProgressIndicatorRenderer;

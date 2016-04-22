@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides an abstraction for list bindings
-sap.ui.define(['jquery.sap.global', './Binding'],
-	function(jQuery, Binding) {
+sap.ui.define(['./Binding'],
+	function(Binding) {
 	"use strict";
 
 
@@ -25,28 +25,46 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	 * @param {array}
 	 *         [aFilters=null] predefined filter/s contained in an array (optional)
 	 * @param {object}
-	 *         [mParameters=null] additional model specific parameters (optional) 
+	 *         [mParameters=null] additional model specific parameters (optional)
+	 * @param {array}
+	 *         [aSorters=null] predefined sap.ui.model.sorter/s contained in an array (optional)
 	 * @public
 	 * @alias sap.ui.model.TreeBinding
+	 * @extends sap.ui.model.Binding
 	 */
 	var TreeBinding = Binding.extend("sap.ui.model.TreeBinding", /** @lends sap.ui.model.TreeBinding.prototype */ {
-		
-		constructor : function(oModel, sPath, oContext, aFilters, mParameters){
+
+		constructor : function(oModel, sPath, oContext, aFilters, mParameters, aSorters){
 			Binding.call(this, oModel, sPath, oContext, mParameters);
-			this.aFilters = aFilters;
+			this.aFilters = [];
+
+			this.aSorters = aSorters;
+			if (!jQuery.isArray(this.aSorters) && this.aSorters instanceof sap.ui.model.Sorter) {
+				this.aSorters = [this.aSorters];
+			} else if (!jQuery.isArray(this.aSorters)) {
+				this.aSorters = [];
+			}
+
+			this.aApplicationFilters = aFilters;
+			if (!jQuery.isArray(aFilters) && aFilters instanceof sap.ui.model.Filter) {
+				this.aApplicationFilters = [aFilters];
+			} else if (!jQuery.isArray(aFilters)) {
+				this.aApplicationFilters = [];
+			}
+
 			this.bDisplayRootNode = mParameters && mParameters.displayRootNode === true;
 		},
-	
+
 		metadata : {
 			"abstract" : true,
 			publicMethods : [
 				"getRootContexts", "getNodeContexts", "hasChildren", "filter"
 			]
 		}
-		
+
 	});
-	
-	
+
+
 	// the 'abstract methods' to be implemented by child classes
 	/**
 	 * Returns the current value of the bound target
@@ -59,7 +77,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	 *
 	 * @public
 	 */
-	
+
 	/**
 	 * Returns the current value of the bound target
 	 *
@@ -72,7 +90,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	 *
 	 * @public
 	 */
-	
+
 	/**
 	 * Returns if the node has child nodes
 	 *
@@ -83,7 +101,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	 *
 	 * @public
 	 */
-	
+
 	/**
 	 * Returns the number of child nodes of a specific context
 	 *
@@ -98,7 +116,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 		}
 		return this.getNodeContexts(oContext).length;
 	};
-	
+
 	/**
 	 * Filters the tree according to the filter definitions.
 	 *
@@ -109,7 +127,17 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	 *
 	 * @public
 	 */
-	
+
+	/**
+	 * Sorts the tree according to the sorter definitions.
+	 *
+	 * @function
+	 * @name sap.ui.model.TreeBinding.prototype.sort
+	 * @param {sap.ui.model.Sorter[]} aSorters Array of sap.ui.model.Sorter objects
+	 *
+	 * @public
+	 */
+
 	/**
 	 * Attach event-handler <code>fnFunction</code> to the '_filter' event of this <code>sap.ui.model.TreeBinding</code>.<br/>
 	 * @param {function} fnFunction The function to call, when the event occurs.
@@ -120,7 +148,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	TreeBinding.prototype.attachFilter = function(fnFunction, oListener) {
 		this.attachEvent("_filter", fnFunction, oListener);
 	};
-	
+
 	/**
 	 * Detach event-handler <code>fnFunction</code> from the '_filter' event of this <code>sap.ui.model.TreeBinding</code>.<br/>
 	 * @param {function} fnFunction The function to call, when the event occurs.
@@ -131,7 +159,7 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	TreeBinding.prototype.detachFilter = function(fnFunction, oListener) {
 		this.detachEvent("_filter", fnFunction, oListener);
 	};
-	
+
 	/**
 	 * Fire event _filter to attached listeners.
 	 * @param {Map} [mArguments] the arguments to pass along with the event.
@@ -141,8 +169,8 @@ sap.ui.define(['jquery.sap.global', './Binding'],
 	TreeBinding.prototype._fireFilter = function(mArguments) {
 		this.fireEvent("_filter", mArguments);
 	};
-	
+
 
 	return TreeBinding;
 
-}, /* bExport= */ true);
+});

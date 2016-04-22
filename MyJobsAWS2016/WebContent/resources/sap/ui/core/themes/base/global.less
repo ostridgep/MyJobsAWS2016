@@ -1,10 +1,25 @@
+/* =========================== */
 /* Global CSS for 'base' theme */
+/* =========================== */
 
-// Semantic Theming Mapping
-@sapUiBaseColor: @sapBaseColor;
+/* =========================== */
+/* Semantic Theming Mapping    */
+/* =========================== */
 
+@sapUiSelected: @sapSelectedColor;
+@sapUiActive: @sapActiveColor;
+
+@sapUiContentLabelColor: @sapContent_LabelColor;
 @sapUiContentDisabledTextColor: @sapContent_DisabledTextColor;
-@sapUiContentForegroundBorderColor: #A6A6A6;
+@sapUiContentContrastTextThreshold: @sapContent_ContrastTextThreshold;
+@sapUiContentContrastTextColor: @sapContent_ContrastTextColor;
+@sapUiContentForegroundColor: @sapContent_ForegroundColor;
+@sapUiContentForegroundBorderColor: @sapContent_ForegroundBorderColor;
+@sapUiContentForegroundTextColor: @sapContent_ForegroundTextColor;
+
+@sapUiShellBackground: @sapShell_Background;
+@sapUiShellBorderColor: @sapShell_BorderColor;
+@sapUiShellTextColor: @sapShell_TextColor;
 
 @sapUiButtonBackground: @sapButton_Background;
 @sapUiButtonBorderColor: @sapButton_BorderColor;
@@ -15,40 +30,83 @@
 @sapUiButtonHoverBackground: @sapButton_Hover_Background;
 @sapUiButtonHoverBorderColor: @sapButton_Hover_BorderColor;
 @sapUiButtonHoverTextColor: @sapButton_Hover_TextColor;
-// @sapUiButtonEmphasizedBackground: @sapButton_Emphasized_Background;
-// @sapUiButtonEmphasizedBorderColor: @sapButton_Emphasized_BorderColor;
-// @sapUiButtonEmphasizedTextColor: @sapButton_Emphasized_TextColor;
-@sapUiButtonRejectBackground: red;
-@sapUiButtonAcceptBackground: green;
+@sapUiButtonEmphasizedBackground: @sapButton_Emphasized_Background;
+@sapUiButtonEmphasizedBorderColor: @sapButton_Emphasized_BorderColor;
+@sapUiButtonEmphasizedTextColor: @sapButton_Emphasized_TextColor;
+@sapUiButtonRejectBackground: @sapButton_Reject_Background;
+@sapUiButtonAcceptBackground: @sapButton_Accept_Background;
 
 @sapUiFieldBackground: @sapField_Background;
-@sapUiFieldBorderColor: #BFBFBF;
-@sapUiFieldHelpBackground: @sapField_Background;
+@sapUiFieldBorderColor: @sapField_BorderColor;
+@sapUiFieldHelpBackground: @sapField_HelpBackground;
 @sapUiFieldHoverBackground: @sapField_Hover_Background;
 @sapUiFieldHoverBorderColor: @sapField_Hover_BorderColor;
 @sapUiFieldHoverHelpBackground: @sapField_Hover_HelpBackground;
-@sapUiFieldFocusBackground: @sapField_Background;
+@sapUiFieldFocusBackground: @sapField_Focus_Background;
 @sapUiFieldFocusBorderColor: @sapField_Focus_BorderColor;
-@sapUiFieldFocusHelpBackground: @sapField_Background;
-@sapUiFieldReadOnlyBackground: #808080;
+@sapUiFieldFocusHelpBackground: @sapField_Focus_HelpBackground;
+@sapUiFieldReadOnlyBackground: @sapField_ReadOnly_Background;
 @sapUiFieldReadOnlyBorderColor: @sapField_ReadOnly_BorderColor;
-@sapUiFieldReadOnlyHelpBackground: #808080;
-@sapUiFieldDisabledBackground: @sapField_Background;
-@sapUiFieldDisabledBorderColor: @sapField_BorderColor;
-@sapUiFieldDisabledHelpBackground: @sapField_Background;
-@sapUiFieldRequiredColor: @sapField_BorderColor;
-@sapUiFieldInvalidColor: #FF0000;
-@sapUiFieldInvalidBackground: #FF9A90;
-@sapUiFieldWarningColor: #FFFF00;
-@sapUiFieldWarningBackground: #FAF2B0;
+@sapUiFieldReadOnlyHelpBackground: @sapField_ReadOnly_HelpBackground;
+@sapUiFieldDisabledBackground: @sapField_Disabled_Background;
+@sapUiFieldDisabledBorderColor: @sapField_Disabled_BorderColor;
+@sapUiFieldDisabledHelpBackground: @sapField_Disabled_HelpBackground;
+@sapUiFieldRequiredColor: @sapField_RequiredColor;
+@sapUiFieldInvalidColor: @sapField_InvalidColor;
+@sapUiFieldInvalidBackground: @sapField_InvalidBackground;
+@sapUiFieldWarningColor: @sapField_WarningColor;
+@sapUiFieldWarningBackground: @sapField_WarningBackground;
 @sapUiFieldSuccessColor: @sapField_SuccessColor;
 @sapUiFieldSuccessBackground: @sapField_SuccessBackground;
 
-@sapUiListHeaderBorderColor: #000000;
-@sapUiListHighlightColor: @sapList_HighlightColor;
-@sapUiListHoverBackground: @sapList_Hover_Background;
-@sapUiListSelectionBackgroundColor: @sapUiHighlight;
+@sapUiGroupTitleBackground: @sapGroup_TitleBackground;
+@sapUiGroupTitleBorderColor: @sapGroup_TitleBorderColor;
+@sapUiGroupTitleTextColor: @sapGroup_TitleTextColor;
+@sapUiGroupContentBackground: @sapGroup_ContentBackground;
+@sapUiGroupContentBorderColor: @sapGroup_ContentBorderColor;
+@sapUiGroupFooterBackground: @sapGroup_FooterBackground;
 
+@sapUiToolbarBackground: @sapToolbar_Background;
+@sapUiToolbarSeparatorColor: @sapToolbar_SeparatorColor;
+
+@sapUiListHeaderBackground: @sapList_HeaderBackground;
+@sapUiListHeaderBorderColor: @sapList_HeaderBorderColor;
+@sapUiListHeaderTextColor: @sapList_HeaderTextColor;
+@sapUiListBorderColor: @sapList_BorderColor;
+@sapUiListHighlightColor: @sapList_HighlightColor;
+@sapUiListSelectionBackgroundColor: @sapList_SelectionBackgroundColor;
+@sapUiListBackground: @sapList_Background;
+@sapUiListHoverBackground: @sapList_Hover_Background;
+
+@sapUiScrollBarFaceColor: @sapScrollBar_FaceColor;
+@sapUiScrollBarTrackColor: @sapScrollBar_TrackColor;
+@sapUiScrollBarBorderColor: @sapScrollBar_BorderColor;
+@sapUiScrollBarSymbolColor: @sapScrollBar_SymbolColor;
+@sapUiScrollBarHoverFaceColor: @sapScrollBar_Hover_FaceColor;
+
+@sapUiPageHeaderBackground: @sapPageHeader_Background;
+@sapUiPageHeaderBorderColor: @sapPageHeader_BorderColor;
+@sapUiPageHeaderTextColor: @sapPageHeader_TextColor;
+@sapUiPageFooterBackground: @sapPageFooter_Background;
+@sapUiPageFooterTextColor: @sapPageFooter_TextColor;
+
+@sapUiInfobarBackground: @sapInfobar_Background;
+
+@sapUiObjectHeaderBackground: @sapObjectHeader_Background;
+
+@sapUiBlockLayerBackground: @sapBlockLayer_Background;
+
+@sapUiTileBackground: @sapTile_Background;
+@sapUiTileBorderColor: @sapTile_BorderColor;
+@sapUiTileTextColor: @sapTile_TextColor;
+
+
+
+
+
+@sapUiBaseColor: @sapBaseColor;
+@sapUiHighlightTextColor: @sapHighlightTextColor;
+@sapUiBaseBG: @sapBackgroundColor;
 
 // Brand Colors
 @sapUiBrand: #F0AB00;     // SAP Gold #f0ab00
@@ -130,11 +188,26 @@
 @sapUiErrorBorder: red;
 @sapUiWarningBorder: yellow;
 
+@sapUiElement: lightgrey;
+@sapUiInvertedElement: #ffffff;
+
 // Line Colors
 @sapUiLightLine: lightgrey;
 @sapUiMediumLine: grey;
 @sapUiEmphasizedLine: @sapUiHighlight;
 @sapUiDarkLine: darkgrey;
+
+@sapUiLightShadowTint: #ffffff;
+@sapUiDarkShadowTint: #000000;
+
+@sapUiFocus: #000000;
+@sapUiInvertedFocus: #ffffff;
+
+@sapUiListTextColor: @sapUiDarkText;
+
+@sapUiPageHeaderTextColor: @sapUiLightText;
+
+@sapUiTileBackground: #ffffff;
 
 // Table Colors
 @sapUiTableRowBG: @sapUiWhite;
@@ -179,12 +252,12 @@
 
 @sapUiUx3ShellBackgroundColor: @sapUiExtraLightBG;
 @sapUiUx3ShellHoverColor: @sapUiBaseText;
-/** 
+/**
   * This parameter is used in the Shell control to calculate the size when it grows.
-  * !!! ONLY PX-VALUES ARE ALLOWED HERE. 
+  * !!! ONLY PX-VALUES ARE ALLOWED HERE.
   */
 @sapUiUx3ShellSideBarBaseWidth:       40px;
-/** 
+/**
   * This parameter is used in the Shell control to calculate the size of the margin when showing
   * an overflow button in the right pane. As of 1.18.0 this value contains the _maximum_ height
   * of the overflow button, if the text inside the button is smaller, the button shrinks with it.
@@ -221,20 +294,22 @@
 /* ToolPopup */
 @sapUiUx3ToolPopupInverted: ~"true"; /* Telling the ToolPopup if it's inverted per default */
 @sapUiUx3ToolPopupArrowWidth: 13px;
-@sapUiUx3ToolPopupArrowHeight: 20px;
+@sapUiUx3ToolPopupArrowHeight: 24px;
 @sapUiUx3ToolPopupArrowRightMarginCorrection: -2px;
 @sapUiUx3ToolPopupArrowRightMarginCorrectionInverted: -7px;
 @sapUiUx3TPPaddingBottom: 50px;
 
 
+@sapUiButtonIconColor: contrast(@sapUiButtonBackground, @sapUiElement, @sapUiContentContrastTextColor, @sapUiContentContrastTextThreshold);
 // @sapUiButtonBorderColor: @sapUiMediumBorder; // needed beacuse different in GR and UX
 // @sapUiButtonBackground: @sapUiButtonStandardBG; // to be renamed????
 // @sapUiButtonDisabledBorderColor: @sapUiMediumBorder; // needed because different in GR, HCB and UX
 @sapUiButtonDisabledBackground: @sapUiExtraLightBG; // needed, different in every theme
 // @sapUiButtonHoverBorderColor: @sapUiMediumBorder; // needed beacuse different in GR and UX
 @sapUiButtonHoverBackground: @sapUiMediumBG; // needed beacuse different in GR, Platinum and UX
-@sapUiButtonActiveBorderColor: @sapUiMediumBorder; // needed beacuse different in GR and UX
-@sapUiButtonActiveBackground: @sapUiDarkBG; // needed beacuse different in GR, Platinum and UX
+@sapUiButtonActiveBackground: @sapUiHighlight;
+@sapUiButtonActiveBorderColor: @sapUiButtonActiveBackground;
+@sapUiButtonActiveTextColor: contrast(@sapUiButtonActiveBackground, @sapUiButtonTextColor, @sapUiContentContrastTextColor, @sapUiContentContrastTextThreshold);
 @sapUiButtonEmphasizedBorderColor: @sapUiButtonBorderColor;
 @sapUiButtonEmphasizedBackground: @sapUiButtonEmphasizedBG;
 @sapUiButtonEmphasizedDisabledBorderColor: @sapUiButtonEmphasizedBorderColor;
@@ -262,11 +337,12 @@
 @sapUiButtonLiteBackground: rgba(0,0,0,0); /* transparent; */
 @sapUiToggleButtonPressedDisabledBackground: #D8D8E8;
 @sapUiToggleButtonPressedBackground: @sapUiHighlight;
+@sapUiToggleButtonPressedHoverBackground: darken(@sapUiToggleButtonPressedBackground, 5);
 
 // semantic colors
 @sapUiPositiveBG: @sapUiPositiveText; // no positive background defined by UX, but using text color as background may be confusing
 
-// default shadow for popups 
+// default shadow for popups
 @sapUiShadowTint: #000;
 @sapUiShadow: 5px 5px 10px fade(@sapUiShadowTint,50%);
 
@@ -279,21 +355,21 @@
 @sapUiMarginMedium : 2rem; /*make medium margin themable*/
 @sapUiMarginLarge  : 3rem; /*make large margin themable*/
 
-/* 
+/*
  * This is a mixin for creating the predefined container content padding
  * classes:
  * sapUiNoContainerContentPadding
  * sapUiContainerContentPadding
  * sapUiResponsiveContainerContentPadding
- * These classes can be set on many UI5 containers and will 
- * add padding inside the container's content padding based 
+ * These classes can be set on many UI5 containers and will
+ * add padding inside the container's content padding based
  * on the selectors that are arguments for this mixin.
  *
  * Arguments to this function-like mixin are the rootClass selector and
  * the content selector where the padding should be applied.
  */
- 
- /* 
+
+ /*
   * the sapLess-parser has problems with an escaped string as default value for the parameterized mixin
   * therefore we need to temporarily use a parameter assigning the default value
   */
@@ -333,7 +409,7 @@
 	.sapMSplitContainerMaster @{rootClass}.sapUiResponsiveContentPadding @{contentSelector} {
 		padding: 0;
 	}
-	
+
 	/* overrides the responsive settings for the split app detail page */
 	.sapMSplitContainerDetail @{rootClass}.sapUiResponsiveContentPadding @{contentSelector} {
 		padding: 1rem;

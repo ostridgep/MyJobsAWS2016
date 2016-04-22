@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,47 +14,47 @@
 
 // Provides class sap.ui.model.odata.ODataModel
 sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './CountMode', './ODataContextBinding', './ODataListBinding', './ODataMetadata', './ODataPropertyBinding', './ODataTreeBinding', 'sap/ui/model/odata/ODataMetaModel', 'sap/ui/thirdparty/URI', 'sap/ui/thirdparty/datajs'],
-	function(jQuery, Model, ODataUtils, CountMode, ODataContextBinding, ODataListBinding, ODataMetadata, ODataPropertyBinding, ODataTreeBinding, ODataMetaModel, URI1, datajs) {
+	function(jQuery, Model, ODataUtils, CountMode, ODataContextBinding, ODataListBinding, ODataMetadata, ODataPropertyBinding, ODataTreeBinding, ODataMetaModel, URI, OData) {
 	"use strict";
 
-
-	/*global OData *///declare unusual global vars for JSLint/SAPUI5 validation
-	/*global URI *///declare unusual global vars for JSLint/SAPUI5 validation
 
 	/**
 	 * Constructor for a new ODataModel.
 	 *
-	 * @param {string} sServiceUrl required - base uri of the service to request data from; additional URL parameters appended here will be appended to every request
-	 * @param {string | object} [bJSON] (optional) true to request data as JSON or an object which contains the following parameter properties:
-	 * 							json, user, password, headers, tokenHandling, withCredentials, loadMetadataAsync, maxDataServiceVersion (default = '2.0';
-	 * please use the following string format e.g. '2.0' or '3.0'. OData version supported by the ODataModel: '2.0'. '3.0' may work but is currently experimental.),
-	 * useBatch (all requests will be sent in batch requests default = false),
-	 * refreshAfterChange (enable/disable automatic refresh after change operations: default = true),
-	 * serviceUrlParams (URL parameters for all requests),
-	 * metadataUrlParams (additional URL parameters for Metadata requests).
-	 * See below for descriptions of these parameters.
-	 * @param {string} [sUser] (optional) user
-	 * @param {string} [sPassword] (optional) password
-	 * @param {object} [mHeaders] (optional) map of custom headers which should be set in each request.
-	 * @param {boolean} [bTokenHandling] (optional) enable/disable XCSRF-Token handling
-	 * @param {boolean} [bWithCredentials] (optional, experimental) true when user credentials are to be included in a cross-origin request. Please note that this works only if all requests are asynchronous.
-	 * @param {object} [bLoadMetadataAsync] (optional) determined if the service metadata request is sent synchronous or asynchronous. Default is false.
-	 * Please note that if this is set to true attach to the metadataLoaded event to get notified when the metadata has been loaded before accessing the service metadata.
-	 * @param {string|string[]} [annotationURI] (optional) The URL (or an array of URLs) from which the annotation metadata should be loaded
-	 * @param {boolean} [loadAnnotationsJoined] (optional) Whether or not to fire the metadataLoaded-event only after annotations have been loaded as well.
+	 * @param {string} [sServiceUrl] base uri of the service to request data from; additional URL parameters appended here will be appended to every request
+	 * 								can be passed with the mParameters object as well: [mParameters.serviceUrl] A serviceURl is required!
+	 * @param {object} [mParameters] (optional) a map which contains the following parameter properties:
+	 * @param {boolean} [mParameters.json] if set true request payloads will be JSON, XML for false (default = false),
+	 * @param {string} [mParameters.user] user for the service,
+	 * @param {string} [mParameters.password] password for service,
+	 * @param {map} [mParameters.headers] a map of custom headers like {"myHeader":"myHeaderValue",...},
+	 * @param {boolean} [mParameters.tokenHandling] enable/disable XCSRF-Token handling (default = true),
+	 * @param {boolean} [mParameters.withCredentials] experimental - true when user credentials are to be included in a cross-origin request. Please note that this works only if all requests are asynchronous.
+	 * @param {object} [mParameters.loadMetadataAsync] (optional) determined if the service metadata request is sent synchronous or asynchronous. Default is false.
+	 * @param [mParameters.maxDataServiceVersion] (default = '2.0') please use the following string format e.g. '2.0' or '3.0'.
+	 * 									OData version supported by the ODataModel: '2.0',
+	 * @param {boolean} [mParameters.useBatch] when true all requests will be sent in batch requests (default = false),
+	 * @param {boolean} [mParameters.refreshAfterChange] enable/disable automatic refresh after change operations: default = true,
+	 * @param  {string|string[]} [mParameters.annotationURI] The URL (or an array of URLs) from which the annotation metadata should be loaded,
+	 * @param {boolean} [mParameters.loadAnnotationsJoined] Whether or not to fire the metadataLoaded-event only after annotations have been loaded as well,
+	 * @param {map} [mParameters.serviceUrlParams] map of URL parameters - these parameters will be attached to all requests,
+	 * @param {map} [mParameters.metadataUrlParams] map of URL parameters for metadata requests - only attached to $metadata request.
+	 * @param {string} [mParameters.defaultCountMode] sets the default count mode for the model. If not set, sap.ui.model.odata.CountMode.Both is used.
+	 * @param {map} [mParameters.metadataNamespaces] a map of namespaces (name => URI) used for parsing the service metadata.
+	 * @param {boolean} [mParameters.skipMetadataAnnotationParsing] Whether to skip the automated loading of annotations from the metadata document. Loading annotations from metadata does not have any effects (except the lost performance by invoking the parser) if there are not annotations inside the metadata document
 	 *
 	 * @class
 	 * Model implementation for oData format
 	 * Binding to V4 metadata annotations is experimental!
 	 *
-	 * @extends sap.ui.model.Model
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.model.odata.ODataModel
+	 * @extends sap.ui.model.Model
 	 */
 	var ODataModel = Model.extend("sap.ui.model.odata.ODataModel", /** @lends sap.ui.model.odata.ODataModel.prototype */ {
 
@@ -70,7 +70,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 				sDefaultCountMode,
 				mServiceUrlParams,
 				mMetadataUrlParams,
+				bSkipMetadataAnnotationParsing,
 				that = this;
+
+			if (typeof (sServiceUrl) === "object") {
+				bJSON = sServiceUrl;
+				sServiceUrl = bJSON.serviceUrl;
+			}
 
 			if (typeof bJSON === "object") {
 				sUser = bJSON.user;
@@ -88,6 +94,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 				mMetadataNamespaces = bJSON.metadataNamespaces;
 				mServiceUrlParams = bJSON.serviceUrlParams;
 				mMetadataUrlParams = bJSON.metadataUrlParams;
+				bSkipMetadataAnnotationParsing = bJSON.skipMetadataAnnotationParsing;
 				bJSON = bJSON.json;
 			}
 
@@ -112,10 +119,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			this.sDefaultCountMode = sDefaultCountMode || CountMode.Both;
 			this.oMetadataLoadEvent = null;
 			this.oMetadataFailedEvent = null;
-			// Load annotations support on demand
-			if (this.sAnnotationURI) {
-				jQuery.sap.require("sap.ui.model.odata.ODataAnnotations");
-			}
+			this.bSkipMetadataAnnotationParsing = bSkipMetadataAnnotationParsing;
 
 
 			// prepare variables for request headers, data and metadata
@@ -146,10 +150,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			this.sServiceUrl = this.sServiceUrl.replace(/\/$/, "");
 
 			// Get/create service specific data container or create one if it doesn't exist
-			if (!ODataModel.mServiceData[this.sServiceUrl]) {
-				ODataModel.mServiceData[this.sServiceUrl] = {};
+			var sMetadataUrl = this._createRequestUrl("$metadata", undefined, mMetadataUrlParams);
+			if (!ODataModel.mServiceData[sMetadataUrl]) {
+				ODataModel.mServiceData[sMetadataUrl] = {};
 			}
-			this.oServiceData = ODataModel.mServiceData[this.sServiceUrl];
+			this.oServiceData = ODataModel.mServiceData[sMetadataUrl];
 
 
 			// Get CSRF token, if already available
@@ -161,14 +166,55 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			this.sUser = sUser;
 			this.sPassword = sPassword;
 
-			this.oHeaders["Accept-Language"] = sap.ui.getCore().getConfiguration().getLanguage();
+			this.oHeaders["Accept-Language"] = sap.ui.getCore().getConfiguration().getLanguageTag();
 
 			if (!this.oServiceData.oMetadata) {
 				//create Metadata object
-				this.oServiceData.oMetadata = new sap.ui.model.odata.ODataMetadata(this._createRequestUrl("$metadata", undefined, mMetadataUrlParams),
-									{ async: this.bLoadMetadataAsync, user: this.sUser, password: this.sPassword, headers: this.mCustomHeaders, namespaces: mMetadataNamespaces, withCredentials: this.bWithCredentials});
+				this.oServiceData.oMetadata = new sap.ui.model.odata.ODataMetadata(sMetadataUrl, {
+					async: this.bLoadMetadataAsync,
+					user: this.sUser,
+					password: this.sPassword,
+					headers: this.mCustomHeaders,
+					namespaces: mMetadataNamespaces,
+					withCredentials: this.bWithCredentials
+				});
 			}
 			this.oMetadata = this.oServiceData.oMetadata;
+
+			this.pAnnotationsLoaded = this.oMetadata.loaded();
+
+			if (this.sAnnotationURI || !this.bSkipMetadataAnnotationParsing) {
+				// Make sure the annotation parser object is already created and can be used by the MetaModel
+				var oAnnotations = this._getAnnotationParser();
+
+				if (!this.bSkipMetadataAnnotationParsing) {
+					if (!this.bLoadMetadataAsync) {
+						//Synchronous metadata load --> metadata should already be available, try to stay synchronous
+						// Don't fire additional events for automatic metadata annotations parsing, but if no annotation URL exists, fire the event
+						this.addAnnotationXML(this.oMetadata.sMetadataBody, !!this.sAnnotationURI);
+					} else {
+						this.pAnnotationsLoaded = this.oMetadata.loaded().then(function(bSuppressEvents, mParams) {
+							//Don't fire additional events for automatic metadata annotations parsing, but if no annotation URL exists, fire the event
+							if (this.bDestroyed) {
+								return Promise.reject();
+							}
+							return this.addAnnotationXML(mParams["metadataString"], bSuppressEvents);
+						}.bind(this, !!this.sAnnotationURI));
+					}
+				}
+
+				if (this.sAnnotationURI) {
+					if (this.bLoadMetadataAsync) {
+						this.pAnnotationsLoaded = this.pAnnotationsLoaded
+							.then(oAnnotations.addUrl.bind(oAnnotations, this.sAnnotationURI));
+					} else {
+						this.pAnnotationsLoaded = Promise.all([
+							this.pAnnotationsLoaded,
+							oAnnotations.addUrl(this.sAnnotationURI)
+						]);
+					}
+				}
+			}
 
 			if (mServiceUrlParams) {
 				// new URL params used -> add to ones from sServiceUrl
@@ -176,7 +222,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 				this.aUrlParams = this.aUrlParams.concat(ODataUtils._createUrlParamsArray(mServiceUrlParams));
 			}
 
-			
+
 			this.onMetadataLoaded = function(oEvent){
 				that._initializeMetadata();
 				that.initialize();
@@ -184,7 +230,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			this.onMetadataFailed = function(oEvent) {
 				that.fireMetadataFailed(oEvent.getParameters());
 			};
-			
+
 			if (!this.oMetadata.isLoaded()) {
 				this.oMetadata.attachLoaded(this.onMetadataLoaded);
 				this.oMetadata.attachFailed(this.onMetadataFailed);
@@ -192,17 +238,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			if (this.oMetadata.isFailed()){
 				this.refreshMetadata();
 			}
-
-			if (this.sAnnotationURI) {
-				this.oAnnotations = new sap.ui.model.odata.ODataAnnotations(this.sAnnotationURI, this.oMetadata, { async: this.bLoadMetadataAsync });
-				this.oAnnotations.attachFailed(function(oEvent) {
-					that.fireAnnotationsFailed(oEvent.getParameters());
-				});
-				this.oAnnotations.attachLoaded(function(oEvent) {
-					that.fireAnnotationsLoaded(oEvent.getParameters());
-				});
-			}
-
 			if (this.oMetadata.isLoaded()) {
 				this._initializeMetadata(true);
 			}
@@ -297,22 +332,23 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			if (!!bDelay) {
 				that.metadataLoadEvent = jQuery.sap.delayedCall(0, that, doFire);
 			} else {
-				that.fireMetadataLoaded({metadata: that.oMetadata});
-				jQuery.sap.log.debug("ODataModel fired metadataloaded");
+				if (that.oMetadata) {
+					that.fireMetadataLoaded({metadata: that.oMetadata});
+					jQuery.sap.log.debug("ODataModel fired metadataloaded");
+				}
 			}
 		};
 
-		if (this.bLoadMetadataAsync && this.sAnnotationURI && this.bLoadAnnotationsJoined) {
+		if (this.sAnnotationURI && this.bLoadAnnotationsJoined) {
 			// In case of joined loading, wait for the annotations before firing the event
 			// This is also tested in the fireMetadataLoaded-method and no event is fired in case
 			// of joined loading.
-			if (this.oAnnotations && this.oAnnotations.bInitialized) {
-				doFire();
+			if (this.oAnnotations && (this.oAnnotations.bInitialized || this.oAnnotations.isFailed())) {
+				doFire(!this.bLoadMetadataAsync);
 			} else {
-				this.oAnnotations.attachLoaded(function() {
-					// Now metadata was loaded and the annotations have been parsed
-					doFire();
-				}, this);
+				this.oAnnotations.attachEventOnce("loaded", function() {
+					doFire(true);
+				});
 			}
 		} else {
 			// In case of synchronous or asynchronous non-joined loading, or if no annotations are
@@ -331,7 +367,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * @protected
 	 */
 	ODataModel.prototype.fireAnnotationsLoaded = function(mArguments) {
-		this.fireEvent("annotationsLoaded", mArguments);
+		if (!this.bLoadMetadataAsync) {
+			setTimeout(this.fireEvent.bind(this, "annotationsLoaded", mArguments), 0);
+		} else {
+			this.fireEvent("annotationsLoaded", mArguments);
+		}
 		return this;
 	};
 
@@ -384,7 +424,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * @protected
 	 */
 	ODataModel.prototype.fireAnnotationsFailed = function(mArguments) {
-		this.fireEvent("annotationsFailed", mArguments);
+		if (!this.bLoadMetadataAsync) {
+			setTimeout(this.fireEvent.bind(this, "annotationsFailed", mArguments), 0);
+		} else {
+			this.fireEvent("annotationsFailed", mArguments);
+		}
 		jQuery.sap.log.debug("ODataModel fired annotationsfailed");
 		return this;
 	};
@@ -637,7 +681,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 					info: "Accept headers:" + that.oHeaders["Accept"], infoObject : {acceptHeaders: that.oHeaders["Accept"]}, success: true});
 				return;
 			}
-			
+
 			// no data available
 			if (!oResultData) {
 				jQuery.sap.log.fatal("The following problem occurred: No data was retrieved by service: " + oResponse.requestUri);
@@ -930,10 +974,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * @param {boolean} bForceUpdate
 	 * @param {boolean} bAsync
 	 * @param {object} mChangedEntities
+	 * @param {boolean} bMetaModelOnly update metamodel bindings only
 	 *
 	 * @private
 	 */
-	ODataModel.prototype.checkUpdate = function(bForceUpdate, bAsync, mChangedEntities) {
+	ODataModel.prototype.checkUpdate = function(bForceUpdate, bAsync, mChangedEntities, bMetaModelOnly) {
 		if (bAsync) {
 			if (!this.sUpdateTimer) {
 				this.sUpdateTimer = jQuery.sap.delayedCall(0, this, function() {
@@ -948,10 +993,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 		}
 		var aBindings = this.aBindings.slice(0);
 		jQuery.each(aBindings, function(iIndex, oBinding) {
-			oBinding.checkUpdate(bForceUpdate, mChangedEntities);
-		});
+			if (!bMetaModelOnly || this.isMetaModelPath(oBinding.getPath())) {
+				oBinding.checkUpdate(bForceUpdate, mChangedEntities);
+			}
+		}.bind(this));
 	};
-
 
 	/**
 	 * @see sap.ui.model.Model.prototype.bindProperty
@@ -997,7 +1043,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			fnCallBack = mParameters;
 			mParameters = null;
 		}
-		
+
 		// if path cannot be resolved, call the callback function and return null
 		if (!sFullPath) {
 			if (fnCallBack) {
@@ -1005,7 +1051,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			}
 			return null;
 		}
-		
+
 		// try to resolve path, send a request to the server if data is not available yet
 		// if we have set forceUpdate in mParameters we send the request even if the data is available
 		var oData = this._getObject(sPath, oContext),
@@ -1068,7 +1114,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 		if (!sFullPath) {
 			return false;
 		}
-		
+
 		// no data --> reload needed
 		if (!oData) {
 			return true;
@@ -1341,7 +1387,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	};
 
 	/**
-	 * Returns the value for the property with the given <code>sPath</code>
+	 * Returns the value for the property with the given <code>sPath</code>.
+	 * If the path points to a navigation property which has been loaded via $expand then the <code>bIncludeExpandEntries</code>
+	 * parameter determines if the navigation property should be included in the returned value or not.
+	 * Please note that this currently works for 1..1 navigation properties only.
+	 *
 	 *
 	 * @param {string} sPath the path/name of the property
 	 * @param {object} [oContext] the context if available to access the property value
@@ -1385,15 +1435,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * @returns {any}
 	 */
 	ODataModel.prototype._getObject = function(sPath, oContext) {
-		var oNode = this.isLegacySyntax() ? this.oData : null, 
+		var oNode = this.isLegacySyntax() ? this.oData : null,
 			sResolvedPath = this.resolve(sPath, oContext),
 			iSeparator, sDataPath, sMetaPath, oMetaContext, sKey, oMetaModel;
 
 		//check for metadata path
 		if (this.oMetadata && sResolvedPath && sResolvedPath.indexOf('/#') > -1)  {
-			iSeparator = sResolvedPath.indexOf('/##');
-			if (iSeparator >= 0) {
+			if (this.isMetaModelPath(sResolvedPath)) {
 				// Metadata binding resolved by ODataMetaModel
+				iSeparator = sResolvedPath.indexOf('/##');
 				oMetaModel = this.getMetaModel();
 				if (!this.bMetaModelLoaded) {
 					return null;
@@ -2296,8 +2346,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * 		given with the context.
 	 * @param {map} [mParameters.urlParameters] A map containing the parameters that will be passed as query strings
 	 * @param {boolean} [mParameters.async=true] true for asynchronous requests.
-	 * @param {array} [mParameter.filters] an array of sap.ui.model.Filter to be included in the request URL
-	 * @param {array} [mParameter.sorters] an array of sap.ui.model.Sorter to be included in the request URL
+	 * @param {array} [mParameters.filters] an array of sap.ui.model.Filter to be included in the request URL
+	 * @param {array} [mParameters.sorters] an array of sap.ui.model.Sorter to be included in the request URL
 	 * @param {function} [mParameters.success] a callback function which is called when the data has
 	 *		been successfully retrieved. The handler can have the
 	 *		following parameters: oData and response.
@@ -2893,10 +2943,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 				}
 			});
 			this.mCustomHeaders = mCheckedHeaders;
+
 		} else {
 			this.mCustomHeaders = {};
 		}
 
+		// Custom set headers should also be used when requesting annotations, but do not instantiate annotations just for this
+		if (this.oAnnotations) {
+			this.oAnnotations.setHeaders(this.mCustomHeaders);
+		}
 	};
 
 	/**
@@ -2968,8 +3023,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	};
 
 	/**
-	 * Format a JavaScript value according to the given EDM type
-	 * http://www.odata.org/documentation/overview#AbstractTypeSystem
+	 * Formats a JavaScript value according to the given
+	 * <a href="http://www.odata.org/documentation/odata-version-2-0/overview#AbstractTypeSystem">
+	 * EDM type</a>.
 	 *
 	 * @param {any} vValue the value to format
 	 * @param {string} sType the EDM type (e.g. Edm.Decimal)
@@ -3046,10 +3102,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 			for (var i = 0; i < oEntityMetadata.property.length; i++) {
 				var oPropertyMetadata = oEntityMetadata.property[i];
 
-				var aType = oPropertyMetadata.type.split('.');
 				var bPropertyInArray = jQuery.inArray(oPropertyMetadata.name,vProperties) > -1;
 				if (!vProperties || bPropertyInArray)  {
-					oEntity[oPropertyMetadata.name] = this._createPropertyValue(aType);
+					oEntity[oPropertyMetadata.name] = this._createPropertyValue(oPropertyMetadata.type);
 					if (bPropertyInArray) {
 						vProperties.splice(vProperties.indexOf(oPropertyMetadata.name),1);
 					}
@@ -3083,20 +3138,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 
 	/**
 	 * Return value for a property. This can also be a ComplexType property
-	 * @param {array} aType Type splitted by dot and passed as array
+	 * @param {string} full qualified Type name
+	 * @returns {any} vValue The property value
 	 * @private
 	 */
-	ODataModel.prototype._createPropertyValue = function(aType) {
-		var sNamespace = aType[0];
-		var sTypeName = aType[1];
+	ODataModel.prototype._createPropertyValue = function(sType) {
+		var aTypeName = this.oMetadata._splitName(sType); // name, namespace
+		var sNamespace = aTypeName[1];
+		var sTypeName = aTypeName[0];
 		if (sNamespace.toUpperCase() !== 'EDM') {
 			var oComplexType = {};
 			var oComplexTypeMetadata = this.oMetadata._getObjectMetadata("complexType",sTypeName,sNamespace);
-			jQuery.sap.assert(oComplexTypeMetadata, "Compley type " + sTypeName + " not found in the metadata !");
+			jQuery.sap.assert(oComplexTypeMetadata, "Complex type " + sType + " not found in the metadata !");
 			for (var i = 0; i < oComplexTypeMetadata.property.length; i++) {
 				var oPropertyMetadata = oComplexTypeMetadata.property[i];
-				var aType = oPropertyMetadata.type.split('.');
-				oComplexType[oPropertyMetadata.name] = this._createPropertyValue(aType);
+				oComplexType[oPropertyMetadata.name] = this._createPropertyValue(oPropertyMetadata.type);
 			}
 			return oComplexType;
 		} else {
@@ -3146,6 +3202,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	ODataModel.prototype.isList = function(sPath, oContext) {
 		var sPath = this.resolve(sPath, oContext);
 		return sPath && sPath.substr(sPath.lastIndexOf("/")).indexOf("(") === -1;
+	};
+
+	/**
+	 * Checks if path points to a metamodel property
+	 * @param {string} sPath The binding path
+	 * @returns {boolean}
+	 * @private
+	 */
+	ODataModel.prototype.isMetaModelPath = function(sPath) {
+		return sPath.indexOf("##") == 0 || sPath.indexOf("/##") > -1;
 	};
 
 	/**
@@ -3201,6 +3267,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	 * @public
 	 */
 	ODataModel.prototype.destroy = function() {
+		this.bDestroyed = true;
 
 		// Abort pending requests
 		if (this.aPendingRequestHandles) {
@@ -3234,6 +3301,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 
 
 		if (this.oAnnotations) {
+			this.oAnnotations.detachFailed(this.onAnnotationsFailed);
+			this.oAnnotations.detachLoaded(this.onAnnotationsLoaded);
 			this.oAnnotations.destroy();
 			delete this.oAnnotations;
 		}
@@ -3242,19 +3311,131 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 	};
 
 	/**
-	 * Returns the meta model of this ODataModel containing OData service metadata and annotations
-	 * in a merged fashion.
+	 * Singleton Lazy loading of the annotation parser on demand
+	 *
+	 * @return {sap.ui.model.odata.Annotations} The annotation parser instance
+	 */
+	ODataModel.prototype._getAnnotationParser = function(mAnnotationData) {
+		if (!this.oAnnotations) {
+			jQuery.sap.require("sap.ui.model.odata.ODataAnnotations");
+			this.oAnnotations = new sap.ui.model.odata.ODataAnnotations({
+				annotationData: mAnnotationData,
+				url: null,
+				metadata: this.oMetadata,
+				async: this.bLoadMetadataAsync,
+				headers: this.mCustomHeaders
+			});
+			this.oAnnotations.attachFailed(this.onAnnotationsFailed, this);
+			this.oAnnotations.attachLoaded(this.onAnnotationsLoaded, this);
+		}
+
+		return this.oAnnotations;
+	};
+
+	ODataModel.prototype.onAnnotationsFailed = function(oEvent) {
+		this.fireAnnotationsFailed(oEvent.getParameters());
+	};
+
+	ODataModel.prototype.onAnnotationsLoaded = function(oEvent) {
+		this.fireAnnotationsLoaded(oEvent.getParameters());
+	};
+
+	/**
+	 * Adds (a) new URL(s) to the be parsed for OData annotations, which are then merged into the annotations object
+	 * which can be retrieved by calling the getServiceAnnotations()-method. If a $metadata url is passed the data will
+	 * also be merged into the metadata object, which can be reached by calling the getServiceMetadata() method.
+	 *
+	 * @param {string|sting[]} vUrl - Either one URL as string or an array or URL strings
+	 * @return {Promise} The Promise to load the given URL(s), resolved if all URLs have been loaded, rejected if at least one fails to load.
+	 * 					 If this promise resolves it returns the following parameters:
+	 * 					 annotations: The annotation object
+	 * 					 entitySets: An array of EntitySet objects containing the newly merged EntitySets from a $metadata requests.
+	 * 								 the structure is the same as in the metadata object reached by the getServiceMetadata() method.
+	 * 								 For non $metadata requests the array will be empty.
+	 *
+	 * @protected
+	 */
+	ODataModel.prototype.addAnnotationUrl = function(vUrl) {
+		var aUrls = [].concat(vUrl),
+			aMetadataUrls = [],
+			aAnnotationUrls = [],
+			aEntitySets = [],
+			that = this;
+
+		jQuery.each(aUrls, function(i, sUrl) {
+			var iIndex = sUrl.indexOf("$metadata");
+			if (iIndex >= 0) {
+				//add serviceUrl for relative metadata urls
+				if (iIndex == 0) {
+					sUrl = that.sServiceUrl + '/' + sUrl;
+				}
+				aMetadataUrls.push(sUrl);
+			} else {
+				aAnnotationUrls.push(sUrl);
+			}
+		});
+
+		return this.oMetadata._addUrl(aMetadataUrls).then(function(aParams) {
+			return Promise.all(jQuery.map(aParams, function(oParam) {
+				aEntitySets = aEntitySets.concat(oParam.entitySets);
+				return that.addAnnotationXML(oParam["metadataString"]);
+			}));
+		}).then(function() {
+			return that._getAnnotationParser().addUrl(aAnnotationUrls);
+		}).then(function(oParam) {
+			return {
+				annotations: oParam.annotations,
+				entitySets: aEntitySets
+			};
+		});
+	};
+
+	/**
+	 * Adds new xml content to be parsed for OData annotations, which are then merged into the annotations object which
+	 * can be retrieved by calling the getServiceAnnotations()-method.
+	 *
+	 * @param {string} sXMLContent - The string that should be parsed as annotation XML
+	 * @param {boolean} [bSuppressEvents=false] - Whether not to fire annotationsLoaded event on the annotationParser
+	 * @return {Promise} The Promise to parse the given XML-String, resolved if parsed without errors, rejected if errors occur
+	 * @protected
+	 */
+	ODataModel.prototype.addAnnotationXML = function(sXMLContent, bSuppressEvents) {
+		return new Promise(function(resolve, reject) {
+			this._getAnnotationParser().setXML(null, sXMLContent, {
+				success:    resolve,
+				error:      reject,
+				fireEvents: !bSuppressEvents
+			});
+		}.bind(this));
+	};
+
+
+	/**
+	 * Returns an instance of an OData meta model which offers a unified access to both OData v2
+	 * meta data and v4 annotations. It uses the existing {@link sap.ui.model.odata.ODataMetadata}
+	 * as a foundation and merges v4 annotations from the existing
+	 * {@link sap.ui.model.odata.ODataAnnotations} directly into the corresponding model element.
+	 *
+	 * <b>BEWARE:</b> Access to this OData meta model will fail before the promise returned by
+	 * {@link sap.ui.model.odata.ODataMetaModel#loaded loaded} has been resolved!
+	 *
 	 * @public
 	 * @returns {sap.ui.model.odata.ODataMetaModel} The meta model for this ODataModel
 	 */
 	ODataModel.prototype.getMetaModel = function() {
 		var that = this;
 		if (!this.oMetaModel) {
-			this.oMetaModel = new ODataMetaModel(this.oMetadata, this.oAnnotations);
+			this.oMetaModel = new ODataMetaModel(this.oMetadata, this.oAnnotations, {
+				addAnnotationUrl : this.addAnnotationUrl.bind(this),
+				annotationsLoadedPromise :
+					this.oMetadata.isLoaded() && (!this.oAnnotations || this.oAnnotations.isLoaded())
+					? null // stay synchronous
+					: this.pAnnotationsLoaded
+			});
 			// Call checkUpdate when metamodel has been loaded to update metamodel bindings
 			this.oMetaModel.loaded().then(function() {
 				that.bMetaModelLoaded = true;
-				that.checkUpdate();
+				that.checkUpdate(false, false, null, true);
 			});
 		}
 		return this.oMetaModel;
@@ -3262,4 +3443,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', './ODataUtils', './Cou
 
 	return ODataModel;
 
-}, /* bExport= */ true);
+});

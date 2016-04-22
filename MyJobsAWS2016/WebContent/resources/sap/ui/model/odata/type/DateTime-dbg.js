@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -57,7 +57,7 @@ sap.ui.define(['sap/ui/model/odata/type/DateTimeBase'],
 	 * @extends sap.ui.model.odata.type.DateTimeBase
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.DateTime
 	 * @param {object} [oFormatOptions]
@@ -66,16 +66,14 @@ sap.ui.define(['sap/ui/model/odata/type/DateTimeBase'],
 	 *   constraints; {@link sap.ui.model.odata.type.DateTimeBase#validateValue validateValue}
 	 *   throws an error if any constraint is violated
 	 * @param {boolean|string} [oConstraints.nullable=true]
-	 *   if <code>true</code>, the value <code>null</code> will be accepted
+	 *   if <code>true</code>, the value <code>null</code> is accepted
 	 * @param {string} [oConstraints.displayFormat=undefined]
-	 *   may be "Date", in this case only the date part will be used, the time part will always be
-	 *   00:00:00, the timezone will be UTC to avoid timezone-related problems
+	 *   may be "Date", in this case only the date part is used, the time part is always 00:00:00
+	 *   and the timezone is UTC to avoid timezone-related problems
 	 * @public
 	 * @since 1.27.0
 	 */
-	var DateTime = DateTimeBase.extend("sap.ui.model.odata.type.DateTime",
-			/** @lends sap.ui.model.odata.type.DateTime.prototype */
-			{
+	var DateTime = DateTimeBase.extend("sap.ui.model.odata.type.DateTime", {
 				constructor : function (oFormatOptions, oConstraints) {
 					DateTimeBase.call(this, oFormatOptions, adjustConstraints(this, oConstraints));
 				}

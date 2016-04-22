@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -66,22 +66,23 @@
 /* CSS for control sap.ui.commons/Accordion.control */
 /* ================================================ */
 
-.sapUiAcd{
+.sapUiAcd {
 	display: block;
-	position:relative;
+	position: relative;
 }
 
-.sapUiAcd-panel{
-	display: block;
-	position:relative;
+.sapUiAcd-panel,
+.sapUiAcd-section {
+	display: 	block;
+	position:	relative;
 }
 
-.sapUiAcd-droptarget{
-	height: 1px;
-	z-index:1;
-	background-color:transparent;
-	top:-1px;
-	position:relative;
+.sapUiAcd-droptarget {
+	height: 			1px;
+	z-index: 			1;
+	background-color: 	transparent;
+	top:				-1px;
+	position:			relative;
 }
 /* END "Accordion.less" */
 
@@ -93,6 +94,7 @@
 	vertical-align: top;
 	position: relative; /* enable positioning for children */
 	top: -1px;
+  	width: 100%;
 }
 
 .sapUiAcdSection-down{
@@ -187,7 +189,7 @@ html[dir=rtl][data-sap-ui-browser^="ie"] .sapUiAcdSectionHdr {
 
 .sapUiAcdSectionCont {
 	/* 'position' will be set by the renderer if required. Do not set any positioning here! */
-	/* It will be set to 'absolute' if sizes are set, in order to extend the content to fully use the available space. 
+	/* It will be set to 'absolute' if sizes are set, in order to extend the content to fully use the available space.
 	Otherwise to 'relative', to fix an IE7 bug which would leave overflowing content with 'position relative' visible. */
 	margin-bottom: 0px; /* will be overwritten in the sapUiAcdSectionFlexHeight case */
 	border: 0;
@@ -596,31 +598,47 @@ html[data-sap-ui-browser="sf5"] .sapUiBtnS > .sapUiBtnTxt {
 /* CSS for control sap.ui.commons/Carousel.control */
 /* =============================================== */
 
-.sapUiCrslHorizontal .sapUiCrslPrevBtn,
-.sapUiCrslHorizontal .sapUiCrslNextBtn {
-	width: 22px;
-}
-
-.sapUiCrslVertical .sapUiCrslPrevBtn,
 .sapUiCrslVertical .sapUiCrslNextBtn {
-	height: 22px;
-	line-height: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
 }
 
-.sapUiCrslPrevBtn, .sapUiCrslNextBtn {
-	cursor: pointer;
+.sapUiCrslVertical .sapUiCrslPrevBtn {
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  position: absolute;
+  top: 0;
 }
 
 .sapUiCrslHorizontal .sapUiCrslPrevBtn {
+	width: 22px;
 	position: absolute;
 	left: 0;
 	text-align: center;
 }
 
 .sapUiCrslHorizontal .sapUiCrslNextBtn {
+	width: 22px;
 	position: absolute;
 	right: 0;
 	text-align: center;
+}
+
+
+.sapUiCrslNextBtn:hover {
+  text-align: center;
+}
+
+.sapUiCrslPrevBtn:hover {
+  text-align: center;
+}
+
+.sapUiCrslPrevBtn, .sapUiCrslNextBtn {
+  cursor: pointer;
 }
 
 .sapUiCrsl {
@@ -628,7 +646,6 @@ html[data-sap-ui-browser="sf5"] .sapUiBtnS > .sapUiBtnTxt {
 }
 
 .sapUiCrslItm {
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	position: relative;
 }
@@ -662,34 +679,6 @@ html[data-sap-ui-browser="sf5"] .sapUiBtnS > .sapUiBtnTxt {
 	position: absolute;
 	clip: rect(auto auto auto auto);
 	overflow: hidden;
-}
-
-.sapUiCrslVertical .sapUiCrslNextBtn {
-	text-align: center;
-	position: absolute;
-	bottom: 0;
-}
-
-.sapUiCrslVertical .sapUiCrslPrevBtn {
-	text-align: center;
-	position: absolute;
-	top: 0;
-}
-
-.sapUiCrslVertical .sapUiCrslNextBtn:hover {
-	text-align: center;
-}
-
-.sapUiCrslVertical .sapUiCrslPrevBtn:hover {
-	text-align: center;
-}
-
-.sapUiCrslHorizontal .sapUiCrslNextBtn:hover {
-	text-align: center;
-}
-
-.sapUiCrslHorizontal .sapUiCrslPrevBtn:hover {
-	text-align: center;
 }
 
 /* END "Carousel.less" */
@@ -927,8 +916,6 @@ html[data-sap-ui-browser^="ie"] .sapUiCb:focus:after {
 /* =============================================== */
 
 .sapUiTfCombo {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	vertical-align: top;
 	width: 22ex;
@@ -1036,8 +1023,6 @@ html[data-sap-ui-browser^="ie"] .sapUiCb:focus:after {
 	position: absolute; /*relative;/* enable positioning for children */
 	display: inline-block;
 	outline: none;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -1061,7 +1046,6 @@ html[data-sap-ui-browser^="ie"] .sapUiCb:focus:after {
 	padding-right: 20px;
 	text-overflow: ellipsis;
 	width: 100%;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -1091,19 +1075,6 @@ html[data-sap-ui-browser^="ie"] .sapUiCb:focus:after {
 html[data-sap-ui-browser="ff3"] .sapUiDlgHdrBtns > a {
 	-moz-user-select: none;
 	-webkit-user-select: none;
-}
-
-/* make x text invisible for IE */
-html[data-sap-ui-browser="ie7"] .sapUiDlgHdrBtns > a,
-html[data-sap-ui-browser="ie8"] .sapUiDlgHdrBtns > a {
-	text-indent: -30px;
-	overflow: hidden;
-}
-
-/* fix for IE7 to display the close X button at the right position...
-   there is a problem with the text-indent */
-html[data-sap-ui-browser="ie7"] .sapUiDlgHdrBtns > a {
-	margin-left: 30px;
 }
 
 /* content */
@@ -1182,14 +1153,6 @@ html[data-sap-ui-browser="ff3"] .sapUiDlgGrip {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 }
-
-/* make resize text invisible for IE */
-html[data-sap-ui-browser="ie7"] .sapUiDlgGrip,
-html[data-sap-ui-browser="ie8"] .sapUiDlgGrip {
-	text-indent: -30px;
-	overflow: hidden;
-}
-
 /* END "Dialog.less" */
 
 /* START "FileUploader.less" */
@@ -1270,7 +1233,6 @@ html[data-sap-ui-browser="ie8"] .sapUiDlgGrip {
 /* ================================================= */
 /* CSS for control sap.ui.commons/FormLayout.control */
 /* ================================================= */
-
 /* END "FormLayout.less" */
 
 /* START "GridLayout.less" */
@@ -1362,8 +1324,6 @@ html[data-sap-ui-browser="ie8"] .sapUiDlgGrip {
 .sapUiIpe{
 	border: 1px solid transparent; /* to avoid reposition if border is painted on focus */
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	overflow: hidden;
 	position: relative;
 	display: inline-block;
@@ -1435,20 +1395,12 @@ html[data-sap-ui-browser="ie8"] .sapUiDlgGrip {
 .sapUiIpeLink > .sapUiIpeCont{
 	display: inline-block;
 	box-sizing: border-box;
-	-moz-box-sizing: padding-box;
-	-webkit-box-sizing: border-box;
 	max-width: 100%;
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiIpeLink > .sapUiIpeCont{
-	width:100%; /* as max-width seems not to work in IE8 */
 }
 
 .sapUiIpeEdit.sapUiIpeLink > .sapUiIpeCont{
 	display: block;
 	box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	-webkit-box-sizing: content-box;
 	padding-right: auto;
 }
 
@@ -1843,7 +1795,7 @@ html[data-sap-ui-browser="ie8"] .sapUiIpeLink > .sapUiIpeCont{
 .ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
 .ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
 .ui-datepicker select.ui-datepicker-month-year {width: 100%;}
-.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year { width: 49%;}
 .ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
 .ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
@@ -1960,18 +1912,18 @@ html[data-sap-ui-browser="ie8"] .sapUiIpeLink > .sapUiIpeCont{
 /* ============================ */
 
 /* GridLayout */
-.sapUiGridLabel > .sapUiLbl{
+td.sapUiFormElementLbl:not(.sapUiGridLabelFull) > .sapUiLbl{
 	max-width: 100%;
 	float: right;
 }
 
 /* required symbol is now left - if indicator is already at begin, don't change it */
-.sapUiGridLabel > .sapUiLbl.sapUiLblReqEnd:after {
+td.sapUiFormElementLbl:not(.sapUiGridLabelFull) > .sapUiLbl.sapUiLblReqEnd:after {
 	padding-left: 0;
 	content : '';
 }
 
-.sapUiGridLabel > .sapUiLbl.sapUiLblReqEnd:before {
+td.sapUiFormElementLbl:not(.sapUiGridLabelFull) > .sapUiLbl.sapUiLblReqEnd:before {
 	.sapUiLbLReqInd;
 }
 
@@ -1986,27 +1938,30 @@ html[data-sap-ui-browser="ie8"] .sapUiIpeLink > .sapUiIpeCont{
 }
 
 /* ResponsiveGridLayout */
-.sapUiFormResGridLbl > .sapUiLbl {
+.sapUiFormResGridCont > .sapUiFormElementLbl > .sapUiLbl {
 	max-width: 100%; /* to have ellipsis if cell gets too small */
 }
 
 /* make labels right aligned if left from fields*/
-.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl,
-.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl,
-.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl {
+.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl,
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl,
+.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl,
+.sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanXL12) > .sapUiLbl {
 	float: right;
 }
 
-.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl.sapUiLblReqEnd:after,
-.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl.sapUiLblReqEnd:after,
-.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl.sapUiLblReqEnd:after{
+.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl.sapUiLblReqEnd:after,
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl.sapUiLblReqEnd:after,
+.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl.sapUiLblReqEnd:after,
+.sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanXL12) > .sapUiLbl.sapUiLblReqEnd:after {
 	padding-left: 0;
 	content : '';
 }
 
-.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl.sapUiLblReqEnd:before,
-.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl.sapUiLblReqEnd:before,
-.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormResGridLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl.sapUiLblReqEnd:before {
+.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanS12) > .sapUiLbl.sapUiLblReqEnd:before,
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanM12) > .sapUiLbl.sapUiLblReqEnd:before,
+.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanL12) > .sapUiLbl.sapUiLblReqEnd:before,
+.sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridCont > .sapUiFormElementLbl:not(.sapUiRespGridSpanXL12) > .sapUiLbl.sapUiLblReqEnd:before {
 	.sapUiLbLReqInd;
 }
 
@@ -2040,8 +1995,6 @@ span.sapUiLblIco { /* icon font */
 }
 
 .sapUiMltCell {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -2172,12 +2125,8 @@ html[dir=rtl] .sapUiMltCellHAlignLeft > * {
 @sapUiListBoxBorderRadius: 0;
 
 .sapUiLbx {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	border: 1px solid @sapUiDarkBorder;
-	-moz-border-radius: @sapUiListBoxBorderRadius;
-	-webkit-border-radius: @sapUiListBoxBorderRadius;
 	border-radius: @sapUiListBoxBorderRadius;
 	background-color: @sapUiFieldBackground;
 	display: inline-block;
@@ -2309,8 +2258,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	display: inline-block;
 	width: 100%;
 	position: relative;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -2484,7 +2431,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 .sapUiMsgBar {
 	background-color: #3355A8;
 	border-radius: 3px;
-	-moz-border-radius: 3px 3px 3px 3px;
 	padding: 1px;
 	white-space: nowrap;
 }
@@ -2494,7 +2440,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	background: url("img/messagebar/float_backgr.gif") repeat-x scroll 0px 0px transparent;
 	border: 1px solid #3355A8;
 	border-radius: 2px;
-	-moz-border-radius: 2px 2px 2px 2px;
 	cursor: move;
 	display: inline-block;
 	height: 21px;
@@ -2534,13 +2479,13 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 }
 .sapUiMsgBarSums .sapUiImg {
 	outline-style: none;
-	vertical-align: middle;  As controls do not vertically align on their own 
+	vertical-align: middle;  As controls do not vertically align on their own
 }
 .sapUiMsgBarSums .sapUiTv {
 	padding: 0 5px 0 0;
-	vertical-align: middle;  As controls do not vertically align on their own 
+	vertical-align: middle;  As controls do not vertically align on their own
 }
- On RTL, the padding switches sides. 
+ On RTL, the padding switches sides.
 .sapUiRtl .sapUiMsgBarSums .sapUiTv {
 	padding: 0 0 0 5px;
 }*/
@@ -2559,7 +2504,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	background: url("img/messagebar/re-dock.gif") no-repeat scroll 0px 0px transparent;
 	border: 1px solid transparent;
 	border-radius: 2px;
-	-moz-border-radius: 2px 2px 2px 2px;
 	cursor: pointer;
 	display: none;
 	height: 21px;
@@ -2659,7 +2603,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	background-color: white;
 	border: 1px solid #306898;
 	border-radius: 3px;
-	-moz-border-radius: 3px 3px 3px 3px;
 	margin-bottom: -2px; /* For the bottom-arrow to overlap onto the border */
 	padding: 2px 6px;
 }
@@ -2801,31 +2744,21 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	display: inline-block;
 	position: relative;
 	vertical-align: top;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	border: 1px solid @sapUiMediumBorder;
-	-moz-border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
-	-webkit-border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
 	border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
 }
 
 .sapUiPanel:focus {
-	outline-width: 1px;
-	outline-style: dotted;
-	outline-color: invert;
+	outline: 1px dotted @sapUiFocus;
 }
 
 .sapUiPanel.sapUiPanelColl,
 .sapUiPanelColl > .sapUiPanelHdr  {
-	-moz-border-radius: @sapUiPanelBorderRadius;
-	-webkit-border-radius: @sapUiPanelBorderRadius;
 	border-radius: @sapUiPanelBorderRadius;
 }
 
 .sapUiPanelHdr {
-	-moz-border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
-	-webkit-border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
 	border-radius: @sapUiPanelBorderRadius @sapUiPanelBorderRadius 0 0;
 	display: -moz-box;
 	display: -ms-box;
@@ -2833,12 +2766,10 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	display: box;
 	-moz-box-orient: horizontal;
 	-moz-box-align: center;
-	-moz-box-sizing: border-box;
 	-ms-box-orient: horizontal;
 	-ms-box-align: center;
 	-webkit-box-orient: horizontal;
 	-webkit-box-align: center;
-	-webkit-box-sizing: border-box;
 	box-orient: horizontal;
 	box-align: center;
 	box-sizing: border-box;
@@ -2858,8 +2789,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 .sapUiPanelHdrItem,
 .sapUiPanelHdrRightItem {
 	display: block;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -2932,8 +2861,6 @@ html[data-sap-ui-browser^="ie"] .sapUiLbx.sapUiLbxFlexWidth > ul > li > span:las
 	border-top-color: @sapUiMediumBorder;
 	display: block;
 	overflow: auto;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -3015,9 +2942,6 @@ html[data-sap-ui-browser*="ie"] .sapUiPanelTb {
 	display: inline-block;
 	border: 1px solid @sapUiContentForegroundBorderColor;
 	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -3026,9 +2950,6 @@ html[data-sap-ui-browser*="ie"] .sapUiPanelTb {
 	background-color: lighten(desaturate(@sapUiHighlight, 49), 44);
 	color: contrast(lighten(desaturate(@sapUiHighlight, 49), 44), @sapTextColor, @sapUiTextInverted);
 	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 14px;
 	-moz-user-select: none;
@@ -3040,9 +2961,6 @@ html[data-sap-ui-browser*="ie"] .sapUiPanelTb {
 	background-color: @sapUiFieldSuccessBackground;
 	color: contrast(@sapUiFieldSuccessBackground, @sapTextColor, @sapUiTextInverted);
 	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 14px;
 	-moz-user-select: none;
@@ -3054,9 +2972,6 @@ html[data-sap-ui-browser*="ie"] .sapUiPanelTb {
 	background-color: @sapUiFieldInvalidBackground;
 	color: contrast(@sapUiFieldInvalidBackground, @sapTextColor, @sapUiTextInverted);
 	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 14px;
 	-moz-user-select: none;
@@ -3068,9 +2983,6 @@ html[data-sap-ui-browser*="ie"] .sapUiPanelTb {
 	background-color: @sapUiFieldWarningBackground;
 	color: contrast(@sapUiFieldWarningBackground, @sapTextColor, @sapUiTextInverted);
 	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 14px;
 	-moz-user-select: none;
@@ -3197,10 +3109,6 @@ html[data-sap-ui-browser^="ie"] .sapUiRb:focus:after {
 	display: inline-block;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiRbG{
-	display: inline-block;
-}
-
 .sapUiRbGTab{
 	display: box;
 	display: -moz-box;
@@ -3247,6 +3155,7 @@ html[data-sap-ui-browser^="ie"] .sapUiRbGDummy{
 	float: left;
 	clear: left;
 	text-overflow: ellipsis;
+	max-width: 100%;
 }
 
 .sapUiRbG.sapUiRbG1Row > .sapUiRb{
@@ -3813,8 +3722,6 @@ Three possible designs with corresponding CSS classes:
 }
 
 .sapUiSearchFieldTf {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	vertical-align: top;
 	overflow: visible;
@@ -3871,15 +3778,15 @@ html[data-sap-ui-browser^="sf"][data-sap-ui-os="mac"]:not([dir=rtl]) .sapUiSearc
 	display: inline;
 	position: absolute;
 	font-size: 0;
-	color: transparent; 
+	color: transparent;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	background-image: url("img/search/search.png");
 	height: 15px;
 	width: 15px;
 	background-repeat: no-repeat;
-	background-position: top right;	
-	background-color: transparent; 
+	background-position: top right;
+	background-color: transparent;
 	margin-top: 3px;
 	cursor: pointer;
 }
@@ -3887,7 +3794,7 @@ html[data-sap-ui-browser^="sf"][data-sap-ui-os="mac"]:not([dir=rtl]) .sapUiSearc
 .sapUiSearchFieldClear.sapUiSearchFieldVal.sapUiSearchFieldDsbl > .sapUiSearchFieldTf > .sapUiSearchFieldIco,
 .sapUiSearchFieldClear.sapUiSearchFieldVal.sapUiSearchFieldDsbl > .sapUiSearchFieldCb > .sapUiSearchFieldIco {
 	font-size: 0;
-	color: transparent; 
+	color: transparent;
 	background-image: url("img/search/search.png");
 }
 
@@ -3943,6 +3850,7 @@ html[data-sap-ui-browser^="sf"][data-sap-ui-os="mac"]:not([dir=rtl]) .sapUiSearc
 	color: inherit;
 	background-image: none;
 }
+
 /* END "SearchField.less" */
 
 /* START "SegmentedButton.less" */
@@ -3956,23 +3864,16 @@ html[data-sap-ui-browser^="sf"][data-sap-ui-os="mac"]:not([dir=rtl]) .sapUiSearc
 }
 
 .sapUiSegmentedButton > span > .sapUiBtnS {
-	-moz-border-radius: 0;
 	border-radius: 0;
 	border-left-width: 0;
 }
 
 .sapUiSegmentedButton > span > button:first-of-type {
-	-moz-border-radius: 2px 0 0 2px;
 	border-radius:  2px 0 0 2px;
 	border-left-width: 1px;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiSegmentedButton > span > button:first-child {
-	border-left-width: 1px;
-}
-
 .sapUiSegmentedButton > span> button:last-of-type {
-	-moz-border-radius: 0 2px 2px 0;
 	border-radius: 0 2px 2px 0;
 }
 
@@ -3999,11 +3900,11 @@ html[data-sap-ui-browser="ie8"] .sapUiSegmentedButton > span > button:first-chil
 /* CSS for control sap.ui.commons/Slider.control     */
 /* ================================================= */
 
-/* All DIV elements MUST have a POSITION definition, otherwise the calculation of the 
+/* All DIV elements MUST have a POSITION definition, otherwise the calculation of the
    grip position will not work */
 
 .sapUiSli{
-	position: relative; 
+	position: relative;
 	display: inline-block;
 	overflow: visible;
 	-moz-user-select: none;
@@ -4044,7 +3945,7 @@ html[data-sap-ui-browser="ie8"] .sapUiSegmentedButton > span > button:first-chil
 	position: absolute;
 	display: inline-block;
 	font-size: 0;
-	color: transparent; 
+	color: transparent;
 	border: 2px solid @sapUiMediumBorder;
 }
 
@@ -4204,28 +4105,32 @@ html[data-sap-ui-browser="ie8"] .sapUiSegmentedButton > span > button:first-chil
 	border: solid 1px @sapUiMediumBorder;
 	font-family: @sapUiFontFamily;
 	font-size: @sapUiFontSize;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	position:relative;
 }
 
 .sapUiTabBar {
+	position: relative;
+	white-space: nowrap;
 	cursor: default;
 }
 
 .sapUiTabBarCnt {
+	white-space: nowrap;
+	display: inline-block;
 	overflow:hidden;
 	margin-top: 0;
 	padding-left: 0;
+	outline: none;
 }
 
 .sapUiTab,
 .sapUiTabSel,
 .sapUiTabDsbl {
-	display: block;
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
 	white-space:nowrap;
-	float:left;
 }
 
 .sapUiTabL {
@@ -4275,6 +4180,64 @@ span.sapUiTabIco {
 	position: absolute;
 	bottom:0;
 }
+
+.sapUiTabStripNoSelection {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.sapUiTabBar .sapUiTabStripScrollContainer {
+	display: inline-block;
+	position: absolute;
+	overflow: hidden;
+
+	left: 0;
+	right: 0;
+}
+
+.sapUiTabBar .sapUiTabStripScrollIcon {
+	width: 16px;
+	height: 22px;
+	font-size: 10px;
+	margin-top: 6px;
+	padding-top: 4px;
+	vertical-align: top;
+	visibility: hidden;
+	display: none;
+
+	box-sizing: border-box;
+
+	outline: none;
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none;
+}
+
+.sapUiTabBar .sapUiTabStripRightScrollIcon {
+	position: absolute;
+	right: 0;
+}
+
+.sapUiTabStrip {
+	&.sapUiTabStripScrollForward .sapUiTabStripRightScrollIcon,
+	&.sapUiTabStripScrollBack .sapUiTabStripLeftScrollIcon {
+		visibility: visible;
+	}
+}
+
+.sapUiTabStrip.sapUiTabStripScrollable .sapUiTabBar {
+	.sapUiTabStripScrollIcon {
+		display: inline-block;
+	}
+
+	.sapUiTabStripScrollContainer {
+		left: 16px;
+		right: 16px;
+	}
+}
+
 /* END "TabStrip.less" */
 
 /* START "TextArea.less" */
@@ -4288,13 +4251,7 @@ span.sapUiTabIco {
 
 .sapUiTf.sapUiTxtA:not(.sapUiTfInner){
 	height: auto; /* to overwrite defaults from TextField */
-	width: auto; 
-	line-height: normal;
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiTf.sapUiTxtA{ /* IE8 ignores :not-statement above */
-	height: auto; /* to overwrite defaults from TextField */
-	width: auto; 
+	width: auto;
 	line-height: normal;
 }
 /* END "TextArea.less" */
@@ -4307,8 +4264,6 @@ html[data-sap-ui-browser="ie8"] .sapUiTf.sapUiTxtA{ /* IE8 ignores :not-statemen
 @sapUiTextFieldHeight: 16px;
 
 .sapUiTf{
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	vertical-align: top;
 	font-family: @sapUiFontFamily;
@@ -4338,11 +4293,6 @@ html[data-sap-ui-os^='mac'] .sapUiTfDsbl .sapUiTfInner.sapUiTf{
 	color: darken(@sapUiContentDisabledTextColor, 25); /* color for disabled inputs is lighter by browser */
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement is overwritten */
-	height: 100%;
-	border: none;
-}
-
 .sapUiTfBrd{
 	border: 1px solid @sapUiFieldBorderColor;
 	-webkit-border-radius: 0px; /*Needed for safari mobile*/
@@ -4366,7 +4316,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 	color: @sapUiBaseText;
 }
 
-.sapUiTfRo > .sapUiTfInner{ 
+.sapUiTfRo > .sapUiTfInner{
 	cursor: default; /* in ComboBox Cursor is overwitten */
 }
 
@@ -4425,6 +4375,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 .sapUiTf:-ms-input-placeholder{
 	color: @sapUiExtraLightText;
 }
+
 /* END "TextField.less" */
 
 /* START "TextView.less" */
@@ -4611,6 +4562,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 	margin: 0;
 	overflow: hidden;
 	position: relative;
+	white-space: normal; // make sure parents don't break the toolbar logic for overflowing to the second line
 }
 
 .sapUiTb.sapUiTbStandalone {
@@ -4640,8 +4592,6 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 	float: left;
 	width: 100%;
 	box-sizing: border-box;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	height: 27px;
 	padding-top: 1px;
 }
@@ -4727,6 +4677,12 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 	outline: 1px dotted @sapUiBaseBorder;
 }
 
+/* Toolbar inside of Form as Form- and Container- header */
+.sapUiGridTitle > th > .sapUiTb,
+.sapUiFormToolbar > .sapUiTb{
+	border-bottom: 2px solid @sapUiMediumBorder;
+}
+
 /* END "Toolbar.less" */
 
 /* START "Tree.less" */
@@ -4739,7 +4695,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTfInner.sapUiTf{ /* in IE8 above statement
 	color: @sapUiBaseText;
 }
 
-/* if the Tree is used within another control that 
+/* if the Tree is used within another control that
 has a black/dark background the Tree itself has to
 invert its text to white as well */
 .sapUiInverted-CTX .sapUiTree {
@@ -4763,11 +4719,9 @@ invert its text to white as well */
 	padding-right: 2px;
 }
 
-html:not([data-sap-ui-browser="ie8"]) .sapUiTreeContScroll .sapUiTreeList {
+.sapUiTreeContScroll .sapUiTreeList {
 	float: left;
 	min-width: 100%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -4861,17 +4815,14 @@ html[dir=rtl] .sapUiTreeTitle {
 	white-space: nowrap;
 	margin-bottom: 3px;
 	border: 1px solid transparent;
-	-moz-border-radius: 1px;
 	border-radius: 1px;
 	-moz-user-select: none;
 }
 
-html:not([data-sap-ui-browser="ie8"]) .sapUiTreeContScroll .sapUiTreeNode {
+.sapUiTreeContScroll .sapUiTreeNode {
 	float: left;
 	clear: left;
 	width: 100%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -4882,10 +4833,6 @@ html:not([data-sap-ui-browser="ie8"]) .sapUiTreeContScroll .sapUiTreeNode {
 
 .sapUiInverted-CTX .sapUiTreeNode:hover {
 	background-color: mix(@sapUiHighlight, @sapUiBlackBG, 60%);
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiTreeNode{
-	padding-right:2px;
 }
 
 .sapUiTreeNodeContent {
@@ -4953,6 +4900,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTreeNode{
 .sapUiTreeHiddenChildrenNodes {
 	display: none;
 }
+
 /* END "Tree.less" */
 
 /* START "TriStateCheckBox.less" */
@@ -5056,7 +5004,7 @@ html[data-sap-ui-browser="ie8"] .sapUiTreeNode{
 	border: 2px solid @sapUiMediumBorder;
 }
 
-.sapUiTriCbRo, 
+.sapUiTriCbRo,
 .sapUiTriCb:hover > .sapUiTriCbRo {
 	background-color: @sapUiFieldReadOnlyBackground;
 }

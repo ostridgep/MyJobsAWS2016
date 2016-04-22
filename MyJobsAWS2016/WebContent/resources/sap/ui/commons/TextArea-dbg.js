@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -12,13 +12,13 @@ sap.ui.define(['jquery.sap.global', './TextField', './library'],
 	/**
 	 * Constructor for a new TextArea.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
 	 * Control to enter or display multible row text.
 	 * @extends sap.ui.commons.TextField
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -62,7 +62,7 @@ sap.ui.define(['jquery.sap.global', './TextField', './library'],
 
 			/**
 			 * ID of label control
-			 * @deprecated Since version 1.5.2. 
+			 * @deprecated Since version 1.5.2.
 			 * Please use association AriaLabelledBy instead.
 			 */
 			labeledBy : {type : "string", group : "Identification", defaultValue : null, deprecated: true}
@@ -160,26 +160,18 @@ sap.ui.define(['jquery.sap.global', './TextField', './library'],
 		oEvent.stopPropagation();
 	};
 
-	/**
-	 * Returns an object representing the serialized focus information.
-	 * Overwrites the standard function.
-	 * @return {object} An object representing the serialized focus information.
-	 * @private
-	 */
-	TextArea.prototype.getFocusInfo = function () {
-		return {id:this.getId(), cursorPos:this.getCursorPos()};
-	};
-
-	/**
+	/*
 	 * Applies the focus info.
 	 * Overwrites the standard function.
 	 * @param {object} oFocusInfo Focusinfo object
 	 * @private
 	 */
 	TextArea.prototype.applyFocusInfo = function (oFocusInfo) {
-		this.focus();
-		var oFocusDomRef = this.getFocusDomRef();
-		jQuery(oFocusDomRef).cursorPos(this.getCursorPos());
+
+		TextField.prototype.applyFocusInfo.apply(this, arguments);
+
+		return this;
+
 	};
 
 	/**
@@ -343,6 +335,10 @@ sap.ui.define(['jquery.sap.global', './TextField', './library'],
 		}
 
 		TextField.prototype.oninput.apply(this, arguments);
+
+		// save cursor position
+		var oDomRef = this.getDomRef();
+		this.setProperty('cursorPos', jQuery(oDomRef).cursorPos(), true); // no re-rendering!
 
 	};
 

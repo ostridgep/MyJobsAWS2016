@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -32,6 +32,7 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 				oFormatOptions.minFractionDigits = oFormatOptions.maxFractionDigits = iScale;
 			}
 			oFormatOptions = jQuery.extend(oFormatOptions, oType.oFormatOptions);
+			oFormatOptions.parseAsString = true;
 			oType.oFormat = NumberFormat.getFloatInstance(oFormatOptions);
 		}
 		return oType.oFormat;
@@ -153,7 +154,7 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.Decimal
 	 * @param {object} [oFormatOptions]
@@ -166,7 +167,7 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 	 *   constraints; {@link #validateValue validateValue} throws an error if any constraint is
 	 *   violated
 	 * @param {boolean|string} [oConstraints.nullable=true]
-	 *   if <code>true</code>, the value <code>null</code> will be accepted
+	 *   if <code>true</code>, the value <code>null</code> is accepted
 	 * @param {int|string} [oConstraints.precision=Infinity]
 	 *   the maximum number of digits allowed in the property’s value
 	 * @param {int|string} [oConstraints.scale=0]
@@ -182,9 +183,7 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 	 * @public
 	 * @since 1.27.0
 	 */
-	var Decimal = ODataType.extend("sap.ui.model.odata.type.Decimal",
-			/** @lends sap.ui.model.odata.type.Decimal.prototype */
-			{
+	var Decimal = ODataType.extend("sap.ui.model.odata.type.Decimal", {
 				constructor : function (oFormatOptions, oConstraints) {
 					ODataType.apply(this, arguments);
 					this.oFormatOptions = oFormatOptions;
@@ -232,16 +231,8 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 	 * Parses the given value, which is expected to be of the given type, to a decimal in
 	 * <code>string</code> representation.
 	 *
-	 * If certain format options are defined and you parse a value with <code>sSourceType</code>
-	 * "string", floating point numbers will be used internally.
-	 * This may cause a loss of precision (e.g.
-	 * "1,234,567,890,123,456,789" will be parsed to "1234567890123456800"). The following options
-	 * do not cause this effect: decimals, decimalSeparator, groupingEnabled, groupingSeparator,
-	 * maxFractionDigits, maxIntegerDigits, minFractionDigits, minIntegerDigits, minusSign and
-	 * plusSign.
-	 *
 	 * @param {string|number} vValue
-	 *   the value to be parsed; the empty string and <code>null</code> will be parsed to
+	 *   the value to be parsed; the empty string and <code>null</code> are parsed to
 	 *   <code>null</code>
 	 * @param {string} sSourceType
 	 *   the source type (the expected type of <code>vValue</code>); may be "float", "int" or
@@ -262,11 +253,14 @@ sap.ui.define(['sap/ui/core/format/NumberFormat', 'sap/ui/model/FormatException'
 		}
 		switch (sSourceType) {
 		case "string":
-			sResult = ODataType.normalizeNumber(this.oFormatOptions, getFormatter(this), vValue,
-				/^0*(\d*)(?:\.(\d*?)0*)?$/);
+			sResult = getFormatter(this).parse(vValue);
 			if (!sResult) {
 				throw new ParseException(sap.ui.getCore().getLibraryResourceBundle()
 					.getText("EnterNumber"));
+			}
+			// NumberFormat.parse does not remove trailing decimal zeroes and separator
+			if (sResult.indexOf(".") >= 0) {
+				sResult = sResult.replace(/0+$/, "").replace(/\.$/, "");
 			}
 			break;
 		case "int":

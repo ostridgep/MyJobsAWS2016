@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -20,14 +20,14 @@ sap.ui.define(['jquery.sap.global',
 	 * @namespace
 	 * @name sap.ui.table
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @public
 	 */
 
 	// delegate further initialization of this library to the Core
 	sap.ui.getCore().initLibrary({
 		name : "sap.ui.table",
-		version: "1.28.12",
+		version: "1.36.7",
 		dependencies : ["sap.ui.core","sap.ui.unified"],
 		types: [
 			"sap.ui.table.NavigationMode",
@@ -56,7 +56,7 @@ sap.ui.define(['jquery.sap.global',
 	/**
 	 * Navigation mode of the table
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @enum {string}
 	 * @public
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
@@ -81,7 +81,7 @@ sap.ui.define(['jquery.sap.global',
 	/**
 	 * Selection behavior of the table
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @enum {string}
 	 * @public
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
@@ -112,7 +112,7 @@ sap.ui.define(['jquery.sap.global',
 	/**
 	 * Selection mode of the table
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @enum {string}
 	 * @public
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
@@ -149,7 +149,7 @@ sap.ui.define(['jquery.sap.global',
 	/**
 	 * Sort order of a column
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @enum {string}
 	 * @public
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
@@ -174,7 +174,7 @@ sap.ui.define(['jquery.sap.global',
 	/**
 	 * VisibleRowCountMode of the table
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @enum {string}
 	 * @public
 	 * @ui5-metamodel This enumeration also will be described in the UI5 (legacy) designtime metamodel
@@ -194,7 +194,11 @@ sap.ui.define(['jquery.sap.global',
 		Interactive : "Interactive",
 
 		/**
-		 * The table automatically fills the height of the surrounding container. The visibleRowCount property is automatically changed accordingly. All rows need the same height, otherwise the auto mode doesn't always work as expected.
+		 * The table automatically fills the height of the surrounding container.
+		 * The visibleRowCount property is automatically changed accordingly.
+		 * All rows need the same height, otherwise the auto mode doesn't always work as expected.
+		 * The height of all siblings within the same layout container of the table will be subtracted from the available height.
+		 * For performance reasons, it is recommended to add no siblings in the table's parent container.
 		 * @public
 		 */
 		Auto : "Auto"

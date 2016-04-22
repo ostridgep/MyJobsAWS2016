@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -436,8 +436,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	margin: 0;
 	border: 0;
 	box-shadow: none;
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
 }
 /* END "CollectionInspector.less" */
 
@@ -557,7 +555,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 
 /* List - Focus, Hover, Select */
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel,
 html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel {
 	border: 1px solid @sapUiListSelectionBackgroundColor;
@@ -570,14 +567,17 @@ html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel {
 }
 
 .sapUiUx3ExactLstLb > ul > .sapUiLbxI:hover,
-.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:hover,
 .sapUiUx3ExactLstLb > ul > .sapUiLbxI:focus,
-.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:focus,
 .sapUiUx3ExactLstLb > ul > .sapUiLbxI:hover > span,
-.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:hover > span,
-.sapUiUx3ExactLstLb > ul > .sapUiLbxI:focus > span,
-.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:focus > span {
+.sapUiUx3ExactLstLb > ul > .sapUiLbxI:focus > span {
 	background-color: @sapUiListHoverBackground;
+}
+
+.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:hover,
+.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:focus,
+.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:hover > span,
+.sapUiUx3ExactLstLb > ul > .sapUiLbxI.sapUiLbxISel:focus > span {
+	background-color: @sapUiListSelectionHoverBackground;
 }
 
 
@@ -687,11 +687,6 @@ html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel {
 	border-bottom: 1px solid @sapUiExtraLightBorder;
 }
 
-html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3ExactLstHead > .sapUiUx3ExactLstHeadTxt {
-	left: -4px; /*should be right -> swapped with right by RTL transformation*/
-}
-
-
 /* Content */
 
 .sapUiUx3ExactLstTop > .sapUiUx3ExactLstCntnt {
@@ -704,13 +699,12 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 
 /* Resize */
 
-.sapUiUx3ExactLstRSz.sapUiUx3ExactLstRSzDrag, 
+.sapUiUx3ExactLstRSz.sapUiUx3ExactLstRSzDrag,
 .sapUiUx3ExactLstRSz:hover {
 	background-image: url("img/exact/resize.gif");
 	background-position: center;
 	background-repeat: no-repeat;
 }
-
 /* END "ExactList.less" */
 
 /* START "FacetFilter.less" */
@@ -1093,13 +1087,6 @@ html[data-sap-ui-browser^="ie"] .sapUiFeedChunk button {
 	font-size: 12px;
 	height: 25px; /* 1px more because header line is part of the height in this case*/
 	line-height: 24px;
-
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
-	border-top: 1px solid  @sapUiExtraLightBorder;
-	margin-top: 7px;
-	padding-top: 0;
 }
 /* END "FeedChunk.less" */
 
@@ -1177,7 +1164,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederLarge > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 .sapUiFeederLarge > button {
@@ -1187,7 +1173,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederMedium > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 3px;
-	-moz-border-radius: 3px;
 }
 
 .sapUiFeederMedium > button {
@@ -1197,7 +1182,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederComment > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 3px;
-	-moz-border-radius: 3px;
 }
 
 .sapUiFeederComment > button {
@@ -1256,7 +1240,7 @@ html[data-sap-ui-browser="ie9"] {
 	font-size: 14px;
 }
 
-/** Top-Level NavigationBar **/ 
+/** Top-Level NavigationBar **/
 
 .sapUiUx3NavBarToplevel {
 	border-bottom: none;
@@ -1452,7 +1436,7 @@ html[dir="rtl"] .sapUiUx3NavBarToplevel.sapUiUx3NavBarScrollForward > .sapUiUx3N
 /* START "NotificationBar.less" */
 /* ================================================== */
 /* CSS for control sap.ui.ux3/NotificationBar.control */
-/* BlueCrystal Desktop                                */   
+/* BlueCrystal Desktop                                */
 /* ================================================== */
 
 .sapUiNotificationBar {
@@ -1493,6 +1477,10 @@ html[dir="rtl"] .sapUiUx3NavBarToplevel.sapUiUx3NavBarScrollForward > .sapUiUx3N
 	min-height: 30px;
 	border: 1px solid @sapUiNotificationBarBorder;
 	border-radius: 2px;
+}
+
+.sapUiNotifier .sapUiIcon {
+	color: @sapUiExtraLightBG;
 }
 
 /* Workaround end */
@@ -1635,7 +1623,7 @@ html[dir="rtl"] .sapUiUx3NavBarToplevel.sapUiUx3NavBarScrollForward > .sapUiUx3N
 
     background-color:   @sapUiLightestBG;
     background-image:   none;
-    padding:            9px 5px 0;
+    padding:            6px 5px 0;
     height:             31px;
 }
 
@@ -1644,12 +1632,15 @@ html[dir="rtl"] .sapUiUx3NavBarToplevel.sapUiUx3NavBarScrollForward > .sapUiUx3N
     height:             4px;
 }
 
-.sapUiUx3ShellHeader > img,
-.sapUiUx3ShellHeader > h1 {
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > img {
     color:              @sapUiLightText;
     margin-top:         -3px;
     text-shadow:        none;
     font-size:          12px;
+}
+
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > span {
+    color:              @sapUiLightText;
 }
 
 .sapUiUx3ShellHeader .sapUiBtn,
@@ -1850,24 +1841,14 @@ html[dir="rtl"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3NavBarArrow {
     clip:               inherit;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3NavBarArrow {
-	display:			inline-block;
-    background:         transparent;
-    border-color:       transparent transparent @sapUiDarkBorder transparent;
-    border-width:       0 7px 7px 7px;
-    width:              auto;
-    height:             auto;
-    top:                auto;
-}
-
 .sapUiUx3ShellCanvas .sapUiUx3ShellContent {
-	padding-left: 20px; 
-	padding-right: 20px; 
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .sapUiUx3ShellNoContentPadding .sapUiUx3ShellContent {
     padding:        0;
-} 
+}
 
 .sapUiUx3ShellCanvas .sapUiUx3NavBar .sapUiUx3NavBarList > li > a {
     padding:            0 10px 0 10px;
@@ -1892,7 +1873,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
     width:              5px;
     margin-left:        -5px;
 }
- 
+
 .sapUiUx3ShellContent {
 	width: auto;
 }
@@ -1902,15 +1883,15 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
 .sapUiUx3ShellHeadBrandOnly .sapUiUx3ShellCanvas > .sapUiUx3NavBar {
 	background-color: @sapUiLightestBG;
 }
-    
+
 .sapUiUx3ShellHeadNoNavigation .sapUiUx3ShellCanvas .sapUiUx3NavBarItem,
 .sapUiUx3ShellHeadBrandOnly .sapUiUx3ShellCanvas .sapUiUx3NavBarItem {
 	font-size: 15px;
 }
 
-   
-    
-    
+
+
+
 /* tool palette area */
 
 .sapUiUx3ShellToolPaletteArea, .sapUiUx3ShellPaneBarRight {
@@ -1953,7 +1934,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
     background-position: 4px -64px;
 }
 .sapUiUx3ShellTool-search:hover,
-.sapUiUx3ShellTool-search:active, 
+.sapUiUx3ShellTool-search:active,
 .sapUiUx3ShellTool-search.sapUiUx3ShellToolSelected {
     background-position: -28px -64px;
 }
@@ -1964,7 +1945,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
 .sapUiUx3ShellTool-inspector:hover {
     background-position: -28px -32px;
 }
-.sapUiUx3ShellTool-inspector:active, 
+.sapUiUx3ShellTool-inspector:active,
 .sapUiUx3ShellTool-inspector.sapUiUx3ShellToolSelected {
     background-position: -60px -32px;
 }
@@ -1973,7 +1954,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
     background-position: 4px 0;
 }
 .sapUiUx3ShellTool-feeder:hover,
-.sapUiUx3ShellTool-feeder:active, 
+.sapUiUx3ShellTool-feeder:active,
 .sapUiUx3ShellTool-feeder.sapUiUx3ShellToolSelected {
     background-position: -28px 0;
 }
@@ -2105,13 +2086,9 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3Shell .sapUiUx3NavBarToplevel .sapUiUx3
 
 /* hack for IE 9+*/
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvasBackground,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellCanvasBackground,
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellCanvas,
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellBgImg,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg,
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellBg,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBg {
 	background-color: transparent;
 	background-image: none;
@@ -2183,9 +2160,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBg {
 .sapUiUx3TP-feeder > .sapUiUx3TPContent {
 	margin: 0;
 }
-
-
-
 /* END "Shell.less" */
 
 /* START "ShellColorPicker.less" */
@@ -2376,7 +2350,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBg {
 	height: 48px;
 	border: 1px solid @sapUiMediumBorder;
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 .sapUiUx3TIIcon>IMG {
@@ -2490,15 +2463,9 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBg {
 	width: 270px;
 }
 
-
 .sapUiUx3TI.sapUiUx3TINoFrame {
 	border-left: 1px solid @sapUiLightBorder;
 	border-right: 1px solid @sapUiLightBorder;
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiUx3TI.sapUiUx3TINoFrame {
-	margin-top: 0px;
-	outline-width: 0px;
 }
 
 .sapUiUx3TI.sapUiUx3TINoFrame .sapUiUx3TV > .sapUiUx3TVContent {
@@ -2550,7 +2517,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TI.sapUiUx3TINoFrame {
 
 .sapUiUx3TVToolbar {
 	background-color: @sapUiToolbarBackground;
-	padding: 0px; 
+	padding: 0px;
 	height: 40px;
 }
 
@@ -2596,11 +2563,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TI.sapUiUx3TINoFrame {
 	margin-top: 3px;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3TV.sapUiUx3TVNoFrame {
-	margin-top: 0px;
-	outline-width: 0px;
-}
-
 .sapUiUx3TV.sapUiUx3TVNoFrame > .sapUiUx3TVContent {
 	border-width: 0;
 }
@@ -2630,8 +2592,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TV.sapUiUx3TVNoFrame {
 
 .sapUiUx3TP.sapUiShd {
 	box-shadow: @sapUiUx3ToolPopupShadow;
-	-webkit-box-shadow: @sapUiUx3ToolPopupShadow;
-	-moz-box-shadow: @sapUiUx3ToolPopupShadow;
 }
 
 .sapUiUx3TP.sapUiUx3TPNoTitle {
@@ -2686,10 +2646,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TV.sapUiUx3TVNoFrame {
 	background-image: none;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrow{
-	width: 12px;
-}
-
 .sapUiUx3TPArrow>.sapUiUx3TPArrowBorder {
 	background: @sapUiDarkBorder;
 
@@ -2703,19 +2659,9 @@ HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrow{
 	height: 26px;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrow>.sapUiUx3TPArrowBorder {
-	/* equals a rotation of 45 degrees */
-	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.7071067690849304, M12=-0.7071067690849304, M21=0.7071067690849304, M22=0.7071067690849304, SizingMethod='auto expand')";
-}
-
 .sapUiUx3TPArrowLeft>.sapUiUx3TPArrowBorder {
 	top: -4px;
 	left: 6px;
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrowLeft>.sapUiUx3TPArrowBorder {
-	left: 0;
-	top: -2px;
 }
 
 .sapUiUx3TPArrowRight>.sapUiUx3TPArrowBorder {
@@ -2723,34 +2669,19 @@ HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrowLeft>.sapUiUx3TPArrowBorder {
 	left: -13px;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrowRight>.sapUiUx3TPArrowBorder {
-	left: -18px;
-	top: -1px;
-}
-
 .sapUiUx3TPArrow.sapUiUx3TPArrowUp,
 .sapUiUx3TPArrow.sapUiUx3TPArrowDown {
-	height: 13px;
-	width: 26px;
+	height: @sapUiUx3ToolPopupArrowWidth;
+	width: @sapUiUx3ToolPopupArrowHeight;
 }
 .sapUiUx3TPArrowUp>.sapUiUx3TPArrowBorder {
 	top: 3px;
 	left: 0px;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrowUp>.sapUiUx3TPArrowBorder {
-	left: -6px;
-	top: 1px;
-}
-
 .sapUiUx3TPArrowDown>.sapUiUx3TPArrowBorder {
 	top: -15px;
 	left: 6px;
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiUx3TPArrowDown>.sapUiUx3TPArrowBorder {
-	left: 0;
-	top: -17px;
 }
 /* END "ToolPopup.less" */
 

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -20,22 +20,18 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
-	 * @param {sap.ui.core.RenderManager} oRm the RenderManager that can be used for writing to the Render-Output-Buffer
-	 * @param {sap.ui.core.Control} oCheckBox an object representation of the control that should be rendered
+	 * @param {sap.ui.core.RenderManager} oRm The RenderManager that can be used for writing to the Render-Output-Buffer
+	 * @param {sap.ui.core.Control} oCheckBox An object representation of the control that should be rendered
 	 */
 	CheckBoxRenderer.render = function(oRm, oCheckBox){
 		// get control properties
 		var bEnabled = oCheckBox.getEnabled();
 		var bEditable = oCheckBox.getEditable();
-		var bInteractible = oCheckBox.getEnabled() && oCheckBox.getEditable();
+		var oCbLabel = oCheckBox.getAggregation("_label");
 
 		// CheckBox wrapper
 		oRm.write("<div");
 		oRm.addClass("sapMCb");
-
-		if (bInteractible) {
-			oRm.addClass("sapMPointer");
-		}
 
 		if (!bEditable) {
 			oRm.addClass("sapMCbRo");
@@ -43,6 +39,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 
 		if (!bEnabled) {
 			oRm.addClass("sapMCbBgDis");
+		}
+
+		if (oCheckBox.getText()) {
+			oRm.addClass("sapMCbHasLabel");
 		}
 
 		oRm.writeControlData(oCheckBox);
@@ -59,10 +59,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 
 		//ARIA attributes
 		oRm.writeAccessibilityState(oCheckBox, {
-			role: 'checkbox',		
+			role: "checkbox",
 			selected: null,
 			checked: oCheckBox.getSelected()
-		});		
+		});
 
 		oRm.write(">");		// DIV element
 
@@ -110,7 +110,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/ValueStateSupport'],
 		}
 
 		oRm.write(" /></div>");
-		oRm.renderControl(oCheckBox._oLabel);
+		oRm.renderControl(oCbLabel);
 		oRm.write("</div>");
 	};
 

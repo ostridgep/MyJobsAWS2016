@@ -8,11 +8,6 @@
 		padding: 0;
 	}
 
-	/* remove the Popover's arrow */
-	&.sapMMsgPopover-ModeToolbar .sapMPopoverArr {
-		display: none;
-	}
-
 	.sapMIBar .sapMBarChild {
 		margin-left: .25rem;
 		margin-right: .25rem;
@@ -20,7 +15,7 @@
 
 	.sapMMsgPopoverTitleText,
 	.sapMMsgPopoverDescriptionText {
-		float: left;
+		display: block;
 		padding: 0 1rem 0 3rem;
 		margin-top: 1rem;
 	}
@@ -29,9 +24,19 @@
 		padding-bottom: 1rem;
 	}
 
+	.sapMMsgPopoverDescriptionText:empty {
+		display: none;
+	}
+
 	.sapMMsgPopoverTitleText {
 		vertical-align: middle;
-		font-weight: 600;
+		font-weight: bold;
+	}
+
+	.markupDescription {
+		float: left;
+		padding: 0 1rem 0 3rem;
+		margin-top: 1rem;
 	}
 }
 

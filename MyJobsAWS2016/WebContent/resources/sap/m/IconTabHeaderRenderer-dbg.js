@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -20,7 +20,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 	 *
 	 * @private
 	 */
-	IconTabHeaderRenderer._aAllIconColors = ['sapMITBFilterCritical', 'sapMITBFilterPositive', 'sapMITBFilterNegative', 'sapMITBFilterDefault'];
+	IconTabHeaderRenderer._aAllIconColors = ['sapMITBFilterCritical', 'sapMITBFilterPositive', 'sapMITBFilterNegative', 'sapMITBFilterDefault', 'sapMITBFilterNeutral'];
 
 
 	/**
@@ -140,6 +140,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 			oRM.writeElementData(oItem);
 			oRM.addClass("sapMITBItem");
 
+			if (!(oItem instanceof sap.m.IconTabSeparator) && !this.getCount()) {
+				oRM.addClass("sapMITBItemNoCount");
+			}
+
 			if (oItem instanceof sap.m.IconTabFilter) {
 
 				if (oItem.getDesign() === sap.m.IconTabFilterDesign.Vertical) {
@@ -180,7 +184,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/IconPool'],
 					oRM.write("<span class='sapMITBFilterNoIcon'> </span>");
 				}
 
-				if (oItem.getDesign() === sap.m.IconTabFilterDesign.Horizontal) {
+				if (oItem.getDesign() === sap.m.IconTabFilterDesign.Horizontal && !oItem.getShowAll()) {
 					oRM.write("</div>");
 					oRM.write("<div class='sapMITBHorizontalWrapper'>");
 				}

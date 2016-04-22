@@ -3,17 +3,21 @@
 /* CSS for controlsap.m/CustomListItem.control */
 /* ============================================= */
 
-.sapMCLI{
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: flex;
+.sapMCLI.sapMLIB{
+	padding: 0 1px;
 }
 
-.sapMCLI > .sapMLIBContent{
-	-webkit-box-flex: 1;
-	-moz-box-flex: 1;
-	-ms-flex: auto;
-	flex: auto;
-	-ms-flex-negative: 1; /* IE10 does not shrink by auto */
+.sapMCLI .sapMLIBSelectSL,
+.sapMCLI .sapMLIBSelectM{
+	margin-left: 0;
+}
+
+.sapMCLI .sapMLIBImgNav,
+.sapMCLI .sapMLIBSelectS,
+.sapMCLI .sapMLIBSelectD{
+	margin-right: 0;
+}
+
+.sapMCLI:not(.sapMLIBNoFlex) > .sapMLIBContent{
+	width: 100%;	/* IE flexbox workaround max-width is not respected */
 }

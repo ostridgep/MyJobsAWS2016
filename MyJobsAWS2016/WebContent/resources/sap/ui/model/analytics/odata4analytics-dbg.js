@@ -1,5 +1,7 @@
 /*!
- * @copyright@
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Disable some ESLint rules. camelcase (some "_" in names to indicate indexed variables (like in math)), valid-jsdoc (not completed yet), no-warning-comments (some TODOs are left)
@@ -7,8 +9,8 @@
 /*eslint-disable camelcase, valid-jsdoc, no-warning-comments */
 
 // Provides API for analytical extensions in OData service metadata
-sap.ui.define(['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.define(['jquery.sap.global', './AnalyticalVersionInfo'],
+	function(jQuery, AnalyticalVersionInfo) {
 	"use strict";
 
 	/**
@@ -102,7 +104,12 @@ sap.ui.define(['jquery.sap.global'],
 	 * @param {object}
 	 * 	          [mParameter] Additional parameters for controlling the model construction. Currently supported are:
 	 *            <li> sAnnotationJSONDoc - A JSON document providing extra annotations to the elements of the
-	 *                 structure of the given service</li>
+	 *                 structure of the given service
+	 *            </li>
+	 *            <li> modelVersion - Parameter to define which ODataModel version should be used, in you use
+	 *                 'odata4analytics.Model.ReferenceByURI': 1 (default), 2
+	 *                 see also: AnalyticalVersionInfo constants
+	 *            </li>
 	 * @constructor
 	 *
 	 * @class Representation of an OData model with analytical annotations defined
@@ -195,10 +202,11 @@ sap.ui.define(['jquery.sap.global'],
 		 */
 		_init : function(oModelReference, mParameter) {
 			if (typeof mParameter == "string") {
-				throw "Deprecated second argument: Adjust your invocation by passing an object with a property sAnnotationJSONDoc as a second argument instead"
+				throw "Deprecated second argument: Adjust your invocation by passing an object with a property sAnnotationJSONDoc as a second argument instead";
 			}
 			this._mParameter = mParameter;
 
+			var that = this;
 			/*
 			 * get access to OData model
 			 */
@@ -217,23 +225,74 @@ sap.ui.define(['jquery.sap.global'],
 				throw "Usage with oModelReference being an instance of Model.ReferenceByURI or Model.ReferenceByModel";
 			}
 
+			//check if a model is given, or we need to create one from the service URI
 			if (oModelReference.oModel) {
 				this._oModel = oModelReference.oModel;
+				// find out which model version we are running
+				this._iVersion = AnalyticalVersionInfo.getVersion(this._oModel);
+				checkForMetadata();
 			} else {
-				this._oModel = new sap.ui.model.odata.ODataModel(oModelReference.sServiceURI);
+				// Check if the user wants a V2 model
+				if (mParameter && mParameter.modelVersion === AnalyticalVersionInfo.V2) {
+					this._oModel = new sap.ui.model.odata.v2.ODataModel(oModelReference.sServiceURI);
+					this._iVersion = AnalyticalVersionInfo.V2;
+					checkForMetadata();
+				} else {
+					//default is V1 Model
+					this._oModel = new sap.ui.model.odata.ODataModel(oModelReference.sServiceURI);
+					this._iVersion = AnalyticalVersionInfo.V1;
+					checkForMetadata();
+				}
 			}
 
 			if (this._oModel.getServiceMetadata().dataServices == undefined) {
 				throw "Model could not be loaded";
 			}
 
-			/*
-			 * add extra annotations if provided
+			/**
+			 * Check if the metadata is already available, if not defere the interpretation of the Metadata
 			 */
-			if (mParameter && mParameter.sAnnotationJSONDoc) {
-				this.mergeV2Annotations(mParameter.sAnnotationJSONDoc);
+			function checkForMetadata() {
+				// V2 supports asynchronous loading of metadata
+				// we have to register for the MetadataLoaded Event in case, the data is not loaded already
+				if (!that._oModel.getServiceMetadata()) {
+					that._oModel.attachMetadataLoaded(processMetadata);
+				} else {
+					// metadata already loaded
+					processMetadata();
+				}
 			}
 
+			/**
+			 * Kickstart the interpretation of the metadata,
+			 * either called directly if metadata is available, or deferred and then
+			 * executed via callback by the model during the metadata loaded event.
+			 */
+			function processMetadata () {
+				//only interprete the metadata if the analytics model was not initialised yet
+				if (that.bIsInitialized) {
+					return;
+				}
+
+				//mark analytics model as initialized
+				that.bIsInitialized = true;
+
+				/*
+				 * add extra annotations if provided
+				 */
+				if (mParameter && mParameter.sAnnotationJSONDoc) {
+					that.mergeV2Annotations(mParameter.sAnnotationJSONDoc);
+				}
+
+				that._interpreteMetadata(that._oModel.getServiceMetadata().dataServices);
+			}
+
+		},
+
+		/**
+		 * @private
+		 */
+		_interpreteMetadata: function (oMetadata) {
 			/*
 			 * parse OData model for analytic queries
 			 */
@@ -3387,9 +3446,16 @@ sap.ui.define(['jquery.sap.global'],
 
 				if (sFilterRestriction == odata4analytics.EntityType.propertyFilterRestriction.SINGLE_VALUE) {
 					if (oPropertiesInFilterExpression[sPropertyName2] != undefined) {
-						if (oPropertiesInFilterExpression[sPropertyName2].length > 1
-								|| oPropertiesInFilterExpression[sPropertyName2][0].sOperator != sap.ui.model.FilterOperator.EQ) {
-							throw "filter expression may use " + sPropertyName2 + " only with a single EQ condition"; // TODO
+						if (oPropertiesInFilterExpression[sPropertyName2].length > 1) {
+							// check if all filter instances of the current property have the same single value
+							var vTheOnlyValue = oPropertiesInFilterExpression[sPropertyName2][0].oValue1;
+							for (var j = 0; j < oPropertiesInFilterExpression[sPropertyName2].length; j++) {
+								// check if we have a value change, this means we got another value in one of the filters
+								if (oPropertiesInFilterExpression[sPropertyName2][j].oValue1 != vTheOnlyValue
+									|| oPropertiesInFilterExpression[sPropertyName2][j].sOperator != sap.ui.model.FilterOperator.EQ) {
+									throw "filter expression may use " + sPropertyName2 + " only with a single EQ condition";
+								}
+							}
 						}
 					}
 				}
@@ -4346,16 +4412,26 @@ sap.ui.define(['jquery.sap.global'],
 		 *            bIncludeCount Indicates whether or not the result shall
 		 *            include a count for the returned entities. Default is not to
 		 *            include it. Pass null to keep current setting.
+		 * @param {Boolean}
+		 *            bReturnNoEntities Indicates whether or not the result shall
+		 *            be empty. This will translate to $top=0 in the OData request and override
+		 *            any setting done with setResultPageBoundaries. The default is not to
+		 *            suppress entities in the result. Pass null to keep current setting.
+		 *            The main use case for this option is to create a request
+		 *            with $inlinecount returning an entity count.
 		 * @public
 		 * @function
 		 * @name sap.ui.model.analytics.odata4analytics.QueryResultRequest#setRequestOptions
 		 */
-		setRequestOptions : function(bIncludeEntityKey, bIncludeCount) {
+		setRequestOptions : function(bIncludeEntityKey, bIncludeCount, bReturnNoEntities) {
 			if (bIncludeEntityKey != null) {
 				this._bIncludeEntityKey = bIncludeEntityKey;
 			}
 			if (bIncludeCount != null) {
 				this._bIncludeCount = bIncludeCount;
+			}
+			if (bReturnNoEntities != null) {
+				this._bReturnNoEntities = bReturnNoEntities;
 			}
 		},
 
@@ -4555,13 +4631,19 @@ sap.ui.define(['jquery.sap.global'],
 				break;
 			}
 			case "$top": {
-				if (this._iTopRequestOption !== null) {
+				sQueryOptionValue = null;
+				if (this._bReturnNoEntities) {
+					sQueryOptionValue = 0;
+				} else if (this._iTopRequestOption !== null) {
 					sQueryOptionValue = this._iTopRequestOption;
 				}
 				break;
 			}
 			case "$skip": {
-				sQueryOptionValue = this._iSkipRequestOption;
+				sQueryOptionValue = null;
+				if (!this._bReturnNoEntities) {
+					sQueryOptionValue = this._iSkipRequestOption;
+				}
 				break;
 			}
 			case "$inlinecount": {
@@ -4614,11 +4696,11 @@ sap.ui.define(['jquery.sap.global'],
 			var sURI = sResourcePath;
 			var bQuestionmark = false;
 
-			if (sSelectOption) {
+			if (sSelectOption !== null) {
 				sURI += "?$select=" + sSelectOption;
 				bQuestionmark = true;
 			}
-			if (this._oFilterExpression && sFilterOption) {
+			if (this._oFilterExpression && sFilterOption !== null) {
 				if (!bQuestionmark) {
 					sURI += "?";
 					bQuestionmark = true;
@@ -4627,7 +4709,7 @@ sap.ui.define(['jquery.sap.global'],
 				}
 				sURI += "$filter=" + sFilterOption;
 			}
-			if (this._oSortExpression && sSortOption) {
+			if (this._oSortExpression && sSortOption !== null) {
 				if (!bQuestionmark) {
 					sURI += "?";
 					bQuestionmark = true;
@@ -4637,7 +4719,7 @@ sap.ui.define(['jquery.sap.global'],
 				sURI += "$orderby=" + sSortOption;
 			}
 
-			if (this._iTopRequestOption && sTopOption) {
+			if ((this._iTopRequestOption || this._bReturnNoEntities) && sTopOption !== null) {
 				if (!bQuestionmark) {
 					sURI += "?";
 					bQuestionmark = true;
@@ -4646,7 +4728,7 @@ sap.ui.define(['jquery.sap.global'],
 				}
 				sURI += "$top=" + sTopOption;
 			}
-			if (this._iSkipRequestOption && sSkipOption) {
+			if (this._iSkipRequestOption && sSkipOption !== null) {
 				if (!bQuestionmark) {
 					sURI += "?";
 					bQuestionmark = true;
@@ -4655,7 +4737,7 @@ sap.ui.define(['jquery.sap.global'],
 				}
 				sURI += "$skip=" + sSkipOption;
 			}
-			if (this._bIncludeCount && sInlineCountOption) {
+			if (this._bIncludeCount && sInlineCountOption !== null) {
 				if (!bQuestionmark) {
 					sURI += "?";
 					bQuestionmark = true;
@@ -4677,9 +4759,10 @@ sap.ui.define(['jquery.sap.global'],
 		_oMeasures : null,
 		_bIncludeEntityKey : null,
 		_bIncludeCount : null,
+		_bReturnNoEntities : null,
 		_oFilterExpression : null,
 		_oSortExpression : null,
-		_iSkipRequestOption : 0,
+		_iSkipRequestOption : null,
 		_iTopRequestOption : null
 	};
 

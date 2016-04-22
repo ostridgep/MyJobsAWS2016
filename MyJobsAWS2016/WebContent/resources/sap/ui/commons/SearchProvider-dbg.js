@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,31 +10,31 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/search/OpenSearchP
 	"use strict";
 
 
-	
+
 	/**
 	 * Constructor for a new SearchProvider.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
 	 * A SearchProvider which can be attached to a Search Field.
 	 * @extends sap.ui.core.search.OpenSearchProvider
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
-	 * @deprecated Since version 1.6.0. 
+	 * @deprecated Since version 1.6.0.
 	 * Replaced by sap.ui.core.search.OpenSearchProvider
 	 * @alias sap.ui.commons.SearchProvider
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var SearchProvider = OpenSearchProvider.extend("sap.ui.commons.SearchProvider", /** @lends sap.ui.commons.SearchProvider.prototype */ { metadata : {
-	
+
 		deprecated : true,
 		library : "sap.ui.commons"
 	}});
-	
+
 	/**
 	 * Called by the search field, when suggestions are requested.
 	 *
@@ -47,8 +47,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/search/OpenSearchP
 			}
 		});
 	};
-	
-	
+
+
 
 	return SearchProvider;
 

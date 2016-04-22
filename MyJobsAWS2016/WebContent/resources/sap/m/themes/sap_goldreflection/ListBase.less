@@ -3,8 +3,6 @@
 /* ============================================= */
 .sapMList {
 	position: relative;	/* This should not break the list but help swipe list content position calculation */
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -22,10 +20,6 @@
 .sapMList:focus,
 .sapMListUl:focus {
 	outline: none;
-}
-
-.sapMListInset {
-	overflow: hidden;
 }
 
 .sapMListSwp {
@@ -122,25 +116,15 @@
 }
 
 /* Growing feature */
-.sapMGrowingListTrigger,
-.sapMGrowingListLoading {
+.sapMGrowingListTrigger {
 	display: block;
 	text-align: center;
 	overflow: hidden;
 }
-.sapMGrowingListBusyIndicator {
-	float: left;
-	overflow: hidden;
+
+.sapMGrowingListBusyIndicatorVisible .sapMGrowingListTriggerText,
+.sapMGrowingListBusyIndicatorVisible .sapMGrowingListDescription {
 	visibility: hidden;
-	width: 2.0em;
-	height: 2.0em;
-}
-.sapMGrowingListBusyIndicatorVisible {
-	visibility: visible;
-}
-.sapMGrowingListLoading > .sapMGrowingListBusyIndicator {
-	float: none;
-	visibility: visible;
 }
 
 /* mixin call for creating container content padding classes (arguments: rootContainer, contentSelector) */

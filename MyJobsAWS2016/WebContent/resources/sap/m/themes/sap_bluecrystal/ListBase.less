@@ -11,8 +11,6 @@
 .sapUiFioriObjectPage > section > .sapMList:not(.sapMListInsetBG){
 	margin: 1rem 0;
 	padding: 0 1rem;
-	-webkit-box-sizing:   border-box;
-	-moz-box-sizing:      border-box;
 	box-sizing:           border-box;
 }
 .sapUiFioriObjectPage > section > .sapMITB + .sapMList:not(.sapMListInsetBG){
@@ -24,15 +22,11 @@
 
 .sapUIMeTabContainerContent .sapMList{
 	padding: 1rem;
-	-webkit-box-sizing:   border-box;
-	-moz-box-sizing:      border-box;
 	box-sizing:           border-box;
 }
 
 .sap-phone .sapUIMeTabContainerContent .sapMList{
 	padding: 0rem;
-	-webkit-box-sizing:   border-box;
-	-moz-box-sizing:      border-box;
 	box-sizing:           border-box;
 }
 
@@ -58,26 +52,25 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	font: @sapUiFontHeaderWeight @sapMFontHeader5Size @sapUiFontHeaderFamily;
+	font-size: @sapMFontHeader4Size;
+	font-family: @sapUiFontHeaderFamily;
 	text-shadow: 0 1px 0 @sapUiLightShadowTint;
-	color: @sapUiHeaderText;
+	color: @sapUiGroupTitleTextColor;
 	height: 3rem;
 	line-height: 3rem;
 	padding: 0 1rem;
-	background-color: fade(@sapUiLightestBG, 0%);
-	border-bottom: 1px solid @sapUiMediumBorder;
+	background-color: @sapUiGroupTitleBackground;
+	border-bottom: 1px solid @sapUiGroupTitleBorderColor;
 }
 
 .sapMListFtr{
 	height: 2rem;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	-webkit-text-size-adjust: none;	/* To improve readability Mobile Safari automatically increases the size of small text so let's disable this */
 	font-size: @sapMFontMediumSize;
 	line-height: 2rem;
-	background-color: @sapUiListBGFooter;
-	color: @sapUiListFooterText;
+	background-color: @sapUiListFooterBackground;
+	color: @sapUiListFooterTextColor;
 	padding: 0 1rem;
 	white-space: nowrap;
 	overflow: hidden;
@@ -85,15 +78,15 @@
 }
 
 .sapMListNoData {
-	color: @sapUiListNoDataTextColor;
-	background-color: @sapUiListBG;
-	border-bottom: 1px solid @sapUiLIBorder;
+	color: @sapUiListTextColor;
+	background-color: @sapUiListBackground;
+	border-bottom: 1px solid @sapUiListBorderColor;
 	padding: 0 1rem !important;
 	height:3rem;
 }
 
 .sapMListTopBorder {
-	border-top: 1px solid @sapUiLIBorder;
+	border-top: 1px solid @sapUiListBorderColor;
 }
 
 .sapMListShowSeparatorsNone .sapMListNoData{
@@ -102,7 +95,6 @@
 
 .sapUIMeTabContainerContent .sapMList{
 	padding: 1rem;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -112,31 +104,23 @@
 }
 
 /* Growing feature */
-.sapMGrowingListTrigger,
-.sapMGrowingListLoading {
-	border-top: 0.0625em solid darken(@sapUiListBG,10)	;
+.sapMGrowingListTrigger {
+	border-top: 1px solid @sapUiListHeaderBorderColor;
 	height: 5.0rem;
 }
 .sapMGrowingListBusyIndicator {
 	margin: 1.5rem 1.0rem ;
 	position: absolute;
 }
-.sapMGrowingListLoading > .sapMGrowingListBusyIndicator {
-	margin: 0.5rem auto;
-	position: static;
-}
-.sapMGrowingListTitel {
+.sapMGrowingListTriggerText {
 	padding: 0 4rem;
 }
-.sapMGrowingListTitel > h1 {
+.sapMGrowingListTriggerText > .sapMSLITitle {
 	margin: 0.813rem 0; /* overwrites any user-agent default margin values */
 }
 .sapMGrowingListDescription {
 	padding: 0 4rem;
 	text-align: center;
-}
-.sapMLIBActive .sapMGrowingListBusyIndicatorVisible .sapMBusySvg {
-	stroke: @sapUiLITextInverted;
 }
 
 /* Compact size */
@@ -153,15 +137,14 @@
 	height: 3rem;
 }
 
-.sapUiSizeCompact .sapMGrowingListTrigger,
-.sapUiSizeCompact .sapMGrowingListLoading {
+.sapUiSizeCompact .sapMGrowingListTrigger{
 	height: 4rem;
 }
 
-.sapUiSizeCompact .sapMGrowingListBusyIndicator{
+.sapUiSizeCompact .sapMGrowingListTrigger > .sapMGrowingListBusyIndicator{
 	margin: 1rem;
 }
 
-.sapUiSizeCompact .sapMGrowingListTitel > h1 {
+.sapUiSizeCompact .sapMGrowingListTriggerText > .sapMSLITitle {
 	margin-bottom: 0;
 }

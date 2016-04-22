@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides the base implementation for all model implementations
-sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/model/SimpleType'],
-	function(jQuery, NumberFormat, SimpleType) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/model/SimpleType', 'sap/ui/model/FormatException', 'sap/ui/model/ParseException', 'sap/ui/model/ValidateException'],
+	function(jQuery, NumberFormat, SimpleType, FormatException, ParseException, ValidateException) {
 	"use strict";
 
 
@@ -19,16 +19,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 	 * @extends sap.ui.model.SimpleType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
 	 * @param {object} [oFormatOptions] formatting options. Supports the same options as {@link sap.ui.core.format.NumberFormat.getIntegerInstance NumberFormat.getIntegerInstance}
-	 * @param {object} [oFormatOptions.source] additional set of format options to be used if the property in the model is not of type string and needs formatting as well. 
-	 * 										   In case an empty object is given, the default is disabled grouping and a dot as decimal separator. 
-	 * @param {object} [oConstraints] value constraints. 
-	 * @param {int} [oConstraints.minimum] smallest value allowed for this type  
-	 * @param {int} [oConstraints.maximum] largest value allowed for this type  
+	 * @param {object} [oFormatOptions.source] additional set of format options to be used if the property in the model is not of type string and needs formatting as well.
+	 * 										   In case an empty object is given, the default is disabled grouping and a dot as decimal separator.
+	 * @param {object} [oConstraints] value constraints.
+	 * @param {int} [oConstraints.minimum] smallest value allowed for this type
+	 * @param {int} [oConstraints.maximum] largest value allowed for this type
 	 * @alias sap.ui.model.type.Integer
 	 */
 	var Integer = SimpleType.extend("sap.ui.model.type.Integer", /** @lends sap.ui.model.type.Integer.prototype */ {
@@ -51,7 +51,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 		if (this.oInputFormat) {
 			iValue = this.oInputFormat.parse(vValue);
 			if (iValue == null) {
-				throw new sap.ui.model.FormatException("Cannot format float: " + vValue + " has the wrong format");
+				throw new FormatException("Cannot format float: " + vValue + " has the wrong format");
 			}
 		}
 		switch (this.getPrimitiveType(sInternalType)) {
@@ -62,7 +62,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 			case "any":
 				return iValue;
 			default:
-				throw new sap.ui.model.FormatException("Don't know how to format Integer to " + sInternalType);
+				throw new FormatException("Don't know how to format Integer to " + sInternalType);
 		}
 	};
 
@@ -76,36 +76,40 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 				iResult = this.oOutputFormat.parse(String(vValue));
 				if (isNaN(iResult)) {
 					oBundle = sap.ui.getCore().getLibraryResourceBundle();
-					throw new sap.ui.model.ParseException(oBundle.getText("Integer.Invalid"));
+					throw new ParseException(oBundle.getText("Integer.Invalid"));
 				}
 				break;
 			case "float":
 				iResult = Math.floor(vValue);
 				if (iResult != vValue) {
 					oBundle = sap.ui.getCore().getLibraryResourceBundle();
-					throw new sap.ui.model.ParseException(oBundle.getText("Integer.Invalid"));
+					throw new ParseException(oBundle.getText("Integer.Invalid"));
 				}
 				break;
 			case "int":
 				iResult = vValue;
 				break;
 			default:
-				throw new sap.ui.model.ParseException("Don't know how to parse Integer from " + sInternalType);
+				throw new ParseException("Don't know how to parse Integer from " + sInternalType);
 		}
 		if (this.oInputFormat) {
 			iResult = this.oInputFormat.format(iResult);
-		}				
+		}
 		return iResult;
 	};
 
 	/**
 	 * @see sap.ui.model.SimpleType.prototype.validateValue
 	 */
-	Integer.prototype.validateValue = function(iValue) {
+	Integer.prototype.validateValue = function(vValue) {
 		if (this.oConstraints) {
 			var oBundle = sap.ui.getCore().getLibraryResourceBundle(),
 				aViolatedConstraints = [],
-				aMessages = [];
+				aMessages = [],
+				iValue = vValue;
+			if (this.oInputFormat) {
+				iValue = this.oInputFormat.parse(vValue);
+			}
 			jQuery.each(this.oConstraints, function(sName, oContent) {
 				switch (sName) {
 					case "minimum":
@@ -122,7 +126,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 				}
 			});
 			if (aViolatedConstraints.length > 0) {
-				throw new sap.ui.model.ValidateException(aMessages.join(" "), aViolatedConstraints);
+				throw new ValidateException(aMessages.join(" "), aViolatedConstraints);
 			}
 		}
 	};
@@ -142,7 +146,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 	Integer.prototype._handleLocalizationChange = function() {
 		this._createFormats();
 	};
-	
+
 	/**
 	 * Create formatters used by this type
 	 * @private
@@ -164,4 +168,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/format/NumberFormat', 'sap/ui/m
 
 	return Integer;
 
-}, /* bExport= */ true);
+});

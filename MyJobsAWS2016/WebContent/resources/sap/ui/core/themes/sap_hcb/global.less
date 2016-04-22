@@ -27,7 +27,11 @@
 
 // Semantic Theming Mapping
 @sapUiHighlightColor: #7A5100;
+@sapUiContentLabelColor: #FFFFFF;
 @sapUiContentDisabledTextColor: #666666;
+@sapUiContentForegroundColor: #000000;
+@sapUiContentForegroundBorderColor: #FFFFFF;
+@sapUiShellBackground: #000000;
 @sapUiButtonBackground: #000000;
 @sapUiButtonBorderColor: #FFFFFF;
 @sapUiButtonTextColor: #FFFFFF;
@@ -40,8 +44,11 @@
 @sapUiFieldBorderColor: #FFFFFF;
 @sapUiFieldHoverBorderColor: #FFFFFF;
 @sapUiFieldHoverHelpBackground: @sapUiHighlightColor;
+@sapUiFieldFocusBorderColor: #FFFFFF;
 @sapUiFieldReadOnlyBackground: #585858;
 @sapUiFieldReadOnlyBorderColor: #999999;
+@sapUiFieldDisabledBackground: #585858;
+@sapUiFieldDisabledBorderColor: #999999;
 @sapUiFieldInvalidBackground: #AA0000;
 @sapUiFieldInvalidColor: #FF0000;
 @sapUiFieldWarningBackground: #CCAA00;
@@ -49,10 +56,17 @@
 @sapUiFieldSuccessBackground: #00AA00;
 @sapUiFieldSuccessColor: #00AA00;
 
+@sapUiGroupContentBackground: #000000;
+
+@sapUiToolbarSeparatorColor: @sapHCStandardFG;
+
 @sapUiListHeaderBackground: #585858;
 @sapUiListHeaderBorderColor: @sapUiBaseBorder;
 @sapUiListSelectionBackgroundColor: @sapUiHighlightColor;
+@sapUiListBackground: #000000;
 @sapUiListHoverBackground: @sapUiHighlightColor;
+
+@sapUiBlockLayerBackground: #000000;
 
 // central colors
 // Brand Colors
@@ -60,6 +74,7 @@
 
 // Base Colors
 @sapUiBase: #FFFFFF;
+@sapUiHighlightTextColor: #ffffff;
 @sapUiBaseBG: #000000;
 @sapUiBaseText: #FFFFFF;
 
@@ -201,6 +216,8 @@
 @sapUiChartMainTitleFontSize: @sapMFontLargeSize;          // 16px
 @sapUiChartAxisTitleFontSize: @sapMFontMediumSize;         // 14px
 @sapUiChartTitleFontWeight: bold;
+@sapUiChartLightText: @sapHCStandardFG;                    // #ffffff
+@sapUiChartZeroAxisColor: @sapHCStandardFG;                // #ffffff
 
 @sapUiChartDataPointBorderColor: @sapHCStandardBG;                                       // #000000
 @sapUiChartDataPointBorderHoverSelectedColor: @sapHCStandardFG;
@@ -213,6 +230,11 @@
 @sapUiChartTargetColor: @sapHCStandardFG;
 @sapUiChartTargetShadowColor: @sapHCStandardBG;
 @sapUiChartBubbleBGOpacity: 0.9;
+
+@sapUiChartScrollbarBorderColor: @sapHCReducedAltFG;
+@sapUiChartScrollbarBorderSize: 0.063rem; // 1px
+@sapUiChartScrollbarThumbPadding: 0.125rem; // 2px
+
 
 // qualitative palette
 
@@ -309,6 +331,11 @@
 @sapUiNotifierSeparator: @sapUiBase;
 @sapUiMessageNotifierCountBG: #0F5D94;
 
+/* ToolPopup */
+@sapUiUx3ToolPopupInverted: ~"false";
+@sapUiUx3ToolPopupArrowWidth: 12px;
+@sapUiUx3ToolPopupArrowHeight: 18px;
+
 @sapUiLinkVisited: @sapUiLink;
 @sapUiLinkActive: @sapUiLink;
 @sapUiLinkHover: @sapUiLink;
@@ -316,11 +343,8 @@
 /* RatingIndicator */
 @sapUiRIIconPadding: 0.25rem;
 
-/* ToolPopup */
-@sapUiUx3ToolPopupInverted: ~"false";
-@sapUiUx3ToolPopupArrowRightMarginCorrection: 11px;
-
 @sapUiButtonDisabledBorderColor: @sapUiTextDisabled;
+@sapUiButtonActiveBorderColor: @sapHCStandardFG;
 @sapUiButtonEmphasizedDisabledBorderColor: @sapUiButtonDisabledBorderColor;
 @sapUiButtonAcceptDisabledBorderColor: @sapUiButtonDisabledBorderColor;
 @sapUiButtonRejectDisabledBorderColor: @sapUiButtonDisabledBorderColor;
@@ -429,7 +453,7 @@
 @sapUiExtraDarkBG: @sapHCStandardBG;
 @sapUiExtraLightBG: @sapHCStandardBG;
 @sapUiLightBG: @sapHCStandardBG;
-@sapUiMediumBG: @sapHCStandardBG; 
+@sapUiMediumBG: @sapHCStandardBG;
 @sapUiDarkBG: @sapHCStandardBG;
 
 /* SAP.ME */

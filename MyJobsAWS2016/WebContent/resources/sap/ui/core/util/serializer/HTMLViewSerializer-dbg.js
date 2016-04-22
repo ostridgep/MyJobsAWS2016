@@ -1,17 +1,14 @@
 /*
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/HTML', 'sap/ui/thirdparty/vkbeautify'],
-	function(jQuery, EventProvider, HTML, vkbeautify1) {
+sap.ui.define(['sap/ui/base/EventProvider', './Serializer', './delegate/HTML', 'sap/ui/thirdparty/vkbeautify'],
+	function(EventProvider, Serializer, HTML, vkbeautify) {
 	"use strict";
 
 
-	
-	/*global vkbeautify *///declare unusual global vars for JSLint/SAPUI5 validation
-	
 	/**
 	 * HTML view serializer class. Serializes a given view.
 	 *
@@ -24,7 +21,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/HTM
 	 * @class HTMLViewSerializer class.
 	 * @extends sap.ui.base.EventProvider
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @alias sap.ui.core.util.serializer.HTMLViewSerializer
 	 * @experimental Since 1.15.1. The HTMLViewSerializer is still under construction, so some implementation details can be changed in future.
 	 */
@@ -38,22 +35,22 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/HTM
 			this._fnGetEventHandlerName = fnGetEventHandlerName;
 		}
 	});
-	
-	
+
+
 	/**
 	 * Serializes the given HTML view.
-	 * 
+	 *
 	 * @returns {string} the serialized HTML view.
 	 */
 	HTMLViewSerializer.prototype.serialize = function () {
-	
+
 		// a function to understand if to skip aggregations
 		var fnSkipAggregations = function (oControl) {
 			return (oControl instanceof this._oWindow.sap.ui.core.mvc.View);
 		};
-	
+
 		// create serializer
-		var oControlSerializer = new sap.ui.core.util.serializer.Serializer(
+		var oControlSerializer = new Serializer(
 			this._oView,
 			new HTML(
 				this._fnGetControlId,
@@ -61,10 +58,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/HTM
 			true,
 			this._oWindow,
 			fnSkipAggregations);
-		
+
 		// run serializer
 		var sResult = oControlSerializer.serialize();
-		
+
 		// wrap result with the template tag
 		var sView = [];
 		sView.push('<template');
@@ -74,11 +71,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/HTM
 		sView.push(" >");
 		sView.push(sResult);
 		sView.push("</template>");
-		
+
 		// done
 		return vkbeautify.xml(sView.join(""));
 	};
 
 	return HTMLViewSerializer;
 
-}, /* bExport= */ true);
+});

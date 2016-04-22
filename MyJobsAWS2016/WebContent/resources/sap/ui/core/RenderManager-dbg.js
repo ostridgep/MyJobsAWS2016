@@ -1,15 +1,19 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides the render manager sap.ui.core.RenderManager
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object', 'sap/ui/core/LabelEnablement', 'jquery.sap.act', 'jquery.sap.encoder'],
-	function(jQuery, Interface, BaseObject, LabelEnablement /* , jQuerySap1, jQuerySap */) {
+sap.ui.define([
+		'jquery.sap.global',
+		'../base/Interface', '../base/Object', 'sap/ui/core/LabelEnablement',
+		'jquery.sap.act', 'jquery.sap.encoder', 'jquery.sap.dom', 'jquery.sap.trace'
+	], function(jQuery, Interface, BaseObject, LabelEnablement /* , jQuerySap1, jQuerySap */) {
+
 	"use strict";
 
-	var aCommonMethods = ["renderControl", "write", "writeEscaped", "translate", "writeAcceleratorKey", "writeControlData",
+	var aCommonMethods = ["renderControl", "write", "writeEscaped", "translate", "writeAcceleratorKey", "writeControlData", "writeInvisiblePlaceholderData",
 						  "writeElementData", "writeAttribute", "writeAttributeEscaped", "addClass", "writeClasses",
 						  "addStyle", "writeStyles", "writeAccessibilityState", "writeIcon",
 						  "getConfiguration", "getHTML", "cleanupControlWithoutRendering"];
@@ -34,7 +38,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 	 *
 	 * @extends sap.ui.base.Object
 	 * @author Jens Pflueger
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @constructor
 	 * @alias sap.ui.core.RenderManager
 	 * @public
@@ -204,7 +208,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 		}
 		this.aRenderStack.unshift(oControl.getId());
 		// start performance measurement
-		jQuery.sap.measure.start(oControl.getId() + "---renderControl","Rendering of " + oControl.getMetadata().getName());
+		jQuery.sap.measure.start(oControl.getId() + "---renderControl","Rendering of " + oControl.getMetadata().getName(), ["rendering","control"]);
 
 		//Remember the current buffer size to check later whether the control produced output
 		var iBufferLength = this.aBuffer.length;
@@ -264,7 +268,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 		}
 
 		//Render the control using the RenderManager interface
-		oRenderer.render(this.getRendererInterface(), oControl);
+		if (oRenderer && typeof oRenderer.render === "function") {
+			oRenderer.render(this.getRendererInterface(), oControl);
+		} else {
+			jQuery.sap.log.error("The renderer for class " + oMetadata.getName() + " is not defined or does not define a render function! Rendering of " + oControl.getId() + " will be skipped!");
+		}
 
 		this.aStyleStack.pop();
 
@@ -338,7 +346,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 						// store the element on the event (aligned with jQuery syntax)
 						oEvent.srcControl = oControl;
 						// start performance measurement
-						jQuery.sap.measure.start(oControl.getId() + "---AfterRendering","AfterRendering of " + oControl.getMetadata().getName());
+						jQuery.sap.measure.start(oControl.getId() + "---AfterRendering","AfterRendering of " + oControl.getMetadata().getName(), ["rendering","after"]);
 						oControl._handleEvent(oEvent);
 						// end performance measurement
 						jQuery.sap.measure.end(oControl.getId() + "---AfterRendering");
@@ -356,7 +364,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 			try {
 				oRM.oFocusHandler.restoreFocus(oStoredFocusInfo);
 			} catch (e) {
-				jQuery.sap.log.warning("Problems while restore focus after rendering: " + e, null, oRM);
+				jQuery.sap.log.warning("Problems while restoring the focus after rendering: " + e, null, oRM);
 			}
 
 			// Re-bind any generically bound browser event handlers (must happen after restoring focus to avoid focus event)
@@ -460,19 +468,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 			this.aStyleStack = [{}];
 
 			jQuery.sap.act.refresh();
+
+			jQuery.sap.interaction.notifyStepEnd();
 		};
 
 		/**
 		 * Renders the given control to the provided DOMNode.
 		 *
-		 * If to control is already rendered in the provided DOMNode the DOM of the control is replaced. If the control
+		 * If the control is already rendered in the provided DOMNode the DOM of the control is replaced. If the control
 		 * is already rendered somewhere else the current DOM of the control is removed and the new DOM is appended
 		 * to the provided DOMNode.
 		 *
 		 * This function must not be called within control renderers.
 		 *
 		 * @param {sap.ui.core.Control} oControl the Control that should be rendered.
-		 * @param {Element} oTargetDomNode The node in the dom where the result of the rendering should be inserted.
+		 * @param {Element} oTargetDomNode The node in the DOM where the result of the rendering should be inserted.
 		 * @public
 		 */
 		RenderManager.prototype.render = function(oControl, oTargetDomNode) {
@@ -487,8 +497,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 				return;
 			}
 
-			// Reset the buffer before rendering
+			// Reset internal state before rendering
+			this.aRenderedControls = [];
 			this.aBuffer = [];
+			this.aStyleStack = [{}];
 
 			// Retrieve the markup (the rendering phase)
 			this.renderControl(oControl);
@@ -501,13 +513,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 				if (oControl && oTargetDomNode) {
 
 					var oldDomNode = oControl.getDomRef();
-					if ( RenderManager.isPreservedContent(oldDomNode) ) {
-						// use placeholder instead
-						oldDomNode = jQuery.sap.byId(sap.ui.core.RenderPrefixes.Dummy + oControl.getId())[0] || oldDomNode;
-					}
-					if (!oldDomNode) {
-						// In case no old DOM node was found, search for the invisible placeholder
-						oldDomNode = jQuery.sap.domById(sap.ui.core.RenderPrefixes.Invisible + oControl.getId());
+					if ( !oldDomNode || RenderManager.isPreservedContent(oldDomNode) ) {
+						// In case no old DOM node was found or only preserved DOM, search for a placeholder (invisible or preserved DOM placeholder)
+						oldDomNode = jQuery.sap.domById(sap.ui.core.RenderPrefixes.Invisible + oControl.getId()) || jQuery.sap.domById(sap.ui.core.RenderPrefixes.Dummy + oControl.getId());
 					}
 
 					var bNewTarget = oldDomNode && oldDomNode.parentNode != oTargetDomNode;
@@ -541,6 +549,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 							if (oldDomNode) {
 								if (RenderManager.isInlineTemplate(oldDomNode)) {
 									jQuery(oldDomNode).html(sHTML);
+								} else if (this._isDomPathingEnabled()) {
+									jQuery.sap.replaceDOM(oldDomNode, sHTML, true);
 								} else {
 									jQuery(oldDomNode).replaceWith(sHTML);
 								}
@@ -618,6 +628,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 		}
 	};
 
+	/**
+	 * Creates the ID to be used for the invisible Placeholder DOM element.
+	 * This method can be used to get direct access to the placeholder DOM element.
+	 * Also statically available as RenderManager.createInvisiblePlaceholderId()
+	 *
+	 * @param {sap.ui.core.Element} oElement - The Element instance for which to create the placeholder ID
+	 * @returns {string} The ID used for the invisible Placeholder of this element
+	 * @static
+	 * @protected
+	 */
+	RenderManager.createInvisiblePlaceholderId = function(oElement) {
+		return sap.ui.core.RenderPrefixes.Invisible + oElement.getId();
+	};
+
+
 	//#################################################################################################
 	// Methods for preserving HTML content
 	//#################################################################################################
@@ -630,7 +655,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 			ATTR_UI_AREA_MARKER = "data-sap-ui-area";
 
 		function getPreserveArea() {
-			var $preserve = jQuery("#" + ID_PRESERVE_AREA);
+			var $preserve = jQuery.sap.byId(ID_PRESERVE_AREA);
 			if ($preserve.length === 0) {
 				$preserve = jQuery("<DIV/>",{"aria-hidden":"true",id:ID_PRESERVE_AREA}).
 					addClass("sapUiHidden").addClass("sapUiForcedHidden").css("width", "0").css("height", "0").css("overflow", "hidden").
@@ -707,7 +732,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 
 			}
 
-			jQuery.sap.measure.start(oRootNode.id + "---preserveContent","preserveContent for " + oRootNode.id);
+			jQuery.sap.measure.start(oRootNode.id + "---preserveContent","preserveContent for " + oRootNode.id, ["rendering","preserve"]);
 			if ( bPreserveRoot ) {
 				check(oRootNode);
 			} else {
@@ -971,6 +996,40 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 	};
 
 	/**
+	 * Writes necessary invisible control/element placeholder data into the HTML.
+	 *
+	 * Controls should only use this method if they can't live with the standard 'visible=false' implementation of the RenderManager which
+	 * renders dummy HTMLSpanElement for better re-rendering performance. Even though HTML5 error tolerance accepts this for most of the cases and
+	 * these dummy elements are not in the render tree of the Browser, controls may need to generate a valid and semantic HTML output when the
+	 * rendered HTMLSpanElement is not an allowed element(e.g. &lt;span&gt; element within the &lt;tr&gt; or &lt;li&gt; group).
+	 *
+	 * The caller needs to start an opening HTML tag, then call this method, then complete the opening and closing tag.
+	 * <pre>
+	 * oRenderManager.write("<tr");
+	 * oRenderManager.writeInvisiblePlaceholderData(oControl);
+	 * oRenderManager.write("></tr>");
+	 * </pre>
+	 *
+	 * @param {sap.ui.core.Element} oElement an instance of sap.ui.core.Element
+	 * @return {sap.ui.core.RenderManager} this render manager instance to allow chaining
+	 * @protected
+	 */
+	RenderManager.prototype.writeInvisiblePlaceholderData = function(oElement) {
+		jQuery.sap.assert(oElement instanceof sap.ui.core.Element, "oElement must be an instance of sap.ui.core.Element");
+
+		var sPlaceholderId = RenderManager.createInvisiblePlaceholderId(oElement),
+			sPlaceholderHtml = ' ' +
+				'id="' + sPlaceholderId + '" ' +
+				'class="sapUiHiddenPlaceholder" ' +
+				'data-sap-ui="' + sPlaceholderId + '" ' +
+				'style="display: none;"' +
+				'aria-hidden="true" ';
+
+		this.write(sPlaceholderHtml);
+		return this;
+	};
+
+	/**
 	 * Writes the elements data into the HTML.
 	 * Element Data consists at least of the id of a element
 	 * @param {sap.ui.core.Element} oElement the element whose identifying information should be written to the buffer
@@ -1022,7 +1081,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 	 */
 	RenderManager.prototype.writeAttributeEscaped = function(sName, vValue) {
 		// writeAttribute asserts
-		this.writeAttribute(sName, jQuery.sap.escapeHTML(String(vValue)));
+		this.writeAttribute(sName, jQuery.sap.encodeHTML(String(vValue)));
 		return this;
 	};
 
@@ -1040,8 +1099,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 	 * <code>selected===true</code> => <code>aria-selected="true"</code>
 	 * <code>checked===true</code> => <code>aria-checked="true"</code>
 	 *
+	 * In case of the required attribute also the Label controls which referencing the given element in their 'for' relation
+	 * are taken into account to compute the <code>aria-required</code> attribute.
+	 *
 	 * Additionally the association <code>ariaDescribedBy</code> and <code>ariaLabelledBy</code> are used to write
 	 * the id lists of the ARIA attributes <code>aria-describedby</code> and <code>aria-labelledby</code>.
+	 *
+	 * Label controls which referencing the given element in their 'for' relation are automatically added to the
+	 * <code>aria-labelledby</code> attributes.
 	 *
 	 * Note: This function is only a heuristic of a control property to ARIA attribute mapping. Control developers
 	 * have to check whether it fullfills their requirements. In case of problems (for example the RadioButton has a
@@ -1119,7 +1184,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 			addACCForProp("editable", "readonly", false);
 			addACCForProp("enabled", "disabled", false);
 			addACCForProp("visible", "hidden", false);
-			addACCForProp("required", "required", true);
+			if (sap.ui.core.LabelEnablement.isRequired(oElement)) {
+				mAriaProps["required"] = "true";
+			}
 			addACCForProp("selected", "selected", true);
 			addACCForProp("checked", "checked", true);
 			addACCForAssoc("ariaDescribedBy", "describedby");
@@ -1169,14 +1236,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 
 	/**
 	 * Writes either an img tag for normal URI or an span tag with needed properties for icon URI.
-	 * 
+	 *
 	 * Additional classes and attributes can be added to the tag by given the second and third parameter.
 	 * All of the given attributes are escaped for security consideration.
-	 * 
+	 *
 	 * when img tag is rendered, the following two attributes are added by default which can be overwritten by the provided mAttributes parameter:
 	 * 1. role: presentation
 	 * 2. alt: ""
-	 * 
+	 *
 	 * @param {sap.ui.core.URI} sURI is the URI of an image or an icon registered in sap.ui.core.IconPool.
 	 * @param {array|string} aClasses are additional classes that are added to the rendered tag.
 	 * @param {object} mAttributes are additional attributes that are added to the rendered tag.
@@ -1184,23 +1251,23 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 	 */
 	RenderManager.prototype.writeIcon = function(sURI, aClasses, mAttributes){
 		jQuery.sap.require("sap.ui.core.IconPool");
-	
+
 		var bIconURI = sap.ui.core.IconPool.isIconURI(sURI),
 			sStartTag = bIconURI ? "<span " : "<img ",
-			sClasses, sProp, oIconInfo;
-	
+			sClasses, sProp, oIconInfo, mDefaultAttributes;
+
 		if (typeof aClasses === "string") {
 			aClasses = [aClasses];
 		}
-	
+
 		if (bIconURI) {
 			oIconInfo = sap.ui.core.IconPool.getIconInfo(sURI);
-	
+
 			if (!oIconInfo) {
 				jQuery.sap.log.error("An unregistered icon: " + sURI + " is used in sap.ui.core.RenderManager's writeIcon method.");
 				return this;
 			}
-	
+
 			if (!aClasses) {
 				aClasses = [];
 			}
@@ -1209,41 +1276,60 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 				aClasses.push("sapUiIconMirrorInRTL");
 			}
 		}
-	
+
 		this.write(sStartTag);
-	
+
 		if (jQuery.isArray(aClasses) && aClasses.length) {
 			sClasses = aClasses.join(" ");
 			this.write("class=\"" + sClasses + "\" ");
 		}
-	
+
 		if (bIconURI) {
-			if (!mAttributes) {
-				mAttributes = {};
-			}
-			mAttributes["data-sap-ui-icon-content"] = oIconInfo.content;
-			mAttributes["role"] = "img";
-			mAttributes["aria-label"] = oIconInfo.name;
+			mDefaultAttributes = {
+				"data-sap-ui-icon-content": oIconInfo.content,
+				"role": "presentation",
+				"aria-label": oIconInfo.text || oIconInfo.name,
+				"title": oIconInfo.text || oIconInfo.name
+			};
+
 			this.write("style=\"font-family: " + oIconInfo.fontFamily + ";\" ");
 		} else {
-			mAttributes = jQuery.extend({
+			mDefaultAttributes = {
 				role: "presentation",
 				alt: "",
 				src: sURI
-			}, mAttributes);
+			};
 		}
-	
+
+		mAttributes = jQuery.extend(mDefaultAttributes, mAttributes);
+
 		if (typeof mAttributes === "object") {
 			for (sProp in mAttributes) {
-				if (mAttributes.hasOwnProperty(sProp)) {
+				if (mAttributes.hasOwnProperty(sProp) && mAttributes[sProp] !== null) {
 					this.writeAttributeEscaped(sProp, mAttributes[sProp]);
 				}
 			}
 		}
-	
+
 		this.write(bIconURI ? "></span>" : "/>");
-	
+
 		return this;
+	};
+
+	/**
+	 * Determines whether Dom Patching is enabled or not
+	 * @returns {Boolean}
+	 * @private
+	 */
+	RenderManager.prototype._isDomPathingEnabled = function() {
+		if (this._bDomPathing === undefined) {
+			this._bDomPathing = this.getConfiguration().getDomPatching();
+			if (this._bDomPathing) {
+				jQuery.sap.log.warning("DOM Patching is enabled: This feature should be used only for the testing purposes!");
+			}
+		}
+
+		return this._bDomPathing;
 	};
 
 	/**
@@ -1258,22 +1344,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Interface', 'sap/ui/base/Object
 		 * @param {sap.ui.core.Control} [oControl] The instance of the invisible control
 		 */
 		render: function(oRm, oControl) {
-			var sPlaceholderId = sap.ui.core.RenderPrefixes.Invisible + oControl.getId();
-
-			var sPlaceholderHtml =
-				'<span ' +
-					'id="' + sPlaceholderId + '" ' +
-					'class="sapUiHiddenPlaceholder" ' +
-					'data-sap-ui="' + sPlaceholderId + '" ' +
-					'style="display: none;"' +
-					'aria-hidden="true">' +
-				'</span>';
-
-			oRm.write(sPlaceholderHtml);
+			oRm.write("<span");
+			oRm.writeInvisiblePlaceholderData(oControl);
+			oRm.write("></span>");
 		}
 	};
 
 
 	return RenderManager;
 
-}, /* bExport= */ true);
+});

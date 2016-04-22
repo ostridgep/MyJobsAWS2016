@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -22,7 +22,7 @@ sap.ui.define(['jquery.sap.global', './ColumnMenu', './library'],
 	 * @extends sap.ui.table.ColumnMenu
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -45,6 +45,7 @@ sap.ui.define(['jquery.sap.global', './ColumnMenu', './library'],
 	 * @private
 	 */
 	AnalyticalColumnMenu.prototype._addMenuItems = function() {
+		// when you add or remove menu items here, remember to update the hasItems function
 		ColumnMenu.prototype._addMenuItems.apply(this);
 		if (this._oColumn) {
 			this._addSumMenuItem();
@@ -57,13 +58,9 @@ sap.ui.define(['jquery.sap.global', './ColumnMenu', './library'],
 	 */
 	AnalyticalColumnMenu.prototype._addGroupMenuItem = function() {
 		var oColumn = this._oColumn,
-			oTable = this._oTable,
-			oBinding = oTable.getBinding("rows"),
-			oResultSet = oBinding && oBinding.getAnalyticalQueryResult();
+			oTable = this._oTable;
 
-		if (oTable && oResultSet && oResultSet.findDimensionByPropertyName(oColumn.getLeadingProperty())
-				&& jQuery.inArray(oColumn.getLeadingProperty(), oBinding.getSortablePropertyNames()) > -1
-				&& jQuery.inArray(oColumn.getLeadingProperty(), oBinding.getFilterablePropertyNames()) > -1) {
+		if (oColumn.isGroupableByMenu()) {
 			this._oGroupIcon = this._createMenuItem(
 				"group",
 				"TBL_GROUP",
@@ -115,7 +112,6 @@ sap.ui.define(['jquery.sap.global', './ColumnMenu', './library'],
 		var oColumn = this._oColumn;
 		this._oSumItem && this._oSumItem.setIcon(oColumn.getSummed() ? "sap-icon://accept" : null);
 		this._oGroupIcon && this._oGroupIcon.setIcon(oColumn.getGrouped() ? "sap-icon://accept" : null);
-		this._oGroupIcon && this._oGroupIcon.setVisible(!oColumn._isLastGroupableLeft);
 	};
 
 	return AnalyticalColumnMenu;

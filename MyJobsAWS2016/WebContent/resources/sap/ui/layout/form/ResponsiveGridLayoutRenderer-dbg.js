@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,13 +14,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './FormLayoutRendere
 	 * @namespace
 	 */
 	var ResponsiveGridLayoutRenderer = Renderer.extend(FormLayoutRenderer);
-	
+
 	ResponsiveGridLayoutRenderer.getMainClass = function(){
 		return "sapUiFormResGrid";
 	};
-	
+
 	ResponsiveGridLayoutRenderer.renderContainers = function(rm, oLayout, oForm){
-	
+
 		var aContainers = oForm.getFormContainers();
 		var aVisibleContainers = [];
 		var iLength = 0;
@@ -31,10 +31,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './FormLayoutRendere
 				aVisibleContainers.push(oContainer);
 			}
 		}
-	
+
 		if (iLength > 0) {
 			// special case: only one container -> do not render an outer Grid
-			if (iLength > 1) {
+			if (iLength > 1 || !oLayout.getSingleContainerFullSize()) {
 				//render Grid
 				rm.renderControl(oLayout._mainGrid);
 			} else if (oLayout.mContainers[aVisibleContainers[0].getId()][0]) {
@@ -45,7 +45,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './FormLayoutRendere
 				rm.renderControl(oLayout.mContainers[aVisibleContainers[0].getId()][1]);
 			}
 		}
-	
+
 	};
 
 	return ResponsiveGridLayoutRenderer;

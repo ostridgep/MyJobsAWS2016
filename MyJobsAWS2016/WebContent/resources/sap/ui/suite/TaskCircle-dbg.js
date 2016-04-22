@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -9,12 +9,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/EnabledP
 	function(jQuery, Control, EnabledPropagator, library) {
 	"use strict";
 
+	// shortcut
+	var TaskCircleColor = library.TaskCircleColor;
 
-	
 	/**
 	 * Constructor for a new TaskCircle.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
@@ -22,75 +23,75 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/EnabledP
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author Svetozar Buzdumovic
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
-	 * @experimental Since version 1.2. 
+	 * @experimental Since version 1.2.
 	 * The API may change. User with care.
 	 * @alias sap.ui.suite.TaskCircle
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var TaskCircle = Control.extend("sap.ui.suite.TaskCircle", /** @lends sap.ui.suite.TaskCircle.prototype */ { metadata : {
-	
+
 		library : "sap.ui.suite",
 		properties : {
-	
+
 			/**
 			 * Current value of the task circle to be displayed. In dependency of the parameters maxValue and minValue it controls the size of the circle.
 			 */
 			value : {type : "int", group : "Misc", defaultValue : 0},
-	
+
 			/**
 			 * Upper limit of the displayed values. Default is 100.
 			 */
 			maxValue : {type : "int", group : "Misc", defaultValue : 100},
-	
+
 			/**
 			 * Lower limit of the displayed values. Default is 0.
 			 */
 			minValue : {type : "int", group : "Misc", defaultValue : 0},
-	
+
 			/**
 			 * Color of the circle. The default color is red.
 			 */
-			color : {type : "sap.ui.suite.TaskCircleColor", group : "Misc", defaultValue : sap.ui.suite.TaskCircleColor.Gray}
+			color : {type : "sap.ui.suite.TaskCircleColor", group : "Misc", defaultValue : TaskCircleColor.Gray}
 		},
 		associations : {
-	
+
 			/**
 			 * Association to controls / ids which label this control (see WAI-ARIA attribute aria-labelledby).
 			 */
-			ariaLabelledBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaLabelledBy"}, 
-	
+			ariaLabelledBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaLabelledBy"},
+
 			/**
 			 * Association to controls / ids which describe this control (see WAI-ARIA attribute aria-describedby).
 			 */
 			ariaDescribedBy : {type : "sap.ui.core.Control", multiple : true, singularName : "ariaDescribedBy"}
 		},
 		events : {
-	
+
 			/**
 			 * Event is fired when the user clicks the control.
 			 */
 			press : {}
 		}
 	}});
-	
-	
-	
-	
+
+
+
+
 	EnabledPropagator.call(TaskCircle.prototype);
-	
-	
+
+
 	/**
 	 * init is called when the control is initialized
 	 */
 	TaskCircle.prototype.init = function(){
 	};
-	
-	
-	
+
+
+
 	/**
 	 * Function is called when control is clicked.
 	 *
@@ -102,8 +103,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/EnabledP
 	  oEvent.preventDefault();
 	  oEvent.stopPropagation();
 	};
-	
-	
+
+
 	// Implementation of API method focus(). Documentation available in generated code.
 
 	/**
@@ -122,4 +123,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/EnabledP
 
 	return TaskCircle;
 
-}, /* bExport= */ true);
+});

@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides control sap.m.Switch.
-sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/core/Control', 'sap/ui/core/EnabledPropagator', 'sap/ui/core/IconPool', 'sap/ui/core/theming/Parameters'],
-	function(jQuery, SwitchRenderer, library, Control, EnabledPropagator, IconPool, Parameters) {
+sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/core/EnabledPropagator', 'sap/ui/core/IconPool', 'sap/ui/core/theming/Parameters'],
+	function(jQuery, library, Control, EnabledPropagator, IconPool, Parameters) {
 		"use strict";
 
 		/**
@@ -20,7 +20,7 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.28.12
+		 * @version 1.36.7
 		 *
 		 * @constructor
 		 * @public
@@ -131,7 +131,7 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 		};
 
 		Switch.prototype._setDomState = function(bState) {
-			var CSS_CLASS = SwitchRenderer.CSS_CLASS,
+			var CSS_CLASS = this.getRenderer().CSS_CLASS,
 				sState = bState ? this._sOn : this._sOff,
 				oDomRef = this.getDomRef();
 
@@ -160,7 +160,9 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 				oDomRef.setAttribute("aria-checked", "false");
 			}
 
-			$Switch.addClass(CSS_CLASS + "Trans");
+			if (sap.ui.getCore().getConfiguration().getAnimation()) {
+				$Switch.addClass(CSS_CLASS + "Trans");
+			}
 
 			// remove inline styles
 			oSwitchInnerDomRef.style.cssText = "";
@@ -175,11 +177,7 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 
 			switch (this.getType()) {
 				case sap.m.SwitchType.Default:
-
-					if (!this.getCustomTextOn()) {
-						sText = "SWITCH_ON";
-					}
-
+					sText = this.getCustomTextOn() || "SWITCH_ON";
 					break;
 
 				case sap.m.SwitchType.AcceptReject:
@@ -235,7 +233,7 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 		 */
 		Switch.prototype.ontouchstart = function(oEvent) {
 			var oTargetTouch = oEvent.targetTouches[0],
-				CSS_CLASS = SwitchRenderer.CSS_CLASS,
+				CSS_CLASS = this.getRenderer().CSS_CLASS,
 				$SwitchInner = this.$("inner");
 
 			// mark the event for components that needs to know if the event was handled by the Switch
@@ -368,7 +366,7 @@ sap.ui.define(['jquery.sap.global', './SwitchRenderer', './library', 'sap/ui/cor
 				assert(!fnTouch.find(oEvent.touches, this._iActiveTouchId), "touchend still active");
 
 				// remove active state
-				this.$("switch").removeClass(SwitchRenderer.CSS_CLASS + "Pressed");
+				this.$("switch").removeClass(this.getRenderer().CSS_CLASS + "Pressed");
 
 				// note: update the DOM before the change event is fired for better user experience
 				this._setDomState(this._bDragging ? this._bTempState : !this.getState());

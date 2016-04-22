@@ -1,12 +1,13 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-// Provides control sap.ui.unified.Calendar.
-sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/delegate/ItemNavigation', 'sap/ui/unified/library'],
-	function(jQuery, Control, ItemNavigation, library) {
+//Provides control sap.ui.unified.Calendar.
+sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/delegate/ItemNavigation',
+               'sap/ui/model/type/Date', 'sap/ui/unified/calendar/CalendarUtils', 'sap/ui/core/date/UniversalDate', 'sap/ui/unified/library'],
+               function(jQuery, Control, ItemNavigation, Date1, CalendarUtils, UniversalDate, library) {
 	"use strict";
 
 	/**
@@ -19,7 +20,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/delegate
 	 * renders a YearPicker with ItemNavigation
 	 * This is used inside the calendar. Not for stand alone usage
 	 * @extends sap.ui.core.Control
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -35,9 +36,36 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/delegate
 			/**
 			 * The year is initial focused and selected
 			 * The value must be between 0 and 9999
+			 * @deprecated Since version 1.34.0 Use <code>date</code> instead
 			 */
-			year : {type : "int", group : "Misc", defaultValue : 2000}
+			year : {type : "int", group : "Data", defaultValue : 2000},
 
+			/**
+			 * number of displayed years
+			 * @since 1.30.0
+			 */
+			years : {type : "int", group : "Appearance", defaultValue : 20},
+
+			/**
+			 * number of years in each row
+			 * 0 means just to have all years in one row, independent of the number
+			 * @since 1.30.0
+			 */
+			columns : {type : "int", group : "Appearance", defaultValue : 4},
+
+			/**
+			 * Date as JavaScript Date object. For this date a <code>YearPicker</code> is rendered. If a Year is selected the
+			 * date is updated with the start date of the selected year (depending on the calendar type).
+			 * @since 1.34.0
+			 */
+			date : {type : "object", group : "Data"},
+
+			/**
+			 * If set, the calendar type is used for display.
+			 * If not set, the calendar type of the global configuration is used.
+			 * @since 1.34.0
+			 */
+			primaryCalendarType : {type : "sap.ui.core.CalendarType", group : "Appearance"}
 		},
 		events : {
 
@@ -49,278 +77,381 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui/core/delegate
 		}
 	}});
 
-	(function() {
+	YearPicker.prototype.init = function(){
 
-		YearPicker.prototype.init = function(){
+		// set default calendar type from configuration
+		var sCalendarType = sap.ui.getCore().getConfiguration().getCalendarType();
+		this.setProperty("primaryCalendarType", sCalendarType);
 
-			this._iColumns = 4;
+		// to format year with era in Japanese
+		this._oYearFormat = sap.ui.core.format.DateFormat.getDateInstance({format: "y", calendarType: sCalendarType});
+		this._oFormatYyyymmdd = sap.ui.core.format.DateFormat.getInstance({pattern: "yyyyMMdd", calendarType: sap.ui.core.CalendarType.Gregorian});
 
-		};
+		this._oMinDate = this._newUniversalDate(new Date(Date.UTC(1, 0, 1)));
+		this._oMinDate.getJSDate().setUTCFullYear(1); // otherwise year 1 will be converted to year 1901
+		this._oMaxDate = this._newUniversalDate(new Date(Date.UTC(9999, 11, 31)));
 
-		YearPicker.prototype.onAfterRendering = function(){
+	};
 
-			var that = this;
+	YearPicker.prototype.onAfterRendering = function(){
 
-			_initItemNavigation(that);
+		_initItemNavigation.call(this);
 
-		};
+	};
 
-		YearPicker.prototype.setYear = function(iYear){
+	YearPicker.prototype.setYear = function(iYear){
 
-			// no rerendering needed, just select new year or update years
-			this.setProperty("year", iYear, true);
-			iYear = this.getProperty("year"); // to have type conversion, validation....
+		// no rerendering needed, just select new year or update years
+		this.setProperty("year", iYear, true);
+		iYear = this.getProperty("year"); // to have type conversion, validation....
 
-			if (iYear < 1 || iYear > 9999) {
-				throw new Error("Property year must be between 0 and 9999; " + this);
+		var oDate = this._newUniversalDate(new Date());
+		oDate.setDate(1);
+		oDate.setMonth(0);
+		oDate.setFullYear(iYear);
+
+		this.setDate(oDate.getJSDate());
+
+		return this;
+
+	};
+
+	YearPicker.prototype.setDate = function(oDate){
+
+		if (oDate && !(oDate instanceof Date)) {
+			throw new Error("Date must be a JavaScript date object; " + this);
+		}
+
+		var iYear = oDate.getFullYear();
+		if (iYear < 1 || iYear > 9999) {
+			throw new Error("Date must not be in valid range (between 0001-01-01 and 9999-12-31); " + this);
+		}
+
+		var oUTCDate = CalendarUtils._createUniversalUTCDate(oDate, this.getPrimaryCalendarType());
+		oUTCDate.setUTCMonth(0, 1); // start of year
+		// no rerendering needed, just select new year or update years
+		this.setProperty("date", oDate, true);
+		this.setProperty("year", oUTCDate.getUTCFullYear(), true);
+		this._oUTCDate = oUTCDate;
+
+		if (this.getDomRef()) {
+			var iYears = this.getYears();
+			var oFirstDate = this._newUniversalDate(this._oUTCDate);
+			oFirstDate.setUTCFullYear(oFirstDate.getUTCFullYear() - Math.floor(iYears / 2));
+			_updateYears.call(this, oFirstDate, Math.floor(iYears / 2));
+		}
+
+		return this;
+
+	};
+
+	YearPicker.prototype._getDate = function(){
+
+		if (!this._oUTCDate) {
+			var iYear = this.getYear();
+			this._oUTCDate = this._newUniversalDate(new Date(Date.UTC(iYear, 0, 1)));
+			if (iYear < 100) {
+				this._oUTCDate.setUTCFullYear(iYear);
 			}
+		}
 
-			if (this.getDomRef()) {
-				var that = this;
-				var iFirstYear = iYear - 10;
-				_updateYears(that, iFirstYear, 10);
-			}
+		return this._oUTCDate;
 
+	};
 
-		};
+	YearPicker.prototype.setPrimaryCalendarType = function(sCalendarType){
 
-		/**
-		 * displays the next page
-		 *
-		 * @returns {sap.ui.unified.calendar.YearPicker} <code>this</code> to allow method chaining
-		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
-		 */
-		YearPicker.prototype.nextPage = function(){
+		this.setProperty("primaryCalendarType", sCalendarType);
 
-			var that = this;
-			_updatePage(that, true, this._oItemNavigation.getFocusedIndex());
+		this._oYearFormat = sap.ui.core.format.DateFormat.getDateInstance({format: "y", calendarType: sCalendarType});
 
-			return this;
+		if (this._oUTCDate) {
+			this._oUTCDate = UniversalDate.getInstance(this._oUTCDate.getJSDate(), sCalendarType);
+			this._oUTCDate.setUTCMonth(0, 1); // start of year
+		}
+		this._oMinDate = UniversalDate.getInstance(this._oMinDate.getJSDate(), sCalendarType);
+		this._oMaxDate = UniversalDate.getInstance(this._oMaxDate.getJSDate(), sCalendarType);
 
-		};
+		return this;
 
-		/**
-		 * displays the previous page
-		 *
-		 * @returns {sap.ui.unified.calendar.YearPicker} <code>this</code> to allow method chaining
-		 * @public
-		 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
-		 */
-		YearPicker.prototype.previousPage = function(){
+	};
 
-			var that = this;
-			_updatePage(that, false, this._oItemNavigation.getFocusedIndex());
+	YearPicker.prototype._newUniversalDate = function(oDate){
 
-			return this;
+		var oJSDate;
 
-		};
+		if ((oDate instanceof UniversalDate)) {
+			oJSDate = new Date(oDate.getJSDate().getTime()); // use getTime() because IE and FF can not parse dates < 0100.01.01
+		} else {
+			oJSDate = new Date(oDate.getTime());
+		}
 
-		YearPicker.prototype.onsapselect = function(oEvent){
+		return UniversalDate.getInstance(oJSDate, this.getPrimaryCalendarType());
 
-			// focused item must be selected
-			var that = this;
-			var iIndex = this._oItemNavigation.getFocusedIndex();
+	};
 
-			_selectYear(that, iIndex);
+	/**
+	 * displays the next page
+	 *
+	 * @returns {sap.ui.unified.calendar.YearPicker} <code>this</code> to allow method chaining
+	 * @public
+	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
+	 */
+	YearPicker.prototype.nextPage = function(){
+
+		_updatePage.call(this, true, this._oItemNavigation.getFocusedIndex());
+
+		return this;
+
+	};
+
+	/**
+	 * displays the previous page
+	 *
+	 * @returns {sap.ui.unified.calendar.YearPicker} <code>this</code> to allow method chaining
+	 * @public
+	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
+	 */
+	YearPicker.prototype.previousPage = function(){
+
+		_updatePage.call(this, false, this._oItemNavigation.getFocusedIndex());
+
+		return this;
+
+	};
+
+	YearPicker.prototype.onsapselect = function(oEvent){
+
+		// focused item must be selected
+		var iIndex = this._oItemNavigation.getFocusedIndex();
+
+		_selectYear.call(this, iIndex);
+		this.fireSelect();
+
+	};
+
+	YearPicker.prototype.onmouseup = function(oEvent){
+
+		// fire select event on mouseup to prevent closing MonthPicker during click
+
+		if (this._bMousedownChange) {
+			this._bMousedownChange = false;
 			this.fireSelect();
-
-		};
-
-
-		function _initItemNavigation(oThis){
-
-			var iYear = oThis.getYear();
-			var oRootDomRef = oThis.getDomRef();
-			var aDomRefs = oThis.$().find(".sapUiCalYear");
-			var iIndex = 10;
-
-			if (iYear > 9990) {
-				iIndex = iIndex + iYear - 9990;
-			} else if (iYear <= 10){
-				iIndex = iIndex - 11 + iYear;
-			}
-
-			if (!oThis._oItemNavigation) {
-				oThis._oItemNavigation = new ItemNavigation();
-				oThis._oItemNavigation.attachEvent(ItemNavigation.Events.AfterFocus, _handleAfterFocus, oThis);
-				oThis._oItemNavigation.attachEvent(ItemNavigation.Events.FocusAgain, _handleFocusAgain, oThis);
-				oThis._oItemNavigation.attachEvent(ItemNavigation.Events.BorderReached, _handleBorderReached, oThis);
-				oThis.addDelegate(oThis._oItemNavigation);
-				oThis._oItemNavigation.setHomeEndColumnMode(true, true);
-				oThis._oItemNavigation.setDisabledModifiers({
-					sapnext : ["alt"],
-					sapprevious : ["alt"],
-					saphome : ["alt"],
-					sapend : ["alt"]
-				});
-			}
-			oThis._oItemNavigation.setRootDomRef(oRootDomRef);
-			oThis._oItemNavigation.setItemDomRefs(aDomRefs);
-			oThis._oItemNavigation.setCycling(false);
-			oThis._oItemNavigation.setColumns(oThis._iColumns, true);
-			oThis._oItemNavigation.setFocusedIndex(iIndex);
-			oThis._oItemNavigation.setPageSize(aDomRefs.length); // to make sure that pageup/down goes out of month
-
 		}
 
-		function _handleAfterFocus(oControlEvent){
+	};
 
-			var iIndex = oControlEvent.getParameter("index");
-			var oEvent = oControlEvent.getParameter("event");
+	function _initItemNavigation(){
 
-			if (!oEvent) {
-				return; // happens if focus is set via ItemNavigation.focusItem directly
-			}
+		var iYears = this.getYears();
+		var iYear = this._getDate().getUTCFullYear();
+		var iMinYear = this._oMinDate.getUTCFullYear();
+		var iMaxYear = this._oMaxDate.getUTCFullYear();
+		var oRootDomRef = this.getDomRef();
+		var aDomRefs = this.$().find(".sapUiCalItem");
+		var iIndex = Math.floor(iYears / 2);
 
-			if (oEvent.type == "mousedown") {
-				// as no click event is fired in some cases
-				var that = this;
-				_handleMousedown(that, oEvent, iIndex);
-			}
-
+		if (iYear > iMaxYear - Math.floor(iYears / 2)) {
+			iIndex = iIndex + iYear - iMaxYear + Math.floor(iYears / 2);
+		}else if (iYear <= iMinYear + Math.floor(iYears / 2)) {
+			iIndex = iYear - iMinYear;
 		}
 
-		function _handleFocusAgain(oControlEvent){
+		if (!this._oItemNavigation) {
+			this._oItemNavigation = new ItemNavigation();
+			this._oItemNavigation.attachEvent(ItemNavigation.Events.AfterFocus, _handleAfterFocus, this);
+			this._oItemNavigation.attachEvent(ItemNavigation.Events.FocusAgain, _handleFocusAgain, this);
+			this._oItemNavigation.attachEvent(ItemNavigation.Events.BorderReached, _handleBorderReached, this);
+			this.addDelegate(this._oItemNavigation);
+			this._oItemNavigation.setHomeEndColumnMode(true, true);
+			this._oItemNavigation.setDisabledModifiers({
+				sapnext : ["alt"],
+				sapprevious : ["alt"],
+				saphome : ["alt"],
+				sapend : ["alt"]
+			});
+		}
+		this._oItemNavigation.setRootDomRef(oRootDomRef);
+		this._oItemNavigation.setItemDomRefs(aDomRefs);
+		this._oItemNavigation.setCycling(false);
+		this._oItemNavigation.setColumns(this.getColumns(), true);
+		this._oItemNavigation.setFocusedIndex(iIndex);
+		this._oItemNavigation.setPageSize(aDomRefs.length); // to make sure that pageup/down goes out of month
 
-			var iIndex = oControlEvent.getParameter("index");
-			var oEvent = oControlEvent.getParameter("event");
+	}
 
-			if (!oEvent) {
-				return; // happens if focus is set via ItemNavigation.focusItem directly
-			}
+	function _handleAfterFocus(oControlEvent){
 
-			if (oEvent.type == "mousedown") {
-				// as no click event is fired in some cases
-				var that = this;
-				_handleMousedown(that, oEvent, iIndex);
-			}
+		var iIndex = oControlEvent.getParameter("index");
+		var oEvent = oControlEvent.getParameter("event");
 
+		if (!oEvent) {
+			return; // happens if focus is set via ItemNavigation.focusItem directly
 		}
 
-		function _handleMousedown(oThis, oEvent, iIndex){
-
-			_selectYear(oThis, iIndex);
-			oThis.fireSelect();
-
-			oEvent.preventDefault(); // to prevent focus set outside of DatePicker
-			oEvent.setMark("cancelAutoClose");
-
+		if (oEvent.type == "mousedown") {
+			// as no click event is fired in some cases
+			_handleMousedown.call(this, oEvent, iIndex);
 		}
 
-		function _handleBorderReached(oControlEvent){
+	}
 
-			var oEvent = oControlEvent.getParameter("event");
+	function _handleFocusAgain(oControlEvent){
 
-			if (oEvent.type) {
-				var that = this;
+		var iIndex = oControlEvent.getParameter("index");
+		var oEvent = oControlEvent.getParameter("event");
 
-				switch (oEvent.type) {
-				case "sapnext":
-				case "sapnextmodifiers":
-					if (oEvent.keyCode == jQuery.sap.KeyCodes.ARROW_DOWN) {
-						//same column in first row of next group
-						_updatePage(that, true, this._oItemNavigation.getFocusedIndex() - 16);
-					} else {
-						// first year in next group
-						_updatePage(that, true, 0);
-					}
-					break;
+		if (!oEvent) {
+			return; // happens if focus is set via ItemNavigation.focusItem directly
+		}
 
-				case "sapprevious":
-				case "sappreviousmodifiers":
-					if (oEvent.keyCode == jQuery.sap.KeyCodes.ARROW_UP) {
-						//same column in last row of previous group
-						_updatePage(that, false, 16 + this._oItemNavigation.getFocusedIndex());
-					} else {
-						// last year in previous group
-						_updatePage(that, false, 19);
-					}
-					break;
+		if (oEvent.type == "mousedown") {
+			// as no click event is fired in some cases
+			_handleMousedown.call(this, oEvent, iIndex);
+		}
 
-				case "sappagedown":
-					// same index in next group
-					_updatePage(that, true, this._oItemNavigation.getFocusedIndex());
-					break;
+	}
 
-				case "sappageup":
-					// same index in previous group
-					_updatePage(that, false, this._oItemNavigation.getFocusedIndex());
-					break;
+	function _handleMousedown(oEvent, iIndex){
 
-				default:
-					break;
+		if (oEvent.button) {
+			// only use left mouse button
+			return;
+		}
+
+		_selectYear.call(this, iIndex);
+		this._bMousedownChange = true;
+
+		oEvent.preventDefault(); // to prevent focus set outside of DatePicker
+		oEvent.setMark("cancelAutoClose");
+
+	}
+
+	function _handleBorderReached(oControlEvent){
+
+		var oEvent = oControlEvent.getParameter("event");
+
+		if (oEvent.type) {
+			var iYears = this.getYears();
+			var iColumns = this.getColumns();
+			if (iColumns == 0) {
+				iColumns = iYears;
+			}
+
+			switch (oEvent.type) {
+			case "sapnext":
+			case "sapnextmodifiers":
+				if (oEvent.keyCode == jQuery.sap.KeyCodes.ARROW_DOWN && iColumns < iYears) {
+					//same column in first row of next group (only if more than one row)
+					_updatePage.call(this, true, this._oItemNavigation.getFocusedIndex() - iYears + iColumns);
+				} else {
+					// first year in next group
+					_updatePage.call(this, true, 0);
 				}
-			}
+				break;
 
-		}
-
-		function _selectYear(oThis, iIndex){
-
-			var aDomRefs = oThis._oItemNavigation.getItemDomRefs();
-			var sYear = jQuery(aDomRefs[iIndex]).text();
-			var $DomRef;
-			var sId = oThis.getId() + "-y" + sYear;
-			for ( var i = 0; i < aDomRefs.length; i++) {
-				$DomRef = jQuery(aDomRefs[i]);
-				if ($DomRef.attr("id") == sId) {
-					$DomRef.addClass("sapUiCalYearSel");
-				}else {
-					$DomRef.removeClass("sapUiCalYearSel");
+			case "sapprevious":
+			case "sappreviousmodifiers":
+				if (oEvent.keyCode == jQuery.sap.KeyCodes.ARROW_UP && iColumns < iYears) {
+					//same column in last row of previous group (only if more than one row)
+					_updatePage.call(this, false, iYears - iColumns + this._oItemNavigation.getFocusedIndex());
+				} else {
+					// last year in previous group
+					_updatePage.call(this, false, iYears - 1);
 				}
+				break;
+
+			case "sappagedown":
+				// same index in next group
+				_updatePage.call(this, true, this._oItemNavigation.getFocusedIndex());
+				break;
+
+			case "sappageup":
+				// same index in previous group
+				_updatePage.call(this, false, this._oItemNavigation.getFocusedIndex());
+				break;
+
+			default:
+				break;
 			}
-
-			oThis.setProperty("year", parseInt(sYear, 10), true);
-
 		}
 
-		function _updatePage(oThis, bForward, iSelectedIndex){
+	}
 
-			var aDomRefs = oThis._oItemNavigation.getItemDomRefs();
-			var iFirstYear = parseInt(jQuery(aDomRefs[0]).text(), 10);
+	function _selectYear(iIndex){
 
-			if (bForward) {
-				iFirstYear = iFirstYear + 20;
-			} else {
-				iFirstYear = iFirstYear - 20;
+		var aDomRefs = this._oItemNavigation.getItemDomRefs();
+		var sYyyymmdd = jQuery(aDomRefs[iIndex]).attr("data-sap-year-start");
+		var oDate =  this._newUniversalDate(this._oFormatYyyymmdd.parse(sYyyymmdd, true));
+		var $DomRef;
+		var sId = this.getId() + "-y" + sYyyymmdd;
+		for ( var i = 0; i < aDomRefs.length; i++) {
+			$DomRef = jQuery(aDomRefs[i]);
+			if ($DomRef.attr("id") == sId) {
+				$DomRef.addClass("sapUiCalItemSel");
+			}else {
+				$DomRef.removeClass("sapUiCalItemSel");
 			}
-
-			_updateYears(oThis, iFirstYear, iSelectedIndex);
-
 		}
 
-		function _updateYears(oThis, iFirstYear, iSelectedIndex){
+		var oLocalDate = CalendarUtils._createLocalDate(oDate);
+		this.setProperty("date", oLocalDate, true);
+		this.setProperty("year", oDate.getUTCFullYear(), true);
 
-			var sCurrentYear = oThis.getYear().toString();
+	}
 
-			if (iFirstYear >= 9980) {
-				iSelectedIndex = iSelectedIndex + iFirstYear - 9980;
-				iFirstYear = 9980;
-			}else if (iFirstYear < 1) {
-				iSelectedIndex = iSelectedIndex + iFirstYear - 1;
-				iFirstYear = 1;
-			}
+	function _updatePage(bForward, iSelectedIndex){
 
-			var aDomRefs = oThis._oItemNavigation.getItemDomRefs();
-			var iYear = iFirstYear;
-			for ( var i = 0; i < aDomRefs.length; i++) {
-				var $DomRef = jQuery(aDomRefs[i]);
-				$DomRef.attr("id", oThis.getId() + "-y" + iYear);
-				$DomRef.text(iYear);
-				if ($DomRef.hasClass("sapUiCalYearSel") && $DomRef.text() != sCurrentYear) {
-					$DomRef.removeClass("sapUiCalYearSel");
-				} else if (!$DomRef.hasClass("sapUiCalYearSel") && $DomRef.text() == sCurrentYear) {
-					$DomRef.addClass("sapUiCalYearSel");
-				}
-				iYear++;
-			}
+		var aDomRefs = this._oItemNavigation.getItemDomRefs();
+		var oFirstDate =  this._newUniversalDate(this._oFormatYyyymmdd.parse(jQuery(aDomRefs[0]).attr("data-sap-year-start"), true));
 
-			oThis._oItemNavigation.focusItem(iSelectedIndex);
-
+		if (bForward) {
+			oFirstDate.setUTCFullYear(oFirstDate.getUTCFullYear() + this.getYears());
+		} else {
+			oFirstDate.setUTCFullYear(oFirstDate.getUTCFullYear() - this.getYears());
 		}
 
+		_updateYears.call(this, oFirstDate, iSelectedIndex);
 
-	}());
+	}
+
+	function _updateYears(oFirstDate, iSelectedIndex){
+
+		var sCurrentYyyymmdd = this._oFormatYyyymmdd.format(this._getDate().getJSDate(), true);
+		var iYears = this.getYears();
+		var iFirstYear = oFirstDate.getUTCFullYear();
+		var iMinYear = this._oMinDate.getUTCFullYear();
+		var iMaxYear = this._oMaxDate.getUTCFullYear();
+
+		if (iFirstYear >= iMaxYear - iYears) {
+			iSelectedIndex = iSelectedIndex + iFirstYear - iMaxYear + iYears;
+			iFirstYear = iMaxYear - iYears + 1;
+			oFirstDate.setUTCFullYear(iFirstYear);
+		}else if (iFirstYear < iMinYear) {
+			iSelectedIndex = iSelectedIndex + iFirstYear - iMinYear;
+			iFirstYear = iMinYear;
+			oFirstDate.setUTCFullYear(iFirstYear);
+		}
+
+		var aDomRefs = this._oItemNavigation.getItemDomRefs();
+		var oDate = this._newUniversalDate(oFirstDate);
+		for ( var i = 0; i < aDomRefs.length; i++) {
+			var sYyyymmdd = this._oFormatYyyymmdd.format(oDate.getJSDate(), true);
+			var $DomRef = jQuery(aDomRefs[i]);
+			$DomRef.attr("id", this.getId() + "-y" + sYyyymmdd);
+			$DomRef.text(this._oYearFormat.format(oDate, true)); // to render era in Japanese
+			$DomRef.attr("data-sap-year-start", sYyyymmdd);
+			if ($DomRef.hasClass("sapUiCalItemSel") && sYyyymmdd != sCurrentYyyymmdd) {
+				$DomRef.removeClass("sapUiCalItemSel");
+			} else if (!$DomRef.hasClass("sapUiCalItemSel") && sYyyymmdd == sCurrentYyyymmdd) {
+				$DomRef.addClass("sapUiCalItemSel");
+			}
+			oDate.setUTCFullYear(oDate.getUTCFullYear() + 1);
+		}
+
+		this._oItemNavigation.focusItem(iSelectedIndex);
+
+	}
 
 	return YearPicker;
 

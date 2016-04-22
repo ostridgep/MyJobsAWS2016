@@ -2,6 +2,6 @@
 <interface xmlns="http://www.sap.com/sap.ui.library.xsd">
     <name>DataSetView</name>
     <derived/>
-    <author>d049080</author>
+    <author>SAP SE</author>
     <documentation>Marker interface for controls which are suitable as view rendering for a DataSet.</documentation>
 </interface>

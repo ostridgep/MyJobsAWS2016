@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -25,6 +25,10 @@ sap.ui.define(['jquery.sap.global'],
 			oRm.write('<div');
 			oRm.writeControlData(oControl);
 			oRm.addClass('sapUiFixFlex');
+
+			if (oControl.getMinFlexSize() !== 0) {
+				oRm.addClass('sapUiFixFlexInnerScrolling');
+			}
 
 			// Setting css class for horizontal layout
 			if (!oControl.getVertical()) {
@@ -93,7 +97,15 @@ sap.ui.define(['jquery.sap.global'],
 			var oFlexContent = oControl.getFlexContent();
 
 			oRm.write('<div id="' + oControl.getId() + '-Flexible" class="sapUiFixFlexFlexible">');
-			oRm.write('<div class="sapUiFixFlexFlexibleContainer">');
+			oRm.write('<div id="' + oControl.getId() + '-FlexibleContainer" class="sapUiFixFlexFlexibleContainer"');
+			if (oControl.getMinFlexSize() !== 0) {
+				if (oControl.getVertical()) {
+					oRm.write('style="min-height:' + oControl.getMinFlexSize() + 'px"');
+				} else {
+					oRm.write('style="min-width:' + oControl.getMinFlexSize() + 'px"');
+				}
+			}
+			oRm.write('>');
 
 			// Render the child
 			oRm.renderControl(oFlexContent);

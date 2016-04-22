@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,11 +10,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 	"use strict";
 
 
-	
+
 	/**
 	 * Constructor for a new layout/PositionContainer.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
@@ -22,7 +22,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -30,36 +30,36 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var PositionContainer = Element.extend("sap.ui.commons.layout.PositionContainer", /** @lends sap.ui.commons.layout.PositionContainer.prototype */ { metadata : {
-	
+
 		library : "sap.ui.commons",
 		properties : {
-	
+
 			/**
 			 * Defines the distance to the top of the layout (as specified in HTML)
 			 */
 			top : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : null},
-	
+
 			/**
 			 * Defines the distance to the bottom of the layout (as specified in HTML)
 			 */
 			bottom : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : null},
-	
+
 			/**
 			 * Defines the distance to the left of the layout (as specified in HTML)
 			 */
 			left : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : null},
-	
+
 			/**
 			 * Defines the distance to the right of the layout (as specified in HTML)
 			 */
 			right : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : null},
-	
+
 			/**
 			 * Indicates whether this container shall be centered horizontally within the AbsoluteLayout area.
 			 * The values of the attributes left and right are ignored when this feature is activated.
 			 */
 			centerHorizontally : {type : "boolean", group : "Dimension", defaultValue : false},
-	
+
 			/**
 			 * Indicates whether this container should be centered vertically within the AbsoluteLayout area.
 			 * The values of the attributes top and bottom are ignored when this feature is activated.
@@ -68,24 +68,24 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		},
 		defaultAggregation : "control",
 		aggregations : {
-	
+
 			/**
 			 * Child control of the position container
 			 */
 			control : {type : "sap.ui.core.Control", multiple : false}
 		}
 	}});
-	
-	
-	
-	
+
+
+
+
 	(function() {
-	
+
 	//**** Overridden API Functions ****
-	
+
 	PositionContainer.prototype.setControl = function(oControl) {
 		cleanup(this);
-	
+
 		if (this.getDomRef()) {
 			this.setAggregation("control", oControl, true);
 			notifyLayoutOnChange(this, oControl ? "CTRL_CHANGE" : "CTRL_REMOVE");
@@ -99,64 +99,64 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 				this.setAggregation("control", oControl);
 			}
 		}
-		
+
 		if (oControl) {
 			oControl.attachEvent("_change", onPropertyChanges, this);
 		}
-	
+
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.destroyControl = function() {
 		cleanup(this);
-	
+
 		var bSuppressRerendering = !!this.getDomRef();
 		this.destroyAggregation("control", bSuppressRerendering);
 		if (bSuppressRerendering) {
 			notifyLayoutOnChange(this, "CTRL_REMOVE");
 		}
-	
+
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setTop = function(sTop) {
 		setProp(this, "top", sTop, true);
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setBottom = function(sBottom) {
 		setProp(this, "bottom", sBottom, true);
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setLeft = function(sLeft) {
 		setProp(this, "left", sLeft, true);
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setRight = function(sRight) {
 		setProp(this, "right", sRight, true);
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setCenterHorizontally = function(bCenterHorizontally) {
 		setProp(this, "centerHorizontally", bCenterHorizontally, true);
 		return this;
 	};
-	
-	
+
+
 	PositionContainer.prototype.setCenterVertically = function(bCenterVertically) {
 		setProp(this, "centerVertically", bCenterVertically, true);
 		return this;
 	};
-	
-	
+
+
 
 	/**
 	 * Updates the position properties of the container according to the given position in JSON style.
@@ -173,7 +173,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		if (!oPos) {
 			oPos = {};
 		}
-	
+
 		setProp(this, "centerHorizontally", oPos.centerHorizontally ? oPos.centerHorizontally : null);
 		setProp(this, "centerVertically", oPos.centerVertically ? oPos.centerVertically : null);
 		setProp(this, "left", oPos.left ? oPos.left : null);
@@ -183,12 +183,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		if (bNotify) {
 			notifyLayoutOnChange(this, "CTRL_POS");
 		}
-	
+
 	};
-	
-	
+
+
 	//**** Other Functions ****
-	
+
 	/**
 	 * Checks the position information for the child control against the width/height property and
 	 * returns the compute position.
@@ -202,9 +202,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		var sRight = this.getRight();
 		var sWidth = null;
 		var sHeight = null;
-	
+
 		var oControl = this.getControl();
-	
+
 		if (oControl) {
 			if (this.getCenterHorizontally()) {
 				sLeft = "50%";
@@ -217,7 +217,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 					sLeft = "0px";
 				}
 			}
-	
+
 			if (this.getCenterVertically()) {
 				sTop = "50%";
 				sBottom = null;
@@ -229,15 +229,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 					sTop = "0px";
 				}
 			}
-	
+
 			sWidth = getContainerDimension(oControl, "width");
 			sHeight = getContainerDimension(oControl, "height");
 		}
-	
+
 		return {top: sTop, bottom: sBottom, left: sLeft, right: sRight, width: sWidth, height: sHeight};
 	};
-	
-	
+
+
 	/**
 	 * Factory for <code>sap.ui.commons.layout.PositionContainer</code> using a given
 	 * child control and a position in JSON style.
@@ -269,8 +269,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		}
 		return oPosition;
 	};
-	
-	
+
+
 	/**
 	 * Cleans up and optionally reinitalizes the event handler registrations of the element.
 	 *
@@ -296,8 +296,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 			onResize();
 		}
 	};
-	
-	
+
+
 	/**
 	 * Called when the element is destroyed.
 	 *
@@ -306,8 +306,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 	PositionContainer.prototype.exit = function(oPos) {
 		this.reinitializeEventHandlers(true);
 	};
-	
-	
+
+
 	/**
 	 * Called when the element is instanciated.
 	 *
@@ -317,10 +317,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		this._disableWidthCheck = true;
 		this._disableHeightCheck = false;
 	};
-	
-	
+
+
 	//**** Private Helper Functions ****
-	
+
 	/**
 	 * Sets the value of the given property and notifies the layout
 	 * if necessary and desired.
@@ -335,8 +335,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		}
 		return bSuppressRerendering;
 	};
-	
-	
+
+
 	/**
 	 * Notifies the layout of this container about the change of the given type.
 	 *
@@ -348,8 +348,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 			oLayout.contentChanged(oThis, sChangeType);
 		}
 	};
-	
-	
+
+
 	/**
 	 * @see sap.ui.commons.layout.AbsoluteLayout#cleanUpControl
 	 *
@@ -362,8 +362,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 			oControl.detachEvent("_change", onPropertyChanges, oThis);
 		}
 	};
-	
-	
+
+
 	/**
 	 * Checks whether the position settings fits to the set height/width attribute of a control.
 	 *
@@ -390,8 +390,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		}
 		return true;
 	};
-	
-	
+
+
 	/**
 	 * Checks whether the given control has a property with the given name and type 'sap.ui.core.CSSSize' and
 	 * returns the corresponding metadata object.
@@ -405,8 +405,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		}
 		return null;
 	};
-	
-	
+
+
 	/**
 	 * Returns the value width or height property (depending of <code>sDim</code>) of the given
 	 * control if the width or height is specified in %.
@@ -423,8 +423,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 		}
 		return null;
 	};
-	
-	
+
+
 	/**
 	 * Handler on child control to check for property changes on width or height attribute.
 	 *
@@ -433,12 +433,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/library', 'sap/ui/core/Eleme
 	var onPropertyChanges = function(oEvent){
 		var sProp = oEvent.getParameter("name");
 		var parent = this.getParent();
-		
+
 		if ((sProp === "width" || sProp === "height") && parent && parent.getDomRef()) {
 			notifyLayoutOnChange(this, "CTRL_POS");
 		}
 	};
-	
+
 	}());
 
 	return PositionContainer;

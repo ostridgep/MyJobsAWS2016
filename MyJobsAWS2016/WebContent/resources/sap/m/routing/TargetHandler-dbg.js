@@ -1,8 +1,10 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
+
+ /*global Promise*/
 sap.ui.define(['jquery.sap.global', 'sap/m/InstanceManager', 'sap/m/NavContainer', 'sap/m/SplitContainer', 'sap/ui/base/Object', 'sap/ui/core/routing/History', 'sap/ui/core/routing/Router'],
 	function($, InstanceManager, NavContainer, SplitContainer, BaseObject, History, Router) {
 		"use strict";
@@ -23,6 +25,9 @@ sap.ui.define(['jquery.sap.global', 'sap/m/InstanceManager', 'sap/m/NavContainer
 			constructor : function (bCloseDialogs) {
 				//until we reverse the order of events fired by router we need to queue handleRouteMatched
 				this._aQueue = [];
+
+				// The Promise object here is used to make the navigations in the same order as they are triggered, only for async
+				this._oNavigationOrderPromise = Promise.resolve();
 
 				if (bCloseDialogs === undefined) {
 					this._bCloseDialogs = true;
@@ -83,6 +88,15 @@ sap.ui.define(['jquery.sap.global', 'sap/m/InstanceManager', 'sap/m/NavContainer
 		 * private
 		 * =================================
 		 */
+
+		/**
+		 * This method is used to chain navigations to be triggered in the correct order, only relevant for async
+		 * @private
+		 */
+		TargetHandler.prototype._chainNavigation = function(fnNavigation) {
+			this._oNavigationOrderPromise = this._oNavigationOrderPromise.then(fnNavigation);
+			return this._oNavigationOrderPromise;
+		};
 
 		/**
 		 * @private
@@ -221,8 +235,17 @@ sap.ui.define(['jquery.sap.global', 'sap/m/InstanceManager', 'sap/m/NavContainer
 			//this is only necessary if the target control is a Split container since the nav container only has a pages aggregation
 				bNextPageIsMaster = oTargetControl instanceof SplitContainer && !!oTargetControl.getMasterPage(sViewId);
 
-			//It is already the current page, no need to navigate
-			if (oTargetControl.getCurrentPage(bNextPageIsMaster).getId() === sViewId) {
+			// It's NOT needed to navigate when both of the following conditions are valid:
+			// 1. The target control is already rendered
+			// 2. The target control already has the target view as the current page
+			//
+			// This fix the problem that the route parameters can't be forwarded to the initial page's onBeforeShow event.
+			// In this case, the 'to' method of target control has to be explicitly called to pass the route parameters for the
+			// onBeforeShow event which is fired in the onBeforeRendering of the target control.
+			//
+			// TODO: when target view is loaded asyncly, it could happen that the target control is rendered with empty content and
+			// the target view is added later. oTargetControl.getDomRef has to be adapted with some new method in target control.
+			if (oTargetControl.getDomRef() && oTargetControl.getCurrentPage(bNextPageIsMaster).getId() === sViewId) {
 				$.sap.log.info("navigation to view with id: " + sViewId + " is skipped since it already is displayed by its targetControl", "sap.m.routing.TargetHandler");
 				return false;
 			}

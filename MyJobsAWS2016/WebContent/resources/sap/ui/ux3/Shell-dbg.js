@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -21,7 +21,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/Menu', 'sap/ui/core/Control'
 	 * The Ux3 GoldReflection Shell, which is an application frame with navigation capabilities.
 	 * It is supposed to be added to a direct child of the BODY tag of a page and there should be no other parts of the page consuming space outside the Shell.
 	 * @extends sap.ui.core.Control
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -1445,7 +1445,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/Menu', 'sap/ui/core/Control'
 			}
 
 			// TODO replace 100000 when there is something smart to handle the z-index centrally
-			$notify.css("height", iHeight + "px").css("z-index", 100000);
+			if (sVisibleStatus === sap.ui.ux3.NotificationBarStatus.Min) {
+				// this enables the NotificationBar to be usable if it's minimized.
+				// If there is a ComboBox in the content area the NotificationBar should
+				// be behind the ComboBox if the NotificationBar is minimized. Otherwise
+				// the NotificationBar must cover all content.
+				$notify.css("height", iHeight + "px").css("z-index", 1);
+			} else {
+				$notify.css("height", iHeight + "px").css("z-index", 100000);
+			}
 
 			if (iHeight > 0 && !this.$().hasClass("sapUiUx3ShellNotifyVisible")) {
 				this.$().addClass("sapUiUx3ShellNotifyVisible");

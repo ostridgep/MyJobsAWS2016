@@ -1,12 +1,11 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // A renderer for the ComponentContainer control
-sap.ui.define(['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.define(function() {
 	"use strict";
 
 
@@ -17,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var ComponentContainerRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -26,13 +25,13 @@ sap.ui.define(['jquery.sap.global'],
 	 * @param {sap.ui.core.Control} oControl Object representation of the control that should be rendered
 	 */
 	ComponentContainerRenderer.render = function(oRenderManager, oComponentContainer){
-	
+
 		// convenience variable
 		var oRM = oRenderManager;
 		var oComponent = oComponentContainer.getComponentInstance();
 		var sWidth = oComponentContainer.getWidth();
 		var sHeight = oComponentContainer.getHeight();
-		
+
 		oRM.write("<div");
 		oRM.writeControlData(oComponentContainer);
 		if (sWidth) {
@@ -59,8 +58,8 @@ sap.ui.define(['jquery.sap.global'],
 		}
 		oRM.write("</div></div>");
 	};
-	
-	
+
+
 
 	return ComponentContainerRenderer;
 

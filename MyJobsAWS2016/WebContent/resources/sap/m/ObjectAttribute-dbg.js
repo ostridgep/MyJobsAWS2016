@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,13 +14,13 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 	/**
 	 * Constructor for a new ObjectAttribute.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given
-	 * @param {object} [mSettings] initial settings for the new control
+	 * @param {string} [sId] ID for the new control, generated automatically if no ID is given
+	 * @param {object} [mSettings] Initial settings for the new control
 	 *
 	 * @class
-	 * ObjectAttribute displays a text field that can be normal or active. Object attribute fires a press event when the user selects active text.
+	 * The ObjectAttribute control displays a text field that can be normal or active. The ObjectAttribute fires a press event when the user selects active text.
 	 * @extends sap.ui.core.Control
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -34,17 +34,17 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 		properties : {
 
 			/**
-			 * The object attribute title.
+			 * Defines the ObjectAttribute title.
 			 */
 			title : {type : "string", group : "Misc", defaultValue : null},
 
 			/**
-			 * The object attribute text.
+			 * Defines the ObjectAttribute text.
 			 */
 			text : {type : "string", group : "Misc", defaultValue : null},
 
 			/**
-			 * Indicates if the object attribute text is selectable by the user.
+			 * Indicates if the ObjectAttribute text is selectable for the user.
 			 */
 			active : {type : "boolean", group : "Misc", defaultValue : null},
 
@@ -57,20 +57,26 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 		aggregations : {
 
 			/**
-			 * Text control to display title and text property
+			 * When the aggregation is set, it replaces the text, active and textDirection properties. This also ignores the press event. The provided control is displayed as an active link.
+			 * <b>Note:</b> It will only allow sap.m.Text and sap.m.Link controls.
+			 */
+			customContent : {type : "sap.ui.core.Control", multiple : false},
+
+			/**
+			 * Text control to display title and text property.
 			 */
 			_textControl : {type : "sap.ui.core.Control", multiple : false, visibility : "hidden"}
 		},
 		events : {
 
 			/**
-			 * Event is fired when the user clicks active text
+			 * Fires when the user clicks on active text.
 			 */
 			press : {
 				parameters : {
 
 					/**
-					 * Dom reference of the object attributes' text to be used for positioning.
+					 * DOM reference of the ObjectAttribute's text to be used for positioning.
 					 */
 					domRef : {type : "string"}
 				}
@@ -78,12 +84,13 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 		}
 	}});
 
-	///**
-	// * This file defines behavior for the control,
-	// */
+	ObjectAttribute.MAX_LINES = {
+		SINGLE_LINE: 1,
+		MULTI_LINE: 2
+	};
 
 	/**
-	 *  Initialize member variables
+	 *  Initializes member variables.
 	 *
 	 * @private
 	 */
@@ -92,35 +99,56 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 	};
 
 	/**
-	 * Delivers text control with updated title, text and maxLines property
+	 * Delivers text control with updated title, text and maxLines properties.
 	 *
 	 * @private
 	 */
 	ObjectAttribute.prototype._getUpdatedTextControl = function() {
-		var oTextControl = this.getAggregation('_textControl');
-		var sTextDir = this.getTextDirection();
-		var oParent = this.getParent();
-		var bPageRTL = sap.ui.getCore().getConfiguration().getRTL();
-		var oMaxLinesConst = {
-			singleLine : 1,
-			multiLine : 2
-		};
-		var iMaxLines = oMaxLinesConst.multiLine;
-		var oppositeDirectionMarker = '';
+		var oAttrAggregation = this.getAggregation('customContent') || this.getAggregation('_textControl'),
+			sTitle = this.getTitle(),
+			sText = this.getAggregation('customContent') ? this.getAggregation('customContent').getText() : this.getText(),
+			sTextDir = this.getTextDirection(),
+			oParent = this.getParent(),
+			bPageRTL = sap.ui.getCore().getConfiguration().getRTL(),
+			iMaxLines = ObjectAttribute.MAX_LINES.MULTI_LINE,
+			bWrap = true,
+			oppositeDirectionMarker = '';
+
 		if (sTextDir === sap.ui.core.TextDirection.LTR && bPageRTL) {
 			oppositeDirectionMarker = '\u200e';
 		}
 		if (sTextDir === sap.ui.core.TextDirection.RTL && !bPageRTL) {
 			oppositeDirectionMarker = '\u200f';
 		}
-
-		oTextControl.setProperty('text', (this.getTitle() ? this.getTitle() + ": " : "") + oppositeDirectionMarker + this.getText() + oppositeDirectionMarker, true);
-		//if attribute is used inside responsive ObjectHeader or in ObjectListItem - only 1 line
-		if (oParent && ((oParent instanceof sap.m.ObjectHeader && oParent.getResponsive()) || oParent instanceof sap.m.ObjectListItem)) {
-			iMaxLines = oMaxLinesConst.singleLine;
+		sText = oppositeDirectionMarker + sText + oppositeDirectionMarker;
+		if (sTitle) {
+			sText = sTitle + ": " + sText;
 		}
-		oTextControl.setProperty('maxLines', iMaxLines, true);
-		return oTextControl;
+		oAttrAggregation.setProperty('text', sText, true);
+
+		//if attribute is used inside responsive ObjectHeader or in ObjectListItem - only 1 line
+		if (oParent instanceof sap.m.ObjectListItem) {
+			bWrap = false;
+			iMaxLines = ObjectAttribute.MAX_LINES.SINGLE_LINE;
+		}
+
+		this._setControlWrapping(oAttrAggregation, bWrap, iMaxLines);
+
+		return oAttrAggregation;
+	};
+
+	/**
+	 * Sets the appropriate property to the customContent aggregation.
+	 *
+	 * @private
+	 */
+	ObjectAttribute.prototype._setControlWrapping = function(oAttrAggregation, bWrap, iMaxLines) {
+		if (oAttrAggregation instanceof sap.m.Link) {
+			oAttrAggregation.setProperty('wrapping', bWrap, true);
+		}
+		if (oAttrAggregation instanceof sap.m.Text) {
+			oAttrAggregation.setProperty('maxLines', iMaxLines, true);
+		}
 	};
 
 	/**
@@ -128,7 +156,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 	 */
 	ObjectAttribute.prototype.ontap = function(oEvent) {
 		//event should only be fired if the click is on the text
-		if (!!this.getActive() && (oEvent.target.id != this.getId())) {
+		if (this._isSimulatedLink() && (oEvent.target.id != this.getId())) {
 			this.firePress({
 				domRef : this.getDomRef()
 			});
@@ -139,7 +167,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 	 * @private
 	 */
 	sap.m.ObjectAttribute.prototype.onsapenter = function(oEvent) {
-		if (!!this.getActive()) {
+		if (this._isSimulatedLink()) {
 			this.firePress({
 				domRef : this.getDomRef()
 			});
@@ -154,37 +182,45 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control'],
 	};
 
 	/**
-	 * See 'return'.
+	 * Checks if ObjectAttribute is empty.
 	 *
 	 * @private
-	 * @returns {boolean} true if attribute's text is empty or only consists of whitespaces.
+	 * @returns {boolean} true if ObjectAttribute's text is empty or only consists of whitespaces
 	 */
 	ObjectAttribute.prototype._isEmpty = function() {
+		if (this.getAggregation('customContent') && !(this.getAggregation('customContent') instanceof sap.m.Link || this.getAggregation('customContent') instanceof sap.m.Text)) {
+			jQuery.sap.log.warning("Only sap.m.Link or sap.m.Text are allowed in \"sap.m.ObjectAttribute.customContent\" aggregation");
+			return true;
+		}
+
 		return !(this.getText().trim() || this.getTitle().trim());
 	};
 
 	/**
-	 * Function is called when the control is touched.
+	 * Called when the control is touched.
 	 *
 	 * @private
 	 */
 	ObjectAttribute.prototype.ontouchstart = function(oEvent) {
-		if (!!this.getActive()) {
+		if (this._isSimulatedLink()) {
 			// for control who need to know if they should handle events from the ObjectAttribute control
 			oEvent.originalEvent._sapui_handledByControl = true;
 		}
 	};
 
 	/**
-	 * Defines to which DOM reference the Popup should be docked
+	 * Defines to which DOM reference the Popup should be docked.
 	 *
 	 * @protected
-	 * @return {DomNode} the DOM reference that Popup should dock to
+	 * @return {DomNode} The DOM reference that Popup should dock to
 	 */
 	ObjectAttribute.prototype.getPopupAnchorDomRef = function() {
 		return this.getDomRef("text");
 	};
 
+	ObjectAttribute.prototype._isSimulatedLink = function () {
+		return this.getActive() && !this.getAggregation('customContent');
+	};
 
 	return ObjectAttribute;
 

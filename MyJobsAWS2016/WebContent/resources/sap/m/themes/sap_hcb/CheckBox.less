@@ -3,8 +3,6 @@
 /* High contrast Black theme                     */
 /* ============================================= */
 .sapMCb {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 3rem;
 	line-height: 3rem;
@@ -55,11 +53,14 @@
 }
 
 .sapMCbBg > input {
-	position: absolute;
-	/* in FF the input needs to be positioned exactly behind the visible checkbox for the focus outline */
 	left: 0;
 	-webkit-appearance: none;
 	visibility: hidden;
+}
+
+html[data-sap-ui-browser^=ff] .sapMCbBg > input {
+  /* in FF the input needs to be positioned exactly behind the visible checkbox for the focus outline */
+  position: absolute;
 }
 
 .sapMCb:not(.sapMCbBgDis):focus > .sapMCbBg,
@@ -69,8 +70,7 @@
 	outline-style: dotted;
 }
 
-.sapMCbHoverable:hover,
-.sapMLIBActive .sapMCbBg {
+.sapMCbHoverable:hover {
 	background-color: @sapHCHighlightAltBG;
 }
 
@@ -120,10 +120,15 @@
 	.sapMLIBSelectM > .sapMCb {
 		width: 2rem;
 	}
+
+	.sapUiForm .sapMCbBg { /* In forms, align left with '0.125rem' ( the focus width) */
+		left: 0.125rem;
+	}
 }
 
 /* Condensed size */
-.sapUiSizeCondensed {
+.sapUiSizeCondensed.sapUiTable,
+.sapUiSizeCondensed .sapUiTable {
 
 	.sapMCb {
 		height: 1.5rem;

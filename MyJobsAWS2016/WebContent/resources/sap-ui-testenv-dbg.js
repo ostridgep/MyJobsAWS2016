@@ -1,15 +1,11 @@
-jQuery.sap.registerPreloadedModules({
-"name":"sap-ui-debug-preload",
-"version":"2.0",
-"modules":{
-	"jquery.sap.strings.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides useful string operations not available in pure JavaScript.
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.strings',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -165,7 +161,7 @@ sap.ui.define(['jquery.sap.global'],
 	var rCamelCase = /-(.)/ig;
 
 	/**
-	 * Transforms a hyphen separated string to an camel case string. 
+	 * Transforms a hyphen separated string to an camel case string.
 	 *
 	 * @param {string} sString Hyphen separated string
 	 * @return The transformed string
@@ -180,12 +176,12 @@ sap.ui.define(['jquery.sap.global'],
 		});
 	};
 
-	
+
 	var rHyphen = /([A-Z])/g;
-	
+
 	/**
 	 * Transforms a camel case string into a hyphen separated string.
-	 * 
+	 *
 	 * @param {string} sString camel case string
 	 * @return The transformed string
 	 * @type {string}
@@ -199,8 +195,8 @@ sap.ui.define(['jquery.sap.global'],
 		});
 	};
 
-	
-	var rEscapeRegExp = /[-[\]{}()*+?.,\\^$|#\s]/g;
+
+	var rEscapeRegExp = /[[\]{}()*+?.\\^$|]/g;
 
 	/**
 	 * This function escapes the reserved letters in Regular Expression
@@ -218,43 +214,43 @@ sap.ui.define(['jquery.sap.global'],
 	/**
 	 * Creates a string from a pattern by replacing placeholders with concrete values.
 	 *
-	 * The syntax of the pattern is inspired by (but not fully equivalent to) the 
+	 * The syntax of the pattern is inspired by (but not fully equivalent to) the
 	 * java.util.MessageFormat.
 	 *
-	 * Placeholders have the form <code>{ integer }</code>, where any occurrence of 
+	 * Placeholders have the form <code>{ integer }</code>, where any occurrence of
 	 * <code>{0}</code> is replaced by the value with index 0 in <code>aValues</code>,
 	 * <code>{1}</code> y the value with index 1 in <code>aValues</code> etc.
 	 *
-	 * To avoid interpretation of curly braces as placeholders, any non-placeholder fragment 
-	 * of the pattern can be enclosed in single quotes. The surrounding single quotes will be 
-	 * omitted from the result. Single quotes that are not meant to escape a fragment and 
-	 * that should appear in the result, need to be doubled. In the result, only a single 
+	 * To avoid interpretation of curly braces as placeholders, any non-placeholder fragment
+	 * of the pattern can be enclosed in single quotes. The surrounding single quotes will be
+	 * omitted from the result. Single quotes that are not meant to escape a fragment and
+	 * that should appear in the result, need to be doubled. In the result, only a single
 	 * single quote will occur.
 	 *
 	 * Example Pattern Strings:
 	 * <pre>
 	 *   jQuery.sap.formatMessage("Say {0}", ["Hello"]) -> "Say Hello"  // normal use case
 	 *   jQuery.sap.formatMessage("Say '{0}'", ["Hello"]) -> "Say {0}"  // escaped placeholder
-	 *   jQuery.sap.formatMessage("Say ''{0}''", ["Hello"]) -> "Say 'Hello'" // doubled single quote 
+	 *   jQuery.sap.formatMessage("Say ''{0}''", ["Hello"]) -> "Say 'Hello'" // doubled single quote
 	 *   jQuery.sap.formatMessage("Say '{0}'''", ["Hello"]) -> "Say {0}'" // doubled single quote in quoted fragment
 	 * </pre>
-	 * 
-	 * In contrast to java.util.MessageFormat, format types or format styles are not supported. 
+	 *
+	 * In contrast to java.util.MessageFormat, format types or format styles are not supported.
 	 * Everything after the argument index and up to the first closing curly brace is ignored.
 	 * Nested placeholders (as supported by java.lang.MessageFormat for the format type choice)
-	 * are not ignored but reported as a parse error. 
+	 * are not ignored but reported as a parse error.
 	 *
-	 * This method throws an Error when the pattern syntax is not fulfilled (e.g. unbalanced curly 
+	 * This method throws an Error when the pattern syntax is not fulfilled (e.g. unbalanced curly
 	 * braces, nested placeholders or a non-numerical argument index).
 	 *
-	 * This method can also be used as a formatter within a binding. The first part of a composite binding 
+	 * This method can also be used as a formatter within a binding. The first part of a composite binding
 	 * will be used as pattern, the following parts as aValues. If there is only one value and this
 	 * value is an array it will be handled like the default described above.
-	 *  
-	 * @param {string} sPattern A pattern string in the described syntax 
+	 *
+	 * @param {string} sPattern A pattern string in the described syntax
 	 * @param {any[]} [aValues=[]] The values to be used instead of the placeholders.
-	 * 										 
-	 * @return {string} The formatted result string 
+	 *
+	 * @return {string} The formatted result string
 	 * @since 1.12.5
 	 * @SecPassthrough {*|return}
 	 * @public
@@ -267,33 +263,33 @@ sap.ui.define(['jquery.sap.global'],
 		aValues = aValues || [];
 		return sPattern.replace(rMessageFormat, function($0,$1,$2,$3,offset) {
 			if ( $1 ) {
-				// a doubled single quote in a normal string fragment 
+				// a doubled single quote in a normal string fragment
 				//   --> emit a single quote
 				return "'";
 			} else if ( $2 ) {
-				// a quoted sequence of chars, potentially containing doubled single quotes again 
-				//   --> emit with doubled single quotes replaced by a single quote 
+				// a quoted sequence of chars, potentially containing doubled single quotes again
+				//   --> emit with doubled single quotes replaced by a single quote
 				return $2.replace(/''/g, "'");
 			} else if ( $3 ) {
 				// a welformed curly brace
-				//   --> emit the argument but ignore other parameters 
+				//   --> emit the argument but ignore other parameters
 				return String(aValues[parseInt($3, 10)]);
 			}
-			// e.g. malformed curly braces 
-			//   --> throw Error 
+			// e.g. malformed curly braces
+			//   --> throw Error
 			throw new Error("formatMessage: pattern syntax error at pos. " + offset);
 		});
 	};
-	
+
 	/**
 	 * Pattern to analyze MessageFormat strings.
-	 * 
+	 *
 	 * Group 1: captures doubled single quotes within the string
-	 * Group 2: captures quoted fragments within the string. 
-	 *            Note that java.util.MessageFormat silently forgives a missing single quote at 
-	 *            the end of a pattern. This special case is handled by the RegEx as well.  
+	 * Group 2: captures quoted fragments within the string.
+	 *            Note that java.util.MessageFormat silently forgives a missing single quote at
+	 *            the end of a pattern. This special case is handled by the RegEx as well.
 	 * Group 3: captures placeholders
-	 *            Checks only for numerical argument index, any remainder is ignored up to the next 
+	 *            Checks only for numerical argument index, any remainder is ignored up to the next
 	 *            closing curly brace. Nested placeholdes are not accepted!
 	 * Group 4: captures any remaining curly braces and indicates syntax errors
 	 *
@@ -304,16 +300,15 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"sap/ui/debug/Highlighter.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a helper that can highlight a given control
-sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom', 'jquery.sap.script'],
+sap.ui.predefine('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom', 'jquery.sap.script'],
 	function(jQuery/* , jQuerySap, jQuerySap1 */) {
 	"use strict";
 
@@ -346,7 +341,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 			this.iBorderWidth = iBorderWidth;
 		}
 	};
-	
+
 	/**
 	 * Shows a rectangle/box that surrounds the given DomRef.
 	 *
@@ -360,7 +355,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 		if (!oDomRef || !oDomRef.parentNode) {
 			return;
 		}
-	
+
 		var oHighlightRect = jQuery.sap.domById(this.sId);
 		if (!oHighlightRect) {
 			oHighlightRect = oDomRef.ownerDocument.createElement("DIV");
@@ -382,7 +377,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 		oHighlightRect.style.height = (oRect.height) + "px";
 		oHighlightRect.style.display = "block";
 	};
-	
+
 	/**
 	 * Hides the rectangle/box if it is currently shown.
 	 */
@@ -397,27 +392,28 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 	return Highlighter;
 
 }, /* bExport= */ true);
-},
-	"sap/ui/test/ControlTree.js":function(){/*!
- * ${copyright}
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a control tree to be used in the Eclipse preview editor
-sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings'],
+sap.ui.predefine('sap/ui/test/ControlTree',['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings'],
 	function(jQuery, Element/* , jQuerySap */) {
 	"use strict";
 
 
-	
+
 	/*global addProperty, callback, restoreLockState, restoreTreeCallback,supplySelectedTheme, *///declare unusual global vars for JSLint/SAPUI5 validation
-	
+
 	/**
 	 * Constructs the class <code>sap.ui.test.ControlTree</code> and registers
 	 * to the <code>sap.ui.core.Core</code> for UI change events.
 	 *
 	 * @class Control Tree used for the Test Environment
 	 * @author SAPUI5 Designtime
-	 * @version ${version}
+	 * @version 1.36.7
 	 *
 	 * @param {sap.ui.core.Core}
 	 *            oCore the core instance to use for analysis
@@ -434,7 +430,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 		this.oCore.attachUIUpdated(this.renderDelayed, this);
 		this.renderDelayed(); // additionally necessary due to first UI update
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -450,7 +446,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 		restoreLockState(this);
 		supplySelectedTheme(this.oCore.getConfiguration().getTheme());
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -460,20 +456,20 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 	ControlTree.prototype.initDT = function() {
 		//Make a Callback to reset the Outline Tree
 		restoreTreeCallback();
-	
+
 		var oUIArea = null,
 			oUIAreas = this.oCore.mUIAreas;
 			//alert("initcontrol tree");
 		for (var i in oUIAreas) {
 			var oUIArea = oUIAreas[i];
-	
+
 			var aRootControls = oUIArea.getContent();
 			for (var i = 0, l = aRootControls.length; i < l; i++) {
 				this.renderNodeDT(aRootControls[i],0);
 			}
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -483,11 +479,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 	ControlTree.prototype.createTreeNodeDT = function(sId,iLevel,sType) {
 		callback(sId,iLevel,sType);
 	};
-	
+
 	ControlTree.prototype.createAssocTreeNodeDT = function(sId,iLevel,sType,srcCntrlId,trgtCntrlId) {
 		callback(sId,iLevel,sType,srcCntrlId,trgtCntrlId);
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -495,13 +491,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 	 * @function
 	 */
 	ControlTree.prototype.renderNodeDT = function(oControl,iLevel) {
-	
+
 		if (!oControl) {
 			return;
 		}
-	
+
 		var oMetadata = oControl.getMetadata();
-	
+
 		var mProperties = oMetadata.getAllProperties();
 		for (var sPropertyName in mProperties) {
 			var oMethod =  oControl["get" + sPropertyName];
@@ -512,7 +508,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 			var oValue = oControl["get" + sName]();
 			addProperty(oControl.getId(), sPropertyName, mProperties[sPropertyName].type, oValue != null ? oValue : "");
 		}
-	
+
 		var mAggregations = oMetadata.getAllAggregations();
 		for (var n in mAggregations) {
 			// Ensure to analyze the actual element/control instance, not just its metadata!
@@ -528,13 +524,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 				this.renderNodeDT(oAggregation,iLevel + 1);
 			}
 		}
-	
-	
+
+
 		//Get all the associations
 		var mAssociations = oMetadata.getAllAssociations();
 		for (var m in mAssociations) {
 			var oAssociation = oControl.getAssociation(mAssociations[m].name);//Returns the association Name
-	
+
 			if (oAssociation != null) {
 				//Construct the Association Name
 				var assocId = mAssociations[m].name + oAssociation;
@@ -542,7 +538,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 				//Add the properties of the association here
 				addProperty(assocId,mAssociations[m].name,"assoc_type",oAssociation);
 				addProperty(assocId, "Name", "string", mAssociations[m].name);
-	
+
 			}
 		}
 	};
@@ -550,33 +546,34 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Element', 'jquery.sap.strings']
 	return ControlTree;
 
 }, /* bExport= */ true);
-},
-	"sap/ui/test/TestEnv.js":function(){/*!
- * ${copyright}
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a bridge between the SAPUI5 runtime and the SAPUI5 Eclipse Tooling.
-sap.ui.define(['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree'],
+sap.ui.predefine('sap/ui/test/TestEnv',['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree'],
 	function(jQuery, Highlighter, ControlTree) {
 	"use strict";
 
 
 	/*global selectControl *///declare unusual global vars for JSLint/SAPUI5 validation
-	
+
 	/**
 	 * Creates an instance of the class <code>sap.ui.debug.TestEnv</code>
 	 *
 	 * @class Central Class for the Test Environment
 	 *
 	 * @author SAPUI5 Designtime
-	 * @version ${version}
+	 * @version 1.36.7
 	 * @constructor
 	 * @private
 	 * @name sap.ui.test.TestEnv
 	 */
 	var TestEnv = function() {
 	};
-	
+
 	/**
 	 * Will be invoked by <code>sap.ui.core.Core</code> to notify the plugin to start
 	 * @param {sap.ui.core.Core} oCore reference to the Core
@@ -591,7 +588,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree']
 		this.oWindow = window;
 		this.oControlTree = new ControlTree(this.oCore, window);
 	};
-	
+
 	/**
 	 * Will be invoked by <code>sap.ui.core.Core</code> to notify the plugin to start
 	 * @param {sap.ui.core.Core} oCore reference to the Core
@@ -603,8 +600,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree']
 		this.oCore.detachControlEvent(this.onControlEvent, this);
 		this.oCore = null;
 	};
-	
-	
+
+
 	/**
 	 * Callback method for listening to any event
 	 * @param {sap.ui.base.Event} oEvent event object
@@ -613,40 +610,40 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree']
 	 * @function
 	 */
 	TestEnv.prototype.onControlEvent = function(oEvent) {
-	
+
 		// logging for testing!
 	//	jQuery.sap.log.info(oEvent.getParameter("browserEvent").getName() + " - " + this.oCore.isLocked());
-	
+
 		// special handling only if the Core is locked
 		if (this.oCore.isLocked()) {
-	
+
 			// get the ref to the browser event
 			var oBrowserEvent = oEvent.getParameter("browserEvent");
-	
+
 			// only act for click events
 			if (oBrowserEvent.type == "click") {
-	
+
 				// determine the clicked element
 				var oElement = oBrowserEvent.srcControl;
 				if (oElement) {
-	
+
 	//				// show the dimension rect and select the control
 					var oSelectionHighlighter = new Highlighter('sap-ui-testsuite-SelectionHighlighter');
 					oSelectionHighlighter.highlight(oElement.getDomRef());
-	
+
 					// (TODO: function selectControl needs to be implemented by DesignTime!)
 					if (selectControl) {
 						selectControl(oElement.getId());
 					}
-	
+
 				}
-	
+
 			}
-	
+
 		}
-	
+
 	};
-	
+
 	/**
 	 * Create the <code>sap.ui.test.TestEnv</code> plugin and register
 	 * it within the <code>sap.ui.core.Core</code>.
@@ -659,6 +656,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/debug/Highlighter', './ControlTree']
 	return TestEnv;
 
 }, /* bExport= */ true);
-}
-}});
 jQuery.sap.require("sap.ui.test.TestEnv");

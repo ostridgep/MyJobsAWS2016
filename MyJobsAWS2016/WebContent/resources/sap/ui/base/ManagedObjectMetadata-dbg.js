@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -49,7 +49,7 @@ sap.ui.define(['jquery.sap.global', './DataType', './Metadata'],
 	 * </ul>
 	 *
 	 * @author Frank Weigel
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 0.8.6
 	 * @alias sap.ui.base.ManagedObjectMetadata
 	 */
@@ -500,9 +500,6 @@ sap.ui.define(['jquery.sap.global', './DataType', './Metadata'],
 			this._mAllAggregations = jQuery.extend({}, oParent._mAllAggregations, this._mAggregations);
 			this._mAllAssociations = jQuery.extend({}, oParent._mAllAssociations, this._mAssociations);
 			this._sDefaultAggregation = this._sDefaultAggregation || oParent._sDefaultAggregation;
-			if ( oParent._mHiddenAggregations ) {
-				this._mHiddenAggregations = jQuery.extend({}, oParent._mHiddenAggregations);
-			}
 			this._mAllSpecialSettings = jQuery.extend({}, oParent._mAllSpecialSettings, this._mSpecialSettings);
 		} else {
 			this._mAllEvents = this._mEvents;
@@ -913,6 +910,25 @@ sap.ui.define(['jquery.sap.global', './DataType', './Metadata'],
 
 	// ---- special settings ------------------------------------------------------------------
 
+
+	/**
+	 * Adds a new special setting.
+	 * Special settings are settings that are accepted in the mSettings
+	 * object at construction time or in an {@link sap.ui.base.ManagedObject.applySettings}
+	 * call but that are neither properties, aggregations, associations nor events.
+	 *
+	 * @param {string} sName name of the setting
+	 * @private
+	 * @experimental since 1.35.0
+	 */
+	ManagedObjectMetadata.prototype.addSpecialSetting = function (sName, oInfo) {
+		var oSS = this._mProperties[sName] = new SpecialSetting(this, sName, oInfo);
+		this._mSpecialSettings[sName] = oSS;
+		if (!this._mAllSpecialSettings[sName]) {
+			this._mAllSpecialSettings[sName] = oSS;
+		}
+	};
+
 	/**
 	 * Checks the existence of the given special setting.
 	 * Special settings are settings that are accepted in the mSettings
@@ -958,11 +974,6 @@ sap.ui.define(['jquery.sap.global', './DataType', './Metadata'],
 				oType = DataType.getType(this._mProperties[s].type);
 				if (oType instanceof DataType) {
 					mDefaults[s] = oType.getDefaultValue();
-				} else { // Enumeration
-					for (var i in oType) {
-						mDefaults[s] = oType[i];
-						break;
-					}
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,11 +10,11 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	"use strict";
 
 
-	
+
 	/**
 	 * Constructor for a new ResponsiveContainer.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
@@ -22,7 +22,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -30,47 +30,47 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var ResponsiveContainer = Control.extend("sap.ui.commons.ResponsiveContainer", /** @lends sap.ui.commons.ResponsiveContainer.prototype */ { metadata : {
-	
+
 		library : "sap.ui.commons",
 		properties : {
-	
+
 			/**
 			 * The width of the responsive container.
 			 */
 			width : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : '100%'},
-	
+
 			/**
 			 * The width of the responsive container.
 			 */
 			height : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : '100%'}
 		},
 		aggregations : {
-	
+
 			/**
 			 * The ranges defined for this container
 			 */
-			ranges : {type : "sap.ui.commons.ResponsiveContainerRange", multiple : true, singularName : "range"}, 
-	
+			ranges : {type : "sap.ui.commons.ResponsiveContainerRange", multiple : true, singularName : "range"},
+
 			/**
 			 * The currently shown content, either the default content or content of a range
 			 */
 			content : {type : "sap.ui.core.Control", multiple : false, visibility : "hidden"}
 		},
 		associations : {
-	
+
 			/**
 			 * The default content to show, in case the range does not provide content
 			 */
 			defaultContent : {type : "sap.ui.core.Control", multiple : false}
 		},
 		events : {
-	
+
 			/**
 			 * The event is fired the width of the container reaches a new range.
 			 */
 			rangeSwitch : {
 				parameters : {
-	
+
 					/**
 					 * The current range
 					 */
@@ -79,8 +79,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}
 		}
 	}});
-	
-	
+
+
 	/**
 	 * Control Initialization
 	 * @private
@@ -88,7 +88,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	ResponsiveContainer.prototype.init = function(){
 		this.oCurrentRange = null;
 	};
-	
+
 	/**
 	 * Destructor
 	 * @private
@@ -100,7 +100,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			this.sResizeListenerId = null;
 		}
 	};
-	
+
 	/**
 	 * Before rendering
 	 */
@@ -115,7 +115,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			this.setAggregation("content", oDefaultContent);
 		}
 	};
-	
+
 	/**
 	 * After rendering
 	 */
@@ -127,7 +127,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			setTimeout(fnResizeHandler, 0);
 		}
 	};
-	
+
 	/**
 	 * Resize handling
 	 */
@@ -147,7 +147,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			});
 		}
 	};
-	
+
 	/**
 	 * Refresh ranges, updates the range sizes from the DOM.
 	 * Loop through all the rendered divs for the ranges and read their width and height
@@ -167,7 +167,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		});
 		this.aRangeDimensions = aRangeDimensions;
 	};
-	
+
 	/**
 	 * Find best matching range, finds the range which best fills the available space.
 	 * Reads the current width and height of the container and compares to the stored range
@@ -192,8 +192,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		});
 		return oMatch && oMatch.range;
 	};
-	
-	
+
+
 
 	return ResponsiveContainer;
 

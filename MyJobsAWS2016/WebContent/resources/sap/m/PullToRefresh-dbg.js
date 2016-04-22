@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -24,7 +24,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -69,7 +69,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 
 	PullToRefresh.prototype.init = function(){
-		this._bTouchMode = sap.ui.Device.support.touch || jQuery.sap.simulateMobileOnDesktop; // FIXME: plus fakeOS mode
+		this._bTouchMode = sap.ui.Device.support.touch && !sap.ui.Device.system.combi || jQuery.sap.simulateMobileOnDesktop;
 
 		this._iState = 0; // 0 - normal; 1 - release to refresh; 2 - loading
 		this.oRb = sap.ui.getCore().getLibraryResourceBundle("sap.m"); // texts
@@ -81,7 +81,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		if (this.getVisible() && !this._oBusyIndicator) {
 			jQuery.sap.require("sap.m.BusyIndicator");
 			this._oBusyIndicator = new sap.m.BusyIndicator({
-				size: this._bTouchMode ? "2em" : "1.7em",
+				size: "1.7rem",
 				design: "auto"
 			});
 			this._oBusyIndicator.setParent(this);
@@ -207,16 +207,19 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			case 0:
 				$this.toggleClass("sapMFlip", false).toggleClass("sapMLoading", false);
 				$text.html(this.oRb.getText(this._bTouchMode ? "PULL2REFRESH_PULLDOWN" : "PULL2REFRESH_REFRESH"));
-				$this.find(".sapMPullDownInfo").html(this.getDescription());
+				$this.removeAttr("aria-live");
+				$this.find(".sapMPullDownInfo").html(jQuery.sap.encodeHTML(this.getDescription()));
 				break;
 			case 1:
 				$this.toggleClass("sapMFlip", true);
 				$text.html(this.oRb.getText("PULL2REFRESH_RELEASE"));
+				$this.removeAttr("aria-live");
 				break;
 			case 2:
 				$this.toggleClass("sapMFlip", false).toggleClass("sapMLoading", true);
 				this._oBusyIndicator.setVisible(true);
 				$text.html(this.oRb.getText("PULL2REFRESH_LOADING"));
+				$this.attr("aria-live", "assertive");
 				$this.find(".sapMPullDownInfo").html(this._bTouchMode ? this.oRb.getText("PULL2REFRESH_LOADING_LONG") : "");
 				break;
 		}
@@ -240,7 +243,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	PullToRefresh.prototype.getCustomIconImage = function(){
 		var mProperties = {
 			src : this.getCustomIcon(),
-			densityAware : this.getIconDensityAware()
+			densityAware : this.getIconDensityAware(),
+			useIconTooltip : false
 		};
 		var aCssClasses = ['sapMPullDownCIImg'];
 

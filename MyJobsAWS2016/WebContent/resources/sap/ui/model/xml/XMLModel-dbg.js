@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -13,8 +13,8 @@
  */
 
 // Provides the XML object based model implementation
-sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', './XMLListBinding', './XMLPropertyBinding', './XMLTreeBinding', 'jquery.sap.xml'],
-	function(jQuery, ClientModel, XMLListBinding, XMLPropertyBinding, XMLTreeBinding/* , jQuerySap */) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Context', './XMLListBinding', './XMLPropertyBinding', './XMLTreeBinding', 'jquery.sap.xml'],
+	function(jQuery, ClientModel, Context, XMLListBinding, XMLPropertyBinding, XMLTreeBinding/* , jQuerySap */) {
 	"use strict";
 
 
@@ -24,10 +24,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', './XMLListBindin
 	 * @class
 	 * Model implementation for XML format
 	 *
-	 * @extends sap.ui.model.Model
+	 * @extends sap.ui.model.ClientModel
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @param {object} oData either the URL where to load the XML from or a XML
 	 * @constructor
@@ -178,8 +178,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', './XMLListBindin
 	/**
 	 * @see sap.ui.model.Model.prototype.bindTree
 	 */
-	XMLModel.prototype.bindTree = function(sPath, oContext, aFilters, mParameters) {
-		var oBinding = new XMLTreeBinding(this, sPath, oContext, aFilters, mParameters);
+	XMLModel.prototype.bindTree = function(sPath, oContext, aFilters, mParameters, aSorters) {
+		var oBinding = new XMLTreeBinding(this, sPath, oContext, aFilters, mParameters, aSorters);
 		return oBinding;
 	};
 
@@ -272,7 +272,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', './XMLListBindin
 			return null;
 		}
 		var oNode = this.isLegacySyntax() ? [oRootNode] : [];
-		if (oContext instanceof sap.ui.model.Context) {
+		if (oContext instanceof Context) {
 			oNode = this._getObject(oContext.getPath());
 		} else if (oContext) {
 			oNode = [oContext];
@@ -432,4 +432,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', './XMLListBindin
 
 	return XMLModel;
 
-}, /* bExport= */ true);
+});

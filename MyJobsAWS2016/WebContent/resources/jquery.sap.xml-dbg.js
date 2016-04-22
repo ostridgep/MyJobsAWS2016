@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -72,7 +72,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		}
 		return sXMLString;
 	};
-	
+
 	jQuery.sap.isEqualNode = function(oNode1, oNode2) {
 		if (oNode1 === oNode2) {
 			return true;
@@ -150,8 +150,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			return oDocument.parseError;
 		}
 
-		// Firefox
-		if (!!Device.browser.firefox && oDocument && oDocument.documentElement
+		// Firefox or Edge
+		if ((!!Device.browser.firefox  || !!Device.browser.edge) && oDocument && oDocument.documentElement
 				&& oDocument.documentElement.tagName == "parsererror") {
 
 			var sErrorText = oDocument.documentElement.firstChild.nodeValue, rParserError = /XML Parsing Error: (.*)\nLocation: (.*)\nLine Number (\d+), Column (\d+):(.*)/;
@@ -196,4 +196,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
+});

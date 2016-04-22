@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides the base implementation for all model implementations
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/Object'],
-	function(jQuery, BaseObject) {
+sap.ui.define(['sap/ui/base/Object'],
+	function(BaseObject) {
 	"use strict";
 
 
@@ -20,19 +20,19 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Object'],
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.model.Type
 	 */
 	var Type = BaseObject.extend("sap.ui.model.Type", /** @lends sap.ui.model.Type.prototype */ {
-		
+
 		constructor : function () {
 			BaseObject.apply(this, arguments);
 			this.sName = "Type";
 		},
-	
+
 		metadata : {
 			"abstract" : true,
 			publicMethods : [
@@ -40,10 +40,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Object'],
 			"getName"
 		  ]
 		}
-		
+
 	});
-	
-	
+
+
 	/**
 	 * Returns the name of this type.
 	 *
@@ -56,4 +56,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/Object'],
 
 	return Type;
 
-}, /* bExport= */ true);
+});

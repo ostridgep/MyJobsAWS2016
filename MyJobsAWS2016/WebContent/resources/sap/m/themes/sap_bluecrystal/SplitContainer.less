@@ -1,28 +1,26 @@
 /* ============================================= */
-/* CSS for control sap.m/SplitContainer.control        */
+/* CSS for control sap.m/SplitContainer.control  */
 /* BlueCrystal theme                             */
 /* ============================================= */
 
 .sapMSplitContainerMaster {
-	background-color: @sapUiSplitContainerMasterBG;
+	background-color: lighten(@sapUiBaseBG, 5);
 }
 
 /* separator line over the content of the master page */
-
-.sapMSplitContainerMaster:not(.sapMSplitContainerMasterVisible):after{
+.sapMSplitContainerMaster:after{
 	content: "";
 	position: absolute;
 	width: 0px;
 	right: 0px;
 	height: 100%;
 	bottom: 0;
-	border-right: 1px solid @sapUiLightBorder;
+	border-right: 1px solid @sapUiPageHeaderBorderColor;
 	z-index: 5;
 }
 
 /* 4px border for the branding bar */
-
-.sapMSplitContainerMaster:not(.sapMSplitContainerMasterVisible):before{
+.sapMSplitContainerMaster:before{
 	content: "";
 	position: absolute;
 	width: 0px;
@@ -32,17 +30,28 @@
 	border-right: 1px solid @sapUiBrand;
 	z-index: 6;
 }
-.sapUiUfdShell .sapMSplitContainerMaster:not(.sapMSplitContainerMasterVisible):before {
+
+/* reset the separator and branding bar when master is shown in an overlay */
+.sapMSplitContainerShowHide.sapMSplitContainerPortrait,
+.sapMSplitContainerHideMode {
+	> .sapMSplitContainerMaster:after,
+	> .sapMSplitcontainerMaster:before {
+		display: none;
+	}
+}
+
+.sapUiUfdShell .sapMSplitContainerMaster:before,
+.sapUshellShell .sapMSplitContainerMaster:before {
 	display: none;
 }
 
-.sapMPopoverCont .sapMSplitContainerMaster:not(.sapMSplitContainerMasterVisible):before{
+.sapMPopoverCont .sapMSplitContainerMaster:before{
 	display: none; /* do not show in a popover */
 }
 
 @media (min-height: @sapMShellMinHeightForHeader) {
 	/* Shell draws its own branding bar */
-	.sap-desktop .sapMShell .sapMSplitContainerMaster:not(.sapMSplitContainerMasterVisible):before{
+	.sap-desktop .sapMShell .sapMSplitContainerMaster:before{
 		display: none;
 	}
 }
@@ -65,10 +74,8 @@
 
 .sapMSplitContainerPortrait.sapMSplitContainerShowHide > .sapMSplitContainerMaster,
 .sapMSplitContainerHideMode > .sapMSplitContainerMaster {
-	box-shadow: @sapUiSplitContainerMasterShadow;
-	-webkit-box-shadow: @sapUiSplitContainerMasterShadow;
-	-moz-box-shadow: @sapUiSplitContainerMasterShadow;
-	border-right: @sapUiSplitContainerMasterBorder;
+	box-shadow: fade(@sapUiDarkShadowTint, 15);
+	border-right: @sapUiPageHeaderBorderColor;
 	background-clip: padding-box;
 	-webkit-background-clip: padding-box;
 	-ms-background-clip: padding-box;

@@ -1,18 +1,13 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-/*global URI*/// declare unusual global vars for JSLint/SAPUI5 validation
-
 // Provides class sap.ui.core.ThemeCheck
-sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jquery.sap.script'],
-	function(jQuery, Device, BaseObject/* , jQuerySap */) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'sap/ui/thirdparty/URI', 'jquery.sap.script'],
+	function(jQuery, Device, BaseObject, URI/* , jQuerySap */) {
 	"use strict";
-
-
-
 
 
 	sap.ui._maxThemeCheckCycles = 100;
@@ -75,16 +70,18 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 		var $Style = jQuery(oStyle);
 
 		try {
-			var res = !oStyle || !!((oStyle.sheet && oStyle.sheet.cssRules.length > 0) ||
-							!!(oStyle.styleSheet && oStyle.styleSheet.cssText.length > 0) ||
+			var res = !oStyle || !!((oStyle.sheet && oStyle.sheet.href === oStyle.href && oStyle.sheet.cssRules && oStyle.sheet.cssRules.length > 0) ||
+							!!(oStyle.styleSheet && oStyle.styleSheet.href === oStyle.href && oStyle.styleSheet.cssText && oStyle.styleSheet.cssText.length > 0) ||
 							!!(oStyle.innerHTML && oStyle.innerHTML.length > 0));
-			var res2 = $Style.attr("sap-ui-ready");
+			var res2 = $Style.attr("data-sap-ui-ready");
 			res2 = !!(res2 === "true" || res2 === "false");
 			if (bLog) {
 				jQuery.sap.log.debug("ThemeCheck: Check styles '" + $Style.attr("id") + "': " + res + "/" + res2 + "/" + !!oStyle);
 			}
 			return res || res2;
-		} catch (e) {}
+		} catch (e) {
+			//escape eslint check for empty block
+		}
 
 		if (bLog) {
 			jQuery.sap.log.debug("ThemeCheck: Error during check styles '" + $Style.attr("id") + "': false/false/" + !!oStyle);
@@ -127,7 +124,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 					// IE9 and below can only handle up to 4095 rules and therefore additional
 					// css files have to be included
 					if (iRules === 4095) {
-						var iNumber = parseInt(jQuery(oStyle).attr("sap-ui-css-count"), 10);
+						var iNumber = parseInt(jQuery(oStyle).attr("data-sap-ui-css-count"), 10);
 						if (isNaN(iNumber)) {
 							iNumber = 1; // first additional stylesheet
 						} else {
@@ -168,11 +165,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 							oLink.id = sLinkId;
 
 							jQuery(oLink)
-							.attr("sap-ui-css-count", iNumber)
+							.attr("data-sap-ui-css-count", iNumber)
 							.load(function() {
-								jQuery(oLink).attr("sap-ui-ready", "true");
+								jQuery(oLink).attr("data-sap-ui-ready", "true");
 							}).error(function() {
-								jQuery(oLink).attr("sap-ui-ready", "false");
+								jQuery(oLink).attr("data-sap-ui-ready", "false");
 							});
 
 							oStyle.parentNode.insertBefore(oLink, oStyle.nextSibling);
@@ -185,8 +182,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 				 */
 				if (oThemeCheck._themeCheckedForCustom != sThemeName) {
 					if (checkCustom(oThemeCheck, lib)) {
-							//load custom css available at sap/ui/core/themename/library.css
-						jQuery.sap.includeStyleSheet(sPath, oThemeCheck._CUSTOMID);
+						// load custom css available at sap/ui/core/themename/custom.css
+						var sCustomCssPath = sPath;
+
+						// check for configured query parameters and add them if available
+						var sLibCssQueryParams = oThemeCheck._oCore._getLibraryCssQueryParams(mLibs["sap.ui.core"]);
+						if (sLibCssQueryParams) {
+							sCustomCssPath += sLibCssQueryParams;
+						}
+
+						jQuery.sap.includeStyleSheet(sCustomCssPath, oThemeCheck._CUSTOMID);
 						oThemeCheck._customCSSAdded = true;
 						jQuery.sap.log.warning("ThemeCheck delivered custom CSS needs to be loaded, Theme not yet applied");
 						oThemeCheck._themeCheckedForCustom = sThemeName;
@@ -225,10 +230,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 			aRules = [];
 		if (jQuery.sap.domById("sap-ui-theme-" + lib)) {
 			var cssFile = jQuery.sap.domById("sap-ui-theme-" + lib);
-			if (cssFile.sheet) {
+			if (cssFile.sheet && cssFile.sheet.cssRules) {
 				aRules = cssFile.sheet.cssRules;
-			} else if (cssFile.styleSheet) {
-				//we're in an old IE version
+			} else if (cssFile.styleSheet && cssFile.styleSheet.rules) {
+				// we're in an old IE version
 				aRules = cssFile.styleSheet.rules;
 			}
 		}
@@ -265,8 +270,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'sap/ui/base/Object', 'jque
 	}
 
 
-
-
 	return ThemeCheck;
 
-}, /* bExport= */ true);
+});

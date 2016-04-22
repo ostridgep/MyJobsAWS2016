@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var HorizontalDividerRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.fw.RenderManager}.
 	 *
@@ -50,7 +50,7 @@ sap.ui.define(['jquery.sap.global'],
 		rm.writeClasses();
 		rm.write("/>");
 	};
-	
+
 
 	return HorizontalDividerRenderer;
 

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer'],
@@ -23,10 +23,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 	DatePickerRenderer.addOuterClasses = function(oRm, oDP) {
 
 		oRm.addClass("sapMDP");
-		oRm.addClass("sapMInputVH"); // just reuse styling of value help icon
-
-		if (sap.ui.Device.browser.internet_explorer && sap.ui.Device.browser.version < 11) {
-			oRm.addClass("sapMInputIE9");
+		if (oDP.getEnabled() && oDP.getEditable()) {
+			oRm.addClass("sapMInputVH"); // just reuse styling of value help icon
 		}
 
 	};
@@ -45,25 +43,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 
 			mAttributes["id"] = oDP.getId() + "-icon";
 			mAttributes["tabindex"] = "-1"; // to get focus events on it, needed for popup autoclose handling
+			mAttributes["title"] = null;
 			oRm.write('<div class="sapMInputValHelp">');
 			oRm.writeIcon("sap-icon://appointment-2", aClasses, mAttributes);
 			oRm.write("</div>");
 		}
-
-		// invisible span with description for keyboard navigation
-		var rb = sap.ui.getCore().getLibraryResourceBundle("sap.ui.unified");
-			// ResourceBundle always returns the key if the text is not found
-		// ResourceBundle always returns the key if the text is not found
-		var sText = rb.getText("DATEPICKER_DATE_TYPE");
-
-		var sTooltip = sap.ui.core.ValueStateSupport.enrichTooltip(oDP, oDP.getTooltip_AsString());
-		if (sTooltip) {
-			// add tooltip to description because it is not read by JAWS from title-attribute if a label is assigned
-			sText = sText + ". " + sTooltip;
-		}
-		oRm.write('<SPAN id="' + oDP.getId() + '-Descr" style="visibility: hidden; display: none;">');
-		oRm.writeEscaped(sText);
-		oRm.write('</SPAN>');
 
 	};
 
@@ -94,21 +78,34 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 
 	};
 
-	DatePickerRenderer.writeAccessibilityState = function(oRm, oDP) {
+	DatePickerRenderer.getAriaRole = function(oDP) {
 
-		var mProps = {
-			role: "combobox",
-			multiline: false,
-			autocomplete: "none",
-			haspopup: true,
-			owns: oDP.getId() + "-cal",
-			describedby: {value: oDP.getId() + "-Descr", append: true}};
+		return "combobox";
 
-		if (oDP.getValueState() == sap.ui.core.ValueState.Error) {
-			mProps["invalid"] = true;
+	};
+
+	DatePickerRenderer.getDescribedByAnnouncement = function(oDP) {
+
+		var sBaseAnnouncement = InputBaseRenderer.getDescribedByAnnouncement.apply(this, arguments);
+		return sap.ui.getCore().getLibraryResourceBundle("sap.m").getText("DATEPICKER_DATE_TYPE") + " " + sBaseAnnouncement;
+
+	};
+
+	DatePickerRenderer.getAccessibilityState = function(oDP) {
+
+		var mAccessibilityState = InputBaseRenderer.getAccessibilityState.apply(this, arguments);
+
+		mAccessibilityState["multiline"] = false;
+		mAccessibilityState["autocomplete"] = "none";
+		mAccessibilityState["haspopup"] = true;
+		mAccessibilityState["owns"] = oDP.getId() + "-cal";
+
+		if (oDP._bMobile && oDP.getEnabled() && oDP.getEditable()) {
+			// if on mobile device readonly property is set, but should not be announced
+			mAccessibilityState["readonly"] = false;
 		}
 
-		oRm.writeAccessibilityState(oDP, mProps);
+		return mAccessibilityState;
 
 	};
 

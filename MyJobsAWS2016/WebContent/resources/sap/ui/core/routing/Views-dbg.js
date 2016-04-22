@@ -1,10 +1,10 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UIComponent'],
-	function($, EventProvider, UIComponent) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UIComponent', 'sap/ui/core/mvc/View', 'sap/ui/core/routing/async/Views', 'sap/ui/core/routing/sync/Views'],
+	function($, EventProvider, UIComponent, View, asyncViews, syncViews) {
 		"use strict";
 
 		/**
@@ -19,9 +19,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 		 * @since 1.28.1
 		 * @param {object} oOptions
 		 * @param {sap.ui.core.UIComponent} [oOptions.component] the owner of all the views that will be created by this Instance.
+		 * @param {boolean} [oOptions.async=false] @since 1.34 Whether the views which are created through this Views are loaded asyncly. This option can be set only when the Views
+		 * is used standalone without the involvement of a Router. Otherwise the async option is inherited from the Router.
 		 * @alias sap.ui.core.routing.Views
 		 */
-		return EventProvider.extend("sap.ui.core.routing.Views", /** @lends sap.ui.core.routing.Views.prototype */ {
+		var Views = EventProvider.extend("sap.ui.core.routing.Views", /** @lends sap.ui.core.routing.Views.prototype */ {
 
 			constructor : function (oOptions) {
 				if (!oOptions) {
@@ -36,6 +38,24 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 				}
 
 				EventProvider.apply(this, arguments);
+
+				// temporarily: for checking the url param
+				function checkUrl() {
+					if (jQuery.sap.getUriParameters().get("sap-ui-xx-asyncRouting") === "true") {
+						jQuery.sap.log.warning("Activation of async view loading in routing via url parameter is only temporarily supported and may be removed soon", "Views");
+						return true;
+					}
+					return false;
+				}
+
+				// set the default view loading mode to sync for compatibility reasons
+				// temporarily: set the default value depending on the url parameter "sap-ui-xx-asyncRouting"
+				var async = (oOptions.async === undefined) ? checkUrl() : oOptions.async;
+				var ViewsStub = async ? asyncViews : syncViews;
+
+				for (var fn in ViewsStub) {
+					this[fn] = ViewsStub[fn];
+				}
 			},
 
 			metadata : {
@@ -51,20 +71,22 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 			 * So you can retrieve the view later by calling the {@link sap.ui.core.UIComponent#byId} function of the UIComponent.
 			 *
 			 * @param {string} oOptions.viewName If you do not use setView please see {@link sap.ui.view} for the documentation. This is used as a key in the cache of the Views instance. If you want to retrieve a view that has been given an alternative name in {@link #setView} you need to provide the same name here and you can skip all the other viewOptions.
-			 * @return {Window.Promise} A promise that is resolved when the view is loaded. The view instance will be passed to the promise.
+			 * @return {Window.Promise} A promise that is resolved when the view is loaded {@link sap.ui.core.mvc.View#loaded}. The view instance will be passed to the promise.
 			 */
 			getView : function (oOptions) {
-				return new Promise(function (fnSuccess) {
-					fnSuccess(this._getView(oOptions));
-				}.bind(this));
+				return this._getView(oOptions).loaded();
 			},
 
 			/**
 			 * Adds or overwrites a view in the cache of the Views instance. The viewName serves as a key for caching.
 			 *
+			 * If the second parameter is set to null or undefined, the previous cache view under the same name isn't managed by the Views instance.
+			 * The lifecycle (for example the destroy of the view) of the view instance should be maintained by additional code.
+			 *
+			 *
 			 * @param {string} sViewName Name of the view, may differ from the actual viewName of the oView parameter provided, since you can retrieve this view per {@link getView}.
-			 * @param {sap.ui.core.mvc.View} oView the view instance
-			 * @returns {sap.ui.core.routing.Views} this for chaining.
+			 * @param {sap.ui.core.mvc.View|null|undefined} oView the view instance
+			 * @return {sap.ui.core.routing.Views} this for chaining.
 			 */
 			setView : function (sViewName, oView) {
 				this._checkViewName(sViewName);
@@ -84,7 +106,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 				EventProvider.prototype.destroy.apply(this);
 
 				for (sProperty in this._oViews) {
-					if (this._oViews.hasOwnProperty(sProperty)) {
+					if (this._oViews.hasOwnProperty(sProperty) && this._oViews[sProperty]) {
 						this._oViews[sProperty].destroy();
 					}
 				}
@@ -168,43 +190,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 			/**
 			 * hook for the deprecated property viewId on the route, will not prefix the id with the component
 			 *
+			 * @name sap.ui.core.routing.Views#_getViewWithGlobalId
 			 * @returns {*}
 			 * @private
 			 */
-			_getViewWithGlobalId : function (oOptions) {
-				function fnCreateView() {
-					return sap.ui.view(oOptions);
-				}
-
-				if (!oOptions) {
-					$.sap.log.error("the oOptions parameter of getView is mandatory", this);
-				}
-
-				var oView,
-					sViewName = oOptions.viewName;
-
-				this._checkViewName(sViewName);
-				oView = this._oViews[sViewName];
-
-				if (oView) {
-					return oView;
-				}
-
-				if (this._oComponent) {
-					oView = this._oComponent.runAsOwner(fnCreateView);
-				} else {
-					oView = fnCreateView();
-				}
-
-				this._oViews[sViewName] = oView;
-
-				this.fireCreated({
-					view: oView,
-					viewOptions: oOptions
-				});
-
-				return oView;
-			},
 
 			/**
 			 * @param {string} sViewName logs an error if it is empty or undefined
@@ -219,4 +208,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/UI
 			}
 		});
 
-	}, /* bExport= */ true);
+		return Views;
+
+	});

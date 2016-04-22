@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,11 +10,11 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Title'],
 	"use strict";
 
 
-	
+
 	/**
 	 * Constructor for a new Title.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
@@ -22,23 +22,23 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Title'],
 	 * @extends sap.ui.core.Title
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
-	 * @deprecated Since version 1.16.0. 
+	 * @deprecated Since version 1.16.0.
 	 * moved to sap.ui.core library. Please use this one.
 	 * @alias sap.ui.commons.Title
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	var Title = Title1.extend("sap.ui.commons.Title", /** @lends sap.ui.commons.Title.prototype */ { metadata : {
-	
+
 		deprecated : true,
 		library : "sap.ui.commons"
 	}});
-	
+
 	/* Overwrite to have right "since" in there */
-	
+
 	/**
 	* Getter for property <code>level</code>.
 	* Defines the level of the title. If set to auto the level of the title is chosen by the control rendering the title.

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var MessageRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 * A "Message" renders with:
@@ -33,14 +33,14 @@ sap.ui.define(['jquery.sap.global'],
 	MessageRenderer.render = function(oRenderManager, oControl){
 		// Convenience variables
 		var rm = oRenderManager;
-	
+
 		// Opening the outer container:
 		// tabindex="0": Message must be focusable for accessibility?!?
 		rm.write('<div class="sapUiMsg" tabindex="0">');
-	
+
 		// Message icon:
 		rm.write('<div class="sapUiMsgIcon sapUiMsgIcon' + oControl.getType() + '"></div>');
-	
+
 		// Possible "Details" pointer, with its trailing "-" separator:
 		if ( typeof oControl.fnCallBack === "function" ) {
 			rm.write('<span class="sapUiMsgLnk">');
@@ -54,12 +54,12 @@ sap.ui.define(['jquery.sap.global'],
 			rm.renderControl(oControl.oLink);
 			rm.write(' - </span>');
 		}
-	
+
 		// ShortText:
 		rm.write('<span class="sapUiMsgTxt">');
 		rm.writeEscaped(oControl.getText());
 		rm.write('</span>');
-	
+
 		// Closing the outer container:
 		rm.write('</div>');
 	};

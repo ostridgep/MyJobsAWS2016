@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -12,12 +12,12 @@ sap.ui.define(['jquery.sap.global', './ButtonRenderer', 'sap/ui/core/Renderer'],
 
 	/**
 	 * ToggleButton renderer.
-	 * @author D040134
+	 * @author SAP SE
 	 * @namespace
 	 */
-	
+
 	var ToggleButtonRenderer = Renderer.extend(ButtonRenderer);
-	
+
 	/**
 	 * Hint: "renderButtonAttributes" is a reserved/hard-coded Button extending function!
 	 *       It is used to allow extensions to display content after the actual button content.
@@ -36,29 +36,29 @@ sap.ui.define(['jquery.sap.global', './ButtonRenderer', 'sap/ui/core/Renderer'],
 			rm.writeAttribute('aria-pressed', false);
 		}
 	};
-	
-	
+
+
 	/**
 	 * Function called by ToggleButton control to enable Pressed state.
 	 */
 	ToggleButtonRenderer.onactivePressed = function(oToggleButton) {
 		oToggleButton.$().addClass("sapUiToggleBtnPressed").attr('aria-pressed', true);
 	};
-	
+
 	/**
 	 * Function called by button control to disable Pressed state.
 	 */
 	ToggleButtonRenderer.ondeactivePressed = function(oToggleButton) {
 		oToggleButton.$().removeClass("sapUiToggleBtnPressed").attr('aria-pressed', false);
 	};
-	
+
 	/**
 	 * Function called by button control to update image based on state.
 	 */
 	ToggleButtonRenderer.updateImage = function(oToggleButton) {
-		oToggleButton.$("img").attr('src',this._getIconForState(oToggleButton, "base"));
+		oToggleButton.$("img").attr('src', this._getIconForState(oToggleButton, "base"));
 	};
-	
+
 	/**
 	 * Returns the icon URI for the given button state
 	 * @private
@@ -87,7 +87,7 @@ sap.ui.define(['jquery.sap.global', './ButtonRenderer', 'sap/ui/core/Renderer'],
 		}
 		return oButton.getIcon();
 	};
-	
+
 
 	return ToggleButtonRenderer;
 

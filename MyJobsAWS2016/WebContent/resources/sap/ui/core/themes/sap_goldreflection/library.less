@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -17,6 +17,10 @@
 	background-color: @sapUiBlackBG;
 	opacity: 0.4;
 	filter: alpha(opacity=40);
+}
+
+#sapUiBusyIndicator .sapUiLocalBusyIndicator {
+	display: none !important;
 }
 /* END "shared.less" */
 
@@ -64,7 +68,7 @@ html[data-sap-ui-browser*="cr"] .sapUiBody ::-webkit-scrollbar {
 
 html[data-sap-ui-browser*="sf"] .sapUiBody ::-webkit-scrollbar-thumb,
 html[data-sap-ui-browser*="cr"] .sapUiBody ::-webkit-scrollbar-thumb {
-	background-color: @sapUiScrollbarTrack; 
+	background-color: @sapUiScrollbarTrack;
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-clip: content-box;
@@ -221,8 +225,6 @@ html[data-sap-ui-browser^=ie] .sapUiBusy {
 /* END "BusyIndicator.less" */
 
 /* START "Shadow.less" */
-html[data-sap-ui-browser=ie8] .sapUiShd {
-	outline: 2px solid @sapUiDarkBorder;
-}
+
 /* END "Shadow.less" */
 

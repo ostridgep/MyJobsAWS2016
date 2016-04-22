@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides the base class for all controls and UI elements.
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './ElementMetadata', 'sap/ui/model/SimpleType', 'jquery.sap.strings'],
-	function(jQuery, ManagedObject, Core, ElementMetadata, SimpleType/* , jQuerySap */) {
+sap.ui.define(['jquery.sap.global', '../base/Object', '../base/ManagedObject', './ElementMetadata', 'jquery.sap.strings', 'jquery.sap.trace'],
+	function(jQuery, BaseObject, ManagedObject, ElementMetadata/* , jQuerySap */) {
 	"use strict";
 
 	/**
@@ -54,7 +54,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 * @class Base Class for Elements.
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @public
 	 * @alias sap.ui.core.Element
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
@@ -243,7 +243,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 * <li>events: map from event names to event names
 	 * </ul>
 	 *
-	 * @see sap.ui.core.Object.defineClass
+	 * @see sap.ui.base.Object.defineClass
 	 *
 	 * @param {string} sClassName name of the class to build the metadata for
 	 * @param {object} oStaticInfo static information used to build the metadata
@@ -255,7 +255,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 */
 	Element.defineClass = function(sClassName, oStaticInfo, fnMetaImpl) {
 		// create and attach metadata but with an Element specific implementation
-		return sap.ui.base.Object.defineClass(sClassName, oStaticInfo, fnMetaImpl || ElementMetadata);
+		return BaseObject.defineClass(sClassName, oStaticInfo, fnMetaImpl || ElementMetadata);
 	};
 
 	/**
@@ -267,36 +267,41 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	};
 
 	/**
-	 * Handles the given browser event.
+	 * Dispatches the given event, usually a browser event or a UI5 pseudo event.
 	 * @private
 	 */
 	Element.prototype._handleEvent = function (oEvent) {
-		var sHandlerName = "on" + oEvent.type;
-			this._callEventHandles(this.aBeforeDelegates.slice(0), sHandlerName, oEvent, true);
-			this._callEventHandles([this], sHandlerName, oEvent);
-			this._callEventHandles(this.aDelegates.slice(0), sHandlerName, oEvent, true);
-	};
 
-	/**
-	 * Calls event handler of the given event handles with the given browser event.
-	 * @private
-	 */
-	Element.prototype._callEventHandles = function (aHandles, sHandlerName, oEvent, bDelegateHolder) {
-		if (aHandles.length > 0) {
-			for (var i = 0; i < aHandles.length; i++) {
-				if (oEvent.isImmediateHandlerPropagationStopped()) {
-					break;
-				}
-				var oHandle = bDelegateHolder ? aHandles[i].oDelegate : aHandles[i];
-				var oThis = (bDelegateHolder && aHandles[i].vThis) ? aHandles[i].vThis : oHandle;
-				if (oThis === true) { // special case, means the control should be the context
-					oThis = this;
-				}
-				if (oHandle[sHandlerName]) {
-					oHandle[sHandlerName].call(oThis, oEvent);
+		var that = this,
+			sHandlerName = "on" + oEvent.type;
+
+		function each(aDelegates) {
+			var i,l,oDelegate;
+			if ( aDelegates && (l = aDelegates.length) > 0 ) {
+				// To be robust against concurrent modifications of the delegates list, we loop over a copy.
+				// When there is only a single entry, the loop is safe without a copy (length is determined only once!)
+				aDelegates = l === 1 ? aDelegates : aDelegates.slice();
+				for (i = 0; i < l; i++ ) {
+					if (oEvent.isImmediateHandlerPropagationStopped()) {
+						return;
+					}
+					oDelegate = aDelegates[i].oDelegate;
+					if (oDelegate[sHandlerName]) {
+						oDelegate[sHandlerName].call(aDelegates[i].vThis === true ? that : aDelegates[i].vThis || oDelegate, oEvent);
+					}
 				}
 			}
 		}
+
+		each(this.aBeforeDelegates);
+		if ( oEvent.isImmediateHandlerPropagationStopped() ) {
+			return;
+		}
+		if ( this[sHandlerName] ) {
+			this[sHandlerName](oEvent);
+		}
+		each(this.aDelegates);
+
 	};
 
 
@@ -550,7 +555,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 		ManagedObject.prototype.destroy.call(this, bSuppressInvalidate);
 
 		// remove this control from DOM, e.g. if there is no parent (e.g. Dialog or already removed control) or this.sParentAggregationName is not properly set
-		this.$().remove();
+		if (bSuppressInvalidate !== "KeepDom") {
+			this.$().remove();
+		} else {
+			jQuery.sap.log.debug("DOM is not removed on destroy of " + this);
+		}
 	};
 
 
@@ -563,14 +572,22 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 * @return {sap.ui.core.Element} Returns <code>this</code> to allow method chaining
 	 * @protected
 	 */
-	Element.prototype.fireEvent = function(sEventId, mParameters) {
-		// clone 'arguments' and modify clone to be strict mode compatible
-		var aArgs = Array.prototype.slice.apply(arguments);
-		// TODO 'id' is somewhat redundant to getSource(), but it is commonly used - fade out with next major release?
-		aArgs[1] = mParameters = mParameters || {};
+	Element.prototype.fireEvent = function(sEventId, mParameters, bAllowPreventDefault, bEnableEventBubbling) {
+		if (this.hasListeners(sEventId)) {
+			jQuery.sap.interaction.notifyStepStart(this);
+		}
+
+		// get optional parameters right
+		if (typeof mParameters === 'boolean') {
+			bEnableEventBubbling = bAllowPreventDefault;
+			bAllowPreventDefault = mParameters;
+			mParameters = null;
+		}
+
+		mParameters = mParameters || {};
 		mParameters.id = mParameters.id || this.getId();
-		// 'aArgs' is necessary, as the EventProvider.fireEvent signature has more parameters
-		return sap.ui.base.EventProvider.prototype.fireEvent.apply(this, aArgs);
+
+		return ManagedObject.prototype.fireEvent.call(this, sEventId, mParameters, bAllowPreventDefault, bEnableEventBubbling);
 	};
 
 
@@ -626,14 +643,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 * @private
 	 */
 	Element.prototype.removeDelegate = function (oDelegate) {
-		for (var i = 0;i < this.aDelegates.length;i++) {
+		var i;
+		for (i = 0; i < this.aDelegates.length; i++) {
 			if (this.aDelegates[i].oDelegate == oDelegate) {
-				this.aDelegates.splice(i,1);
+				this.aDelegates.splice(i, 1);
+				i--; // One element removed means the next element now has the index of the current one
 			}
 		}
-		for (var i = 0;i < this.aBeforeDelegates.length;i++) {
+		for (i = 0; i < this.aBeforeDelegates.length; i++) {
 			if (this.aBeforeDelegates[i].oDelegate == oDelegate) {
-				this.aBeforeDelegates.splice(i,1);
+				this.aBeforeDelegates.splice(i, 1);
+				i--; // One element removed means the next element now has the index of the current one
 			}
 		}
 		return this;
@@ -751,13 +771,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 *
 	 * If a new tooltip is set, any previously set tooltip is deactivated.
 	 *
-	 * @param {string|sap.ui.core.TooltipBase} oTooltip.
+	 * @param {string|sap.ui.core.TooltipBase} vTooltip
 	 * @public
 	 */
-	Element.prototype.setTooltip = function(oTooltip) {
+	Element.prototype.setTooltip = function(vTooltip) {
 
-		this._refreshTooltipBaseDelegate(oTooltip);
-		this.setAggregation("tooltip", oTooltip);
+		this._refreshTooltipBaseDelegate(vTooltip);
+		this.setAggregation("tooltip", vTooltip);
 
 		return this;
 	};
@@ -1023,7 +1043,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	};
 
 	/**
-	 * Allows the parent of a control to enhance the aria information during rendering
+	 * Allows the parent of a control to enhance the aria information during rendering.
 	 *
 	 * This function is called by the RenderManager's writeAccessibilityState method
 	 * for the parent of the currently rendered control - if the parent implements it.
@@ -1042,8 +1062,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 	 * to resolve bound properties or aggregations of the object itself and all of its children
 	 * relatively to the given path.
 	 * If a relative binding path is used, this will be applied whenever the parent context changes.
-	 * @param {string} sPath the binding path
-	 * @param {object} [mParameters] map of additional parameters for this binding
+	 * @param {string|object} vPath the binding path or an object with more detailed binding options
+	 * @param {string} vPath.path the binding path
+	 * @param {object} [vPath.parameters] map of additional parameters for this binding
+	 * @param {string} [vPath.model] name of the model
+	 * @param {object} [vPath.events] map of event listeners for the binding events
+	 * @param {object} [mParameters] map of additional parameters for this binding (only taken into account when vPath is a string)
 	 *
 	 * @return {sap.ui.base.ManagedObject} reference to the instance itself
 	 * @public
@@ -1075,6 +1099,27 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './Core', './El
 		return this.getObjectBinding(sModelName);
 	};
 
+	/*
+	 * If Control has no FieldGroupIds use the one of the parents.
+	 */
+	Element.prototype._getFieldGroupIds = function() {
+
+		var aFieldGroupIds;
+		if (this.getMetadata().hasProperty("fieldGroupIds")) {
+			aFieldGroupIds = this.getFieldGroupIds();
+		}
+
+		if (!aFieldGroupIds || aFieldGroupIds.length == 0) {
+			var oParent = this.getParent();
+			if (oParent && oParent._getFieldGroupIds) {
+				return oParent._getFieldGroupIds();
+			}
+		}
+
+		return aFieldGroupIds;
+
+	};
+
 	return Element;
 
-}, /* bExport= */ true);
+});

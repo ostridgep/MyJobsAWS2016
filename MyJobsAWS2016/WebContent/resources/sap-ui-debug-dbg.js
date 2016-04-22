@@ -1,20 +1,15 @@
-jQuery.sap.registerPreloadedModules({
-"name":"sap-ui-debug-preload",
-"version":"2.0",
-"modules":{
-	"sap/ui/debug/ControlTree.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a tree of controls for the testsuite
-sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/EventProvider'],
-	function(jQuery, EventProvider) {
+sap.ui.predefine('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/EventProvider', 'sap/ui/core/Element', 'sap/ui/core/UIArea', './Highlighter'],
+	function(jQuery, EventProvider, Element, UIArea, Highlighter) {
 	"use strict";
 
 
-	
 	/**
 	 * Constructs the class <code>sap.ui.debug.ControlTree</code> and registers
 	 * to the <code>sap.ui.core.Core</code> for UI change events.
@@ -31,7 +26,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 	 * @class Control Tree used for the Debug Environment
 	 * @extends sap.ui.base.EventProvider
 	 * @author Martin Schaus, Frank Weigel
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @alias sap.ui.debug.ControlTree
 	 * @private
 	 */
@@ -43,8 +38,8 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			this.oCore = oCore;
 			this.oSelectedNode = null;
 			this.oParentDomRef = oParentDomRef;
-			this.oSelectionHighlighter = new sap.ui.debug.Highlighter("sap-ui-testsuite-SelectionHighlighter");
-			this.oHoverHighlighter = new sap.ui.debug.Highlighter("sap-ui-testsuite-HoverHighlighter", true, '#c8f', 1);
+			this.oSelectionHighlighter = new Highlighter("sap-ui-testsuite-SelectionHighlighter");
+			this.oHoverHighlighter = new Highlighter("sap-ui-testsuite-HoverHighlighter", true, '#c8f', 1);
 			var that = this;
 			jQuery(oParentDomRef).bind("click",function(evt) {
 				that.onclick(evt);
@@ -66,12 +61,12 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			this.sLinkUrl = this.sResourcePath + "sap/ui/debug/images/link.gif";
 		}
 	});
-	
+
 	/** events of the ControlTree */
 	ControlTree.M_EVENTS = {
 		SELECT : "SELECT"
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -80,7 +75,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		jQuery(document).unbind();
 		jQuery(this.oParentDomRef).unbind();
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -91,7 +86,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		}
 		this.oTimer = this.oWindow.jQuery.sap.delayedCall(0,this,"render");
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -105,14 +100,14 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			var oUIArea = oUIAreas[i],
 				oDomNode = this.createTreeNodeDomRef(oUIArea.getId(),0,"UIArea", this.sTestResourcePath + "sap/ui/core/images/controls/sap.ui.core.UIArea.gif");
 			oDomRef.appendChild(oDomNode);
-	
+
 			var aRootControls = oUIArea.getContent();
 			for (var i = 0, l = aRootControls.length; i < l; i++) {
 				this.renderNode(oDomRef,aRootControls[i],1);
 			}
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -135,7 +130,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		oDomNode.title = sType + " - " + sId;
 		return oDomNode;
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -159,7 +154,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		oParentRef.appendChild(oDomNode);
 		return oDomNode;
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -168,7 +163,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		if (!oControl) {
 			return;
 		}
-	
+
 		var oMetadata = oControl.getMetadata();
 		var sIcon = this.sTestResourcePath + oMetadata.getLibraryName().replace(/\./g, "/") + "/images/controls/" + oMetadata.getName() + ".gif";
 		var oDomNode = this.createTreeNodeDomRef(oControl.getId(),iLevel,oMetadata.getName(),sIcon);
@@ -181,11 +176,11 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 				if (oAggregation && oAggregation.length) {
 					for (var i = 0;i < oAggregation.length;i++) {
 						var o = oAggregation[i];
-						if (o  instanceof sap.ui.core.Element) {
+						if (o  instanceof Element) {
 							this.renderNode(oDomRef,oAggregation[i],iLevel + 1);
 						}
 					}
-				} else if (oAggregation instanceof sap.ui.core.Element) {
+				} else if (oAggregation instanceof Element) {
 					this.renderNode(oDomRef,oAggregation,iLevel + 1);
 				}
 			}
@@ -211,9 +206,9 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			oExpandImage.src = this.sMinusUrl;
 			oExpandImage.style.display = "";
 		}
-	
+
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -257,19 +252,19 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 				oSource.src = this.sMinusUrl;
 				oParent.setAttribute("sap-expanded","true");
 			}
-	
+
 		//} else if (oSource.getAttribute("sap-type") == "UIArea") {
-	
+
 		} else {
 			if (oSource.tagName != "SPAN") {
 				oSource = oSource.getElementsByTagName("SPAN")[0];
 			}
 			var oParent = oSource.parentNode,
 				sId = oParent.getAttribute("sap-id"),
-				oElement = this.oCore.getElementById(sId),
+				oElement = this.oCore.byId(sId),
 				sNodeId = oParent.getAttribute("sap-type") === "Link" ? "sap-debug-controltree-" + sId : oParent.id;
 			this.oSelectionHighlighter.hide();
-			if (oElement && oElement instanceof sap.ui.core.Element) {
+			if (oElement && oElement instanceof Element) {
 				this.oSelectionHighlighter.highlight(oElement.getDomRef());
 				this.oHoverHighlighter.hide();
 			}
@@ -277,7 +272,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			this.selectNode(sNodeId);
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -288,7 +283,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			this.oHoverHighlighter.highlight(this.getTargetDomRef(oSource.parentNode));
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -301,7 +296,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			}
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -320,10 +315,10 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		oSpan.style.backgroundColor = "#000066";
 		oSpan.style.color = "#FFFFFF";
 		this.sSelectedNodeId = sId;
-	
+
 		this.fireEvent(ControlTree.M_EVENTS.SELECT,{id:sId, controlId: sControlId});
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -338,7 +333,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 		oSpan.style.color = "#000000";
 		this.sSelectedNodeId = sId;
 	};
-	
+
 	/**
 	 * Tries to find the innermost DOM node in the source window that contains the
 	 * SAPUI5 element/UIArea identified by the given tree node.
@@ -354,21 +349,21 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 	ControlTree.prototype.getTargetDomRef = function(oTreeNodeDomRef) {
 		var sType = oTreeNodeDomRef.getAttribute("sap-type"),
 			sId = oTreeNodeDomRef.getAttribute("sap-id"),
-			oSomething = sType === "UIArea" ? this.oCore.getUIArea(sId) : this.oCore.getElementById(sId);
-	
-		while (oSomething && oSomething instanceof sap.ui.core.Element) {
+			oSomething = sType === "UIArea" ? this.oCore.getUIArea(sId) : this.oCore.byId(sId);
+
+		while (oSomething && oSomething instanceof Element) {
 			var oDomRef = oSomething.getDomRef();
 			if ( oDomRef ) {
 				return oDomRef;
 			}
 			oSomething = oSomething.getParent();
 		}
-	
-		if ( oSomething instanceof sap.ui.core.UIArea ) {
+
+		if ( oSomething instanceof UIArea ) {
 			return oSomething.getRootNode();
 		}
 	};
-	
+
 	/**
 	 * Enables an 'onhover' handler in the content window that allows to see control borders.
 	 * @private
@@ -379,7 +374,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			that.selectControlInTree(oEvt);
 		});
 	};
-	
+
 	ControlTree.prototype.selectControlInTree = function( oEvt ) {
 		if ( oEvt ) {
 		  if ( oEvt.ctrlKey && oEvt.shiftKey && !oEvt.altKey ) {
@@ -393,7 +388,7 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 			// this.selectControlInTreeByCtrlId(sId);
 				  this.oHoverHighlighter.hide();
 			 }
-	
+
 		  } else {
 			  this.oHoverHighlighter.hide();
 		  }
@@ -402,17 +397,16 @@ sap.ui.define('sap/ui/debug/ControlTree', ['jquery.sap.global', 'sap/ui/base/Eve
 
 	return ControlTree;
 
-}, /* bExport= */ true);
-},
-	"sap/ui/debug/DebugEnv.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // A core plugin that bundles debug features and connects with an embedding testsuite
-sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', './Highlighter', './LogViewer', './PropertyList'],
-	function(jQuery, ControlTree, Highlighter, LogViewer, PropertyList) {
+sap.ui.predefine('sap/ui/debug/DebugEnv', ['jquery.sap.global', 'sap/ui/base/Interface', './ControlTree', './LogViewer', './PropertyList'],
+	function(jQuery, Interface, ControlTree, LogViewer, PropertyList) {
 	"use strict";
 
 
@@ -422,13 +416,13 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 	 * @class Central Class for the Debug Environment
 	 *
 	 * @author Martin Schaus, Frank Weigel
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @private
 	 * @alias sap.ui.debug.DebugEnv
 	 */
 	var DebugEnv = function() {
 	};
-	
+
 	/**
 	 * Will be invoked by <code>sap.ui.core.Core</code> to notify the plugin to start.
 	 *
@@ -437,19 +431,19 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 	 * @public
 	 */
 	DebugEnv.prototype.startPlugin = function(oCore, bOnInit) {
-	
+
 		this.oCore = oCore;
 		this.oWindow = window;
-	
+
 		/**
 		 * Whether the debugenv should run embedded in application page (true) or in testsuite (false).
 		 * @private
 		 */
 		try {
 			this.bRunsEmbedded = typeof window.top.testfwk == "undefined"; // window || !top.frames["sap-ui-TraceWindow"]; // check only with ==, not === as the test otherwise fails on IE8
-	
+
 			jQuery.sap.log.info("Starting DebugEnv plugin (" + (this.bRunsEmbedded ? "embedded" : "testsuite") + ")");
-	
+
 			// initialize only if running in testsuite or when debug views are not disabled via URL parameter
 			if (!this.bRunsEmbedded || oCore.getConfiguration().getInspect()) {
 				this.init(bOnInit);
@@ -461,7 +455,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			jQuery.sap.log.warning("DebugEnv plugin can not be started outside the Testsuite.");
 		}
 	};
-	
+
 	/**
 	 * Will be invoked by <code>sap.ui.core.Core</code> to notify the plugin to start
 	 * @param {sap.ui.core.Core} oCore reference to the Core
@@ -471,7 +465,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		jQuery.sap.log.info("Stopping DebugEnv plugin.");
 		this.oCore = null;
 	};
-	
+
 	/**
 	 * Initializes the ControlTreeView and PropertyListView of the <code>sap.ui.debug.DebugEnv</code>
 	 * @private
@@ -479,9 +473,9 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 	DebugEnv.prototype.init = function(bOnInit) {
 		this.oControlTreeWindow = this.bRunsEmbedded ? this.oWindow : (top.frames["sap-ui-ControlTreeWindow"] || top);
 		this.oPropertyListWindow = this.bRunsEmbedded ? this.oWindow : (top.frames["sap-ui-PropertyListWindow"] || top);
-	
+
 		var bRtl = sap.ui.getCore().getConfiguration().getRTL();
-	
+
 		/* TODO enable switch to testsuite
 		if ( this.bRunsEmbedded ) {
 			var div = this.oWindow.document.createElement("DIV");
@@ -509,10 +503,10 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			this.oWindow.document.body.appendChild(div);
 		}
 		*/
-	
+
 		var oControlTreeRoot = this.oControlTreeWindow.document.getElementById("sap-ui-ControlTreeRoot"),
 			oPropertyWindowRoot = this.oPropertyListWindow.document.getElementById("sap-ui-PropertyWindowRoot");
-	
+
 		if ( !oControlTreeRoot ) {
 			oControlTreeRoot = this.oControlTreeWindow.document.createElement("DIV");
 			oControlTreeRoot.setAttribute("id", "sap-ui-ControlTreeRoot");
@@ -538,7 +532,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			oControlTreeRoot.innerHTML = "";
 		}
 		this.oControlTreeRoot = oControlTreeRoot;
-	
+
 		if ( !oPropertyWindowRoot ) {
 			oPropertyWindowRoot = this.oPropertyListWindow.document.createElement("DIV");
 			oPropertyWindowRoot.setAttribute("id", "sap-ui-PropertyWindowRoot");
@@ -564,7 +558,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			oPropertyWindowRoot.innerHTML = "";
 		}
 		this.oPropertyWindowRoot = oPropertyWindowRoot;
-	
+
 		this.oControlTree = new ControlTree(this.oCore, this.oWindow, oControlTreeRoot, this.bRunsEmbedded);
 		this.oPropertyList = new PropertyList(this.oCore, this.oWindow, oPropertyWindowRoot);
 		this.oControlTree.attachEvent(ControlTree.M_EVENTS.SELECT, this.oPropertyList.update,
@@ -572,14 +566,14 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		if ( !bOnInit ) {
 			this.oControlTree.renderDelayed();
 		}
-	
+
 		jQuery(window).unload(jQuery.proxy(function(oEvent) {
 			this.oControlTree.exit();
 			this.oPropertyList.exit();
 		}, this));
-	
+
 	};
-	
+
 	/**
 	 * Initializes the LogViewer of the <code>sap.ui.debug.DebugEnv</code>
 	 * @private
@@ -598,7 +592,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			this.oTraceViewer = new LogViewer(this.oTraceWindow, 'sap-ui-TraceWindowRoot');
 		}
 		this.oLogger.addLogListener(this.oTraceViewer);
-	
+
 		// When debug.js is injected (testsuite), it is not initialized during Core.init() but later.
 		// In IE the startPlugin happens before rendering, in Chrome and others after rendering
 		// Therefore the first 'UIUpdated' is missed in browsers other than IE.
@@ -613,7 +607,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			}, 0);
 		}
 	};
-	
+
 	DebugEnv.prototype.enableLogViewer = function() {
 		// clear timeout (necessary in case we have been notified via attachUIUpdated)
 		if ( this.oTimer ) {
@@ -622,27 +616,27 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		}
 		// clear listener (necessary to avoid multiple calls and in case we are called via timer)
 		this.oCore.detachUIUpdated(this.enableLogViewer, this);
-	
+
 		// real action: enable the LogViewer
 		if ( this.oTraceViewer) {
 			this.oTraceViewer.unlock();
 		}
 	};
-	
+
 	/**
 	 * Whether the DebugEnv is running embedded in app page or not (which then means running in a test suite)
 	 */
 	DebugEnv.prototype.isRunningEmbedded = function() {
 		return this.bRunsEmbedded;
 	};
-	
+
 	/**
 	 * Whether the ControlTree is visible
 	 */
 	DebugEnv.prototype.isControlTreeShown = function() {
 		return jQuery(this.oControlTreeRoot).css("visibility") === "visible" || jQuery(this.oControlTreeRoot).css("visibility") === "inherit";
 	};
-	
+
 	/**
 	 * Will be called to show the ControlTree
 	 */
@@ -652,14 +646,14 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		}
 		jQuery(this.oControlTreeRoot).css("visibility", "visible");
 	};
-	
+
 	/**
 	 * Will be called to hide the ControlTree
 	 */
 	DebugEnv.prototype.hideControlTree = function() {
 		jQuery(this.oControlTreeRoot).css("visibility", "hidden");
 	};
-	
+
 	/**
 	 * Whether the LogViewer is shown
 	 */
@@ -667,7 +661,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		var oLogViewer = this.oTraceWindow && this.oTraceWindow.document.getElementById('sap-ui-TraceWindowRoot');
 		return oLogViewer && (jQuery(oLogViewer).css("visibility") === "visible" || jQuery(oLogViewer).css("visibility") === "inherit");
 	};
-	
+
 	/**
 	 * Will be called to show the TraceWindow
 	 */
@@ -680,7 +674,7 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			jQuery(oLogViewer).css("visibility", "visible");
 		}
 	};
-	
+
 	/**
 	 * Will be called to hide the TraceWindow
 	 */
@@ -690,14 +684,14 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 			jQuery(oLogViewer).css("visibility", "hidden");
 		}
 	};
-	
+
 	/**
 	 * Will be called to show the PropertyList
 	 */
 	DebugEnv.prototype.isPropertyListShown = function() {
 		return jQuery(this.oPropertyWindowRoot).css("visibility") === "visible" || jQuery(this.oPropertyWindowRoot).css("visibility") === "inherit";
 	};
-	
+
 	/**
 	 * Will be called to show the PropertyList
 	 */
@@ -707,14 +701,14 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 		}
 		jQuery(this.oPropertyWindowRoot).css("visibility", "visible");
 	};
-	
+
 	/**
 	 * Will be called to hide the PropertyList
 	 */
 	DebugEnv.prototype.hidePropertyList = function() {
 		jQuery(this.oPropertyWindowRoot).css("visibility", "hidden");
 	};
-	
+
 	/**
 	 * Create the <code>sap.ui.debug.DebugEnv</code> plugin and register
 	 * it within the <code>sap.ui.core.Core</code>.
@@ -722,21 +716,20 @@ sap.ui.define('sap/ui/debug/DebugEnv', ['jquery.sap.global', './ControlTree', '.
 	(function(){
 		var oThis = new DebugEnv();
 		sap.ui.getCore().registerPlugin(oThis);
-		DebugEnv.getInstance = jQuery.sap.getter(new sap.ui.base.Interface(oThis, ["isRunningEmbedded", "isControlTreeShown", "showControlTree", "hideControlTree", "isTraceWindowShown", "showTraceWindow", "hideTraceWindow", "isPropertyListShown", "showPropertyList", "hidePropertyList"]));
+		DebugEnv.getInstance = jQuery.sap.getter(new Interface(oThis, ["isRunningEmbedded", "isControlTreeShown", "showControlTree", "hideControlTree", "isTraceWindowShown", "showTraceWindow", "hideTraceWindow", "isPropertyListShown", "showPropertyList", "hidePropertyList"]));
 	}());
 
 	return DebugEnv;
 
 }, /* bExport= */ true);
-},
-	"sap/ui/debug/Highlighter.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a helper that can highlight a given control
-sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom', 'jquery.sap.script'],
+sap.ui.predefine('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom', 'jquery.sap.script'],
 	function(jQuery/* , jQuerySap, jQuerySap1 */) {
 	"use strict";
 
@@ -769,7 +762,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 			this.iBorderWidth = iBorderWidth;
 		}
 	};
-	
+
 	/**
 	 * Shows a rectangle/box that surrounds the given DomRef.
 	 *
@@ -783,7 +776,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 		if (!oDomRef || !oDomRef.parentNode) {
 			return;
 		}
-	
+
 		var oHighlightRect = jQuery.sap.domById(this.sId);
 		if (!oHighlightRect) {
 			oHighlightRect = oDomRef.ownerDocument.createElement("DIV");
@@ -805,7 +798,7 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 		oHighlightRect.style.height = (oRect.height) + "px";
 		oHighlightRect.style.display = "block";
 	};
-	
+
 	/**
 	 * Hides the rectangle/box if it is currently shown.
 	 */
@@ -820,16 +813,14 @@ sap.ui.define('sap/ui/debug/Highlighter', ['jquery.sap.global', 'jquery.sap.dom'
 	return Highlighter;
 
 }, /* bExport= */ true);
-},
-	"sap/ui/debug/LogViewer.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a log viewer for debug purposes
-sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.predefine('sap/ui/debug/LogViewer', function() {
 	"use strict";
 
 
@@ -868,15 +859,15 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 		this.clear();
 		this.setFilter(LogViewer.NO_FILTER);
 	};
-	
+
 	LogViewer.NO_FILTER = function(oLogMessage) {
 		return true;
 	};
-	
+
 	LogViewer.prototype.clear = function() {
 		this.oDomNode.innerHTML = "";
 	};
-	
+
 	/**
 	 * Returns an XML escaped version of a given string sText
 	 * @param {string} sText the string that is escaped.
@@ -895,9 +886,9 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 	 * @protected
 	 */
 	LogViewer.prototype.addEntry = function(oLogEntry) {
-	
+
 		var oDomEntry = this.oWindow.document.createElement("div");
-	
+
 		// style the entry
 		if ( this.sLogEntryClassPrefix ) {
 			// note: setting a class has only an effect when the main.css is loaded (testsuite)
@@ -909,28 +900,28 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 			oDomEntry.style.width = "100%";
 			oDomEntry.style.whiteSpace = "noWrap";
 		}
-	
+
 		// create text as text node
 		var sText = LogViewer.xmlEscape(oLogEntry.time + "  " + oLogEntry.message),
 			oTextNode = this.oWindow.document.createTextNode(sText);
 		oDomEntry.appendChild(oTextNode);
 		oDomEntry.title = oLogEntry.message;
-	
+
 		// filter
 		oDomEntry.style.display = this.oFilter(sText) ? "" : "none";
-	
+
 		this.oDomNode.appendChild(oDomEntry);
-	
+
 		return oDomEntry;
 	};
-	
+
 	LogViewer.prototype.fillFromLogger = function(iFirstEntry) {
 		this.clear();
 		this.iFirstEntry = iFirstEntry;
 		if ( !this.oLogger ) {
 			return;
 		}
-	
+
 		// when attached to a log, clear the dom node and add all entries from the log
 		var aLog = this.oLogger.getLog();
 		for (var i = this.iFirstEntry,l = aLog.length;i < l;i++) {
@@ -938,19 +929,19 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 				this.addEntry(aLog[i]);
 			}
 		}
-	
+
 		this.scrollToBottom();
 	};
-	
+
 	LogViewer.prototype.scrollToBottom = function() {
 		this.oDomNode.scrollTop = this.oDomNode.scrollHeight;
 	};
-	
+
 	LogViewer.prototype.truncate = function() {
 		this.clear();
 		this.fillFromLogger(this.oLogger.getLog().length);
 	};
-	
+
 	LogViewer.prototype.setFilter = function(oFilter) {
 		this.oFilter = oFilter = oFilter || LogViewer.NO_FILTER;
 		var childNodes = this.oDomNode.childNodes;
@@ -963,7 +954,7 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 		}
 		this.scrollToBottom();
 	};
-	
+
 	LogViewer.prototype.setLogLevel = function(iLogLevel) {
 		this.iLogLevel = iLogLevel;
 		if ( this.oLogger ) {
@@ -972,19 +963,19 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 		// fill and filter again
 		this.fillFromLogger(this.iFirstEntry);
 	};
-	
+
 	LogViewer.prototype.lock = function() {
 		this.bLocked = true;
 		//this.oDomNode.style.backgroundColor = 'gray'; // marker for 'locked' state
 	};
-	
+
 	LogViewer.prototype.unlock = function() {
 		this.bLocked = false;
 		//this.oDomNode.style.backgroundColor = ''; // clear 'locked' marker
 		this.fillFromLogger(0);
 		// this.addEntry({ time : '---------', message: '---------------', level : 3});
 	};
-	
+
 	LogViewer.prototype.onAttachToLog = function(oLogger) {
 		this.oLogger = oLogger;
 		this.oLogger.setLevel(this.iLogLevel);
@@ -992,12 +983,12 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 			this.fillFromLogger(0);
 		}
 	};
-	
+
 	LogViewer.prototype.onDetachFromLog = function(oLogger) {
 		this.oLogger = undefined;
 		this.fillFromLogger(0); // clears the viewer
 	};
-	
+
 	LogViewer.prototype.onLogEntry = function(oLogEntry) {
 		if ( !this.bLocked ) {
 			var oDomRef = this.addEntry(oLogEntry);
@@ -1010,16 +1001,15 @@ sap.ui.define('sap/ui/debug/LogViewer', ['jquery.sap.global'],
 	return LogViewer;
 
 }, /* bExport= */ true);
-},
-	"sap/ui/debug/PropertyList.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides a (modifiable) list of properties for a given control
-sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/DataType', 'sap/ui/base/EventProvider', 'sap/ui/core/Core', 'sap/ui/core/Element', 'jquery.sap.strings'],
-	function(jQuery, DataType, EventProvider, Core, Element/* , jQuerySap */) {
+sap.ui.predefine('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/DataType', 'sap/ui/base/EventProvider', 'sap/ui/core/Element', 'sap/ui/core/ElementMetadata', 'jquery.sap.strings', 'jquery.sap.encoder'],
+	function(jQuery, DataType, EventProvider, Element, ElementMetadata/* , jQuerySap */) {
 	"use strict";
 
 
@@ -1031,7 +1021,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 	 *
 	 * @extends sap.ui.base.EventProvider
 	 * @author Martin Schaus
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @param {sap.ui.core.Core}
 	 *            oCore the core instance to use for analysis
@@ -1074,10 +1064,10 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			//this.oParentDomRef.style.backgroundColor = "#e0e0e0";
 			this.oParentDomRef.style.border = "solid 1px gray";
 			this.oParentDomRef.style.padding = "2px";
-		
+
 		}
 	});
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1085,7 +1075,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 	PropertyList.prototype.exit = function() {
 		jQuery(this.oParentDomRef).unbind();
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1093,8 +1083,8 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 	PropertyList.prototype.update = function(oParams) {
 		var sControlId = oParams.getParameter("controlId");
 		this.oParentDomRef.innerHTML = "";
-	
-		var oControl = this.oCore.getElementById(sControlId);
+
+		var oControl = this.oCore.byId(sControlId);
 		if (!oControl) {
 			this.oParentDomRef.innerHTML = "Please select a valid control";
 			return;
@@ -1113,8 +1103,8 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			aHTML.push("<div id='sap-ui-quickhelp' style='position:fixed;display:none;padding:5px;background-color:rgb(200,220,231);border:1px solid gray;overflow:hidden'>Help</div>");
 		}
 		aHTML.push("<div style='border-bottom:1px solid gray'>&nbsp;</div><table cellspacing='1' style='font-size:8pt;width:100%;table-layout:fixed'>");
-	
-		while ( oMetadata instanceof sap.ui.core.ElementMetadata ) {
+
+		while ( oMetadata instanceof ElementMetadata ) {
 			var mProperties = oMetadata.getProperties();
 			var bHeaderCreated = false;
 			if ( !jQuery.isEmptyObject(mProperties) ) {
@@ -1138,36 +1128,36 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			}
 			oMetadata = oMetadata.getParent();
 		}
-	
+
 		aHTML.push("</table>");
 		this.oParentDomRef.innerHTML = aHTML.join("");
 		this.mHelpDocs = {};
 	};
-	
+
 	PropertyList.prototype.getAggregationsAsProperties = function(oMetadata) {
-	
+
 		function isSimpleType(sType) {
 			if ( !sType ) {
 				return false;
 			}
-	
+
 			if ( sType.indexOf("[]") > 0 ) {
 				sType = sType.substring(sType.indexOf("[]"));
 			}
-	
+
 			if ( sType === "boolean" || sType === "string" || sType === "int" || sType === "float" ) {
 				return true;
 			}
-	
+
 			if ( sType === "void" ) {
 				return false;
 			}
-	
+
 			// TODO check for enum
-	
+
 			return false;
 		}
-	
+
 		var oResult = {};
 		for (var sAggrName in oMetadata.getAggregations() ) {
 			var oAggr = oMetadata.getAggregations()[sAggrName];
@@ -1176,9 +1166,9 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			}
 		}
 		return oResult;
-	
+
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1212,7 +1202,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 					}
 					sTitle = ' title="This aggregation currently references an Element. You can set a ' + sType +  ' value instead"';
 				}
-				aHTML.push("<input type='text' style='width:100%;font-size:8pt;background-color:#f5f5f5;" + sColor + "' value='" + jQuery.sap.escapeHTML("" + oValue) + "'" + sTitle + " sap-name='" + sName + "'/>");
+				aHTML.push("<input type='text' style='width:100%;font-size:8pt;background-color:#f5f5f5;" + sColor + "' value='" + jQuery.sap.encodeHTML("" + oValue) + "'" + sTitle + " sap-name='" + sName + "'/>");
 			} else if (sType == "boolean") {
 				aHTML.push("<input type='checkbox' sap-name='" + sName + "' ");
 				if (oValue == true) {
@@ -1223,7 +1213,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 				//Enum or Custom Type
 				var oEnum = jQuery.sap.getObject(sType);
 				if (!oEnum || oEnum instanceof DataType) {
-					aHTML.push("<input type='text' style='width:100%;font-size:8pt;background-color:#f5f5f5;' value='" + jQuery.sap.escapeHTML("" + oValue) + "'" + sTitle + " sap-name='" + sName + "'/>");
+					aHTML.push("<input type='text' style='width:100%;font-size:8pt;background-color:#f5f5f5;' value='" + jQuery.sap.encodeHTML("" + oValue) + "'" + sTitle + " sap-name='" + sName + "'/>");
 				} else {
 					aHTML.push("<select style='width:100%;font-size:8pt;background-color:#f5f5f5;' sap-name='" + sName + "'>");
 					sType = sType.replace("/",".");
@@ -1244,7 +1234,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			aHTML.push("</td></tr>");
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1254,7 +1244,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			this.applyChanges("sap-debug-propertylist-apply");
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1265,7 +1255,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			this.applyChanges("sap-debug-propertylist-apply");
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1279,7 +1269,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			}
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1287,11 +1277,11 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 	PropertyList.prototype.applyChanges = function(sId) {
 		var oSource = this.oParentDomRef.ownerDocument.getElementById(sId),
 			sControlId = oSource.getAttribute("sap-id"),
-			oControl = this.oCore.getElementById(sControlId),
+			oControl = this.oCore.byId(sControlId),
 			aInput = oSource.parentNode.getElementsByTagName("INPUT"),
 			aSelect = oSource.parentNode.getElementsByTagName("SELECT"),
 			oMethod;
-	
+
 		for (var i = 0; i < aInput.length; i++) {
 			var oInput = aInput[i],
 				sName = oInput.getAttribute("sap-name");
@@ -1324,7 +1314,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 		}
 		this.oCore.applyChanges();
 	};
-	
+
 	PropertyList.prototype.showQuickHelp = function(oSource) {
 		if ( this.oQuickHelpTimer ) {
 			clearTimeout(this.oQuickHelpTimer);
@@ -1368,9 +1358,9 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			}
 		}
 	};
-	
+
 	// ---- Quickhelp ----
-	
+
 	PropertyList.prototype.receiveQuickHelp = function(oDocument) {
 		if ( oDocument ) {
 			var oControlNode = oDocument.getElementsByTagName("control")[0];
@@ -1449,7 +1439,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			this.updateQuickHelp(undefined, 0);
 		}
 	};
-	
+
 	PropertyList.prototype.updateQuickHelp = function(sNewContent, iTimeout) {
 		if ( this.oQuickHelpTimer ) {
 			clearTimeout(this.oQuickHelpTimer);
@@ -1469,7 +1459,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			}
 		}
 	};
-	
+
 	PropertyList.prototype.hideQuickHelp = function() {
 		var oTooltipDomRef = this.oParentDomRef.ownerDocument.getElementById("sap-ui-quickhelp");
 		if ( oTooltipDomRef ) {
@@ -1477,7 +1467,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 		}
 		this.bMovedOverTooltip = false;
 	};
-	
+
 	PropertyList.prototype._calcHelpId = function(oMetadata, sName) {
 		var sHelpId = oMetadata.getName();
 		if ( sName ) {
@@ -1485,7 +1475,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 		}
 		return sHelpId;
 	};
-	
+
 	PropertyList.prototype._isChildOfQuickHelp = function(oDomRef) {
 		while ( oDomRef ) {
 			if ( oDomRef.id === "sap-ui-quickhelp" ) {
@@ -1495,7 +1485,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 		}
 		return false;
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1518,7 +1508,7 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 			this.showQuickHelp(oSource);
 		}
 	};
-	
+
 	/**
 	 * TODO: missing internal JSDoc... @author please update
 	 * @private
@@ -1551,7 +1541,5 @@ sap.ui.define('sap/ui/debug/PropertyList', ['jquery.sap.global', 'sap/ui/base/Da
 
 	return PropertyList;
 
-}, /* bExport= */ true);
-}
-}});
+});
 jQuery.sap.require("sap.ui.debug.DebugEnv");

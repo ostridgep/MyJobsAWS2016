@@ -2,7 +2,8 @@
 /* CSS for control sap.m/Tokenizer.control */
 /* ============================================= */
 
-.sapMTokenizer{ 
+.sapMTokenizer {
+	position: relative;
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -12,14 +13,34 @@
 	margin-top: 0.375rem;
 	margin-bottom: 0.375rem;
 	margin-right: 0.375rem;
-	line-height: initial;
+	line-height: normal;
 	padding-top: 0;
 	padding-bottom: 0;
 	height: 1.625rem;
 	display: inline-block;
 }
 
-.sapMTokenTruncate{
+.sapMTokenizerClip {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	display: block;
+	font-size: 1px;
+	z-index: -1;
+	color: transparent;
+	background: transparent;
+	overflow: hidden;
+	border: none;
+	padding: 0;
+	resize: none;
+	outline: none;
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+.sapMTokenTruncate {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -37,12 +58,12 @@
 	width: calc(~"100% - 2rem");
 }
 
-.sap-phone .sapMTokenizerMultiLine{
+.sap-phone .sapMTokenizerMultiLine {
 	padding-left: 1rem;
 	padding-right: 1rem;
 }
 
-.sap-phone .sapMTokenizerMultiLine > .sapMTokenizerScrollContainer > .sapMToken{
+.sap-phone .sapMTokenizerMultiLine > .sapMTokenizerScrollContainer > .sapMToken {
 	display: table;
 }
 
@@ -55,7 +76,7 @@
 }
 
 .sapUiSizeCompact .sapMTokenizer .sapMToken{
-	height: 1.25rem;	
+	height: 1.25rem;
 	margin-top: 0.125rem;
 	margin-bottom: 0.125rem;
 	margin-right: 0.125rem;
@@ -72,11 +93,17 @@
 
 .sapMTokenizer:focus{
 	outline: none;
+	border: 0.0625rem dotted @sapUiFocus;
 }
 
 .sapMTokenizerScrollContainer{
 	display: inline-block;
-	-moz-user-select: none; 
-	-webkit-user-select: none; 
+	-moz-user-select: none;
+	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+
+.sapMMultiInputMultiModeBorder .sapMTokenizerEmpty {
+	height: 0;
+	display: block;
 }

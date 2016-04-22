@@ -3,6 +3,8 @@
 /* ============================================= */
 .sapMPanel {
 	overflow: hidden;
+	// The following needed for calculation of height for content child
+	position: relative;
 }
 
 .sapMPanelHdr {
@@ -14,6 +16,7 @@
 	height: 3rem;
 	line-height: 3rem;
 	padding: 0 1rem;
+	margin: 0;
 
 	/*
 	* To improve readability Mobile Safari automatically increases
@@ -41,9 +44,10 @@
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
-	/* 400ms is standard jQuery duration */
-	-webkit-transition: -webkit-transform 0.4s ease-out;
-	transition: transform 0.4s ease-out;
+
+	&:focus {
+		outline: none;
+	}
 
 	&:focus::after {
 		content: "";
@@ -61,9 +65,20 @@
 	-webkit-transform: translateY(-50%) rotate(90deg);
 	-ms-transform: translateY(-50%) rotate(90deg);
 	transform: translateY(-50%) rotate(90deg);
-	/* 400ms is standard jQuery duration */
-	-webkit-transition: all 0.4s ease-out;
-	transition: all 0.4s ease-out;
+}
+
+html[data-sap-ui-animation='on'] {
+	.sapMPanelExpandableIcon {
+		/* 400ms is standard jQuery duration */
+		-webkit-transition: -webkit-transform 0.4s ease-out;
+		transition: transform 0.4s ease-out;
+	}
+
+	.sapMPanelExpandableIconExpanded {
+		/* 400ms is standard jQuery duration */
+		-webkit-transition: all 0.4s ease-out;
+		transition: all 0.4s ease-out;
+	}
 }
 
 html[dir=rtl] .sapUiIconMirrorInRTL:not(.sapUiIconSuppressMirrorInRTL).sapMPanelExpandableIcon {
@@ -85,7 +100,7 @@ html[dir=rtl] .sapUiIconMirrorInRTL:not(.sapUiIconSuppressMirrorInRTL).sapMPanel
 }
 
 /* if Panel is expandable, we do not wish toolbar to come with own border */
-.sapMPanelWrappingDivTb > .sapMPanelHdrExpandable.sapMTB {
+.sapMPanelWrappingDivTb > .sapMTB {
 	border-width: 0;
 }
 
@@ -100,18 +115,14 @@ html[dir=rtl] .sapUiIconMirrorInRTL:not(.sapUiIconSuppressMirrorInRTL).sapMPanel
 	box-sizing: border-box;
 }
 
-.sapMPanelHdrExpandable.sapMPanelHdr,
-.sapMPanelHdrExpandable.sapMTB-Transparent-CTX.sapMTB {
+.sapMPanel .sapMPanelWrappingDiv .sapMPanelHdr,
+.sapMPanel .sapMPanelWrappingDivTb .sapMIBar.sapMTB {
 	padding-left: 0;
-}
-
-.sapMIBar.sapMPanelHdrExpandable .sapMBarChild:first-child {
-	margin-left: 0;
-}
-
-.sapMPanelHdrExpandable.sapMPanelHdr,
-.sapMPanelWrappingDivTb > .sapMTB {
 	margin-left: 3rem;
+
+  	>:first-child {
+	  margin-left: 0;
+	}
 }
 
 /* mixin call for creating container content padding classes (arguments: rootContainer, contentSelector) */

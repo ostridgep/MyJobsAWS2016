@@ -1,17 +1,13 @@
 /*
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML', 'sap/ui/thirdparty/vkbeautify'],
-	function(jQuery, EventProvider, XML, vkbeautify1) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Serializer', './delegate/XML', 'sap/ui/thirdparty/vkbeautify'],
+	function(jQuery, EventProvider, Serializer, XML, vkbeautify) {
 	"use strict";
 
-
-	
-	/*global vkbeautify *///declare unusual global vars for JSLint/SAPUI5 validation
-	
 	/**
 	 * XML view serializer class. Serializes a given view.
 	 *
@@ -25,7 +21,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML
 	 * @class XMLViewSerializer class.
 	 * @extends sap.ui.base.EventProvider
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @alias sap.ui.core.util.serializer.XMLViewSerializer
 	 * @experimental Since 1.15.1. The XMLViewSerializer is still under construction, so some implementation details can be changed in future.
 	 */
@@ -40,16 +36,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML
 			this._fnGetEventHandlerName = fnGetEventHandlerName;
 		}
 	});
-	
-	
-	
+
+
+
 	/**
 	 * Serializes the given XML view.
-	 * 
+	 *
 	 * @returns {string} the serialized XML view.
 	 */
 	XMLViewSerializer.prototype.serialize = function () {
-	
+
 		// a function to memorize the control packages
 		var mPackages = [];
 		var fnMemorizePackage = function (oControl, sPackage) {
@@ -61,14 +57,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML
 				mPackages.push(sPackage);
 			}
 		};
-		
+
 		// a function to understand if to skip aggregations
 		var fnSkipAggregations = function (oControl) {
 			return (oControl instanceof this._oWindow.sap.ui.core.mvc.View);
 		};
-		
+
 		// create serializer
-		var oControlSerializer = new sap.ui.core.util.serializer.Serializer(
+		var oControlSerializer = new Serializer(
 			this._oView,
 			new XML(
 				this._sDefaultNamespace,
@@ -78,17 +74,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML
 			true,
 			this._oWindow,
 			fnSkipAggregations);
-		
+
 		// run serializer ... before writing namespaces
 		var sResult = oControlSerializer.serialize();
-		
+
 		// write view start
 		var sView = [];
 		sView.push('<sap.ui.core.mvc:View');
 		if (this._oView.getControllerName && this._oView.getControllerName()) {
 			sView.push(' controllerName="' + this._oView.getControllerName() + '"');
 		}
-		
+
 		// write view namespaces ... after running serializer
 		if (jQuery.inArray('sap.ui.core.mvc', mPackages) === -1) {
 			mPackages.push('sap.ui.core.mvc');
@@ -100,15 +96,15 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './delegate/XML
 				sView.push(' xmlns:' + mPackages[i] + '="' + mPackages[i] + '"');
 			}
 		}
-		
+
 		// write the main content
 		sView.push(" >");
 		sView.push(sResult);
 		sView.push("</sap.ui.core.mvc:View>");
-		
+
 		return vkbeautify.xml(sView.join(""));
 	};
 
 	return XMLViewSerializer;
 
-}, /* bExport= */ true);
+});

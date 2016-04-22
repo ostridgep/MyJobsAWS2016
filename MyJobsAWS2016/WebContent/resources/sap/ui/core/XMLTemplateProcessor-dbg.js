@@ -1,13 +1,13 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 /*global HTMLTemplateElement, DocumentFragment*/
 
-sap.ui.define(['jquery.sap.global', './mvc/View'],
-	function(jQuery, View) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/base/ManagedObject', './mvc/View', './ExtensionPoint', './StashedControlSupport'],
+	function(jQuery, ManagedObject, View, ExtensionPoint, StashedControlSupport) {
 	"use strict";
 
 
@@ -16,7 +16,7 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 
 		function parseScalarType(sType, sValue, sName, oController) {
 			// check for a binding expression (string)
-			var oBindingInfo = sap.ui.base.ManagedObject.bindingParser(sValue, oController, true);
+			var oBindingInfo = ManagedObject.bindingParser(sValue, oController, true);
 			if ( oBindingInfo && typeof oBindingInfo === "object" ) {
 				return oBindingInfo;
 			}
@@ -33,7 +33,7 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 			}
 
 			// Note: to avoid double resolution of binding expressions, we have to escape string values once again
-			return typeof vValue === "string" ? sap.ui.base.ManagedObject.bindingParser.escape(vValue) : vValue;
+			return typeof vValue === "string" ? ManagedObject.bindingParser.escape(vValue) : vValue;
 		}
 
 		function localName(xmlNode) {
@@ -124,6 +124,10 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 			if (oView.isSubView()) {
 				parseNode(xmlNode, true);
 			} else {
+				if (xmlNode.localName === "View" && xmlNode.namespaceURI !== "sap.ui.core.mvc") {
+					// it's not <core:View>, it's <mvc:View> !!!
+					jQuery.sap.log.warning("XMLView root node must have the 'sap.ui.core.mvc' namespace, not '" + xmlNode.namespaceURI + "'" + (sCurrentName ? " (View name: " + sCurrentName + ")" : ""));
+				}
 				parseChildren(xmlNode);
 			}
 
@@ -342,7 +346,7 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 						mSettings['containingView'] = oView._oContainingView;
 
 					} else if ((sName === "binding" && !oInfo) || sName === 'objectBindings' ) {
-						var oBindingInfo = sap.ui.base.ManagedObject.bindingParser(sValue, oView._oContainingView.oController);
+						var oBindingInfo = ManagedObject.bindingParser(sValue, oView._oContainingView.oController);
 						// TODO reject complex bindings, types, formatters; enable 'parameters'?
 						mSettings.objectBindings = mSettings.objectBindings || {};
 						mSettings.objectBindings[oBindingInfo.model || undefined] = oBindingInfo;
@@ -369,7 +373,7 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 						mSettings[sName] = parseScalarType(oInfo.altTypes[0], sValue, sName, oView._oContainingView.oController);
 
 					} else if (oInfo && oInfo._iKind === 2 /* MULTIPLE_AGGREGATION */ ) {
-						var oBindingInfo = sap.ui.base.ManagedObject.bindingParser(sValue, oView._oContainingView.oController);
+						var oBindingInfo = ManagedObject.bindingParser(sValue, oView._oContainingView.oController);
 						if ( oBindingInfo ) {
 							mSettings[sName] = oBindingInfo;
 						} else {
@@ -398,11 +402,15 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 						} else {
 							jQuery.sap.log.warning(oView + ": event handler function \"" + sValue + "\" is not a function or does not exist in the controller.");
 						}
+					} else if (oInfo && oInfo._iKind === -1) {
+						// SPECIAL SETTING - currently only allowed for View´s async setting
+						if (sap.ui.core.mvc.View.prototype.isPrototypeOf(oClass.prototype) && sName == "async") {
+							mSettings[sName] = parseScalarType(oInfo.type, sValue, sName, oView._oContainingView.oController);
+						} else {
+							jQuery.sap.log.warning(oView + ": setting '" + sName + "' for class " + oMetadata.getName() + " (value:'" + sValue + "') is not supported");
+						}
 					} else {
-						jQuery.sap.assert(
-							(oInfo && oInfo._iKind === -1 /* SPECIAL_SETTING */) || sName === 'xmlns',
-							oView + ": encountered unknown setting '" + sName + "' for class " + oMetadata.getName() + " (value:'" + sValue + "')"
-						);
+						jQuery.sap.assert(sName === 'xmlns', oView + ": encountered unknown setting '" + sName + "' for class " + oMetadata.getName() + " (value:'" + sValue + "')");
 					}
 				}
 				if (aCustomData.length > 0) {
@@ -411,57 +419,80 @@ sap.ui.define(['jquery.sap.global', './mvc/View'],
 
 				function handleChildren(node, oAggregation, mAggregations) {
 
-					var childNode,oNamedAggregation;
+					var childNode;
 
 					// loop over all nodes
 					for (childNode = node.firstChild; childNode; childNode = childNode.nextSibling) {
 
-						// inspect only element nodes
-						if (childNode.nodeType === 1 /* ELEMENT_NODE */) {
-
-							// check for a named aggregation (must have the same namespace as the parent and an aggregation with the same name must exist)
-							oNamedAggregation = childNode.namespaceURI === ns && mAggregations && mAggregations[localName(childNode)];
-							if (oNamedAggregation) {
-
-								// the children of the current childNode are aggregated controls (or HTML) below the named aggregation
-								handleChildren(childNode, oNamedAggregation);
-
-							} else if (oAggregation) {
-								// child node name does not equal an aggregation name,
-								// so this child must be a control (or HTML) which is aggregated below the DEFAULT aggregation
-								var aControls = createControls(childNode);
-								for (var j = 0; j < aControls.length; j++) {
-									var oControl = aControls[j];
-									// append the child to the aggregation
-									var name = oAggregation.name;
-									if (oAggregation.multiple) {
-										// 1..n AGGREGATION
-										if (!mSettings[name]) {
-											mSettings[name] = [];
-										}
-										if (typeof mSettings[name].path === "string") {
-											jQuery.sap.assert(!mSettings[name].template, "list bindings support only a single template object");
-											mSettings[name].template = oControl;
-										} else {
-											mSettings[name].push(oControl);
-										}
-									} else {
-										// 1..1 AGGREGATION
-										jQuery.sap.assert(!mSettings[name], "multiple aggregates defined for aggregation with cardinality 0..1");
-										mSettings[name] = oControl;
-									}
-								}
-							} else if (localName(node) !== "FragmentDefinition" || node.namespaceURI !== "sap.ui.core") { // children of FragmentDefinitions are ok, they need no aggregation
-								throw new Error("Cannot add direct child without default aggregation defined for control " + oMetadata.getElementName());
-							}
-
-						} else if (childNode.nodeType === 3 /* TEXT_NODE */) {
-							if (jQuery.trim(childNode.textContent || childNode.text)) { // whitespace would be okay
-								throw new Error("Cannot add text nodes as direct child of an aggregation. For adding text to an aggregation, a surrounding html tag is needed: " + jQuery.trim(childNode.textContent || childNode.text));
-							}
-						} // other nodes types are silently ignored
-
+						handleChild(node, oAggregation, mAggregations, childNode);
 					}
+				}
+
+				function handleChild(node, oAggregation, mAggregations, childNode, bActivate) {
+					var oNamedAggregation;
+
+					// inspect only element nodes
+					if (childNode.nodeType === 1 /* ELEMENT_NODE */) {
+
+						// check for a named aggregation (must have the same namespace as the parent and an aggregation with the same name must exist)
+						oNamedAggregation = childNode.namespaceURI === ns && mAggregations && mAggregations[localName(childNode)];
+						if (oNamedAggregation) {
+
+							// the children of the current childNode are aggregated controls (or HTML) below the named aggregation
+							handleChildren(childNode, oNamedAggregation);
+
+						} else if (oAggregation) {
+							// TODO consider moving this to a place where HTML and SVG nodes can be handled properly
+							// create a StashedControl for inactive controls, which is not placed in an aggregation
+							if (!bActivate && childNode.getAttribute("stashed") === "true") {
+								StashedControlSupport.createStashedControl(oView._oContainingView.createId(childNode.getAttribute("id")), {
+									stashedAlias: childNode.getAttribute("stashedAlias"),
+									sParentId: mSettings["id"],
+									sParentAggregationName: oAggregation.name,
+									fnCreate: function() {
+										return handleChild(node, oAggregation, mAggregations, childNode, true);
+									}
+								});
+								// do not create the control
+								return;
+							}
+
+							// child node name does not equal an aggregation name,
+							// so this child must be a control (or HTML) which is aggregated below the DEFAULT aggregation
+							var aControls = createControls(childNode);
+							for (var j = 0; j < aControls.length; j++) {
+								var oControl = aControls[j];
+								// append the child to the aggregation
+								var name = oAggregation.name;
+								if (oAggregation.multiple) {
+									// 1..n AGGREGATION
+									if (!mSettings[name]) {
+										mSettings[name] = [];
+									}
+									if (typeof mSettings[name].path === "string") {
+										jQuery.sap.assert(!mSettings[name].template, "list bindings support only a single template object");
+										mSettings[name].template = oControl;
+									} else {
+										mSettings[name].push(oControl);
+									}
+								} else {
+									// 1..1 AGGREGATION
+									jQuery.sap.assert(!mSettings[name], "multiple aggregates defined for aggregation with cardinality 0..1");
+									mSettings[name] = oControl;
+								}
+							}
+							return aControls;
+						} else if (localName(node) !== "FragmentDefinition" || node.namespaceURI !== "sap.ui.core") { // children of FragmentDefinitions are ok, they need no aggregation
+							throw new Error("Cannot add direct child without default aggregation defined for control " + oMetadata.getElementName());
+						}
+
+					} else if (childNode.nodeType === 3 /* TEXT_NODE */) {
+						if (jQuery.trim(childNode.textContent || childNode.text)) { // whitespace would be okay
+							throw new Error("Cannot add text nodes as direct child of an aggregation. For adding text to an aggregation, a surrounding html tag is needed: " + jQuery.trim(childNode.textContent || childNode.text));
+						}
+					} // other nodes types are silently ignored
+
+					return [];
 				}
 
 				// loop child nodes and handle all AGGREGATIONS

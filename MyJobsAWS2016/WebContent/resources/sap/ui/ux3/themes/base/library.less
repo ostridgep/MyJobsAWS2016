@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -496,7 +496,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton {
 	font-weight: bold;
 	padding: 0;
 	height: 33px;
-	-moz-border-radius: 0;
 	border-radius: 0;
 	width: 100%;
 	position: absolute;
@@ -510,8 +509,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton:active {
 	margin: 0;
 	border: 0;
 	box-shadow: none;
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
 	margin-top: 2px;
 }
 
@@ -521,6 +518,7 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	color: @sapUiTextInverted;
 	margin-top: 2px;
 }
+
 /* END "CollectionInspector.less" */
 
 /* START "DataSet.less" */
@@ -694,8 +692,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	display: inline-block;
 	position: relative;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	height: 100%;
 	outline: none;
 }
@@ -721,12 +717,15 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	position: absolute;
 	bottom: 0;
 	top: @sapUiUx3ExactLstHeaderHeight;
-	left: 0;
+	begin: 0;
 	width: 168px;
 	border: 1px solid @sapUiMediumBorder;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
+}
+
+html[data-sap-ui-browser^="ed"] .sapUiUx3ExactLstLst,
+html[data-sap-ui-browser^="ie"] .sapUiUx3ExactLstLst {
+	left: 0;
 }
 
 .sapUiUx3ExactLstLst.sapUiUx3ExactLstExpandedBL {
@@ -767,7 +766,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	position: relative;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI,
 html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI {
 	border: 1px solid transparent;
@@ -799,7 +797,6 @@ html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI {
 	display: none;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI > .sapUiLbxIIco,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI > .sapUiLbxIIco,
 html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI > .sapUiLbxIIco {
 	top: 3px;
@@ -848,8 +845,6 @@ html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI > .sapUiL
 /* Header */
 .sapUiUx3ExactLstHead {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	display: block;
 	height: @sapUiUx3ExactLstHeaderHeight;
     line-height: @sapUiUx3ExactLstHeaderHeight;
@@ -1004,22 +999,9 @@ html[dir=rtl] .sapUiUx3ExactLstCollapsed > .sapUiUx3ExactLstHead > .sapUiUx3Exac
 	-ms-transform-origin: 0% 100%; /*should be '100% 100%' -> swapped with right by RTL transformation*/
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3ExactLstHead > .sapUiUx3ExactLstHeadTxt {
-	bottom: 165px;
-	top: auto;
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-
-html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3ExactLstHead > .sapUiUx3ExactLstHeadTxt {
-	left: -2px; /*should be right -> swapped with right by RTL transformation*/
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
-
 /* Content */
 .sapUiUx3ExactLstCntnt {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	display: inline-block;
 	height: 100%;
 	margin-left: 168px;
@@ -1118,7 +1100,6 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 .sapUiUx3ExactLstTop.sapUiUx3ExactLstTopHidden > .sapUiUx3ExactLstCntnt {
 	left: 0;
 }
-
 /* END "ExactList.less" */
 
 /* START "FacetFilter.less" */
@@ -1142,8 +1123,6 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 /* Header */
 .sapUiUx3FFLstHead {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	display: block;
 	line-height: 25px;
 	border-top: 1px solid @sapUiListHeaderBorderColor;
@@ -1169,8 +1148,6 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 	display: inline-block;
 	position: relative;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	cursor: default;
 	height: 100%;
 	width: 100%;
@@ -1229,7 +1206,6 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 /*  width: 100%;*/
 	background-color: @sapUiFieldBackground;
 	display: block;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	position: relative;
 }
@@ -1344,8 +1320,6 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 /* ============================================= */
 
 .sapUiFeeder {
-/*	width: 100%;*/
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	position: relative;
 }
@@ -1429,6 +1403,9 @@ html[data-sap-ui-browser^="ie"] .sapUiFeederInput > p {
 	-webkit-user-select: none;
 	user-select: none;
 	overflow: hidden;
+}
+
+.sapUiUx3NavBarUpperCaseText {
 	text-transform: uppercase;
 }
 
@@ -1654,7 +1631,6 @@ html[data-sap-ui-browser*="ie"] .sapUiUx3NavBarItemSel > a {
 
 .sapUiNotificationBar {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -1674,12 +1650,8 @@ html[data-sap-ui-browser*="ie"] .sapUiUx3NavBarItemSel > a {
 	-ms-user-select: none;
 	-o-user-select: none;
 	user-select: none;
-	outline : none;
+	outline: none;
 	z-index: 2; /* needed when the NotiBar has to cover the Table's row headers */
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiNotificationBar {
-	background-color: @sapUiNotificationBarBG_IE;
 }
 
 .sapUiNotificationBarMaximized {
@@ -1694,9 +1666,13 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotificationBar {
 .sapUiNotiHover {
 	position: absolute;
 	height: @sapUiNotificationBarHeight;
+	/* IE workaround to detect bar hovering in Min mode */
+	background-color: inherit;
+	opacity: 0;
 }
 
 .sapUiNotiHover:hover .sapUiBarToggle,
+.sapUiNotiHover:hover + .sapUiBarToggle,
 .sapUiNotificationBar:hover .sapUiBarToggle {
 	display: block;
 }
@@ -1704,7 +1680,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotificationBar {
 .sapUiBarToggle {
 	display: none;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	position: absolute;
 	height: 16px;
 	width: 40px;
@@ -1723,10 +1698,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotificationBar {
 	transition: all 0.2s linear;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
-	background-color: @sapUiNotificationBarBG_IE;
-}
-
 .sapUiBarToggle.sapUiBarToggleWide {
 	width: 66px;
 	left: 48%;
@@ -1738,63 +1709,49 @@ HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
 	background-repeat: no-repeat;
 	height: 16px;
 	background-position: center center;
+	font-family: 'SAP-icons';
+	color: white;
+	font-size: 16px;
+	opacity: 0.5;
+	text-align: center;
 }
 
 .sapUiBarToggleItem:hover,
 .sapUiBarToggleItem:active {
 	background-color: @sapUiNotifierHoverColor;
+	opacity: 1;
 }
 
 /* Enlarge Arrow */
-.sapUiBarToggleArrowUp {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_up.png");
+.sapUiBarToggleArrowUp::before {
+	content: "\e200";
 }
 
-.sapUiBarToggleArrowUp:hover,
-.sapUiBarToggleArrowUp:active {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_up_hover.png");
+/* Minimize Arrow */
+.sapUiBarToggleArrowDown::before {
+	content: "\e1f9";
+}
+
+/* BarUp */
+.sapUiBarToggleBarUp::before {
+	content: "\e1e9";
+}
+
+/* BarDown */
+.sapUiBarToggleBarDown::before {
+	content: "\e1ea";
 }
 
 .sapUiBarToggleArrowUp.sapUiBarToggleHide {
 	display: none;
 }
 
-/* Minimize Arrow */
-.sapUiBarToggleArrowDown {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_down.png");
-}
-
-.sapUiBarToggleArrowDown:hover,
-.sapUiBarToggleArrowDown:active {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_down_hover.png");
-}
-
 .sapUiBarToggleArrowDown.sapUiBarToggleHide {
-	display: none;
-}
-
-/* BarUp */
-.sapUiBarToggleBarUp {
-	background-image: url("img/notification_bar/arrows/ArrowBar_up.png");
-}
-
-.sapUiBarToggleBarUp:hover,
-.sapUiBarToggleBarUp:active {
-	background-image: url("img/notification_bar/arrows/ArrowBar_up_hover.png");
+  display: none;
 }
 
 .sapUiBarToggleBarUp.sapUiBarToggleHide {
 	display: none;
-}
-
-/* BarDown */
-.sapUiBarToggleBarDown {
-	background-image: url("img/notification_bar/arrows/ArrowBar_down.png");
-}
-
-.sapUiBarToggleBarDown:hover,
-.sapUiBarToggleBarDown:active {
-	background-image: url("img/notification_bar/arrows/ArrowBar_down_hover.png");
 }
 
 .sapUiBarToggleBarDown.sapUiBarToggleHide {
@@ -1802,15 +1759,15 @@ HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
 }
 
 .sapUiNotifiers {
-	padding: 0px;
-	margin: 0px;
-	height: inherit;
+  padding: 0px;
+  margin: 0px;
+  height: inherit;
 }
 
 .sapUiNotifier {
-	/* this is needed to show the Notifier's icon on tablets. Otherwise the icon would be only visible if 
-	the windows i.e. */ 
-	-webkit-transform: translate3d(0,0,0);
+	/* this is needed to show the Notifier's icon on tablets. Otherwise the icon would be only visible if
+	the windows i.e. */
+	-webkit-transform: translate3d(0, 0, 0);
 	display: inline-block;
 	position: relative;
 	font-size: 12px;
@@ -1822,7 +1779,7 @@ HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
 	margin: 0;
 	padding: 0;
 	vertical-align: top;
-	outline : none;
+	outline: none;
 }
 
 .sapUiNotifier:hover,
@@ -1830,14 +1787,16 @@ HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
 	background-color: @sapUiNotifierHoverColor;
 }
 
-.sapUiNotifier img {
+.sapUiNotifier img, .sapUiNotifier .sapUiIcon {
 	position: relative;
 	top: 8px;
 	left: 8px;
 	opacity: 0.75;
+	font-size: 22px;
+	cursor: pointer;
 }
 
-.sapUiNotifier:hover img {
+.sapUiNotifier:hover img, .sapUiNotifier:hover .sapUiIcon {
 	opacity: 1;
 }
 
@@ -1857,25 +1816,12 @@ HTML[data-sap-ui-browser='ie8'] .sapUiBarToggle {
 	max-width: 250px;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout {
-	background-color: @sapUiNotificationBarBG_IE;
-	border: 4px solid @sapUiNotificationBarCalloutBorder_IE;
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout.sapUiShd {
-	outline-width: 0px;
-}
-
 html[dir=rtl] .sapUiNotifierCallout {
 	max-width: 250px;
 }
 
 .sapUiNotifierCallout > .sapUiCltBaseCont {
 	background-color: transparent;
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout > .sapUiCltBaseCont {
-	background-color: @sapUiNotificationBarBG_IE;
 }
 
 .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseArr {
@@ -1885,7 +1831,7 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout > .sapUiCltBaseCont {
 	-ms-transform: rotate(0deg);
 	transform: rotate(0deg);
 	background-color: transparent;
-	/* currently the values must be defined separately to ensure the generating of the CSS-file */ 
+	/* currently the values must be defined separately to ensure the generating of the CSS-file */
 	/*border-color: rgba(44, 44, 44, 0.92) transparent transparent transparent;*/
 	border-top-color: @sapUiNotificationBarCalloutArr;
 	/*border-top-color: @sapUiNotificationBarBG;*/
@@ -1896,12 +1842,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout > .sapUiCltBaseCont {
 	border-width: 10px;
 	height: 0;
 	width: 0;
-}
-
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseArr {
-	/* equals a rotation of 0 degrees */
-	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, SizingMethod='auto expand')";
-	border-top-color: @sapUiNotificationBarCalloutBorder_IE;
 }
 
 .sapUiNotifierContainers {
@@ -1920,11 +1860,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseA
 	overflow-x: hidden;
 }
 
-/*HTML[data-sap-ui-browser^='ff'] .sapUiNotifierContent .sapUiCommonsHoriDiv,*/
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierContent .sapUiCommonsHoriDiv {
-	margin-left: -45px;
-}
-
 .sapUiNotifierTitle {
 	background-color: transparent;
 	color: white;
@@ -1938,12 +1873,13 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierContent .sapUiCommonsHoriDiv {
 	min-height: 35px;
 	background: transparent;
 	padding: 5px 5px;
-	outline : none;
+	outline: none;
 }
 
 .sapUiNotifierSelectable .sapUiNotifierMessage {
 	cursor: pointer;
 }
+
 .sapUiNotifierSelectable .sapUiNotifierMessage.sapUiNotifierMessageReadOnly {
 	cursor: default;
 }
@@ -1989,13 +1925,13 @@ li.sapUiInPlaceMessage div.sapUiNotifierMessageText {
 	max-height: 12px;
 	padding-bottom: 2px;
 	white-space: nowrap;
-	outline : none;
+	outline: none;
 }
 
-li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
+li.sapUiInPlaceMessage > div.sapUiNotifierMessageText:focus {
 	background-color: @sapUiNotifierHoverColor;
 }
- 
+
 /* Only if there is an event handler show the messages as clickable */
 .sapUiInPlaceMessageSelectable:hover,
 .sapUiInPlaceMessageSelectable:active {
@@ -2040,7 +1976,6 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	top: 4px;
 	position: absolute;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	background-color: @sapUiHighlight;
 	border: 1px solid @sapUiWhiteBG;
 	padding: 0 3px;
@@ -2070,6 +2005,7 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 .sapUiNotifierMessageCount.sapUiMessage.sapUiMessageError {
 	background-color: @sapUiErrorBorder;
 }
+
 /* END "NotificationBar.less" */
 
 /* START "Overlay.less" */
@@ -2215,8 +2151,6 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	border-style: solid;
 	border-color: @sapUiMediumBorder;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
 }
 
 .sapUiUx3QVHeader {
@@ -2266,6 +2200,14 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 /* CSS for sap.ui.ux3.Shell.control (base theme) */
 /* ============================================= */
 
+/* Define function to make user-select consistent across browsers */
+.userSelect(@value) {
+	-webkit-user-select: @value;  /* Chrome all / Safari all */
+	-moz-user-select: @value;     /* Firefox all */
+	-ms-user-select: @value;      /* IE 10+ */
+	user-select: @value;          /* Likely future */
+}
+
 .sapUiUx3Shell {
 	margin: 0;
 	padding: 0;
@@ -2273,9 +2215,7 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	font-family: Arial, Helvetica, sans-serif;
 	width: 100%;
 	overflow-x: hidden;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
+	.userSelect(none);
 }
 
 .sapUiUx3ShellHeader {
@@ -2284,8 +2224,6 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	color: @sapUiTextSelection;
 	height: 33px; /* may be removed by sapUiUx3ShellHeaderFlex, so having min-height as well makes sense */
 	padding: 12px 20px 0 20px;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	white-space: nowrap;
 }
@@ -2316,32 +2254,34 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	border: none;
 }
 
-.sapUiUx3ShellHeader > img { /* the logo image */
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding-top: 3px;
+}
+
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > span {
+	font-size: 0.75rem;
+	font-weight: bold;
+	.userSelect(none);
+}
+
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > img { /* the logo image */
 	vertical-align: top;
 	max-height: 18px;
 	margin-right: 3px;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
+	margin-top: -3px;
+	.userSelect(none);
 }
 
-.sapUiUx3ShellHeader.sapUiUx3ShellHeaderFlex > img {
+.sapUiUx3ShellHeader.sapUiUx3ShellHeaderFlex > .sapUiUx3ShellHeaderTitleLeft > img {
 	max-height: 40px;
 }
 
-.sapUiUx3ShellHeader > h1 {
-	font-size: 12px;
-	display: inline-block;
-	margin: 0;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
 .sapUiUx3ShellHeader .sapUiUx3ShellHeaderTitleRight {
-	position: absolute;
-	right: 20px;
-	font-weight: normal;
+	float: right;
 }
 
 .sapUiUx3ShellBlockHeaderAccess .sapUiUx3ShellHeaderTitleRight {
@@ -2405,7 +2345,6 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 /* tool palette area */
 .sapUiUx3ShellToolPaletteArea, .sapUiUx3ShellPaneBar {
 	position: fixed;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	bottom: 0;
 	width: @sapUiUx3ShellSideBarBaseWidth;
@@ -2417,9 +2356,7 @@ li.sapUiInPlaceMessage>div.sapUiNotifierMessageText:focus {
 	background-position: right top;
 	padding-top: 12px;
 	line-height: 1px;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
+	.userSelect(none);
 	z-index: 1; /* must be in front of the right-hand side Pane, otherwise that one will overlap when the window is very narrow */
 }
 
@@ -2552,13 +2489,8 @@ html[data-sap-ui-browser^="ff"] .sapUiUx3ShellToolFontIcon {
 	width: @sapUiUx3ShellSideBarBaseWidth;
 	display: inline-block;
 	height: 100%;
-
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
+	.userSelect(none);
 }
 
 /** Overflow button and menu**/
@@ -2607,22 +2539,6 @@ html[data-sap-ui-browser^="ff"] .sapUiUx3ShellToolFontIcon {
 	line-height: @sapUiUx3ShellSideBarBaseWidth;
 }
 
-
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellPaneBarRight > .sapUiUx3ShellPaneOverflowButton > .sapUiUx3ShellPaneOverflowWrapper {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-	position: static;
-}
-
-html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneBarRight > .sapUiUx3ShellPaneOverflowButton > .sapUiUx3ShellPaneOverflowWrapper {
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	text-align: right;
-}
-
-
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellPaneOverflowText {
-	margin-right: 0;
-}
-
 .sapUiUx3ShellPaneBarRight > .sapUiUx3ShellPaneOverflowButton > div > .sapUiUx3ShellPaneOverflowText {
 	box-sizing: border-box;
 	text-align: right;
@@ -2642,32 +2558,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellPaneOverflowText {
     margin: 0;
     line-height: @sapUiUx3ShellSideBarBaseWidth;
     padding-left: 26px;
-}
-
-/* rotation for IE8 */
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellPaneEntries {
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-	padding-left: 0;
-	margin-top: 20px;
-	width: 1000px; /* otherwise only the first or so entry is visible */
-}
-
-/**
- * In RTL case, IE8 has a bug where the clickable area is different from the visible elements.
- * So the plan here is: switch to LTR for rotation, rotate into the opposite direction, switch
- * back to RTL inside. Because of LTR the pane bar content needs to be right-aligned.
- */
-html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneBarRight {
-	direction: ltr;
-}
-
-html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneEntries {
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	text-align: right;
-}
-
-html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneEntry {
-	direction: rtl;
 }
 
 .sapUiUx3ShellPaneEntry {
@@ -2731,12 +2621,9 @@ html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneEntry {
 	/* Do not finally hardcode the width here. This width is only the default and will be overwritten by script code. */
 	width: 250px;
 	overflow: auto;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	border-right: 2px solid @sapUiMediumBorder;
-	-moz-user-select: auto;
-	-webkit-user-select: auto;
+	.userSelect(text);
 }
 
 .sapUiUx3ShellPaneBarOpen .sapUiUx3ShellPaneBarContent {
@@ -2765,11 +2652,6 @@ html[data-sap-ui-browser="ie8"][dir="rtl"] .sapUiUx3ShellPaneEntry {
 	padding: 0px 0px 0px 0px;
 }
 
-/* FIX: Height of the Canvas not adopted in IE8 - Snippix #5411 */
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
-	overflow-y: auto;
-}
-
 .sapUiUx3ShellCanvas > .sapUiUx3NavBar {
 	margin-bottom: 16px;
 }
@@ -2778,8 +2660,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 	width: 100%;
 	-webkit-overflow-scrolling: touch;
 	overflow-x: auto;
-	-moz-user-select: auto;
-	-webkit-user-select: auto;
+	.userSelect(text);
 }
 
 .sapUiUx3ShellFullHeightContent .sapUiUx3ShellContent {
@@ -2818,7 +2699,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 	padding: 0;
 }
 
-.sapUiUx3Shell.sapUiUx3ShellHeadBrandOnly > .sapUiUx3ShellHeader > img,
+.sapUiUx3Shell.sapUiUx3ShellHeadBrandOnly > .sapUiUx3ShellHeader > span > img,
 .sapUiUx3Shell.sapUiUx3ShellHeadBrandOnly > .sapUiUx3ShellHeader > h1,
 .sapUiUx3Shell.sapUiUx3ShellHeadBrandOnly > .sapUiUx3ShellHeader > span,
 .sapUiUx3Shell.sapUiUx3ShellHeadBrandOnly > .sapUiUx3ShellWorksetBar,
@@ -3150,7 +3031,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 	height: 48px;
 	border: 1px solid @sapUiMediumBorder;
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 .sapUiUx3TIIcon>IMG {
@@ -3266,8 +3146,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 
 .sapUiUx3TI.sapUiUx3TINoFrame {
 	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
 }
 
 .sapUiUx3TI.sapUiUx3TINoFrame > .sapUiUx3TIContent {
@@ -3284,6 +3162,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 .sapUiUx3TI.sapUiUx3TINoFrame > .sapUiUx3OverlayCloseButton {
 	display: none;
 }
+
 /* END "ThingInspector.less" */
 
 /* START "ThingViewer.less" */
@@ -3442,7 +3321,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 	font-size: 48px;
 	border: 1px solid @sapUiMediumBorder;
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 	float: left;
 }
 
@@ -3564,8 +3442,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 
 .sapUiUx3TV.sapUiUx3TVNoFrame {
 	box-shadow: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
 }
 
 .sapUiUx3TV.sapUiUx3TVNoFrame > .sapUiUx3TVContent {
@@ -3580,6 +3456,7 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3ShellCanvas {
 .sapUiUx3TV.sapUiUx3TVNoFrame > .sapUiUx3OverlayCloseButton {
 	display: none;
 }
+
 /* END "ThingViewer.less" */
 
 /* START "ToolPopup.less" */
@@ -3697,6 +3574,7 @@ html[dir=rtl] .sapUiUx3TPBtnRow {
 .sapUiUx3TPContent.sapUiUx3TPLargeContent {
 	bottom: 0px;
 	overflow-y: scroll;
+	height: 100%;
 }
 
 /* Control Adaptations */
@@ -3723,5 +3601,6 @@ html[dir=rtl] .sapUiUx3TPBtnRow {
 .sapUiUx3TPButtonRowHidden{
 	display: none;
 }
+
 /* END "ToolPopup.less" */
 

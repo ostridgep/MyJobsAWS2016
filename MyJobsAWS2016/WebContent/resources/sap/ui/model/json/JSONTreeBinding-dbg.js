@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,11 +14,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientTreeBinding'],
 	 *
 	 * @class
 	 * Tree binding implementation for JSON format.
-	 * 
-	 * The tree data structure may contain JSON objects and also arrays. If using arrays and don't want to bind every array data in the data structure you can 
+	 *
+	 * The tree data structure may contain JSON objects and also arrays. If using arrays and don't want to bind every array data in the data structure you can
 	 * specify a parameter <code>arrayNames</code> in the mParameters which contains the names of the arrays in a string array which should be bound for the tree.
 	 * An array not included there won't be bound. If an array is included but it is nested in another parent array which isn't included in the names list it won't be bound.
-	 * So make sure that the parent array name is also included. If the tree data structure doesn't include any arrays you don't have to specify this parameter at all. 
+	 * So make sure that the parent array name is also included. If the tree data structure doesn't include any arrays you don't have to specify this parameter at all.
 	 *
 	 * @param {sap.ui.model.json.JSONModel} [oModel]
 	 * @param {string}
@@ -29,77 +29,23 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientTreeBinding'],
 	 *         [aFilters=null] predefined filter/s contained in an array (optional)
 	 * @param {object}
 	 *         [mParameters=null] additional model specific parameters (optional)
-	 *         If the mParameter <code>arrayNames</code> is specified with an array of string names this names will be checked against the tree data structure
-	 *         and the found data in this array is included in the tree but only if also the parent array is included.
-	 *         If this parameter is not specified then all found arrays in the data structure are bound.
-	 *         If the tree data structure doesn't contain an array you don't have to specify this parameter. 
-	 * 
+	 * @param {string[]} [mParameters.arrayNames]
+	 *         If this parameter is specified with an array of string names, these names will be used to construct the tree data structure.
+	 *         Only the nested objects contained in arrays, with names specified by mParameters.arrayNames, will be included in the tree.
+	 *         Of course this will only happen if all parent-nodes up to the top-level are also included.
+	 *         If you do NOT specify this parameter: by default all nested objects/arrays will be used to build the trees hierarchy.
+	 *
 	 * @alias sap.ui.model.json.JSONTreeBinding
-	 * @extends sap.ui.model.TreeBinding
+	 * @extends sap.ui.model.ClientTreeBinding
 	 */
 	var JSONTreeBinding = ClientTreeBinding.extend("sap.ui.model.json.JSONTreeBinding");
-	
-	/**
-	 * Return node contexts for the tree
-	 * @param {object} oContext to use for retrieving the node contexts
-	 * @param {integer} iStartIndex the startIndex where to start the retrieval of contexts
-	 * @param {integer} iLength determines how many contexts to retrieve beginning from the start index.
-	 * @return {Array} the contexts array
-	 * @protected
-	 */
-	JSONTreeBinding.prototype.getNodeContexts = function(oContext, iStartIndex, iLength) {
-		if (!iStartIndex) {
-			iStartIndex = 0;
-		}
-		if (!iLength) {
-			iLength = this.oModel.iSizeLimit;
-		}
-	
-		var sContextPath = oContext.getPath();
-		if (!jQuery.sap.endsWith(sContextPath,"/")) {
-			sContextPath = sContextPath + "/";
-		}
-		if (!jQuery.sap.startsWith(sContextPath,"/")) {
-			sContextPath = "/" + sContextPath;
-		}
-	
-		var aContexts = [],
-			that = this,
-			oNode = this.oModel._getObject(sContextPath),
-			aArrayNames = this.mParameters && this.mParameters.arrayNames,
-			aChildArray;
-		
-		if (oNode) {
-			if (aArrayNames && jQuery.isArray(aArrayNames)) {
-				jQuery.each(aArrayNames, function(iIndex, sArrayName){
-					aChildArray = oNode[sArrayName];
-					if (aChildArray) {
-						jQuery.each(aChildArray, function(sSubName, oSubChild) {
-							that._saveSubContext(oSubChild, aContexts, sContextPath, sArrayName + "/" + sSubName);
-						});
-					}
-				});
-			} else {
-				jQuery.sap.each(oNode, function(sName, oChild) {
-					if (jQuery.isArray(oChild)) {
-						jQuery.each(oChild, function(sSubName, oSubChild) {
-							that._saveSubContext(oSubChild, aContexts, sContextPath, sName + "/" + sSubName);
-						});
-					} else if (oChild && typeof oChild == "object") {
-						that._saveSubContext(oChild, aContexts, sContextPath, sName);
-					}
-				});
-			}
-		}
-		return aContexts.slice(iStartIndex, iStartIndex + iLength);
-	};
-	
-	
+
 	JSONTreeBinding.prototype._saveSubContext = function(oNode, aContexts, sContextPath, sName) {
-		if (typeof oNode == "object") {
+		// only collect node if it is defined (and not null), because typeof null == "object"!
+		if (oNode && typeof oNode == "object") {
 			var oNodeContext = this.oModel.getContext(sContextPath + sName);
 			// check if there is a filter on this level applied
-			if (this.aFilters && !this.bIsFiltering) {
+			if (this.aAllFilters && !this.bIsFiltering) {
 				if (jQuery.inArray(oNodeContext, this.filterInfo.aFilteredContexts) != -1) {
 					aContexts.push(oNodeContext);
 				}
@@ -111,4 +57,4 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientTreeBinding'],
 
 	return JSONTreeBinding;
 
-}, /* bExport= */ true);
+});

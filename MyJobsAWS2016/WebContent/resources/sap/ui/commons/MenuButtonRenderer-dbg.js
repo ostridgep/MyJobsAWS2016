@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -17,7 +17,7 @@ sap.ui.define(['jquery.sap.global', './ButtonRenderer', 'sap/ui/core/Renderer'],
 	 * @namespace
 	 */
 	var MenuButtonRenderer = Renderer.extend(ButtonRenderer);
-	
+
 	/**
 	 * Hint: "renderButtonAttributes" is a reserved/hard-coded Button extending function!
 	 *       It is used to allow extensions to display content after the actual button content.
@@ -33,7 +33,7 @@ sap.ui.define(['jquery.sap.global', './ButtonRenderer', 'sap/ui/core/Renderer'],
 			rm.writeAttribute("aria-haspopup", "true");
 		}
 	};
-	
+
 	/**
 	 * Hint: "renderButtonContentAfter" is a reserved/hard-coded Button extending function!
 	 *       It is used to allow extensions to display content after the actual button content.

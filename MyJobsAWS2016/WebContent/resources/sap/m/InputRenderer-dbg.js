@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -30,10 +30,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 			if (oControl.getValueHelpOnly()) {
 				oRm.addClass("sapMInputVHO");
 			}
-			if (sap.ui.Device.browser.internet_explorer && sap.ui.Device.browser.version < 11) {
-				// IE9 and IE10 ignore padding-right in <input>
-				oRm.addClass("sapMInputIE9");
-			}
 		}
 		if (oControl.getDescription()) {
 				oRm.addClass("sapMInputDescription");
@@ -62,15 +58,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 				|| (oControl.getValueHelpOnly() && oControl.getEnabled() && oControl.getEditable() && oControl.getShowValueHelp())) {
 			// required for JAWS reader on password fields on desktop and in other cases:
 			oRm.writeAttribute("readonly", "readonly");
-		}
-		// Screen reader: announcements
-		if (oControl.getShowValueHelp() && oControl.getEnabled() && oControl.getEditable()) {
-			oRm.writeAccessibilityState({
-				describedby : {
-					value: oControl._sAriaF4LabelId,
-					append: true
-				}
-			});
 		}
 	};
 
@@ -114,12 +101,20 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 			oRm.write("</span>");
 		}
 
+		if (sap.ui.getCore().getConfiguration().getAccessibility()) {
+			if (oControl.getShowSuggestion() && oControl.getEnabled() && oControl.getEditable()) {
+				oRm.write("<span id=\"" + oControl.getId() + "-SuggDescr\" class=\"sapUiInvisibleText\" role=\"status\" aria-live=\"polite\"></span>");
+			}
+		}
+
 	};
 
 	InputRenderer.writeValueHelpIcon = function(oRm, oControl) {
 
 		if (oControl.getShowValueHelp() && oControl.getEnabled() && oControl.getEditable()) {
-			oRm.write('<div class="sapMInputValHelp">');
+			// Set tabindex to -1 to prevent the focus from going to the underlying list row,
+			// in case when the input is placed inside of a list/table.
+			oRm.write('<div class="sapMInputValHelp" tabindex="-1">');
 			oRm.renderControl(oControl._getValueHelpIcon());
 			oRm.write("</div>");
 		}
@@ -137,6 +132,45 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './InputBaseRenderer
 		if (oControl.getDescription()) {
 			oRm.addStyle("width", oControl.getFieldWidth() || "50%");
 		}
+
+	};
+
+	InputRenderer.getAriaDescribedBy = function(oControl) {
+
+		var sAriaDescribedBy = InputBaseRenderer.getAriaDescribedBy.apply(this, arguments);
+
+		if (oControl.getShowValueHelp() && oControl.getEnabled() && oControl.getEditable()) {
+			if (sAriaDescribedBy) {
+				sAriaDescribedBy = sAriaDescribedBy + " " + oControl._sAriaValueHelpLabelId;
+			} else {
+				sAriaDescribedBy = oControl._sAriaValueHelpLabelId;
+			}
+			if (oControl.getValueHelpOnly()) {
+				sAriaDescribedBy = sAriaDescribedBy + " " + oControl._sAriaInputDisabledLabelId;
+			}
+		}
+
+		if (oControl.getShowSuggestion() && oControl.getEnabled() && oControl.getEditable()) {
+			if (sAriaDescribedBy) {
+				sAriaDescribedBy = sAriaDescribedBy + " " + oControl.getId() + "-SuggDescr";
+			} else {
+				sAriaDescribedBy = oControl.getId() + "-SuggDescr";
+			}
+		}
+
+		return sAriaDescribedBy;
+
+	};
+
+	InputRenderer.getAccessibilityState = function(oControl) {
+
+		var mAccessibilityState = InputBaseRenderer.getAccessibilityState.apply(this, arguments);
+
+		if (oControl.getShowSuggestion() && oControl.getEnabled() && oControl.getEditable()) {
+			mAccessibilityState.autocomplete = "list";
+		}
+
+		return mAccessibilityState;
 
 	};
 

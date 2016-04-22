@@ -4439,9 +4439,7 @@ formtab=null;
     									new sap.m.Table("JobPhotoTable",{
     										 mode: sap.m.ListMode.SingleSelectMaster,
     											selectionChange: function(evt){
-    												//selectedPhoto=evt.getParameter("listItem").getCells()[4].getText()
     												
-    												//formDisplayPhoto.open()
     												showFile(evt.getParameter("listItem").getCells()[4].getText())
     										    },
     										width:'100%',
@@ -4453,26 +4451,25 @@ formtab=null;
    										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
    										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-   										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
- 										       	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-    										       	 hAlign: 'Left',width: '0%',minScreenWidth : "" , hidden:true, demandPopin: true })
+   										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
+ 										       	 new sap.m.Column({header: new sap.m.Button( {
+ 										       		icon:"sap-icon://camera",
+ 		    	                                    type: 	sap.m.ButtonType.Accept,
+ 		    	                                    tap: [ function(oEvt) { 
+ 		    	                                    	
+ 		    	                                    	
+ 		    	                                       	
+ 		    	                                       	
+ 		    	                                       	
+ 		    	                                    	getPhoto("JOB");
+ 		    	                                    	
+ 		    	                                              
+ 		    	                                                } ]
+ 		    	                                   
+ 		    	                                }),
+    										       	 hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })
    								           	     ]
-    									}),
-    									new sap.m.Button( {
-    	                                    text: "Take Photo",
-    	                                    type: 	sap.m.ButtonType.Accept,
-    	                                    tap: [ function(oEvt) { 
-    	                                    	
-    	                                    	
-    	                                       	
-    	                                       	
-    	                                       	
-    	                                    	getPhoto("JOB");
-    	                                    	
-    	                                              
-    	                                                } ]
-    	                                   
-    	                                }),  
+    									}) 
     									]          	                
         	                }),	
        	                ]

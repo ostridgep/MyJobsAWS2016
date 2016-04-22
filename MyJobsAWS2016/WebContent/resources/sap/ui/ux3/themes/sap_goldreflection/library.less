@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -121,8 +121,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 	margin: 0;
 	border: 0;
 	box-shadow: none;
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
 }
 /* END "CollectionInspector.less" */
 
@@ -199,7 +197,6 @@ button.sapUiBtnS.sapUiBtnNorm.sapUiUx3EditCollectionButton.sapUiBtnStd:hover {
 }
 
 /* List - Focus, Hover, Select */
-html[data-sap-ui-browser="ie8"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel,
 html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel {
 	border: 1px solid @sapUiHighlight;
@@ -311,10 +308,6 @@ html[data-sap-ui-browser="ie10"] .sapUiUx3ExactLstLb > ul > .sapUiLbxISel {
 	border-bottom: 1px solid @sapUiExtraLightBorder;
 }
 
-html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3ExactLstHead > .sapUiUx3ExactLstHeadTxt {
-	left: -4px; /*should be right -> swapped with right by RTL transformation*/
-}
-
 /* Content */
 .sapUiUx3ExactLstTop > .sapUiUx3ExactLstCntnt {
 	border: 0px solid transparent;
@@ -324,7 +317,7 @@ html[dir=rtl][data-sap-ui-browser="ie8"] .sapUiUx3ExactLstCollapsed > .sapUiUx3E
 }
 
 /* Resize */
-.sapUiUx3ExactLstRSz.sapUiUx3ExactLstRSzDrag, 
+.sapUiUx3ExactLstRSz.sapUiUx3ExactLstRSzDrag,
 .sapUiUx3ExactLstRSz:hover {
 	background-image: url("img/exact/resize.gif");
 	background-position: center;
@@ -660,13 +653,6 @@ html[data-sap-ui-browser^="ie"] .sapUiFeedChunk button {
 	font-size: 12px;
 	height: 25px; /* 1px more because header line is part of the height in this case*/
 	line-height: 24px;
-
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
-	border-top: 1px solid  @sapUiExtraLightBorder;
-	margin-top: 7px;
-	padding-top: 0;
 }
 /* END "FeedChunk.less" */
 
@@ -738,7 +724,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederLarge > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 .sapUiFeederLarge > button {
@@ -748,7 +733,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederMedium > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 3px;
-	-moz-border-radius: 3px;
 }
 
 .sapUiFeederMedium > button {
@@ -758,7 +742,6 @@ html[data-sap-ui-browser="ie8"] .sapUiFeedChunk > section > header{
 
 .sapUiFeederComment > .sapUiBtnS.sapUiBtnNorm {
 	border-radius: 3px;
-	-moz-border-radius: 3px;
 }
 
 .sapUiFeederComment > button {
@@ -897,6 +880,9 @@ html[data-sap-ui-browser="ie9"] {
 /* Per default the overriding of the less-parameter through the global.css in GF does not work somehow */
 @sapUiNotificationBarBG: rgba(44,44,44, 0.92);
 
+.sapUiNotifier .sapUiIcon {
+  color: @sapUiExtraLightBG;
+}
 
 /* END "NotificationBar.less" */
 
@@ -968,17 +954,15 @@ html[data-sap-ui-browser="ie9"] {
 	background-image: -ms-linear-gradient(top, @sapUiUx3ShellGradientTop 0, @sapUiUx3ShellGradientBottom 108px, @sapUiUx3ShellGradientBottom); /* starting with IE10 this works in IE */
 	background-image: linear-gradient(top, @sapUiUx3ShellGradientTop 0, @sapUiUx3ShellGradientBottom 108px, @sapUiUx3ShellGradientBottom);
 	background-position: left top;
-	padding: 9px 20px 0;
+	padding: 9px 0 0 20px;
 }
 
-html[data-sap-ui-browser="ie7"] .sapUiUx3ShellHeader,
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellHeader,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellHeader {
 	background-image: url(img/shell/Workset_bg.png);
 	background-size: auto; /* IE9 does understand background-size, but it is meant for the gradient which it does not understand... */
 }
 
-/* fading does not look too great 
+/* fading does not look too great
 .sapUiUx3ShellHeader.sapUiUx3ShellHeaderFadeout {
 	background-image: -moz-linear-gradient(top center, #606366, #525557 30px, rgba(80,83,85, 0) 35px, #2C2C2C);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#606366), to(#2C2C2C));
@@ -989,15 +973,16 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellHeader {
 
 .sapUiUx3ShellHeader > hr {
 	background-color: @sapUiBrand;
-	-moz-box-shadow: 0 0 5px #111;
-	-webkit-box-shadow: 0 0 5px #111;
 	box-shadow: 0 0 5px #111;
 	/* does not work, using the image... filter: Shadow(Color=#000, Direction=135, Strength=2);       */
 }
 
-.sapUiUx3ShellHeader > img,
-.sapUiUx3ShellHeader > h1 {
-	margin-top: 3px;
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft {
+	padding-top: 2px;
+}
+
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > img {
+	margin-top: 1px;
 }
 
 .sapUiUx3ShellHeader .sapUiBtn,
@@ -1128,8 +1113,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellHeader {
 	background-position: left top;
 }
 
-html[data-sap-ui-browser="ie7"] .sapUiUx3ShellBgImg,
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellBgImg,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg {
 	background-image: url(img/shell/Workset_bg.png);
 	background-size: auto; /* IE9 does understand background-size, but it is meant for the gradient which it does not understand... */
@@ -1172,7 +1155,7 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg {
 }
 
 .sapUiUx3ShellTool-search:hover,
-.sapUiUx3ShellTool-search:active, 
+.sapUiUx3ShellTool-search:active,
 .sapUiUx3ShellTool-search.sapUiUx3ShellToolSelected {
 	background-position: -28px -64px;
 }
@@ -1184,7 +1167,7 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg {
 .sapUiUx3ShellTool-inspector:hover {
 	background-position: -28px -32px;
 }
-.sapUiUx3ShellTool-inspector:active, 
+.sapUiUx3ShellTool-inspector:active,
 .sapUiUx3ShellTool-inspector.sapUiUx3ShellToolSelected {
 	background-position: -60px -32px;
 }
@@ -1194,7 +1177,7 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg {
 }
 
 .sapUiUx3ShellTool-feeder:hover,
-.sapUiUx3ShellTool-feeder:active, 
+.sapUiUx3ShellTool-feeder:active,
 .sapUiUx3ShellTool-feeder.sapUiUx3ShellToolSelected {
 	background-position: -28px 0;
 }
@@ -1299,7 +1282,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellBgImg {
 }
 
 /******** Light Designs *********/
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellHeader,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellHeader,
 .sapUiUx3ShellDesignLight > .sapUiUx3ShellHeader {
     background-color:   lighten(@sapUiUx3ShellHeaderColor, 20);
@@ -1337,7 +1319,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellHeader
     background:         linear-gradient(to right, @sapUiLightBG 0%,#ffffff 33%,#ffffff 66%,@sapUiLightBG 100%); /* W3C */
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellBgImg,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellBgImg,
 .sapUiUx3ShellDesignLight > .sapUiUx3ShellBgImg {
     background-image:   url(img/shell/lightBG.png);
@@ -1464,18 +1445,17 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignLight > .sapUiUx3ShellBgImg,
 .sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas {
     overflow-x:         visible;
     overflow-y:         visible;
-    -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.2) ;
     box-shadow:         0px 0px 1px 0px rgba(0, 0, 0, 0.2) ;
     bottom:             0;
 }
 
-html:not([data-sap-ui-browser="ie8"]) .sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas {
+.sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas {
     border-top:         1px solid @sapUiWhite;
     border-left:        1px solid lighten(@sapUiLightBG,6.5);
     border-right:       1px solid lighten(@sapUiLightBG,6.5);
 }
 
-html:not([data-sap-ui-browser="ie8"]) .sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas:before  {
+.sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas:before  {
     content:            "";
     position:           absolute;
     left:               -6px;
@@ -1486,7 +1466,7 @@ html:not([data-sap-ui-browser="ie8"]) .sapUiUx3ShellDesignLight > .sapUiUx3Shell
     z-index:            -1;
 }
 
-html:not([data-sap-ui-browser="ie8"]) .sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas:after {
+.sapUiUx3ShellDesignLight > .sapUiUx3ShellCanvas:after {
     content:            "";
     position:           absolute;
     right:              -6px;
@@ -1513,7 +1493,6 @@ html:not([data-sap-ui-browser="ie8"]) .sapUiUx3ShellDesignLight > .sapUiUx3Shell
     padding:            0;
     margin-top:         0px;
     background:         lighten(@sapUiLightBG, 8);
-    -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
     box-shadow:         0px 0px 2px 1px rgba(0, 0, 0, 0.2);
     top:                43px;
     clip:               rect(-8px,14px,14px,-8px);
@@ -1526,18 +1505,7 @@ html[dir="rtl"] .sapUiUx3ShellDesignLight .sapUiUx3NavBarToplevel .sapUiUx3NavBa
     clip:               inherit;
 }
 
-
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellDesignLight .sapUiUx3NavBarToplevel .sapUiUx3NavBarArrow {
-    background:         transparent;
-    border-color:       transparent transparent @sapUiDarkBorder transparent;
-    border-width:       0 7px 7px 7px;
-    width:              auto;
-    height:             auto;
-    top:                auto;
-}
-
 /******** Crystal design - based on Light ********/
-html[data-sap-ui-browser="ie8"] .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHeader,
 html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHeader,
 .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHeader {
     background-color:   @sapUiHeaderBGCrystal;
@@ -1584,7 +1552,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHead
 	background-color: @sapUiHighlight;
 	color: @sapUiTextInverted;
 }
-
 /* END "Shell.less" */
 
 /* START "ThingInspector.less" */
@@ -1754,7 +1721,6 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHead
 	height: 48px;
 	border: 1px solid @sapUiMediumBorder;
 	border-radius: 6px;
-	-moz-border-radius: 6px;
 }
 
 .sapUiUx3TIIcon>IMG {
@@ -1868,14 +1834,8 @@ html[data-sap-ui-browser="ie9"] .sapUiUx3ShellDesignCrystal > .sapUiUx3ShellHead
 	width: 270px;
 }
 
-
 .sapUiUx3TI.sapUiUx3TINoFrame {
 	margin-top: 3px;
-}
-
-html[data-sap-ui-browser="ie8"] .sapUiUx3TI.sapUiUx3TINoFrame {
-	margin-top: 0px;
-	outline-width: 0px;
 }
 
 .sapUiUx3TI.sapUiUx3TINoFrame .sapUiUx3TV > .sapUiUx3TVContent {
@@ -1952,11 +1912,6 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TI.sapUiUx3TINoFrame {
 	margin-top: 3px;
 }
 
-html[data-sap-ui-browser="ie8"] .sapUiUx3TV.sapUiUx3TVNoFrame {
-	margin-top: 0px;
-	outline-width: 0px;
-}
-
 .sapUiUx3TV.sapUiUx3TVNoFrame > .sapUiUx3TVContent {
 	border-width: 0;
 }
@@ -1981,19 +1936,8 @@ html[data-sap-ui-browser="ie8"] .sapUiUx3TV.sapUiUx3TVNoFrame {
 	border: 3px solid @sapUiDarkBG;
 }
 
-/* only prevent IE8 since it cannot use transparency.
-No need to check for other IE versions since we only
-support from version 8 */
-html[data-sap-ui-browser*=ie8] .sapUiUx3TP.sapUiTPInverted {
-	background-color: @sapUiBlackBG;
-}
-
 .sapUiUx3TP > hr {
 	border: 1px solid @sapUiMediumBorder;
-}
-
-html[data-sap-ui-browser=ie8] .sapUiUx3TP.sapUiShd {
-	outline: none;
 }
 /* END "ToolPopup.less" */
 

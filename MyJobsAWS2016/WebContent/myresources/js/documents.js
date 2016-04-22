@@ -265,8 +265,22 @@ function buildDocumentList(){
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
-	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})       	                         
+	    	            	 										       	 new sap.m.Column({header: new sap.m.Button( {
+	    	            	  										       		icon:"sap-icon://camera",
+	    	            	  		    	                                    type: 	sap.m.ButtonType.Accept,
+	    	            	  		    	                                    tap: [ function(oEvt) { 
+	    	            	  		    	                                    	
+	    	            	  		    	                                    	
+	    	            	  		    	                                       	
+	    	            	  		    	                                       	
+	    	            	  		    	                                       	
+	    	            	  		    	                                    	getPhoto("JOB");
+	    	            	  		    	                                    	
+	    	            	  		    	                                              
+	    	            	  		    	                                                } ]
+	    	            	  		    	                                   
+	    	            	  		    	                                }),
+	    	            	     										       	 hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })         
 	    	            								           	     ]
 	    	            								           	  
 

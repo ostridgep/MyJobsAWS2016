@@ -1,8 +1,8 @@
 /* NOTE: This file was generated as an optimized version of "library.source.less" for the Theme Designer. */
 
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -42,7 +42,7 @@
 
 
 .sapUiUx3ActionBarAction:focus {
-	outline: none; 
+	outline: none;
 }
 
 .sapUiUx3ActionBarAction:hover {
@@ -487,7 +487,7 @@ html[data-sap-ui-browser^="ie"] .sapUiUx3ExactLstLb > ul > .sapUiLbxI > .sapUiLb
 
 /* Header */
 .sapUiUx3ExactLstHeadAct {
-	top: -1px;	
+	top: -1px;
 	font-weight: bold;
 	outline: none;
 }
@@ -695,7 +695,6 @@ html[dir=rtl] .sapUiUx3ExactLstTopActive.sapUiUx3ExactLstTop > .sapUiUx3ExactLst
 	padding: 0;
 	background-color: @sapUiButtonBackground;
 	border: 1px solid @sapUiButtonBorderColor;
-	-moz-border-radius: 2px;
 	border-radius: 2px;
 }
 
@@ -811,7 +810,6 @@ html[dir=rtl] .sapUiUx3ExactLstTopActive.sapUiUx3ExactLstTop > .sapUiUx3ExactLst
 }
 
 .sapUiFeeder > button {
-	-moz-border-radius: 2px;
 	border-radius: 2px;
 }
 
@@ -860,6 +858,10 @@ html[dir=rtl] .sapUiUx3ExactLstTopActive.sapUiUx3ExactLstTop > .sapUiUx3ExactLst
 	color: @sapUiLink;
 	border: 1px solid @sapUiMediumBorder;
 }
+
+.sapUiUx3NavBarItem:focus {
+	outline: 3px solid white;
+}
 /* END "NavigationBar.less" */
 
 /* START "NotificationBar.less" */
@@ -883,34 +885,10 @@ html[dir=rtl] .sapUiUx3ExactLstTopActive.sapUiUx3ExactLstTop > .sapUiUx3ExactLst
 	font-size: @sapUiDesktopFontSize;
 }
 
-HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseArr {
-	z-index: -100;
-}
-
 .sapUiBarToggle {
 	border-top: 1px solid @sapUiBase;
 	border-left: 1px solid @sapUiBase;
 	border-right: 1px solid @sapUiBase;
-}
-
-/* Enlarge Arrow */
-.sapUiBarToggleArrowUp {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_up_hover.png");
-}
-
-/* Minimize Arrow */
-.sapUiBarToggleArrowDown {
-	background-image: url("img/notification_bar/arrows/DoubleArrow_down_hover.png");
-}
-
-/* BarUp */
-.sapUiBarToggleBarUp {
-	background-image: url("img/notification_bar/arrows/ArrowBar_up_hover.png");
-}
-
-/* BarDown */
-.sapUiBarToggleBarDown {
-	background-image: url("img/notification_bar/arrows/ArrowBar_down_hover.png");
 }
 
 .sapUiNotifierMessageCount {
@@ -977,6 +955,14 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseA
 	background-color: @sapUiBaseBG;
 }
 
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft {
+	padding-top: 0;
+}
+
+.sapUiUx3ShellHeader > .sapUiUx3ShellHeaderTitleLeft > img {
+	margin-top: 0;
+}
+
 .sapUiUx3ShellPaneEntry {
 	color: @sapUiBaseText;
 }
@@ -1035,8 +1021,6 @@ HTML[data-sap-ui-browser='ie8'] .sapUiNotifierCallout .sapUiCltArr.sapUiCltBaseA
 	vertical-align: top;
 	outline: none;
 	border-radius: 2px;
-	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px;
 	padding: 0 4px 0 5px;
 }
 

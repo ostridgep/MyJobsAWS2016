@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -16,8 +16,8 @@ sap.ui.define(['jquery.sap.global'],
 	 */
 	var ExactAreaRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
 	 *
@@ -41,7 +41,7 @@ sap.ui.define(['jquery.sap.global'],
 				if (oToolbarItem instanceof sap.ui.commons.ToolbarSeparator) {
 					sap.ui.commons.ToolbarRenderer.renderSeparator(rm, oToolbarItem);
 				} else if (oToolbarItem instanceof sap.ui.ux3.ExactAreaToolbarTitle) {
-					rm.write("<div class=\"sapUiUx3ExactAreaTbTitle\">" + jQuery.sap.escapeHTML(oToolbarItem.getText()) + "</div>");
+					rm.write("<div class=\"sapUiUx3ExactAreaTbTitle\">" + jQuery.sap.encodeHTML(oToolbarItem.getText()) + "</div>");
 				} else {
 					rm.renderControl(oToolbarItem);
 				}

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -26,18 +26,21 @@ sap.ui.define(['jquery.sap.global'],
 	 *            the button to be rendered
 	 */
 	ButtonRenderer.render = function(oRm, oButton) {
+
 		// get control properties
 		var sType = oButton.getType();
 		var bEnabled = oButton.getEnabled();
 		var sWidth = oButton.getWidth();
 		var sTooltip = oButton.getTooltip_AsString();
+		var sText = oButton._getText();
 		var sTextDir = oButton.getTextDirection();
+		var bIE_Edge = sap.ui.Device.browser.internet_explorer || sap.ui.Device.browser.edge;
 
 		// get icon from icon pool
 		var sBackURI = sap.ui.core.IconPool.getIconURI("nav-back");
 
 		// start button tag
-		oRm.write("<button type=\"button\"");
+		oRm.write("<button");
 		oRm.writeControlData(oButton);
 		oRm.addClass("sapMBtnBase");
 
@@ -46,7 +49,7 @@ sap.ui.define(['jquery.sap.global'],
 			oRm.addClass("sapMBtn");
 
 			// extend  minimum button size if icon is set without text for button types back and up
-			if ((sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) && oButton.getIcon() && !oButton._getText()) {
+			if ((sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) && oButton.getIcon() && !sText) {
 				oRm.addClass("sapMBtnBack");
 			}
 		}
@@ -96,9 +99,12 @@ sap.ui.define(['jquery.sap.global'],
 			}
 		}
 
+		// get icon-font info. will return null if the icon is a image
+		var oIconInfo = sap.ui.core.IconPool.getIconInfo(oButton.getIcon());
+
 		// add tooltip if available
-		if (sTooltip) {
-			oRm.writeAttributeEscaped("title", sTooltip);
+		if (sTooltip || (oIconInfo && !oButton.getText())) {
+			oRm.writeAttributeEscaped("title", sTooltip || oIconInfo.text || oIconInfo.name);
 		}
 
 		oRm.writeClasses();
@@ -129,6 +135,26 @@ sap.ui.define(['jquery.sap.global'],
 		// check if button is focusable (not disabled)
 		if (bEnabled) {
 			oRm.addClass("sapMFocusable");
+			// special focus handling for IE
+			if (bIE_Edge) {
+				oRm.addClass("sapMIE");
+			}
+		}
+
+		if (!oButton._isUnstyled()) {
+			if (sText) {
+				oRm.addClass("sapMBtnText");
+			}
+			if (sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) {
+				oRm.addClass("sapMBtnBack");
+			}
+			if (oButton.getIcon()) {
+				if (oButton.getIconFirst()) {
+					oRm.addClass("sapMBtnIconFirst");
+				} else {
+					oRm.addClass("sapMBtnIconLast");
+				}
+			}
 		}
 
 		//get render attributes of depended buttons (e.g. ToggleButton)
@@ -136,31 +162,10 @@ sap.ui.define(['jquery.sap.global'],
 			this.renderButtonAttributes(oRm, oButton);
 		}
 
-		// set padding depending on icons left or right or none
-		if (!oButton._isUnstyled()) {
-			if (!oButton.getIcon()) {
-				if (sType != sap.m.ButtonType.Back && sType != sap.m.ButtonType.Up) {
-					oRm.addClass("sapMBtnPaddingLeft");
-				}
-				if (oButton._getText()) {
-					oRm.addClass("sapMBtnPaddingRight");
-				}
-			} else {
-				if (oButton.getIcon() && oButton._getText() && oButton.getIconFirst()) {
-					oRm.addClass("sapMBtnPaddingRight");
-				}
-				if (oButton.getIcon() && oButton._getText() && !oButton.getIconFirst()) {
-					if (sType != sap.m.ButtonType.Back && sType != sap.m.ButtonType.Up) {
-						oRm.addClass("sapMBtnPaddingLeft");
-					}
-				}
-			}
-		}
-
 		// set button specific styles
 		if (!oButton._isUnstyled() && sType !== "") {
 			// set button specific styles
-			oRm.addClass("sapMBtn" + jQuery.sap.escapeHTML(sType));
+			oRm.addClass("sapMBtn" + jQuery.sap.encodeHTML(sType));
 		}
 
 		// add all classes to inner button tag
@@ -180,35 +185,23 @@ sap.ui.define(['jquery.sap.global'],
 		}
 
 		// write button text
-		if (oButton._getText()) {
+		if (sText) {
 			oRm.write("<span");
 			oRm.addClass("sapMBtnContent");
 			// check if textDirection property is not set to default "Inherit" and add "dir" attribute
 			if (sTextDir !== sap.ui.core.TextDirection.Inherit) {
 				oRm.writeAttribute("dir", sTextDir.toLowerCase());
 			}
-			// Check and add padding between icon and text
-			if (oButton.getIcon()) {
-				if (oButton.getIconFirst()) {
-					if (sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) {
-						oRm.addClass("sapMBtnBackContentRight");
-					} else {
-						oRm.addClass("sapMBtnContentRight");
-					}
-				} else {
-					if (sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) {
-						oRm.addClass("sapMBtnContentRight");
-					}
-					oRm.addClass("sapMBtnContentLeft");
-				}
-			} else if (sType === sap.m.ButtonType.Back || sType === sap.m.ButtonType.Up) {
-				oRm.addClass("sapMBtnContentRight");
-			}
 			oRm.writeClasses();
 			oRm.writeAttribute("id", oButton.getId() + "-content");
 			oRm.write(">");
-			oRm.writeEscaped(oButton._getText());
+			oRm.writeEscaped(sText);
 			oRm.write("</span>");
+		}
+
+		// special handling for IE focus outline
+		if (bIE_Edge && bEnabled) {
+			oRm.write('<div class="sapMBtnFocusDiv"></div>');
 		}
 
 		// end inner button tag

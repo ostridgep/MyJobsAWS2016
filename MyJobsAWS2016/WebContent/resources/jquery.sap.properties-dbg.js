@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -25,7 +25,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 	 * currently in the list.
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.Properties
 	 * @public
@@ -124,7 +124,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 	 * RegExp used to split file into lines, also removes leading whitespace.
 	 * Note: group must be non-capturing, otherwise the line feeds will be part of the split result.
 	 */
-	var rLines = /(?:^|\r\n|\r|\n)[ \t\f]*/;
+	var rLines = /(?:\r\n|\r|\n|^)[ \t\f]*/;
 
 	/**
 	 * RegExp that handles escapes, continuation line markers and key/value separators
@@ -304,4 +304,4 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
+});

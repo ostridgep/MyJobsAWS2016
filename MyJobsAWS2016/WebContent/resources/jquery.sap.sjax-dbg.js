@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -34,6 +34,7 @@ sap.ui.define(['jquery.sap.global'],
 	 * <li><code>status</code> string a textual status ('success,', 'error', 'timeout',...)
 	 * <li><code>statusCode</code> string the HTTP status code of the request
 	 * <li><code>error</code> Error an error object (exception) in case an error occurred
+	 * <li><code>errorText</code> string an error message in case an error occurred
 	 * </ul>
 	 *
 	 * When <code>complexResult</code> is false, then in the case of success, only 'data' is returned, in case of an error the
@@ -60,7 +61,7 @@ sap.ui.define(['jquery.sap.global'],
 					oResult = { success : true, data : data, status : textStatus, statusCode : xhr && xhr.status };
 				},
 				error : function(xhr, textStatus, error) {
-					oResult = { success : false, data : undefined, status : textStatus, error : error, statusCode : xhr.status };
+					oResult = { success : false, data : undefined, status : textStatus, error : error, statusCode : xhr.status, errorResponse :  xhr.responseText};
 				}
 			});
 
@@ -192,4 +193,4 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
+});

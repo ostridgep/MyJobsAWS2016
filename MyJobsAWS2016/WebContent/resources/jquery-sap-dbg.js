@@ -1,13 +1,1000 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * @overview es6-promise - a tiny implementation of Promises/A+.
+ * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
+ * @license   Licensed under MIT license
+ *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
+ * @version   2.3.0
+ */
+
+(function() {
+    "use strict";
+    function lib$es6$promise$utils$$objectOrFunction(x) {
+      return typeof x === 'function' || (typeof x === 'object' && x !== null);
+    }
+
+    function lib$es6$promise$utils$$isFunction(x) {
+      return typeof x === 'function';
+    }
+
+    function lib$es6$promise$utils$$isMaybeThenable(x) {
+      return typeof x === 'object' && x !== null;
+    }
+
+    var lib$es6$promise$utils$$_isArray;
+    if (!Array.isArray) {
+      lib$es6$promise$utils$$_isArray = function (x) {
+        return Object.prototype.toString.call(x) === '[object Array]';
+      };
+    } else {
+      lib$es6$promise$utils$$_isArray = Array.isArray;
+    }
+
+    var lib$es6$promise$utils$$isArray = lib$es6$promise$utils$$_isArray;
+    var lib$es6$promise$asap$$len = 0;
+    var lib$es6$promise$asap$$toString = {}.toString;
+    var lib$es6$promise$asap$$vertxNext;
+    var lib$es6$promise$asap$$customSchedulerFn;
+
+    var lib$es6$promise$asap$$asap = function asap(callback, arg) {
+      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len] = callback;
+      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len + 1] = arg;
+      lib$es6$promise$asap$$len += 2;
+      if (lib$es6$promise$asap$$len === 2) {
+        // If len is 2, that means that we need to schedule an async flush.
+        // If additional callbacks are queued before the queue is flushed, they
+        // will be processed by this flush that we are scheduling.
+        if (lib$es6$promise$asap$$customSchedulerFn) {
+          lib$es6$promise$asap$$customSchedulerFn(lib$es6$promise$asap$$flush);
+        } else {
+          lib$es6$promise$asap$$scheduleFlush();
+        }
+      }
+    }
+
+    function lib$es6$promise$asap$$setScheduler(scheduleFn) {
+      lib$es6$promise$asap$$customSchedulerFn = scheduleFn;
+    }
+
+    function lib$es6$promise$asap$$setAsap(asapFn) {
+      lib$es6$promise$asap$$asap = asapFn;
+    }
+
+    var lib$es6$promise$asap$$browserWindow = (typeof window !== 'undefined') ? window : undefined;
+    var lib$es6$promise$asap$$browserGlobal = lib$es6$promise$asap$$browserWindow || {};
+    var lib$es6$promise$asap$$BrowserMutationObserver = lib$es6$promise$asap$$browserGlobal.MutationObserver || lib$es6$promise$asap$$browserGlobal.WebKitMutationObserver;
+    var lib$es6$promise$asap$$isNode = typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+
+    // test for web worker but not in IE10
+    var lib$es6$promise$asap$$isWorker = typeof Uint8ClampedArray !== 'undefined' &&
+      typeof importScripts !== 'undefined' &&
+      typeof MessageChannel !== 'undefined';
+
+    // node
+    function lib$es6$promise$asap$$useNextTick() {
+      var nextTick = process.nextTick;
+      // node version 0.10.x displays a deprecation warning when nextTick is used recursively
+      // setImmediate should be used instead instead
+      var version = process.versions.node.match(/^(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/);
+      if (Array.isArray(version) && version[1] === '0' && version[2] === '10') {
+        nextTick = setImmediate;
+      }
+      return function() {
+        nextTick(lib$es6$promise$asap$$flush);
+      };
+    }
+
+    // vertx
+    function lib$es6$promise$asap$$useVertxTimer() {
+      return function() {
+        lib$es6$promise$asap$$vertxNext(lib$es6$promise$asap$$flush);
+      };
+    }
+
+    function lib$es6$promise$asap$$useMutationObserver() {
+      var iterations = 0;
+      var observer = new lib$es6$promise$asap$$BrowserMutationObserver(lib$es6$promise$asap$$flush);
+      var node = document.createTextNode('');
+      observer.observe(node, { characterData: true });
+
+      return function() {
+        node.data = (iterations = ++iterations % 2);
+      };
+    }
+
+    // web worker
+    function lib$es6$promise$asap$$useMessageChannel() {
+      var channel = new MessageChannel();
+      channel.port1.onmessage = lib$es6$promise$asap$$flush;
+      return function () {
+        channel.port2.postMessage(0);
+      };
+    }
+
+    function lib$es6$promise$asap$$useSetTimeout() {
+      return function() {
+        setTimeout(lib$es6$promise$asap$$flush, 1);
+      };
+    }
+
+    var lib$es6$promise$asap$$queue = new Array(1000);
+    function lib$es6$promise$asap$$flush() {
+      for (var i = 0; i < lib$es6$promise$asap$$len; i+=2) {
+        var callback = lib$es6$promise$asap$$queue[i];
+        var arg = lib$es6$promise$asap$$queue[i+1];
+
+        callback(arg);
+
+        lib$es6$promise$asap$$queue[i] = undefined;
+        lib$es6$promise$asap$$queue[i+1] = undefined;
+      }
+
+      lib$es6$promise$asap$$len = 0;
+    }
+
+    function lib$es6$promise$asap$$attemptVertex() {
+      try {
+        var r = require;
+        var vertx = r('vertx');
+        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
+        return lib$es6$promise$asap$$useVertxTimer();
+      } catch(e) {
+        return lib$es6$promise$asap$$useSetTimeout();
+      }
+    }
+
+    var lib$es6$promise$asap$$scheduleFlush;
+    // Decide what async method to use to triggering processing of queued callbacks:
+    if (lib$es6$promise$asap$$isNode) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useNextTick();
+    } else if (lib$es6$promise$asap$$BrowserMutationObserver) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMutationObserver();
+    } else if (lib$es6$promise$asap$$isWorker) {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMessageChannel();
+    } else if (lib$es6$promise$asap$$browserWindow === undefined && typeof require === 'function') {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$attemptVertex();
+    } else {
+      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useSetTimeout();
+    }
+
+    function lib$es6$promise$$internal$$noop() {}
+
+    var lib$es6$promise$$internal$$PENDING   = void 0;
+    var lib$es6$promise$$internal$$FULFILLED = 1;
+    var lib$es6$promise$$internal$$REJECTED  = 2;
+
+    var lib$es6$promise$$internal$$GET_THEN_ERROR = new lib$es6$promise$$internal$$ErrorObject();
+
+    function lib$es6$promise$$internal$$selfFullfillment() {
+      return new TypeError("You cannot resolve a promise with itself");
+    }
+
+    function lib$es6$promise$$internal$$cannotReturnOwn() {
+      return new TypeError('A promises callback cannot return that same promise.');
+    }
+
+    function lib$es6$promise$$internal$$getThen(promise) {
+      try {
+        return promise.then;
+      } catch(error) {
+        lib$es6$promise$$internal$$GET_THEN_ERROR.error = error;
+        return lib$es6$promise$$internal$$GET_THEN_ERROR;
+      }
+    }
+
+    function lib$es6$promise$$internal$$tryThen(then, value, fulfillmentHandler, rejectionHandler) {
+      try {
+        then.call(value, fulfillmentHandler, rejectionHandler);
+      } catch(e) {
+        return e;
+      }
+    }
+
+    function lib$es6$promise$$internal$$handleForeignThenable(promise, thenable, then) {
+       lib$es6$promise$asap$$asap(function(promise) {
+        var sealed = false;
+        var error = lib$es6$promise$$internal$$tryThen(then, thenable, function(value) {
+          if (sealed) { return; }
+          sealed = true;
+          if (thenable !== value) {
+            lib$es6$promise$$internal$$resolve(promise, value);
+          } else {
+            lib$es6$promise$$internal$$fulfill(promise, value);
+          }
+        }, function(reason) {
+          if (sealed) { return; }
+          sealed = true;
+
+          lib$es6$promise$$internal$$reject(promise, reason);
+        }, 'Settle: ' + (promise._label || ' unknown promise'));
+
+        if (!sealed && error) {
+          sealed = true;
+          lib$es6$promise$$internal$$reject(promise, error);
+        }
+      }, promise);
+    }
+
+    function lib$es6$promise$$internal$$handleOwnThenable(promise, thenable) {
+      if (thenable._state === lib$es6$promise$$internal$$FULFILLED) {
+        lib$es6$promise$$internal$$fulfill(promise, thenable._result);
+      } else if (thenable._state === lib$es6$promise$$internal$$REJECTED) {
+        lib$es6$promise$$internal$$reject(promise, thenable._result);
+      } else {
+        lib$es6$promise$$internal$$subscribe(thenable, undefined, function(value) {
+          lib$es6$promise$$internal$$resolve(promise, value);
+        }, function(reason) {
+          lib$es6$promise$$internal$$reject(promise, reason);
+        });
+      }
+    }
+
+    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable) {
+      if (maybeThenable.constructor === promise.constructor) {
+        lib$es6$promise$$internal$$handleOwnThenable(promise, maybeThenable);
+      } else {
+        var then = lib$es6$promise$$internal$$getThen(maybeThenable);
+
+        if (then === lib$es6$promise$$internal$$GET_THEN_ERROR) {
+          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$GET_THEN_ERROR.error);
+        } else if (then === undefined) {
+          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
+        } else if (lib$es6$promise$utils$$isFunction(then)) {
+          lib$es6$promise$$internal$$handleForeignThenable(promise, maybeThenable, then);
+        } else {
+          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
+        }
+      }
+    }
+
+    function lib$es6$promise$$internal$$resolve(promise, value) {
+      if (promise === value) {
+        lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$selfFullfillment());
+      } else if (lib$es6$promise$utils$$objectOrFunction(value)) {
+        lib$es6$promise$$internal$$handleMaybeThenable(promise, value);
+      } else {
+        lib$es6$promise$$internal$$fulfill(promise, value);
+      }
+    }
+
+    function lib$es6$promise$$internal$$publishRejection(promise) {
+      if (promise._onerror) {
+        promise._onerror(promise._result);
+      }
+
+      lib$es6$promise$$internal$$publish(promise);
+    }
+
+    function lib$es6$promise$$internal$$fulfill(promise, value) {
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
+
+      promise._result = value;
+      promise._state = lib$es6$promise$$internal$$FULFILLED;
+
+      if (promise._subscribers.length !== 0) {
+        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, promise);
+      }
+    }
+
+    function lib$es6$promise$$internal$$reject(promise, reason) {
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
+      promise._state = lib$es6$promise$$internal$$REJECTED;
+      promise._result = reason;
+
+      lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publishRejection, promise);
+    }
+
+    function lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection) {
+      var subscribers = parent._subscribers;
+      var length = subscribers.length;
+
+      parent._onerror = null;
+
+      subscribers[length] = child;
+      subscribers[length + lib$es6$promise$$internal$$FULFILLED] = onFulfillment;
+      subscribers[length + lib$es6$promise$$internal$$REJECTED]  = onRejection;
+
+      if (length === 0 && parent._state) {
+        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, parent);
+      }
+    }
+
+    function lib$es6$promise$$internal$$publish(promise) {
+      var subscribers = promise._subscribers;
+      var settled = promise._state;
+
+      if (subscribers.length === 0) { return; }
+
+      var child, callback, detail = promise._result;
+
+      for (var i = 0; i < subscribers.length; i += 3) {
+        child = subscribers[i];
+        callback = subscribers[i + settled];
+
+        if (child) {
+          lib$es6$promise$$internal$$invokeCallback(settled, child, callback, detail);
+        } else {
+          callback(detail);
+        }
+      }
+
+      promise._subscribers.length = 0;
+    }
+
+    function lib$es6$promise$$internal$$ErrorObject() {
+      this.error = null;
+    }
+
+    var lib$es6$promise$$internal$$TRY_CATCH_ERROR = new lib$es6$promise$$internal$$ErrorObject();
+
+    function lib$es6$promise$$internal$$tryCatch(callback, detail) {
+      try {
+        return callback(detail);
+      } catch(e) {
+        lib$es6$promise$$internal$$TRY_CATCH_ERROR.error = e;
+        return lib$es6$promise$$internal$$TRY_CATCH_ERROR;
+      }
+    }
+
+    function lib$es6$promise$$internal$$invokeCallback(settled, promise, callback, detail) {
+      var hasCallback = lib$es6$promise$utils$$isFunction(callback),
+          value, error, succeeded, failed;
+
+      if (hasCallback) {
+        value = lib$es6$promise$$internal$$tryCatch(callback, detail);
+
+        if (value === lib$es6$promise$$internal$$TRY_CATCH_ERROR) {
+          failed = true;
+          error = value.error;
+          value = null;
+        } else {
+          succeeded = true;
+        }
+
+        if (promise === value) {
+          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$cannotReturnOwn());
+          return;
+        }
+
+      } else {
+        value = detail;
+        succeeded = true;
+      }
+
+      if (promise._state !== lib$es6$promise$$internal$$PENDING) {
+        // noop
+      } else if (hasCallback && succeeded) {
+        lib$es6$promise$$internal$$resolve(promise, value);
+      } else if (failed) {
+        lib$es6$promise$$internal$$reject(promise, error);
+      } else if (settled === lib$es6$promise$$internal$$FULFILLED) {
+        lib$es6$promise$$internal$$fulfill(promise, value);
+      } else if (settled === lib$es6$promise$$internal$$REJECTED) {
+        lib$es6$promise$$internal$$reject(promise, value);
+      }
+    }
+
+    function lib$es6$promise$$internal$$initializePromise(promise, resolver) {
+      try {
+        resolver(function resolvePromise(value){
+          lib$es6$promise$$internal$$resolve(promise, value);
+        }, function rejectPromise(reason) {
+          lib$es6$promise$$internal$$reject(promise, reason);
+        });
+      } catch(e) {
+        lib$es6$promise$$internal$$reject(promise, e);
+      }
+    }
+
+    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
+      var enumerator = this;
+
+      enumerator._instanceConstructor = Constructor;
+      enumerator.promise = new Constructor(lib$es6$promise$$internal$$noop);
+
+      if (enumerator._validateInput(input)) {
+        enumerator._input     = input;
+        enumerator.length     = input.length;
+        enumerator._remaining = input.length;
+
+        enumerator._init();
+
+        if (enumerator.length === 0) {
+          lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+        } else {
+          enumerator.length = enumerator.length || 0;
+          enumerator._enumerate();
+          if (enumerator._remaining === 0) {
+            lib$es6$promise$$internal$$fulfill(enumerator.promise, enumerator._result);
+          }
+        }
+      } else {
+        lib$es6$promise$$internal$$reject(enumerator.promise, enumerator._validationError());
+      }
+    }
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._validateInput = function(input) {
+      return lib$es6$promise$utils$$isArray(input);
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._validationError = function() {
+      return new Error('Array Methods must be provided an Array');
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._init = function() {
+      this._result = new Array(this.length);
+    };
+
+    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
+      var enumerator = this;
+
+      var length  = enumerator.length;
+      var promise = enumerator.promise;
+      var input   = enumerator._input;
+
+      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
+        enumerator._eachEntry(input[i], i);
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
+      var enumerator = this;
+      var c = enumerator._instanceConstructor;
+
+      if (lib$es6$promise$utils$$isMaybeThenable(entry)) {
+        if (entry.constructor === c && entry._state !== lib$es6$promise$$internal$$PENDING) {
+          entry._onerror = null;
+          enumerator._settledAt(entry._state, i, entry._result);
+        } else {
+          enumerator._willSettleAt(c.resolve(entry), i);
+        }
+      } else {
+        enumerator._remaining--;
+        enumerator._result[i] = entry;
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
+      var enumerator = this;
+      var promise = enumerator.promise;
+
+      if (promise._state === lib$es6$promise$$internal$$PENDING) {
+        enumerator._remaining--;
+
+        if (state === lib$es6$promise$$internal$$REJECTED) {
+          lib$es6$promise$$internal$$reject(promise, value);
+        } else {
+          enumerator._result[i] = value;
+        }
+      }
+
+      if (enumerator._remaining === 0) {
+        lib$es6$promise$$internal$$fulfill(promise, enumerator._result);
+      }
+    };
+
+    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
+      var enumerator = this;
+
+      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
+        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
+      }, function(reason) {
+        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
+      });
+    };
+    function lib$es6$promise$promise$all$$all(entries) {
+      return new lib$es6$promise$enumerator$$default(this, entries).promise;
+    }
+    var lib$es6$promise$promise$all$$default = lib$es6$promise$promise$all$$all;
+    function lib$es6$promise$promise$race$$race(entries) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+
+      if (!lib$es6$promise$utils$$isArray(entries)) {
+        lib$es6$promise$$internal$$reject(promise, new TypeError('You must pass an array to race.'));
+        return promise;
+      }
+
+      var length = entries.length;
+
+      function onFulfillment(value) {
+        lib$es6$promise$$internal$$resolve(promise, value);
+      }
+
+      function onRejection(reason) {
+        lib$es6$promise$$internal$$reject(promise, reason);
+      }
+
+      for (var i = 0; promise._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
+        lib$es6$promise$$internal$$subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
+      }
+
+      return promise;
+    }
+    var lib$es6$promise$promise$race$$default = lib$es6$promise$promise$race$$race;
+    function lib$es6$promise$promise$resolve$$resolve(object) {
+      /*jshint validthis:true */
+      var Constructor = this;
+
+      if (object && typeof object === 'object' && object.constructor === Constructor) {
+        return object;
+      }
+
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+      lib$es6$promise$$internal$$resolve(promise, object);
+      return promise;
+    }
+    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
+    function lib$es6$promise$promise$reject$$reject(reason) {
+      /*jshint validthis:true */
+      var Constructor = this;
+      var promise = new Constructor(lib$es6$promise$$internal$$noop);
+      lib$es6$promise$$internal$$reject(promise, reason);
+      return promise;
+    }
+    var lib$es6$promise$promise$reject$$default = lib$es6$promise$promise$reject$$reject;
+
+    var lib$es6$promise$promise$$counter = 0;
+
+    function lib$es6$promise$promise$$needsResolver() {
+      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+    }
+
+    function lib$es6$promise$promise$$needsNew() {
+      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
+    }
+
+    var lib$es6$promise$promise$$default = lib$es6$promise$promise$$Promise;
+    /**
+      Promise objects represent the eventual result of an asynchronous operation. The
+      primary way of interacting with a promise is through its `then` method, which
+      registers callbacks to receive either a promise's eventual value or the reason
+      why the promise cannot be fulfilled.
+
+      Terminology
+      -----------
+
+      - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
+      - `thenable` is an object or function that defines a `then` method.
+      - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
+      - `exception` is a value that is thrown using the throw statement.
+      - `reason` is a value that indicates why a promise was rejected.
+      - `settled` the final resting state of a promise, fulfilled or rejected.
+
+      A promise can be in one of three states: pending, fulfilled, or rejected.
+
+      Promises that are fulfilled have a fulfillment value and are in the fulfilled
+      state.  Promises that are rejected have a rejection reason and are in the
+      rejected state.  A fulfillment value is never a thenable.
+
+      Promises can also be said to *resolve* a value.  If this value is also a
+      promise, then the original promise's settled state will match the value's
+      settled state.  So a promise that *resolves* a promise that rejects will
+      itself reject, and a promise that *resolves* a promise that fulfills will
+      itself fulfill.
+
+
+      Basic Usage:
+      ------------
+
+      ```js
+      var promise = new Promise(function(resolve, reject) {
+        // on success
+        resolve(value);
+
+        // on failure
+        reject(reason);
+      });
+
+      promise.then(function(value) {
+        // on fulfillment
+      }, function(reason) {
+        // on rejection
+      });
+      ```
+
+      Advanced Usage:
+      ---------------
+
+      Promises shine when abstracting away asynchronous interactions such as
+      `XMLHttpRequest`s.
+
+      ```js
+      function getJSON(url) {
+        return new Promise(function(resolve, reject){
+          var xhr = new XMLHttpRequest();
+
+          xhr.open('GET', url);
+          xhr.onreadystatechange = handler;
+          xhr.responseType = 'json';
+          xhr.setRequestHeader('Accept', 'application/json');
+          xhr.send();
+
+          function handler() {
+            if (this.readyState === this.DONE) {
+              if (this.status === 200) {
+                resolve(this.response);
+              } else {
+                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+              }
+            }
+          };
+        });
+      }
+
+      getJSON('/posts.json').then(function(json) {
+        // on fulfillment
+      }, function(reason) {
+        // on rejection
+      });
+      ```
+
+      Unlike callbacks, promises are great composable primitives.
+
+      ```js
+      Promise.all([
+        getJSON('/posts'),
+        getJSON('/comments')
+      ]).then(function(values){
+        values[0] // => postsJSON
+        values[1] // => commentsJSON
+
+        return values;
+      });
+      ```
+
+      @class Promise
+      @param {function} resolver
+      Useful for tooling.
+      @constructor
+    */
+    function lib$es6$promise$promise$$Promise(resolver) {
+      this._id = lib$es6$promise$promise$$counter++;
+      this._state = undefined;
+      this._result = undefined;
+      this._subscribers = [];
+
+      if (lib$es6$promise$$internal$$noop !== resolver) {
+        if (!lib$es6$promise$utils$$isFunction(resolver)) {
+          lib$es6$promise$promise$$needsResolver();
+        }
+
+        if (!(this instanceof lib$es6$promise$promise$$Promise)) {
+          lib$es6$promise$promise$$needsNew();
+        }
+
+        lib$es6$promise$$internal$$initializePromise(this, resolver);
+      }
+    }
+
+    lib$es6$promise$promise$$Promise.all = lib$es6$promise$promise$all$$default;
+    lib$es6$promise$promise$$Promise.race = lib$es6$promise$promise$race$$default;
+    lib$es6$promise$promise$$Promise.resolve = lib$es6$promise$promise$resolve$$default;
+    lib$es6$promise$promise$$Promise.reject = lib$es6$promise$promise$reject$$default;
+    lib$es6$promise$promise$$Promise._setScheduler = lib$es6$promise$asap$$setScheduler;
+    lib$es6$promise$promise$$Promise._setAsap = lib$es6$promise$asap$$setAsap;
+    lib$es6$promise$promise$$Promise._asap = lib$es6$promise$asap$$asap;
+
+    lib$es6$promise$promise$$Promise.prototype = {
+      constructor: lib$es6$promise$promise$$Promise,
+
+    /**
+      The primary way of interacting with a promise is through its `then` method,
+      which registers callbacks to receive either a promise's eventual value or the
+      reason why the promise cannot be fulfilled.
+
+      ```js
+      findUser().then(function(user){
+        // user is available
+      }, function(reason){
+        // user is unavailable, and you are given the reason why
+      });
+      ```
+
+      Chaining
+      --------
+
+      The return value of `then` is itself a promise.  This second, 'downstream'
+      promise is resolved with the return value of the first promise's fulfillment
+      or rejection handler, or rejected if the handler throws an exception.
+
+      ```js
+      findUser().then(function (user) {
+        return user.name;
+      }, function (reason) {
+        return 'default name';
+      }).then(function (userName) {
+        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
+        // will be `'default name'`
+      });
+
+      findUser().then(function (user) {
+        throw new Error('Found user, but still unhappy');
+      }, function (reason) {
+        throw new Error('`findUser` rejected and we're unhappy');
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
+        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
+      });
+      ```
+      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+
+      ```js
+      findUser().then(function (user) {
+        throw new PedagogicalException('Upstream error');
+      }).then(function (value) {
+        // never reached
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // The `PedgagocialException` is propagated all the way down to here
+      });
+      ```
+
+      Assimilation
+      ------------
+
+      Sometimes the value you want to propagate to a downstream promise can only be
+      retrieved asynchronously. This can be achieved by returning a promise in the
+      fulfillment or rejection handler. The downstream promise will then be pending
+      until the returned promise is settled. This is called *assimilation*.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // The user's comments are now available
+      });
+      ```
+
+      If the assimliated promise rejects, then the downstream promise will also reject.
+
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // If `findCommentsByAuthor` fulfills, we'll have the value here
+      }, function (reason) {
+        // If `findCommentsByAuthor` rejects, we'll have the reason here
+      });
+      ```
+
+      Simple Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var result;
+
+      try {
+        result = findResult();
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+      findResult(function(result, err){
+        if (err) {
+          // failure
+        } else {
+          // success
+        }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findResult().then(function(result){
+        // success
+      }, function(reason){
+        // failure
+      });
+      ```
+
+      Advanced Example
+      --------------
+
+      Synchronous Example
+
+      ```javascript
+      var author, books;
+
+      try {
+        author = findAuthor();
+        books  = findBooksByAuthor(author);
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+
+      Errback Example
+
+      ```js
+
+      function foundBooks(books) {
+
+      }
+
+      function failure(reason) {
+
+      }
+
+      findAuthor(function(author, err){
+        if (err) {
+          failure(err);
+          // failure
+        } else {
+          try {
+            findBoooksByAuthor(author, function(books, err) {
+              if (err) {
+                failure(err);
+              } else {
+                try {
+                  foundBooks(books);
+                } catch(reason) {
+                  failure(reason);
+                }
+              }
+            });
+          } catch(error) {
+            failure(err);
+          }
+          // success
+        }
+      });
+      ```
+
+      Promise Example;
+
+      ```javascript
+      findAuthor().
+        then(findBooksByAuthor).
+        then(function(books){
+          // found books
+      }).catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method then
+      @param {Function} onFulfilled
+      @param {Function} onRejected
+      Useful for tooling.
+      @return {Promise}
+    */
+      then: function(onFulfillment, onRejection) {
+        var parent = this;
+        var state = parent._state;
+
+        if (state === lib$es6$promise$$internal$$FULFILLED && !onFulfillment || state === lib$es6$promise$$internal$$REJECTED && !onRejection) {
+          return this;
+        }
+
+        var child = new this.constructor(lib$es6$promise$$internal$$noop);
+        var result = parent._result;
+
+        if (state) {
+          var callback = arguments[state - 1];
+          lib$es6$promise$asap$$asap(function(){
+            lib$es6$promise$$internal$$invokeCallback(state, child, callback, result);
+          });
+        } else {
+          lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
+        }
+
+        return child;
+      },
+
+    /**
+      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
+      as the catch block of a try/catch statement.
+
+      ```js
+      function findAuthor(){
+        throw new Error('couldn't find that author');
+      }
+
+      // synchronous
+      try {
+        findAuthor();
+      } catch(reason) {
+        // something went wrong
+      }
+
+      // async with promises
+      findAuthor().catch(function(reason){
+        // something went wrong
+      });
+      ```
+
+      @method catch
+      @param {Function} onRejection
+      Useful for tooling.
+      @return {Promise}
+    */
+      'catch': function(onRejection) {
+        return this.then(null, onRejection);
+      }
+    };
+    function lib$es6$promise$polyfill$$polyfill() {
+      var local;
+
+      if (typeof global !== 'undefined') {
+          local = global;
+      } else if (typeof self !== 'undefined') {
+          local = self;
+      } else {
+          try {
+              local = Function('return this')();
+          } catch (e) {
+              throw new Error('polyfill failed because global object is unavailable in this environment');
+          }
+      }
+
+      var P = local.Promise;
+
+      // ##### BEGIN: MODIFIED BY SAP
+      // Original line:
+      //    if (P && Object.prototype.toString.call(P.resolve()) === '[object Promise]' && !P.cast) {
+      // This lead to the polyfill replacing the native promise object in
+      // - Chrome, where "[object Object]" is returned instead of '[object Promise]'
+      // - Safari, where native promise contains a definition for Promise.cast
+      if (P && Object.prototype.toString.call(P.resolve()).indexOf('[object ') === 0) {
+      // ##### END: MODIFIED BY SAP
+        return;
+      }
+
+      local.Promise = lib$es6$promise$promise$$default;
+    }
+    var lib$es6$promise$polyfill$$default = lib$es6$promise$polyfill$$polyfill;
+
+    var lib$es6$promise$umd$$ES6Promise = {
+      'Promise': lib$es6$promise$promise$$default,
+      'polyfill': lib$es6$promise$polyfill$$default
+    };
+
+    /* global define:true module:true window: true */
+    if (typeof define === 'function' && define['amd']) {
+      // ##### BEGIN: MODIFIED BY SAP
+      // Original line:
+      // define(function() { return lib$es6$promise$umd$$ES6Promise; });
+      define('sap/ui/thirdparty/es6-promise', function() { return lib$es6$promise$umd$$ES6Promise; });
+      // ##### END: MODIFIED BY SAP
+    } else if (typeof module !== 'undefined' && module['exports']) {
+      module['exports'] = lib$es6$promise$umd$$ES6Promise;
+    } else if (typeof this !== 'undefined') {
+      this['ES6Promise'] = lib$es6$promise$umd$$ES6Promise;
+    }
+
+    lib$es6$promise$polyfill$$default();
+}).call(this);
+
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-/** 
- * Device and Feature Detection API of the SAP UI5 Library.
+/**
+ * Device and Feature Detection API: Provides information about the used browser / device and cross platform support for certain events
+ * like media queries, orientation change or resizing.
  *
- * @version 1.28.12
+ * This API is independent from any other part of the UI5 framework. This allows it to be loaded beforehand, if it is needed, to create the UI5 bootstrap
+ * dynamically depending on the capabilities of the browser or device.
+ *
+ * @version 1.36.7
  * @namespace
  * @name sap.ui.Device
  * @public
@@ -29,14 +1016,15 @@ if (typeof window.sap.ui !== "object") {
 }
 
 (function() {
+	"use strict";
 
 	//Skip initialization if API is already available
 	if (typeof window.sap.ui.Device === "object" || typeof window.sap.ui.Device === "function" ) {
-		var apiVersion = "1.28.12";
+		var apiVersion = "1.36.7";
 		window.sap.ui.Device._checkAPIVersion(apiVersion);
 		return;
 	}
-	
+
 	var device = {};
 
 ////-------------------------- Logging -------------------------------------
@@ -81,16 +1069,16 @@ if (typeof window.sap.ui !== "object") {
 				return oLogEntry;
 		};
 	};
-// instantiate new logger		
+// instantiate new logger
 	var logger = new deviceLogger();
 	logger.log(INFO, "Device API logging initialized");
-	
-	
+
+
 //******** Version Check ********
-	
+
 	//Only used internal to make clear when Device API is loaded in wrong version
 	device._checkAPIVersion = function(sVersion){
-		var v = "1.28.12";
+		var v = "1.36.7";
 		if (v != sVersion) {
 			logger.log(WARNING, "Device API version differs: " + v + " <-> " + sVersion);
 		}
@@ -110,7 +1098,7 @@ if (typeof window.sap.ui !== "object") {
 
 	function detachEvent(sEventId, fnFunction, oListener) {
 		var aEventListeners = mEventRegistry[sEventId];
-		
+
 		if (!aEventListeners) {
 			return this;
 		}
@@ -139,142 +1127,146 @@ if (typeof window.sap.ui !== "object") {
 
 //******** OS Detection ********
 
-	/** 
+	/**
 	 * Contains information about the operating system of the device.
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.os
 	 * @public
 	 */
 	/**
 	 * Enumeration containing the names of known operating systems.
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.os.OS
 	 * @public
 	 */
 	/**
 	 * The name of the operating system.
-	 * 
-	 * @see sap.ui.Device.os#OS
+	 *
+	 * @see sap.ui.Device.os.OS
 	 * @name sap.ui.Device.os#name
 	 * @type String
 	 * @public
 	 */
 	/**
-	 * The version as string. Might be empty if no version can be determined.
-	 * 
+	 * The version of the operating system as <code>string</code>.
+	 *
+	 * Might be empty if no version can be determined.
+	 *
 	 * @name sap.ui.Device.os#versionStr
 	 * @type String
 	 * @public
 	 */
 	/**
-	 * The version as float. Might be -1 if no version can be determined.
-	 * 
+	 * The version of the operating system as <code>float</code>.
+	 *
+	 * Might be <code>-1</code> if no version can be determined.
+	 *
 	 * @name sap.ui.Device.os#version
 	 * @type float
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Windows operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, a Windows operating system is used.
+	 *
 	 * @name sap.ui.Device.os#windows
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Linux operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, a Linux operating system is used.
+	 *
 	 * @name sap.ui.Device.os#linux
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the MAC operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, a Mac operating system is used.
+	 *
 	 * @name sap.ui.Device.os#macintosh
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the iOS operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, an iOS operating system is used.
+	 *
 	 * @name sap.ui.Device.os#ios
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Android operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, an Android operating system is used.
+	 *
 	 * @name sap.ui.Device.os#android
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Blackberry operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, a Blackberry operating system is used.
+	 *
 	 * @name sap.ui.Device.os#blackberry
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Windows Phone operating system.
-	 * 
+	 * If this flag is set to <code>true</code>, a Windows Phone operating system is used.
+	 *
 	 * @name sap.ui.Device.os#windows_phone
 	 * @type boolean
 	 * @public
 	 */
-	
+
 	/**
 	 * Windows operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#WINDOWS
 	 * @public
 	 */
 	/**
 	 * MAC operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#MACINTOSH
 	 * @public
 	 */
 	/**
 	 * Linux operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#LINUX
 	 * @public
 	 */
 	/**
 	 * iOS operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#IOS
 	 * @public
 	 */
 	/**
 	 * Android operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#ANDROID
 	 * @public
 	 */
 	/**
 	 * Blackberry operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @name sap.ui.Device.os.OS#BLACKBERRY
 	 * @public
 	 */
 	/**
 	 * Windows Phone operating system name.
-	 * 
+	 *
 	 * @see sap.ui.Device.os#name
 	 * @alias sap.ui.Device.os.OS#WINDOWS_PHONE
 	 * @public
 	 */
-	
+
 	var OS = {
 		"WINDOWS": "win",
 		"MACINTOSH": "mac",
@@ -356,12 +1348,19 @@ if (typeof window.sap.ui !== "object") {
 			}
 		}
 
+		//Firefox on Android
+		platform = /\((Android)[\s]?([\d][.\d]*)?;.*Firefox\/[\d][.\d]*/;
+		result = userAgent.match(platform);
+		if (result) {
+			return ({"name": OS.ANDROID, "versionStr": result.length == 3 ? result[2] : ""});
+		}
+
 		// Desktop
 		return getDesktopOS();
 	}
-	
-	function setOS() {
-		device.os = getOS() || {};
+
+	function setOS(customUA) {
+		device.os = getOS(customUA) || {};
 		device.os.OS = OS;
 		device.os.version = device.os.versionStr ? parseFloat(device.os.versionStr) : -1;
 
@@ -374,104 +1373,164 @@ if (typeof window.sap.ui !== "object") {
 		}
 	}
 	setOS();
+	// expose for unit test
+	device._setOS = setOS;
 
 
 
 //******** Browser Detection ********
-	
-	/** 
+
+	/**
 	 * Contains information about the used browser.
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.browser
 	 * @public
 	 */
-	
+
 	/**
 	 * Enumeration containing the names of known browsers.
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.browser.BROWSER
 	 * @public
 	 */
-	
+
 	/**
 	 * The name of the browser.
-	 * 
-	 * @see sap.ui.Device.browser#BROWSER
+	 *
+	 * @see sap.ui.Device.browser.BROWSER
 	 * @name sap.ui.Device.browser#name
 	 * @type String
 	 * @public
 	 */
 	/**
-	 * The version as string. Might be empty if no version can be determined.
-	 * 
+	 * The version of the browser as <code>string</code>.
+	 *
+	 * Might be empty if no version can be determined.
+	 *
 	 * @name sap.ui.Device.browser#versionStr
 	 * @type String
 	 * @public
 	 */
 	/**
-	 * The version as float. Might be -1 if no version can be determined.
-	 * 
+	 * The version of the browser as <code>float</code>.
+	 *
+	 * Might be <code>-1</code> if no version can be determined.
+	 *
 	 * @name sap.ui.Device.browser#version
 	 * @type float
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether the mobile variant of the browser is used.
-	 * 
+	 * If this flag is set to <code>true</code>, the mobile variant of the browser is used.
+	 *
+	 * <b>Note:</b> This information might not be available for all browsers.
+	 *
 	 * @name sap.ui.Device.browser#mobile
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Internet Explorer browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Microsoft Internet Explorer browser is used.
+	 *
 	 * @name sap.ui.Device.browser#internet_explorer
 	 * @type boolean
-	 * @deprecated since 1.20: use sap.ui.Device.browser.msie
+	 * @deprecated since 1.20, use {@link sap.ui.Device.browser.msie} instead.
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Internet Explorer browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Microsoft Internet Explorer browser is used.
+	 *
 	 * @name sap.ui.Device.browser#msie
 	 * @type boolean
 	 * @since 1.20.0
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Firefox browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Microsoft Edge browser is used.
+	 *
+	 * @name sap.ui.Device.browser#edge
+	 * @type boolean
+	 * @since 1.30.0
+	 * @public
+	 */
+	/**
+	 * If this flag is set to <code>true</code>, the Mozilla Firefox browser is used.
+	 *
 	 * @name sap.ui.Device.browser#firefox
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Chrome browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Google Chrome browser is used.
+	 *
 	 * @name sap.ui.Device.browser#chrome
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating the Safari browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Apple Safari browser is used.
+	 *
+	 * <b>Note:</b>
+	 * This flag is also <code>true</code> when the standalone (fullscreen) mode or webview is used on iOS devices.
+	 * Please also note the flags {@link sap.ui.Device.browser#fullscreen} and {@link sap.ui.Device.browser#webview}.
+	 *
 	 * @name sap.ui.Device.browser#safari
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating a Webkit browser.
-	 * 
+	 * If this flag is set to <code>true</code>, a browser featuring a Webkit engine is used.
+	 *
 	 * @name sap.ui.Device.browser#webkit
 	 * @type boolean
 	 * @since 1.20.0
 	 * @public
 	 */
 	/**
-	 * Flag indicating a Mozilla browser.
-	 * 
+	 * If this flag is set to <code>true</code>, the Safari browser runs in standalone fullscreen mode on iOS.
+	 *
+	 * <b>Note:</b> This flag is only available if the Safari browser was detected. Furthermore, if this mode is detected,
+	 * technically not a standard Safari is used. There might be slight differences in behavior and detection, e.g.
+	 * the availability of {@link sap.ui.Device.browser#version}.
+	 *
+	 * @name sap.ui.Device.browser#fullscreen
+	 * @type boolean
+	 * @since 1.31.0
+	 * @public
+	 */
+	/**
+	 * If this flag is set to <code>true</code>, the Safari browser runs in webview mode on iOS.
+	 *
+	 * <b>Note:</b> This flag is only available if the Safari browser was detected. Furthermore, if this mode is detected,
+	 * technically not a standard Safari is used. There might be slight differences in behavior and detection, e.g.
+	 * the availability of {@link sap.ui.Device.browser#version}.
+	 *
+	 * @name sap.ui.Device.browser#webview
+	 * @type boolean
+	 * @since 1.31.0
+	 * @public
+	 */
+	/**
+	 * If this flag is set to <code>true</code>, the Phantom JS browser is used.
+	 *
+	 * @name sap.ui.Device.browser#phantomJS
+	 * @type boolean
+	 * @private
+	 */
+	/**
+	 * The version of the used Webkit engine, if available.
+	 *
+	 * @see sap.ui.Device.browser#webkit
+	 * @name sap.ui.Device.browser#webkitVersion
+	 * @type String
+	 * @since 1.20.0
+	 * @private
+	 */
+	/**
+	 * If this flag is set to <code>true</code>, a browser featuring a Mozilla engine is used.
+	 *
 	 * @name sap.ui.Device.browser#mozilla
 	 * @type boolean
 	 * @since 1.20.0
@@ -479,42 +1538,51 @@ if (typeof window.sap.ui !== "object") {
 	 */
 	/**
 	 * Internet Explorer browser name.
-	 * 
+	 *
 	 * @see sap.ui.Device.browser#name
 	 * @name sap.ui.Device.browser.BROWSER#INTERNET_EXPLORER
 	 * @public
 	 */
 	/**
+	 * Edge browser name.
+	 *
+	 * @see sap.ui.Device.browser#name
+	 * @name sap.ui.Device.browser.BROWSER#EDGE
+	 * @since 1.28.0
+	 * @public
+	 */
+	/**
 	 * Firefox browser name.
-	 * 
+	 *
 	 * @see sap.ui.Device.browser#name
 	 * @name sap.ui.Device.browser.BROWSER#FIREFOX
 	 * @public
 	 */
 	/**
 	 * Chrome browser name.
-	 * 
+	 *
 	 * @see sap.ui.Device.browser#name
 	 * @name sap.ui.Device.browser.BROWSER#CHROME
 	 * @public
 	 */
 	/**
 	 * Safari browser name.
-	 * 
+	 *
 	 * @see sap.ui.Device.browser#name
 	 * @name sap.ui.Device.browser.BROWSER#SAFARI
 	 * @public
 	 */
 	/**
 	 * Android stock browser name.
-	 * 
+	 *
 	 * @see sap.ui.Device.browser#name
 	 * @alias sap.ui.Device.browser.BROWSER#ANDROID
 	 * @public
 	 */
-	
+
 	var BROWSER = {
 		"INTERNET_EXPLORER": "ie",
+		"EDGE": "ed",
 		"FIREFOX": "ff",
 		"CHROME": "cr",
 		"SAFARI": "sf",
@@ -544,12 +1612,13 @@ if (typeof window.sap.ui !== "object") {
 		var rwebkit = /(webkit)[ \/]([\w.]+)/;
 		var ropera = /(opera)(?:.*version)?[ \/]([\w.]+)/;
 		var rmsie = /(msie) ([\w.]+)/;
-		//TODO this might needs to be adjusted in future IE version > 11
-		var rmsienew = /(trident)\/[\w.]+;.*rv:([\w.]+)/;
+		var rmsie11 = /(trident)\/[\w.]+;.*rv:([\w.]+)/;
+		var redge = /(edge)[ \/]([\w.]+)/;
 		var rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/;
 
-		// WinPhone IE11 userAgent contains "WebKit" and "Mozilla" and therefore must be checked first
-		var browserMatch = rmsienew.exec( _ua ) ||
+		// WinPhone IE11 and MS Edge userAgents contain "WebKit" and "Mozilla" and therefore must be checked first
+		var browserMatch = redge.exec( _ua ) ||
+					rmsie11.exec( _ua ) ||
 					rwebkit.exec( _ua ) ||
 					ropera.exec( _ua ) ||
 					rmsie.exec( _ua ) ||
@@ -561,9 +1630,10 @@ if (typeof window.sap.ui !== "object") {
 		return res;
 	}
 
-	function getBrowser(customUa) {
+	function getBrowser(customUa, customNav) {
 		var b = calcBrowser(customUa);
 		var _ua = customUa || ua;
+		var _navigator = customNav || window.navigator;
 
 		// jQuery checks for user agent strings. We differentiate between browsers
 		var oExpMobile;
@@ -582,7 +1652,8 @@ if (typeof window.sap.ui !== "object") {
 				// unknown mozilla browser
 				return {
 					mobile: oExpMobile.test(_ua),
-					mozilla: true
+					mozilla: true,
+					version: -1
 				};
 			}
 		} else if ( b.webkit ) {
@@ -603,6 +1674,16 @@ if (typeof window.sap.ui !== "object") {
 					webkit: true,
 					webkitVersion: webkitVersion
 				};
+			} else if ( _ua.match(/FxiOS\/(\d+\.\d+)/)) {
+				var version = parseFloat(RegExp.$1);
+				return {
+					name: BROWSER.FIREFOX,
+					versionStr: "" + version,
+					version: version,
+					mobile: true,
+					webkit: true,
+					webkitVersion: webkitVersion
+				};
 			} else if ( _ua.match(/Android .+ Version\/(\d+\.\d+)/) ) {
 				var version = parseFloat(RegExp.$1);
 				return {
@@ -615,24 +1696,38 @@ if (typeof window.sap.ui !== "object") {
 				};
 			} else { // Safari might have an issue with _ua.match(...); thus changing
 				var oExp = /(Version|PhantomJS)\/(\d+\.\d+).*Safari/;
+				var bStandalone = _navigator.standalone;
 				if (oExp.test(_ua)) {
 					var aParts = oExp.exec(_ua);
 					var version = parseFloat(aParts[2]);
 					return {
 						name: BROWSER.SAFARI,
 						versionStr: "" + version,
+						fullscreen: false,
+						webview: false,
 						version: version,
 						mobile: oExpMobile.test(_ua),
 						webkit: true,
 						webkitVersion: webkitVersion,
 						phantomJS: aParts[1] === "PhantomJS"
 					};
-				} else {
-					// unknown webkit browser
+				} else if (/iPhone|iPad|iPod/.test(_ua) && !(/CriOS/.test(_ua)) && !(/FxiOS/.test(_ua)) && (bStandalone === true || bStandalone === false)) {
+					//WebView or Standalone mode on iOS
 					return {
+						name: BROWSER.SAFARI,
+						version: -1,
+						fullscreen: bStandalone,
+						webview: !bStandalone,
 						mobile: oExpMobile.test(_ua),
 						webkit: true,
 						webkitVersion: webkitVersion
+					};
+				} else { // other webkit based browser
+					return {
+						mobile: oExpMobile.test(_ua),
+						webkit: true,
+						webkitVersion: webkitVersion,
+						version: -1
 					};
 				}
 			}
@@ -655,6 +1750,14 @@ if (typeof window.sap.ui !== "object") {
 				msie: true,
 				mobile: false // TODO: really?
 			};
+		} else if ( b.edge ) {
+			var version = version = parseFloat(b.version);
+			return {
+				name: BROWSER.EDGE,
+				versionStr: "" + version,
+				version: version,
+				edge: true
+			};
 		}
 		return {
 			name: "",
@@ -664,11 +1767,11 @@ if (typeof window.sap.ui !== "object") {
 		};
 	}
 	device._testUserAgent = getBrowser; // expose the user-agent parsing (mainly for testing), but don't let it be overwritten
-	
+
 	function setBrowser() {
 		device.browser = getBrowser();
 		device.browser.BROWSER = BROWSER;
-		
+
 		if (device.browser.name) {
 			for (var b in BROWSER) {
 				if (BROWSER[b] === device.browser.name) {
@@ -680,70 +1783,79 @@ if (typeof window.sap.ui !== "object") {
 	setBrowser();
 
 
-	
+
 
 //******** Support Detection ********
-	
-	/** 
+
+	/**
 	 * Contains information about detected capabilities of the used browser or device.
-	 * 
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.support
 	 * @public
 	 */
-	
+
 	/**
-	 * Flag indicating whether touch events are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser supports touch events.
+	 *
+	 * <b>Note:</b> This flag indicates whether the used browser supports touch events or not.
+	 * This does not necessarily mean that the used device has a touchable screen.
+	 *
 	 * @name sap.ui.Device.support#touch
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether pointer events are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser supports pointer events.
+	 *
 	 * @name sap.ui.Device.support#pointer
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether media queries via JavaScript are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser natively supports media queries via JavaScript.
+	 *
+	 * <b>Note:</b> The {@link sap.ui.Device.media media queries API} of the device API can also be used when there is no native support.
+	 *
 	 * @name sap.ui.Device.support#matchmedia
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether events on JavaScript media queries are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser natively supports events of media queries via JavaScript.
+	 *
+	 * <b>Note:</b> The {@link sap.ui.Device.media media queries API} of the device API can also be used when there is no native support.
+	 *
 	 * @name sap.ui.Device.support#matchmedialistener
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether the native orientationchange event is supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser natively supports the <code>orientationchange</code> event.
+	 *
+	 * <b>Note:</b> The {@link sap.ui.Device.orientation orientation event} of the device API can also be used when there is no native support.
+	 *
 	 * @name sap.ui.Device.support#orientation
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether the device has a Retina display.
-	 * 
+	 * If this flag is set to <code>true</code>, the device has a display with a high resolution.
+	 *
 	 * @name sap.ui.Device.support#retina
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether WebSockets are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser supports web sockets.
+	 *
 	 * @name sap.ui.Device.support#websocket
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating whether placeholder on input tags are supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the used browser supports the <code>placeholder</code> attribute on <code>input</code> elements.
+	 *
 	 * @name sap.ui.Device.support#input.placeholder
 	 * @type boolean
 	 * @public
@@ -766,7 +1878,7 @@ if (typeof window.sap.ui !== "object") {
 	device.support.matchmedia = !!window.matchMedia;
 	var m = device.support.matchmedia ? window.matchMedia("all and (max-width:0px)") : null; //IE10 doesn't like empty string as argument for matchMedia, FF returns null when running within an iframe with display:none
 	device.support.matchmedialistener = !!(m && m.addListener);
-	if (device.browser.safari && device.browser.version < 6) {
+	if (device.browser.safari && device.browser.version < 6 && !device.browser.fullscreen && !device.browser.webview) {
 		//Safari seems to have addListener but no events are fired ?!
 		device.support.matchmedialistener = false;
 	}
@@ -781,82 +1893,179 @@ if (typeof window.sap.ui !== "object") {
 	device.support.input.placeholder = ('placeholder' in document.createElement("input"));
 
 //******** Match Media ********
-	
-	/** 
-	 * Event API for Screen width media queries.
-	 * 
+
+	/**
+	 * Event API for screen width changes.
+	 *
+	 * This API is based on media queries but can also be used if media queries are not natively supported by the used browser.
+	 * In this case, the behavior of media queries is simulated by this API.
+	 *
+	 * There are several predefined {@link sap.ui.Device.media.RANGESETS range sets} available. Each of them defines a
+	 * set of intervals for the screen width (from small to large). Whenever the screen width changes and the current screen width is in
+	 * a different interval to the one before the change, the registered event handlers for the range set are called.
+	 *
+	 * If needed, it is also possible to define a custom set of intervals.
+	 *
+	 * The following example shows a typical use case:
+	 * <pre>
+	 * function sizeChanged(mParams) {
+	 *     switch(mParams.name) {
+	 *         case "Phone":
+	 *             // Do what is needed for a little screen
+	 *             break;
+	 *         case "Tablet":
+	 *             // Do what is needed for a medium sized screen
+	 *             break;
+	 *         case "Desktop":
+	 *             // Do what is needed for a large screen
+	 *     }
+	 * }
+	 *
+	 * // Register an event handler to changes of the screen size
+	 * sap.ui.Device.media.attachHandler(sizeChanged, null, sap.ui.Device.media.RANGESETS.SAP_STANDARD);
+	 * // Do some initialization work based on the current size
+	 * sizeChanged(sap.ui.Device.media.getCurrentRange(sap.ui.Device.media.RANGESETS.SAP_STANDARD));
+	 * </pre>
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.media
 	 * @public
 	 */
 	device.media = {};
-	
+
 	/**
-	 * Enumeration containing the names of predefined Screen width media query range sets.
-	 * 
+	 * Enumeration containing the names and settings of predefined screen width media query range sets.
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.media.RANGESETS
 	 * @public
 	 */
-	
+
 	/**
-	 * A 3 step range set (S-L).
-	 * 
+	 * A 3-step range set (S-L).
+	 *
+	 * The ranges of this set are:
+	 * <ul>
+	 * <li><code>"S"</code>: For screens smaller than 520 pixels.</li>
+	 * <li><code>"M"</code>: For screens greater than or equal to 520 pixels and smaller than 960 pixels.</li>
+	 * <li><code>"L"</code>: For screens greater than or equal to 960 pixels.</li>
+	 * </ul>
+	 *
+	 * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.html#initRangeSet}).
+	 *
+	 * If this range set is initialized, a CSS class is added to the page root (<code>html</code> tag) which indicates the current
+	 * screen width range: <code>sapUiMedia-3Step-<i>NAME_OF_THE_INTERVAL</i></code>.
+	 *
 	 * @name sap.ui.Device.media.RANGESETS#SAP_3STEPS
 	 * @public
 	 */
 	/**
-	 * A 4 step range set (S-XL).
-	 * 
+	 * A 4-step range set (S-XL).
+	 *
+	 * The ranges of this set are:
+	 * <ul>
+	 * <li><code>"S"</code>: For screens smaller than 520 pixels.</li>
+	 * <li><code>"M"</code>: For screens greater than or equal to 520 pixels and smaller than 760 pixels.</li>
+	 * <li><code>"L"</code>: For screens greater than or equal to 760 pixels and smaller than 960 pixels.</li>
+	 * <li><code>"XL"</code>: For screens greater than or equal to 960 pixels.</li>
+	 * </ul>
+	 *
+	 * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.html#initRangeSet}).
+	 *
+	 * If this range set is initialized, a CSS class is added to the page root (<code>html</code> tag) which indicates the current
+	 * screen width range: <code>sapUiMedia-4Step-<i>NAME_OF_THE_INTERVAL</i></code>.
+	 *
 	 * @name sap.ui.Device.media.RANGESETS#SAP_4STEPS
 	 * @public
 	 */
 	/**
-	 * A 6 step range set (XS-XXL).
-	 * 
+	 * A 6-step range set (XS-XXL).
+	 *
+	 * The ranges of this set are:
+	 * <ul>
+	 * <li><code>"XS"</code>: For screens smaller than 241 pixels.</li>
+	 * <li><code>"S"</code>: For screens greater than or equal to 241 pixels and smaller than 400 pixels.</li>
+	 * <li><code>"M"</code>: For screens greater than or equal to 400 pixels and smaller than 541 pixels.</li>
+	 * <li><code>"L"</code>: For screens greater than or equal to 541 pixels and smaller than 768 pixels.</li>
+	 * <li><code>"XL"</code>: For screens greater than or equal to 768 pixels and smaller than 960 pixels.</li>
+	 * <li><code>"XXL"</code>: For screens greater than or equal to 960 pixels.</li>
+	 * </ul>
+	 *
+	 * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.html#initRangeSet}).
+	 *
+	 * If this range set is initialized, a CSS class is added to the page root (<code>html</code> tag) which indicates the current
+	 * screen width range: <code>sapUiMedia-6Step-<i>NAME_OF_THE_INTERVAL</i></code>.
+	 *
 	 * @name sap.ui.Device.media.RANGESETS#SAP_6STEPS
 	 * @public
 	 */
 	/**
-	 * A 3 step range set (Phone, Tablet, Desktop). <br/>
-	 * <br/>
-	 * This range set is initialized always by default.<br/>
-	 * Phone is < 600px<br/>
-	 * Tablet is 600px >= Tablet < 1024<br/>
-	 * Desktop is > 1024px<br/>
-	 * <br/>
-	 * There are 5 css classes to hide elements based on the width of the screen:
+	 * A 3-step range set (Phone, Tablet, Desktop).
+	 *
+	 * The ranges of this set are:
 	 * <ul>
-	 * 	<li>sapUiHideOnPhone - will be hidden if the screen has 600px or more</li>
-	 * 	<li>sapUiHideOnTablet - will be hidden if the screen has less than 600px or more than 1023px</li>
-	 * 	<li>sapUiHideOnDesktop - will be hidden if the screen is smaller than 1024px</li>
-	 * 	<li>sapUiVisibleOnlyOnPhone - will be visible if the screen has less than 600px</li>
-	 * 	<li>sapUiVisibleOnlyOnTablet - will be visible if the screen has 600px or more but less than 1024px</li>
-	 * 	<li>sapUiVisibleOnlyOnDesktop - will be visible if the screen has 1024px or more</li>
+	 * <li><code>"Phone"</code>: For screens smaller than 600 pixels.</li>
+	 * <li><code>"Tablet"</code>: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.</li>
+	 * <li><code>"Desktop"</code>: For screens greater than or equal to 1024 pixels.</li>
 	 * </ul>
-	 * @alias sap.ui.Device.media.RANGESETS#SAP_STANDARD
+	 *
+	 * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.html#initRangeSet} is not needed.
+	 *
+	 * A CSS class is added to the page root (<code>html</code> tag) which indicates the current
+	 * screen width range: <code>sapUiMedia-Std-<i>NAME_OF_THE_INTERVAL</i></code>.
+	 * Furthermore there are 5 additional CSS classes to hide elements based on the width of the screen:
+	 * <ul>
+	 * <li><code>sapUiHideOnPhone</code>: Will be hidden if the screen has 600px or more</li>
+	 * <li><code>sapUiHideOnTablet</code>: Will be hidden if the screen has less than 600px or more than 1023px</li>
+	 * <li><code>sapUiHideOnDesktop</code>: Will be hidden if the screen is smaller than 1024px</li>
+	 * <li><code>sapUiVisibleOnlyOnPhone</code>: Will be visible if the screen has less than 600px</li>
+	 * <li><code>sapUiVisibleOnlyOnTablet</code>: Will be visible if the screen has 600px or more but less than 1024px</li>
+	 * <li><code>sapUiVisibleOnlyOnDesktop</code>: Will be visible if the screen has 1024px or more</li>
+	 * </ul>
+	 *
+	 * @name sap.ui.Device.media.RANGESETS#SAP_STANDARD
 	 * @public
 	 */
-	
+
+	/**
+	 * A 4-step range set (Phone, Tablet, Desktop, LargeDesktop).
+	 *
+	 * The ranges of this set are:
+	 * <ul>
+	 * <li><code>"Phone"</code>: For screens smaller than 600 pixels.</li>
+	 * <li><code>"Tablet"</code>: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.</li>
+	 * <li><code>"Desktop"</code>: For screens greater than or equal to 1024 pixels and smaller than 1440 pixels.</li>
+	 * <li><code>"LargeDesktop"</code>: For screens greater than or equal to 1440 pixels.</li>
+	 * </ul>
+	 *
+	 * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.html#initRangeSet} is not needed.
+	 *
+	 * A CSS class is added to the page root (<code>html</code> tag) which indicates the current
+	 * screen width range: <code>sapUiMedia-StdExt-<i>NAME_OF_THE_INTERVAL</i></code>.
+	 *
+	 * @name sap.ui.Device.media.RANGESETS#SAP_STANDARD_EXTENDED
+	 * @public
+	 */
+
 	var RANGESETS = {
 		"SAP_3STEPS": "3Step",
 		"SAP_4STEPS": "4Step",
 		"SAP_6STEPS": "6Step",
-		"SAP_STANDARD": "Std"
+		"SAP_STANDARD": "Std",
+		"SAP_STANDARD_EXTENDED": "StdExt"
 	};
 	device.media.RANGESETS = RANGESETS;
-	
 	device.media._predefinedRangeSets = {};
 	device.media._predefinedRangeSets[RANGESETS.SAP_3STEPS] = {points: [520, 960], unit: "px", name: RANGESETS.SAP_3STEPS, names: ["S", "M", "L"]};
 	device.media._predefinedRangeSets[RANGESETS.SAP_4STEPS] = {points: [520, 760, 960], unit: "px", name: RANGESETS.SAP_4STEPS, names: ["S", "M", "L", "XL"]};
 	device.media._predefinedRangeSets[RANGESETS.SAP_6STEPS] = {points: [241, 400, 541, 768, 960], unit: "px", name: RANGESETS.SAP_6STEPS, names: ["XS", "S", "M", "L", "XL", "XXL"]};
 	device.media._predefinedRangeSets[RANGESETS.SAP_STANDARD] = {points: [600, 1024], unit: "px", name: RANGESETS.SAP_STANDARD, names: ["Phone", "Tablet", "Desktop"]};
-	
+	device.media._predefinedRangeSets[RANGESETS.SAP_STANDARD_EXTENDED] = {points: [600, 1024, 1440], unit: "px", name: RANGESETS.SAP_STANDARD_EXTENDED, names: ["Phone", "Tablet", "Desktop", "LargeDesktop"]};
 	var _defaultRangeSet = RANGESETS.SAP_STANDARD;
 	var media_timeout = device.support.matchmedialistener ? 0 : 100;
 	var _querysets = {};
 	var media_currentwidth = null;
-	
+
 	function getQuery(from, to, unit){
 		unit = unit || "px";
 		var q = "all";
@@ -868,17 +2077,17 @@ if (typeof window.sap.ui !== "object") {
 		}
 		return q;
 	}
-	
+
 	function handleChange(name){
 		if (!device.support.matchmedialistener && media_currentwidth == windowSize()[0]) {
 			return; //Skip unnecessary resize events
 		}
-		
+
 		if (_querysets[name].timer) {
 			clearTimeout(_querysets[name].timer);
 			_querysets[name].timer = null;
 		}
-		
+
 		_querysets[name].timer = setTimeout(function() {
 			var mParams = checkQueries(name, false);
 			if (mParams) {
@@ -886,7 +2095,7 @@ if (typeof window.sap.ui !== "object") {
 			}
 		}, media_timeout);
 	}
-	
+
 	function getRangeInfo(sSetName, iRangeIdx){
 		var q = _querysets[sSetName].queries[iRangeIdx];
 		var info = {from: q.from, unit: _querysets[sSetName].unit};
@@ -898,7 +2107,7 @@ if (typeof window.sap.ui !== "object") {
 		}
 		return info;
 	}
-	
+
 	function checkQueries(name, infoOnly){
 		if (_querysets[name]) {
 			var aQueries = _querysets[name].queries;
@@ -915,18 +2124,18 @@ if (typeof window.sap.ui !== "object") {
 					info = getRangeInfo(name, i);
 				}
 			}
-			
+
 			return info;
 		}
 		logger.log(WARNING, "No queryset with name " + name + " found", 'DEVICE.MEDIA');
 		return null;
 	}
-	
+
 	function refreshCSSClasses(sSetName, sRangeName, bRemove){
 		 var sClassPrefix = "sapUiMedia-" + sSetName + "-";
 		 changeRootCSSClass(sClassPrefix + sRangeName, bRemove, sClassPrefix);
 	}
-	
+
 	function changeRootCSSClass(sClassName, bRemove, sPrefix){
 		var oRoot = document.documentElement;
 		if (oRoot.className.length == 0) {
@@ -947,11 +2156,11 @@ if (typeof window.sap.ui !== "object") {
 			oRoot.className = sNewClasses;
 		}
 	}
-	
+
 	function windowSize(){
 		return [document.documentElement.clientWidth, document.documentElement.clientHeight];
 	}
-	
+
 	function convertToPx(val, unit){
 		if (unit === "em" || unit === "rem") {
 			var s = window.getComputedStyle || function(e) {
@@ -967,7 +2176,7 @@ if (typeof window.sap.ui !== "object") {
 	function match_legacy(from, to, unit){
 		from = convertToPx(from, unit);
 		to = convertToPx(to, unit);
-		
+
 		var width = windowSize()[0];
 		var a = from < 0 || from <= width;
 		var b = to < 0 || width <= to;
@@ -981,21 +2190,34 @@ if (typeof window.sap.ui !== "object") {
 	}
 
 	device.media.matches = device.support.matchmedia ? match : match_legacy;
-	
+
 	/**
-	 * Registers the given handler to the range change event, which is fired when a new range of the set is entered.
-	 * 
-	 * The handler has one map parameter <code>mParams</code>:
+	 * Registers the given event handler to change events of the screen width based on the range set with the specified name.
+	 *
+	 * The event is fired whenever the screen width changes and the current screen width is in
+	 * a different interval of the given range set than before the width change.
+	 *
+	 * The event handler is called with a single argument: a map <code>mParams</code> which provides the following information
+	 * about the entered interval:
 	 * <ul>
-	 * <li>mParams.from: the range start value</li>
-	 * <li>mParams.to: the range end value, not defined for the last range (INFINITY)</li>
-	 * <li>mParams.unit: the used unit, e.g. px</li>
-	 * <li>mParams.name: the range name if defined</li>
+	 * <li><code>mParams.from</code>: The start value (inclusive) of the entered interval as a number</li>
+	 * <li><code>mParams.to</code>: The end value (exclusive) range of the entered interval as a number or undefined for the last interval (infinity)</li>
+	 * <li><code>mParams.unit</code>: The unit used for the values above, e.g. <code>"px"</code></li>
+	 * <li><code>mParams.name</code>: The name of the entered interval, if available</li>
 	 * </ul>
-	 * 
-	 * @param {Function} fnFunction The function to call, when the range change event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
-	 * @param {String} sName The name of the range set to listen to.
+	 *
+	 * @param {function}
+	 *            fnFunction The handler function to call when the event occurs. This function will be called in the context of the
+	 *                       <code>oListener</code> instance (if present) or on the <code>window</code> instance. A map with information
+	 *                       about the entered range set is provided as a single argument to the handler (see details above).
+	 * @param {object}
+	 *            [oListener] The object that wants to be notified when the event occurs (<code>this</code> context within the
+	 *                        handler function). If it is not specified, the handler function is called in the context of the <code>window</code>.
+	 * @param {String}
+	 *            sName The name of the range set to listen to. The range set must be initialized beforehand
+	 *                  ({@link sap.ui.Device.media.html#initRangeSet}). If no name is provided, the
+	 *                  {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD default range set} is used.
+	 *
 	 * @name sap.ui.Device.media#attachHandler
 	 * @function
 	 * @public
@@ -1006,11 +2228,18 @@ if (typeof window.sap.ui !== "object") {
 	};
 
 	/**
-	 * Deregisters a previously registered handler from the range change event.
-	 * 
-	 * @param {Function} fnFunction The function to call, when the range change event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
-	 * @param {String} sName The name of the range set to listen to.
+	 * Removes a previously attached event handler from the change events of the screen width.
+	 *
+	 * The passed parameters must match those used for registration with {@link #attachHandler} beforehand.
+	 *
+	 * @param {function}
+	 *            fnFunction The handler function to detach from the event
+	 * @param {object}
+	 *            [oListener] The object that wanted to be notified when the event occurred
+	 * @param {String}
+	 *             sName The name of the range set to listen to. If no name is provided, the
+	 *                   {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD default range set} is used.
+	 *
 	 * @name sap.ui.Device.media#detachHandler
 	 * @function
 	 * @public
@@ -1019,29 +2248,49 @@ if (typeof window.sap.ui !== "object") {
 		var name = sName || _defaultRangeSet;
 		detachEvent("media_" + name, fnFunction, oListener);
 	};
-	
-	/** 
-	 * Initializes a Screen width media query range set.
-	 * 
-	 * This function can either be called only with the name parameter to initialize a predefined range set,
-	 * e.g. <code>sap.ui.Device.media.initRangeSet(sap.ui.Device.media.RANGESETS.SAP_3STEPS)</code>.
-	 * 
-	 * Or it is possible to define a custom range set as in the following example:
-	 * <code>sap.ui.Device.media.initRangeSet("MyRangeSet", [200, 400], "px", ["Small", "Medium", "Large"])</code> defines 3 ranges:
+
+	/**
+	 * Initializes a screen width media query range set.
+	 *
+	 * This initialization step makes the range set ready to be used for one of the other functions in namespace <code>sap.ui.Device.media</code>.
+	 * The most important {@link sap.ui.Device.media.RANGESETS predefined range sets} are initialized automatically.
+	 *
+	 * To make a not yet initialized {@link sap.ui.Device.media.RANGESETS predefined range set} ready to be used, call this function with the
+	 * name of the range set to be initialized:
+	 * <pre>
+	 * sap.ui.Device.media.initRangeSet(sap.ui.Device.media.RANGESETS.SAP_3STEPS);
+	 * </pre>
+	 *
+	 * Alternatively it is possible to define custom range sets as shown in the following example:
+	 * <pre>
+	 * sap.ui.Device.media.initRangeSet("MyRangeSet", [200, 400], "px", ["Small", "Medium", "Large"]);
+	 * </pre>
+	 * This example defines the following named ranges:
 	 * <ul>
-	 * <li>0px-199.999px with name "Small"</li>
-	 * <li>200px-399.999px with name "Medium"</li>
-	 * <li>400px-INFINITY with name "Large"</li>
+	 * <li><code>"Small"</code>: For screens smaller than 200 pixels.</li>
+	 * <li><code>"Medium"</code>: For screens greater than or equal to 200 pixels and smaller than 400 pixels.</li>
+	 * <li><code>"Large"</code>: For screens greater than or equal to 400 pixels.</li>
 	 * </ul>
-	 * 
-	 * The range names are optional. If they are specified also a CSS class (e.g. sapUiMedia-MyRangeSet-Small) is added to the document root
-	 * depending on the current active range. This can be suppressed via parameter <code>bSuppressClasses</code>.
-	 * 
-	 * @param {String} sName The name of the range set. Either a predefined or custom one. The name must be a valid id (consist of letters and digits).
-	 * @param {int[]} aRangeBorders The range borders
-	 * @param {String} [sUnit] The unit which should be used. Allowed values are px (default), em or rem.
-	 * @param {String[]} [aRangeNames] The names of the ranges. The names must be a valid id (consist of letters and digits).
-	 * @param {boolean} [bSuppressClasses] Whether writing CSS classes to the document root should be suppressed
+	 * The range names are optional. If they are specified a CSS class (e.g. <code>sapUiMedia-MyRangeSet-Small</code>) is also
+	 * added to the document root depending on the current active range. This can be suppressed via parameter <code>bSuppressClasses</code>.
+	 *
+	 * @param {String}
+	 *             sName The name of the range set to be initialized - either a {@link sap.ui.Device.media.RANGESETS predefined} or custom one.
+	 *                   The name must be a valid id and consist only of letters and numeric digits.
+	 * @param {int[]}
+	 *             [aRangeBorders] The range borders
+	 * @param {String}
+	 *             [sUnit] The unit which should be used for the values given in <code>aRangeBorders</code>.
+	 *                     The allowed values are <code>"px"</code> (default), <code>"em"</code> or <code>"rem"</code>
+	 * @param {String[]}
+	 *             [aRangeNames] The names of the ranges. The names must be a valid id and consist only of letters and digits. If names
+	 *             are specified, CSS classes are also added to the document root as described above. This behavior can be
+	 *             switched off explicitly by using <code>bSuppressClasses</code>. <b>Note:</b> <code>aRangeBorders</code> with <code>n</code> entries
+	 *             define <code>n+1</code> ranges. Therefore <code>n+1</code> names must be provided.
+	 * @param {boolean}
+	 *             [bSuppressClasses] Whether or not writing of CSS classes to the document root should be suppressed when
+	 *             <code>aRangeNames</code> are provided
+	 *
 	 * @name sap.ui.Device.media#initRangeSet
 	 * @function
 	 * @public
@@ -1056,12 +2305,12 @@ if (typeof window.sap.ui !== "object") {
 		} else {
 			oConfig = {name: sName, unit: (sUnit || "px").toLowerCase(), points: aRangeBorders || [], names: aRangeNames, noClasses: !!bSuppressClasses};
 		}
-		
+
 		if (device.media.hasRangeSet(oConfig.name)) {
 			logger.log(INFO, "Range set " + oConfig.name + " hase already been initialized", 'DEVICE.MEDIA');
 			return;
 		}
-		
+
 		sName = oConfig.name;
 		oConfig.queries = [];
 		oConfig.timer = null;
@@ -1069,7 +2318,7 @@ if (typeof window.sap.ui !== "object") {
 		oConfig.listener = function(){
 			return handleChange(sName);
 		};
-			
+
 		var from, to, query;
 		var aPoints = oConfig.points;
 		for (var i = 0, len = aPoints.length; i <= len; i++) {
@@ -1082,13 +2331,13 @@ if (typeof window.sap.ui !== "object") {
 				to: to
 			});
 		}
-		
+
 		if (oConfig.names && oConfig.names.length != oConfig.queries.length) {
 			oConfig.names = null;
 		}
-		
+
 		_querysets[oConfig.name] = oConfig;
-			
+
 		if (device.support.matchmedialistener) { //FF, Safari, Chrome, IE10?
 			var queries = oConfig.queries;
 			for (var i = 0; i < queries.length; i++) {
@@ -1096,7 +2345,7 @@ if (typeof window.sap.ui !== "object") {
 				q.media = window.matchMedia(q.query);
 				q.media.addListener(oConfig.listener);
 			}
-		} else { //IE, Safari (<6?)	
+		} else { //IE, Safari (<6?)
 			if (window.addEventListener) {
 				window.addEventListener("resize", oConfig.listener, false);
 				window.addEventListener("orientationchange", oConfig.listener, false);
@@ -1104,16 +2353,17 @@ if (typeof window.sap.ui !== "object") {
 				window.attachEvent("onresize", oConfig.listener);
 			}
 		}
-		
+
 		oConfig.listener();
 	};
-	
+
 	/**
 	 * Returns information about the current active range of the range set with the given name.
-	 * 
-	 * @param {String} sName The name of the range set.
+	 *
+	 * @param {String} sName The name of the range set. The range set must be initialized beforehand ({@link sap.ui.Device.media.html#initRangeSet})
+	 *
 	 * @name sap.ui.Device.media#getCurrentRange
-	 * @return {Map} the information about the current active range (same structure like the handler parameters (@see sap.ui.Device.media#attachHandler))
+	 * @return {map} Information about the current active interval of the range set. The returned map has the same structure as the argument of the event handlers ({link sap.ui.Device.media#attachHandler})
 	 * @function
 	 * @public
 	 */
@@ -1123,26 +2373,29 @@ if (typeof window.sap.ui !== "object") {
 		}
 		return checkQueries(sName, true);
 	};
-	
+
 	/**
-	 * Returns whether a range set with the given name is initialized.
-	 * 
+	 * Returns <code>true</code> if a range set with the given name is already initialized.
+	 *
 	 * @param {String} sName The name of the range set.
+	 *
 	 * @name sap.ui.Device.media#hasRangeSet
-	 * @return {boolean}
+	 * @return {boolean} Returns <code>true</code> if a range set with the given name is already initialized
 	 * @function
 	 * @public
 	 */
 	device.media.hasRangeSet = function(sName){
 		return sName && !!_querysets[sName];
 	};
-	
+
 	/**
 	 * Removes a previously initialized range set and detaches all registered handlers.
-	 * 
-	 * Initialized predefined range sets (@see sap.ui.Device.media#RANGESETS) cannot be removed.
-	 * 
-	 * @param {String} sName The name of the range set.
+	 *
+	 * Only custom range sets can be removed via this function. Initialized predefined range sets
+	 * ({@link sap.ui.Device.media#RANGESETS}) cannot be removed.
+	 *
+	 * @param {String} sName The name of the range set which should be removed.
+	 *
 	 * @name sap.ui.Device.media#removeRangeSet
 	 * @function
 	 * @protected
@@ -1159,14 +2412,14 @@ if (typeof window.sap.ui !== "object") {
 				return;
 			}
 		}
-		
+
 		var oConfig = _querysets[sName];
 		if (device.support.matchmedialistener) { //FF, Safari, Chrome, IE10?
 			var queries = oConfig.queries;
 			for (var i = 0; i < queries.length; i++) {
 				queries[i].media.removeListener(oConfig.listener);
 			}
-		} else { //IE, Safari (<6?)	
+		} else { //IE, Safari (<6?)
 			if (window.removeEventListener) {
 				window.removeEventListener("resize", oConfig.listener, false);
 				window.removeEventListener("orientationchange", oConfig.listener, false);
@@ -1174,7 +2427,7 @@ if (typeof window.sap.ui !== "object") {
 				window.detachEvent("onresize", oConfig.listener);
 			}
 		}
-		
+
 		refreshCSSClasses(sName, "", true);
 		delete mEventRegistry["media_" + sName];
 		delete _querysets[sName];
@@ -1182,52 +2435,63 @@ if (typeof window.sap.ui !== "object") {
 
 //******** System Detection ********
 
-	/** 
-	 * Contains information about the system.
-	 * 
+	/**
+	 * Provides a basic categorization of the used device based on various indicators.
+	 *
+	 * These indicators are for example the support of touch events, the screen size, the used operation system or
+	 * the user agent of the browser.
+	 *
+	 * <b>Note:</b> Depending on the capabilities of the device it is also possible that multiple flags are set to <code>true</code>.
+	 *
 	 * @namespace
 	 * @name sap.ui.Device.system
 	 * @public
 	 */
 	/**
-	 * Enumeration containing the names of known types of the devices.
-	 * 
-	 * @namespace
-	 * @name sap.ui.Device.system.SYSTEMTYPE
-	 * @public
-	 */
-	/**
-	 * Flag indicating if the device is a tablet.
-	 * 
+	 * If this flag is set to <code>true</code>, the device is recognized as a tablet.
+	 *
+	 * Furthermore, a CSS class <code>sap-tablet</code> is added to the document root element.
+	 *
 	 * @name sap.ui.Device.system#tablet
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating if the device is a phone.
-	 * 
+	 * If this flag is set to <code>true</code>, the device is recognized as a phone.
+	 *
+	 * Furthermore, a CSS class <code>sap-phone</code> is added to the document root element.
+	 *
 	 * @name sap.ui.Device.system#phone
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating if the device is a desktop.
-	 * 
+	 * If this flag is set to <code>true</code>, the device is recognized as a desktop system.
+	 *
+	 * Furthermore, a CSS class <code>sap-desktop</code> is added to the document root element.
+	 *
 	 * @name sap.ui.Device.system#desktop
 	 * @type boolean
 	 * @public
 	 */
 	/**
-	 * Flag indicating if the device is a combination of desktop and tablet.
-	 * 
-	 * This property is mainly targeting the windows 8 devices where the mouse and touch event may supported
-	 * natively by the browser.
-	 * 
-	 * This property is set to true only when both mouse and touch event are natively supported.
-	 * 
+	 * If this flag is set to <code>true</code>, the device is recognized as a combination of a desktop system and tablet.
+	 *
+	 * Furthermore, a CSS class <code>sap-combi</code> is added to the document root element.
+	 *
+	 * <b>Note:</b> This property is mainly for Microsoft Windows 8 (and following) devices where the mouse and touch event may be supported
+	 * natively by the browser being used. This property is set to <code>true</code> only when both mouse and touch event are natively supported.
+	 *
 	 * @alias sap.ui.Device.system#combi
 	 * @type boolean
 	 * @public
+	 */
+	/**
+	 * Enumeration containing the names of known types of the devices.
+	 *
+	 * @namespace
+	 * @name sap.ui.Device.system.SYSTEMTYPE
+	 * @private
 	 */
 
 	var SYSTEMTYPE = {
@@ -1237,45 +2501,47 @@ if (typeof window.sap.ui !== "object") {
 			"COMBI" : "combi"
 	};
 
-	var isWin8 = !!device.os.windows && device.os.version === 8;
-	var isWin7 = !!device.os.windows && device.os.version === 7;
-
 	device.system = {};
 
-	function getSystem(_simMobileOnDesktop) {
-		var t = isTablet();
-		
+	function getSystem(_simMobileOnDesktop, customUA) {
+		var t = isTablet(customUA);
+		var isWin8Upwards = device.os.windows && device.os.version >= 8;
+		var isWin7 = device.os.windows && device.os.version === 7;
+
 		var s = {};
-		s.tablet = ((device.support.touch && !isWin7) || isWin8 || !!_simMobileOnDesktop) && t;
-		s.phone = device.os.windows_phone || ((device.support.touch && !isWin7) || !!_simMobileOnDesktop) && !t;
-		s.desktop = (!s.tablet && !s.phone) || isWin8 || isWin7;
-		s.combi = (s.desktop && s.tablet);
+		s.tablet = !!(((device.support.touch && !isWin7) || isWin8Upwards || !!_simMobileOnDesktop) && t);
+		s.phone = !!(device.os.windows_phone || ((device.support.touch && !isWin7) || !!_simMobileOnDesktop) && !t);
+		s.desktop = !!((!s.tablet && !s.phone) || isWin8Upwards || isWin7);
+		s.combi = !!(s.desktop && s.tablet);
 		s.SYSTEMTYPE = SYSTEMTYPE;
-		
+
 		for (var type in SYSTEMTYPE) {
 			changeRootCSSClass("sap-" + SYSTEMTYPE[type], !s[SYSTEMTYPE[type]]);
 		}
 		return s;
 	}
 
-	function isTablet() {
-		var android_phone = (/(?=android)(?=.*mobile)/i.test(navigator.userAgent));
-		// According to google documentation: https://developer.chrome.com/multidevice/webview/overview, the WebView shipped with Android 4.4 (KitKat) is based on the same code as Chrome for Android.
-		// If you're attempting to differentiate between the WebView and Chrome for Android, you should look for the presence of the Version/_X.X_ string in the WebView user-agent string
-		// The stock browser of Samsung device uses Chrome kernal from Android version 4.4. It behaves differently than the Chrome Webview, therefore it's excluded from this check by checking the 'SAMSUNG'
-		// string in the user agent.
-		var bChromeWebView = device.os.android && device.browser.chrome && (device.os.version >= 4.4) && /Version\/\d.\d/.test(navigator.userAgent) && !/SAMSUNG/.test(navigator.userAgent);
+	function isTablet(customUA) {
+		var ua = customUA || navigator.userAgent;
+		var isWin8Upwards = device.os.windows && device.os.version >= 8;
 		if (device.os.name === device.os.OS.IOS) {
-			return /ipad/i.test(navigator.userAgent);
+			return /ipad/i.test(ua);
 		} else {
+			//in real mobile device
 			if (device.support.touch) {
-				if (isWin8) {
+				if (isWin8Upwards) {
 					return true;
 				}
-				
-				//in real mobile device
-				var densityFactor = window.devicePixelRatio ? window.devicePixelRatio : 1; // may be undefined in Windows Phone devices
-				if (!bChromeWebView && (device.os.name === device.os.OS.ANDROID) && device.browser.webkit && (parseFloat(device.browser.webkitVersion) > 537.10)) {
+
+				if (device.browser.chrome && device.os.android && device.os.version >= 4.4) {
+					// From Android version 4.4, WebView also uses Chrome as Kernel.
+					// We can use the user agent pattern defined in Chrome to do phone/tablet detection
+					// According to the information here: https://developer.chrome.com/multidevice/user-agent#chrome_for_android_user_agent,
+					//  the existence of "Mobile" indicates it's a phone. But because the crosswalk framework which is used in Fiori Client
+					//  inserts another "Mobile" to the user agent for both tablet and phone, we need to check whether "Mobile Safari/<Webkit Rev>" exists.
+					return !/Mobile Safari\/[.0-9]+/.test(ua);
+				} else {
+					var densityFactor = window.devicePixelRatio ? window.devicePixelRatio : 1; // may be undefined in Windows Phone devices
 					// On Android sometimes window.screen.width returns the logical CSS pixels, sometimes the physical device pixels;
 					// Tests on multiple devices suggest this depends on the Webkit version.
 					// The Webkit patch which changed the behavior was done here: https://bugs.webkit.org/show_bug.cgi?id=106460
@@ -1283,75 +2549,121 @@ if (typeof window.sap.ui !== "object") {
 					// Chrome 18 with Webkit 535.19 returns the physical pixels.
 					// The BlackBerry 10 browser with Webkit 537.10+ returns the physical pixels.
 					// So it appears like somewhere above Webkit 537.10 we do not hve to divide by the devicePixelRatio anymore.
+					if (device.os.android && device.browser.webkit && (parseFloat(device.browser.webkitVersion) > 537.10)) {
+						densityFactor = 1;
+					}
 
-					// update: Chrome WebView returns physical pixels therefore it's excluded from this special check
-					densityFactor = 1;
+					//this is how android distinguishes between tablet and phone
+					//http://android-developers.blogspot.de/2011/07/new-tools-for-managing-screen-sizes.html
+					var bTablet = (Math.min(window.screen.width / densityFactor, window.screen.height / densityFactor) >= 600);
+
+					// special workaround for Nexus 7 where the window.screen.width is 600px or 601px in portrait mode (=> tablet)
+					// but window.screen.height 552px in landscape mode (=> phone), because the browser UI takes some space on top.
+					// So the detected device type depends on the orientation :-(
+					// actually this is a Chrome bug, as "width"/"height" should return the entire screen's dimensions and
+					// "availWidth"/"availHeight" should return the size available after subtracting the browser UI
+					if (isLandscape()
+							&& (window.screen.height === 552 || window.screen.height === 553) // old/new Nexus 7
+							&& (/Nexus 7/i.test(ua))) {
+						bTablet = true;
+					}
+
+					return bTablet;
 				}
 
-				//this is how android distinguishes between tablet and phone
-				//http://android-developers.blogspot.de/2011/07/new-tools-for-managing-screen-sizes.html
-				var bTablet = (Math.min(window.screen.width / densityFactor, window.screen.height / densityFactor) >= 600);
-
-				// special workaround for Nexus 7 where the window.screen.width is 600px or 601px in portrait mode (=> tablet) 
-				// but window.screen.height 552px in landscape mode (=> phone), because the browser UI takes some space on top.
-				// So the detected device type depends on the orientation :-(
-				// actually this is a Chrome bug, as "width"/"height" should return the entire screen's dimensions and
-				// "availWidth"/"availHeight" should return the size available after subtracting the browser UI
-				if (isLandscape()
-						&& (window.screen.height === 552 || window.screen.height === 553) // old/new Nexus 7  
-						&& (/Nexus 7/i.test(navigator.userAgent))) {
-					bTablet = true;
-				}
-
-				return bTablet;
 			} else {
+				// This simple android phone detection can be used here because this is the mobile emulation mode in desktop browser
+				var android_phone = (/(?=android)(?=.*mobile)/i.test(ua));
 				// in desktop browser, it's detected as tablet when
 				// 1. Windows 8 device with a touch screen where "Touch" is contained in the userAgent
 				// 2. Android emulation and it's not an Android phone
-				return (device.browser.msie && ua.indexOf("Touch") !== -1) || (device.os.name === device.os.OS.ANDROID && !android_phone);
+				return (device.browser.msie && ua.indexOf("Touch") !== -1) || (device.os.android && !android_phone);
 			}
 		}
 	}
-	
-	function setSystem(_simMobileOnDesktop) {
-		device.system = getSystem(_simMobileOnDesktop);
+
+	function setSystem(_simMobileOnDesktop, customUA) {
+		device.system = getSystem(_simMobileOnDesktop, customUA);
 		if (device.system.tablet || device.system.phone) {
 			device.browser.mobile = true;
 		}
 	}
 	setSystem();
+	// expose the function for unit test
+	device._getSystem = getSystem;
 
 //******** Orientation Detection ********
 
-	/** 
-	 * Orientation Change Event API.
+	/**
+	 * Common API for orientation change notifications across all platforms.
+	 *
+	 * For browsers or devices that do not provide native support for orientation change events
+	 * the API simulates them based on the ratio of the document's width and height.
 	 *
 	 * @namespace
 	 * @name sap.ui.Device.orientation
 	 * @public
 	 */
+	/**
+	 * If this flag is set to <code>true</code>, the screen is currently in portrait mode (the height is greater than the width).
+	 *
+	 * @name sap.ui.Device.orientation#portrait
+	 * @type boolean
+	 * @public
+	 */
+	/**
+	 * If this flag is set to <code>true</code>, the screen is currently in landscape mode (the width is greater than the height).
+	 *
+	 * @name sap.ui.Device.orientation#landscape
+	 * @type boolean
+	 * @public
+	 */
 
 	device.orientation = {};
 
-	/** 
-	 * Resize Event API.
+	/**
+	 * Common API for document window size change notifications across all platforms.
 	 *
 	 * @namespace
 	 * @name sap.ui.Device.resize
 	 * @public
 	 */
-	device.resize = {};
-	
 	/**
-	 * Registers the given handler to the orientation change event.
+	 * The current height of the document's window in pixels.
 	 *
-	 * The handler has one map parameter <code>mParams</code>:
+	 * @name sap.ui.Device.resize#height
+	 * @type integer
+	 * @public
+	 */
+	/**
+	 * The current width of the document's window in pixels.
+	 *
+	 * @name sap.ui.Device.resize#width
+	 * @type integer
+	 * @public
+	 */
+
+	device.resize = {};
+
+	/**
+	 * Registers the given event handler to orientation change events of the document's window.
+	 *
+	 * The event is fired whenever the screen orientation changes and the width of the document's window
+	 * becomes greater than its height or the other way round.
+	 *
+	 * The event handler is called with a single argument: a map <code>mParams</code> which provides the following information:
 	 * <ul>
-	 * <li>mParams.landscape: whether the orientation is currently landscape</li>
+	 * <li><code>mParams.landscape</code>: If this flag is set to <code>true</code>, the screen is currently in landscape mode, otherwise in portrait mode.</li>
 	 * </ul>
 	 *
-	 * @param {Function} fnFunction The function to call, when the orientation change event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
+	 * @param {function}
+	 *            fnFunction The handler function to call when the event occurs. This function will be called in the context of the
+	 *                       <code>oListener</code> instance (if present) or on the <code>window</code> instance. A map with information
+	 *                       about the orientation is provided as a single argument to the handler (see details above).
+	 * @param {object}
+	 *            [oListener] The object that wants to be notified when the event occurs (<code>this</code> context within the
+	 *                        handler function). If it is not specified, the handler function is called in the context of the <code>window</code>.
+	 *
 	 * @name sap.ui.Device.orientation#attachHandler
 	 * @function
 	 * @public
@@ -1361,16 +2673,24 @@ if (typeof window.sap.ui !== "object") {
 	};
 
 	/**
-	 * Registers the given handler to the resize event.
+	 * Registers the given event handler to resize change events of the document's window.
 	 *
-	 * The handler has one map parameter <code>mParams</code>:
+	 * The event is fired whenever the document's window size changes.
+	 *
+	 * The event handler is called with a single argument: a map <code>mParams</code> which provides the following information:
 	 * <ul>
-	 * <li>mParams.height: new height of the window</li>
-	 * <li>mParams.width: new width of the window</li>
+	 * <li><code>mParams.height</code>: The height of the document's window in pixels.</li>
+	 * <li><code>mParams.width</code>: The width of the document's window in pixels.</li>
 	 * </ul>
 	 *
-	 * @param {Function} fnFunction The function to call, when the resize event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
+	 * @param {function}
+	 *            fnFunction The handler function to call when the event occurs. This function will be called in the context of the
+	 *                       <code>oListener</code> instance (if present) or on the <code>window</code> instance. A map with information
+	 *                       about the size is provided as a single argument to the handler (see details above).
+	 * @param {object}
+	 *            [oListener] The object that wants to be notified when the event occurs (<code>this</code> context within the
+	 *                        handler function). If it is not specified, the handler function is called in the context of the <code>window</code>.
+	 *
 	 * @name sap.ui.Device.resize#attachHandler
 	 * @function
 	 * @public
@@ -1380,9 +2700,15 @@ if (typeof window.sap.ui !== "object") {
 	};
 
 	/**
-	 * Deregisters a previously registered handler from the orientation change event.
-	 * @param {Function} fnFunction The function to call, when the orientation change event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
+	 * Removes a previously attached event handler from the orientation change events.
+	 *
+	 * The passed parameters must match those used for registration with {@link #attachHandler} beforehand.
+	 *
+	 * @param {function}
+	 *            fnFunction The handler function to detach from the event
+	 * @param {object}
+	 *            [oListener] The object that wanted to be notified when the event occurred
+	 *
 	 * @name sap.ui.Device.orientation#detachHandler
 	 * @function
 	 * @public
@@ -1392,9 +2718,15 @@ if (typeof window.sap.ui !== "object") {
 	};
 
 	/**
-	 * Deregisters a previously registered handler from the resize event.
-	 * @param {Function} fnFunction The function to call, when the resize event occurs.
-	 * @param {Object} [oListener] The 'this' context of the handler function.
+	 * Removes a previously attached event handler from the resize events.
+	 *
+	 * The passed parameters must match those used for registration with {@link #attachHandler} beforehand.
+	 *
+	 * @param {function}
+	 *            fnFunction The handler function to detach from the event
+	 * @param {object}
+	 *            [oListener] The object that wanted to be notified when the event occurred
+	 *
 	 * @name sap.ui.Device.resize#detachHandler
 	 * @function
 	 * @public
@@ -1456,7 +2788,7 @@ if (typeof window.sap.ui !== "object") {
 	// when changing the orientation while keyboard is shown.
 	var bSkipFirstResize = device.os.ios && device.browser.name === "sf" &&
 		((device.system.phone && device.os.version >= 7 && device.os.version < 7.1) || (device.system.tablet && device.os.version >= 7));
-	
+
 	function isLandscape(bFromOrientationChange){
 		if (device.support.touch && device.support.orientation) {
 			//if on screen keyboard is open and the call of this method is from orientation change listener, reverse the last value.
@@ -1561,7 +2893,7 @@ if (typeof window.sap.ui !== "object") {
 	};
 
 //********************************************************
-	
+
 	setResizeInfo(device.resize);
 	setOrientationInfo(device.orientation);
 
@@ -1585,6 +2917,7 @@ if (typeof window.sap.ui !== "object") {
 
 	//Always initialize the default media range set
 	device.media.initRangeSet();
+	device.media.initRangeSet(RANGESETS["SAP_STANDARD_EXTENDED"]);
 
 	// define module if API is available
 	if (sap.ui.define) {
@@ -1616,8 +2949,8 @@ if (typeof window.sap.ui !== "object") {
         // AMD. Register as an anonymous module.
       // ##### BEGIN: MODIFIED BY SAP
       // define(['./punycode', './IPv6', './SecondLevelDomains'], factory);
-      // we can't support loading URI.js via AMD define. URI.js is packaged with SAPUI5 code 
-      // and define() doesn't execute synchronously. So the UI5 code executed after URI.js 
+      // we can't support loading URI.js via AMD define. URI.js is packaged with SAPUI5 code
+      // and define() doesn't execute synchronously. So the UI5 code executed after URI.js
       // fails as it is missing the URI.js code.
       // Instead we use the standard init code and only expose the result via define()
       // The (optional) dependencies are lost or must be loaded in advance
@@ -1704,7 +3037,7 @@ function filterArrayValues(data, value) {
 
 function arrayContains(list, value) {
     var i, length;
-    
+
     // value may be string, number, array, regexp
     if (isArray(value)) {
         // Note: this can be optimized to O(n) (instead of current O(m * n))
@@ -1713,10 +3046,10 @@ function arrayContains(list, value) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     var _type = getType(value);
     for (i = 0, length = list.length; i < length; i++) {
         if (_type === 'RegExp') {
@@ -1735,7 +3068,7 @@ function arraysEqual(one, two) {
     if (!isArray(one) || !isArray(two)) {
         return false;
     }
-    
+
     // arrays can't be equal if they have different amount of content
     if (one.length !== two.length) {
         return false;
@@ -1749,7 +3082,7 @@ function arraysEqual(one, two) {
             return false;
         }
     }
-    
+
     return true;
 }
 
@@ -1819,13 +3152,13 @@ URI.getDomAttribute = function(node) {
     if (!node || !node.nodeName) {
         return undefined;
     }
-    
+
     var nodeName = node.nodeName.toLowerCase();
     // <input> should only expose src for type="image"
     if (nodeName === 'input' && node.type !== 'image') {
         return undefined;
     }
-    
+
     return URI.domAttributes[nodeName];
 };
 
@@ -2057,8 +3390,8 @@ URI.parseAuthority = function(string, parts) {
 URI.parseUserinfo = function(string, parts) {
     // extract username:password
     var firstSlash = string.indexOf('/');
-    var pos = firstSlash > -1 
-        ? string.lastIndexOf('@', firstSlash) 
+    var pos = firstSlash > -1
+        ? string.lastIndexOf('@', firstSlash)
         : string.indexOf('@');
     var t;
 
@@ -2244,7 +3577,7 @@ URI.addQuery = function(data, name, value) {
 };
 URI.removeQuery = function(data, name, value) {
     var i, length, key;
-    
+
     if (isArray(name)) {
         for (i = 0, length = name.length; i < length; i++) {
             data[name[i]] = undefined;
@@ -2278,7 +3611,7 @@ URI.hasQuery = function(data, name, value, withinArray) {
                 }
             }
         }
-        
+
         return true;
     } else if (typeof name !== "string") {
         throw new TypeError("URI.hasQuery() accepts an object, string as the name parameter");
@@ -2352,7 +3685,7 @@ URI.commonPath = function(one, two) {
     if (pos < 1) {
         return one.charAt(0) === two.charAt(0) && one.charAt(0) === '/' ? '/' : '';
     }
-    
+
     // revert to last /
     if (one.charAt(pos) !== '/' || two.charAt(pos) !== '/') {
         pos = one.substring(0, pos).lastIndexOf('/');
@@ -2446,7 +3779,7 @@ generateAccessor = function(_part){
     };
 };
 
-for (_part in _parts) {                                                                                                                                                                                        
+for (_part in _parts) {
     p[_part] = generateAccessor(_parts[_part]);
 }
 
@@ -2501,7 +3834,7 @@ p.pathname = function(v, build) {
 p.path = p.pathname;
 p.href = function(href, build) {
     var key;
-    
+
     if (href === undefined) {
         return this.toString();
     }
@@ -2516,13 +3849,13 @@ p.href = function(href, build) {
         href = href[attribute] || "";
         _object = false;
     }
-    
+
     // window.location is reported to be an object, but it's not the sort
-    // of object we're looking for: 
+    // of object we're looking for:
     // * location.protocol ends with a colon
     // * location.query != object.search
     // * location.hash != object.fragment
-    // simply serializing the unknown object should do the trick 
+    // simply serializing the unknown object should do the trick
     // (for location, not for everything...)
     if (!_URI && _object && href.pathname !== undefined) {
         href = href.toString();
@@ -2717,11 +4050,11 @@ p.userinfo = function(v, build) {
 };
 p.resource = function(v, build) {
     var parts;
-    
+
     if (v === undefined) {
         return this.path() + this.search() + this.hash();
     }
-    
+
     parts = URI.parse(v);
     this._parts.path = parts.path;
     this._parts.query = parts.query;
@@ -2833,7 +4166,7 @@ p.tld = function(v, build) {
         return tld;
     } else {
         var replace;
-        
+
         if (!v) {
             throw new TypeError("cannot set TLD empty");
         } else if (v.match(/[^a-zA-Z0-9-]/)) {
@@ -2916,7 +4249,7 @@ p.filename = function(v, build) {
         return v ? URI.decodePathSegment(res) : res;
     } else {
         var mutatedDirectory = false;
-        
+
         if (v.charAt(0) === '/') {
             v = v.substring(1);
         }
@@ -3026,11 +4359,11 @@ p.segment = function(segment, v, build) {
                 if (!v[i].length && (!segments.length || !segments[segments.length -1].length)) {
                     continue;
                 }
-                
+
                 if (segments.length && !segments[segments.length -1].length) {
                     segments.pop();
                 }
-                
+
                 segments.push(v[i]);
             }
         } else if (v || (typeof v === "string")) {
@@ -3110,7 +4443,7 @@ p.query = function(v, build) {
 };
 p.setQuery = function(name, value, build) {
     var data = URI.parseQuery(this._parts.query, this._parts.escapeQuerySpace);
-    
+
     if (typeof name === "object") {
         for (var key in name) {
             if (hasOwn.call(name, key)) {
@@ -3122,7 +4455,7 @@ p.setQuery = function(name, value, build) {
     } else {
         throw new TypeError("URI.addQuery() accepts an object, string as the name parameter");
     }
-    
+
     this._parts.query = URI.buildQuery(data, this._parts.duplicateQueryParameters, this._parts.escapeQuerySpace);
     if (typeof name !== "string") {
         build = value;
@@ -3373,11 +4706,11 @@ p.absoluteTo = function(base) {
     if (!(base instanceof URI)) {
         base = new URI(base);
     }
-    
+
     if (!resolved._parts.protocol) {
         resolved._parts.protocol = base._parts.protocol;
     }
-    
+
     if (this._parts.hostname) {
         return resolved;
     }
@@ -3385,7 +4718,7 @@ p.absoluteTo = function(base) {
     for (i = 0; p = properties[i]; i++) {
         resolved._parts[p] = base._parts[p];
     }
-    
+
     properties = ['query', 'path'];
     for (i = 0; p = properties[i]; i++) {
         if (!resolved._parts[p] && base._parts[p]) {
@@ -3447,7 +4780,7 @@ p.relativeTo = function(base) {
         relativeParts.path = '';
         return relative.build();
     }
-    
+
     // determine common sub path
     common = URI.commonPath(relative.path(), base.path());
 
@@ -3542,206 +4875,12 @@ p.escapeQuerySpace = function(v) {
 return URI;
 }));
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-// Provides ECMA Script 6 Polyfill
-(function(jQuery) {
-	"use strict";
-	
-	/*
-	 * No Documentation by intention.
-	 * This class represents a polyfill for ECMA Script 6 Promises
-	 * see http://www.html5rocks.com/en/tutorials/es6/promises/
-	 */
-	
-	var Promise = function(fAction) {
-		if (typeof (fAction) != "function") {
-			throw new TypeError("Argument is not a function");
-		}
-		
-		this._deferred = new jQuery.Deferred();
-
-		try {
-			var that = this;
-			fAction(function(oVal){
-				_finalize(that, oVal, true); //force async resolve
-			}, function(oVal){
-				_finalize(that, oVal, false); //force async reject
-			});
-		} catch (e) { //Error in action rejects the promise
-			_finalize(this, e, false);
-		}
-	};
-	
-	// *** Instance Promise functions ***
-	
-	Promise.prototype.then = function(fOnFulfilled, fOnRejected){
-		var oFollowUpPromise = new Promise(_dummy);
-		setTimeout(function(){
-			this._deferred.then(_doWrap(fOnFulfilled, oFollowUpPromise, true), _doWrap(fOnRejected, oFollowUpPromise, false));
-		}.bind(this), 0);
-		return oFollowUpPromise;
-	};
-	
-	Promise.prototype["catch"] = function(fOnRejected){
-		return this.then(undefined, fOnRejected);
-	};
-	
-	
-	// *** Static Promise functions ***
-	
-	Promise.all = function(aPromises){
-		return new Promise(function(fResolve, fReject){
-			if (!jQuery.isArray(aPromises)) {
-				fReject(new TypeError("invalid argument"));
-				return;
-			}
-			if (aPromises.length == 0) {
-				fResolve([]);
-				return;
-			}
-			
-			var bFailed = false,
-				aValues = new Array(aPromises.length),
-				iCount = 0;
-			
-			function _check(iIdx){
-				Promise.resolve(aPromises[iIdx]).then(function(oObj){
-					if (!bFailed) {
-						iCount++;
-						aValues[iIdx] = oObj;
-						if (iCount == aPromises.length) {
-							fResolve(aValues);
-						}
-					}
-				}, function(oObj){
-					if (!bFailed) {
-						bFailed = true;
-						fReject(oObj);
-					}
-				});
-			}
-			
-			for (var i = 0; i < aPromises.length; i++) {
-				_check(i);
-			}
-		});
-	};
-	
-	Promise.race = function(aPromises){
-		return new Promise(function(fResolve, fReject){
-			if (!jQuery.isArray(aPromises)) {
-				fReject(new TypeError("invalid argument"));
-			}
-			
-			var bFinal = false;
-			
-			for (var i = 0; i < aPromises.length; i++) {
-				/*eslint-disable no-loop-func */
-				Promise.resolve(aPromises[i]).then(function(oObj){
-					if (!bFinal) {
-						bFinal = true;
-						fResolve(oObj);
-					}
-				}, function(oObj){
-					if (!bFinal) {
-						bFinal = true;
-						fReject(oObj);
-					}
-				});
-				/*eslint-enable no-loop-func */
-			}
-		});
-	};
-	
-	Promise.resolve = function(oObj){
-		return oObj instanceof Promise ? oObj : _resolve(new Promise(_dummy), oObj);
-	};
-	
-	Promise.reject = function(oObj){
-		return _finalize(new Promise(_dummy), oObj, false);
-	};
-	
-	
-	// *** Helper functions ***
-	
-	function _dummy(){}
-	
-	function _isThenable(oObj){
-		return oObj && oObj.then && typeof (oObj.then) == "function";
-	}
-	
-	function _finalize(oPromise, oObj, bResolve){
-		setTimeout(function(){
-			if (_isThenable(oObj) && bResolve) { //Assimilation
-				_resolve(oPromise, oObj);
-			} else {
-				oPromise._deferred[bResolve ? "resolve" : "reject"](oObj);
-			}
-		}, 0);
-		return oPromise;
-	}
-	
-	function _resolve(oPromise, oObj){
-		if (_isThenable(oObj)) {
-			var bFinal = false;
-			try {
-				oObj.then(function(oVal){
-					_finalize(oPromise, oVal, true);
-					bFinal = true;
-				}, function(oVal){
-					_finalize(oPromise, oVal, false);
-					bFinal = true;
-				});
-			} catch (e) {
-				if (!bFinal) {
-					_finalize(oPromise, e, false);
-				} else {
-					jQuery.sap.log.debug("Promise: Error in then: " + e); //Error is ignored
-				}
-			}
-		} else {
-			_finalize(oPromise, oObj, true);
-		}
-		return oPromise;
-	}
-	
-	function _doWrap(fAction, oPromise, bResolve){
-		return function(oObj){
-			if (!fAction) {
-				_finalize(oPromise, oObj, bResolve);
-			} else {
-				try {
-					_resolve(oPromise, fAction(oObj));
-				} catch (e) { //catch error in fAction
-					_finalize(oPromise, e, false);
-				}
-			}
-		};
-	}
-	
-	
-	// *** Polyfill ***
-	
-	if (!window.Promise) {
-		window.Promise = Promise;
-	}
-
-	if (window.sap && window.sap.__ui5PublishPromisePolyfill) { //For testing purposes
-		window._UI5Promise = Promise;
-	}
-	
-})(jQuery);
-/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
- * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
- */
-
-/*global URI, Promise, alert, console, XMLHttpRequest */
+/*global URI, Promise, ES6Promise, alert, confirm, console, XMLHttpRequest*/
 
 /**
  * @class Provides base functionality of the SAP jQuery plugin as extension of the jQuery framework.<br/>
@@ -3761,6 +4900,7 @@ return URI;
  */
 
 (function() {
+	"use strict";
 
 	if (!window.jQuery ) {
 		throw new Error("SAPUI5 requires jQuery as a prerequisite (>= version 1.7)");
@@ -3769,6 +4909,18 @@ return URI;
 	// ensure not to initialize twice
 	if (jQuery.sap) {
 		return;
+	}
+
+	// the Promise behaves wrong in MS Edge - therefore we rely on the Promise
+	// polyfill for the MS Edge which works properly (@see jQuery.sap.promise)
+	// Related to MS Edge issue: https://connect.microsoft.com/IE/feedback/details/1658365
+	if (sap.ui.Device.browser.edge) {
+		window.Promise = undefined;
+	}
+
+	// Enable promise polyfill if native promise is not available
+	if (!window.Promise) {
+		ES6Promise.polyfill();
 	}
 
 	/**
@@ -3820,7 +4972,7 @@ return URI;
 	 * @class Represents a version consisting of major, minor, patch version and suffix, e.g. '1.2.7-SNAPSHOT'.
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @constructor
 	 * @public
 	 * @since 1.15.0
@@ -3968,8 +5120,8 @@ return URI;
 	// -----------------------------------------------------------------------
 
 	var oJQVersion = Version(jQuery.fn.jquery);
-	if ( !oJQVersion.inRange("1.7.0", "2.0.0") ) {
-		_earlyLog("error", "SAPUI5 requires a jQuery version of 1.7 or higher, but lower than 2.0; current version is " + jQuery.fn.jquery);
+	if ( !oJQVersion.inRange("1.7.0", "2.2.0") ) {
+		_earlyLog("error", "SAPUI5 requires a jQuery version of 1.7 or higher, but lower than 2.2; current version is " + jQuery.fn.jquery);
 	}
 
 	// TODO move to a separate module? Only adds 385 bytes (compressed), but...
@@ -4002,19 +5154,44 @@ return URI;
 		}(window.navigator.userAgent));
 	}
 
-	// Fixes the CORS issue (introduced by jQuery 1.7) when loading resources
-	// (e.g. SAPUI5 script) from other domains for IE browsers.
-	// The CORS check in jQuery filters out such browsers who do not have the
-	// property "withCredentials" which is the IE and Opera and prevents those
-	// browsers to request data from other domains with jQuery.ajax. The CORS
-	// requests are simply forbidden nevertheless if it works. In our case we
-	// simply load our script resources from another domain when using the CDN
-	// variant of SAPUI5. The following fix is also recommended by jQuery:
+	// XHR overrides for IE
 	if (!!sap.ui.Device.browser.internet_explorer) {
+
+		// Fixes the CORS issue (introduced by jQuery 1.7) when loading resources
+		// (e.g. SAPUI5 script) from other domains for IE browsers.
+		// The CORS check in jQuery filters out such browsers who do not have the
+		// property "withCredentials" which is the IE and Opera and prevents those
+		// browsers to request data from other domains with jQuery.ajax. The CORS
+		// requests are simply forbidden nevertheless if it works. In our case we
+		// simply load our script resources from another domain when using the CDN
+		// variant of SAPUI5. The following fix is also recommended by jQuery:
 		jQuery.support = jQuery.support || {};
 		jQuery.support.cors = true;
-	}
 
+		// Fixes XHR factory issue (introduced by jQuery 1.11). In case of IE
+		// it uses by mistake the ActiveXObject XHR. In the list of XHR supported
+		// HTTP methods PATCH and MERGE are missing which are required for OData.
+		// The related ticket is: #2068 (no downported to jQuery 1.x planned)
+		var oJQV = Version(jQuery.fn.jquery);
+		// the fix will only be applied to jQuery >= 1.11.0 (only for jQuery 1.x)
+		if (window.ActiveXObject !== undefined && oJQV.getMajor() == 1 && oJQV.getMinor() >= 11) {
+			var fnCreateStandardXHR = function() {
+				try {
+					return new window.XMLHttpRequest();
+				} catch (e) { /* ignore */ }
+			};
+			var fnCreateActiveXHR = function() {
+				try {
+					return new window.ActiveXObject("Microsoft.XMLHTTP");
+				} catch (e) { /* ignore */ }
+			};
+			jQuery.ajaxSettings = jQuery.ajaxSettings || {};
+			jQuery.ajaxSettings.xhr = function() {
+				return !this.isLocal ? fnCreateStandardXHR() : fnCreateActiveXHR();
+			};
+		}
+
+	}
 
 	/**
 	 * Find the script URL where the SAPUI5 is loaded from and return an object which
@@ -4063,17 +5240,33 @@ return URI;
 	 */
 	(function() {
 		if (/sap-bootstrap-debug=(true|x|X)/.test(location.search)) {
-			window["sap-ui-bRestart"] = false;
-			window["sap-ui-sRestartUrl"] = "http://localhost:8080/sapui5/resources/sap-ui-core.js";
+			// Dear developer, the way to reload UI5 from a different location has changed: it can now be directly configured in the support popup (Ctrl-Alt-Shift-P),
+			// without stepping into the debugger.
+			// However, for convenience or cases where this popup is disabled, or for other usages of an early breakpoint, the "sap-bootstrap-debug" URL parameter option is still available.
+			// To reboot an alternative core just step down a few lines and set sRebootUrl
+			/*eslint-disable no-debugger */
+			debugger;
+		}
 
-			// function to replace the bootstrap tag with a newly created script tag to enable
-			// restarting the core from a different server
-			var restartCore = function() {
+		// Check local storage for booting a different core
+		var sRebootUrl;
+		try { // Necessary for FF when Cookies are disabled
+			sRebootUrl = window.localStorage.getItem("sap-ui-reboot-URL");
+			window.localStorage.removeItem("sap-ui-reboot-URL"); // only reboot once from there (to avoid a deadlock when the alternative core is broken)
+		} catch (e) { /* no warning, as this will happen on every startup, depending on browser settings */ }
+
+		if (sRebootUrl && sRebootUrl !== "undefined") { // sic! It can be a string.
+			/*eslint-disable no-alert*/
+			var bUserConfirmed = confirm("WARNING!\n\nUI5 will be booted from the URL below.\nPress 'Cancel' unless you have configured this.\n\n" + sRebootUrl);
+			/*eslint-enable no-alert*/
+
+			if (bUserConfirmed) {
+				// replace the bootstrap tag with a newly created script tag to enable restarting the core from a different server
 				var oScript = _oBootstrap.tag,
-					sScript = "<script src=\"" + window["sap-ui-sRestartUrl"] + "\"";
+					sScript = "<script src=\"" + sRebootUrl + "\"";
 				jQuery.each(oScript.attributes, function(i, oAttr) {
 					if (oAttr.nodeName.indexOf("data-sap-ui-") == 0) {
-						sScript += " " + oAttr.nodeName + "=\"" + oAttr.nodeValue + "\"";
+						sScript += " " + oAttr.nodeName + "=\"" + oAttr.nodeValue.replace(/"/g, "&quot;") + "\"";
 					}
 				});
 				sScript += "></script>";
@@ -4084,25 +5277,11 @@ return URI;
 				window["sap-ui-config"] && window["sap-ui-config"].resourceRoots && (window["sap-ui-config"].resourceRoots[""] = undefined);
 
 				document.write(sScript);
-				var oRestart = new Error("Aborting UI5 bootstrap and restarting from: " + window["sap-ui-sRestartUrl"]);
+
+				// now this core commits suicide to enable clean loading of the other core
+				var oRestart = new Error("This is not a real error. Aborting UI5 bootstrap and rebooting from: " + sRebootUrl);
 				oRestart.name = "Restart";
-
-				// clean up
-				delete window["sap-ui-bRestart"];
-				delete window["sap-ui-sRestartUrl"];
-
 				throw oRestart;
-			};
-
-			// debugger stops here. To restart UI5 from somewhere else (default: localhost), set:
-			//    window["sap-ui-bRestart"] = true
-			// If you want to restart from a different server than localhost, you can adapt the URL, e.g.:
-			//    window["sap-ui-sRestartUrl"] = "http://someserver:8080/sapui5/resources/sap-ui-core.js"
-			/*eslint-disable no-debugger */
-			debugger;
-			/*eslint-enable no-debugger */
-			if (window["sap-ui-bRestart"]) {
-				restartCore();
 			}
 		}
 	})();
@@ -4117,9 +5296,11 @@ return URI;
 			bIsOptimized = window["sap-ui-optimized"];
 
 		//Check local storage
-		try { //Necessary for FF when Cookies are deactivated
+		try {
 			bDebugSources = bDebugSources || (window.localStorage.getItem("sap-ui-debug") == "X");
-		} catch (e) {}
+		} catch (e) {
+			//Happens in FF when Cookies are deactivated
+		}
 
 		window["sap-ui-debug"] = bDebugSources;
 
@@ -4239,7 +5420,7 @@ return URI;
 	/**
 	 * Root Namespace for the jQuery plug-in provided by SAP SE.
 	 *
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @namespace
 	 * @public
 	 * @static
@@ -4250,8 +5431,22 @@ return URI;
 
 	jQuery.sap.Version = Version;
 
-	// -------------------------- DEBUG LOCAL STORAGE -------------------------------------
+	// -------------------------- PERFORMANCE NOW -------------------------------------
+	/**
+	 * Returns a high resolution timestamp for measurements.
+	 * The timestamp is based on 01/01/1970 00:00:00 as float with microsecond precision or
+	 * with millisecond precision, if high resolution timestamps are not available.
+	 * The fractional part of the timestamp represents microseconds.
+	 * Converting to a <code>Date</code> is possible using <code>new Date(jQuery.sap.now())</code>
+	 *
+	 * @public
+	 * @returns {float} high resolution timestamp for measurements
+	 */
+	jQuery.sap.now = !(window.performance && window.performance.now && window.performance.timing) ? Date.now : function() {
+		return window.performance.timing.navigationStart + window.performance.now();
+	};
 
+	// -------------------------- DEBUG LOCAL STORAGE -------------------------------------
 	jQuery.sap.debug = function(bEnable) {
 		if (!window.localStorage) {
 			return null;
@@ -4274,6 +5469,41 @@ return URI;
 		return window.localStorage.getItem("sap-ui-debug") == "X";
 	};
 
+	/**
+	 * Sets the URL to reboot this app from, the next time it is started. Only works with localStorage API available
+	 * (and depending on the browser, if cookies are enabled, even though cookies are not used).
+	 *
+	 * @param sRebootUrl the URL to sap-ui-core.js, from which the application should load UI5 on next restart; undefined clears the restart URL
+	 * @returns the current reboot URL or undefined in case of an error or when the reboot URL has been cleared
+	 *
+	 * @private
+	 */
+	jQuery.sap.setReboot = function(sRebootUrl) { // null-ish clears the reboot request
+		var sUrl;
+		if (!window.localStorage) {
+			return null;
+		}
+
+		try {
+			if (sRebootUrl) {
+				window.localStorage.setItem("sap-ui-reboot-URL", sRebootUrl); // remember URL to reboot from
+
+				/*eslint-disable no-alert */
+				alert("Next time this app is launched (only once), it will load UI5 from:\n" + sRebootUrl + ".\nPlease reload the application page now.");
+				/*eslint-enable no-alert */
+
+			} else {
+				window.localStorage.removeItem("sap-ui-reboot-URL"); // clear reboot URL, so app will start normally
+			}
+
+			sUrl =  window.localStorage.getItem("sap-ui-reboot-URL");
+		} catch (e) {
+			jQuery.sap.log.warning("Could not access localStorage while setting reboot URL '" + sRebootUrl + "' (are cookies disabled?): " + e.message);
+		}
+
+		return sUrl;
+	};
+
 	// -------------------------- STATISTICS LOCAL STORAGE -------------------------------------
 
 	jQuery.sap.statistics = function(bEnable) {
@@ -4281,7 +5511,7 @@ return URI;
 			return null;
 		}
 
-		function reloadHint(bUsesDbgSrc){
+		function gatewayStatsHint(bUsesDbgSrc){
 			/*eslint-disable no-alert */
 			alert("Usage of Gateway statistics " + (bUsesDbgSrc ? "on" : "off") + " now.\nFor the change to take effect, you need to reload the page.");
 			/*eslint-enable no-alert */
@@ -4289,10 +5519,10 @@ return URI;
 
 		if (bEnable === true) {
 			window.localStorage.setItem("sap-ui-statistics", "X");
-			reloadHint(true);
+			gatewayStatsHint(true);
 		} else if (bEnable === false) {
 			window.localStorage.removeItem("sap-ui-statistics");
-			reloadHint(false);
+			gatewayStatsHint(false);
 		}
 
 		return window.localStorage.getItem("sap-ui-statistics") == "X";
@@ -4377,11 +5607,13 @@ return URI;
 		 */
 		function log(iLevel, sMessage, sDetails, sComponent) {
 			if (iLevel <= level(sComponent) ) {
-				var oNow = new Date(),
+				var fNow =  jQuery.sap.now(),
+					oNow = new Date(fNow),
+					iMicroSeconds = Math.floor((fNow - Math.floor(fNow)) * 1000),
 					oLogEntry = {
-						time     : pad0(oNow.getHours(),2) + ":" + pad0(oNow.getMinutes(),2) + ":" + pad0(oNow.getSeconds(),2),
+						time     : pad0(oNow.getHours(),2) + ":" + pad0(oNow.getMinutes(),2) + ":" + pad0(oNow.getSeconds(),2) + "." + pad0(oNow.getMilliseconds(),3) + pad0(iMicroSeconds,3),
 						date     : pad0(oNow.getFullYear(),4) + "-" + pad0(oNow.getMonth() + 1,2) + "-" + pad0(oNow.getDate(),2),
-						timestamp: oNow.getTime(),
+						timestamp: fNow,
 						level    : iLevel,
 						message  : String(sMessage || ""),
 						details  : String(sDetails || ""),
@@ -4801,6 +6033,851 @@ return URI;
 		 */
 		jQuery.sap.log.getLog = jQuery.sap.log.getLogEntries;
 
+		// *** Performance measure ***
+		function PerfMeasurement() {
+
+			function Measurement(sId, sInfo, iStart, iEnd, aCategories) {
+				this.id = sId;
+				this.info = sInfo;
+				this.start = iStart;
+				this.end = iEnd;
+				this.pause = 0;
+				this.resume = 0;
+				this.duration = 0; // used time
+				this.time = 0; // time from start to end
+				this.categories = aCategories;
+				this.average = false; //average duration enabled
+				this.count = 0; //average count
+				this.completeDuration = 0; //complete duration
+			}
+
+			function matchCategories(aCategories) {
+				if (!aRestrictedCategories) {
+					return true;
+				}
+				if (!aCategories) {
+					return aRestrictedCategories === null;
+				}
+				//check whether active categories and current categories match
+				for (var i = 0; i < aRestrictedCategories.length; i++) {
+					if (aCategories.indexOf(aRestrictedCategories[i]) > -1) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			function checkCategories(aCategories) {
+				if (!aCategories) {
+					aCategories = ["javascript"];
+				}
+				aCategories = typeof aCategories === "string" ? aCategories.split(",") : aCategories;
+				if (!matchCategories(aCategories)) {
+					return null;
+				}
+				return aCategories;
+			}
+
+			var bActive = false,
+				fnAjax = jQuery.ajax,
+				aRestrictedCategories = null,
+				aAverageMethods = [],
+				aOriginalMethods = [],
+				mMethods = {},
+				mMeasurements = {};
+
+			/**
+			 * Gets the current state of the perfomance measurement functionality
+			 *
+			 * @return {boolean} current state of the perfomance measurement functionality
+			 * @name jQuery.sap.measure#getActive
+			 * @function
+			 * @public
+			 */
+			this.getActive = function() {
+				return bActive;
+			};
+
+			/**
+			 * Activates or deactivates the performance measure functionality
+			 * Optionally a category or list of categories can be passed to restrict measurements to certain categories
+			 * like "javascript", "require", "xmlhttprequest", "render"
+			 * @param {boolean} bOn state of the perfomance measurement functionality to set
+			 * @param {string | string[]}  An optional list of categories that should be measured
+			 *
+			 * @return {boolean} current state of the perfomance measurement functionality
+			 * @name jQuery.sap.measure#setActive
+			 * @function
+			 * @public
+			 */
+			this.setActive = function(bOn, aCategories) {
+				//set restricted categories
+				if (!aCategories) {
+					aCategories = null;
+				} else if (typeof aCategories === "string") {
+					aCategories = aCategories.split(",");
+				}
+				aRestrictedCategories = aCategories;
+
+				if (bActive === bOn) {
+					return;
+				}
+				bActive = bOn;
+				if (bActive) {
+
+					//activate method implementations once
+					for (var sName in mMethods) {
+						this[sName] = mMethods[sName];
+					}
+					mMethods = {};
+					// wrap and instrument jQuery.ajax
+					jQuery.ajax = function(url, options) {
+
+						if ( typeof url === 'object' ) {
+							options = url;
+							url = undefined;
+						}
+						options = options || {};
+
+						var sMeasureId = new URI(url || options.url).absoluteTo(document.location.origin + document.location.pathname).href();
+						jQuery.sap.measure.start(sMeasureId, "Request for " + sMeasureId, "xmlhttprequest");
+						var fnComplete = options.complete;
+						options.complete = function() {
+							jQuery.sap.measure.end(sMeasureId);
+							if (fnComplete) {
+								fnComplete.apply(this, arguments);
+							}
+						};
+
+						// strict mode: we potentially modified 'options', so we must not use 'arguments'
+						return fnAjax.call(this, url, options);
+					};
+				} else if (fnAjax) {
+					jQuery.ajax = fnAjax;
+				}
+
+				return bActive;
+			};
+
+			/**
+			 * Starts a performance measure.
+			 * Optionally a category or list of categories can be passed to allow filtering of measurements.
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @param {string} sInfo Info for the measurement
+			 * @param {string | string[]} [aCategories = "javascript"] An optional list of categories for the measure
+			 *
+			 * @return {object} current measurement containing id, info and start-timestamp (false if error)
+			 * @name jQuery.sap.measure#start
+			 * @function
+			 * @public
+			 */
+			mMethods["start"] = function(sId, sInfo, aCategories) {
+				if (!bActive) {
+					return;
+				}
+
+				aCategories = checkCategories(aCategories);
+				if (!aCategories) {
+					return;
+				}
+
+				var iTime = jQuery.sap.now(),
+					oMeasurement = new Measurement( sId, sInfo, iTime, 0, aCategories);
+
+				// create timeline entries if available
+				/*eslint-disable no-console */
+				if (jQuery.sap.log.getLevel("sap.ui.Performance") >= 4 && window.console && console.time) {
+					console.time(sInfo + " - " + sId);
+				}
+				/*eslint-enable no-console */
+	//			jQuery.sap.log.info("Performance measurement start: "+ sId + " on "+ iTime);
+
+				if (oMeasurement) {
+					mMeasurements[sId] = oMeasurement;
+					return this.getMeasurement(oMeasurement.id);
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Pauses a performance measure
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @return {object} current measurement containing id, info and start-timestamp, pause-timestamp (false if error)
+			 * @name jQuery.sap.measure#pause
+			 * @function
+			 * @public
+			 */
+			mMethods["pause"] = function(sId) {
+				if (!bActive) {
+					return;
+				}
+
+				var iTime = jQuery.sap.now();
+				var oMeasurement = mMeasurements[sId];
+				if (oMeasurement && oMeasurement.end > 0) {
+					// already ended -> no pause possible
+					return false;
+				}
+
+				if (oMeasurement && oMeasurement.pause == 0) {
+					// not already paused
+					oMeasurement.pause = iTime;
+					if (oMeasurement.pause >= oMeasurement.resume && oMeasurement.resume > 0) {
+						oMeasurement.duration = oMeasurement.duration + oMeasurement.pause - oMeasurement.resume;
+						oMeasurement.resume = 0;
+					} else if (oMeasurement.pause >= oMeasurement.start) {
+						oMeasurement.duration = oMeasurement.pause - oMeasurement.start;
+					}
+				}
+	//			jQuery.sap.log.info("Performance measurement pause: "+ sId + " on "+ iTime + " duration: "+ oMeasurement.duration);
+
+				if (oMeasurement) {
+					return this.getMeasurement(oMeasurement.id);
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Resumes a performance measure
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @return {object} current measurement containing id, info and start-timestamp, resume-timestamp (false if error)
+			 * @name jQuery.sap.measure#resume
+			 * @function
+			 * @public
+			 */
+			mMethods["resume"] = function(sId) {
+				if (!bActive) {
+					return;
+				}
+
+				var iTime = jQuery.sap.now();
+				var oMeasurement = mMeasurements[sId];
+	//			jQuery.sap.log.info("Performance measurement resume: "+ sId + " on "+ iTime + " duration: "+ oMeasurement.duration);
+
+				if (oMeasurement && oMeasurement.pause > 0) {
+					// already paused
+					oMeasurement.pause = 0;
+					oMeasurement.resume = iTime;
+				}
+
+				if (oMeasurement) {
+					return this.getMeasurement(oMeasurement.id);
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Ends a performance measure
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @return {object} current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
+			 * @name jQuery.sap.measure#end
+			 * @function
+			 * @public
+			 */
+			mMethods["end"] = function(sId) {
+				if (!bActive) {
+					return;
+				}
+
+				var iTime = jQuery.sap.now();
+
+				var oMeasurement = mMeasurements[sId];
+	//			jQuery.sap.log.info("Performance measurement end: "+ sId + " on "+ iTime);
+
+				if (oMeasurement && !oMeasurement.end) {
+					oMeasurement.end = iTime;
+					if (oMeasurement.end >= oMeasurement.resume && oMeasurement.resume > 0) {
+						oMeasurement.duration = oMeasurement.duration + oMeasurement.end - oMeasurement.resume;
+						oMeasurement.resume = 0;
+					} else if (oMeasurement.pause > 0) {
+						// duration already calculated
+						oMeasurement.pause = 0;
+					} else if (oMeasurement.end >= oMeasurement.start) {
+						if (oMeasurement.average) {
+							oMeasurement.completeDuration += (oMeasurement.end - oMeasurement.start);
+							oMeasurement.count++;
+							oMeasurement.duration = oMeasurement.completeDuration / oMeasurement.count;
+							oMeasurement.start = iTime;
+						} else {
+							oMeasurement.duration = oMeasurement.end - oMeasurement.start;
+						}
+					}
+					if (oMeasurement.end >= oMeasurement.start) {
+						oMeasurement.time = oMeasurement.end - oMeasurement.start;
+					}
+				}
+
+				if (oMeasurement) {
+					// end timeline entry
+					/*eslint-disable no-console */
+					if (jQuery.sap.log.getLevel("sap.ui.Performance") >= 4 && window.console && console.timeEnd) {
+						console.timeEnd(oMeasurement.info + " - " + sId);
+					}
+					/*eslint-enable no-console */
+					return this.getMeasurement(sId);
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Clears all performance measurements
+			 *
+			 * @name jQuery.sap.measure#clear
+			 * @function
+			 * @public
+			 */
+			mMethods["clear"] = function() {
+				mMeasurements = {};
+			};
+
+			/**
+			 * Removes a performance measure
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @name jQuery.sap.measure#remove
+			 * @function
+			 * @public
+			 */
+			mMethods["remove"] = function(sId) {
+				delete mMeasurements[sId];
+			};
+			/**
+			 * Adds a performance measurement with all data
+			 * This is usefull to add external measurements (e.g. from a backend) to the common measurement UI
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @param {string} sInfo Info for the measurement
+			 * @param {int} iStart start timestamp
+			 * @param {int} iEnd end timestamp
+			 * @param {int} iTime time in milliseconds
+			 * @param {int} iDuration effective time in milliseconds
+			 * @param {string | string[]} [aCategories = "javascript"] An optional list of categories for the measure
+			 * @return {object} [] current measurement containing id, info and start-timestamp, end-timestamp, time, duration, categories (false if error)
+			 * @name jQuery.sap.measure#add
+			 * @function
+			 * @public
+			 */
+			mMethods["add"] = function(sId, sInfo, iStart, iEnd, iTime, iDuration, aCategories) {
+				if (!bActive) {
+					return;
+				}
+				aCategories = checkCategories(aCategories);
+				if (!aCategories) {
+					return false;
+				}
+				var oMeasurement = new Measurement( sId, sInfo, iStart, iEnd, aCategories);
+				oMeasurement.time = iTime;
+				oMeasurement.duration = iDuration;
+
+				if (oMeasurement) {
+					mMeasurements[sId] = oMeasurement;
+					return this.getMeasurement(oMeasurement.id);
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Starts an average performance measure.
+			 * The duration of this measure is an avarage of durations measured for each call.
+			 * Optionally a category or list of categories can be passed to allow filtering of measurements.
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @param {string} sInfo Info for the measurement
+			 * @param {string | string[]} [aCategories = "javascript"] An optional list of categories for the measure
+			 * @return {object} current measurement containing id, info and start-timestamp (false if error)
+			 * @name jQuery.sap.measure#average
+			 * @function
+			 * @public
+			 */
+			mMethods["average"] = function(sId, sInfo, aCategories) {
+				if (!bActive) {
+					return;
+				}
+				aCategories = checkCategories(aCategories);
+				if (!aCategories) {
+					return;
+				}
+
+				var oMeasurement = mMeasurements[sId],
+					iTime = jQuery.sap.now();
+				if (!oMeasurement || !oMeasurement.average) {
+					this.start(sId, sInfo, aCategories);
+					oMeasurement = mMeasurements[sId];
+					oMeasurement.average = true;
+				} else {
+					if (!oMeasurement.end) {
+						oMeasurement.completeDuration += (iTime - oMeasurement.start);
+						oMeasurement.count++;
+					}
+					oMeasurement.start = iTime;
+					oMeasurement.end = 0;
+				}
+				return this.getMeasurement(oMeasurement.id);
+			};
+
+			/**
+			 * Gets a performance measure
+			 *
+			 * @param {string} sId ID of the measurement
+			 * @return {object} current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
+			 * @name jQuery.sap.measure#getMeasurement
+			 * @function
+			 * @public
+			 */
+			this.getMeasurement = function(sId) {
+
+				var oMeasurement = mMeasurements[sId];
+
+				if (oMeasurement) {
+					return {id: oMeasurement.id,
+							info: oMeasurement.info,
+							start: oMeasurement.start,
+							end: oMeasurement.end,
+							pause: oMeasurement.pause,
+							resume: oMeasurement.resume,
+							time: oMeasurement.time,
+							duration: oMeasurement.duration,
+							completeDuration: oMeasurement.completeDuration,
+							count: oMeasurement.count,
+							average: oMeasurement.average,
+							categories: oMeasurement.categories};
+				} else {
+					return false;
+				}
+			};
+
+			/**
+			 * Gets all performance measurements
+			 *
+			 * @param {boolean} [bCompleted] Whether only completed measurements should be returned, if explicitly set to false only incomplete measurements are returned
+			 * @return {object} [] current measurement containing id, info and start-timestamp, end-timestamp, time, duration, categories
+			 * @name jQuery.sap.measure#getAllMeasurements
+			 * @function
+			 * @public
+			 */
+			this.getAllMeasurements = function(bCompleted) {
+				return this.filterMeasurements(function(oMeasurement) {
+					return oMeasurement;
+				}, bCompleted);
+			};
+
+			/**
+			 * Gets all performance measurements where a provided filter function returns true.
+			 * The filter function is called for every measurement and should return the measurement to be added.
+			 * If no filter function is provided an empty array is returned.
+			 * To filter for certain categories of measurements a fnFilter can be implemented like this
+			 * <code>
+			 * function(oMeasurement) {
+			 *     return oMeasurement.categories.indexOf("rendering") > -1 ? oMeasurement : null
+			 * }</code>
+			 *
+			 * @param {function} fnFilter a filter function that returns true if the passed measurement should be added to the result
+			 * @param {boolean} [bCompleted] Whether only completed measurements should be returned, if explicitly set to false only incomplete measurements are returned
+			 *
+			 * @return {object} [] current measurements containing id, info and start-timestamp, end-timestamp, time, duration, categories (false if error)
+			 * @name jQuery.sap.measure#filterMeasurements
+			 * @function
+			 * @public
+			 * @since 1.34.0
+		 	 */
+			this.filterMeasurements = function(fnFilter, bCompleted) {
+				var aMeasurements = [],
+					that = this;
+				jQuery.each(mMeasurements, function(sId){
+					var oMeasurement = that.getMeasurement(sId);
+					if (fnFilter) {
+						var oResult = fnFilter(oMeasurement);
+						if (oResult && ((bCompleted === false && oResult.end === 0) || (bCompleted !== false && (!bCompleted || oResult.end)))) {
+							aMeasurements.push(oResult);
+						}
+					}
+				});
+				return aMeasurements;
+			};
+
+			/**
+			 * Registers an average measurement for a given objects method
+			 *
+			 * @param {string} sId the id of the measurement
+			 * @param {object} oObject the object of the method
+			 * @param {string} sMethod the name of the method
+			 * @param {string[]} [aCategories = ["javascript"]] An optional categories list for the measurement
+			 *
+			 * @returns {boolean} true if the registration was successful
+			 * @name jQuery.sap.measure#registerMethod
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.registerMethod = function(sId, oObject, sMethod, aCategories) {
+				var fnMethod = oObject[sMethod];
+				if (fnMethod && typeof fnMethod === "function") {
+					var bFound = aAverageMethods.indexOf(fnMethod) > -1;
+					if (!bFound) {
+						aOriginalMethods.push({func : fnMethod, obj: oObject, method: sMethod, id: sId});
+						oObject[sMethod] = function() {
+							jQuery.sap.measure.average(sId, sId + " method average", aCategories);
+							var result = fnMethod.apply(this, arguments);
+							jQuery.sap.measure.end(sId);
+							return result;
+						};
+						aAverageMethods.push(oObject[sMethod]);
+						return true;
+					}
+				} else {
+					jQuery.sap.log.debug(sMethod + " in not a function. jQuery.sap.measure.register failed");
+				}
+				return false;
+			};
+
+			/**
+			 * Unregisters an average measurement for a given objects method
+			 *
+			 * @param {string} sId the id of the measurement
+			 * @param {object} oObject the object of the method
+			 * @param {string} sMethod the name of the method
+			 *
+			 * @returns {boolean} true if the unregistration was successful
+			 * @name jQuery.sap.measure#unregisterMethod
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.unregisterMethod = function(sId, oObject, sMethod) {
+				var fnFunction = oObject[sMethod],
+					iIndex = aAverageMethods.indexOf(fnFunction);
+				if (fnFunction && iIndex > -1) {
+					oObject[sMethod] = aOriginalMethods[iIndex].func;
+					aAverageMethods.splice(iIndex, 1);
+					aOriginalMethods.splice(iIndex, 1);
+					return true;
+				}
+				return false;
+			};
+
+			/**
+			 * Unregisters all average measurements
+			 * @name jQuery.sap.measure#unregisterAllMethods
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.unregisterAllMethods = function() {
+				while (aOriginalMethods.length > 0) {
+					var oOrig = aOriginalMethods[0];
+					this.unregisterMethod(oOrig.id, oOrig.obj, oOrig.method);
+				}
+			};
+
+			// ** Interaction measure **
+			var aInteractions = [];
+			var oPendingInteraction;
+
+			/**
+			 * Gets all interaction measurements
+			 * @param {boolean} bFinalize finalize the current pending interaction so that it is contained in the returned array
+			 * @return {object[]} all interaction measurements
+			 * @name jQuery.sap.measure#getAllInteractionMeasurements
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.getAllInteractionMeasurements = function(bFinalize) {
+				if (bFinalize) {
+					// force the finalization of the currently pending interaction
+					jQuery.sap.measure.endInteraction(true);
+				}
+				return aInteractions;
+			};
+
+			/**
+			 * Gets all interaction measurements for which a provided filter function returns a truthy value.
+			 * To filter for certain categories of measurements a fnFilter can be implemented like this
+			 * <code>
+			 * function(oInteractionMeasurement) {
+			 *     return oInteractionMeasurement.duration > 0
+			 * }</code>
+			 * @param {function} fnFilter a filter function that returns true if the passed measurement should be added to the result
+			 * @return {object[]} all interaction measurements passing the filter function successfully
+			 * @name jQuery.sap.measure#filterInteractionMeasurements
+			 * @function
+			 * @public
+			 * @since 1.36.2
+			 */
+			this.filterInteractionMeasurements = function(fnFilter) {
+				var aFilteredInteractions = [];
+				if (fnFilter) {
+					for (var i = 0, l = aInteractions.length; i < l; i++) {
+						if (fnFilter(aInteractions[i])) {
+							aFilteredInteractions.push(aInteractions[i]);
+						}
+					}
+				}
+				return aFilteredInteractions;
+			};
+
+			/**
+			 * Gets the incomplete pending interaction
+			 * @return {object} interaction measurement
+			 * @name jQuery.sap.measure#getInteractionMeasurement
+			 * @function
+			 * @private
+			 * @since 1.34.0
+			 */
+			this.getPendingInteractionMeasurement = function() {
+				return oPendingInteraction;
+			};
+
+			/**
+			 * Clears all interaction measurements
+			 * @name jQuery.sap.measure#clearInteractionMeasurements
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.clearInteractionMeasurements = function() {
+				aInteractions = [];
+			};
+
+			function finalizeInteraction(iTime) {
+				if (oPendingInteraction) {
+					oPendingInteraction.end = iTime;
+					oPendingInteraction.duration = oPendingInteraction.processing;
+					oPendingInteraction.requests = jQuery.sap.measure.getRequestTimings();
+					oPendingInteraction.measurements = jQuery.sap.measure.filterMeasurements(function(oMeasurement) {
+						return (oMeasurement.start > oPendingInteraction.start && oMeasurement.end < oPendingInteraction.end) ? oMeasurement : null;
+					}, true);
+					if (oPendingInteraction.requests.length > 0) {
+						// determine Performance API timestamp for latestly completed request
+						var iEnd = oPendingInteraction.requests[0].startTime,
+							iNavLo = oPendingInteraction.requests[0].startTime,
+							iNavHi = oPendingInteraction.requests[0].requestStart,
+							iRtLo = oPendingInteraction.requests[0].requestStart,
+							iRtHi = oPendingInteraction.requests[0].responseEnd;
+						oPendingInteraction.requests.forEach(function(oRequest) {
+							iEnd = oRequest.responseEnd > iEnd ? oRequest.responseEnd : iEnd;
+							oPendingInteraction.requestTime += (oRequest.responseEnd - oRequest.startTime);
+							// summarize navigation and roundtrip with respect to requests overlapping and times w/o requests
+							if (iRtHi < oRequest.startTime) {
+								oPendingInteraction.navigation += (iNavHi - iNavLo);
+								oPendingInteraction.roundtrip += (iRtHi - iRtLo);
+								iNavLo =  oRequest.startTime;
+								iRtLo =  oRequest.requestStart;
+							}
+							if (oRequest.responseEnd > iRtHi) {
+								iNavHi = oRequest.requestStart;
+								iRtHi = oRequest.responseEnd;
+							}
+						});
+						oPendingInteraction.navigation += iNavHi - iNavLo;
+						oPendingInteraction.roundtrip += iRtHi - iRtLo;
+						// calculate average network time per request
+						oPendingInteraction.networkTime = oPendingInteraction.networkTime ? ((oPendingInteraction.requestTime - oPendingInteraction.networkTime) / oPendingInteraction.requests.length) : 0;
+						// in case processing is not determined, which means no re-rendering occured, take start to iEnd
+						if (oPendingInteraction.duration === 0) {
+							oPendingInteraction.duration = oPendingInteraction.navigation + oPendingInteraction.roundtrip;
+						}
+					}
+					// calculate real processing time if any processing took place, cannot be negative as then requests took longer than processing
+					if (oPendingInteraction.processing !== 0) {
+						var iProcessing = oPendingInteraction.processing - oPendingInteraction.navigation - oPendingInteraction.roundtrip;
+						oPendingInteraction.processing = iProcessing > 0 ? iProcessing : 0;
+					}
+					aInteractions.push(oPendingInteraction);
+					jQuery.sap.log.info("Interaction step finished: trigger: " + oPendingInteraction.trigger + "; duration: " + oPendingInteraction.duration + "; requests: " + oPendingInteraction.requests.length, "jQuery.sap.measure");
+					oPendingInteraction = null;
+				}
+			}
+
+			/**
+			 * Start an interaction measurements
+			 *
+			 * @param {string} sType type of the event which triggered the interaction
+			 * @param {object} oSrcElement the control on which the interaction was triggered
+			 *
+			 * @name jQuery.sap.measure#startInteraction
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.startInteraction = function(sType, oSrcElement) {
+				// component determination - heuristic
+				function createOwnerComponentInfo(oSrcElement) {
+					var sId, sVersion;
+					if (oSrcElement) {
+						var Component, oComponent;
+						Component = sap.ui.require("sap/ui/core/Component");
+						while (Component && oSrcElement && oSrcElement.getParent) {
+							oComponent = Component.getOwnerComponentFor(oSrcElement);
+							if (oComponent || oSrcElement instanceof Component) {
+								oComponent = oComponent || oSrcElement;
+								var oApp = oComponent.getManifestEntry("sap.app");
+								// get app id or module name for FESR
+								sId = oApp && oApp.id || oComponent.getMetadata().getName();
+								sVersion = oApp && oApp.applicationVersion && oApp.applicationVersion.version;
+							}
+							oSrcElement = oSrcElement.getParent();
+						}
+					}
+					return {
+						id: sId ? sId : "undetermined",
+						version: sVersion ? sVersion : ""
+					};
+				}
+
+				var iTime = jQuery.sap.now();
+
+				if (oPendingInteraction) {
+					finalizeInteraction(iTime);
+				}
+
+				// clear request timings for new interaction
+				this.clearRequestTimings();
+
+				var oComponentInfo = createOwnerComponentInfo(oSrcElement);
+
+				// setup new pending interaction
+				oPendingInteraction = {
+					event: sType, // event which triggered interaction
+					trigger: oSrcElement && oSrcElement.getId ? oSrcElement.getId() : "undetermined", // control which triggered interaction
+					component: oComponentInfo.id, // component or app identifier
+					appVersion: oComponentInfo.version, // application version as from app descriptor
+					start : iTime, // interaction start
+					end: 0, // interaction end
+					navigation: 0, // sum over all navigation times
+					roundtrip: 0, // time from first request sent to last received response end
+					processing: 0, // client processing time
+					duration: 0, // interaction duration
+					requests: [], // Performance API requests during interaction
+					measurements: [], // jQuery.sap.measure Measurements
+					sapStatistics: [], // SAP Statistics for OData, added by jQuery.sap.trace
+					requestTime: 0, // summ over all requests in the interaction (oPendingInteraction.requests[0].responseEnd-oPendingInteraction.requests[0].requestStart)
+					networkTime: 0, // request time minus server time from the header, added by jQuery.sap.trace
+					bytesSent: 0, // sum over all requests bytes, added by jQuery.sap.trace
+					bytesReceived: 0, // sum over all response bytes, added by jQuery.sap.trace
+					requestCompression: undefined, // true if all responses have been sent gzipped
+					busyDuration : 0 // summed GlobalBusyIndicator duration during this interaction
+				};
+				jQuery.sap.log.info("Interaction step started: trigger: " + oPendingInteraction.trigger + "; type: " + oPendingInteraction.event, "jQuery.sap.measure");
+			};
+
+			/**
+			 * End an interaction measurements
+			 *
+			 * @param {boolean} bForce forces end of interaction now and ignores further re-renderings
+			 *
+			 * @name jQuery.sap.measure#endInteraction
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.endInteraction = function(bForce) {
+				if (oPendingInteraction) {
+					// set provisionary processing time from start to end and calculate later
+					if (!bForce) {
+						oPendingInteraction.processing = jQuery.sap.now() - oPendingInteraction.start;
+					} else {
+						finalizeInteraction(jQuery.sap.now());
+					}
+				}
+			};
+
+			/**
+			 * Sets the request buffer size for the interaction measurement
+			 *
+			 * @param {integer} iSize size of the buffer
+			 *
+			 * @name jQuery.sap.measure#setRequestBufferSize
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.setRequestBufferSize = function(iSize) {
+				if (!window.performance) {
+					return;
+				}
+				if (window.performance.setResourceTimingBufferSize) {
+					window.performance.setResourceTimingBufferSize(iSize);
+				} else if (window.performance.webkitSetResourceTimingBufferSize) {
+					window.performance.webkitSetResourceTimingBufferSize(iSize);
+				}
+			};
+
+			/**
+			 * Gets the request timings for the interaction measurement
+			 *
+			 * @return {object[]} iSize size of the buffer
+			 * @name jQuery.sap.measure#getRequestTimings
+			 * @function
+			 * @public
+			 * @since 1.34.0
+			 */
+			this.getRequestTimings = function() {
+				if (window.performance && window.performance.getEntriesByType) {
+					return jQuery.extend(window.performance.getEntriesByType("resource"),{});
+				}
+				return [];
+			};
+
+			 /**
+ 			 * Clears all request timings
+ 			 *
+ 			 * @name jQuery.sap.measure#clearRequestTimings
+ 			 * @function
+ 			 * @public
+ 			 * @since 1.34.0
+ 			 */
+			this.clearRequestTimings = function() {
+				if (!window.performance) {
+					return;
+				}
+				if (window.performance.clearResourceTimings) {
+					window.performance.clearResourceTimings();
+				} else if (window.performance.webkitClearResourceTimings){
+					window.performance.webkitClearResourceTimings();
+				}
+			};
+
+			this.setRequestBufferSize(1000);
+
+			var aMatch = location.search.match(/sap-ui-measure=([^\&]*)/);
+			if (aMatch && aMatch[1]) {
+				if (aMatch[1] === "true" || aMatch[1] === "x" || aMatch[1] === "X") {
+					this.setActive(true);
+				} else {
+					this.setActive(true, aMatch[1]);
+				}
+			} else {
+				var fnInactive = function() {
+					//measure not active
+					return null;
+				};
+				//deactivate methods implementations
+				for (var sName in mMethods) {
+					this[sName] = fnInactive;
+				}
+			}
+		}
+
+		/**
+		 * Namespace for the jQuery performance measurement plug-in provided by SAP SE.
+		 *
+		 * @namespace
+		 * @name jQuery.sap.measure
+		 * @public
+		 * @static
+		 */
+		jQuery.sap.measure = new PerfMeasurement();
+
 		/**
 		 * A simple assertion mechanism that logs a message when a given condition is not met.
 		 *
@@ -4809,14 +6886,15 @@ return URI;
 		 *              of this method.
 		 *
 		 * @param {boolean} bResult result of the checked assertion
-		 * @param {string} sMessage message that will be raised when the result is <code>false</code>
+		 * @param {string|function} vMessage message that will be raised when the result is <code>false</code>. In case this is a function, the return value of the function will be displayed. This can be used to execute complex code only if the assertion fails.
 		 *
 		 * @public
 		 * @static
 		 * @SecSink {1|SECRET} Could expose secret data in logs
 		 */
-		jQuery.sap.assert = function(bResult, sMessage) {
+		jQuery.sap.assert = function(bResult, vMessage) {
 			if ( !bResult ) {
+				var sMessage = typeof vMessage === "function" ? vMessage() : vMessage;
 				/*eslint-disable no-console */
 				if ( window.console && console.assert ) {
 					console.assert(bResult, sWindowName + sMessage);
@@ -5142,8 +7220,48 @@ return URI;
 
 			mPreloadModules = {},
 
+		/* for future use
 		/**
-		 * Information about third party modules that react on AMD loaders and need a workaround
+		 * Mapping from default AMD names to UI5 AMD names.
+		 *
+		 * For simpler usage in requireModule, the names are already converted to
+		 * normalized resource names.
+		 *
+		 * /
+			mAMDAliases = {
+				'blanket.js': 'sap/ui/thirdparty/blanket.js',
+				'crossroads.js': 'sap/ui/thirdparty/crossroads.js',
+				'd3.js': 'sap/ui/thirdparty/d3.js',
+				'handlebars.js': 'sap/ui/thirdparty/handlebars.js',
+				'hasher.js': 'sap/ui/thirdparty/hasher.js',
+				'IPv6.js': 'sap/ui/thirdparty/IPv6.js',
+				'jquery.js': 'sap/ui/thirdparty/jquery.js',
+				'jszip.js': 'sap/ui/thirdparty/jszip.js',
+				'less.js': 'sap/ui/thirdparty/less.js',
+				'OData.js': 'sap/ui/thirdparty/datajs.js',
+				'punycode.js': 'sap/ui/thirdparty/punycode.js',
+				'SecondLevelDomains.js': 'sap/ui/thirdparty/SecondLevelDomains.js',
+				'sinon.js': 'sap/ui/thirdparty/sinon.js',
+				'signals.js': 'sap/ui/thirdparty/signals.js',
+				'URI.js': 'sap/ui/thirdparty/URI.js',
+				'URITemplate.js': 'sap/ui/thirdparty/URITemplate.js',
+				'esprima.js': 'sap/ui/demokit/js/esprima.js'
+			},
+		*/
+
+		/**
+		 * Information about third party modules that are delivered with the sap.ui.core library.
+		 *
+		 * The information maps the name of the module (including extension '.js') to an info object with the
+		 * following properties:
+		 *
+		 * <ul>
+		 * <li>amd:boolean : whether the module uses an AMD loader if present. UI5 will disable the AMD loader while loading
+		 *              such modules to force the modules to expose their content via global names.</li>
+		 * <li>exports:string[]|string : global name (or names) that are exported by the module. If one ore multiple names are defined,
+		 *              the first one will be read from the global object and will be used as value of the module.</li>
+		 * <li>deps:string[] : list of modules that the module depends on. The modules will be loaded first before loading the module itself.</li>
+		 * </ul>
 		 * to be able to work with jQuery.sap.require no matter whether an AMD loader is present or not.
 		 *
 		 * Note: this is a map for future extension
@@ -5151,29 +7269,136 @@ return URI;
 		 * @private
 		 */
 			mAMDShim = {
-				'sap/ui/thirdparty/blanket.js': true,
-				'sap/ui/thirdparty/crossroads.js': true,
-				'sap/ui/thirdparty/d3.js': true,
-				'sap/ui/thirdparty/datajs.js': true,
-				'sap/ui/thirdparty/handlebars.js': true,
-				'sap/ui/thirdparty/hasher.js': true,
-				'sap/ui/thirdparty/IPv6.js': true,
-				'sap/ui/thirdparty/jquery/jquery-1.11.1.js': true,
-				'sap/ui/thirdparty/jquery/jquery-1.10.2.js': true,
-				'sap/ui/thirdparty/jquery/jquery-1.10.1.js': true,
-				'sap/ui/thirdparty/jquery/jquery.1.7.1.js': true,
-				'sap/ui/thirdparty/jquery/jquery.1.8.1.js': true,
-				'sap/ui/thirdparty/jquery-mobile-custom.js': true,
-				'sap/ui/thirdparty/jszip.js': true,
-				'sap/ui/thirdparty/less.js': true,
-				'sap/ui/thirdparty/punycode.js': true,
-				'sap/ui/thirdparty/require.js': true,
-				'sap/ui/thirdparty/SecondLevelDomains.js': true,
-				'sap/ui/thirdparty/signals.js': true,
-				'sap/ui/thirdparty/URI.js' : true,
-				'sap/ui/thirdparty/URITemplate.js' : true,
-				'sap/ui/demokit/js/esprima.js' : true
-		  },
+				'sap/ui/thirdparty/blanket.js': {
+					amd: true,
+					exports: 'blanket' // '_blanket', 'esprima', 'falafel', 'inBrowser', 'parseAndModify'
+				},
+				'sap/ui/thirdparty/caja-html-sanitizer.js': {
+					amd: false,
+					exports: 'html' // 'html_sanitizer', 'html4'
+				},
+				'sap/ui/thirdparty/crossroads.js': {
+					amd: true,
+					exports: 'crossroads',
+					deps: ['sap/ui/thirdparty/signals.js']
+				},
+				'sap/ui/thirdparty/d3.js': {
+					amd: true,
+					exports: 'd3'
+				},
+				'sap/ui/thirdparty/datajs.js': {
+					amd: true,
+					exports: 'OData' // 'datajs'
+				},
+				'sap/ui/thirdparty/es6-promise.js' : {
+					amd: true,
+					exports: 'ES6Promise'
+				},
+				'sap/ui/thirdparty/flexie.js': {
+					exports: 'Flexie'
+				},
+				'sap/ui/thirdparty/handlebars.js': {
+					amd: true,
+					exports: 'Handlebars'
+				},
+				'sap/ui/thirdparty/hasher.js': {
+					amd: true,
+					exports: 'hasher',
+					deps: ['sap/ui/thirdparty/signals.js']
+				},
+				'sap/ui/thirdparty/IPv6.js': {
+					amd: true,
+					exports: 'IPv6'
+				},
+				'sap/ui/thirdparty/iscroll-lite.js': {
+					exports: 'iScroll'
+				},
+				'sap/ui/thirdparty/iscroll.js': {
+					exports: 'iScroll'
+				},
+				'sap/ui/thirdparty/jquery.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery/jquery-1.11.1.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery/jquery-1.10.2.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery/jquery-1.10.1.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery/jquery.1.7.1.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery/jquery.1.8.1.js': {
+					amd: true
+				},
+				'sap/ui/thirdparty/jquery-mobile-custom.js': {
+					amd: true,
+					exports: 'jQuery.mobile'
+				},
+				'sap/ui/thirdparty/jszip.js': {
+					amd: true,
+					exports: 'JSZip'
+				},
+				'sap/ui/thirdparty/less.js': {
+					amd: true,
+					exports: 'less'
+				},
+				'sap/ui/thirdparty/mobify-carousel.js': {
+					exports: 'Mobify' // or Mobify.UI.Carousel?
+				},
+				'sap/ui/thirdparty/punycode.js': {
+					amd: true,
+					exports: 'punycode'
+				},
+				'sap/ui/thirdparty/require.js': {
+					exports: 'define' // 'require', 'requirejs'
+				},
+				'sap/ui/thirdparty/SecondLevelDomains.js': {
+					amd: true,
+					exports: 'SecondLevelDomains'
+				},
+				'sap/ui/thirdparty/signals.js': {
+					amd: true,
+					exports: 'signals'
+				},
+				'sap/ui/thirdparty/sinon.js': {
+					amd: true,
+					exports: 'sinon'
+				},
+				'sap/ui/thirdparty/sinon-server.js': {
+					amd: true,
+					exports: 'sinon' // really sinon! sinon-server is a subset of server and uses the same global for export
+				},
+				'sap/ui/thirdparty/unorm.js': {
+					exports: 'UNorm'
+				},
+				'sap/ui/thirdparty/unormdata.js': {
+					exports: 'UNorm', // really 'UNorm'! module extends UNorm
+					deps: ['sap/ui/thirdparty/unorm.js']
+				},
+				'sap/ui/thirdparty/URI.js' : {
+					amd: true,
+					exports: 'URI'
+				},
+				'sap/ui/thirdparty/URITemplate.js' : {
+					amd: true,
+					exports: 'URITemplate',
+					deps: ['sap/ui/thirdparty/URI.js']
+				},
+				'sap/ui/thirdparty/vkbeautify.js' : {
+					exports: 'vkbeautify'
+				},
+				'sap/ui/thirdparty/zyngascroll.js' : {
+					exports: 'Scroller' // 'requestAnimationFrame', 'cancelRequestAnimationFrame', 'core'
+				},
+				'sap/ui/demokit/js/esprima.js' : {
+					amd: true,
+					exports: 'esprima'
+				}
+			},
 
 		/**
 		 * Stack of modules that are currently executed.
@@ -5326,6 +7551,101 @@ return URI;
 			// return undefined;
 		}
 
+		function extractStacktrace(oError) {
+			if (!oError.stack) {
+				try {
+					throw oError;
+				} catch (ex) {
+					return ex.stack;
+				}
+			}
+			return oError.stack;
+		}
+
+		function enhanceStacktrace(oError, oCausedByStack) {
+			// concat the error stack for better traceability of loading issues
+			// (ignore for PhantomJS since Error.stack is readonly property!)
+			if (!sap.ui.Device.browser.phantomJS) {
+				var oErrorStack = extractStacktrace(oError);
+				if (oErrorStack && oCausedByStack) {
+					oError.stack = oErrorStack + "\nCaused by: " + oCausedByStack;
+				}
+			}
+			// for non Chrome browsers we log the caused by stack manually in the console
+			if (window.console && !sap.ui.Device.browser.chrome) {
+				/*eslint-disable no-console */
+				console.error(oError.message + "\nCaused by: " + oCausedByStack);
+				/*eslint-enable no-console */
+			}
+		}
+
+		var rDotsAnywhere = /(?:^|\/)\.+/;
+		var rDotSegment = /^\.*$/;
+
+		/**
+		 * Resolves relative module names that contain <code>./</code> or <code>../</code> segments to absolute names.
+		 * E.g.: A name <code>../common/validation.js</code> defined in <code>sap/myapp/controller/mycontroller.controller.js</code>
+		 * may resolve to <code>sap/myapp/common/validation.js</code>.
+		 *
+		 * When sBaseName is <code>null</code>, relative names are not allowed (e.g. for a <code>sap.ui.require</code> call)
+		 * and their usage results in an error being thrown.
+		 *
+		 * @param {string|null} sBaseName name of a reference module
+		 * @param {string} sModuleName the name to resolve
+		 * @returns {string} resolved name
+		 * @private
+		 */
+		function resolveModuleName(sBaseName, sModuleName) {
+
+			var m = rDotsAnywhere.exec(sModuleName),
+				aSegments,
+				sSegment,
+				i,j,l;
+
+			// check whether the name needs to be resolved at all - if not, just return the sModuleName as it is.
+			if ( !m ) {
+				return sModuleName;
+			}
+
+			// if the name starts with a relative segments then there must be a base name (a global sap.ui.require doesn't support relative names)
+			if ( m.index === 0 && sBaseName == null ) {
+				throw new Error("relative name not supported ('" + sModuleName + "'");
+			}
+
+			// if relative name starts with a dot segment, then prefix it with the base path
+			aSegments = (m.index === 0 ? sBaseName + sModuleName : sModuleName).split('/');
+
+			// process path segments
+			for (i = 0, j = 0, l = aSegments.length; i < l; i++) {
+
+				var sSegment = aSegments[i];
+
+				if ( rDotSegment.test(sSegment) ) {
+					if (sSegment === '.' || sSegment === '') {
+						// ignore '.' as it's just a pointer to current package. ignore '' as it results from double slashes (ignored by browsers as well)
+						continue;
+					} else if (sSegment === '..') {
+						// move to parent directory
+						if ( j === 0 ) {
+							throw new Error("Can't navigate to parent of root (base='" + sBaseName + "', name='" + sModuleName + "'");//  sBaseNamegetPackagePath(), relativePath));
+						}
+						j--;
+					} else {
+						throw new Error("illegal path segment '" + sSegment + "'");
+					}
+				} else {
+
+					aSegments[j++] = sSegment;
+
+				}
+
+			}
+
+			aSegments.length = j;
+
+			return aSegments.join('/');
+		}
+
 		function declareModule(sModuleName) {
 			var oModule;
 
@@ -5357,7 +7677,12 @@ return URI;
 		}
 
 		function requireModule(sModuleName) {
+
+			// TODO enable when preload has been adapted:
+			// sModuleName = mAMDAliases[sModuleName] || sModuleName;
+
 			var m = rJSSubtypes.exec(sModuleName),
+				oShim = mAMDShim[sModuleName],
 				sBaseName, sType, oModule, aExtensions, i;
 
 			// only for robustness, should not be possible by design (all callers append '.js')
@@ -5366,9 +7691,21 @@ return URI;
 				return;
 			}
 
+			if ( oShim && oShim.deps ) {
+				if ( log.isLoggable() ) {
+					log.debug("require dependencies of raw module " + sModuleName);
+				}
+				for (i = 0; i < oShim.deps.length; i++) {
+					if ( log.isLoggable() ) {
+						log.debug("  require " + oShim.deps[i]);
+					}
+					requireModule(oShim.deps[i]);
+				}
+			}
+
 			// in case of having a type specified ignore the type for the module path creation and add it as file extension
 			sBaseName = sModuleName.slice(0, m.index);
-			sType = m[0];			// must be a normalized resource name of type .js sType can be empty or one of view|controller|fragment
+			sType = m[0]; // must be a normalized resource name of type .js sType can be empty or one of view|controller|fragment
 
 			oModule = mModules[sModuleName] || (mModules[sModuleName] = { state : INITIAL });
 
@@ -5389,7 +7726,9 @@ return URI;
 					}
 					return this;
 				} else if ( oModule.state === FAILED ) {
-					throw new Error("found in negative cache: '" + sModuleName +  "' from " + oModule.url + ": " + oModule.error);
+					var oError = new Error("found in negative cache: '" + sModuleName +  "' from " + oModule.url + ": " + oModule.errorMessage);
+					enhanceStacktrace(oError, oModule.errorStack);
+					throw oError;
 				} else {
 					// currently loading
 					return this;
@@ -5398,7 +7737,6 @@ return URI;
 
 			// set marker for loading modules (to break cycles)
 			oModule.state = LOADING;
-
 			// if debug is enabled, try to load debug module first
 			aExtensions = window["sap-ui-loaddbg"] ? ["-dbg", ""] : [""];
 			for (i = 0; i < aExtensions.length && oModule.state !== LOADED; i++) {
@@ -5418,7 +7756,8 @@ return URI;
 					},
 					error : function(xhr, textStatus, error) {
 						oModule.state = FAILED;
-						oModule.error = xhr ? xhr.status + " - " + xhr.statusText : textStatus;
+						oModule.errorMessage = xhr ? xhr.status + " - " + xhr.statusText : textStatus;
+						oModule.errorStack = error && error.stack;
 					}
 				});
 				/*eslint-enable no-loop-func */
@@ -5430,7 +7769,9 @@ return URI;
 			}
 
 			if ( oModule.state !== READY ) {
-				throw new Error("failed to load '" + sModuleName +  "' from " + oModule.url + ": " + oModule.error);
+				var oError = new Error("failed to load '" + sModuleName +  "' from " + oModule.url + ": " + oModule.errorMessage);
+				enhanceStacktrace(oError, oModule.errorStack);
+				throw oError;
 			}
 
 		}
@@ -5439,12 +7780,13 @@ return URI;
 		function execModule(sModuleName) {
 
 			var oModule = mModules[sModuleName],
+				oShim = mAMDShim[sModuleName],
 				sOldPrefix, sScript, vAMD;
 
 			if ( oModule && oModule.state === LOADED && typeof oModule.data !== "undefined" ) {
 
 				// check whether the module is known to use an existing AMD loader, remember the AMD flag
-				vAMD = mAMDShim[sModuleName] && typeof window.define === "function" && window.define.amd;
+				vAMD = (oShim === true || (oShim && oShim.amd)) && typeof window.define === "function" && window.define.amd;
 
 				try {
 
@@ -5464,6 +7806,8 @@ return URI;
 					_execStack.push(sModuleName);
 					if ( typeof oModule.data === "function" ) {
 						oModule.data.call(window);
+					} else if ( jQuery.isArray(oModule.data) ) {
+						sap.ui.define.apply(sap.ui, oModule.data);
 					} else {
 
 						sScript = oModule.data;
@@ -5472,8 +7816,12 @@ return URI;
 						// Note: IE11 supports sourceURL even when running in IE9 or IE10 mode
 						// Note: make URL absolute so Chrome displays the file tree correctly
 						// Note: do not append if there is already a sourceURL / sourceMappingURL
+						// Note: Safari fails, if sourceURL is the same as an existing XHR URL
 						if (sScript && !sScript.match(/\/\/[#@] source(Mapping)?URL=.*$/)) {
 							sScript += "\n//# sourceURL=" + URI(oModule.url).absoluteTo(sDocumentLocation);
+							if (sap.ui.Device.browser.safari) {
+								sScript += "?";
+							}
 						}
 
 						// framework internal hook to intercept the loaded script and modify
@@ -5498,9 +7846,8 @@ return URI;
 					_execStack.pop();
 					oModule.state = READY;
 					oModule.data = undefined;
-					// best guess for legacy modules that don't use sap.ui.define
-					// TODO implement fallback for raw modules
-					oModule.content = oModule.content || jQuery.sap.getObject(urnToUI5(sModuleName));
+					// best guess for raw and legacy modules that don't use sap.ui.define
+					oModule.content = oModule.content || jQuery.sap.getObject((oShim && oShim.exports) || urnToUI5(sModuleName));
 
 					if ( log.isLoggable() ) {
 						sLogPrefix = sOldPrefix;
@@ -5509,7 +7856,8 @@ return URI;
 
 				} catch (err) {
 					oModule.state = FAILED;
-					oModule.error = ((err.toString && err.toString()) || err.message) + (err.line ? "(line " + err.line + ")" : "" );
+					oModule.errorStack = err && err.stack;
+					oModule.errorMessage = ((err.toString && err.toString()) || err.message) + (err.line ? "(line " + err.line + ")" : "" );
 					oModule.data = undefined;
 					if ( window["sap-ui-debug"] && (/sap-ui-xx-show(L|-l)oad(E|-e)rrors=(true|x|X)/.test(location.search) || oCfgData["xx-showloaderrors"]) ) {
 						log.error("error while evaluating " + sModuleName + ", embedding again via script tag to enforce a stack trace (see below)");
@@ -5527,13 +7875,13 @@ return URI;
 			}
 		}
 
-		function requireAll(aDependencies, fnCallback) {
+		function requireAll(sBaseName, aDependencies, fnCallback) {
 
 			var aModules = [],
 				i, sDepModName;
 
 			for (i = 0; i < aDependencies.length; i++) {
-				sDepModName = aDependencies[i];
+				sDepModName = resolveModuleName(sBaseName, aDependencies[i]);
 				log.debug(sLogPrefix + "require '" + sDepModName + "'");
 				requireModule(sDepModName + ".js");
 				// best guess for legacy modules that don't use sap.ui.define
@@ -5715,6 +8063,13 @@ return URI;
 				log.info("registerResourcePath ('" + sResourceNamePrefix + "') (registration removed)");
 			} else {
 				vUrlPrefix.url = String(vUrlPrefix.url);
+
+				// remove query parameters and/or hash
+				var iQueryOrHashIndex = vUrlPrefix.url.search(/[?#]/);
+				if (iQueryOrHashIndex !== -1) {
+					vUrlPrefix.url = vUrlPrefix.url.slice(0, iQueryOrHashIndex);
+				}
+
 				// ensure that the prefix ends with a '/'
 				if ( vUrlPrefix.url.slice(-1) != '/' ) {
 					vUrlPrefix.url += '/';
@@ -5873,7 +8228,9 @@ return URI;
 				vModuleName = ui5ToRJS(vModuleName) + ".js";
 			}
 
+			jQuery.sap.measure.start(vModuleName,"Require module " + vModuleName, ["require"]);
 			requireModule(vModuleName);
+			jQuery.sap.measure.end(vModuleName);
 
 			return this; // TODO
 		};
@@ -5894,9 +8251,6 @@ return URI;
 		window.sap = window.sap || {};
 		sap.ui = sap.ui || {};
 
-		var rDotsAnywhere = /(?:^|\/)\.+/;
-		var r2DotsAnywhere = /(?:^|\/)\.{2,}/;
-		
 		/**
 		 * Defines a Javascript module with its name, its dependencies and a module value or factory.
 		 *
@@ -5940,16 +8294,16 @@ return URI;
 		 *
 		 *   });
 		 * </pre>
-		 * 
+		 *
 		 * In another module or in an application HTML page, the {@link sap.ui.require} API can be used
 		 * to load the Something module and to work with it:
-		 * 
+		 *
 		 * <pre>
 		 * sap.ui.require(['sap/mylib/Something'], function(Something) {
-		 * 
-		 *   // instantiate a Something and call foo() on it 
+		 *
+		 *   // instantiate a Something and call foo() on it
 		 *   new Something().foo();
-		 *   
+		 *
 		 * });
 		 * </pre>
 		 *
@@ -6091,8 +8445,6 @@ return URI;
 		 * <li><code>sap.ui.define</code> does <b>not</b> support the 'sugar' of requireJS where CommonJS
 		 * style dependency declarations using <code>sap.ui.require("something")</code> are automagically
 		 * converted into <code>sap.ui.define</code> dependencies before executing the factory function.</li>
-		 * <li><code>sap.ui.define</code> does not support the '../' prefix for module names. Only
-		 * relative names in the same package or in subpackages thereof are supported.</li>
 		 * </ul>
 		 *
 		 *
@@ -6112,7 +8464,7 @@ return URI;
 		 *     The exact details of how this works might be changed in future implementations and are not
 		 *     yet part of the API contract</li>
 		 * </ul>
-		 * @param {string} [sModuleName] name of the module in simplified resource name syntax. 
+		 * @param {string} [sModuleName] name of the module in simplified resource name syntax.
 		 *        When omitted, the loader determines the name from the request.
 		 * @param {string[]} [aDependencies] list of dependencies of the module
 		 * @param {function|any} vFactory the module value or a function that calculates the value
@@ -6124,7 +8476,7 @@ return URI;
 		 *        is not used and if the asynchronous contract is respected, even Non-SAP code might use it.
 		 */
 		sap.ui.define = function(sModuleName, aDependencies, vFactory, bExport) {
-			var sResourceName, i;
+			var sResourceName, sBaseName;
 
 			// optional id
 			if ( typeof sModuleName === 'string' ) {
@@ -6136,9 +8488,12 @@ return URI;
 				aDependencies = sModuleName;
 				sResourceName = _execStack[_execStack.length - 1];
 			}
-			
+
 			// convert module name to UI5 module name syntax (might fail!)
 			sModuleName = urnToUI5(sResourceName);
+
+			// calculate the base name for relative module names
+			sBaseName = sResourceName.slice(0, sResourceName.lastIndexOf('/') + 1);
 
 			// optional array of dependencies
 			if ( !jQuery.isArray(aDependencies) ) {
@@ -6146,22 +8501,6 @@ return URI;
 				bExport = vFactory;
 				vFactory = aDependencies;
 				aDependencies = [];
-			} else {
-				// resolve relative module names
-				var sPackage = sResourceName.slice(0,1 + sResourceName.lastIndexOf('/'));
-				for (i = 0; i < aDependencies.length; i++) {
-					if ( r2DotsAnywhere.test(aDependencies[i]) ) {
-						log.error(
-							"In UI5 1.28, relative module names using '../' are not supported by sap.ui.define. " +
-							"Code that uses them might fail with release 1.30 or later even if that code seems to work now. " +
-							"In 1.28, the browser might resolve the '../', but that resolution differs significantly from the " + 
-							"AMD compliant resolution implemented in 1.30 and later. " +
-							"It is therefore strongly discouraged in version 1.28 to use '../' in the module dependencies for a sap.ui.define call.");
-					}
-					if ( /^\.\//.test(aDependencies[i]) ) {
-						aDependencies[i] = sPackage + aDependencies[i].slice(2); // 2 == length of './' prefix
-					}
-				}
 			}
 
 			if ( log.isLoggable() ) {
@@ -6170,8 +8509,8 @@ return URI;
 
 			var oModule = declareModule(sResourceName);
 
-			// note: dependencies will be converted from RJS to URN inside requireAll
-			requireAll(aDependencies, function(aModules) {
+			// Note: dependencies will be resolved and converted from RJS to URN inside requireAll
+			requireAll(sBaseName, aDependencies, function(aModules) {
 
 				// factory
 				if ( log.isLoggable() ) {
@@ -6180,7 +8519,10 @@ return URI;
 
 				if ( bExport ) {
 					// ensure parent namespace
-					jQuery.sap.getObject(sModuleName, 1);
+					var sPackage = sResourceName.split('/').slice(0,-1).join('.');
+					if ( sPackage ) {
+						jQuery.sap.getObject(sPackage, 0);
+					}
 				}
 
 				if ( typeof vFactory === 'function' ) {
@@ -6202,6 +8544,30 @@ return URI;
 				}
 
 			});
+
+		};
+
+		/**
+		 * @private
+		 */
+		sap.ui.predefine = function(sModuleName, aDependencies, vFactory, bExport) {
+
+			if ( typeof sModuleName !== 'string' ) {
+				throw new Error("sap.ui.predefine requires a module name");
+			}
+
+			var sResourceName = sModuleName + '.js';
+			var oModule = mModules[sResourceName];
+			if ( !oModule ) {
+				mModules[sResourceName] = { state : PRELOADED, url : "TODO???/" + sModuleName, data : [sModuleName, aDependencies, vFactory, bExport], group: null };
+			}
+
+			// when a library file is preloaded, also mark its preload file as loaded
+			// for normal library preload, this is redundant, but for non-default merged entities
+			// like sap/fiori/core.js it avoids redundant loading of library preload files
+			if ( sResourceName.match(/\/library\.js$/) ) {
+				mPreloadModules[urnToUI5(sResourceName) + "-preload"] = true;
+			}
 
 		};
 
@@ -6268,13 +8634,7 @@ return URI;
 
 			}
 
-			for (var i = 0; i < vDependencies.length; i++) {
-				if ( rDotsAnywhere.test(vDependencies[i]) ) {
-					log.error("sap.ui.require does not support relative names using './' or '..'/'");
-				}
-			}
-
-			requireAll(vDependencies, function(aModules) {
+			requireAll(null, vDependencies, function(aModules) {
 
 				if ( typeof fnCallback === 'function' ) {
 					// enforce asynchronous execution of callback
@@ -6486,13 +8846,12 @@ return URI;
 
 			function handleData(d, e) {
 				if ( d == null && mOptions.failOnError ) {
-					e = e || new Error("no data returned for " + sResourceName);
+					oError = e || new Error("no data returned for " + sResourceName);
 					if (mOptions.async) {
-						oDeferred.reject(e);
-						jQuery.sap.log.error(e);
-						return d;
+						oDeferred.reject(oError);
+						jQuery.sap.log.error(oError);
 					}
-					throw e;
+					return null;
 				}
 
 				if (mOptions.async) {
@@ -6547,7 +8906,15 @@ return URI;
 
 			}
 
-			return mOptions.async ? window.Promise.resolve(oDeferred) : oData;
+			if ( mOptions.async ) {
+				return Promise.resolve(oDeferred);
+			}
+
+			if ( oError != null && mOptions.failOnError ) {
+				throw oError;
+			}
+
+			return oData;
 		};
 
 		/*
@@ -6593,8 +8960,8 @@ return URI;
 
 				var oScript = window.document.createElement('SCRIPT');
 				oScript.src = sUrl;
-				oScript.dataset.sapUiModule = sResource;
-				oScript.dataset.sapUiModuleError = '';
+				oScript.setAttribute("data-sap-ui-module", sResource); // IE9/10 don't support dataset :-(
+				// oScript.setAttribute("data-sap-ui-module-error", '');
 				oScript.addEventListener('load', function(e) {
 					jQuery.sap.log.info("Javascript resource loaded: " + sResource);
 // TODO either find a cross-browser solution to detect and assign execution errros or document behavior
@@ -6648,51 +9015,28 @@ return URI;
 		}
 	}
 
-	/**
-	 * Includes the script (via &lt;script&gt;-tag) into the head for the
-	 * specified <code>sUrl</code> and optional <code>sId</code>.
-	 * <br>
-	 * <i>In case of IE8 only the load callback will work ignoring in case of success and error.</i>
-	 *
-	 * @param {string}
-	 *            sUrl the URL of the script to load
-	 * @param {string}
-	 *            [sId] id that should be used for the script include tag
-	 * @param {function}
-	 *            [fnLoadCallback] callback function to get notified once the script has been loaded
-	 * @param {function}
-	 *            [fnErrorCallback] callback function to get notified once the script loading failed (not supported by IE8)
-	 *
-	 * @public
-	 * @static
-	 * @SecSink {0|PATH} Parameter is used for future HTTP requests
-	 */
-	jQuery.sap.includeScript = function includeScript(sUrl, sId, fnLoadCallback, fnErrorCallback){
+	function _includeScript(sUrl, sId, fnLoadCallback, fnErrorCallback) {
 		var oScript = window.document.createElement("script");
 		oScript.src = sUrl;
 		oScript.type = "text/javascript";
 		if (sId) {
 			oScript.id = sId;
 		}
-		if (!!sap.ui.Device.browser.internet_explorer && sap.ui.Device.browser.version < 9) {
-			// in case if IE8 the error callback is not supported!
-			// we can only check the loading via the readystatechange event
-			if (fnLoadCallback) {
-				oScript.onreadystatechange = function() {
-					if (oScript.readyState === "loaded" || oScript.readyState === "complete") {
-						fnLoadCallback();
-						oScript.onreadystatechange = null;
-					}
-				};
-			}
-		} else {
-			if (fnLoadCallback) {
-				jQuery(oScript).load(fnLoadCallback);
-			}
-			if (fnErrorCallback) {
-				jQuery(oScript).error(fnErrorCallback);
-			}
+
+		if (fnLoadCallback) {
+			jQuery(oScript).load(function() {
+				fnLoadCallback();
+				jQuery(oScript).off("load");
+			});
 		}
+
+		if (fnErrorCallback) {
+			jQuery(oScript).error(function() {
+				fnErrorCallback();
+				jQuery(oScript).off("error");
+			});
+		}
+
 		// jQuery("head").append(oScript) doesn't work because they filter for the script
 		// and execute them directly instead adding the SCRIPT tag to the head
 		var oOld;
@@ -6700,34 +9044,53 @@ return URI;
 			jQuery(oOld).remove(); // replacing scripts will not trigger the load event
 		}
 		appendHead(oScript);
-	};
-
-	var oIEStyleSheetNode;
-	var mIEStyleSheets = jQuery.sap._mIEStyleSheets = {};
+	}
 
 	/**
-	 * Includes the specified stylesheet via a &lt;link&gt;-tag in the head of the current document. If there is call to
-	 * <code>includeStylesheet</code> providing the sId of an already included stylesheet, the existing element will be
-	 * replaced.
+	 * Includes the script (via &lt;script&gt;-tag) into the head for the
+	 * specified <code>sUrl</code> and optional <code>sId</code>.
 	 *
+	 * @param {string|object}
+	 *            vUrl the URL of the script to load or a configuration object
 	 * @param {string}
-	 *          sUrl the URL of the script to load
+	 *            vUrl.url the URL of the script to load
 	 * @param {string}
-	 *          [sId] id that should be used for the script include tag
+	 *            [vUrl.id] id that should be used for the script tag
+	 * @param {string}
+	 *            [sId] id that should be used for the script tag
 	 * @param {function}
-	 *          [fnLoadCallback] callback function to get notified once the link has been loaded
+	 *            [fnLoadCallback] callback function to get notified once the script has been loaded
 	 * @param {function}
-	 *          [fnErrorCallback] callback function to get notified once the link loading failed.
-	 *          In case of usage in IE the error callback will also be executed if an empty stylesheet
-	 *          is loaded. This is the only option how to determine in IE if the load was successful
-	 *          or not since the native onerror callback for link elements doesn't work in IE. The IE
-	 *          always calls the onload callback of the link element.
+	 *            [fnErrorCallback] callback function to get notified once the script loading failed
+	 * @return {void|Promise}
+	 *            When using the configuration object a <code>Promise</code> will be returned. The
+	 *            documentation for the <code>fnLoadCallback</code> applies to the <code>resolve</code>
+	 *            handler of the <code>Promise</code> and the one for the <code>fnErrorCallback</code>
+	 *            applies to the <code>reject</code> handler of the <code>Promise</code>.
 	 *
 	 * @public
 	 * @static
 	 * @SecSink {0|PATH} Parameter is used for future HTTP requests
 	 */
-	jQuery.sap.includeStyleSheet = function includeStyleSheet(sUrl, sId, fnLoadCallback, fnErrorCallback) {
+	jQuery.sap.includeScript = function includeScript(vUrl, sId, fnLoadCallback, fnErrorCallback) {
+		var oConfig = typeof vUrl === "string" ? {
+			url: vUrl,
+			id: sId
+		} : vUrl;
+
+		if (typeof vUrl === "string") {
+			_includeScript(oConfig.url, oConfig.id, fnLoadCallback, fnErrorCallback);
+		} else {
+			return new Promise(function(fnResolve, fnReject) {
+				_includeScript(oConfig.url, oConfig.id, fnResolve, fnReject);
+			});
+		}
+	};
+
+	var oIEStyleSheetNode;
+	var mIEStyleSheets = jQuery.sap._mIEStyleSheets = {};
+
+	function _includeStyleSheet(sUrl, sId, fnLoadCallback, fnErrorCallback) {
 
 		var _createLink = function(sUrl, sId, fnLoadCallback, fnErrorCallback){
 
@@ -6741,14 +9104,14 @@ return URI;
 			}
 
 			var fnError = function() {
-				jQuery(oLink).attr("sap-ui-ready", "false");
+				jQuery(oLink).attr("data-sap-ui-ready", "false").off("error");
 				if (fnErrorCallback) {
 					fnErrorCallback();
 				}
 			};
 
 			var fnLoad = function() {
-				jQuery(oLink).attr("sap-ui-ready", "true");
+				jQuery(oLink).attr("data-sap-ui-ready", "true").off("load");
 				if (fnLoadCallback) {
 					fnLoadCallback();
 				}
@@ -6807,7 +9170,7 @@ return URI;
 				if (!oIEStyleSheetNode) {
 					// create a style sheet to add additional style sheet. But for this the Replace logic will not work any more
 					// the callback functions are not used in this case
-					// the sap-ui-ready attribute will not be set -> maybe problems with ThemeCheck
+					// the data-sap-ui-ready attribute will not be set -> maybe problems with ThemeCheck
 					oIEStyleSheetNode = document.createStyleSheet();
 				}
 				// add up to 30 style sheets to every of this style sheets. (result is a tree of style sheets)
@@ -6858,6 +9221,54 @@ return URI;
 			_appendStyle(sUrl, sId, fnLoadCallback, fnErrorCallback);
 		}
 
+	}
+
+	/**
+	 * Includes the specified stylesheet via a &lt;link&gt;-tag in the head of the current document. If there is call to
+	 * <code>includeStylesheet</code> providing the sId of an already included stylesheet, the existing element will be
+	 * replaced.
+	 *
+	 * @param {string|object}
+	 *          vUrl the URL of the stylesheet to load or a configuration object
+	 * @param {string}
+	 *            vUrl.url the URL of the stylesheet to load
+	 * @param {string}
+	 *            [vUrl.id] id that should be used for the link tag
+	 * @param {string}
+	 *          [sId] id that should be used for the link tag
+	 * @param {function}
+	 *          [fnLoadCallback] callback function to get notified once the stylesheet has been loaded
+	 * @param {function}
+	 *          [fnErrorCallback] callback function to get notified once the stylesheet loading failed.
+	 *            In case of usage in IE the error callback will also be executed if an empty stylesheet
+	 *            is loaded. This is the only option how to determine in IE if the load was successful
+	 *            or not since the native onerror callback for link elements doesn't work in IE. The IE
+	 *            always calls the onload callback of the link element.
+	 *            Another issue of the IE9 is that in case of loading too many stylesheets the eventing
+	 *            is not working and therefore the error or load callback will not be triggered anymore.
+	 * @return {void|Promise}
+	 *            When using the configuration object a <code>Promise</code> will be returned. The
+	 *            documentation for the <code>fnLoadCallback</code> applies to the <code>resolve</code>
+	 *            handler of the <code>Promise</code> and the one for the <code>fnErrorCallback</code>
+	 *            applies to the <code>reject</code> handler of the <code>Promise</code>.
+	 *
+	 * @public
+	 * @static
+	 * @SecSink {0|PATH} Parameter is used for future HTTP requests
+	 */
+	jQuery.sap.includeStyleSheet = function includeStyleSheet(vUrl, sId, fnLoadCallback, fnErrorCallback) {
+		var oConfig = typeof vUrl === "string" ? {
+			url: vUrl,
+			id: sId
+		} : vUrl;
+
+		if (typeof vUrl === "string") {
+			_includeStyleSheet(oConfig.url, oConfig.id, fnLoadCallback, fnErrorCallback);
+		} else {
+			return new Promise(function(fnResolve, fnReject) {
+				_includeStyleSheet(oConfig.url, oConfig.id, fnResolve, fnReject);
+			});
+		}
 	};
 
 	// TODO should be in core, but then the 'callback' could not be implemented
@@ -6890,15 +9301,11 @@ return URI;
 						}
 						oSupport.openSupportTool();
 					} catch (err2) {
+						// ignore error
 					}
 				}
 			});
 		});
-	}
-
-	// *********** Include E2E-Trace Scripts *************
-	if (/sap-ui-xx-e2e-trace=(true|x|X)/.test(location.search)) {
-		jQuery.sap.require("sap.ui.core.support.trace.E2eTraceLib" + "" /* Make dynamic dependency */);
 	}
 
 	// *********** feature detection, enriching jQuery.support *************
@@ -7025,6 +9432,14 @@ return URI;
 	preserveOrTestCssPropWithPrefixes("flexBoxLayout", "boxFlex");
 
 	/**
+	 * Whether the current browser supports the NEW CSS3 Flexible Box Layout directly or via vendor prefixes
+	 * @type {boolean}
+	 * @public
+	 * @name jQuery.support.newFlexBoxLayout
+	 */
+	preserveOrTestCssPropWithPrefixes("newFlexBoxLayout", "flexGrow");	// Use a new property that IE10 doesn't support
+
+	/**
 	 * Whether the current browser supports the IE10 CSS3 Flexible Box Layout directly or via vendor prefixes
 	 * @type {boolean}
 	 * @public
@@ -7032,17 +9447,11 @@ return URI;
 	 * @since 1.12.0
 	 */
 	// Just using one of the IE10 properties that's not in the new FlexBox spec
-	if (oStyle.msFlexOrder !== undefined) {
+	if (!jQuery.support.newFlexBoxLayout && oStyle.msFlexOrder !== undefined) {
 		jQuery.support.ie10FlexBoxLayout = true;
+	} else {
+		jQuery.support.ie10FlexBoxLayout = false;
 	}
-
-	/**
-	 * Whether the current browser supports the NEW CSS3 Flexible Box Layout directly or via vendor prefixes
-	 * @type {boolean}
-	 * @public
-	 * @name jQuery.support.newFlexBoxLayout
-	 */
-	preserveOrTestCssPropWithPrefixes("newFlexBoxLayout", "flexGrow");	// Use a new property that IE10 doesn't support
 
 	/**
 	 * Whether the current browser supports any kind of Flexible Box Layout directly or via vendor prefixes
@@ -7055,362 +9464,6 @@ return URI;
 	} else {
 		jQuery.support.hasFlexBoxSupport = false;
 	}
-
-	// *********** fixes for (pending) jQuery bugs **********
-	if (!jQuery.support.opacity) {
-		(function() {
-			// jQuery cssHook for setOpacity[IE8] doesn't properly cleanup the CSS filter property
-			var oldSet = jQuery.cssHooks.opacity.set;
-			jQuery.cssHooks.opacity.set = function( elem, value ) {
-				oldSet.apply(this, arguments);
-				if ( !jQuery.trim(elem.style.filter) ) {
-					elem.style.removeAttribute("filter");
-				}
-			};
-		}());
-	}
-
-	// *** Performance measure ***
-	function PerfMeasurement(){
-
-		function Measurement( sId, sInfo, iStart, iEnd ){
-			this.id = sId;
-			this.info = sInfo;
-			this.start = iStart;
-			this.end = iEnd;
-			this.pause = 0;
-			this.resume = 0;
-			this.duration = 0; // used time
-			this.time = 0; // time from start to end
-		}
-
-		var bActive = false;
-		var fnAjax = jQuery.ajax;
-
-		/**
-		 * Gets the current state of the perfomance measurement functionality
-		 *
-		 * @return {boolean} current state of the perfomance measurement functionality
-		 * @name jQuery.sap.measure#getActive
-		 * @function
-		 * @public
-		 */
-		this.getActive = function(){
-			return bActive;
-		};
-
-		/**
-		 * Activates or deactivates the performance measure functionality
-		 *
-		 * @param {boolean} bOn state of the perfomance measurement functionality to set
-		 * @return {boolean} current state of the perfomance measurement functionality
-		 * @name jQuery.sap.measure#setActive
-		 * @function
-		 * @public
-		 */
-		this.setActive = function( bOn ){
-
-			if (bActive == bOn) {
-				return bActive;
-			}
-
-			bActive = bOn;
-
-			if (bActive) {
-				// redefine AJAX call
-				jQuery.ajax = function( url, options ){
-					jQuery.sap.measure.start(url.url, "Request for " + url.url);
-					fnAjax.apply(this,arguments);
-					jQuery.sap.measure.end(url.url);
-				};
-			} else if (fnAjax) {
-				jQuery.ajax = fnAjax;
-			}
-
-			return bActive;
-
-		};
-
-		this.setActive(/sap-ui-measure=(true|x|X)/.test(location.search));
-
-		this.mMeasurements = {};
-
-		/**
-		 * Starts a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @param {string} sInfo Info for the measurement
-		 * @return {object} current measurement containing id, info and start-timestamp (false if error)
-		 * @name jQuery.sap.measure#start
-		 * @function
-		 * @public
-		 */
-		this.start = function( sId, sInfo ){
-			if (!bActive) {
-				return;
-			}
-
-			var iTime = new Date().getTime();
-			var oMeasurement = new Measurement( sId, sInfo, iTime, 0);
-//			jQuery.sap.log.info("Performance measurement start: "+ sId + " on "+ iTime);
-
-			if (oMeasurement) {
-				this.mMeasurements[sId] = oMeasurement;
-				return ({id: oMeasurement.id, info: oMeasurement.info, start: oMeasurement.start });
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Pauses a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @return {object} current measurement containing id, info and start-timestamp, pause-timestamp (false if error)
-		 * @name jQuery.sap.measure#pause
-		 * @function
-		 * @public
-		 */
-		this.pause = function( sId ){
-			if (!bActive) {
-				return;
-			}
-
-			var iTime = new Date().getTime();
-			var oMeasurement = this.mMeasurements[sId];
-			if (oMeasurement && oMeasurement.end > 0) {
-				// already ended -> no pause possible
-				return false;
-			}
-
-			if (oMeasurement && oMeasurement.pause == 0) {
-				// not already paused
-				oMeasurement.pause = iTime;
-				if (oMeasurement.pause >= oMeasurement.resume && oMeasurement.resume > 0) {
-					oMeasurement.duration = oMeasurement.duration + oMeasurement.pause - oMeasurement.resume;
-					oMeasurement.resume = 0;
-				} else if (oMeasurement.pause >= oMeasurement.start) {
-					oMeasurement.duration = oMeasurement.pause - oMeasurement.start;
-				}
-			}
-//			jQuery.sap.log.info("Performance measurement pause: "+ sId + " on "+ iTime + " duration: "+ oMeasurement.duration);
-
-			if (oMeasurement) {
-				return ({id: oMeasurement.id, info: oMeasurement.info, start: oMeasurement.start, pause: oMeasurement.pause });
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Resumes a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @return {object} current measurement containing id, info and start-timestamp, resume-timestamp (false if error)
-		 * @name jQuery.sap.measure#resume
-		 * @function
-		 * @public
-		 */
-		this.resume = function( sId ){
-			if (!bActive) {
-				return;
-			}
-
-			var iTime = new Date().getTime();
-			var oMeasurement = this.mMeasurements[sId];
-//			jQuery.sap.log.info("Performance measurement resume: "+ sId + " on "+ iTime + " duration: "+ oMeasurement.duration);
-
-			if (oMeasurement && oMeasurement.pause > 0) {
-				// already paused
-				oMeasurement.pause = 0;
-				oMeasurement.resume = iTime;
-			}
-
-			if (oMeasurement) {
-				return ({id: oMeasurement.id, info: oMeasurement.info, start: oMeasurement.start, resume: oMeasurement.resume });
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Ends a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @return {object} current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
-		 * @name jQuery.sap.measure#end
-		 * @function
-		 * @public
-		 */
-		this.end = function( sId ){
-			if (!bActive) {
-				return;
-			}
-
-			var iTime = new Date().getTime();
-			var oMeasurement = this.mMeasurements[sId];
-//			jQuery.sap.log.info("Performance measurement end: "+ sId + " on "+ iTime);
-
-			if (oMeasurement && !oMeasurement.end) {
-				oMeasurement.end = iTime;
-				if (oMeasurement.end >= oMeasurement.resume && oMeasurement.resume > 0) {
-					oMeasurement.duration = oMeasurement.duration + oMeasurement.end - oMeasurement.resume;
-					oMeasurement.resume = 0;
-				} else if (oMeasurement.pause > 0) {
-					// duration already calculated
-					oMeasurement.pause = 0;
-				} else if (oMeasurement.end >= oMeasurement.start) {
-					oMeasurement.duration = oMeasurement.end - oMeasurement.start;
-				}
-				if (oMeasurement.end >= oMeasurement.start) {
-					oMeasurement.time = oMeasurement.end - oMeasurement.start;
-				}
-			}
-
-			if (oMeasurement) {
-				return ({id: oMeasurement.id,
-						info: oMeasurement.info,
-						start: oMeasurement.start,
-						end: oMeasurement.end,
-						time: oMeasurement.time,
-						duration: oMeasurement.duration});
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Gets a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @return {object} current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
-		 * @name jQuery.sap.measure#getMeasurement
-		 * @function
-		 * @public
-		 */
-		this.getMeasurement = function( sId ){
-			if (!bActive) {
-				return;
-			}
-
-			var oMeasurement = this.mMeasurements[sId];
-
-			if (oMeasurement) {
-				return ({id: oMeasurement.id,
-						info: oMeasurement.info,
-						start: oMeasurement.start,
-						end: oMeasurement.end,
-						time: oMeasurement.time,
-						duration: oMeasurement.duration});
-			} else {
-				return false;
-			}
-		};
-
-		/**
-		 * Clears all performance measurements
-		 *
-		 * @name jQuery.sap.measure#clear
-		 * @function
-		 * @public
-		 */
-		this.clear = function( ){
-			if (!bActive) {
-				return;
-			}
-
-			this.mMeasurements = {};
-		};
-
-		/**
-		 * Removes a performance measure
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @name jQuery.sap.measure#remove
-		 * @function
-		 * @public
-		 */
-		this.remove = function( sId ){
-			if (!bActive) {
-				return;
-			}
-
-			delete this.mMeasurements[sId];
-		};
-
-		/**
-		 * Gets all performance measurements
-		 *
-		 * @return {object} [] current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
-		 * @name jQuery.sap.measure#getAllMeasurements
-		 * @function
-		 * @public
-		 */
-		this.getAllMeasurements = function( ){
-			if (!bActive) {
-				return;
-			}
-
-			var aMeasurements = [];
-
-			jQuery.each(this.mMeasurements, function(sId, oMeasurement){
-				aMeasurements.push({id: oMeasurement.id,
-									info: oMeasurement.info,
-									start: oMeasurement.start,
-									end: oMeasurement.end,
-									duration: oMeasurement.duration,
-									time: oMeasurement.time});
-			});
-			return aMeasurements;
-		};
-
-		/**
-		 * Adds a performance measurement with all data
-		 * This is usefull to add external measurements (e.g. from a backend) to the common measurement UI
-		 *
-		 * @param {string} sId ID of the measurement
-		 * @param {string} sInfo Info for the measurement
-		 * @param {int} iStart start timestamp
-		 * @param {int} iEnd end timestamp
-		 * @param {int} iTime time in milliseconds
-		 * @param {int} iDuration effective time in milliseconds
-		 * @return {object} [] current measurement containing id, info and start-timestamp, end-timestamp, time, duration (false if error)
-		 * @name jQuery.sap.measure#add
-		 * @function
-		 * @public
-		 */
-		this.add = function( sId, sInfo, iStart, iEnd, iTime, iDuration ){
-			if (!bActive) {
-				return;
-			}
-
-			var oMeasurement = new Measurement( sId, sInfo, iStart, iEnd);
-			oMeasurement.time = iTime;
-			oMeasurement.duration = iDuration;
-
-			if (oMeasurement) {
-				this.mMeasurements[sId] = oMeasurement;
-				return ({id: oMeasurement.id,
-						info: oMeasurement.info,
-						start: oMeasurement.start,
-						end: oMeasurement.end,
-						time: oMeasurement.time,
-						duration: oMeasurement.duration});
-			} else {
-				return false;
-			}
-		};
-	}
-
-	/**
-	 * Namespace for the jQuery performance measurement plug-in provided by SAP SE.
-	 *
-	 * @namespace
-	 * @name jQuery.sap.measure
-	 * @public
-	 * @static
-	 */
-	jQuery.sap.measure = new PerfMeasurement();
 
 	/**
 	 * FrameOptions class
@@ -7428,6 +9481,7 @@ return URI;
 		this.bUnlocked = false;
 		this.bRunnable = false;
 		this.bParentUnlocked = false;
+		this.bParentResponded = false;
 		this.sStatus = "pending";
 		this.aFPChilds = [];
 
@@ -7476,14 +9530,14 @@ return URI;
 					if (bOk) {
 						this._applyState(true, true);
 					}
-				} catch(e) {
+				} catch (e) {
 					// access to the top window is not possible
-					FrameOptions.__parent.postMessage('SAPFrameProtection*require-origin', '*');
+					this._sendRequireMessage();
 				}
 
 			} else {
 				// same origin not allowed
-				FrameOptions.__parent.postMessage('SAPFrameProtection*require-origin', '*');
+				this._sendRequireMessage();
 			}
 
 		}
@@ -7609,6 +9663,9 @@ return URI;
 	};
 
 	FrameOptions.prototype._applyState = function(bIsRunnable, bIsParentUnlocked) {
+		if (this.bUnlocked) {
+			return;
+		}
 		if (bIsRunnable) {
 			this.bRunnable = true;
 		}
@@ -7632,12 +9689,12 @@ return URI;
 		}
 	};
 
-	FrameOptions.prototype._check = function() {
+	FrameOptions.prototype._check = function(bParentResponsePending) {
 		if (this.bRunnable) {
 			return;
 		}
 		var bTrusted = false;
-		if (this.bAllowSameOrigin && FrameOptions.__window.document.URL.indexOf(this.sParentOrigin) == 0) {
+		if (this.bAllowSameOrigin && this.sParentOrigin && FrameOptions.__window.document.URL.indexOf(this.sParentOrigin) == 0) {
 			bTrusted = true;
 		} else if (this.mSettings.whitelist && this.mSettings.whitelist.length != 0) {
 			var sHostName = this.sParentOrigin.split('//')[1];
@@ -7658,7 +9715,7 @@ return URI;
 			var url = this.mSettings.whitelistService + '?parentOrigin=' + encodeURIComponent(this.sParentOrigin);
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4) {
-					that._handleXmlHttpResponse(xmlhttp);
+					that._handleXmlHttpResponse(xmlhttp, bParentResponsePending);
 				}
 			};
 			xmlhttp.open('GET', url, true);
@@ -7669,18 +9726,23 @@ return URI;
 		}
 	};
 
-	FrameOptions.prototype._handleXmlHttpResponse = function(xmlhttp) {
+	FrameOptions.prototype._handleXmlHttpResponse = function(xmlhttp, bParentResponsePending) {
 		if (xmlhttp.status === 200) {
 			var bTrusted = false;
 			var sResponseText = xmlhttp.responseText;
 			var oRuleSet = JSON.parse(sResponseText);
 			if (oRuleSet.active == false) {
-				bTrusted = true;
-			} else if (this.match(this.sParentOrigin, oRuleSet.origin)) {
-				bTrusted = oRuleSet.framing;
+				this._applyState(true, true);
+			} else if (bParentResponsePending) {
+				return;
+			} else {
+				if (this.match(this.sParentOrigin, oRuleSet.origin)) {
+					bTrusted = oRuleSet.framing;
+				}
+				this._applyTrusted(bTrusted);
 			}
-			this._applyTrusted(bTrusted);
 		} else {
+			jQuery.sap.log.warning("The configured whitelist service is not available: " + xmlhttp.status);
 			this._callback(false);
 		}
 	};
@@ -7688,6 +9750,19 @@ return URI;
 	FrameOptions.prototype._notifyChildFrames = function() {
 		for (var i = 0; i < this.aFPChilds.length; i++) {
 			this.aFPChilds[i].postMessage('SAPFrameProtection*parent-unlocked','*');
+		}
+	};
+
+	FrameOptions.prototype._sendRequireMessage = function() {
+		FrameOptions.__parent.postMessage('SAPFrameProtection*require-origin', '*');
+		// If not postmessage response was received, send request to whitelist service
+		// anyway, to check whether frame protection is enabled
+		if (this.mSettings.whitelistService) {
+			setTimeout(function() {
+				if (!this.bParentResponded) {
+					this._check(true);
+				}
+			}.bind(this), 10);
 		}
 	};
 
@@ -7705,6 +9780,7 @@ return URI;
 			return;
 		}
 		if (oSource === FrameOptions.__parent) {
+			this.bParentResponded = true;
 			if (!this.sParentOrigin) {
 				this.sParentOrigin = oEvent.origin;
 				this._check();
@@ -7736,68 +9812,27 @@ return URI;
  * @SecSink {0|XSS} Parameter is evaluated
  */
 jQuery.sap.globalEval = function() {
+	"use strict";
+
 	/*eslint-disable no-eval */
 	eval(arguments[0]);
 	/*eslint-enable no-eval */
 };
 jQuery.sap.declare('jquery-sap');
+jQuery.sap.declare('sap.ui.thirdparty.es6-promise', false);
 jQuery.sap.declare('sap.ui.Device', false);
 jQuery.sap.declare('sap.ui.thirdparty.URI', false);
-jQuery.sap.declare('jquery.sap.promise', false);
 jQuery.sap.declare('jquery.sap.global', false);
-jQuery.sap.registerPreloadedModules({
-"name":"jquery-sap-preload",
-"version":"2.0",
-"modules":{
-	"jquery.sap.dom.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides functionality related to DOM analysis and manipulation which is not provided by jQuery itself.
-sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
+sap.ui.predefine('jquery.sap.dom',['jquery.sap.global', 'sap/ui/Device'],
 	function(jQuery, Device) {
 	"use strict";
-
-	/**
-	 * Shortcut for document.getElementById() with additionally an IE6/7 bug fixed.
-	 * Used to replace the jQuery.sap.domById when running in IE < v8.
-	 *
-	 * @param {string} sId the id of the DOM element to return
-	 * @param {Window} oWindow the window (optional)
-	 * @return {Element} the DOMNode identified by the given sId
-	 * @private
-	 */
-	var domByIdInternal = function(sId, oWindow) {
-
-		if (!oWindow) {
-			oWindow = window;
-		}
-		if (!sId || sId == "") {
-			return null;
-		}
-
-		var oDomRef = oWindow.document.getElementById(sId);
-
-		// IE also returns the element with the name or id whatever is first
-		// => the following line makes sure that this was the id
-		if (oDomRef && oDomRef.id == sId) {
-			return oDomRef;
-		}
-
-		// otherwise try to lookup the name
-		var oRefs = oWindow.document.getElementsByName(sId);
-		for (var i = 0;i < oRefs.length;i++) {
-			oDomRef = oRefs[i];
-			if (oDomRef && oDomRef.id == sId) {
-				return oDomRef;
-			}
-		}
-
-		return null;
-
-	};
 
 	/**
 	 * Shortcut for document.getElementById(), including a bug fix for older IE versions.
@@ -7809,10 +9844,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 	 * @function
 	 * @since 0.9.0
 	 */
-	jQuery.sap.domById = !!Device.browser.internet_explorer && Device.browser.version < 8 ? domByIdInternal : function domById(sId, oWindow) {
+	jQuery.sap.domById = function domById(sId, oWindow) {
 		return sId ? (oWindow || window).document.getElementById(sId) : null;
 	};
-
 
 	/**
 	 * Shortcut for jQuery("#" + id) with additionally the id being escaped properly.
@@ -7993,7 +10027,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 				oTextEditRange.moveEnd('character', iEnd - iStart);
 				oTextEditRange.select();
 			}
-		} catch (e) {}	// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		} catch (e) {
+			// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		}
 
 		return this;
 	};
@@ -8021,7 +10057,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			if (document.selection) {
 				return document.selection.createRange().text;
 			}
-		} catch (e) {}	// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		} catch (e) {
+			// note: some browsers fail to read the "selectionStart" and "selectionEnd" properties from HTMLInputElement, e.g.: The input element's type "number" does not support selection.
+		}
 
 		return "";
 	};
@@ -8273,7 +10311,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		if (oDomRef) {
 
 			if (iPos === undefined) { // GETTER code
-				if (!!Device.browser.internet_explorer) {
+				if (!!Device.browser.internet_explorer || !!Device.browser.edge) {
 					return oDomRef.scrollWidth - oDomRef.scrollLeft - oDomRef.clientWidth;
 
 				} else if (!!Device.browser.webkit) {
@@ -8725,6 +10763,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		return _oScrollbarSize[sKey];
 	};
 
+	// handle weak dependency to sap/ui/core/Control
+	var _Control;
+
+	function getControl() {
+		return _Control || (_Control = sap.ui.require('sap/ui/core/Control'));
+	}
+
 	/**
 	 * Search ancestors of the given source DOM element for the specified CSS class name.
 	 * If the class name is found, set it to the root DOM element of the target control.
@@ -8743,7 +10788,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			return vDestination;
 		}
 
-		if (vSource instanceof sap.ui.core.Control) {
+		var Control = getControl();
+
+		if (Control && vSource instanceof Control) {
 			vSource = vSource.$();
 		} else if (typeof vSource === "string") {
 			vSource = jQuery.sap.byId(vSource);
@@ -8756,7 +10803,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 
 		if (vDestination instanceof jQuery) {
 			vDestination.toggleClass(sStyleClass, bClassFound);
-		} else if (vDestination instanceof sap.ui.core.Control) {
+		} else if (Control && vDestination instanceof Control) {
 			vDestination.toggleStyleClass(sStyleClass, bClassFound);
 		} else {
 			jQuery.sap.assert(false, 'jQuery.sap.syncStyleClass(): vDestination must be a jQuery object or a Control');
@@ -8765,18 +10812,256 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		return vDestination;
 	};
 
+	/**
+	 * Adds space separated value to the given attribute.
+	 * This method ignores when the value is already available for the given attribute.
+	 *
+	 * @this {jQuery} jQuery context
+	 * @param {string} sAttribute The name of the attribute.
+	 * @param {string} sValue The value of the attribute to be inserted.
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 * @private
+	 */
+	function addToAttributeList(sAttribute, sValue) {
+		var sAttributes = this.attr(sAttribute);
+		if (!sAttributes) {
+			return this.attr(sAttribute, sValue);
+		}
+
+		var aAttributes = sAttributes.split(" ");
+		if (aAttributes.indexOf(sValue) == -1) {
+			aAttributes.push(sValue);
+			this.attr(sAttribute, aAttributes.join(" "));
+		}
+
+		return this;
+	}
+
+	/**
+	 * Remove space separated value from the given attribute.
+	 *
+	 * @this {jQuery} jQuery context
+	 * @param {string} sAttribute The name of the attribute.
+	 * @param {string} sValue The value of the attribute to be inserted.
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 * @private
+	 */
+	function removeFromAttributeList(sAttribute, sValue) {
+		var sAttributes = this.attr(sAttribute) || "",
+			aAttributes = sAttributes.split(" "),
+			iIndex = aAttributes.indexOf(sValue);
+
+		if (iIndex == -1) {
+			return this;
+		}
+
+		aAttributes.splice(iIndex, 1);
+		if (aAttributes.length) {
+			this.attr(sAttribute, aAttributes.join(" "));
+		} else {
+			this.removeAttr(sAttribute);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Adds the given ID reference to the the aria-labelledby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#addAriaLabelledBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.addAriaLabelledBy = function (sId) {
+		return addToAttributeList.call(this, "aria-labelledby", sId);
+	};
+
+	/**
+	 * Removes the given ID reference from the aria-labelledby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#removeAriaLabelledBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.removeAriaLabelledBy = function (sId) {
+		return removeFromAttributeList.call(this, "aria-labelledby", sId);
+	};
+
+	/**
+	 * Adds the given ID reference to the aria-describedby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#addAriaDescribedBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.addAriaDescribedBy = function (sId) {
+		return addToAttributeList.call(this, "aria-describedby", sId);
+	};
+
+	/**
+	 * Removes the given ID reference from the aria-describedby attribute.
+	 *
+	 * @param {string} sID The ID reference of an element
+	 * @return {jQuery} <code>this</code> to allow method chaining.
+	 * @name jQuery#removeAriaDescribedBy
+	 * @public
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @function
+	 */
+	jQuery.fn.removeAriaDescribedBy = function (sId) {
+		return removeFromAttributeList.call(this, "aria-describedby", sId);
+	};
+
+
+	/**
+	 * This method try to patch two HTML elements according to changed attributes.
+	 *
+	 * @param {HTMLElement} oOldDom existing element to be patched
+	 * @param {HTMLElement} oNewDom is the new node to patch old dom
+	 * @return {Boolean} true when patch is applied correctly or false when nodes are replaced.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @private
+	 */
+	function patchDOM(oOldDom, oNewDom) {
+
+		// start checking with most common use case and backwards compatible
+		if (oOldDom.childElementCount != oNewDom.childElementCount ||
+			oOldDom.tagName != oNewDom.tagName) {
+			oOldDom.parentNode.replaceChild(oNewDom, oOldDom);
+			return false;
+		}
+
+		// go with native... if nodes are equal there is nothing to do
+		// http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-isEqualNode
+		if (oOldDom.isEqualNode(oNewDom)) {
+			return true;
+		}
+
+		// remove outdated attributes from old dom
+		var aOldAttributes = oOldDom.attributes;
+		for (var i = 0, ii = aOldAttributes.length; i < ii; i++) {
+			var sAttrName = aOldAttributes[i].name;
+			if (oNewDom.getAttribute(sAttrName) === null) {
+				oOldDom.removeAttribute(sAttrName);
+				ii = ii - 1;
+				i = i - 1;
+			}
+		}
+
+		// patch new or changed attributes to the old dom
+		var aNewAttributes = oNewDom.attributes;
+		for (var i = 0, ii = aNewAttributes.length; i < ii; i++) {
+			var sAttrName = aNewAttributes[i].name,
+				vOldAttrValue = oOldDom.getAttribute(sAttrName),
+				vNewAttrValue = oNewDom.getAttribute(sAttrName);
+
+			if (vOldAttrValue === null || vOldAttrValue !== vNewAttrValue) {
+				oOldDom.setAttribute(sAttrName, vNewAttrValue);
+			}
+		}
+
+		// check whether more child nodes to continue or not
+		var iNewChildNodesCount = oNewDom.childNodes.length;
+		if (!iNewChildNodesCount && !oOldDom.hasChildNodes()) {
+			return true;
+		}
+
+		// maybe no more child elements
+		if (!oNewDom.childElementCount) {
+			// but child nodes(e.g. Text Nodes) still needs to be replaced
+			if (!iNewChildNodesCount) {
+				// new dom does not have any child node, so we can clean the old one
+				oOldDom.textContent = "";
+			} else if (iNewChildNodesCount == 1 && oNewDom.firstChild.nodeType == 3 /* TEXT_NODE */) {
+				// update the text content for the first text node
+				oOldDom.textContent = oNewDom.textContent;
+			} else {
+				// in case of comments or other node types are used
+				oOldDom.innerHTML = oNewDom.innerHTML;
+			}
+			return true;
+		}
+
+		// patch child nodes
+		for (var i = 0, r = 0, ii = iNewChildNodesCount; i < ii; i++) {
+			var oOldDomChildNode = oOldDom.childNodes[i],
+				oNewDomChildNode = oNewDom.childNodes[i - r];
+
+			if (oNewDomChildNode.nodeType == 1 /* ELEMENT_NODE */) {
+				// recursively patch child elements
+				if (!patchDOM(oOldDomChildNode, oNewDomChildNode)) {
+					// if patch is not possible we replace nodes
+					// in this case replaced node is removed
+					r = r + 1;
+				}
+			} else {
+				// when not element update only node values
+				oOldDomChildNode.nodeValue = oNewDomChildNode.nodeValue;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * This method try to replace two HTML elements according to changed attributes.
+	 * As a fallback it replaces DOM nodes.
+	 *
+	 * @param {HTMLElement} oOldDom existing element to be patched
+	 * @param {HTMLElement|String} vNewDom is the new node to patch old dom
+	 * @param {Boolean} bCleanData wheter jQuery data should be removed or not
+	 * @return {Boolean} true when patch is applied correctly or false when nodes are replaced.
+	 * @author SAP SE
+	 * @since 1.30.0
+	 * @private
+	 */
+	jQuery.sap.replaceDOM = function(oOldDom, vNewDom, bCleanData) {
+		var oNewDom;
+		if (typeof vNewDom === "string") {
+			oNewDom = jQuery.parseHTML(vNewDom)[0];
+		} else {
+			oNewDom = vNewDom;
+		}
+
+		if (bCleanData) {
+			jQuery.cleanData([oOldDom]);
+			jQuery.cleanData(oOldDom.getElementsByTagName("*"));
+		}
+
+		return patchDOM(oOldDom, oNewDom);
+	};
+
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.encoder.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides encoding functions for JavaScript.
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.encoder',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -9021,7 +11306,7 @@ sap.ui.define(['jquery.sap.global'],
 	var aWhitelist = [];
 
 	/**
-	 * clears the whitelist for URL valiadtion
+	 * Clears the whitelist for URL validation
 	 *
 	 * @public
 	 */
@@ -9032,7 +11317,7 @@ sap.ui.define(['jquery.sap.global'],
 	};
 
 	/**
-	 * Adds a whitelist entry for URL valiadtion
+	 * Adds a whitelist entry for URL validation.
 	 *
 	 * @param {string} protocol The protocol of the URL
 	 * @param {string} host The host of the URL
@@ -9047,7 +11332,7 @@ sap.ui.define(['jquery.sap.global'],
 	};
 
 	/**
-	 * Removes a whitelist entry for URL valiadtion
+	 * Removes a whitelist entry for URL validation.
 	 *
 	 * @param {int} iIndex index of entry
 	 * @public
@@ -9057,9 +11342,9 @@ sap.ui.define(['jquery.sap.global'],
 	};
 
 	/**
-	 * Gets the whitelist for URL valiadtion
+	 * Gets the whitelist for URL validation.
 	 *
-	 * @return {string[]} whitelist
+	 * @return {object[]} A copy of the whitelist
 	 * @public
 	 */
 	jQuery.sap.getUrlWhitelist = function() {
@@ -9069,27 +11354,98 @@ sap.ui.define(['jquery.sap.global'],
 	/**
 	 * Validates an URL. Check if it's not a script or other security issue.
 	 *
+	 * Split URL into components and check for allowed characters according to RFC3986:
+	 *
+	 * <pre>
+	 * pct-encoded   = "%" HEXDIG HEXDIG
+	 * reserved      = gen-delims / sub-delims
+	 * gen-delims    = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+	 * sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+	 *               / "*" / "+" / "," / ";" / "="
+	 * unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+	 * pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+	 *
+	 * path          = path-abempty    ; begins with "/" or is empty
+	 *               / path-absolute   ; begins with "/" but not "//"
+	 *               / path-noscheme   ; begins with a non-colon segment
+	 *               / path-rootless   ; begins with a segment
+	 *               / path-empty      ; zero characters
+	 *
+	 * path-abempty  = *( "/" segment )
+	 * path-absolute = "/" [ segment-nz *( "/" segment ) ]
+	 * path-noscheme = segment-nz-nc *( "/" segment )
+	 * path-rootless = segment-nz *( "/" segment )
+	 * path-empty    = 0<pchar>
+	 * segment       = *pchar
+	 * segment-nz    = 1*pchar
+	 * segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
+	 *               ; non-zero-length segment without any colon ":"
+	 *
+	 * query       = *( pchar / "/" / "?" )
+	 *
+	 * fragment    = *( pchar / "/" / "?" )
+	 * </pre>
+	 *
+	 * When the URI uses the protocol 'mailto:', the address part is additionally checked
+	 * against the most commonly used parts of RFC 6068:
+	 *
+	 * <pre>
+	 * mailtoURI    = "mailto:" [ to ] [ hfields ]
+	 * to           = addr-spec *("," addr-spec )
+	 * hfields      = "?" hfield *( "&" hfield )
+	 * hfield       = hfname "=" hfvalue
+	 * hfname       = *qchar
+	 * hfvalue      = *qchar
+	 * addr-spec    = local-part "@" domain
+	 * local-part   = dot-atom-text              // not accepted: quoted-string
+	 * domain       = dot-atom-text              // not accepted: "[" *dtext-no-obs "]"
+	 * dtext-no-obs = %d33-90 / ; Printable US-ASCII
+	 *                %d94-126  ; characters not including
+	 *                          ; "[", "]", or "\"
+	 * qchar        = unreserved / pct-encoded / some-delims
+	 * some-delims  = "!" / "$" / "'" / "(" / ")" / "*"
+	 *              / "+" / "," / ";" / ":" / "@"
+	 *
+	 * Note:
+	 * A number of characters that can appear in <addr-spec> MUST be
+	 * percent-encoded.  These are the characters that cannot appear in
+	 * a URI according to [STD66] as well as "%" (because it is used for
+	 * percent-encoding) and all the characters in gen-delims except "@"
+	 * and ":" (i.e., "/", "?", "#", "[", and "]").  Of the characters
+	 * in sub-delims, at least the following also have to be percent-
+	 * encoded: "&", ";", and "=".  Care has to be taken both when
+	 * encoding as well as when decoding to make sure these operations
+	 * are applied only once.
+	 *
+	 * </pre>
+	 *
+	 * When a whitelist has been configured using {@link .addUrlWhitelist addUrlWhitelist},
+	 * any URL that passes the syntactic checks above, additionally will be tested against
+	 * the content of the whitelist.
+	 *
 	 * @param {string} sUrl
 	 * @return true if valid, false if not valid
 	 * @public
 	 */
 	jQuery.sap.validateUrl = function(sUrl) {
 
-		var result = /(?:([^:\/?#]+):)?(?:\/\/([^\/?#:]*)(?::([0-9]+))?)?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/.exec(sUrl);
+		var result = /^(?:([^:\/?#]+):)?((?:\/\/([^\/?#:]*)(?::([0-9]+))?)?([^?#]*))(?:\?([^#]*))?(?:#(.*))?$/.exec(sUrl);
 		if (!result) {
-			return result;
+			return false;
 		}
 
 		var sProtocol = result[1],
-			sHost = result[2],
-			sPort = result[3],
-			sPath = result[4],
-			sQuery = result[5],
-			sHash = result[6];
+			sBody = result[2],
+			sHost = result[3],
+			sPort = result[4],
+			sPath = result[5],
+			sQuery = result[6],
+			sHash = result[7];
 
-		var rCheck = /[\x00-\x24\x26-\x29\x2b\x2c\x2f\x3a-\x40\x5b-\x5e\x60\x7b-\x7d\x7f-\uffff]/;
-		var rCheckHash = /[\x00-\x24\x26-\x29\x2b\x2c\x3a-\x3e\x5b-\x5e\x60\x7b-\x7d\x7f-\uffff]/;
-		var rCheckMail = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+		var rCheckPath = /^([a-z0-9-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*$/i;
+		var rCheckQuery = /^([a-z0-9-._~!$&'()*+,;=:@\/?]|%[0-9a-f]{2})*$/i;
+		var rCheckFragment = rCheckQuery;
+		var rCheckMail = /^([a-z0-9!$'*+:^_`{|}~-]|%[0-9a-f]{2})+(?:\.([a-z0-9!$'*+:^_`{|}~-]|%[0-9a-f]{2})+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
 
 		// protocol
 		if (sProtocol) {
@@ -9110,15 +11466,17 @@ sap.ui.define(['jquery.sap.global'],
 		// Path -> split for "/" and check if forbidden characters exist
 		if (sPath) {
 			if (sProtocol === "MAILTO") {
-				var bCheck = rCheckMail.test(sPath);
-				if (!bCheck) {
-					return false;
+				var aAddresses = sBody.split(",");
+				for ( var i = 0; i < aAddresses.length; i++) {
+					if (!rCheckMail.test(aAddresses[i])) {
+						// forbidden character found
+						return false;
+					}
 				}
 			} else {
 				var aComponents = sPath.split("/");
 				for ( var i = 0; i < aComponents.length; i++) {
-					var bCheck = rCheck.test(aComponents[i]);
-					if (bCheck) {
+					if (!rCheckPath.test(aComponents[i])) {
 						// forbidden character found
 						return false;
 					}
@@ -9126,27 +11484,17 @@ sap.ui.define(['jquery.sap.global'],
 			}
 		}
 
-		// query -> Split on & and = and check if forbidden characters exist
+		// query
 		if (sQuery) {
-			var aComponents = sQuery.split("&");
-			for ( var i = 0; i < aComponents.length; i++) {
-				var iPos = aComponents[i].search("=");
-				if (iPos != -1) {
-					var sPart1 = aComponents[i].substring(0,iPos);
-					var sPart2 = aComponents[i].substring(iPos + 1);
-					var bCheck1 = rCheck.test(sPart1);
-					var bCheck2 = rCheck.test(sPart2);
-					if (bCheck1 || bCheck2) {
-						// forbidden character found
-						return false;
-					}
-				}
+			if (!rCheckQuery.test(sQuery)) {
+				// forbidden character found
+				return false;
 			}
 		}
 
 		// hash
 		if (sHash) {
-			if (rCheckHash.test(sHash)) {
+			if (!rCheckFragment.test(sHash)) {
 				// forbidden character found
 				return false;
 			}
@@ -9261,17 +11609,16 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.events.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides functionality related to eventing.
-sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
-	function(jQuery, Device/* , jQuerySap1 */) {
+sap.ui.predefine('jquery.sap.events',['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes', "sap/ui/thirdparty/jquery-mobile-custom"],
+	function(jQuery, Device/* , jQuerySap1, jQuerySap2 */ ) {
 	"use strict";
 
 	var onTouchStart,
@@ -9337,7 +11684,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			};
 
 			/**
-			 * Mouse event handler. Prevents propagation for native events. 
+			 * Mouse event handler. Prevents propagation for native events.
 			 * @param {jQuery.Event} oEvent the event object
 			 * @private
 			 */
@@ -9396,7 +11743,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 
 					if (bIsMoved) {
 
-						// Fire "mousemove" event only when the finger was moved. This is to prevent unwanted movements. 
+						// Fire "mousemove" event only when the finger was moved. This is to prevent unwanted movements.
 						fireMouseEvent("mousemove", oEvent);
 					}
 				}
@@ -9435,7 +11782,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			document.addEventListener('touchmove', onTouchMove, true);
 			document.addEventListener('touchend', onTouchEnd, true);
 			document.addEventListener('touchcancel', onTouchCancel, true);
-			
+
 			/**
 			 * Disable touch to mouse handling
 			 *
@@ -9459,12 +11806,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 					document.removeEventListener(aMouseEvents[i], onMouseEvent, true);
 				}
 			};
-			
+
 		}());
 	}
 
 	if (!jQuery.sap.disableTouchToMouseHandling) {
-		jQuery.sap.disableTouchToMouseHandling = function(){};
+		jQuery.sap.disableTouchToMouseHandling = function() {};
 	}
 
 	/**
@@ -9473,12 +11820,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 	 * A control/element doesn't have to bind listeners for these events.
 	 * It instead can implement an <code>on<i>event</i>(oEvent)</code> method
 	 * for any of the following events that it wants to be notified about:
-	 * 
-	 * click, dblclick, contextmenu, focusin, focusout, keydown, keypress, keyup, mousedown, mouseout, mouseover, 
-	 * mouseup, select, selectstart, dragstart, dragenter, dragover, dragleave, dragend, drop, paste, cut, input
-	 * 
-	 * In case touch events are natively supported the following events are available in addition:
-	 * touchstart, touchend, touchmove, touchcancel
+	 *
+	 * click, dblclick, contextmenu, focusin, focusout, keydown, keypress, keyup, mousedown, mouseout, mouseover,
+	 * mouseup, select, selectstart, dragstart, dragenter, dragover, dragleave, dragend, drop, paste, cut, input,
+	 * touchstart, touchend, touchmove, touchcancel, tap, swipe, swipeleft, swiperight, scrollstart, scrollstop
+	 *
+	 * The mouse events and touch events are supported simultaneously on both desktop and mobile browsers. Do NOT
+	 * create both onmouse* and ontouch* functions to avoid one event being handled twice on the same control.
 	 *
 	 * @public
 	 */
@@ -9505,7 +11853,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 		"drop",
 		"paste",
 		"cut",
-		
+
 		/* input event is fired synchronously on IE9+ when the value of an <input> or <textarea> element is changed */
 		/* for more details please see : https://developer.mozilla.org/en-US/docs/Web/Reference/Events/input */
 		"input"
@@ -9908,7 +12256,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			var iNextKey = bRtl ? jQuery.sap.KeyCodes.ARROW_LEFT : jQuery.sap.KeyCodes.ARROW_RIGHT;
 			return (oEvent.keyCode == iNextKey || oEvent.keyCode == jQuery.sap.KeyCodes.ARROW_UP) && !hasModifierKeys(oEvent);
 		}},
-		
+
 		/**
 		 * Pseudo event for pressing the '+' (plus) sign.
 		 * @since 1.25.0
@@ -10041,21 +12389,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 
 		/**
 		 * This function adds the simulated event prefixed with string "sap" to jQuery.sap.ControlEvents.
-		 * 
-		 * When UIArea binds to the simulated event with prefix, it internally binds to the original events with the given handler and 
+		 *
+		 * When UIArea binds to the simulated event with prefix, it internally binds to the original events with the given handler and
 		 * also provides the additional configuration data in the follwing format:
-		 * 
+		 *
 		 * {
 		 * 	domRef: // the dom reference of the UIArea
 		 * 	eventName: // the simulated event name
 		 * 	sapEventName: // the simulated event name with sap prefix
 		 * 	eventHandle: // the handler that should be registered to simulated event with sap prefix
 		 * }
-		 * 
+		 *
 		 * @param {string} sSimEventName The name of the simulated event
 		 * @param {array} aOrigEvents The array of original events that should be simulated from
 		 * @param {function} fnHandler The function which is bound to the original events
-		 * 
+		 *
 		 * @private
 		 */
 		var createSimulatedEvent = function(sSimEventName, aOrigEvents, fnHandler) {
@@ -10104,10 +12452,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 
 		/**
 		 * This function simulates the corresponding touch event by listening to mouse event.
-		 * 
+		 *
 		 * The simulated event will be dispatch through UI5 event delegation which means that the on"EventName" function is called
 		 * on control's prototype.
-		 * 
+		 *
 		 * @param {jQuery.Event} oEvent The original event object
 		 * @param {object} oConfig Additional configuration passed from createSimulatedEvent function
 		 * @private
@@ -10204,162 +12552,153 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			createSimulatedEvent("touchmove", ["mousemove"], fnMouseToTouchHandler);
 		}
 
-		/**
-		 * This methods decides when extra events are needed. Extra events are: tap, swipe and the new touch to mouse event simulation.
-		 * 
-		 * The old touch to mouse simulation is done in a way that a real mouse event is fired when there's a corresponding touch event. But this will mess up
-		 * the mouse to touch event simulation and is not consistent with the mouse to touch event simulation. That's why when certain condition is met, the old
-		 * touch to mouse event simluation will be replaced with the new touch to mouse event simulation.
-		 * 
-		 * The new one can't completely replace the old one because the desktop controls which bind to events using jQuery or browser API directly have to be change.
-		 * Then the new one can replace the old one completely not under certain condition anymore.
-		 * 
-		 * @private
-		 */
-		function needsExtraEventSupport(){
-			var oCfgData = window["sap-ui-config"] || {},
-				sLibs = oCfgData.libs || "";
+		// Simulate mouse events on touch devices
+		// Except for Windows Phone (<10): IE supports touch events but fires mouse events based on pointer events without delay.
+		// In Edge on Windows Phone 10 the mouse events are delayed like in other browsers
+		if (Device.support.touch && !(Device.os.windows_phone && Device.os.version < 10)) {
+			var bFingerIsMoved = false,
+				iMoveThreshold = jQuery.vmouse.moveDistanceThreshold,
+				iStartX, iStartY,
+				iOffsetX, iOffsetY,
+				iLastTouchMoveTime;
 
-			// TODO: should be replaced by some function in jQuery.sap.global (e.g. jQuery.sap.config(sKey))
-			function hasConfig(sKey) {
-				return document.location.search.indexOf("sap-ui-" + sKey) > -1 || // URL 
-					!!oCfgData[sKey.toLowerCase()]; // currently, properties of oCfgData are converted to lower case (DOM attributes)
-			}
+			var fnCreateNewEvent = function(oEvent, oConfig, oMappedEvent) {
+				var oNewEvent = jQuery.event.fix(oEvent.originalEvent || oEvent);
+				oNewEvent.type = oConfig.sapEventName;
 
-			return Device.support.touch || // tap, swipe, etc. events are needed when touch is supported
-				hasConfig("xx-test-mobile") || // see sap.ui.core.Configuration -> M_SETTINGS
-				// also simulate touch events when sap-ui-xx-fakeOS is set (independently of the value and the current browser)
-				hasConfig("xx-fakeOS") ||
-				// always simulate touch events when the mobile lib is involved (FIXME: hack for Kelley, this does currently not work with dynamic library loading)
-				sLibs.match(/sap.m\b/);
-		}
+				delete oNewEvent.touches;
+				delete oNewEvent.changedTouches;
+				delete oNewEvent.targetTouches;
 
-		// If extra event support is needed, jQuery mobile event plugin is loaded to support tap, swipe and scrollstart/stop events.
-		// The old touch to mouse event simulation ((see line 25 in this file)) will be deregistered and the new one will be active.
-		if (needsExtraEventSupport()) {
-			jQuery.sap.require("sap.ui.thirdparty.jquery-mobile-custom");
+				//TODO: add other properties that should be copied to the new event
+				oNewEvent.screenX = oMappedEvent.screenX;
+				oNewEvent.screenY = oMappedEvent.screenY;
+				oNewEvent.clientX = oMappedEvent.clientX;
+				oNewEvent.clientY = oMappedEvent.clientY;
+				oNewEvent.ctrlKey = oMappedEvent.ctrlKey;
+				oNewEvent.altKey = oMappedEvent.altKey;
+				oNewEvent.shiftKey = oMappedEvent.shiftKey;
+				// The simulated mouse event should always be clicked by the left key of the mouse
+				oNewEvent.button = 0;
 
-			// Simulate mouse events on touch devices
-			// Except for Windows Phone with touch events support.
-			if (Device.support.touch && !Device.support.pointer) {
-				var bFingerIsMoved = false,
-					iMoveThreshold = jQuery.vmouse.moveDistanceThreshold,
-					iStartX, iStartY,
-					iOffsetX, iOffsetY,
-					iLastTouchMoveTime;
-				
-				var fnCreateNewEvent = function(oEvent, oConfig, oMappedEvent) {
-					var oNewEvent = jQuery.event.fix(oEvent.originalEvent || oEvent);
-					oNewEvent.type = oConfig.sapEventName;
-					//reset the _sapui_handledByUIArea flag
-					if (oNewEvent.isMarked("firstUIArea")) {
-						oNewEvent.setMark("handledByUIArea", false);
+				return oNewEvent;
+			};
+
+			/**
+			 * This function simulates the corresponding mouse event by listening to touch event (touchmove).
+			 *
+			 * The simulated event will be dispatch through UI5 event delegation which means that the on"EventName" function is called
+			 * on control's prototype.
+			 *
+			 * @param {jQuery.Event} oEvent The original event object
+			 * @param {object} oConfig Additional configuration passed from createSimulatedEvent function
+			 */
+			var fnTouchMoveToMouseHandler = function(oEvent, oConfig) {
+				if (oEvent.isMarked("handledByTouchToMouse")) {
+					return;
+				}
+				oEvent.setMarked("handledByTouchToMouse");
+
+				if (!bFingerIsMoved) {
+					var oTouch = oEvent.originalEvent.touches[0];
+					bFingerIsMoved = (Math.abs(oTouch.pageX - iStartX) > iMoveThreshold ||
+											Math.abs(oTouch.pageY - iStartY) > iMoveThreshold);
+				}
+
+				if (Device.os.blackberry) {
+					//Blackberry sends many touchmoves -> create a simulated mousemove every 50ms
+					if (iLastTouchMoveTime && oEvent.timeStamp - iLastTouchMoveTime < 50) {
+						return;
 					}
+					iLastTouchMoveTime = oEvent.timeStamp;
+				}
 
-					delete oNewEvent.touches;
-					delete oNewEvent.changedTouches;
-					delete oNewEvent.targetTouches;
-					
-					//TODO: add other properties that should be copied to the new event
-					oNewEvent.screenX = oMappedEvent.screenX;
-					oNewEvent.screenY = oMappedEvent.screenY;
-					oNewEvent.clientX = oMappedEvent.clientX;
-					oNewEvent.clientY = oMappedEvent.clientY;
-					oNewEvent.ctrlKey = oMappedEvent.ctrlKey;
-					oNewEvent.altKey = oMappedEvent.altKey;
-					oNewEvent.shiftKey = oMappedEvent.shiftKey;
-					// The simulated mouse event should always be clicked by the left key of the mouse
-					oNewEvent.button = (Device.browser.msie && Device.browser.version <= 8 ? 1 : 0);
-					
-					return oNewEvent;
-				};
-				
-				/**
-				 * This function simulates the corresponding mouse event by listening to touch event (touchmove).
-				 * 
-				 * The simulated event will be dispatch through UI5 event delegation which means that the on"EventName" function is called
-				 * on control's prototype.
-				 * 
-				 * @param {jQuery.Event} oEvent The original event object
-				 * @param {object} oConfig Additional configuration passed from createSimulatedEvent function
-				 */
-				var fnTouchMoveToMouseHandler = function(oEvent, oConfig) {
-					if (!bFingerIsMoved) {
-						var oTouch = oEvent.originalEvent.touches[0];
-						bFingerIsMoved = (Math.abs(oTouch.pageX - iStartX) > iMoveThreshold ||
-												Math.abs(oTouch.pageY - iStartY) > iMoveThreshold);
-					}
+				var oNewEvent = fnCreateNewEvent(oEvent, oConfig, oEvent.touches[0]);
+				jQuery.sap.delayedCall(0, this, function(){
+					oNewEvent.setMark("handledByUIArea", false);
+					oConfig.eventHandle.handler.call(oConfig.domRef, oNewEvent);
+				});
+			};
 
-					if (Device.os.blackberry) {
-						//Blackberry sends many touchmoves -> create a simulated mousemove every 200ms
-						if (iLastTouchMoveTime && oEvent.timeStamp - iLastTouchMoveTime < 200) {
-							return;
+			/**
+			 * This function simulates the corresponding mouse event by listening to touch event (touchstart, touchend, touchcancel).
+			 *
+			 * The simulated event will be dispatch through UI5 event delegation which means that the on"EventName" function is called
+			 * on control's prototype.
+			 *
+			 * @param {jQuery.Event} oEvent The original event object
+			 * @param {object} oConfig Additional configuration passed from createSimulatedEvent function
+			 */
+			var fnTouchToMouseHandler = function(oEvent, oConfig) {
+				if (oEvent.isMarked("handledByTouchToMouse")) {
+					return;
+				}
+				oEvent.setMarked("handledByTouchToMouse");
+
+				var oNewStartEvent, oNewEndEvent, bSimulateClick;
+
+				function createNewEvent() {
+					return fnCreateNewEvent(oEvent, oConfig, oConfig.eventName === "mouseup" ? oEvent.changedTouches[0] : oEvent.touches[0]);
+				}
+
+				if (oEvent.type === "touchstart") {
+
+					var oTouch = oEvent.originalEvent.touches[0];
+					bFingerIsMoved = false;
+					iLastTouchMoveTime = 0;
+					iStartX = oTouch.pageX;
+					iStartY = oTouch.pageY;
+					iOffsetX = Math.round(oTouch.pageX - jQuery(oEvent.target).offset().left);
+					iOffsetY = Math.round(oTouch.pageY - jQuery(oEvent.target).offset().top);
+
+					oNewStartEvent = createNewEvent();
+					jQuery.sap.delayedCall(0, this, function(){
+						oNewStartEvent.setMark("handledByUIArea", false);
+						oConfig.eventHandle.handler.call(oConfig.domRef, oNewStartEvent);
+					});
+				} else if (oEvent.type === "touchend") {
+
+					oNewEndEvent = createNewEvent();
+					bSimulateClick = !bFingerIsMoved;
+
+					jQuery.sap.delayedCall(0, this, function(){
+						oNewEndEvent.setMark("handledByUIArea", false);
+						oConfig.eventHandle.handler.call(oConfig.domRef, oNewEndEvent);
+						if (bSimulateClick) {
+							// also call the onclick event handler when touchend event is received and the movement is within threshold
+							oNewEndEvent.type = "click";
+							oNewEndEvent.getPseudoTypes = jQuery.Event.prototype.getPseudoTypes; //Reset the pseudo types due to type change
+							oNewEndEvent.setMark("handledByUIArea", false);
+							oNewEndEvent.offsetX = iOffsetX; // use offset from touchstart
+							oNewEndEvent.offsetY = iOffsetY; // use offset from touchstart
+							oConfig.eventHandle.handler.call(oConfig.domRef, oNewEndEvent);
 						}
-						iLastTouchMoveTime = oEvent.timeStamp;
-					}
+					});
+				}
+			};
 
-					var oNewEvent = fnCreateNewEvent(oEvent, oConfig, oEvent.touches[0]);
-					oConfig.eventHandle.handler.call(oConfig.domRef, oNewEvent);
-				};
+			// Deregister the previous touch to mouse event simulation (see line 25 in this file)
+			jQuery.sap.disableTouchToMouseHandling();
 
-				/**
-				 * This function simulates the corresponding mouse event by listening to touch event (touchstart, touchend, touchcancel).
-				 * 
-				 * The simulated event will be dispatch through UI5 event delegation which means that the on"EventName" function is called
-				 * on control's prototype.
-				 * 
-				 * @param {jQuery.Event} oEvent The original event object
-				 * @param {object} oConfig Additional configuration passed from createSimulatedEvent function
-				 */
-				var fnTouchToMouseHandler = function(oEvent, oConfig) {
-					if (oEvent.type === "touchstart") {
-						var oTouch = oEvent.originalEvent.touches[0];
-						bFingerIsMoved = false;
-						iLastTouchMoveTime = 0;
-						iStartX = oTouch.pageX;
-						iStartY = oTouch.pageY;
-						iOffsetX = Math.round(oTouch.pageX - jQuery(oEvent.target).offset().left);
-						iOffsetY = Math.round(oTouch.pageY - jQuery(oEvent.target).offset().top);
-					}
-					
-					var oNewEvent = fnCreateNewEvent(oEvent, oConfig, oConfig.eventName === "mouseup" ? oEvent.changedTouches[0] : oEvent.touches[0]);
-					var bIsClick = oEvent.type === "touchend" && !oNewEvent.isMarked("handledByUIArea") && !bFingerIsMoved;
-
-					oConfig.eventHandle.handler.call(oConfig.domRef, oNewEvent);
-
-					// also call the onclick event handler when touchend event is received and the movement is within threshold
-					if (bIsClick) {
-						oNewEvent.type = "click";
-						oNewEvent.setMark("handledByUIArea", false);
-						oNewEvent.offsetX = iOffsetX; // use offset from touchstart
-						oNewEvent.offsetY = iOffsetY; // use offset from touchstart
-						oConfig.eventHandle.handler.call(oConfig.domRef, oNewEvent);
-					}
-				};
-
-				// Deregister the previous touch to mouse event simulation (see line 25 in this file)
-				jQuery.sap.disableTouchToMouseHandling();
-
-				createSimulatedEvent("mousedown", ["touchstart"], fnTouchToMouseHandler);
-				createSimulatedEvent("mousemove", ["touchmove"], fnTouchMoveToMouseHandler);
-				createSimulatedEvent("mouseup", ["touchend", "touchcancel"], fnTouchToMouseHandler);
-			}
-
-			// Define additional jQuery Mobile events to be added to the event list
-			// TODO taphold cannot be used (does not bubble / has no target property) -> Maybe provide own solution
-			// IMPORTANT: update the public documentation when extending this list
-			aAdditionalControlEvents.push("swipe", "tap", "swipeleft", "swiperight", "scrollstart", "scrollstop");
-
-			//Define additional pseudo events to be added to the event list
-			aAdditionalPseudoEvents.push({sName: "swipebegin", aTypes: ["swipeleft", "swiperight"], fnCheck: function (oEvent) {
-				var bRtl = sap.ui.getCore().getConfiguration().getRTL();
-				return (bRtl && oEvent.type === "swiperight") || (!bRtl && oEvent.type === "swipeleft");
-			}});
-			aAdditionalPseudoEvents.push({sName: "swipeend", aTypes: ["swipeleft", "swiperight"], fnCheck: function (oEvent) {
-				var bRtl = sap.ui.getCore().getConfiguration().getRTL();
-				return (!bRtl && oEvent.type === "swiperight") || (bRtl && oEvent.type === "swipeleft");
-			}});
+			createSimulatedEvent("mousedown", ["touchstart"], fnTouchToMouseHandler);
+			createSimulatedEvent("mousemove", ["touchmove"], fnTouchMoveToMouseHandler);
+			createSimulatedEvent("mouseup", ["touchend", "touchcancel"], fnTouchToMouseHandler);
 		}
+
+		// Define additional jQuery Mobile events to be added to the event list
+		// TODO taphold cannot be used (does not bubble / has no target property) -> Maybe provide own solution
+		// IMPORTANT: update the public documentation when extending this list
+		aAdditionalControlEvents.push("swipe", "tap", "swipeleft", "swiperight", "scrollstart", "scrollstop");
+
+		//Define additional pseudo events to be added to the event list
+		aAdditionalPseudoEvents.push({sName: "swipebegin", aTypes: ["swipeleft", "swiperight"], fnCheck: function (oEvent) {
+			var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+			return (bRtl && oEvent.type === "swiperight") || (!bRtl && oEvent.type === "swipeleft");
+		}});
+		aAdditionalPseudoEvents.push({sName: "swipeend", aTypes: ["swipeleft", "swiperight"], fnCheck: function (oEvent) {
+			var bRtl = sap.ui.getCore().getConfiguration().getRTL();
+			return (!bRtl && oEvent.type === "swiperight") || (bRtl && oEvent.type === "swipeleft");
+		}});
 
 		// Add all defined events to the event infrastructure
 		//
@@ -10487,34 +12826,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 		}
 	};
 
-
-	/*
-	 * store reference to original preventDefault method
-	 */
-	var _preventDefault = jQuery.Event.prototype.preventDefault;
-	/*
-	 * and introduce some keyCode fixing for IE...
-	 * this e.g. suppresses the address-field drop down opening in case of sapshow (i.e. F4) in ComboBoxes
-	 */
-	jQuery.Event.prototype.preventDefault = function() {
-		_preventDefault.apply(this, arguments);
-
-		var e = this.originalEvent;
-
-		if ( !e ) {
-			return;
-		}
-
-		if ( e.keyCode != 0 ) {
-			try { // Sometimes setting keycode results in "Access Denied"
-				if (!sap.ui.Device.browser.firefox) {
-					e.keyCode = 0;
-				}
-			} catch (ex) {}
-		}
-
-	};
-
 	/**
 	 * Binds all events for listening with the given callback function.
 	 *
@@ -10564,7 +12875,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			if ( parent !== element ) {
 				isMouseEnterLeave = true;
 			}
-		} catch (e) { }
+		} catch (e) {
+			//escape eslint check for empty block
+		}
 
 		return isMouseEnterLeave;
 	};
@@ -10745,7 +13058,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 
 	// we still call the original stopImmediatePropagation
 	var fnStopImmediatePropagation = jQuery.Event.prototype.stopImmediatePropagation;
-	
+
 	/**
 	 * PRIVATE EXTENSION: allows to immediately stop the propagation of events in
 	 * the event handler execution - means that "before" delegates can stop the
@@ -10808,63 +13121,63 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 		return !!(this.originalEvent || this)["_sapui_" + sKey];
 	};
 
-	
+
 	/* ************** F6 Fast Navigation ************** */
-	
+
 	// CustomData attribute name for fast navigation groups (in DOM additional prefix "data-" is needed)
 	jQuery.sap._FASTNAVIGATIONKEY = "sap-ui-fastnavgroup";
-	
-	// Returns the nearest parent DomRef of the given DomRef with attribute data-sap-ui-customfastnavgroup="true". 
+
+	// Returns the nearest parent DomRef of the given DomRef with attribute data-sap-ui-customfastnavgroup="true".
 	function findClosestCustomGroup(oRef) {
 		var $Group = jQuery(oRef).closest('[data-sap-ui-customfastnavgroup="true"]');
 		return $Group[0];
 	}
-	
+
 	// Returns the nearest parent DomRef of the given DomRef with attribute data-sap-ui-fastnavgroup="true" or
-	// (if available) the nearest parent with attribute data-sap-ui-customfastnavgroup="true". 
+	// (if available) the nearest parent with attribute data-sap-ui-customfastnavgroup="true".
 	function findClosestGroup(oRef) {
 		var oGroup = findClosestCustomGroup(oRef);
 		if (oGroup) {
 			return oGroup;
 		}
-		
+
 		var $Group = jQuery(oRef).closest('[data-' + jQuery.sap._FASTNAVIGATIONKEY + '="true"]');
 		return $Group[0];
 	}
-	
+
 	// Returns a jQuery object which contains all next/previous (bNext) tabbable DOM elements of the given starting point (oRef) within the given scopes (DOMRefs)
 	function findTabbables(oRef, aScopes, bNext) {
 		var $Ref = jQuery(oRef),
 			$All, $Tabbables;
-		
+
 		if (bNext) {
 			$All = jQuery.merge($Ref.find("*"), jQuery.merge($Ref.nextAll(), $Ref.parents().nextAll()));
 			$Tabbables = $All.find(':sapTabbable').addBack(':sapTabbable');
 		} else {
 			$All = jQuery.merge($Ref.prevAll(), $Ref.parents().prevAll());
 			$Tabbables = jQuery.merge($Ref.parents(':sapTabbable'), $All.find(':sapTabbable').addBack(':sapTabbable'));
-		} 
+		}
 
 		var $Tabbables = jQuery.unique($Tabbables);
 		return $Tabbables.filter(function(){
 			return isContained(aScopes, this);
 		});
 	}
-	
+
 	// Filters all elements in the given jQuery object which are in the static UIArea and which are not in the given scopes.
 	function filterStaticAreaContent($Refs, aScopes){
 		var oStaticArea = jQuery.sap.domById("sap-ui-static");
 		if (!oStaticArea) {
 			return $Refs;
 		}
-		
+
 		var aScopesInStaticArea = [];
 		for (var i = 0; i < aScopes.length; i++) {
 			if (jQuery.contains(oStaticArea, aScopes[i])) {
 				aScopesInStaticArea.push(aScopes[i]);
 			}
 		}
-		
+
 		return $Refs.filter(function(){
 			if (aScopesInStaticArea.length && isContained(aScopesInStaticArea, this)) {
 				return true;
@@ -10872,7 +13185,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			return !jQuery.contains(oStaticArea, this);
 		});
 	}
-	
+
 	// Checks whether the given DomRef is contained or equals (in) one of the given container
 	function isContained(aContainers, oRef) {
 		for (var i = 0; i < aContainers.length; i++) {
@@ -10882,11 +13195,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 		}
 		return false;
 	}
-	
+
 	//see navigate() (bForward = false)
 	function findFirstTabbableOfPreviousGroup($FirstTabbableInScope, $Tabbables, oSouceGroup, bFindPreviousGroup) {
 		var oGroup, $Target;
-		
+
 		for (var i = $Tabbables.length - 1; i >= 0; i--) {
 			oGroup = findClosestGroup($Tabbables[i]);
 			if (oGroup != oSouceGroup) {
@@ -10902,31 +13215,31 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 				}
 			}
 		}
-		
+
 		if (!$Target && !bFindPreviousGroup) {
 			//Group X found but not group Y -> X is the first group -> Focus the first tabbable scope (e.g. page) element
 			$Target = $FirstTabbableInScope;
 		}
-		
+
 		return $Target;
 	}
-	
+
 	// Finds the next/previous (bForward) element in the F6 chain starting from the given source element within the given scopes and focus it
 	function navigate(oSource, aScopes, bForward) {
 		if (!aScopes || aScopes.length == 0) {
 			aScopes = [document];
 		}
-		
+
 		if (!isContained(aScopes, oSource)) {
 			return;
 		}
-		
+
 		var oSouceGroup = findClosestGroup(oSource),
 			$AllTabbables = filterStaticAreaContent(jQuery(aScopes).find(':sapTabbable').addBack(':sapTabbable'), aScopes),
 			$FirstTabbableInScope = $AllTabbables.first(),
 			$Tabbables = filterStaticAreaContent(findTabbables(oSource, aScopes, bForward), aScopes),
 			oGroup, $Target;
-		
+
 		if (bForward) {
 			//Find the first next tabbable within another group
 			for (var i = 0; i < $Tabbables.length; i++) {
@@ -10943,10 +13256,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 			}
 		} else {
 			$Target = findFirstTabbableOfPreviousGroup($FirstTabbableInScope, $Tabbables, oSouceGroup, true);
-			
+
 			if (!$Target || !$Target.length) {
 				//No other group found before -> find first element of last group in the scope (e.g. page)
-				
+
 				if ($AllTabbables.length == 1) {
 					//Only one tabbable element -> use it
 					$Target = jQuery($AllTabbables[0]);
@@ -10963,12 +13276,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 				}
 			}
 		}
-		
+
 		if ($Target && $Target.length) {
 			var oTarget = $Target[0],
 				oEvent = null,
 				oCustomGroup = findClosestCustomGroup(oTarget);
-			
+
 			if (oCustomGroup && oCustomGroup.id) {
 				var oControl = sap.ui.getCore().byId(oCustomGroup.id);
 				if (oControl) {
@@ -10979,18 +13292,18 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 					oControl._handleEvent(oEvent);
 				}
 			}
-			
+
 			if (!oEvent || !oEvent.isDefaultPrevented()) {
 				jQuery.sap.focus(oTarget);
 			}
 		}
 	}
-	
+
 	/**
 	 * Central handler for F6 key event. Based on the current target and the given event the next element in the F6 chain is focused.
-	 * 
+	 *
 	 * This handler might be also called manually. In this case the central handler is deactivated for the given event.
-	 * 
+	 *
 	 * If the event is not a keydown event, it does not represent the F6 key, the default behavior is prevented,
 	 * the handling is explicitly skipped (<code>oSettings.skip</code>) or the target (<code>oSettings.target</code>) is not contained
 	 * in the used scopes (<code>oSettings.scope</code>), the event is skipped.
@@ -11005,37 +13318,37 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 	 * @since 1.25.0
 	 */
 	jQuery.sap.handleF6GroupNavigation = function(oEvent, oSettings) {
-		if (oEvent.type != "keydown" 
-				|| oEvent.keyCode != jQuery.sap.KeyCodes.F6 
+		if (oEvent.type != "keydown"
+				|| oEvent.keyCode != jQuery.sap.KeyCodes.F6
 				|| oEvent.isMarked("sapui5_handledF6GroupNavigation")
 				|| oEvent.isMarked()
 				|| oEvent.isDefaultPrevented()) {
 			return;
 		}
-		
+
 		oEvent.setMark("sapui5_handledF6GroupNavigation");
 		oEvent.setMarked();
 		oEvent.preventDefault();
-		
+
 		if (oSettings && oSettings.skip) {
 			return;
 		}
-		
+
 		var oTarget = oSettings && oSettings.target ? oSettings.target : document.activeElement,
 			aScopes = null;
-		
+
 		if (oSettings && oSettings.scope) {
 			aScopes = jQuery.isArray(oSettings.scope) ? oSettings.scope : [oSettings.scope];
 		}
-		
+
 		navigate(oTarget, aScopes, !oEvent.shiftKey);
 	};
-	
+
 	jQuery(function() {
 		jQuery(document).on("keydown", function(oEvent) {
 			jQuery.sap.handleF6GroupNavigation(oEvent, null);
 		});
-    });
+	});
 
 	/**
 	 * Whether the current browser fires mouse events after touch events with long delay (~300ms)
@@ -11049,10 +13362,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 	 * @since 1.30.0
 	 */
 	jQuery.sap.isMouseEventDelayed =
-		(sap.ui.Device.browser.mobile
+		(Device.browser.mobile
 			&& !(
-				(sap.ui.Device.os.ios && sap.ui.Device.os.version >= 8 && sap.ui.Device.browser.safari)
-				|| (sap.ui.Device.browser.chrome && !/SAMSUNG/.test(navigator.userAgent) && sap.ui.Device.browser.version >= 32)
+				(Device.os.ios && Device.os.version >= 8 && Device.browser.safari)
+				|| (Device.browser.chrome && !/SAMSUNG/.test(navigator.userAgent) && Device.browser.version >= 32)
 			)
 		);
 
@@ -11063,17 +13376,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.keycodes'],
 	return jQuery;
 
 });
-},
-	"jquery.sap.keycodes.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 /*
  * Provides constants for key codes. Useful in the implementation of keypress/keydown event handlers.
  */
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.keycodes',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -11086,613 +13398,613 @@ sap.ui.define(['jquery.sap.global'],
 	 * @since 0.9.0
 	 */
 	jQuery.sap.KeyCodes = {
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		BACKSPACE : 8,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		TAB : 9,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ENTER : 13,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SHIFT : 16,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		CONTROL : 17,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ALT : 18,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		BREAK : 19,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		CAPS_LOCK : 20,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ESCAPE : 27,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SPACE : 32,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		PAGE_UP : 33,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		PAGE_DOWN : 34,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		END : 35,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		HOME : 36,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ARROW_LEFT : 37,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ARROW_UP : 38,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ARROW_RIGHT : 39,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		ARROW_DOWN : 40,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		PRINT : 44,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		INSERT : 45,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DELETE : 46,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_0 : 48,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_1 : 49,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_2 : 50,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_3 : 51,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_4 : 52,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_5 : 53,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_6 : 54,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_7 : 55,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_8 : 56,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DIGIT_9 : 57,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		A : 65,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		B : 66,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		C : 67,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		D : 68,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		E : 69,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F : 70,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		G : 71,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		H : 72,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		I : 73,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		J : 74,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		K : 75,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		L : 76,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		M : 77,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		N : 78,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		O : 79,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		P : 80,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		Q : 81,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		R : 82,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		S : 83,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		T : 84,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		U : 85,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		V : 86,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		W : 87,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		X : 88,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		Y : 89,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		Z : 90,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		WINDOWS : 91,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		CONTEXT_MENU : 93,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		TURN_OFF : 94,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SLEEP : 95,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_0 : 96,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_1 : 97,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_2 : 98,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_3 : 99,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_4 : 100,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_5 : 101,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_6 : 102,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_7 : 103,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_8 : 104,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_9 : 105,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_ASTERISK : 106,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_PLUS : 107,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_MINUS : 109,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_COMMA : 110,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUMPAD_SLASH : 111,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F1 : 112,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F2 : 113,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F3 : 114,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F4 : 115,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F5 : 116,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F6 : 117,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F7 : 118,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F8 : 119,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F9 : 120,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F10 : 121,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F11 : 122,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		F12 : 123,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		NUM_LOCK : 144,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SCROLL_LOCK : 145,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		OPEN_BRACKET : 186,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		PLUS : 187,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		COMMA : 188,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SLASH : 189,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		DOT : 190,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		PIPE : 191,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SEMICOLON : 192,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		MINUS : 219,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		GREAT_ACCENT : 220,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		EQUALS : 221,
-	
+
 		/**
 		 * @type number
 		 * @public
 		 */
 		SINGLE_QUOTE : 222,
-	
+
 		/**
 		 * @type number
 		 * @public
@@ -11702,35 +14014,34 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.mobile.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-//Provides common helper functions for the mobile version of UI5 
-sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.sap.events'],
+//Provides common helper functions for the mobile version of UI5
+sap.ui.predefine('jquery.sap.mobile',['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.sap.events'],
 	function(jQuery, Device/* , jQuerySap1, jQuerySap2 */) {
 	"use strict";
 
 
 	(function($) { // TODO get rid of inner scope function, rename $ to jQuery
 		var FAKE_OS_PATTERN = /(?:\?|&)sap-ui-xx-fakeOS=([^&]+)/;
-	
+
 		$.sap.simulateMobileOnDesktop = false;
-	
+
 		// OS overriding mechanism
 		if ((Device.browser.webkit || (Device.browser.msie && Device.browser.version >= 10)) && !jQuery.support.touch) { // on non-touch webkit browsers and IE10 we are interested in overriding
-	
+
 			var result = document.location.search.match(FAKE_OS_PATTERN);
 			var resultUA = result && result[1] || jQuery.sap.byId("sap-ui-bootstrap").attr("data-sap-ui-xx-fakeOS");
-	
+
 			if (resultUA) {
-	
+
 				$.sap.simulateMobileOnDesktop = true;
-	
+
 				var ua = { // for "ios"/"android"/"blackberry" we have defined fake user-agents; these will affect all other browser/platform detection mechanisms
 						ios: "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0_1 like Mac OS X) AppleWebKit/534.48 (KHTML, like Gecko) Version/5.1 Mobile/9A406 Safari/7534.48.3",
 						iphone: "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0_1 like Mac OS X) AppleWebKit/534.48 (KHTML, like Gecko) Version/5.1 Mobile/9A406 Safari/7534.48.3",
@@ -11741,10 +14052,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 						blackberry: "Mozilla/5.0 (BB10; Touch) AppleWebKit/537.10+ (KHTML, like Gecko) Version/10.0.9.2372 Mobile Safari/537.10+",
 						winphone: "Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 920)"
 				}[resultUA];
-	
+
 				if (ua &&
 						(Device.browser.webkit && resultUA !== "winphone" || Device.browser.msie && resultUA === "winphone")) { // only for the working combinations
-	
+
 					// code for modifying the real user-agent
 					if (Device.browser.safari) {
 						var __originalNavigator = window.navigator;
@@ -11760,32 +14071,32 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 							}
 						});
 					}
-	
+
 					if (Device.browser.webkit) {
-	
+
 						// all downstream checks will be fine with the faked user-agent.
 						// But now we also need to adjust the wrong upstream settings in jQuery:
 						jQuery.browser.msie = jQuery.browser.opera = jQuery.browser.mozilla = false;
 						jQuery.browser.webkit = true;
 						jQuery.browser.version = "534.46"; // this is not exactly true for all UAs, but there are much bigger shortcomings of this approach than a minor version of the browser, so giving the exact value is not worth the effort
 					} // else in IE10 with winphone emulation, jQuery.browser has already the correct information
-	
+
 					// update the sap.ui.Device.browser.* information
 					Device._update($.sap.simulateMobileOnDesktop);
 				}
 			}
 		}
-	
+
 		/**
 		 * Holds information about the current operating system
-		 * 
+		 *
 		 * @name jQuery.os
 		 * @namespace
 		 * @deprecated since 1.20: use sap.ui.Device.os
 		 * @public
 		 */
 		$.os = $.extend(/** @lends jQuery.os */ {
-	
+
 			/**
 			 * The name of the operating system; currently supported are: "ios", "android", "blackberry"
 			 * @type {string}
@@ -11793,7 +14104,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			os: Device.os.name,
-	
+
 			/**
 			 * The version of the operating system as a string (including minor versions)
 			 * @type {string}
@@ -11801,7 +14112,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			version: Device.os.versionStr,
-	
+
 			/**
 			 * The version of the operating system parsed as a float (major and first minor version)
 			 * @type {float}
@@ -11810,9 +14121,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 */
 			fVersion: Device.os.version
 		}, $.os);
-	
+
 		$.os[Device.os.name] = true;
-	
+
 		/**
 		 * Whether the current operating system is Android
 		 * @type {boolean}
@@ -11820,7 +14131,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @deprecated since 1.20: use sap.ui.Device.os.android
 		 * @name jQuery.os.android
 		 */
-	
+
 		/**
 		 * Whether the current operating system is BlackBerry
 		 * @type {boolean}
@@ -11828,7 +14139,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @deprecated since 1.20: use sap.ui.Device.os.blackberry
 		 * @name jQuery.os.blackberry
 		 */
-	
+
 		/**
 		 * Whether the current operating system is Apple iOS
 		 * @type {boolean}
@@ -11836,7 +14147,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @deprecated since 1.20: use sap.ui.Device.os.ios
 		 * @name jQuery.os.ios
 		 */
-		
+
 		/**
 		 * Whether the current operating system is Windows Phone
 		 * @type {boolean}
@@ -11844,11 +14155,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @deprecated since 1.20: use sap.ui.Device.os.winphone
 		 * @name jQuery.os.winphone
 		 */
-	
-	
+
+
 		// feature and state detection
 		$.extend( $.support, {
-	
+
 			/**
 			 * Whether the device has a retina display (window.devicePixelRatio >= 2)
 			 * @type {boolean}
@@ -11856,8 +14167,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 */
 			retina: window.devicePixelRatio >= 2
 		});
-	
-		
+
+
 		/**
 		 * @name jQuery.device
 		 * @namespace
@@ -11865,17 +14176,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @public
 		 */
 		$.device = $.extend({}, $.device);
-	
+
 		/**
 		 * Holds information about the current device and its state
-		 * 
+		 *
 		 * @name jQuery.device.is
 		 * @namespace
 		 * @deprecated since 1.20: use the respective functions of sap.ui.Device
 		 * @public
 		 */
 		$.device.is = $.extend( /** @lends jQuery.device.is */ {
-	
+
 			/**
 			 * Whether the application runs in standalone mode without browser UI (launched from the iOS home screen)
 			 * @type {boolean}
@@ -11883,7 +14194,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			standalone: window.navigator.standalone,
-	
+
 			/**
 			 * Whether the device is in "landscape" orientation (also "true" when the device does not know about the orientation)
 			 * @type {boolean}
@@ -11891,7 +14202,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			landscape: Device.orientation.landscape,
-	
+
 			/**
 			 * Whether the device is in portrait orientation
 			 * @type {boolean}
@@ -11899,7 +14210,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			portrait: Device.orientation.portrait,
-	
+
 			/**
 			 * Whether the application runs on an iPhone
 			 * @type {boolean}
@@ -11907,7 +14218,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			iphone: Device.os.ios && Device.system.phone,
-	
+
 			/**
 			 * Whether the application runs on an iPad
 			 * @type {boolean}
@@ -11915,7 +14226,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			ipad: Device.os.ios && Device.system.tablet,
-	
+
 			/**
 			 * Whether the application runs on an Android phone - based not on screen size but user-agent (so this is not guaranteed to be equal to jQuery.device.is.phone on Android)
 			 * https://developers.google.com/chrome/mobile/docs/user-agent
@@ -11925,7 +14236,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			android_phone: Device.system.phone && Device.os.android,
-	
+
 			/**
 			 * Whether the application runs on an Android tablet - based not on screen size but user-agent (so this is not guaranteed to be equal to jQuery.device.is.tablet on Android)
 			 * https://developers.google.com/chrome/mobile/docs/user-agent
@@ -11935,10 +14246,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			android_tablet: Device.system.tablet && Device.os.android,
-	
+
 			/**
 			 * Whether the running device is a tablet.
-			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile), 
+			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile),
 			 * this property will also be set according to the simulated platform.
 			 * This property will be false when runs in desktop browser.
 			 * @type {boolean}
@@ -11946,10 +14257,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			tablet: Device.system.tablet,
-	
+
 			/**
 			 * Whether the running device is a phone.
-			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile), 
+			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile),
 			 * this property will also be set according to the simulated platform.
 			 * This property will be false when runs in desktop browser.
 			 * @type {boolean}
@@ -11957,10 +14268,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			 * @public
 			 */
 			phone: Device.system.phone,
-	
+
 			/**
 			 * Whether the running device is a desktop browser.
-			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile), 
+			 * If a desktop browser runs in mobile device simulation mode (with URL parameter sap-ui-xx-fakeOS or sap-ui-xx-test-mobile),
 			 * this property will be false.
 			 * @type {boolean}
 			 * @deprecated since 1.17.0: use sap.ui.Device.system.desktop instead
@@ -11970,22 +14281,22 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		},$.device.is);
 
 		// Windows Phone specific handling
-		if (sap.ui.Device.os.windows_phone) {
+		if (Device.os.windows_phone) {
 			var oTag;
 			// Disable grey highlights over tapped areas.
 			// This meta tag works since Windows 8.1.
 			// Write in-place, otherwise IE ignores it:
-		    oTag = document.createElement("meta");
-		    oTag.setAttribute("name", "msapplication-tap-highlight");
-		    oTag.setAttribute("content", "no");
-		    document.head.appendChild(oTag);
+			oTag = document.createElement("meta");
+			oTag.setAttribute("name", "msapplication-tap-highlight");
+			oTag.setAttribute("content", "no");
+			document.head.appendChild(oTag);
 
-		    // Style for correct viewport size and scale definition.
+			// Style for correct viewport size and scale definition.
 			// It works correctly since Windows 8.1.
 			// Older 8.0 patches return wrong device-width:
-		    oTag = document.createElement("style");
-		    oTag.appendChild(document.createTextNode('@-ms-viewport{width:device-width;}'));
-		    document.head.appendChild(oTag);
+			oTag = document.createElement("style");
+			oTag.appendChild(document.createTextNode('@-ms-viewport{width:device-width;}'));
+			document.head.appendChild(oTag);
 		}
 
 		var _bInitMobileTriggered = false;
@@ -12019,17 +14330,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * @param {string}  [options.homeIcon=undefined] deprecated since 1.12, use jQuery.sap.setIcons instead.
 		 * @param {boolean} [options.homeIconPrecomposed=false] deprecated since 1.12, use jQuery.sap.setIcons instead.
 		 * @param {boolean} [options.mobileWebAppCapable=true] whether the Application will be loaded in full screen mode after added to home screen on mobile devices. The default value for this property only enables the full screen mode when runs on iOS device.
-		 * 
+		 *
 		 * @name jQuery.sap.initMobile
 		 * @function
 		 * @public
 		 */
 		$.sap.initMobile = function(options) {
 			var $head = $("head");
-	
+
 			if (!_bInitMobileTriggered) { // only one initialization per HTML page
 				_bInitMobileTriggered = true;
-	
+
 				options = $.extend({}, { // merge in the default values
 					viewport: true,
 					statusBar: "default",
@@ -12040,7 +14351,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 					homeIconPrecomposed: false,
 					mobileWebAppCapable: "default"
 				}, options);
-	
+
 				// en-/disable automatic link generation for phone numbers
 				if (Device.os.ios && options.preventPhoneNumberDetection) {
 					$head.append($('<meta name="format-detection" content="telephone=no">')); // this only works for all DOM created afterwards
@@ -12048,7 +14359,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 					$head.append($('<meta http-equiv="cleartype" content="on">'));
 					$head.append($('<meta name="msapplication-tap-highlight" content="no">'));
 				}
-	
+
 				var bIsIOS7Safari = Device.os.ios && Device.os.version >= 7 && Device.os.version < 8 && Device.browser.name === "sf";
 				// initialize viewport
 				if (options.viewport) {
@@ -12072,7 +14383,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 					}
 					$head.append($('<meta name="viewport" content="' + sMeta + '">'));
 				}
-				
+
 				if (options.mobileWebAppCapable === "default") {
 					if (Device.os.ios) {
 						// keep the old behavior for compatibility
@@ -12082,23 +14393,23 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 				} else {
 					$.sap.setMobileWebAppCapable(options.mobileWebAppCapable);
 				}
-	
+
 				if (Device.os.ios) {
 					// set the status bar style on Apple devices
 					$head.append($('<meta name="apple-mobile-web-app-status-bar-style" content="' + options.statusBar + '">')); // "default" or "black" or "black-translucent", since iOS 2.1
-	
+
 					// splash screen
 					//<link rel="apple-touch-startup-image" href="/startup.png">
 				}
-	
-				if (options.preventScroll) {
+
+				if (options.preventScroll && !sap.ui.Device.os.blackberry) {
 					$(window).bind("touchmove", function sapInitMobileTouchMoveHandle(oEvent) {
 						if (!oEvent.isMarked()) {
 							oEvent.preventDefault(); // prevent the rubber-band effect
 						}
 					});
 				}
-	
+
 				if (options.useFullScreenHeight) {
 					$(function() {
 						document.documentElement.style.height = "100%"; // set html root tag to 100% height
@@ -12137,10 +14448,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 *
 		 * All icons are given in an an object holding icon URLs and other settings. The properties of this object are:
 		 * <ul>
-		 * <li>phone: a 57x57 pixel version for non-retina iPhones</li>
-		 * <li>tablet: a 72x72 pixel version for non-retina iPads</li>
-		 * <li>phone@2: a 114x114 pixel version for retina iPhones</li>
-		 * <li>tablet@2: a 144x144 pixel version for retina iPads</li>
+		 * <li>phone: a 60x60 pixel version for non-retina iPhones</li>
+		 * <li>tablet: a 76x76 pixel version for non-retina iPads</li>
+		 * <li>phone@2: a 120x120 pixel version for retina iPhones</li>
+		 * <li>tablet@2: a 152x152 pixel version for retina iPads</li>
 		 * <li>precomposed: whether the home icons already have some glare effect (otherwise iOS will add it) (default: false)</li>
 		 * <li>favicon: the ICO file to be used inside the browser and for desktop shortcuts</li>
 		 * </ul>
@@ -12148,29 +14459,29 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * One example is:
 		 * <pre>
 		 * {
-		 *    'phone':'phone-icon_57x57.png',
-		 *    'phone@2':'phone-retina_117x117.png',
-		 *    'tablet':'tablet-icon_72x72.png',
-		 *    'tablet@2':'tablet-retina_144x144.png',
+		 *    'phone':'phone-icon_60x60.png',
+		 *    'phone@2':'phone-retina_120x120.png',
+		 *    'tablet':'tablet-icon_76x76.png',
+		 *    'tablet@2':'tablet-retina_152x152.png',
 		 *    'precomposed':true,
 		 *    'favicon':'desktop.ico'
 		 * }
 		 * </pre>
 		 * If one of the sizes is not given, the largest available alternative image will be used instead for this size.
 		 * On Android these icons may or may not be used by the device. Apparently chances can be improved by using icons with glare effect, so the "precomposed" property can be set to "true". Some Android devices may also use the favicon for bookmarks instead of the home icons.</li>
-		 * 
+		 *
 		 * @param {object} oIcons
 		 * @name jQuery.sap.setIcons
 		 * @function
 		 * @public
 		 */
 		$.sap.setIcons = function(oIcons) {
-	
+
 			if (!oIcons || (typeof oIcons !== "object")) {
 				$.sap.log.warning("Call to jQuery.sap.setIcons() has been ignored because there were no icons given or the argument was not an object.");
 				return;
 			}
-	
+
 			var $head = $("head"),
 				precomposed = oIcons.precomposed ? "-precomposed" : "",
 				getBestFallback = function(res) {
@@ -12178,35 +14489,35 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 				},
 				mSizes = {
 					"phone": "",
-					"tablet": "72x72",
-					"phone@2": "114x114",
-					"tablet@2": "144x144"
+					"tablet": "76x76",
+					"phone@2": "120x120",
+					"tablet@2": "152x152"
 				};
-	
+
 			// desktop icon
 			if (oIcons["favicon"]) {
-	
+
 				// remove any other favicons
 				var $fav = $head.find("[rel^=shortcut]"); // cannot search for "shortcut icon"
-	
+
 				$fav.each(function(){
 					if (this.rel === "shortcut icon") {
 						$(this).remove();
 					}
 				});
-	
+
 				// create favicon
 				$head.append($('<link rel="shortcut icon" href="' + oIcons["favicon"] + '" />'));
 			}
-	
+
 			// mobile home screen icons
 			if (getBestFallback("phone")) {
-	
+
 				// if any home icon is given remove old ones
 				$head.find("[rel=apple-touch-icon]").remove();
 				$head.find("[rel=apple-touch-icon-precomposed]").remove();
 			}
-	
+
 			for (var platform in mSizes) {
 				oIcons[platform] = oIcons[platform] || getBestFallback(platform);
 				if (oIcons[platform]) {
@@ -12220,12 +14531,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 		 * Sets the "apple-mobile-web-app-capable" and "mobile-web-app-capable" meta information which defines whether the application is loaded
 		 * in full screen mode (browser address bar and toolbar are hidden) after the user does "add to home screen" on mobile devices. Currently
 		 * this meta tag is only supported by iOS Safari and mobile Chrome from version 31.
-		 * 
+		 *
 		 * If the application opens new tabs because of attachments, url and so on, setting this to false will let the user be able to go from the
 		 * new tab back to the application tab after the application is added to home screen.
-		 * 
+		 *
 		 * Note: this function only has effect when the application runs on iOS Safari and mobile Chrome from version 31.
-		 * 
+		 *
 		 * @param {boolean} bValue whether the Application will be loaded in full screen mode after added to home screen from iOS Safari or mobile Chrome from version 31.
 		 * @name jQuery.sap.setMobileWebAppCapable
 		 * @function
@@ -12253,19 +14564,18 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device', 'jquery.sap.dom', 'jquery.s
 			}
 		};
 	})(jQuery);
-	
+
 	return jQuery;
-	
-}, /* bExport= */ false);
-},
-	"jquery.sap.properties.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides access to Java-like properties files
-sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
+sap.ui.predefine('jquery.sap.properties',['jquery.sap.global', 'jquery.sap.sjax'],
 	function(jQuery/* , jQuerySap1 */) {
 	"use strict";
 
@@ -12285,7 +14595,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 	 * currently in the list.
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.Properties
 	 * @public
@@ -12384,7 +14694,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 	 * RegExp used to split file into lines, also removes leading whitespace.
 	 * Note: group must be non-capturing, otherwise the line feeds will be part of the split result.
 	 */
-	var rLines = /(?:^|\r\n|\r|\n)[ \t\f]*/;
+	var rLines = /(?:\r\n|\r|\n|^)[ \t\f]*/;
 
 	/**
 	 * RegExp that handles escapes, continuation line markers and key/value separators
@@ -12564,16 +14874,15 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.sjax'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.resources.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides access to Java-like resource bundles in properties file format
-sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings'],
+sap.ui.predefine('jquery.sap.resources',['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings'],
 	function(jQuery/* , jQuerySap1, jQuerySap2 */) {
 	"use strict";
 
@@ -12605,36 +14914,52 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 * tried (fr). If that also can't be found or doesn't contain the requested text, the english file
 	 * is used (en - assuming that most development projects contain at least english texts).
 	 * If that also fails, the file without locale (base URL of the bundle) is tried.
-	 * 
+	 *
 	 * If none of the requested files can be found or none of them contains a text for the given key,
 	 * then the key itself is returned as text.
 	 *
 	 * Exception: Fallback for "zh_HK" is "zh_TW" before zh.
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.ResourceBundle
 	 * @public
 	 */
-	
+
 	/**
 	 * Returns a locale-specific string value for the given key sKey.
-	 * 
+	 *
 	 * The text is searched in this resource bundle according to the fallback chain described in
 	 * {@link jQuery.sap.util.ResourceBundle}. If no text could be found, the key itself is used as text.
-	 * 
+	 *
 	 * If text parameters are given, then any occurrences of the pattern "{<i>n</i>}" with <i>n</i> being an integer
 	 * are replaced by the parameter value with index <i>n</i>.  Note: This replacement is also applied if no text had been found (key).
 	 * For more details on this replacement mechanism refer also:
 	 * @see jQuery.sap#formatMessage
-	 * 
+	 *
 	 * @param {string} sKey
 	 * @param {string[]} [aArgs] List of parameters which should replace the place holders "{n}" (n is the index) in the found locale-specific string value.
 	 * @return {string} The value belonging to the key, if found; otherwise the key itself.
 	 *
 	 * @function
 	 * @name jQuery.sap.util.ResourceBundle.prototype.getText
+	 * @public
+	 */
+
+	/**
+	 * Checks whether the text for the given key can be found in the concrete
+	 * resource bundle or not. Neither the custom resource bundles nor the
+	 * fallback chain will be processed.
+	 *
+	 * When requesting the resource bundle asynchronously this check must only be
+	 * used after the resource bundle has been loaded.
+	 *
+	 * @param {string} sKey
+	 * @return {boolean} true if the text has been found in the concrete bundle
+	 *
+	 * @function
+	 * @name jQuery.sap.util.ResourceBundle.prototype.hasText
 	 * @public
 	 */
 
@@ -12647,11 +14972,11 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 * @param {jQuery.sap.util.ResourceBundle} oBundle an instance of a <code>jQuery.sap.util.ResourceBundle</code>
 	 * @since 1.16.5
 	 * @private
-	 * 
+	 *
 	 * @function
 	 * @name jQuery.sap.util.ResourceBundle.prototype._enhance
 	 */
-	
+
 	/**
 	 * A regular expression that describes language tags according to BCP-47.
 	 * @see BCP47 "Tags for Identifying Languages" (http://www.ietf.org/rfc/bcp/bcp47.txt)
@@ -12664,10 +14989,10 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 *  4=variants (separated by '-', Note: capturing group contains leading '-' to shorten the regex!)
 	 *  5=extensions (including leading singleton, multiple extensions separated by '-')
 	 *  6=private use section (including leading 'x', multiple sections separated by '-')
-	 *  
-	 *            [-------------------- language ----------------------][--- script ---][------- region --------][------------ variants --------------][--------- extensions --------------][------ private use -------]
+	 *
+	 *              [-------------------- language ----------------------][--- script ---][------- region --------][------------- variants --------------][----------- extensions ------------][------ private use -------]
 	 */
-	var rlocale = /^((?:[A-Z]{2,3}(?:-[A-Z]{3}){0,3})|[A-Z]{4}|[A-Z]{5,8})(?:-([A-Z]{4}))?(?:-([A-Z]{2}|[0-9]{3}))?(-[0-9A-Z]{5,8}|(?:[0-9][0-9A-Z]{3}))*(?:-([0-9A-WYZ](?:-[0-9A-Z]{2,8})+))*(?:-(X(?:-[0-9A-Z]{1,8})+))?$/i;
+	var rLocale = /^((?:[A-Z]{2,3}(?:-[A-Z]{3}){0,3})|[A-Z]{4}|[A-Z]{5,8})(?:-([A-Z]{4}))?(?:-([A-Z]{2}|[0-9]{3}))?((?:-[0-9A-Z]{5,8}|-[0-9][0-9A-Z]{3})*)((?:-[0-9A-WYZ](?:-[0-9A-Z]{2,8})+)*)(?:-(X(?:-[0-9A-Z]{1,8})+))?$/i;
 
 	/**
 	 * Resource bundles are stored according to the Java Development Kit conventions.
@@ -12690,7 +15015,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 
 	/**
 	 * HANA XS Engine can't handle private extensions in BCP47 language tags.
-	 * Therefore, the agreed BCP47 codes for the technical languages 1Q and 2Q 
+	 * Therefore, the agreed BCP47 codes for the technical languages 1Q and 2Q
 	 * don't work as Accept-Header and need to be send as URL parameters as well.
 	 * @private
 	 */
@@ -12699,7 +15024,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		"en_US_sappsd" : "2Q"
 	};
 
-	var rSAPSupportabilityLocales = /-(saptrc|sappsd)(?:-|$)/i;
+	var rSAPSupportabilityLocales = /(?:^|-)(saptrc|sappsd)(?:-|$)/i;
 
 	/**
 	 * Helper to normalize the given locale (in BCP-47 syntax) to the java.util.Locale format.
@@ -12708,12 +15033,12 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 */
 	function normalize(sLocale) {
 		var m;
-		if ( typeof sLocale === 'string' && (m = rlocale.exec(sLocale.replace(/_/g, '-'))) ) {
+		if ( typeof sLocale === 'string' && (m = rLocale.exec(sLocale.replace(/_/g, '-'))) ) {
 			var sLanguage = m[1].toLowerCase();
 			sLanguage = M_ISO639_NEW_TO_OLD[sLanguage] || sLanguage;
 			var sScript = m[2] ? m[2].toLowerCase() : undefined;
 			var sRegion = m[3] ? m[3].toUpperCase() : undefined;
-			var sVariants = m[4];
+			var sVariants = m[4] ? m[4].slice(1) : undefined;
 			var sPrivate = m[6];
 			// recognize and convert special SAP supportability locales (overwrites m[]!)
 			if ( (sPrivate && (m = rSAPSupportabilityLocales.exec(sPrivate)))
@@ -12728,10 +15053,10 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 					sRegion = "TW";
 				}
 			}
-			return sLanguage + (sRegion ? "_" + sRegion + (sVariants ? "_" + sVariants.slice(1).replace("-","_") : "") : "");
+			return sLanguage + (sRegion ? "_" + sRegion + (sVariants ? "_" + sVariants.replace("-","_") : "") : "");
 		}
 	}
-	
+
 	/**
 	 * Returns the default locale (the locale defined in UI5 configuration if available, else "en")
 	 * @return {string} The default locale
@@ -12744,7 +15069,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		}
 		return sLocale || "en";
 	}
-	
+
 	/**
 	 * Helper to normalize the given locale (java.util.Locale format) to the BCP-47 syntax.
 	 * @param {string} sLocale locale to convert
@@ -12752,7 +15077,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 */
 	function convertLocaleToBCP47(sLocale) {
 		var m;
-		if ( typeof sLocale === 'string' && (m = rlocale.exec(sLocale.replace(/_/g, '-'))) ) {
+		if ( typeof sLocale === 'string' && (m = rLocale.exec(sLocale.replace(/_/g, '-'))) ) {
 			var sLanguage = m[1].toLowerCase();
 			sLanguage = M_ISO639_OLD_TO_NEW[sLanguage] || sLanguage;
 			return sLanguage + (m[3] ? "-" + m[3].toUpperCase() + (m[4] ? "-" + m[4].slice(1).replace("_","-") : "") : "");
@@ -12766,7 +15091,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 	 * <li>the file extension itself
 	 * <li>any remaining part after the file extension (query, hash - optional)
 	 * </ol>.
-	 * 
+	 *
 	 * Won't match for URLs without a file extension.
 	 *
 	 *           [------- prefix ------][----ext----][-------suffix--------]
@@ -12830,14 +15155,14 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 			jQuery.sap.log.error("Custom ResourceBundle is either undefined or not an instanceof jQuery.sap.util.ResourceBundle. Therefore this custom ResourceBundle will be ignored!");
 		}
 	};
-	
+
 	/*
 	 * Implements jQuery.sap.util.ResourceBundle.prototype.getText
 	 */
 	Bundle.prototype.getText = function(sKey, aArgs, bCustomBundle){
-		var sValue = null, 
+		var sValue = null,
 			i;
-		
+
 		// loop over the custom bundles before resolving this one
 		// lookup the custom resource bundles (last one first!)
 		for (i = this.aCustomBundles.length - 1; i >= 0; i--) {
@@ -12847,7 +15172,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 				return sValue; // found!
 			}
 		}
-		
+
 		//loop over all loaded property files and return the value for the key if any
 		for (i = 0; i < this.aPropertyFiles.length; i++) {
 			sValue = this.aPropertyFiles[i].getProperty(sKey);
@@ -12916,6 +15241,11 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		return sValue;
 	};
 
+	// checks the existence of the text in the concrete properties file
+	Bundle.prototype.hasText = function(sKey) {
+		return this.aPropertyFiles.length > 0 && typeof this.aPropertyFiles[0].getProperty(sKey) === "string";
+	};
+
 	/*
 	 * If a .properties file for the given locale is not loaded yet
 	 * in the given bundle, this method loads the .properties file and
@@ -12959,7 +15289,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 						};
 						break;
 				}
-				
+
 				if (bAsync) {
 					oRequest.async = true;
 					oPromise = Promise.resolve(jQuery.sap.properties(oRequest));
@@ -12977,7 +15307,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 					oPromise = Promise.resolve(oProperties);
 				}
 			}
-			
+
 			// remember result and locales that have been loaded so far (to avoid repeated roundtrips)
 			if (bAsync) {
 				oPromise.then(function(oProps){
@@ -12991,7 +15321,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 				return oProperties;
 			}
 		}
-		
+
 		return bAsync ? Promise.resolve(null) : null;
 	}
 
@@ -13002,7 +15332,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Creates and returns a new instance of {@link jQuery.sap.util.ResourceBundle}
 	 * using the given URL and locale to determine what to load.
@@ -13033,6 +15363,17 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		}
 	};
 
+	/**
+	 * Checks if the given object is an instance of {@link jQuery.sap.util.ResourceBundle}
+	 *
+	 * @param {jQuery.sap.util.ResourceBundle} oBundle object to check
+	 * @return {boolean} true, if the object is a {@link jQuery.sap.util.ResourceBundle}
+	 * @public
+	 */
+	jQuery.sap.resources.isBundle = function(oBundle) {
+		return oBundle && oBundle instanceof Bundle;
+	};
+
 	jQuery.sap.resources._getFallbackLocales = function(sLocale, aSupportedLocales) {
 		var sTempLocale = normalize(sLocale),
 			aLocales = [];
@@ -13040,7 +15381,7 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 		function supported(sLocale) {
 			return !aSupportedLocales || aSupportedLocales.length === 0 || jQuery.inArray(sLocale, aSupportedLocales) >= 0;
 		}
-		
+
 		while (sTempLocale) {
 			if ( supported(sTempLocale) ) {
 				aLocales.push(sTempLocale);
@@ -13069,16 +15410,15 @@ sap.ui.define(['jquery.sap.global', 'jquery.sap.properties', 'jquery.sap.strings
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.script.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides miscellaneous utility functions that might be useful for any script
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.script',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -13172,7 +15512,7 @@ sap.ui.define(['jquery.sap.global'],
 	 * Use {@link jQuery.sap.getUriParameters} to create an instance of jQuery.sap.util.UriParameters.
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.UriParameters
 	 * @public
@@ -13302,7 +15642,7 @@ sap.ui.define(['jquery.sap.global'],
 	 * @param {any} b A value of any type
 	 * @param {int} [maxDepth=10] Maximum recursion depth
 	 * @param {boolean} [contains] Whether all existing properties in a are equal as in b
-	 * 
+	 *
 	 * @return {boolean} Whether a and b are equal
 	 * @public
 	 */
@@ -13370,20 +15710,20 @@ sap.ui.define(['jquery.sap.global'],
 		}
 		return false;
 	};
-	
+
 	/**
-	 * Iterates over elements of the given object or array. 
-	 * 
-	 * Works similar to <code>jQuery.each</code>, but a numeric index is only used for 
-	 * instances of <code>Array</code>. For all other objects, including those with a numeric 
-	 * <code>length</code> property, the properties are iterated by name. 
-	 * 
+	 * Iterates over elements of the given object or array.
+	 *
+	 * Works similar to <code>jQuery.each</code>, but a numeric index is only used for
+	 * instances of <code>Array</code>. For all other objects, including those with a numeric
+	 * <code>length</code> property, the properties are iterated by name.
+	 *
 	 * The contract for the <code>fnCallback</code> is the same as for <code>jQuery.each</code>,
 	 * when it returns <code>false</code>, then the iteration stops (break).
-	 * 
+	 *
 	 * @param {object|any[]} oObject object or array to enumerate the properties of
 	 * @param {function} fnCallback function to call for each property name
-	 * @return {object|any[]} the given <code>oObject</code> 
+	 * @return {object|any[]} the given <code>oObject</code>
 	 * @since 1.11
 	 */
 	jQuery.sap.each = function(oObject, fnCallback) {
@@ -13406,27 +15746,27 @@ sap.ui.define(['jquery.sap.global'],
 
 		return oObject;
 	};
-	
+
 	/**
 	 * Substitute for <code>for(n in o)</code> loops which fixes the 'Don'tEnum' bug of IE8.
-	 * 
+	 *
 	 * Iterates over all enumerable properties of the given object and calls the
-	 * given callback function for each of them. The assumed signature of the 
-	 * callback function is 
-	 * 
+	 * given callback function for each of them. The assumed signature of the
+	 * callback function is
+	 *
 	 *	 fnCallback(name, value)
-	 *	 
+	 *
 	 * where name is the name of the property and value is its value.
-	 * 
+	 *
 	 * When an object in IE8 overrides a property of Object.prototype
-	 * that has been marked as 'don't enum', then IE8 by mistake also 
-	 * doesn't enumerate the overriding property. 
-	 * 
-	 * A 100% complete substitute is hard to achieve. The current implementation 
-	 * enumerates an overridden property when it either is an 'own' property 
-	 * (hasOwnProperty(name) is true) or when the property value is different 
+	 * that has been marked as 'don't enum', then IE8 by mistake also
+	 * doesn't enumerate the overriding property.
+	 *
+	 * A 100% complete substitute is hard to achieve. The current implementation
+	 * enumerates an overridden property when it either is an 'own' property
+	 * (hasOwnProperty(name) is true) or when the property value is different
 	 * from the value in the Object.prototype object.
-	 * 
+	 *
 	 * @param {object} oObject object to enumerate the properties of
 	 * @param {function} fnCallback function to call for each property name
 	 * @function
@@ -13441,16 +15781,16 @@ sap.ui.define(['jquery.sap.global'],
 				}
 			}
 		} :
-		// use a special implementation for IE8 
+		// use a special implementation for IE8
 		(function() {
 			var DONT_ENUM_KEYS = ["toString","valueOf","toLocaleString", "hasOwnProperty","isPrototypeOf","propertyIsEnumerable","constructor"],
 					DONT_ENUM_KEYS_LENGTH = DONT_ENUM_KEYS.length,
 					oObjectPrototype = Object.prototype,
 					fnHasOwnProperty = oObjectPrototype.hasOwnProperty;
-					
+
 			return function(oObject, fnCallback) {
 				var n,i;
-				
+
 				// standard for(in) loop
 				for (n in oObject) {
 					if ( fnCallback(n, oObject[n]) === false ) {
@@ -13470,13 +15810,13 @@ sap.ui.define(['jquery.sap.global'],
 				}
 				// Note: this substitute implementation still fails in several regards
 				// - it fails when oObject is identical to Object.prototype (iterates non-enumerable properties)
-				// - it fails when one of the don't enum properties by intention has been overridden in the 
+				// - it fails when one of the don't enum properties by intention has been overridden in the
 				//	 prototype chain with a value identical to the value in Object.prototype
 				// - the don't enum properties are handled out of order. This is okay with the ECMAScript
 				//	 spec but might be unexpected for some callers
 			};
 		}());
-		
+
 
 	/**
 	 * Calculate delta of old list and new list
@@ -13916,7 +16256,7 @@ sap.ui.define(['jquery.sap.global'],
 			at = start || 0;
 			ch = ' ';
 			result = value();
-			
+
 			if ( isNaN(start) ) {
 				white();
 				if (ch) {
@@ -13974,26 +16314,26 @@ sap.ui.define(['jquery.sap.global'],
 
 	/**
 	 * Parse simple JS objects.
-	 * 
+	 *
 	 * A parser for JS object literals. This is different from a JSON parser, as it does not have
 	 * the JSON specification as a format description, but a subset of the JavaScript language.
 	 * The main difference is, that keys in objects do not need to be quoted and strings can also
 	 * be defined using apostrophes instead of quotation marks.
-	 * 
+	 *
 	 * The parser does not support functions, but only boolean, number, string, object and array.
-	 * 
+	 *
 	 * @param {string} The string containing the JS objects
 	 * @throws an error, if the string does not contain a valid JS object
 	 * @returns {object} the JS object
-	 * 
+	 *
 	 * @since 1.11
 	 */
 	jQuery.sap.parseJS = jQuery.sap._createJSTokenizer().parseJS;
-	
+
 	/**
 	 * Merge the contents of two or more objects together into the first object.
 	 * Usage is the same as jQuery.extend, but Arguments that are null or undefined are NOT ignored.
-	 * 
+	 *
 	 * @since 1.26
 	 */
 	jQuery.sap.extend = function() {
@@ -14016,11 +16356,11 @@ sap.ui.define(['jquery.sap.global'],
 		if ( typeof target !== "object" && !jQuery.isFunction(target) ) {
 			target = {};
 		}
-		
+
 		for ( ; i < length; i++ ) {
-			
+
 			options = arguments[ i ];
-			
+
 			// Extend the base object
 			for ( name in options ) {
 				src = target[ name ];
@@ -14053,21 +16393,20 @@ sap.ui.define(['jquery.sap.global'],
 		// Return the modified object
 		return target;
 	};
-	
+
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.sjax.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 /*
  * Provides convenience functions for synchronous communication, based on the jQuery.ajax() function.
  */
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.sjax',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -14094,6 +16433,7 @@ sap.ui.define(['jquery.sap.global'],
 	 * <li><code>status</code> string a textual status ('success,', 'error', 'timeout',...)
 	 * <li><code>statusCode</code> string the HTTP status code of the request
 	 * <li><code>error</code> Error an error object (exception) in case an error occurred
+	 * <li><code>errorText</code> string an error message in case an error occurred
 	 * </ul>
 	 *
 	 * When <code>complexResult</code> is false, then in the case of success, only 'data' is returned, in case of an error the
@@ -14120,7 +16460,7 @@ sap.ui.define(['jquery.sap.global'],
 					oResult = { success : true, data : data, status : textStatus, statusCode : xhr && xhr.status };
 				},
 				error : function(xhr, textStatus, error) {
-					oResult = { success : false, data : undefined, status : textStatus, error : error, statusCode : xhr.status };
+					oResult = { success : false, data : undefined, status : textStatus, error : error, statusCode : xhr.status, errorResponse :  xhr.responseText};
 				}
 			});
 
@@ -14252,16 +16592,15 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.strings.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides useful string operations not available in pure JavaScript.
-sap.ui.define(['jquery.sap.global'],
+sap.ui.predefine('jquery.sap.strings',['jquery.sap.global'],
 	function(jQuery) {
 	"use strict";
 
@@ -14417,7 +16756,7 @@ sap.ui.define(['jquery.sap.global'],
 	var rCamelCase = /-(.)/ig;
 
 	/**
-	 * Transforms a hyphen separated string to an camel case string. 
+	 * Transforms a hyphen separated string to an camel case string.
 	 *
 	 * @param {string} sString Hyphen separated string
 	 * @return The transformed string
@@ -14432,12 +16771,12 @@ sap.ui.define(['jquery.sap.global'],
 		});
 	};
 
-	
+
 	var rHyphen = /([A-Z])/g;
-	
+
 	/**
 	 * Transforms a camel case string into a hyphen separated string.
-	 * 
+	 *
 	 * @param {string} sString camel case string
 	 * @return The transformed string
 	 * @type {string}
@@ -14451,8 +16790,8 @@ sap.ui.define(['jquery.sap.global'],
 		});
 	};
 
-	
-	var rEscapeRegExp = /[-[\]{}()*+?.,\\^$|#\s]/g;
+
+	var rEscapeRegExp = /[[\]{}()*+?.\\^$|]/g;
 
 	/**
 	 * This function escapes the reserved letters in Regular Expression
@@ -14470,43 +16809,43 @@ sap.ui.define(['jquery.sap.global'],
 	/**
 	 * Creates a string from a pattern by replacing placeholders with concrete values.
 	 *
-	 * The syntax of the pattern is inspired by (but not fully equivalent to) the 
+	 * The syntax of the pattern is inspired by (but not fully equivalent to) the
 	 * java.util.MessageFormat.
 	 *
-	 * Placeholders have the form <code>{ integer }</code>, where any occurrence of 
+	 * Placeholders have the form <code>{ integer }</code>, where any occurrence of
 	 * <code>{0}</code> is replaced by the value with index 0 in <code>aValues</code>,
 	 * <code>{1}</code> y the value with index 1 in <code>aValues</code> etc.
 	 *
-	 * To avoid interpretation of curly braces as placeholders, any non-placeholder fragment 
-	 * of the pattern can be enclosed in single quotes. The surrounding single quotes will be 
-	 * omitted from the result. Single quotes that are not meant to escape a fragment and 
-	 * that should appear in the result, need to be doubled. In the result, only a single 
+	 * To avoid interpretation of curly braces as placeholders, any non-placeholder fragment
+	 * of the pattern can be enclosed in single quotes. The surrounding single quotes will be
+	 * omitted from the result. Single quotes that are not meant to escape a fragment and
+	 * that should appear in the result, need to be doubled. In the result, only a single
 	 * single quote will occur.
 	 *
 	 * Example Pattern Strings:
 	 * <pre>
 	 *   jQuery.sap.formatMessage("Say {0}", ["Hello"]) -> "Say Hello"  // normal use case
 	 *   jQuery.sap.formatMessage("Say '{0}'", ["Hello"]) -> "Say {0}"  // escaped placeholder
-	 *   jQuery.sap.formatMessage("Say ''{0}''", ["Hello"]) -> "Say 'Hello'" // doubled single quote 
+	 *   jQuery.sap.formatMessage("Say ''{0}''", ["Hello"]) -> "Say 'Hello'" // doubled single quote
 	 *   jQuery.sap.formatMessage("Say '{0}'''", ["Hello"]) -> "Say {0}'" // doubled single quote in quoted fragment
 	 * </pre>
-	 * 
-	 * In contrast to java.util.MessageFormat, format types or format styles are not supported. 
+	 *
+	 * In contrast to java.util.MessageFormat, format types or format styles are not supported.
 	 * Everything after the argument index and up to the first closing curly brace is ignored.
 	 * Nested placeholders (as supported by java.lang.MessageFormat for the format type choice)
-	 * are not ignored but reported as a parse error. 
+	 * are not ignored but reported as a parse error.
 	 *
-	 * This method throws an Error when the pattern syntax is not fulfilled (e.g. unbalanced curly 
+	 * This method throws an Error when the pattern syntax is not fulfilled (e.g. unbalanced curly
 	 * braces, nested placeholders or a non-numerical argument index).
 	 *
-	 * This method can also be used as a formatter within a binding. The first part of a composite binding 
+	 * This method can also be used as a formatter within a binding. The first part of a composite binding
 	 * will be used as pattern, the following parts as aValues. If there is only one value and this
 	 * value is an array it will be handled like the default described above.
-	 *  
-	 * @param {string} sPattern A pattern string in the described syntax 
+	 *
+	 * @param {string} sPattern A pattern string in the described syntax
 	 * @param {any[]} [aValues=[]] The values to be used instead of the placeholders.
-	 * 										 
-	 * @return {string} The formatted result string 
+	 *
+	 * @return {string} The formatted result string
 	 * @since 1.12.5
 	 * @SecPassthrough {*|return}
 	 * @public
@@ -14519,33 +16858,33 @@ sap.ui.define(['jquery.sap.global'],
 		aValues = aValues || [];
 		return sPattern.replace(rMessageFormat, function($0,$1,$2,$3,offset) {
 			if ( $1 ) {
-				// a doubled single quote in a normal string fragment 
+				// a doubled single quote in a normal string fragment
 				//   --> emit a single quote
 				return "'";
 			} else if ( $2 ) {
-				// a quoted sequence of chars, potentially containing doubled single quotes again 
-				//   --> emit with doubled single quotes replaced by a single quote 
+				// a quoted sequence of chars, potentially containing doubled single quotes again
+				//   --> emit with doubled single quotes replaced by a single quote
 				return $2.replace(/''/g, "'");
 			} else if ( $3 ) {
 				// a welformed curly brace
-				//   --> emit the argument but ignore other parameters 
+				//   --> emit the argument but ignore other parameters
 				return String(aValues[parseInt($3, 10)]);
 			}
-			// e.g. malformed curly braces 
-			//   --> throw Error 
+			// e.g. malformed curly braces
+			//   --> throw Error
 			throw new Error("formatMessage: pattern syntax error at pos. " + offset);
 		});
 	};
-	
+
 	/**
 	 * Pattern to analyze MessageFormat strings.
-	 * 
+	 *
 	 * Group 1: captures doubled single quotes within the string
-	 * Group 2: captures quoted fragments within the string. 
-	 *            Note that java.util.MessageFormat silently forgives a missing single quote at 
-	 *            the end of a pattern. This special case is handled by the RegEx as well.  
+	 * Group 2: captures quoted fragments within the string.
+	 *            Note that java.util.MessageFormat silently forgives a missing single quote at
+	 *            the end of a pattern. This special case is handled by the RegEx as well.
 	 * Group 3: captures placeholders
-	 *            Checks only for numerical argument index, any remainder is ignored up to the next 
+	 *            Checks only for numerical argument index, any remainder is ignored up to the next
 	 *            closing curly brace. Nested placeholdes are not accepted!
 	 * Group 4: captures any remaining curly braces and indicates syntax errors
 	 *
@@ -14556,16 +16895,15 @@ sap.ui.define(['jquery.sap.global'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-},
-	"jquery.sap.xml.js":function(){/*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+});
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides xml parsing and error checking functionality.
-sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
+sap.ui.predefine('jquery.sap.xml',['jquery.sap.global', 'sap/ui/Device'],
 	function(jQuery, Device) {
 	"use strict";
 
@@ -14632,7 +16970,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 		}
 		return sXMLString;
 	};
-	
+
 	jQuery.sap.isEqualNode = function(oNode1, oNode2) {
 		if (oNode1 === oNode2) {
 			return true;
@@ -14710,8 +17048,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 			return oDocument.parseError;
 		}
 
-		// Firefox
-		if (!!Device.browser.firefox && oDocument && oDocument.documentElement
+		// Firefox or Edge
+		if ((!!Device.browser.firefox  || !!Device.browser.edge) && oDocument && oDocument.documentElement
 				&& oDocument.documentElement.tagName == "parsererror") {
 
 			var sErrorText = oDocument.documentElement.firstChild.nodeValue, rParserError = /XML Parsing Error: (.*)\nLocation: (.*)\nLine Number (\d+), Column (\d+):(.*)/;
@@ -14756,9 +17094,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/Device'],
 
 	return jQuery;
 
-}, /* bExport= */ false);
-}
-}});
+});
 jQuery.sap.require("jquery.sap.dom");
 jQuery.sap.require("jquery.sap.encoder");
 jQuery.sap.require("jquery.sap.events");

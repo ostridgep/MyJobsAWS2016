@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,15 +14,15 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	/**
 	 * Constructor for a new TileContainer.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given
-	 * @param {object} [mSettings] initial settings for the new control
+	 * @param {string} [sId] ID for the new control, generated automatically if no ID is given
+	 * @param {object} [mSettings] Initial settings for the new control
 	 *
 	 * @class
-	 * A container that arranges same-size tiles nicely on carousel pages
+	 * A container that arranges same-size tiles nicely on carousel pages.
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @constructor
 	 * @public
@@ -36,22 +36,22 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		properties : {
 
 			/**
-			 * The width of the container in pixel
+			 * Defines the width of the TileContainer in px.
 			 */
 			width : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : '100%'},
 
 			/**
-			 * The height of the container in pixel
+			 * Defines the height of the TileContainer in px.
 			 */
 			height : {type : "sap.ui.core.CSSSize", group : "Dimension", defaultValue : '100%'},
 
 			/**
-			 * Whether the tile container is editable and you can move or delete or add tiles.
+			 * Determines whether the TileContainer is editable so you can move, delete or add tiles.
 			 */
 			editable : {type : "boolean", group : "Misc", defaultValue : null},
 
 			/**
-			 * Determines whether the user is allowed to add tiles in edit mode (editable = true)
+			 * Determines whether the user is allowed to add Tiles in Edit mode (editable = true).
 			 */
 			allowAdd : {type : "boolean", group : "Misc", defaultValue : null}
 		},
@@ -59,45 +59,45 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		aggregations : {
 
 			/**
-			 * The tiles to be displayed by the tile container
+			 * The Tiles to be displayed by the TileContainer.
 			 */
-			tiles : {type : "sap.ui.core.Control", multiple : true, singularName : "tile"}
+			tiles : {type : "sap.m.Tile", multiple : true, singularName : "tile"}
 		},
 		events : {
 
 			/**
-			 * Fired if a tile was moved
+			 * Fires if a Tile is moved.
 			 */
 			tileMove : {
 				parameters : {
 
 					/**
-					 * The tile that has been moved
+					 * The Tile that has been moved.
 					 */
 					tile : {type : "sap.m.Tile"},
 
 					/**
-					 * The new index of the tile in the tiles aggregation
+					 * The new index of the Tile in the tiles aggregation.
 					 */
 					newIndex : {type : "int"}
 				}
 			},
 
 			/**
-			 * Fired if a tile is deleted during edit mode.
+			 * Fires if a Tile is deleted in Edit mode.
 			 */
 			tileDelete : {
 				parameters : {
 
 					/**
-					 * The tile
+					 * The deleted Tile.
 					 */
 					tile : {type : "sap.m.Tile"}
 				}
 			},
 
 			/**
-			 * Fired if a Tile is added
+			 * Fires when a Tile is added.
 			 */
 			tileAdd : {}
 		}
@@ -109,7 +109,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	TileContainer.prototype._bRtl  = sap.ui.getCore().getConfiguration().getRTL();
 
 	/**
-	 * Initializes the control
+	 * Initializes the control.
 	 *
 	 * @private
 	 */
@@ -158,7 +158,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 						// if we are on the first tile of the current page already, go to the very first tile
 						? iFirstOnPageOrVeryFirstIndex
 						: iRowFirstTileIndex;
-					var oFirstTile = this.getTiles()[iTargetTileIndex];
+
+					var oFirstTile = this._getVisibleTiles()[iTargetTileIndex];
 
 					if (!!oFirstTile) {
 						this._findTile(oFirstTile.$()).focus();
@@ -171,7 +172,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 			fnOnEnd = jQuery.proxy(function(oEvent) {
 				if (this._iCurrentFocusIndex >= 0) {
-					var oTiles = this.getTiles();
+					var oTiles = this._getVisibleTiles();
 					var iRowFirstTileIndex = this._iCurrentFocusIndex - this._iCurrentFocusIndex % this._iMaxTilesX;
 					var iRowLastTileIndex = iRowFirstTileIndex + this._iMaxTilesX < oTiles.length ? iRowFirstTileIndex + this._iMaxTilesX - 1 : oTiles.length - 1;
 					var iLastTileIndex = this._iCurrentTileStartIndex + this._iMaxTiles < oTiles.length ? this._iCurrentTileStartIndex + this._iMaxTiles - 1 : oTiles.length - 1;
@@ -190,11 +191,12 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}, this),
 
 			fnOnPageUp = jQuery.proxy(function(oEvent) {
+				var oTiles = this._getVisibleTiles();
 
-				if (this.getTiles().length > 0) {
+				if (oTiles.length > 0) {
 					var iNextIndex = this._iCurrentFocusIndex - this._iMaxTiles >= 0 ? this._iCurrentFocusIndex - this._iMaxTiles : 0;
 
-					var oNextTile = this.getTiles()[iNextIndex];
+					var oNextTile = oTiles[iNextIndex];
 
 					if (!!oNextTile) {
 						this._findTile(oNextTile.$()).focus();
@@ -206,12 +208,13 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}, this),
 
 			fnOnPageDown = jQuery.proxy(function(oEvent) {
-				var iTilesCount = this.getTiles().length;
+				var oTiles = this._getVisibleTiles();
+				var iTilesCount = oTiles.length;
 
 				if (iTilesCount > 0) {
 					var iNextIndex = this._iCurrentFocusIndex + this._iMaxTiles < iTilesCount ? this._iCurrentFocusIndex + this._iMaxTiles : iTilesCount - 1;
 
-					var oNextTile = this.getTiles()[iNextIndex];
+					var oNextTile = oTiles[iNextIndex];
 
 					if (!!oNextTile) {
 						this._findTile(oNextTile.$()).focus();
@@ -224,7 +227,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 			fnOnRight = jQuery.proxy(function(oEvent) {
 				if (this._iCurrentFocusIndex >= 0) {
-					var oTiles = this.getTiles();
+					var oTiles = this._getVisibleTiles();
 					var iNextIndex = this._iCurrentFocusIndex + 1 < oTiles.length ? this._iCurrentFocusIndex + 1 : this._iCurrentFocusIndex;
 
 					if (!oEvent.ctrlKey) {
@@ -255,7 +258,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 			fnOnLeft = jQuery.proxy(function(oEvent) {
 				if (this._iCurrentFocusIndex >= 0) {
-					var oTiles = this.getTiles();
+					var oTiles = this._getVisibleTiles();
 					var iNextIndex = this._iCurrentFocusIndex - 1 >= 0 ? this._iCurrentFocusIndex - 1 : this._iCurrentFocusIndex;
 
 					if (!oEvent.ctrlKey) {
@@ -284,20 +287,22 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}, this),
 
 			fnOnDown = jQuery.proxy(function(oEvent) {
+				var oTiles = this._getVisibleTiles();
+
 				if (this._iCurrentFocusIndex >= 0) {
 					var iModCurr = this._iCurrentFocusIndex % this._iMaxTiles,
 						iNextIndex = this._iCurrentFocusIndex + this._iMaxTilesX,
 						iModNext = iNextIndex % this._iMaxTiles;
 
 					if (!oEvent.ctrlKey) {
-						var oNextTile = this.getTiles()[iNextIndex];
+						var oNextTile = oTiles[iNextIndex];
 
 						if ((iModNext > iModCurr) && !!oNextTile) {
 							// '(iModNext > iModCurr)' means: still on same page
 							this._findTile(oNextTile.$()).focus();
 						}
 					} else if (this.getEditable()) {
-						var oTile = this.getTiles()[this._iCurrentFocusIndex];
+						var oTile = oTiles[this._iCurrentFocusIndex];
 						this.moveTile(oTile, iNextIndex);
 						oTile.$().focus();
 					}
@@ -308,19 +313,21 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}, this),
 
 			fnOnUp = jQuery.proxy(function(oEvent) {
+				var oTiles = this._getVisibleTiles();
+
 				if (this._iCurrentFocusIndex >= 0) {
 					var iModCurr = this._iCurrentFocusIndex % this._iMaxTiles,
 						iNextIndex = this._iCurrentFocusIndex - this._iMaxTilesX,
 						iModNext = iNextIndex % this._iMaxTiles;
 
 					if (!oEvent.ctrlKey) {
-						var oNextTile = this.getTiles()[iNextIndex];
+						var oNextTile = oTiles[iNextIndex];
 						if ((iModNext < iModCurr) && !!oNextTile) {
 							// '(iModNext < iModCurr)' means: still on same page
 							this._findTile(oNextTile.$()).focus();
 						}
 					} else if (this.getEditable()) {
-						var oTile = this.getTiles()[this._iCurrentFocusIndex];
+						var oTile = oTiles[this._iCurrentFocusIndex];
 						this.moveTile(oTile, iNextIndex);
 						oTile.$().focus();
 					}
@@ -331,19 +338,22 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}, this),
 
 			fnOnDelete = jQuery.proxy(function(oEvent) {
+				var oTiles = this._getVisibleTiles();
+
 				if (this._iCurrentFocusIndex >= 0 && this.getEditable()) {
-					var oTile = this.getTiles()[this._iCurrentFocusIndex];
+					var oTile = oTiles[this._iCurrentFocusIndex];
+
 					if (oTile.getRemovable()) {
 						this.deleteTile(oTile);
 
-						if (this._iCurrentFocusIndex === this.getTiles().length) {
-							if (this.getTiles().length !== 0) {
-								this.getTiles()[this._iCurrentFocusIndex - 1].$().focus();
+						if (this._iCurrentFocusIndex === oTiles.length) {
+							if (oTiles.length !== 0) {
+								oTiles[this._iCurrentFocusIndex - 1].$().focus();
 							} else {
 								this._findNextTabbable().focus();
 							}
 						} else {
-							this.getTiles()[this._iCurrentFocusIndex].$().focus();
+							oTiles[this._iCurrentFocusIndex].$().focus();
 						}
 						this._handleAriaActiveDescendant();
 					}
@@ -384,8 +394,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Finds the next tabbable element after the tile container
-	 * @returns {Element} the next tabbable element after the tile container
+	 * Finds the next tabbable element after the TileContainer.
+	 * @returns {Element} The next tabbable element after the tile container
 	 * @private
 	 */
 	TileContainer.prototype._findNextTabbable = function() {
@@ -433,7 +443,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 		if (sap.ui.Device.system.desktop || sap.ui.Device.system.combi) {
 			var aTiles = this.getAggregation("tiles");
-			if (aTiles.length > 0 && this._mFocusables) {
+			aTiles = this._getVisibleTiles();
+
+			if (aTiles.length > 0 && this._mFocusables && this._mFocusables[aTiles[0].getId()]) {
 				this._mFocusables[aTiles[0].getId()].eq(0).attr('tabindex', '0');
 			}
 		}
@@ -444,15 +456,15 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Sets the editable property to the tile container that allows to move icons.
-	 * This is currently also set with a long tap
+	 * Sets the editable property to the TileContainer, allowing to move icons.
+	 * This is currently also set with a long tap.
 	 *
-	 * @param {boolean} bValue Whether the container is in edit mode or not.
-	 * @returns {sap.m.TileContainer} This tile container.
+	 * @param {boolean} bValue Whether the container is in edit mode or not
+	 * @returns {sap.m.TileContainer} this pointer for chaining
 	 * @public
 	 */
 	TileContainer.prototype.setEditable = function(bValue) {
-		var aTiles = this.getTiles();
+		var aTiles = this._getVisibleTiles();
 
 		// set the property
 		this.setProperty("editable", bValue, true);
@@ -471,7 +483,17 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Applies the containers dimensions.
+	 * Called whenever the model is updated
+	 *
+	 * @private
+	 */
+	TileContainer.prototype.updateTiles = function (sReason) {
+		this.destroyTiles();
+		this.updateAggregation('tiles');
+	};
+
+	/**
+	 * Applies the container's dimensions.
 	 *
 	 * @private
 	 */
@@ -525,8 +547,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handles the resize event for the tile container.
-	 * This is called whenever the orientation of browser size changes.
+	 * Handles the resize event for the TileContainer.
+	 * Called whenever the orientation of browser size changes.
 	 *
 	 * @private
 	 */
@@ -566,7 +588,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Updates all tiles
+	 * Updates all Tiles.
 	 *
 	 * @private
 	 */
@@ -589,9 +611,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Returns the index of the first tile that is visible in the current page
+	 * Returns the index of the first Tile visible in the current page.
 	 *
-	 * @returns {int} The index of the first tile that is visible in the current page.
+	 * @returns {int} The index of the first Tile that is visible in the current page
 	 * @public
 	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
@@ -600,17 +622,17 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Moves a given tile to the given index.
+	 * Moves a given Tile to the given index.
 	 *
 	 * @param {sap.m.Tile} vTile The tile to move
-	 * @param {int} iNewIndex The new Tile position in the tiles aggregation.
-	 * @returns {sap.m.TileContainer} This tile container.
+	 * @param {int} iNewIndex The new Tile position in the tiles aggregation
+	 * @returns {sap.m.TileContainer} this pointer for chaining
 	 * @public
 	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
 	TileContainer.prototype.moveTile = function(vTile, iNewIndex) {
 		if (!isNaN(vTile)) {
-			vTile = this.getTiles()[vTile];
+			vTile = this._getVisibleTiles()[vTile];
 		}
 
 		if (!vTile) {
@@ -625,10 +647,10 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Adds a tile to the end of the tiles collection
+	 * Adds a Tile to the end of the tiles collection.
 	 *
-	 * @param {sap.m.Tile} oTile The tile to add.
-	 * @returns {sap.m.TileContainer} This tile container.
+	 * @param {sap.m.Tile} oTile The tile to add
+	 * @returns {sap.m.TileContainer} this pointer for chaining
 	 * @override
 	 * @public
 	 */
@@ -637,11 +659,11 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Inserts a tile to the given index
+	 * Inserts a Tile to the given index.
 	 *
-	 * @param {sap.m.Tile} oTile The tile to insert
-	 * @param {int} iIndex The new Tile position in the tiles aggregation.
-	 * @returns {sap.m.TileContainer} This tile container.
+	 * @param {sap.m.Tile} oTile The Tile to insert
+	 * @param {int} iIndex The new Tile position in the tiles aggregation
+	 * @returns {sap.m.TileContainer} this pointer for chaining
 	 * @override
 	 * @public
 	 */
@@ -667,7 +689,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 
 
 				var iPreviousTileIndex = that._iCurrentFocusIndex >= 0 ? that._iCurrentFocusIndex : 0;
-				var oPrevTile = that.getTiles()[iPreviousTileIndex];
+				var oPrevTile = that._getVisibleTiles()[iPreviousTileIndex];
 
 				if (oPrevTile) {
 					that._mFocusables[oPrevTile.getId()].attr("tabindex", "-1");
@@ -699,7 +721,6 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 				oRm.destroy();
 			}
 
-			//this._applyPageStartIndex(iIndex);
 			this._update(false);
 
 			// When the control is initialized/updated with data binding and optimization for rendering
@@ -711,18 +732,20 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			this.insertAggregation("tiles",oTile,iIndex);
 		}
 
-		handleAriaPositionInSet.call(this, iIndex, this.getTiles().length);
+		//handleAriaPositionInSet.call(this, iIndex, this.getTiles().length);
+		handleAriaPositionInSet.call(this, iIndex, this._getVisibleTiles().length);
 		handleAriaSize.call(this);
 
 		return this;
 	};
 
 	/**
-	 * If there is no tile focusable e.g.tabindex = 0 update the first tile.
+	 * Updates the tab index of the Tiles.
+	 * If there is no focusable Tile (for example, tabindex = 0), updates the first tile.
 	 * @private
 	 */
 	TileContainer.prototype._updateTilesTabIndex = function () {
-		var aTiles = this.getAggregation("tiles");
+		var aTiles = this._getVisibleTiles();
 		if (aTiles.length && aTiles.length > 0) {
 			for (var i = 0; i < aTiles.length; i++) {
 				if (aTiles[i].$().attr("tabindex") === "0") {
@@ -734,7 +757,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Checks if a DOM element is focusable - to be used within jQuery.filter function
+	 * Checks if a DOM element is focusable.
+	 * To be used within jQuery.filter function.
 	 * @param {int} index Index of the element within an array
 	 * @param {Element} element DOM element to check
 	 * @returns {Boolean} If a DOM element is focusable
@@ -763,10 +787,10 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Deletes a tile.
+	 * Deletes a Tile.
 	 *
 	 * @param {sap.m.Tile} oTile The tile to move
-	 * @returns {sap.m.TileContainer} This tile container.
+	 * @returns {sap.m.TileContainer} this pointer for chaining
 	 * @override
 	 * @public
 	 */
@@ -774,7 +798,6 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		var iTileUnderDeletionIndex = this.indexOfAggregation("tiles",oTile);
 
 		if (this.getDomRef()) {
-			var iPreviousTileIndex = iTileUnderDeletionIndex - 1;
 			this.removeAggregation("tiles",oTile,true);
 
 			if (!this._oDragSession) {
@@ -786,13 +809,12 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 				}
 			}
 
-			this._applyPageStartIndex(iPreviousTileIndex < 0 ? 0 : iPreviousTileIndex);
 			this._update(false);
 		} else {
 			this.removeAggregation("tiles",oTile,false);
 		}
 
-		handleAriaPositionInSet.call(this, iTileUnderDeletionIndex, this.getTiles().length);
+		handleAriaPositionInSet.call(this, iTileUnderDeletionIndex, this._getVisibleTiles().length);
 		handleAriaSize.call(this);
 		return this;
 	};
@@ -830,7 +852,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Scrolls one page to the left
+	 * Scrolls one page to the left.
 	 *
 	 * @public
 	 */
@@ -856,11 +878,11 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Scrolls to the page where the given tile or tile index is included.
+	 * Scrolls to the page where the given Tile or tile index is included.
 	 * Optionally this can be done animated or not. With IE9 the scroll is never animated.
 	 *
-	 * @param {sap.m.Tile|int} vTile The tile or tile index to be scrolled into view.
-	 * @param {boolean} bAnimated Whether the scroll should be animated.
+	 * @param {sap.m.Tile|int} vTile The Tile or tile index to be scrolled into view
+	 * @param {boolean} bAnimated Whether the scroll should be animated
 	 * @public
 	 * @ui5-metamodel This method also will be described in the UI5 (legacy) designtime metamodel
 	 */
@@ -873,7 +895,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			iIndex = this.indexOfAggregation("tiles",vTile);
 		}
 
-		if (!this.getTiles()[iIndex]) {
+		if (!this.getTiles()[iIndex] || !this.getTiles()[iIndex].getVisible()) {
 			return;
 		}
 
@@ -902,15 +924,15 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		if (oContentDimension.height === 0) {	// nothing to do because the height of the content is not (yet) available
 			return;
 		}
-		
-		if (this.getTiles().length === 0) {	// no tiles
+
+		if (this._getVisibleTiles().length === 0) {	// no tiles
 			return;
 		}
 
 		this._applyPageStartIndex(this._iCurrentTileStartIndex);
 		this._applyDimension();
 
-		var aTiles = this.getTiles(),
+		var aTiles = this._getVisibleTiles(),
 			oContentDimension = this._getContentDimension();
 
 		this._iPages = Math.ceil(aTiles.length / this._iMaxTiles);
@@ -937,7 +959,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Convenience method which returns $node if it has css class 'sapMTile'
+	 * Finds a Tile.
+	 * Convenience method, which returns $node if it has Css class sapMTile
 	 * or the first child with that class.
 	 *
 	 * @private
@@ -952,8 +975,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Updates the pager part of the tile container.
-	 * This is done dynamically
+	 * Updates the pager part of the TileContainer.
+	 * This is done dynamically.
 	 *
 	 * @private
 	 */
@@ -1037,9 +1060,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Returns the dimension (width and height) of the tile container content.
+	 * Returns the dimension (width and height) of the TileContainer content.
 	 *
-	 * @returns {object} Width and height of the pages content.
+	 * @returns {object} Width and height of the pages content
 	 * @private
 	 */
 	TileContainer.prototype._getContainerDimension = function() {
@@ -1058,18 +1081,18 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Calculates the tile page sizes.
+	 * Calculates the Tile page sizes.
 	 *
 	 * @private
 	 */
 	TileContainer.prototype._calculatePositions = function() {
 
-		if (this.getTiles().length === 0) {	// no tiles
+		if (this._getVisibleTiles().length === 0) {	// no tiles
 			return;
 		}
 
 		var oContentDimension = this._getContainerDimension(),
-			iTiles = this.getTiles().length,
+			iTiles = this._getVisibleTiles().length,
 			iPagerHeight = this.$("pager")[0].offsetHeight;
 
 		if (oContentDimension.height === 0) {	// nothing to do because the height of the content is not (yet) available
@@ -1101,23 +1124,24 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Returns an array for a given pixel position in the tile container.
-	 * Normally there is only one tile for a position.
+	 * Gets Tiles from a given position.
+	 * Returns an array for a given pixel position in the TileContainer.
+	 * Normally, there is only one Tile for a position.
 	 *
-	 * @param {int} iX Position in pixels.
-	 * @param {int} iY Position in pixels.
-	 * @returns {array} Array of tiles for the given position
+	 * @param {int} iX Position in px
+	 * @param {int} iY Position in px
+	 * @returns {array} Array of Tiles for the given position
 	 * @private
 	 */
 	TileContainer.prototype._getTilesFromPosition = function(iX, iY) {
 
-		if (!this.getTiles().length) {
+		if (!this._getVisibleTiles().length) {
 			return [];
 		}
 
 		iX = iX + this._iScrollLeft;
 
-		var aTiles = this.getTiles(),
+		var aTiles = this._getVisibleTiles(),
 			aResult = [];
 
 		for (var i = 0;i < aTiles.length;i++) {
@@ -1138,21 +1162,21 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Applies the start index of the pages first tile according to the given index.
+	 * Applies the start index of the pages' first Tile according to the given index.
 	 *
-	 * @param {int} iIndex The index of the tile that should be visible.
+	 * @param {int} iIndex The index of the tile that should be visible
 	 * @private
 	 */
 	TileContainer.prototype._applyPageStartIndex = function(iIndex) {
-		
+
 		var oContentDimension = this._getContainerDimension();
 
 		if (oContentDimension.height === 0) {	// nothing to do because the height of the content is not (yet) available
 			return;
 		}
-		
+
 		this._calculatePositions();
-		var iLength = this.getTiles().length;
+		var iLength = this._getVisibleTiles().length;
 
 		if (iIndex < 0) {
 			iIndex = 0;
@@ -1170,7 +1194,8 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	/**
 	 * Scrolls to the given position.
 	 *
-	 * @param {int} The new scroll position.
+	 * @param {int} iScrollLeft The new scroll position
+	 * @param {boolean} bAnimated Whether the scroll is animated
 	 * @private
 	 */
 	TileContainer.prototype._scrollTo = function(iScrollLeft, bAnimated) {
@@ -1191,9 +1216,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	 * Applies the translate x and y to the given jQuery object.
 	 *
 	 * @param {object} o$ The jQuery object
-	 * @param {int} iX The pixel x value for the translate
-	 * @param {int} iY The pixel y value for the translate
-	 * @param {boolean} bAnimated Whether the translate should be animated or not.
+	 * @param {int} iX The px x value for the translate
+	 * @param {int} iY The px y value for the translate
+	 * @param {boolean} bAnimated Whether the translate should be animated or not
 	 * @private
 	 */
 	TileContainer.prototype._applyTranslate = function(o$, iX, iY, bAnimated) {
@@ -1213,9 +1238,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Initializes the touch session for the tile container.
+	 * Initializes the touch session for the TileContainer.
 	 *
-	 * @param {jQuery.Event} oEvent The event object that started the touch.
+	 * @param {jQuery.Event} oEvent The event object that started the touch
 	 * @private
 	 */
 	TileContainer.prototype._initTouchSession = function(oEvent) {
@@ -1244,9 +1269,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Initializes the drag session for the tile container.
+	 * Initializes the drag session for the TileContainer.
 	 *
-	 * @param {jQuery.Event} oEvent The event object that started the drag.
+	 * @param {jQuery.Event} oEvent The event object that started the drag
 	 * @private
 	 */
 	TileContainer.prototype._initDragSession = function(oEvent) {
@@ -1283,9 +1308,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handle click events for scollers in desktop case.
+	 * Handles click events for scrollers on desktop.
 	 *
-	 * @param {jQuery.Event} oEvent The event object that started the drag.
+	 * @param {jQuery.Event} oEvent The event object that started the drag
 	 * @private
 	 */
 	TileContainer.prototype.onclick = function(oEvent) {
@@ -1305,9 +1330,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handle the touchstart event on the TileContainer.
+	 * Handles the touchstart event on the TileContainer.
 	 *
-	 * @param {jQuery.Event} oEvent The event object.
+	 * @param {jQuery.Event} oEvent The event object
 	 * @private
 	 */
 	TileContainer.prototype.ontouchstart = function(oEvent) {
@@ -1343,9 +1368,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handle the touch move event on the TileContainer.
+	 * Handles the touchmove event on the TileContainer.
 	 *
-	 * @param {jQuery.Event} oEvent The event object.
+	 * @param {jQuery.Event} oEvent The event object
 	 * @private
 	 */
 	TileContainer.prototype._onmove = function(oEvent) {
@@ -1401,9 +1426,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handle the touchend and mouseup events on the TileContainer.
+	 * Handles the touchend and mouseup events on the TileContainer.
 	 *
-	 * @param {jQuery.Event} The event object.
+	 * @param {jQuery.Event} The event object
 	 * @private
 	 */
 	TileContainer.prototype._onend = function(oEvent) {
@@ -1475,9 +1500,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handles the drag start of an item in edit mode.
+	 * Handles the drag start of an item in Edit mode.
 	 *
-	 * @param {jQuery.Event} oEvent The event object.
+	 * @param {jQuery.Event} oEvent The event object
 	 * @private
 	 */
 	TileContainer.prototype._onDragStart = function(oEvent) {
@@ -1491,7 +1516,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	/**
 	 * Handles the dragging of an item.
 	 *
-	 * @param {jQuery.Event} oEvent The event object.
+	 * @param {jQuery.Event} oEvent The event object
 	 * @private
 	 */
 	TileContainer.prototype._onDrag = function(oEvent) {
@@ -1623,7 +1648,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		} else if (this._iCurrentPage == this._iPages - 1) {
 
 			// check whether the dragged tile is at the end of the tile container
-			var aTiles = this.getTiles(),
+			var aTiles = this._getVisibleTiles(),
 				oLastTile = aTiles[aTiles.length - 1];
 
 			if (oLastTile && iCenter > oLastTile._posX - this._iScrollLeft && iMiddle > oLastTile._posY) {
@@ -1634,9 +1659,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handles the drop of a tile.
+	 * Handles the drop of a Tile.
 	 *
-	 * @param {jQuery.Event} oEvent The event object.
+	 * @param {jQuery.Event} oEvent The event object
 	 * @private
 	 */
 	TileContainer.prototype._onDrop = function(oEvent) {
@@ -1680,7 +1705,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handles the WAI ARIA property aria-activedescendant
+	 * Handles the WAI ARIA property aria-activedescendant.
 	 *
 	 * @private
 	 */
@@ -1698,10 +1723,9 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Calculates a common tile dimension (width and height),
-	 * that should be applied for all tiles.
-	 * Function {@link getLastCalculatedDimension} does not do the calculation,
-	 * the caller must explicitly call the {@link calc} function before it, or when he/she wants up-to-date dimension
+	 * Calculates a common Tile dimension (width and height) applied for all the Tiles.
+	 * Function {@link getLastCalculatedDimension} does not do the calculation.
+	 * The caller must explicitly call the {@link calc} function before it, or when he/she wants up-to-date dimension.
 	 * @private
 	 */
 	var TileDimensionCalculator = function(oTileContainer) {
@@ -1709,31 +1733,36 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		this._oTileContainer = oTileContainer;
 	};
 	/**
-	 * Calculates the dimension (width and height) of a tile.
-	 * @returns {object} Width and height of a tile.
+	 * Calculates the dimension (width and height) of a Tile.
+	 * @returns {object} Width and height of a tile
 	 * @protected
 	 */
 	TileDimensionCalculator.prototype.calc = function() {
-		var oTile;
+		var aVisibleTiles,
+			oTile;
 
 		if (!this._oTileContainer.getDomRef()) {
 			return;
 		}
 
-		if (this._oTileContainer.getTiles().length) {
+		if (this._oTileContainer._getVisibleTiles().length) {
 			//All tiles have fixed with, defined in the corresponding tile css/less file. So use the first.
-			oTile = this._oTileContainer.getTiles()[0];
-			this._oDimension = {
-				width  : Math.round(oTile.$().outerWidth(true)),
-				height : Math.round(oTile.$().outerHeight(true))
-			};
+			aVisibleTiles = this._oTileContainer._getVisibleTiles();
+
+			if (aVisibleTiles.length) {
+				oTile = aVisibleTiles[0];
+				this._oDimension = {
+					width  : Math.round(oTile.$().outerWidth(true)),
+					height : Math.round(oTile.$().outerHeight(true))
+				};
+			}
 		}
 		return this._oDimension;
 	};
 	/**
-	 * Returns the current dimension (width and height) of a tile.
+	 * Returns the current dimension (width and height) of a Tile.
 	 *
-	 * @returns {object} Width and height of a tile.
+	 * @returns {object} Width and height of a Tile.
 	 * @protected
 	 */
 	TileDimensionCalculator.prototype.getLastCalculatedDimension = function() {
@@ -1741,14 +1770,14 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 	};
 
 	/**
-	 * Handles the WAI ARIA property "aria-setsize" after a change in the tile container
+	 * Handles the WAI ARIA property aria-setsize after a change in the TileContainer.
 	 *
 	 * @private
 	 */
 	function handleAriaSize () {
-		var iTilesCount = this.getTiles().length,
+		var iTilesCount = this._getVisibleTiles().length,
 			oDomRef = null;
-		this.getTiles().forEach(function(oTile) {
+		this._getVisibleTiles().forEach(function(oTile) {
 			oDomRef = oTile.getDomRef();
 			if (oDomRef) {
 				oDomRef.setAttribute("aria-setsize", iTilesCount);
@@ -1756,13 +1785,13 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 		});
 	}
 	/**
-	 * Handles the WAI ARIA property "aria-posinset" after a change in the tile container
-	 * @param {int} iStartIndex the index of the tile to start with
-	 * @param {int} iEndIndex the index of the tile to complete with
+	 * Handles the WAI ARIA property aria-posinset after a change in the TileContainer.
+	 * @param {int} iStartIndex The index of the Tile to start with
+	 * @param {int} iEndIndex The index of the Tile to complete with
 	 * @private
 	 */
 	function handleAriaPositionInSet(iStartIndex, iEndIndex) {
-		var aTiles = this.getTiles(),
+		var aTiles = this._getVisibleTiles(),
 			i, oTile = null;
 		for (var i = iStartIndex; i < iEndIndex; i++) {
 			oTile = aTiles[i];
@@ -1771,6 +1800,12 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control', 'sap/ui/
 			}
 		}
 	}
+
+	TileContainer.prototype._getVisibleTiles = function() {
+		return this.getTiles().filter(function(oTile) {
+					return oTile.getVisible();
+				});
+	};
 
 	return TileContainer;
 

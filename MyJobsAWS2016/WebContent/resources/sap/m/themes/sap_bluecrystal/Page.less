@@ -3,7 +3,7 @@
 /* ==================================================== */
 
 .sapMPageBgSolid {
-	background-color: @sapUiPageBG;
+	background-color: lighten(@sapUiBaseBG, 5);
 }
 
 /* page with standard padding */
@@ -14,7 +14,7 @@
 
 /* page with header and subHeader */
 .sapMPage > .sapMPageHeader + .sapMPageSubHeader + section {
-	top: 6em;
+	top: 6rem;
 }
 
 /* page with header */
@@ -22,29 +22,29 @@
 /* page with subheader */
 .sapMPage > .sapMPageSubHeader + section,
 /* page with header and invisible subheader */
-.sapMPage > .sapMPageHeader + .sapUiHiddenPlaceholder + section, {
-	top: 3em;
+.sapMPage > .sapMPageHeader + .sapUiHiddenPlaceholder + section {
+	top: 3rem;
 }
 
 /* page with footer */
 
 .sapMPageWithFooter > section {
-	bottom: 3em;
+	bottom: 3rem;
 }
 
 /* page app icon */
 
 .sapMBar-CTX .sapMBarLeft > .sapMImg.sapMPageAppIcon {
-	max-height: 1.375em;
-	max-width: 1.375em;
-	margin: 0.8125em;
+	max-height: 1.375rem;
+	max-width: 1.375rem;
+	margin: 0.8125rem;
 }
 
 /* vertical scroll bar */
 
 .sapMPage .sapMScrollbarV > div {
-	background-color: @sapMUiScrollBarBG;
-	border-color: @sapMUiScrollBarBorderColor;
+	background-color: @sapUiScrollBarFaceColor;
+	border-color: @sapUiScrollBarBorderColor;
 }
 
 /* Branding line, covers any content under it (approved by UX) */
@@ -53,7 +53,7 @@
 	position: absolute;
 	width:100%;
 	top: 0;
-	border-top: 0.25rem solid @sapUiBarBrandingBG;
+	border-top: 0.25rem solid @sapUiBrand;
 	/* I don't know why its 7 but i will definitely not change it because i fear i will break something */
 	z-index: 7;
 }

@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -11,27 +11,32 @@ sap.ui.define([
 		"use strict";
 
 		/**
-		 * Constructor for a new QuickViewGroup.
-		 *
-		 * @param {string} [sId] id for the new control, generated automatically if no id is given
-		 * @param {object} [mSettings] initial settings for the new control
-		 * @class QuickViewGroup consists of a title (optional) and an entity of group elements.
-		 * @extends sap.ui.core.Element
-		 * @author SAP SE
-		 * @constructor
-		 * @public
-		 * @alias sap.m.QuickViewGroup
-		 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
-		 */
-		var Group = Element.extend("sap.m.QuickViewGroup",
-			{
+		* Constructor for a new QuickViewGroup.
+		*
+		* @param {string} [sId] ID for the new control, generated automatically if no ID is given
+		* @param {object} [mSettings] Initial settings for the new control
+		*
+		* @class QuickViewGroup consists of a title (optional) and an entity of group elements.
+		*
+		* @extends sap.ui.core.Element
+		*
+		* @author SAP SE
+		* @version 1.36.7
+		*
+		* @constructor
+		* @public
+		* @since 1.28.11
+		* @alias sap.m.QuickViewGroup
+		* @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
+		*/
+		var Group = Element.extend("sap.m.QuickViewGroup", /** @lends sap.m.QuickViewGroup.prototype */ {
 				metadata: {
 
 					library: "sap.m",
 					properties: {
 
 						/**
-						 * Whether the group should be visible on the screen.
+						 * Determines whether the group is visible on the screen.
 						 */
 						visible : {
 							type: "boolean",
@@ -63,6 +68,35 @@ sap.ui.define([
 					}
 				}
 			});
+
+
+		["setModel", "bindAggregation", "setAggregation", "insertAggregation", "addAggregation",
+			"removeAggregation", "removeAllAggregation", "destroyAggregation"].forEach(function (sFuncName) {
+				Group.prototype["_" + sFuncName + "Old"] = Group.prototype[sFuncName];
+				Group.prototype[sFuncName] = function () {
+					var result = Group.prototype["_" + sFuncName + "Old"].apply(this, arguments);
+
+					var oPage = this.getParent();
+					if (oPage) {
+						oPage._updatePage();
+					}
+
+					if (["removeAggregation", "removeAllAggregation"].indexOf(sFuncName) !== -1) {
+						return result;
+					}
+
+					return this;
+				};
+			});
+
+		Group.prototype.setProperty = function () {
+			Element.prototype.setProperty.apply(this, arguments);
+
+			var oPage = this.getParent();
+			if (oPage) {
+				oPage._updatePage();
+			}
+		};
 
 		return Group;
 

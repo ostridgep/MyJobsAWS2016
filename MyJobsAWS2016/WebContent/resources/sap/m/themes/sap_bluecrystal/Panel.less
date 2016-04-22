@@ -1,30 +1,38 @@
 /* ============================================= */
 /* Theme CSS for control sap.m/Panel.control     */
 /* ============================================= */
-.sapMPanelBG {
-	background-color: fade(@sapUiPanelBG, 80%);
+.sapMPanelBGSolid {
+	background-color: @sapUiGroupContentBackground;
+}
+
+.sapMPanelBGTranslucent {
+	background-color: fade(@sapUiGroupContentBackground, 80%);
+}
+
+.sapMPanelBGTransparent {
+	background-color: transparent;
 }
 
 /* if Panel is not expandable, we do wish header to come with own border */
-.sapMPanelHdr:not(.sapMPanelHdrExpandable),
+.sapMPanel > .sapMPanelHdr,
 /* notice: sapMPanelWrappingDiv is available if Panel is expandable */
 .sapMPanelWrappingDiv,
 /* do not want border if expanded and if only header text */
 .sapMPanelWrappingDivTb {
-	border-bottom: 1px solid @sapUiToolbarBorder;
+	border-bottom: 1px solid @sapUiGroupTitleBorderColor;
 }
 
 .sapMPanelHdr {
 	font-weight: @sapUiFontHeaderWeight;
-	font-size: @sapMFontHeader5Size;
+	font-size: @sapMFontHeader4Size;
 	font-family: @sapUiFontHeaderFamily;
 	text-shadow: 0 0.0625rem 0 @sapUiLightShadowTint;
-	color: @sapUiHeaderText;
-	background-color: fade(@sapUiLightestBG, 0%);
+	color: @sapUiGroupTitleTextColor;
+	background-color: @sapUiGroupTitleBackground;
 }
 
-.sapMPanelContent {
-	border-bottom: 1px solid @sapUiExtraLightBorder;
+.sapMPanelContent:not(.sapMPanelBGTransparent) {
+	border-bottom: 1px solid @sapUiGroupContentBorderColor;
 }
 
 .sapMPanelExpandableIcon {

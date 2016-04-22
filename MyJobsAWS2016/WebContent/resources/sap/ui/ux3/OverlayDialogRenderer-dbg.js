@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -14,7 +14,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './OverlayRenderer']
 	 * @namespace
 	 */
 	var OverlayDialogRenderer = Renderer.extend(OverlayRenderer);
-	
+
 	/**
 	 * Renders the Overlay content
 	 *
@@ -35,7 +35,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './OverlayRenderer']
 		}
 		rm.write("</div>");
 	};
-	
+
 	/**
 	 * Add root class to Overlay
 	 *
@@ -50,7 +50,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './OverlayRenderer']
 		var rm = oRenderManager;
 		rm.addClass("sapUiUx3OD");
 	};
-	
+
 	/**
 	 * Add class to Overlay
 	 *
@@ -65,7 +65,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/core/Renderer', './OverlayRenderer']
 		var rm = oRenderManager;
 		rm.addClass("sapUiUx3ODOverlay");
 	};
-	
+
 
 	return OverlayDialogRenderer;
 

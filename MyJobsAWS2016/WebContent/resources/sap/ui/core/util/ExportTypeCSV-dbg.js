@@ -1,18 +1,18 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides class sap.ui.core.util.ExportTypeCSV
-sap.ui.define(['jquery.sap.global', './ExportType'],
-	function(jQuery, ExportType) {
+sap.ui.define(['./ExportType'],
+	function(ExportType) {
 	'use strict';
 
 	/**
 	 * Constructor for a new ExportTypeCSV.
 	 *
-	 * @param {string} [sId] id for the new control, generated automatically if no id is given 
+	 * @param {string} [sId] id for the new control, generated automatically if no id is given
 	 * @param {object} [mSettings] initial settings for the new control
 	 *
 	 * @class
@@ -25,7 +25,7 @@ sap.ui.define(['jquery.sap.global', './ExportType'],
 	 * @extends sap.ui.core.util.ExportType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 * @since 1.22.0
 	 *
 	 * @constructor
@@ -37,10 +37,10 @@ sap.ui.define(['jquery.sap.global', './ExportType'],
 		metadata: {
 			library: "sap.ui.core",
 			properties: {
-				
+
 				/**
 				 * Separator char.
-				 * 
+				 *
 				 * Value needs to be exactly one character or empty for default.
 				 */
 				separatorChar: {
@@ -155,5 +155,5 @@ sap.ui.define(['jquery.sap.global', './ExportType'],
 
 	return CSV;
 
-}, /* bExport= */ true
+}
 );

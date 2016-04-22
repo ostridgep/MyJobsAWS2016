@@ -1,12 +1,12 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
 // Provides default renderer for control sap.m.RadioButtonGroup
-sap.ui.define(['jquery.sap.global'],
-	function(jQuery) {
+sap.ui.define([],
+	function() {
 	"use strict";
 
 
@@ -31,6 +31,11 @@ sap.ui.define(['jquery.sap.global'],
 			return;
 		}
 
+		// Should render only visible buttons
+		var aVisibleRBs = oRBGroup.aRBs.filter(function(oButton) {
+			return oButton.getVisible();
+		});
+
 		var iColumns = oRBGroup.getColumns();
 		var bEnabled = oRBGroup.getEnabled();
 		var sControlTextDir = oRBGroup.getTextDirection();
@@ -52,7 +57,7 @@ sap.ui.define(['jquery.sap.global'],
 		rm.writeControlData(oRBGroup);
 		rm.addClass("sapMRbG");
 		if (iColumns > 1) {
-			if (iColumns == oRBGroup.aRBs.length) {
+			if (iColumns == aVisibleRBs.length) {
 				rm.addClass("sapMRbG1Row");
 			} else {
 				rm.addClass("sapMRbGTab");
@@ -77,12 +82,6 @@ sap.ui.define(['jquery.sap.global'],
 			rm.writeAttribute("dir", sControlTextDir.toLowerCase());
 		}
 
-		if (bEnabled) {
-			rm.writeAttribute("tabindex", "0");
-		} else {
-			rm.writeAttribute("tabindex", "-1");
-		}
-
 		// ARIA
 		rm.writeAccessibilityState(oRBGroup, {
 			role : "radiogroup"
@@ -94,7 +93,7 @@ sap.ui.define(['jquery.sap.global'],
 
 		// columns
 		for (var c = 0; c < iColumns; c++) {
-			if (iColumns > 1 && iColumns != oRBGroup.aRBs.length) {
+			if (iColumns > 1 && iColumns != aVisibleRBs.length) {
 				// if only 1 column -> no DIV necessary
 				rm.write("<div");
 				rm.addClass("sapMRbGCol");
@@ -103,16 +102,16 @@ sap.ui.define(['jquery.sap.global'],
 			}
 
 			// render RadioButtons
-			for (var i = c; i < oRBGroup.aRBs.length; i = i + iColumns) {
-				rm.renderControl(oRBGroup.aRBs[i]);
+			for (var i = c; i < aVisibleRBs.length; i = i + iColumns) {
+				rm.renderControl(aVisibleRBs[i]);
 			}
 
-			if (iColumns > 1 && iColumns != oRBGroup.aRBs.length) {
+			if (iColumns > 1 && iColumns != aVisibleRBs.length) {
 				rm.write("</div>");
 			}
 		}
 
-		if (iColumns > 1 && iColumns != oRBGroup.aRBs.length) {
+		if (iColumns > 1 && iColumns != aVisibleRBs.length) {
 			// dummy Column to avoid big spaces between RadioButtons in Safari
 			rm.write('<div class="sapMRbGDummy"> </div>');
 		}

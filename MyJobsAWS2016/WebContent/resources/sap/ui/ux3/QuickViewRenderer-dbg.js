@@ -1,34 +1,34 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
-sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/ui/core/Renderer'],
-	function(jQuery, CalloutBaseRenderer, Renderer) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/ui/core/Renderer', 'sap/ui/core/IconPool'],
+	function(jQuery, CalloutBaseRenderer, Renderer, IconPool) {
 	"use strict";
 
 
 	/**
-	 * QuickView renderer. 
+	 * QuickView renderer.
 	 * @namespace
 	 */
 	var QuickViewRenderer = Renderer.extend(CalloutBaseRenderer);
-	
-	
+
+
 	/**
 	 * Renders the HTML for the CalloutBase content, using the provided {@link sap.ui.core.RenderManager}.
-	 * 
+	 *
 	 * @param {sap.ui.core.RenderManager} oRenderManager the RenderManager that can be used for writing to the Render-Output-Buffer
 	 * @param {sap.ui.core.Control} oControl an object representation of the control that should be rendered
 	 */
 	QuickViewRenderer.renderContent = function(oRenderManager, oControl){
-	
+
 		var rm = oRenderManager;
-	
+
 		// accessibility
 		var bAcc = sap.ui.getCore().getConfiguration().getAccessibility();
-	
+
 		// control properties
 		var sType	= oControl.getType(),
 			sName	= oControl.getFirstTitle(),
@@ -39,7 +39,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 			sId = oControl.getId(),
 			tooltip = oControl.getTooltip_AsString(),
 			oIconAttr;
-	
+
 		// container for the QuickView header and content
 		rm.write("<div");
 		if (tooltip) {
@@ -56,7 +56,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 			rm.writeStyles();
 		}
 		rm.write(">");
-	
+
 		//header (Thing Type) is mandatory
 		rm.write("<div");
 		rm.writeAttribute("id", sId + "-title");
@@ -66,7 +66,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 		rm.write(">");
 		rm.writeEscaped(sType);
 		rm.write("</div>");
-	
+
 		//heading: icon, title1, title2
 		if (sIcon || sName || sDesc) {
 			rm.write("<div");
@@ -76,10 +76,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 			rm.addClass("sapUiUx3QVHeading");
 			rm.writeClasses();
 			rm.write(">");
-	
+
 			//icon
 			if (sIcon) {
-				if (sIcon.indexOf("sap-icon://") !== 0) {
+				if (IconPool.isIconURI(sIcon)) {
 					//setting title & tabindex here
 					//alt, src and role=presentation are set by writeIcon
 					oIconAttr = {
@@ -89,8 +89,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 				}
 				rm.writeIcon(sIcon, "sapUiUx3QVIcon", oIconAttr);
 			}
-	
-			//name 
+
+			//name
 			rm.write("<span");
 			rm.writeAttribute("id", sId + "-name");
 			if (bAcc && sDesc) {
@@ -111,7 +111,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 				rm.write("</a>");
 			}
 			rm.write("</span>");
-	
+
 			//title2
 			if (sDesc) {
 				rm.write("<br><span");
@@ -125,22 +125,22 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 			}
 			rm.write("</div>"); // heading
 		}
-	
+
 		// content
 		// render Header Content
 		rm.write("<div id=\"" + sId + "-content\">");
 		this.renderBody(rm, oControl);
 		rm.write("</div>");
-	
+
 		rm.write("</div>"); // container
-	
-		// render the action bar 
+
+		// render the action bar
 		if (oControl.getShowActionBar() && oControl.getActionBar()) {
 			rm.renderControl(oControl.getActionBar());
 		}
-	
+
 	};
-	
+
 	/**
 	 * Renders the HTML for the QuickView body content (form or )
 	 *
@@ -169,8 +169,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/commons/CalloutBaseRenderer', 'sap/u
 			rm.write("</div>");
 		}
 	};
-	
-	
+
+
 
 	return QuickViewRenderer;
 

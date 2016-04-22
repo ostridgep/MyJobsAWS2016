@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -10,16 +10,16 @@ sap.ui.define(['jquery.sap.global'],
 
 
 	/**
-	 * SplitContainer renderer. 
+	 * SplitContainer renderer.
 	 * @namespace
 	 */
 	var SplitContainerRenderer = {
 	};
-	
-	
+
+
 	/**
 	 * Renders the HTML for the given control, using the provided {@link sap.ui.core.RenderManager}.
-	 * 
+	 *
 	 * @param {sap.ui.core.RenderManager} oRm the RenderManager that can be used for writing to the render output buffer
 	 * @param {sap.ui.core.Control} oControl an object representation of the control that should be rendered
 	 */
@@ -29,41 +29,45 @@ sap.ui.define(['jquery.sap.global'],
 		oRm.write("<div");
 		oRm.writeControlData(oControl);
 		oRm.addClass("sapMSplitContainer");
-		
+
 		if (this.renderAttributes) {
 			this.renderAttributes(oRm, oControl); // may be used by inheriting renderers, but DO NOT write class or style attributes! Instead, call addClass/addStyle.
 		}
-		
+
+		// The following CSS classes need to be added using the addStyleClass function because
+		//  they are manipulated later on also using the togggleStyleClass function
 		if (!sap.ui.Device.system.phone) {
 			if (sap.ui.Device.orientation.portrait) {
-				oRm.addClass("sapMSplitContainerPortrait");
+				oControl.addStyleClass("sapMSplitContainerPortrait");
 			}
 			switch (sMode) {
 				case "ShowHideMode":
-					oRm.addClass("sapMSplitContainerShowHide");
+					oControl.addStyleClass("sapMSplitContainerShowHide");
 					break;
 				case "StretchCompress":
-					oRm.addClass("sapMSplitContainerStretchCompress");
+					oControl.addStyleClass("sapMSplitContainerStretchCompress");
 					break;
 				case "PopoverMode":
-					oRm.addClass("sapMSplitContainerPopover");
+					oControl.addStyleClass("sapMSplitContainerPopover");
 					break;
 				case "HideMode":
-					oRm.addClass("sapMSplitContainerHideMode");
+					oControl.addStyleClass("sapMSplitContainerHideMode");
+					break;
 			}
 		}
-		oRm.writeClasses();
+
+		oRm.writeClasses(oControl);
 		oRm.writeStyles();
 		var sTooltip = oControl.getTooltip_AsString();
 		if (sTooltip) {
 			oRm.writeAttributeEscaped("title", sTooltip);
 		}
 		oRm.write(">"); // div element
-		
+
 		if (this.renderBeforeContent) {
 			this.renderBeforeContent(oRm, oControl);
 		}
-		
+
 		if (!sap.ui.Device.system.phone) {
 			oControl._bMasterisOpen = false;
 			if ((sap.ui.Device.orientation.landscape && (sMode !== "HideMode")) ||
@@ -84,7 +88,7 @@ sap.ui.define(['jquery.sap.global'],
 			} else {
 				oControl._oMasterNav.addStyleClass("sapMSplitContainerMaster");
 				oRm.renderControl(oControl._oMasterNav);
-				
+
 				oControl._oDetailNav.addStyleClass("sapMSplitContainerDetail");
 				oRm.renderControl(oControl._oDetailNav);
 			}
@@ -92,10 +96,10 @@ sap.ui.define(['jquery.sap.global'],
 			oControl._oMasterNav.addStyleClass("sapMSplitContainerMobile");
 			oRm.renderControl(oControl._oMasterNav);
 		}
-		
+
 		 oRm.write("</div>");
 	};
-	
+
 
 	return SplitContainerRenderer;
 

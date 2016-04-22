@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -21,7 +21,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 * @param {sap.ui.model.odata.type.Time} oType
 	 *   the type
 	 * @returns {string}
-	 *   the locale-dependent error message.
+	 *   the locale-dependent error message
 	 * @private
 	 */
 	function getErrorMessage(oType) {
@@ -107,7 +107,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 		return {
 			__edmType: "Edm.Time",
 			ms: ((oDate.getUTCHours() * 60 + oDate.getUTCMinutes()) * 60 + oDate.getUTCSeconds())
-				* 1000 // TODO + oDate.getUTCMilliseconds()
+				* 1000 + oDate.getUTCMilliseconds()
 		};
 	}
 
@@ -143,7 +143,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.Time
 	 * @param {object} [oFormatOptions]
@@ -156,9 +156,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 * @public
 	 * @since 1.27.0
 	 */
-	var Time = ODataType.extend("sap.ui.model.odata.type.Time",
-			/** @lends sap.ui.model.odata.type.Time.prototype */
-			{
+	var Time = ODataType.extend("sap.ui.model.odata.type.Time", {
 				constructor : function (oFormatOptions, oConstraints) {
 					ODataType.apply(this, arguments);
 					setConstraints(this, oConstraints);

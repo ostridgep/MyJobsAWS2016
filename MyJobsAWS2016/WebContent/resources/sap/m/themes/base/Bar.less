@@ -41,7 +41,7 @@
 	}
 }
 
-	
+
 .sapMBarLeft,
 .sapMBarRight {
 	position: absolute;
@@ -52,7 +52,7 @@
 	left: 0px;
 }
 
-/* IE does not support "text-align: end" */
+/* IE / Edge does not support "text-align: end" */
 /* use "right" and "left" instead        */
 .sapMBarRight {
 	text-align: right;
@@ -76,6 +76,11 @@
 	left: 0px;
 }
 
-.sapMBar .sapMLabel {
+.sapMBar .sapMLabel,
+.sapMBar .sapMLnk {
 	display: inline;
+}
+
+.sapMBarFlexBoxWidth100 {
+	width: 100%;
 }

@@ -1,6 +1,10 @@
-// Copyright (c) 2013 SAP SE, All Rights Reserved
-sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
-	function($, EventProvider, Target) {
+/*!
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
+ */
+sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target', './async/Targets', './sync/Targets'],
+	function($, EventProvider, Target, asyncTargets, syncTargets) {
 		"use strict";
 
 		/**
@@ -56,9 +60,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 		 * The id of the rootView - This should be the id of the view that contains the control with the controlId
 		 * since the control will be retrieved by calling the {@link sap.ui.core.mvc.View#byId} function of the rootView.
 		 * If you are using a component and add the routing.targets <b>do not set this parameter</b>,
-		 * since the component will set the rootView to the view created by the {@link sap.ui.core.UIComponent.html#createContent} function.
+		 * since the component will set the rootView to the view created by the {@link sap.ui.core.UIComponent#createContent} function.
 		 * If you specify the "parent" property of a target, the control will not be searched in the root view but in the view Created by the parent (see parent documentation).
-		 *
+		 * @param {boolean} [oOptions.config.async=false] @since 1.34 Whether the views which are created through this Targets are loaded asyncly. This option can be set only when the Targets
+		 * is used standalone without the involvement of a Router. Otherwise the async option is inherited from the Router.
+
 		 * @param {object} oOptions.targets One or multiple targets in a map.
 		 * @param {object} oOptions.targets.anyName a new target, the key severs as a name. An example:
 		 * <pre>
@@ -160,10 +166,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 		 *
 		 * @param {string} [oOptions.targets.anyName.controlAggregation] The name of an aggregation of the controlId, that contains views.
 		 * Eg: a {@link sap.m.NavContainer} has an aggregation 'pages', another Example is the {@link sap.ui.ux3.Shell} it has 'content'.
-		 * @param {boolean} [oOptions.targets.anyName.clearAggregation] Defines a boolean that can be passed to specify if the aggregation should be cleared
+		 * @param {boolean} [oOptions.targets.anyName.clearControlAggregation] Defines a boolean that can be passed to specify if the aggregation should be cleared
 		 * - all items will be removed - before adding the View to it.
 		 * When using a {@link sap.ui.ux3.Shell} this should be true. For a {@link sap.m.NavContainer} it should be false. When you use the {@link sap.m.routing.Router} the default will be false.
-		 * @param {string} [oOptions.targets.parent] A reference to another target, using the name of the target.
+		 * @param {string} [oOptions.targets.anyName.parent] A reference to another target, using the name of the target.
 		 * If you display a target that has a parent, the parent will also be displayed.
 		 * Also the control you specify with the controlId parameter, will be searched inside of the view of the parent not in the rootView, provided in the config.
 		 * The control will be searched using the byId function of a view. When it is not found, the global id is checked.
@@ -243,16 +249,46 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 		 * @public
 		 * @alias sap.ui.core.routing.Targets
 		 */
-		return EventProvider.extend("sap.ui.core.routing.Targets", /** @lends sap.ui.core.routing.Targets.prototype */ {
+		var Targets = EventProvider.extend("sap.ui.core.routing.Targets", /** @lends sap.ui.core.routing.Targets.prototype */ {
 
 			constructor : function(oOptions) {
 				var sTargetOptions,
 					sTargetName;
 
 				EventProvider.apply(this);
+
 				this._mTargets = {};
 				this._oConfig = oOptions.config;
 				this._oViews = oOptions.views;
+
+				// If no config is given, set the default value to sync
+				if (!this._oConfig) {
+					this._oConfig = {
+						_async: false
+					};
+				}
+
+				// temporarily: for checking the url param
+				function checkUrl() {
+					if (jQuery.sap.getUriParameters().get("sap-ui-xx-asyncRouting") === "true") {
+						jQuery.sap.log.warning("Activation of async view loading in routing via url parameter is only temporarily supported and may be removed soon", "Targets");
+						return true;
+					}
+					return false;
+				}
+
+				// Config object doesn't have _async set which means the Targets is instantiated standalone by given a non-empty config object
+				// Assign the oConfig.async to oConfig._async and set the default value to sync
+				if (this._oConfig._async === undefined) {
+					// temporarily: set the default value depending on the url parameter "sap-ui-xx-asyncRouting"
+					this._oConfig._async = (this._oConfig.async === undefined) ? checkUrl() : this._oConfig.async;
+				}
+
+				// branch by abstraction
+				var TargetsStub = this._oConfig._async ?  asyncTargets : syncTargets;
+				for (var fn in TargetsStub) {
+					this[fn] = TargetsStub[fn];
+				}
 
 				for (sTargetOptions in oOptions.targets) {
 					if (oOptions.targets.hasOwnProperty(sTargetOptions)) {
@@ -269,7 +305,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			},
 
 			/**
-			 * Destroys the targets instance an all created targets. Does not destroy the views instance passed to the constructor. It has to be destroyed separately.
+			 * Destroys the targets instance and all created targets. Does not destroy the views instance passed to the constructor. It has to be destroyed separately.
 			 * @public
 			 * @returns { sap.ui.core.routing.Targets } this for chaining.
 			 */
@@ -298,15 +334,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			 * @param {any} [vData] an object that will be passed to the display event in the data property. If the target has parents, the data will also be passed to them.
 			 * @public
 			 * @returns {sap.ui.core.routing.Targets} this pointer for chaining
+			 * @name sap.ui.core.routing.Targets#display
 			 */
-			display : function (vTargets, vData) {
-				this._display(vTargets, vData);
-			},
 
 			/**
 			 * Returns the views instance passed to the constructor
 			 *
 			 * @return {sap.ui.core.routing.Views} the views instance
+			 * @public
 			 */
 			getViews : function () {
 				return this._oViews;
@@ -317,6 +352,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			 *
 			 * @param {string|string[]} vName the name of a single target or the name of multiple targets
 			 * @return {sap.ui.core.routing.Target|undefined|sap.ui.core.routing.Target[]} The target with the coresponding name or undefined. If an array way passed as name this will return an array with all found targets. Non existing targets will not be returned but will log an error.
+			 * @public
 			 */
 			getTarget : function (vName) {
 				var that = this,
@@ -336,6 +372,29 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 				}
 
 				return this._mTargets[vName];
+			},
+
+			/**
+			 * Creates a target by using the given name and options. If there's already a target with the same name exists, the existing target is kept from being overwritten and an error log will be written to the development console.
+			 *
+			 * @param {string} sName the name of a target
+			 * @param {object} oTarget the options of a target. The option names are the same as the ones in "oOptions.targets.anyName" of {@link constructor}.
+			 * @returns {sap.ui.core.routing.Targets} Targets itself for method chaining
+			 * @public
+			 *
+			 */
+			addTarget : function (sName, oTargetOptions) {
+				var oOldTarget = this.getTarget(sName),
+					oTarget;
+
+				if (oOldTarget) {
+					$.sap.log.error("Target with name " + sName + " already exists", this);
+				} else {
+					oTarget = this._createTarget(sName, oTargetOptions);
+					this._addParentTo(oTarget);
+				}
+
+				return this;
 			},
 
 			/**
@@ -376,6 +435,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			 * @param {function} fnFunction The function to call, when the event occurs.
 			 * @param {object} oListener Object on which the given function had to be called.
 			 * @return {sap.ui.core.routing.Targets} <code>this</code> to allow method chaining
+			 * @public
 			 */
 			detachDisplay : function(fnFunction, oListener) {
 				return this.detachEvent(this.M_EVENTS.DISPLAY, fnFunction, oListener);
@@ -386,6 +446,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			 *
 			 * @param {object} [mArguments] the arguments to pass along with the event.
 			 * @return {sap.ui.core.routing.Targets} <code>this</code> to allow method chaining
+			 * @public
 			 */
 			fireDisplay : function(mArguments) {
 				return this.fireEvent(this.M_EVENTS.DISPLAY, mArguments);
@@ -400,6 +461,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			 *
 			 * @param {string} sName
 			 * @param {object} oTargetOptions
+			 * @return {sap.ui.core.routing.Target} The created target object
 			 * @private
 			 */
 			_createTarget : function (sName, oTargetOptions) {
@@ -420,6 +482,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 					});
 				}, this);
 				this._mTargets[sName] = oTarget;
+				return oTarget;
 			},
 
 			/**
@@ -455,36 +518,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 			/**
 			 * hook to distinguish between the router and an application calling this
 			 * @private
+			 * @name sap.ui.core.routing.Targets#_display
 			 */
-			_display : function (vTargets, vData) {
-				var that = this;
-
-				if ($.isArray(vTargets)) {
-					$.each(vTargets, function (i, sTarget) {
-						that._displaySingleTarget(sTarget, vData);
-					});
-				} else {
-					this._displaySingleTarget(vTargets, vData);
-				}
-
-				return this;
-			},
 
 			/**
 			 *
 			 * @param sName name of the single target
 			 * @param vData event data
 			 * @private
+			 * @name sap.ui.core.routing.Targets.#_displaySingleTarget
 			 */
-			_displaySingleTarget : function (sName, vData) {
-				var oTarget = this.getTarget(sName);
-
-				if (oTarget !== undefined) {
-					oTarget.display(vData);
-				} else {
-					$.sap.log.error("The target with the name \"" + sName + "\" does not exist!", this);
-				}
-			},
 
 			/**
 			 * Called by the UIComponent since the rootView id is not known in the constructor
@@ -508,4 +551,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/base/EventProvider', './Target'],
 
 		});
 
-	}, /* bExport= */ true);
+		return Targets;
+
+	});

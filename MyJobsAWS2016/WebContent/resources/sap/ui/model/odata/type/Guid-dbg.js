@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -9,13 +9,14 @@ sap.ui.define(['sap/ui/model/FormatException', 'sap/ui/model/odata/type/ODataTyp
 	function(FormatException, ODataType, ParseException, ValidateException) {
 	"use strict";
 
-	var rGuid = /^[A-F0-9]{8}-([A-F0-9]{4}-){3}[A-F0-9]{12}$/i;
+	var rAllWhitespaceAndSeparators = /[-\s]/g, // whitespace and "-" separator, globally
+		rGuid = /^[A-F0-9]{8}-([A-F0-9]{4}-){3}[A-F0-9]{12}$/i;
 
 	/**
 	 * Returns the locale-dependent error message.
 	 *
 	 * @returns {string}
-	 *   the locale-dependent error message.
+	 *   the locale-dependent error message
 	 * @private
 	 */
 	function getErrorMessage() {
@@ -54,7 +55,7 @@ sap.ui.define(['sap/ui/model/FormatException', 'sap/ui/model/odata/type/ODataTyp
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.Guid
 	 * @param {object} [oFormatOptions]
@@ -68,9 +69,7 @@ sap.ui.define(['sap/ui/model/FormatException', 'sap/ui/model/odata/type/ODataTyp
 	 * @public
 	 * @since 1.27.0
 	 */
-	var EdmGuid = ODataType.extend("sap.ui.model.odata.type.Guid",
-			/** @lends sap.ui.model.odata.type.Guid.prototype */
-			{
+	var EdmGuid = ODataType.extend("sap.ui.model.odata.type.Guid", {
 				constructor : function (oFormatOptions, oConstraints) {
 					ODataType.apply(this, arguments);
 					setConstraints(this, oConstraints);
@@ -139,7 +138,7 @@ sap.ui.define(['sap/ui/model/FormatException', 'sap/ui/model/odata/type/ODataTyp
 				+ sSourceType);
 		}
 		// remove all whitespaces and separators
-		sResult = sValue.replace(/[-\s]/g, '');
+		sResult = sValue.replace(rAllWhitespaceAndSeparators, '');
 		if (sResult.length != 32) {
 			// don't try to add separators to invalid value
 			return sValue;

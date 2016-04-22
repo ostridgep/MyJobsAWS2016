@@ -1,6 +1,6 @@
 /*!
- * SAP UI development toolkit for HTML5 (SAPUI5/OpenUI5)
- * (c) Copyright 2009-2015 SAP SE or an SAP affiliate company.
+ * UI development toolkit for HTML5 (OpenUI5)
+ * (c) Copyright 2009-2016 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -20,12 +20,12 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	}
 
 	/**
-	 * Returns the matching error message for the type based on the constraints.
+	 * Returns the matching locale-dependent error message for the type based on the constraints.
 	 *
 	 * @param {sap.ui.model.odata.type.DateTimeBase} oType
 	 *   the type
 	 * @returns {string}
-	 *   the message
+	 *   the locale-dependent error message
 	 */
 	function getErrorMessage(oType) {
 		return sap.ui.getCore().getLibraryResourceBundle().getText(
@@ -102,7 +102,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 * @extends sap.ui.model.odata.type.ODataType
 	 *
 	 * @author SAP SE
-	 * @version 1.28.12
+	 * @version 1.36.7
 	 *
 	 * @alias sap.ui.model.odata.type.DateTimeBase
 	 * @param {object} [oFormatOptions]
@@ -111,17 +111,15 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 *   constraints; {@link #validateValue validateValue} throws an error if any constraint is
 	 *   violated
 	 * @param {boolean|string} [oConstraints.nullable=true]
-	 *   if <code>true</code>, the value <code>null</code> will be accepted
+	 *   if <code>true</code>, the value <code>null</code> is accepted
 	 * @param {boolean} [oConstraints.isDateOnly=false]
-	 *   if <code>true</code>, only the date part will be used, the time part will always be
-	 *   00:00:00, the timezone will be UTC to avoid timezone-related problems
+	 *   if <code>true</code>, only the date part is used, the time part is always 00:00:00 and
+	 *   the timezone is UTC to avoid timezone-related problems
 	 * @public
 	 * @abstract
 	 * @since 1.27.0
 	 */
-	var DateTimeBase = ODataType.extend("sap.ui.model.odata.type.DateTimeBase",
-			/** @lends sap.ui.model.odata.type.DateTimeBase.prototype */
-			{
+	var DateTimeBase = ODataType.extend("sap.ui.model.odata.type.DateTimeBase", {
 				constructor : function (oFormatOptions, oConstraints) {
 					ODataType.apply(this, arguments);
 					setConstraints(this, oConstraints);
@@ -167,7 +165,7 @@ sap.ui.define(['sap/ui/core/format/DateFormat', 'sap/ui/model/FormatException',
 	 * Parses the given value to JavaScript <code>Date</code>.
 	 *
 	 * @param {string} sValue
-	 *   the value to be parsed; the empty string and <code>null</code> will be parsed to
+	 *   the value to be parsed; the empty string and <code>null</code> are parsed to
 	 *   <code>null</code>
 	 * @param {string} sSourceType
 	 *   the source type (the expected type of <code>sValue</code>); must be "string".
