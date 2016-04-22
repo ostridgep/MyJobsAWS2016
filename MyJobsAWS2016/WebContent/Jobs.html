@@ -5966,6 +5966,19 @@ function refreshJobList(){
 </script>
 </body>
 <script>
+$(document).on("swipeleft",function(e){
 
+	if(e.target.id=="detail-intHeader")
+		{
+	
+    		oSplitApp.setMode(sap.m.SplitAppMode.HideMode)
+    	}
+});  
+$(document).on("swiperight",function(e){
+	if(e.target.id=="detail-intHeader")
+	{
+		oSplitApp.setMode(sap.m.SplitAppMode.ShowHideMode)	
+	}
+});      
 </script>
-</>
+</html>
