@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+val: <input type="text" id="val" value="0"><BR>
+len: <input type="text" id="len" value="0"><BR>
+dec: <input type="text" id="dec" value="0"><BR>
+<p>Click the button to check the value.</p>
+chk: <input type="text" id="chk" value=""><BR>
+<button onclick="myFunction()">Try it</button>
+<iframe scrolling="auto" allowtransparency="true" name="main" style="width:400PX;height:400PX;background-image:url(images/WORKER.jpg)"> </iframe>
+<script>
+function myFunction() {
+val=document.getElementById("val").value
+len=document.getElementById("len").value
+dec=document.getElementById("dec").value
+  if(validateDecimal(val,dec,len)){
+   alert("Valid");
+  }else{
+	  alert("not Valid");
+  }
+}
+function validateDecimal(value, decimals, length) { 
+x=value.split(".")
+nlen = length-decimals;
+
+if(decimals<2){
+	var rx = /^\d+(?:\.\d{1,1})?$/ 
+}
+if(decimals==2){
+	var rx = /^\d+(?:\.\d{1,2})?$/ 
+}
+if(decimals==3){
+	var rx = /^\d+(?:\.\d{1,3})?$/ 
+}
+if(decimals==4){
+	var rx = /^\d+(?:\.\d{1,4})?$/ 
+}
+if(decimals==5){
+	var rx = /^\d+(?:\.\d{1,5})?$/ 
+}
+
+    if(rx.test(value)) { 
+       vlen=x[0].length;
+       if (x.length>1){
+    	   vlen+=x[1].length
+       }
+       if(vlen>length){
+    	   //Number length is too Big
+    	   return(false)
+       }else{
+    	   if((x.length>1)&&(dec==0)){
+    		   return false;
+    	   }else{
+    		   if(x[0].length>nlen){
+        		   return false;
+        	   }else{
+        		   return true;   
+        	   }   
+    	   }
+    	   
+       }
+       
+       
+    }
+    else { 
+       return false; 
+    } 
+}
+
+</script>
+
+</body>
+</html>
