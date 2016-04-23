@@ -179,6 +179,13 @@ $(".btn-group > .btn").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
     $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
 });
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
 		
 	</script>
 	

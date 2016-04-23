@@ -6,6 +6,7 @@
         <script src="js/jqui.1.9.2.js"></script>
         <script src="js/bs.3.1.1.js"></script>
         <script src="js/functions.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <link rel="stylesheet" href="css/bs.3.1.1.css" />
         <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
         
@@ -185,6 +186,13 @@ $(".btn-group > .btn").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
     $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
 });
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
 		
 	</script>
 	

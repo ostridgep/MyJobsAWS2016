@@ -2536,6 +2536,7 @@ function prepareChangeStatus(){
 	
 }
 function changeStatus(Status){
+
 	var StatusState;
 	var StatusIcon;
 	var StatusColour=""
@@ -2633,9 +2634,10 @@ function changeStatus(Status){
 	 }
 	currentStatus=Status;
 	prepareChangeStatus()
-	document.getElementById("JobHead_Status").inner = "<Font color='"+StatusColour+"'>"+StatusText+"</font>";
 	
-	 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = StatusText;
+	document.getElementById("JobHead_Status").innerHTML = "<Font color='"+StatusColour+"'>"+StatusText+"</font>";
+	
+	 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = StatusText;
 	
 
 }
@@ -5095,13 +5097,7 @@ function rebuildTimeConfs()
 					  						formNewNotif.open(); 
 					  						
 					  							}]
-										 }),
-									new sap.m.Button({
-					                    icon: "sap-icon://list",
-					                    press : function() {
-					                    	oSplitApp.hideMaster()
-					                    }
-					                    })
+										 })
 								],
 						contentRight : [new sap.m.Button("LastSyncMess", {
 		 	      			 text:"",
@@ -5118,8 +5114,19 @@ function rebuildTimeConfs()
 						  					 press: [ function(){						  						
 						  						SetConfigParam('LASTSYNC_TRANSACTIONAL', "20120101010101");
 						  						syncTransactional()
+						  					    syncUpload()
+												 syncDT=localStorage.getItem('LastSyncedDT')	
+												 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
+												 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
+						  						setSyncingIndicator(true)
+						  						
 						  							}]
-											 })
+											 }),
+						new sap.m.BusyIndicator("syncIndicator",{
+						
+							visible:false
+							
+						})
 									]
 						})			 
 
@@ -5917,16 +5924,16 @@ function startBGSync()
 			
 					})]
                   })) */
-             
-                 
-		 //syncReference()
-		 syncTransactional()
-		 localStorage.setItem('SAPCalling','false')
-		 syncUpload()
-		 syncDT=localStorage.getItem('LastSyncedDT')	
-		 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
-		 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
-		// standardList.removeItem("Job:000050646820:0010").destroy()
+         if(sap.ui.getCore().getElementById("syncIndicator").getVisible()==false) { 
+	         setSyncingIndicator(true)    
+			 //syncReference()
+			 syncTransactional()
+			 localStorage.setItem('SAPCalling','false')
+			 syncUpload()
+			 syncDT=localStorage.getItem('LastSyncedDT')	
+			 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
+			 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
+         }
 		 
 		
 		 };

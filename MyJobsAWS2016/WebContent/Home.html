@@ -1288,11 +1288,13 @@ var tileContainer = new sap.m.TileContainer({
 		
 });
 function BuildMenuBar(){
+
 	MyMenu=[];
 	html5sql.process(
 			["SELECT * from MyMenuBar where level >'0' and level <'2' order by position"],
 			function(transaction, results, rowsArray){
-				sap.ui.getCore().byId("HomeMenu").removeContentMiddle();
+			
+				sap.ui.getCore().byId("HomeMenu").removeAllContentMiddle();
 				if( rowsArray.length > 0) {
 					for (n = 0; n <rowsArray.length; n++){
 						
@@ -1481,7 +1483,12 @@ var page  = new sap.m.Page('homePage',{
       					loadLastSyncValues();
       					 sap.ui.getCore().byId("dlgLastSync").open(); ;
       						}]
-      			 })]
+      			 }),
+      			new sap.m.BusyIndicator("syncIndicator",{
+					
+					visible:false
+					
+				})]
 			}),
     content: [tileContainer,new sap.m.Label({text:"xxxxx"})],enableScrolling:false,showNavButton: "{device>/isPhone}" });
 BuildNotificationTypes()
@@ -1511,7 +1518,7 @@ function startBGSync()
       }
       // Update timer div with output from Web Worker
       w.onmessage = function (event) {   
-    	
+    	  setSyncingIndicator(true)
 		 //syncReference()
 		 syncTransactional()
 		 setCounts();

@@ -11,7 +11,7 @@ var objid="";
 var objshorttext="";	
 var objaddress="";	
 var objswerk="";		
-
+var currentlySyncing=false
 var SAPServerPrefix="";
 var SAPServerSuffix="";	
 
@@ -20,7 +20,7 @@ var syncDetsSet=false;
 var demoDataLoaded=0;
 var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
-
+var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
 function isTablet(customUA) {
 	  var ua = customUA || navigator.userAgent;
@@ -42,7 +42,39 @@ var fdt="";
 return fdt;
 }
 
-
+function setSyncingIndicator(state){
+	
+	var path = window.location.pathname;
+    var page = path.split("/").pop();
+    if(page=="Jobs.html"){
+    	
+		if(state){
+			console.log("on")
+			sap.ui.getCore().getElementById("Syncit").setType(syncStatusType)
+			sap.ui.getCore().getElementById("Syncit").setVisible(false)			
+			sap.ui.getCore().getElementById("syncIndicator").setVisible(true)
+		}else{
+			console.log("off")
+			sap.ui.getCore().getElementById("Syncit").setType(syncStatusType)
+			sap.ui.getCore().getElementById("Syncit").setVisible(true)
+			sap.ui.getCore().getElementById("syncIndicator").setVisible(false)
+			
+		}
+	}
+    if(page=="Home.html"){
+    	
+		if(state){
+			sap.ui.getCore().getElementById("LastSyncMess").setType(syncStatusType)
+			sap.ui.getCore().getElementById("LastSyncMess").setVisible(false)
+			sap.ui.getCore().getElementById("syncIndicator").setVisible(true)
+		}else{
+			sap.ui.getCore().getElementById("LastSyncMess").setType(syncStatusType)
+			sap.ui.getCore().getElementById("LastSyncMess").setVisible(true)
+			sap.ui.getCore().getElementById("syncIndicator").setVisible(false)
+			
+		}
+	}
+}
 
 function requestSAPData1(page,params){
 	var SAPCalls = JSON.parse(localStorage.getItem("SAPCalls"));
@@ -61,21 +93,34 @@ function requestSAPData1(page,params){
 }
 
 function requestSAPData(page,params){
-console.log("POST")
+
 
 	opMessage(SAPServerPrefix+page);
 	var myurl=SAPServerPrefix+page+SAPServerSuffix+params;
+	var urlStart=myurl.substring(0, 4).toUpperCase();
+	if((urlStart.indexOf("HTTP") == -1)&&(urlStart.indexOf("HTTPS") == -1)){
+		 console.log("Invalid URL")
+		 syncStatusType=sap.m.ButtonType.Reject
+		 setSyncingIndicator(false)
+		  
+		  return
+		}
+		
 	
 	$.ajax({
-	    type: "POST",
+	   
 	    dataType: "json",
 	    url: myurl,
 	    
-	    timeout: 300000
+	    timeout: 30000
 		}).done(function() {
+			console.log("success")
+			syncStatusType=sap.m.ButtonType.Accept			
 		    opMessage("call success"+page );
 		  }).fail( function( xhr, status ) {
-			
+			  console.log("request failed")
+			  syncStatusType=sap.m.ButtonType.Reject
+			  setSyncingIndicator(false)
 			  opMessage(page+status)
 			  	if (status!="parsererror"){
 					
@@ -85,13 +130,12 @@ console.log("POST")
 				    }
 			  	}
 			}).always(function() {
-
+					console.log("complete")
 					opMessage("Complete"+page );
 					
 				
 			  });
-    
-  //})
+
  
   
 }	 
@@ -822,7 +866,9 @@ var lastsync=localStorage.getItem('LastSyncedDT')	;
 function syncTransactional(){
 
 
-	if (!CheckSyncInterval('TRANSACTIONAL')){return; }
+	if (!CheckSyncInterval('TRANSACTIONAL')){
+		(false)
+		return; }
 	opMessage("Synchronizing Transactional Data");
 
    console.log("Transactional Call "+getTime())
@@ -839,6 +885,7 @@ function syncTransactional(){
 									localStorage.setItem('LastSyncTransactionalDetails','');
 									syncTransactionalDetsUpdated=false;
 									SAPServerPrefix=$.trim(rowsArray[0].paramvalue);
+									currentlySyncing = true;
 									requestSAPData("MyJobsOrdersTest.htm",'');
 									requestSAPData("MyJobsOrdersObjectsMP.htm",'');
 									requestSAPData("MyJobsNotifications.htm",'');
@@ -3127,7 +3174,7 @@ var orderlist="";
 					}else if(page=="Home.html"){
 						setCounts()
 					}
-			   
+			     setSyncingIndicator(false)
 				     html5sql.process(sqlstatementMP,
 							 function(){
 								 
