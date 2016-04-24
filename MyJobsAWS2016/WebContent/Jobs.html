@@ -1321,7 +1321,7 @@ function buildMpointDetails(mp){
     					sap.ui.getCore().byId("MPointID").setValue(rowsArray[0].meas_point)
     					sap.ui.getCore().byId("MPointPosition").setValue(rowsArray[0].psort)
     					sap.ui.getCore().byId("MPointDescription").setValue(rowsArray[0].pttxt)
-    					sap.ui.getCore().byId("MPointValueLabel").setText("Reading ("+rowsArray[0].unit_meas+")   " +rowsArray[0].format)
+    					sap.ui.getCore().byId("MPointValueLabel").setText("Reading ("+rowsArray[0].unit_meas+") [" +rowsArray[0].format+"]")
 						if(rowsArray[0].code_gp.length <1){
 							sap.ui.getCore().byId("MPointCode").setEnabled(false)
 							buildMPValues(mp,"NOCODE")
