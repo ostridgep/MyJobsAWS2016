@@ -654,6 +654,14 @@ var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
 						 
 				    	formMapSelect.close()
 						  } ]
+				}),
+				new sap.m.Button({
+				    text: "Save",
+				    type: 	sap.m.ButtonType.Accept,
+				    tap: [ function(oEvt) {		  
+				    	setUserAgent(window, sap.ui.getCore().getElementById('userAgent').getValue()); 
+				    	formMapSelect.close()
+						  } ]
 				})
 				],					
     content:[
@@ -663,6 +671,8 @@ var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
 				content : [
 new sap.m.Label({text:"Current Map Type"}),
 new sap.m.Input("CurrentMapType",{type: sap.m.InputType.Input, enabled: false}),
+new sap.m.Label({text:"User Agent"}),
+new sap.m.Input("userAgent",{type: sap.m.InputType.Input}),
 new sap.m.Label({text:""}),							
 new sap.m.Button({
     text: "Google Maps",
@@ -693,7 +703,7 @@ new sap.m.Button({
 
             ],
 beforeOpen:function(){
-    
+	sap.ui.getCore().getElementById('userAgent').setValue(navigator.userAgent) 
 	sap.ui.getCore().getElementById('CurrentMapType').setValue(localStorage.getItem('MAPTYPE'));
 
   }

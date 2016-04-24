@@ -5122,7 +5122,7 @@ function rebuildTimeConfs()
 						  						
 						  							}]
 											 }),
-						new sap.m.BusyIndicator("syncIndicator",{
+						new sap.m.BusyIndicator("jobsyncIndicator",{
 						
 							visible:false
 							
@@ -5924,7 +5924,7 @@ function startBGSync()
 			
 					})]
                   })) */
-         if(sap.ui.getCore().getElementById("syncIndicator").getVisible()==false) { 
+         if(sap.ui.getCore().getElementById("jobsyncIndicator").getVisible()==false) { 
 	         setSyncingIndicator(true)    
 			 //syncReference()
 			 syncTransactional()

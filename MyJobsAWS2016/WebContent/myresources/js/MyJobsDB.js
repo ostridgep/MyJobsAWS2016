@@ -22,6 +22,18 @@ var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
+function setUserAgent(window, userAgent) {
+    if (window.navigator.userAgent != userAgent) {
+        var userAgentProp = { get: function () { return userAgent; } };
+        try {
+            Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
+        } catch (e) {
+            window.navigator = Object.create(navigator, {
+                userAgent: userAgentProp
+            });
+        }
+    }
+}
 function isTablet(customUA) {
 	  var ua = customUA || navigator.userAgent;
 
@@ -52,12 +64,12 @@ function setSyncingIndicator(state){
 			console.log("on")
 			sap.ui.getCore().getElementById("Syncit").setType(syncStatusType)
 			sap.ui.getCore().getElementById("Syncit").setVisible(false)			
-			sap.ui.getCore().getElementById("syncIndicator").setVisible(true)
+			sap.ui.getCore().getElementById("jobsyncIndicator").setVisible(true)
 		}else{
 			console.log("off")
 			sap.ui.getCore().getElementById("Syncit").setType(syncStatusType)
 			sap.ui.getCore().getElementById("Syncit").setVisible(true)
-			sap.ui.getCore().getElementById("syncIndicator").setVisible(false)
+			sap.ui.getCore().getElementById("jobsyncIndicator").setVisible(false)
 			
 		}
 	}
