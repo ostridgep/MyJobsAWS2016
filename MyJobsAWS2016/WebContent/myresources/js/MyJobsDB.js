@@ -2908,6 +2908,7 @@ function requestDEMOData(page){
 function orderCB(MyOrders){
 
 var sqlDelete="";
+OrdersProcessed=[]
 var sqlstatement="";
 var sqlstatements=[];
 var ordernos=[];
@@ -2953,6 +2954,47 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].no_char+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].no_deci+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].code_gp+  '",'+
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
+						}
+						//Loop and write JobDets
+						for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
+							{
+								if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
+									sqlstatementMP+='INSERT INTO MyJobDets (orderno, opno, notifno, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
+									'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].eworkcentre+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].oworkcentre+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].priority_code+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].priority_desc+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].pmactivity_code+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].pmactivity_desc+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].oppmactivity_code+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].oppmactivity_desc+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].start_date+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].start_time+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].duration+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].equipment_code+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].equipment_desc+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].equipment_gis+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].funcloc_code+'","'+ 
+									MyOrders.order[cntx].jobdets[pcnt].funcloc_desc+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].funcloc_gis+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].acpt_date+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].acpt_time+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].onsite_date+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].status+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].notif_cat_prof+'","'+
+									MyOrders.order[cntx].jobdets[pcnt].site+'");';
+								  
+								   
+								}
+							
 						}
 				
 					}
@@ -3064,47 +3106,7 @@ var orderlist="";
 					
 					}
 				}				
-				//Loop and write JobDets
-				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
-					{
-						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
-							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
-							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].eworkcentre+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].oworkcentre+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].priority_code+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].priority_desc+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].pmactivity_code+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].pmactivity_desc+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].oppmactivity_code+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].oppmactivity_desc+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].start_date+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].start_time+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].duration+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].equipment_code+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].equipment_desc+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].equipment_gis+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].funcloc_code+'","'+ 
-							MyOrders.order[cntx].jobdets[pcnt].funcloc_desc+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].funcloc_gis+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].acpt_date+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].acpt_time+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].onsite_date+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].status+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].notif_cat_prof+'","'+
-							MyOrders.order[cntx].jobdets[pcnt].site+'");';
-						  
-						   
-						}
-					
-				}				
+				
 				
 				//Loop and write Assets to DB
 				
@@ -3146,10 +3148,10 @@ var orderlist="";
 	
 
 					}
-				
-					sqlstatements.push(sqlstatement);
-				
-				
+				    if(OrdersProcessed.indexOf(MyOrders.order[cntx].orderno)==-1){
+				    	sqlstatements.push(sqlstatement);
+				        OrdersProcessed.push(MyOrders.order[cntx].orderno)
+				    }
 				sqlstatement=""
 
 				
@@ -3222,7 +3224,7 @@ console.log(orderno+changeddatetime)
 						}else{
 							//alert("DB="+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 							opMessage("Deleting Existing Order details "+orderno);
-							sqlstatement1 = 	'DELETE FROM MyOrders where orderno = "'+orderno+'";'+
+							sqlstatement1 = 'DELETE FROM MyOrders where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperations where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationsSplit where orderno = "'+orderno+'";'+
 											'DELETE FROM MyJobDets where orderno = "'+orderno+'";'+
@@ -3234,6 +3236,8 @@ console.log(orderno+changeddatetime)
 											'DELETE FROM MyUserStatus where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationInfo where orderno = "'+orderno+'";'+
 											'DELETE FROM MyJobDetsDraw where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsMPCodes where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsMPoints where orderno = "'+orderno+'";'+
 											'DELETE FROM MyStatus where state="SERVER" and orderno = "'+orderno+'";'
 						}
 						console.log("about to Insert");
@@ -3310,6 +3314,7 @@ opMessage("Callback objects triggured");
 function notificationCB(MyNotifications){
 var sqlstatement;
 var notiftype=""
+	var NotifProcessed=[]
 opMessage("Callback Notifications triggured");
 
 	if(MyNotifications.notification.length>0){
@@ -3482,7 +3487,11 @@ opMessage("Callback Notifications triggured");
 							(MyNotifications.notification[cntx].notifno.length<4)){
 						sqlstatement1=""
 					}else{
-						sqlstatement+=sqlstatement1;
+						if(NotifProcessed.indexOf(MyNotifications.notification[cntx].notifno)==-1){
+							sqlstatement+=sqlstatement1;
+					        NotifProcessed.push(MyNotifications.notification[cntx].notifno)
+						}
+						
 					}
 						
 
