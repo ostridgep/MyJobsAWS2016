@@ -876,13 +876,14 @@ var lastsync=localStorage.getItem('LastSyncedDT')	;
 
 }
 function syncTransactional(){
-
+console.log("about sync to Transactional")
 
 	if (!CheckSyncInterval('TRANSACTIONAL')){
-		(false)
+		setSyncingIndicator(false)
 		return; }
+console.log("syncing Transactional")
 	opMessage("Synchronizing Transactional Data");
-
+	setSyncingIndicator(true)
    console.log("Transactional Call "+getTime())
 	html5sql.process(
 		["SELECT * from MyUserDets"],
@@ -2846,6 +2847,7 @@ function resetTables() {
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
+					'DELETE FROM  MyUserDets;'+
 					'DELETE FROM  GASSurveyHDR;';
 					
 					
@@ -2853,16 +2855,11 @@ function resetTables() {
 					html5sql.process(sqlstatement,
 					 function(){
 						
-						var x = window.location.href.split("/")
-						if(x[x.length-1]=="Home.html"){
-							
-							setCounts()
-						}
-						requestDEMOData('MySurveys.json');
+						
 						SetConfigParam('LASTSYNC_REFERENCE', "20120101010101");
 						SetConfigParam('LASTSYNC_TRANSACTIONAL', "20120101010101");
 
-						
+						 window.location.href="index.html"
 
 
 					 },
@@ -2989,7 +2986,10 @@ var orderlist="";
 		opMessage("Doing Orders");
 		
 		console.log(MyOrders.order.length+"Orders")
-		
+		if(MyOrders.order.length==0){
+			 setSyncingIndicator(false)
+		}
+			
 		if(MyOrders.order.length>0){
 			if(syncTransactionalDetsUpdated){
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+', Orders:'+String(MyOrders.order.length));
@@ -3074,12 +3074,18 @@ var orderlist="";
 				ordernos.push(MyOrders.order[cntx].orderno)
 				changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
 				console.log(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
-				stext=unescape(MyOrders.order[cntx].shorttext).replace(/'/g, "");;
+				stext=MyOrders.order[cntx].shorttext.replace(/%2A%20/g,"%0D%0A")
 				stext=stext.replace("\/", "");;
 				stext=stext.replace(/&/g, "");;
-				ltext=unescape(MyOrders.order[cntx].longtext).replace(/'/g, "");;
-				ltext=stext.replace("\/", "");;
-				ltext=stext.replace(/&/g, "");;
+				//alert(MyOrders.order[cntx].longtext)
+				ltext=MyOrders.order[cntx].longtext.replace(/%2A%20/g,"%0D%0A")
+				ltext=ltext.replace(/%E2%80%A2/g,"%2D")				
+				ltext=ltext.replace(/ %2A /g,"%0D%0A")
+				ltext=ltext.replace(/%C2/g,"")				
+				ltext=ltext.replace(/%3C%28%3E/g,"")	
+				ltext=ltext.replace(/%3C%29%3E/g,"")		
+				ltext=ltext.replace(/%E2%80%99/g,"")
+				//alert(ltext)
 				sqlstatement='INSERT INTO MyOrders (orderno , changedby, changeddatetime, shorttext , longtext , startdate ,  enddate ,contact , telno , type , priority , address ,workaddress, house, houseno, street, district, city, postcode, gis,  property, funcloc, equipment, propertygis, funclocgis, equipmentgis, notifno) VALUES ('+
 					 '"'+MyOrders.order[cntx].orderno+ '","'+ MyOrders.order[cntx].changed_by+ '","'+ MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time+ '","'+ stext + '","'+ ltext + '","'+ MyOrders.order[cntx].startdate + '","'+ MyOrders.order[cntx].enddate + '","'+MyOrders.order[cntx].contact+'",'+ 
 					 '"'+MyOrders.order[cntx].telno + '","'+MyOrders.order[cntx].type + '","'+MyOrders.order[cntx].priority + '","'+MyOrders.order[cntx].address + '","'+MyOrders.order[cntx].workaddress+ '","'+MyOrders.order[cntx].house+'",'+ 
@@ -3249,7 +3255,7 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
-			
+			console.log("about to tidy up orders")
 			html5sql.process(sqldeleteorders,
 					 function(transaction, results, rowsArray){
 				 var path = window.location.pathname;
@@ -3258,6 +3264,7 @@ var orderlist="";
 						console.log("about to refreshList")
 						refreshJobList()
 					}else if(page=="Home.html"){
+						console.log("about to refresh Counts")
 						setCounts()
 					}
 			     setSyncingIndicator(false)
@@ -3417,23 +3424,25 @@ opMessage("Callback Notifications triggured");
 			for(var cntx=0; cntx < MyNotifications.notification.length ; cntx++)
 				{
 		
-				/*if(MyNotifications.notification[cntx].sortfield.length==0){
-					notiftype=MyNotifications.notification[cntx].type;
-				}else{
-					notiftype=MyNotifications.notification[cntx].sortfield;
-				}*/
-				x=unescape(MyNotifications.notification[cntx].shorttext).replace(/'/g, "");;
-				x=x.replace("\/", "");;
-				x=x.replace(/&/g, "");;
-				y=unescape(MyNotifications.notification[cntx].longtext).replace(/'/g, "");;
-			y=y.replace("\/", "");;
-				y=y.replace(/&/g, "");;
+
+				x=unescape(MyNotifications.notification[cntx].shorttext).replace(/'/g,"&#039;");;
+				
+				x=x.replace("\/", "");;			
+				y=MyNotifications.notification[cntx].longtext.replace(/%2A%20/g,"%0D%0A")
+				y=y.replace(/%E2%80%A2/g,"%2D")				
+				y=y.replace(/ %2A /g,"%0D%0A")
+				y=y.replace(/%C2/g,"")				
+				y=y.replace(/%3C%28%3E/g,"")	
+				y=y.replace(/%3C%29%3E/g,"")		
+				y=y.replace(/%E2%80%99/g,"");
 				sqlstatement1='INSERT INTO MyNotifications (notifno , changedby, changeddatetime, shorttext , longtext , startdate , priority , type, funcloc, equipment,orderno, reportedon , reportedby , plant, funclocgis, equipmentgis, cattype, pgroup, pcode, grouptext, codetext) VALUES ( '+ 
 					'"'+MyNotifications.notification[cntx].notifno +'",'+
 					'"'+MyNotifications.notification[cntx].changed_by+'",'+ 
 					'"'+MyNotifications.notification[cntx].changed_date +MyNotifications.notification[cntx].changed_time +'",'+ 
-					'"'+MyNotifications.notification[cntx].shorttext+'",'+ 
-					'"'+MyNotifications.notification[cntx].longtext +'",'+ 
+					//'"'+MyNotifications.notification[cntx].shorttext+'",'+ 
+					'"'+x+'",'+ 
+					'"'+y+'",'+ 
+					//'"'+MyNotifications.notification[cntx].longtext +'",'+  
 					'"'+MyNotifications.notification[cntx].startdate+'",'+ 
 					'"'+MyNotifications.notification[cntx].priority+'",'+
 					'"'+MyNotifications.notification[cntx].type+'",'+

@@ -393,7 +393,8 @@ html5sql.process(SQLStatement,
 			  sap.ui.getCore().getElementById('notificationFuncLoc').setText(rowsArray[0].funcloc)	
 			  sap.ui.getCore().getElementById('notificationEquipment').setTitle("Equipment ")	
 			  sap.ui.getCore().getElementById('notificationEquipment').setText(rowsArray[0].equipment)	
-			  sap.ui.getCore().getElementById('notificationLongText').setText(rowsArray[0].longtext)	
+			 
+			  sap.ui.getCore().getElementById('notificationLongText').setText(rowsArray[0].shorttext+unescape(rowsArray[0].longtext))	
 
 			 
 		 }

@@ -3254,7 +3254,7 @@ var NLongtext=''
 
        SQLStatement="SELECT MyNotifications.pcode, MyNotifications.id as notifid, MyNotifications.type as jobtype, refnotificationtypes.notifprofile,MyRefOrderTypes.description as JobDescription, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, "
 	   SQLStatement+=" MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, "
-	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, "
+	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, MyNotifications.shorttext as notifshorttext, "
 	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
        SQLStatement+="(SELECT GROUP_CONCAT(status ) "
        SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) as opstat,"
@@ -3480,9 +3480,9 @@ html5sql.process(SQLStatement,
                        sap.ui.getCore().getElementById('Equipment').setText(rowsArray[0].equipment_code+" "+rowsArray[0].equipment_desc)   */
 					  
 					   //sap.ui.getCore().getElementById('Equipment').setCustomContent(sap.m.icon("images/"+jobicons[0]))				   
-                       NLongtext=unescape(rowsArray[0].notiflongtext)
-                       Longtext=unescape(rowsArray[0].orderlongtext) 
-
+                     NLongtext=rowsArray[0].notifshorttext+unescape(rowsArray[0].notiflongtext)
+                     
+                     Longtext=unescape(rowsArray[0].orderlongtext) 
              
                       
                }
@@ -5161,7 +5161,7 @@ function rebuildTimeConfs()
 												 syncDT=localStorage.getItem('LastSyncedDT')	
 												 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
 												 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
-						  						setSyncingIndicator(true)
+						  						
 						  						
 						  							}]
 											 }),
