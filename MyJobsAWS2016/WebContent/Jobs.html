@@ -1208,8 +1208,8 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
            liveChange : function(oEvent){
               
                var val = sap.ui.getCore().byId("MPointValue").getValue();
-               console.log("Checking"+val+":"+selevctedMPDecimals+":"+selevctedMPLength)
-               if(validateDecimal(val,selevctedMPDecimals,selevctedMPLength))            
+               console.log("Checking"+val+":"+selectedMPDecimals+":"+selectedMPLength)
+               if(validateDecimal(val,selectedMPDecimals,selectedMPLength))            
                    valueState = "Success";               
                else
                    valueState = "Error";
@@ -1226,19 +1226,37 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     					new sap.m.Button( "MPointSave",{
     					    text: "Save",
     					    type: 	sap.m.ButtonType.Accept,
-    					    tap: [ function(oEvt) {		
+    					    tap: [ function(oEvt) {	
+    					    	var mptype=sap.ui.getCore().byId("MPointType").getValue()
     					    	var eMess="Invalid "
-    					    	
+    					    	var mpvalue=sap.ui.getCore().byId("MPointValue").getValue()
     					    	if(sap.ui.getCore().byId("MPointCode").getEnabled()){
     					    		var mpcode=sap.ui.getCore().byId("MPointCode").getSelectedItem().getKey()
     					    	}else{
     					    		var mpcode=""
     					    	}
     					    	if(sap.ui.getCore().byId("MPointValue").getValueState()=="Error"){
-    					    		eMess+="Reading, "
+    					    		eMess=" Invalid Value "
     					    	}
-    					    	if(mpcode=="-1"){
-    					    		eMess+="Code, "
+    					    	if(mptype=="2"){
+	    					    	if(mpcode=="-1"){
+	    					    		eMess=" Code is mandatory "
+	    					    	}
+    					    	}
+    					    	
+    					    	if(mptype=="1"){
+	    					    	if(mpvalue.length<1){
+	    					    		eMess=" Value is mandatory"
+	    					    	}
+    					    	}
+    					    	if(eMess.length>8){
+    					    		showErrorMessage("Invalid Measurement Point Details",eMess)
+    					    		return
+    					    	}
+    					    	if(mptype=="3"){
+	    					    	if((mpcode=="-1")&&(mpvalue.length<1)){
+	    					    		eMess=" Code or Value must be entered "
+	    					    	}
     					    	}
     					    	if(eMess.length>8){
     					    		showErrorMessage("Invalid Measurement Point Details",eMess)
@@ -1285,11 +1303,12 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
     								
     				                new sap.m.Label({text:"ID"}),
     								new sap.m.Input("MPointID",{type: sap.m.InputType.Input, enabled: false}),
+    								new sap.m.Input("MPointType",{type: sap.m.InputType.Input, visible: false, enabled: false}),
     				                new sap.m.Label({text:"Position"}),
     								new sap.m.Input("MPointPosition",{type: sap.m.InputType.Input, enabled: false}),	
     								new sap.m.Label({text:"Description"}),
      								new sap.m.Input("MPointDescription",{type: sap.m.InputType.Input, enabled: false}),	
-     								new sap.m.Label({text:"Code"}),
+     								new sap.m.Label("MPointCodeLabel",{text:"Code"}),
     								new sap.m.Select('MPointCode',{}),
     				                new sap.m.Label('MPointValueLabel',{text:"Reading"}),
     								oInp,
@@ -1312,16 +1331,40 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 function buildMpointDetails(mp){
     	  
 
-    	html5sql.process("select DISTINCT meas_point, psort, pttxt,format, no_char, no_deci, code_gp, unit_meas from myjobdetsmpoints where meas_point = '"+mp+"' order by meas_point",
+    	html5sql.process("select DISTINCT meas_point, psort, pttxt,format, no_char, no_deci, code_gp, unit_meas, read_from from myjobdetsmpoints where meas_point = '"+mp+"' order by meas_point",
     			 function(transaction, results, rowsArray){
 
     				if(rowsArray.length>0){
-    					selevctedMPLength=rowsArray[0].no_char;
-    					selevctedMPDecimals=rowsArray[0].no_deci;
+    					
+    					selectedMPLength=rowsArray[0].no_char;
+    					selectedMPDecimals=rowsArray[0].no_deci;
     					sap.ui.getCore().byId("MPointID").setValue(rowsArray[0].meas_point)
+    					sap.ui.getCore().byId("MPointType").setValue(rowsArray[0].read_from)
     					sap.ui.getCore().byId("MPointPosition").setValue(rowsArray[0].psort)
     					sap.ui.getCore().byId("MPointDescription").setValue(rowsArray[0].pttxt)
     					sap.ui.getCore().byId("MPointValueLabel").setText("Reading ("+rowsArray[0].unit_meas+") [" +rowsArray[0].format+"]")
+    					
+    					if(rowsArray[0].read_from=="1"){
+    						sap.ui.getCore().byId("MPointCode").setVisible(false)
+    						sap.ui.getCore().byId("MPointCodeLabel").setVisible(false)
+    						sap.ui.getCore().byId("MPointValue").setVisible(true)
+    						sap.ui.getCore().byId("MPointValueLabel").setVisible(true)
+
+    					}
+    					if(rowsArray[0].read_from=="2"){
+    						sap.ui.getCore().byId("MPointCode").setVisible(true)
+    						sap.ui.getCore().byId("MPointCodeLabel").setVisible(true)
+    						sap.ui.getCore().byId("MPointValue").setVisible(false)
+    						sap.ui.getCore().byId("MPointValueLabel").setVisible(false)
+
+    					}
+    					if(rowsArray[0].read_from=="3"){
+    						sap.ui.getCore().byId("MPointCode").setVisible(true)
+    						sap.ui.getCore().byId("MPointCodeLabel").setVisible(true)
+    						sap.ui.getCore().byId("MPointValue").setVisible(true)
+    						sap.ui.getCore().byId("MPointValueLabel").setVisible(true)
+
+    					}
 						if(rowsArray[0].code_gp.length <1){
 							sap.ui.getCore().byId("MPointCode").setEnabled(false)
 							buildMPValues(mp,"NOCODE")

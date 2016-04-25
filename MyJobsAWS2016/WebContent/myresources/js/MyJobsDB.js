@@ -130,14 +130,14 @@ function requestSAPData(page,params){
 			syncStatusType=sap.m.ButtonType.Accept			
 		    opMessage("call success"+page );
 		  }).fail( function( xhr, status ) {
-			  console.log("request failed")
-			  syncStatusType=sap.m.ButtonType.Reject
-			  setSyncingIndicator(false)
+			  
+			  
 			  opMessage(page+status)
 			  	if (status!="parsererror"){
 					
 				    if( status == "timeout" ) {
-				    	
+				    	syncStatusType=sap.m.ButtonType.Reject
+						setSyncingIndicator(false)
 				    	opMessage(page+status);
 				    }
 			  	}
@@ -2926,7 +2926,7 @@ var orderlist="";
 			}
 			opMessage("Deleting Existing Orders");
 			sqlstatementMP = 	'DELETE FROM MyJobDetsMPoints;'+
-							'DELETE FROM MyJobDetsMPCodes;';
+							'DELETE FROM MyJobDetsMPCodes;'+'DELETE FROM MyJobDets;';
 			
 			
 			opMessage("Loading "+MyOrders.order.length+" Orders");
