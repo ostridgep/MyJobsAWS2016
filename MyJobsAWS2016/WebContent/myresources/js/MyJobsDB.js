@@ -1344,6 +1344,58 @@ var syncDetails = false	;
 																						);	
 																					return;
 																				 }
+																				// Seding Measurement Docs
+																				html5sql.process("SELECT * from MyMpointDocs where state = 'NEW'",
+																						function(transaction, results, rowsArray){
+																						
+																							console.log("found MP"+rowsArray.length)
+																							if( rowsArray.length > 0) {
+																								if (syncDetails){
+																									localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", MPDocs:"+String(rowsArray.length));
+																								}else{
+																									syncDetails=true;
+																									localStorage.setItem('LastSyncUploadDetails',"MPDocs:"+String(rowsArray.length));
+																								}
+																								if(!syncDetsSet){
+																									syncDetsSet=true;
+																									SetLastSyncDetails("LASTSYNC_UPLOAD");
+																									sapCalls+=1;
+																									}
+
+																								item = rowsArray[0];
+																								var mpcode=""
+																									if(item['code']!="-1"){
+																										mpcode=item['code'];
+																									}
+																								newMPDoc='&EQUIPMENT='+item['equipment']+'&FUNC_LOC='+item['funcloc']+'&MEAS_POINT='+item['meas_point']+
+																								'&READING_DATE='+item['date']+
+																								'&READING_TIME='+item['time']+
+																								'&RECNO='+item['id']+
+																								'&READER='+localStorage.getItem('MobileUser')+
+																								'&RECORDED_VALUE='+item['value']+
+																								'&VALUATION_CODE='+mpcode+
+																								'&SHORT_TEXT='+item['shorttext']+
+																								'&USERID='+localStorage.getItem('MobileUser')
+																								opMessage("SEND Status= "+newMPDoc);
+																								
+																								
+																								html5sql.process("UPDATE MyMpointDocs SET state = 'SENDING' WHERE id='"+item['id']+"'",
+																											 function(){
+																												sendSAPData("MyJobsCreateMPDoc.htm",newMPDoc,"UPDATE MyMpointDocs SET state = 'NEW' WHERE id='"+item['id']+"'");
+																													
+																											 },
+																											 function(error, statement){
+																												 
+																												 opMessage("Error: " + error.message + " when processing " + statement);
+																											 }        
+																									);	
+																								return;
+																							 }
+																				},
+																				function(error, statement){
+																					opMessage("Error: " + error.message + " when New Measurement Docs processing New " + statement); 
+																				}
+																				);	
 																				 
 																			},
 																			function(error, statement){
@@ -1712,6 +1764,10 @@ function updateOperationStatus(orderno, opno, code, status)
 		sqltimestamp=", onsite_date = '"+statusUpdateDate+"', onsite_time ='"+statusUpdateTime+"'"
 	}else if(code=='PARK'){
 		sqltimestamp=", park_date = '"+statusUpdateDate+"', park_time ='"+statusUpdateTime+"'"
+		updateMeasurementDocsState(orderno,opno,"NEW")
+	}else if(code=='CONF'){
+		updateMeasurementDocsState(orderno,opno,"NEW")
+	
 	}
 	
 	html5sql.process("update  myjobdets set status = '"+code+"', status_s = '"+code+"', status_l =  '"+code+"'"+sqltimestamp+" ,tconf_date = '"+statusUpdateDate+"', tconf_time = '"+statusUpdateTime+"' where  orderno = '"+orderno+"' and opno = '"+ opno+"';",
@@ -1745,7 +1801,23 @@ function updateOperationStatus(orderno, opno, code, status)
 		}
 	);
 }
+function updateMeasurementDocsState(orderno, opno, state)
+{
+	
+// Update all Measurement Docs to state = "NEW" ready for sending
+	
+	
+	html5sql.process("update  mympointdocs set state = 'NEW'  where  orderno = '"+orderno+"' and opno = '"+ opno+"';",
+		function(){
 
+
+		},
+		function(error, statement){
+		opMessage("Error: " + error.message + " when Updateing mympointdocs state " + statement);          
+		
+		}
+	);
+}
 function createNewStatus(orderno, opno, code, status)
 {
 	
@@ -3686,6 +3758,23 @@ opMessage("Callback sapCB triggured");
 
 					}else{
 						sqlstatement+="UPDATE MyTimeConfs SET confno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+MySAP.message[0].recno+"';";
+					}
+		
+			}
+//Handle MPDoc Create Response			
+			if (MySAP.message[0].type=="creatempdoc"){
+				console.log(MySAP.message[0].type+":"+MySAP.message[0].message+":"+MySAP.message[0].message_type+":"+MySAP.message[0].mpdocno+":"+MySAP.message[0].recno)
+				opMessage("-->Type= "+MySAP.message[0].type);
+				opMessage("-->confno= "+MySAP.message[0].mpdocno);
+				if(MySAP.message[0].confno!="0000000000"){
+
+					
+		
+						sqlstatement+="UPDATE MyMpointdocs SET state = '"+MySAP.message[0].mpdocno+"' WHERE id='"+MySAP.message[0].recno+"';";
+						
+
+					}else{
+						sqlstatement+="UPDATE MyMpointdocs SET state = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+MySAP.message[0].recno+"';";
 					}
 		
 			}
