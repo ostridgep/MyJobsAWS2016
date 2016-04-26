@@ -1,4 +1,27 @@
+var oSwitchFlooding = new sap.m.Switch({
+				state: false,
+				customTextOn:"Yes",
+				customTextOff:"No",
+				change: function(evt){
+					
+					setCloseswitch()
 
+			    }
+			});
+
+
+			var oSwitchPollution = new sap.m.Switch({
+				state: false,
+				customTextOn:"Yes",
+				customTextOff:"No",
+					change: function(evt){
+						
+						setCloseswitch()
+
+				    }
+			});
+
+			
 var oLayout1 = new sap.ui.layout.form.GridLayout();
 var oLayout1a = new sap.ui.layout.form.GridLayout();
               var oLayout2 = new sap.ui.layout.form.ResponsiveLayout();
@@ -63,9 +86,16 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                    							displayFormat : "H'h' m'm'",
                    							
                    						})
-                           
-                                        ]
+                                          ]
                                       }),
+                   					 new sap.ui.layout.form.FormElement({
+                                         label: "Has there been an escape of sewage to a 3rd party property?",
+                                         fields: [oSwitchFlooding]
+                                      }),
+                    					 new sap.ui.layout.form.FormElement({
+                                             label: "Has there been a pollution?",
+                                             fields: [oSwitchPollution]
+                    					 })  
                                          ],
                                   layoutData: new sap.ui.core.VariantLayoutData({
                                                 multipleLayoutData: [new sap.ui.layout.ResponsiveFlowLayoutData({linebreak: true, minWidth: 400}),
@@ -368,6 +398,32 @@ function setCloseButtons(key){
 	}
 	
 	if (key=="GEN-OP"){
+		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
+		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
+			sap.ui.getCore().getElementById('btnPollution').setText("Create");
+			
+		}
+		
+	}else{
+		sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
+		
+	}
+}
+function setCloseswitch(){
+	initCloseButtons()
+	if (oSwitchFlooding.getState()){
+		sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
+		if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
+			sap.ui.getCore().getElementById('btnDG5').setText("Create");
+			
+		}
+	
+	}else{
+		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
+	
+	}
+	
+	if (oSwitchPollution.getState()){
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
 		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
 			sap.ui.getCore().getElementById('btnPollution').setText("Create");
