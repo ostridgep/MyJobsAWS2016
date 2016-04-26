@@ -10,6 +10,7 @@ var oSwitchFlooding = new sap.m.Switch({
 			});
 
 
+
 			var oSwitchPollution = new sap.m.Switch({
 				state: false,
 				customTextOn:"Yes",
