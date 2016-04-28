@@ -563,7 +563,8 @@ new sap.m.Button( {
             contentWidth:"85%",
             contentHeight: "85%",
       beforeOpen:function(){
-      
+    	  oSwitchPollution.setState(false);
+    	  oSwitchFlooding.setState(false)
 		BuildCloseScreen();
 
       },
@@ -3252,7 +3253,7 @@ var StatusColour=""
 var Longtext='';
 var NLongtext=''
 
-       SQLStatement="SELECT MyNotifications.pcode, MyNotifications.id as notifid, MyNotifications.type as jobtype, refnotificationtypes.notifprofile,MyRefOrderTypes.description as JobDescription, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, "
+       SQLStatement="SELECT MyNotifications.pcode,  substr(MyNotifications.startdate,1,8) as notifdate , substr(MyNotifications.startdate,10,6) as notiftime, MyNotifications.id as notifid, MyNotifications.type as jobtype, refnotificationtypes.notifprofile,MyRefOrderTypes.description as JobDescription, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, "
 	   SQLStatement+=" MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, "
 	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, MyNotifications.shorttext as notifshorttext, "
 	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 

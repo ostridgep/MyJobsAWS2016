@@ -89,12 +89,13 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                    						})
                                           ]
                                       }),
-                   					 new sap.ui.layout.form.FormElement({
-                                         label: "Has there been an escape of sewage to a 3rd party property?",
-                                         fields: [oSwitchFlooding]
-                                      }),
+                   					 
+                                      new sap.ui.layout.form.FormElement({
+                                          label: "Escape of sewage?",
+                                          fields: [oSwitchFlooding]
+                                       }),
                     					 new sap.ui.layout.form.FormElement({
-                                             label: "Has there been a pollution?",
+                                             label: "Pollution Incident?",
                                              fields: [oSwitchPollution]
                     					 })  
                                          ],

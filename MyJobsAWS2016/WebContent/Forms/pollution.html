@@ -103,67 +103,67 @@
                         </tr>
                         <tr>
                             <th>Upstream</th>
-                            <td><input class="feedback-input-table" id="upstreamdistance" name="upstreamdistance"/></td>
-                            <td><input class="feedback-input-table" id="upstreamonsitenh3" name="upstreamonsitenh3"/></td>
+                            <td><input class="feedback-input-table" id="upstreamdistance" name="upstreamdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3" name="upstreamonsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
                                 
                                
-                                    <button type="button" onclick = 'document.getElementById("upstreamsenttolabV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("upstreamsenttolabV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'setSample("1","YES");this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'setSample("1","NO");this.active=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Pt of Disc</th>
-                            <td><input class="feedback-input-table" id="ptofdiscdistance" name="ptofdiscdistance"/></td>
-                            <td><input class="feedback-input-table" id="ptofdisconsitenh3" name="ptofdisconsitenh3"/></td>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance" name="ptofdiscdistance"disabled /></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3" name="ptofdisconsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
                                
-                                    <button type="button" onclick = 'document.getElementById("ptofdiscsenttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("ptofdiscsenttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'setSample("2","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'setSample("2","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Downstream 1</th>
-                            <td><input class="feedback-input-table" id="downstream1distance" name="downstream1distance"/></td>
-                            <td><input class="feedback-input-table" id="downstream1onsitenh3" name="downstream1onsitenh3"/></td>
+                            <td><input class="feedback-input-table" id="downstream1distance" name="downstream1distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3" name="downstream1onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
                                 
-                                    <button type="button" onclick = 'document.getElementById(""downstream1senttolabV"").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById(""downstream1senttolabV"").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'setSample("3","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'dsetSample("3","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Downstream 2</th>
-                            <td><input class="feedback-input-table" id="downstream2distance" name="downstream2distance"/></td>
-                            <td><input class="feedback-input-table" id="downstream2onsitenh3" name="downstream2onsitenh3"/></td>
+                            <td><input class="feedback-input-table" id="downstream2distance" name="downstream2distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3" name="downstream2onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
                                 
-                                    <button type="button" onclick = 'document.getElementById("downstream2senttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("downstream2senttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'setSample("4","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'setSample("4","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th>Downstream 3</th>
-                            <td><input class="feedback-input-table" id="downstream3distance" name="downstream3distance"/></td>
-                            <td><input class="feedback-input-table" id="downstream3onsitenh3" name="downstream3onsitenh3"/></td>
+                            <td><input class="feedback-input-table" id="downstream3distance" name="downstream3distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3" name="downstream3onsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
                                
-                                    <button type="button" onclick = 'document.getElementById("downstream3senttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("downstream3senttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'setSample("5","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'setSample("5","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -179,9 +179,45 @@
 
         </form>
     </div>
-    
+ 
 	
 <script>
+function setSample(row,mode){
+	if (row=="5"){
+		f1="downstream3distance"
+		f2="downstream3onsitenh3"
+		f3="downstream3senttolabV"
+	}
+	if (row=="4"){
+		f1="downstream2distance"
+		f2="downstream2onsitenh3"
+		f3="downstream2senttolabV"
+	}
+	if (row=="3"){
+		f1="downstream1distance"
+		f2="downstream1onsitenh3"
+		f3="downstream1senttolabV"
+	}
+	if (row=="2"){
+		f1="ptofdiscdistance"
+		f2="ptofdisconsitenh3"
+		f3="ptofdiscsenttolabV"
+	}
+	if (row=="1"){
+		f1="upstreamdistance"
+		f2="upstreamonsitenh3"
+		f3="upstreamsenttolabV"
+	}
+	console.log(f1+":"+f2+":"+f3)
+	document.getElementById(f3).value="NO"
+	if(mode=="NO"){
+		disabledflag=true;
+	}else{
+		disabledflag=false;
+	}
+	document.getElementById(f1).disabled=disabledflag
+	document.getElementById(f2).disabled=disabledflag
+}
 $(".btn-group > .btn").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
     $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
@@ -193,7 +229,42 @@ $(window).resize(function() {
 		location.href="#"+document.activeElement.id
 
 	});
+function loadCompleted(){
+	
+	 
+}
+function isComplete()
+{
+	   
+	    var elem = document.getElementById('MyJobsForm').elements;
+		cnt = 0;
+		fvalid=0
 		
+	    for(var i = 0; i < elem.length; i++)
+	    {
+	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
+	    		
+	    		
+	    			if(!elem[i].hasAttribute("Ignore")){
+	    				console.log(elem[i].id+":"+elem[i].value)
+	    				cnt=cnt+1
+	    				if((elem[i].value!="")||(elem[i].disabled==true)){
+	    					fvalid++;
+	    				}
+	    			
+	    		}
+
+	    	}
+	    } 
+		
+	    console.log("valid Fields = "+fvalid+" of "+cnt)
+	   
+	    if(fvalid!=cnt){
+	    	return "All Fields must be completed must be completed"
+	    	return False
+	    }
+	    return "COMPLETE"
+}		
 	</script>
 	
 </body>

@@ -53,8 +53,8 @@
                                 <div class="btn-group btn-toggle" id="spokento" style="margin-left: 10px">
                                 
                                
-                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="YES";this.active=true;document.getElementById("custsatifaction").disabled=false' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("spokentoV").value="NO";this.active=true;document.getElementById("custsatifaction").value="CS06";document.getElementById("custsatifaction").disabled=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -76,7 +76,7 @@
                             <td width = "50%">Please confirm how satisfied the Customer is with the actions you have taken</td>
                            
                            <td align="left">
-                        <select class="feedback-input" id="custsatifaction" name="custsatifaction"  merge="SELECT CODE as value, CODEDESC as description FROM CFCODES WHERE codegroup = 'CUST030' AND LEVEL='2' ORDER BY CODEDESC">
+                        <select class="feedback-input" id="custsatifaction" name="custsatifaction"  onChange= "loadCompleted()" merge="SELECT CODE as value, CODEDESC as description FROM CFCODES WHERE codegroup = 'CUST030' AND LEVEL='2' ORDER BY CODE">
                             <option value="" selected></option>
 
 
@@ -88,7 +88,7 @@
                             <td width = "50%">If Customer is Dissatisfied / Very Dissatisfied, please state why</td>
                            
                            <td align="left">
-                              <textarea id="reason" name="reason"  rows="4" cols="50" ></textarea>
+                              <textarea id="reason" name="reason"  rows="4" cols="50" disabled=true></textarea>
                                
                             </td>
                         </tr>
@@ -100,8 +100,8 @@
                                 <div class="btn-group btn-toggle" id="resolved" style="margin-left: 10px">
                                 
                                
-                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="YES";this.active=true;document.getElementById("cause").disabled=false' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("resolvedV").value="NO";this.active=true;document.getElementById("cause").disabled=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -140,15 +140,15 @@
                             </td>
                         </tr>  
                         <tr>
-                            <td width = "50%">Would this Customer's issue potentially benefit from being on a PPM Programme?/td>
+                            <td width = "50%">Would this Customer's issue potentially benefit from being on a PPM Programme?</td>
                            
                              <td align="left">
                              <input type="TEXT" id="ppmV" name="ppmV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ppm" style="margin-left: 10px">
                                 
                                
-                                    <button type="button" onclick = 'document.getElementById("ppmV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("ppmV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'document.getElementById("ppmV").value="YES";this.active=true;document.getElementById("ppmdetails").disabled=false' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("ppmV").value="NO";this.active=true;document.getElementById("ppmdetails").disabled=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>  
@@ -186,7 +186,61 @@ $(window).resize(function() {
 		location.href="#"+document.activeElement.id
 
 	});
+function loadCompleted(){
+	if(document.getElementById("spokentoV").value=="NO"){
+		document.getElementById("custsatifaction").value="CS06";
+		document.getElementById("custsatifaction").disabled=true
+		document.getElementById("reason").disabled=true
+	}
+	if((document.getElementById("custsatifaction").value=="CS04")||(document.getElementById("custsatifaction").value=="CS05")){
 		
+		document.getElementById("reason").disabled=false
+	}	else{
+		document.getElementById("reason").disabled=true
+	}
+	if(document.getElementById("resolvedV").value="NO"){
+		document.getElementById("cause").disabled=false
+	}else{
+		document.getElementById("cause").disabled=true
+	}
+	if(document.getElementById("ppmV").value="YES"){
+		document.getElementById("ppmdetails").disabled=false
+	}else{
+		document.getElementById("ppmdetails").disabled=true
+	}
+}
+function isComplete()
+{
+	   
+	    var elem = document.getElementById('MyJobsForm').elements;
+		cnt = 0;
+		fvalid=0
+		
+	    for(var i = 0; i < elem.length; i++)
+	    {
+	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
+	    		
+	    		
+	    			if(!elem[i].hasAttribute("Ignore")){
+	    				console.log(elem[i].id+":"+elem[i].value)
+	    				cnt=cnt+1
+	    				if((elem[i].value!="")||(elem[i].disabled==true)){
+	    					fvalid++;
+	    				}
+	    			
+	    		}
+
+	    	}
+	    } 
+		
+	    console.log("valid Fields = "+fvalid+" of "+cnt)
+	   
+	    if(fvalid!=cnt){
+	    	return "All Fields must be completed must be completed"
+	    	return False
+	    }
+	    return "COMPLETE"
+}				
 	</script>
 	
 </body>

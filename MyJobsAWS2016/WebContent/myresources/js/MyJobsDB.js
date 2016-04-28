@@ -2021,6 +2021,7 @@ function createAWSEODNotif(workdate,homedate,empno)
 
 function createAWSJobClose(order,opno,notifno, details, empid,work_cntr,closedate,closetime, funcloc , equipment, inshift , outofshift , pgrp, pcode, agrp, acode, igrp, icode, followon , variance, reason)
 {
+
 html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, empid, work_cntr, state , closedate, closetime, funcloc , equipment, inshift , outofshift , pgrp, pcode, agrp, acode, igrp, icode, followon , variance, reason) VALUES ("+
 			 "'"+order+"','"+opno+"','"+notifno+"','"+details+"','"+empid+"','"+work_cntr+"','NEW','"+closedate+"','"+closetime+"','"+
 			 funcloc+"','"+equipment+"','"+inshift+"','"+outofshift+"','"+pgrp+"','"+pcode+"','"+agrp+"','"+
@@ -2036,18 +2037,21 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 }
 function createFormsResponse(formname, order,opno,user,content,mode)
 {
+	
 	if (mode=="Close"){
 		state = "Close"
 	}else{
 		state="NEW"
 	}
-	html5sql.process("INSERT INTO  MyFormsResponses (formname, orderno , opno, user, contents, date , time , state) VALUES ("+
-				 "'"+formname+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');",
+	sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
+	sqlStatement+="INSERT INTO  MyFormsResponses (formname, orderno , opno, user, contents, date , time , state) VALUES ("+
+	 "'"+formname+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');"
+	html5sql.process(sqlStatement,
 		 function(){
-			
+			console.log("form done")
 		 },
 		 function(error, statement){
-
+			 console.log("Error: " + error.message + " when FormsResponses processing " + statement);
 			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 		 }        
 		);

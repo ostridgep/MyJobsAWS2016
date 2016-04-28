@@ -57,6 +57,29 @@ function showMessage(msg){
 
 	});
 }
+function showFormValidationMessage(title,msg){
+	sap.m.MessageToast.show(msg, {
+		type: Error,
+		duration: Number(3000),
+		width: "30em",
+		my: "center center",
+		at: "center center",		
+		autoClose: true,
+
+	});
+	  sap.m.MessageBox.show(msg, {
+		         icon: sap.m.MessageBox.Icon.ERROR ,
+		         title: title,
+		         actions: [sap.m.MessageBox.Action.IGNORE, sap.m.MessageBox.Action.ABORT],
+	  			 onClose: function(oAction){
+	  				
+	  				 if(oAction=="IGNORE"){
+	  					 saveFormData()
+	  				 }
+	  			 }
+		       }
+		     );
+}
 function showErrorMessage(title,msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,
@@ -119,6 +142,11 @@ function getDate()	{
 function getFormattedDate()	{			
 	var currentdate = new Date(); 
 return zeroFill1(currentdate.getFullYear().toString()) +"/"+ zeroFill1((currentdate.getMonth()+1).toString() ) + "/"+zeroFill1(currentdate.getDate().toString());
+
+}
+function getFormattedDMY()	{			
+	var currentdate = new Date(); 
+return zeroFill1(currentdate.getDate().toString()) +"/"+ zeroFill1((currentdate.getMonth()+1).toString() ) + "/"+zeroFill1(currentdate.getFullYear().toString());
 
 }
 function formatDate(currentdate)	{			
@@ -192,6 +220,12 @@ function formatDate(dt){
 	var formatteddt="";
 	formatteddt=dt.substring(6,8)+"/"+dt.substring(4,6)+"/"+dt.substring(0,4)
 	return formatteddt;
+	}
+function formatTimeString(dt){
+
+	var formattedt="";
+	formattedt=dt.substring(0,2)+":"+dt.substring(2,4)+":"+dt.substring(4,6)
+	return formattedt;
 	}
 function getDateStamp(){
 nowd=getDate();

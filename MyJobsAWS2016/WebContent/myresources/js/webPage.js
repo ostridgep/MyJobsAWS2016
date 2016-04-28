@@ -134,34 +134,33 @@ var formForms = new sap.m.Dialog("dlg",{
 					    text: "Save",
 					    icon:"sap-icon://sys-save",
 					    type: sap.m.ButtonType.Accept,
-					    tap: [ function(oEvt) {		  
+					    tap: [ function(oEvt) {	
+					    	var fstate=document.getElementById("formIframe").contentWindow.isComplete()
 					    	var MyIFrame = document.getElementById("formIframe");
-					    	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
-					    	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
-					    	try {
-					    		fname=MyIFrameDoc.getElementById("FormName").value
-					    		json=buildJSONResponse(MyIFrameDoc)
-					    		if(currentPage.indexOf("Home")<1) {
-					    			w=localStorage.getItem("SelectedItem")
+						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
+					    	fname=MyIFrameDoc.getElementById("FormName").value
+					    	
+					    	if(fstate!="COMPLETE"){
+					    	    showFormValidationMessage(fname+" Form",fstate)
+					    	    
+							
+					    	}else{
+					    		saveFormData();
+					    	}
+						    	
+						    	
 
-					    			x=w.split("#")
-					    			y=x[1]
-					    			z=y.split(":")
-					    			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode)
-					    		}else{
-					    		//Standalone Form
-					    			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode)
-					    		}
-					    		formForms.close()
-					    	}
-					    	catch(err) {
-					    	
-					    		formForms.close()
-					    	}
+						    	
+						    	
+						    	
+						    	 
+							
 					    	
 					    	
 					    	
-					    	} ]   
+					    }
+					    ]   
 					})
 					
 					],					
@@ -192,6 +191,32 @@ var formForms = new sap.m.Dialog("dlg",{
 	  }
 	
 	 })
+function saveFormData(){
+	
+	var MyIFrame = document.getElementById("formIframe");
+    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
+	try {
+		
+		json=buildJSONResponse(MyIFrameDoc)
+		if(currentPage.indexOf("Home")<1) {
+			w=localStorage.getItem("SelectedItem")
+
+			x=w.split("#")
+			y=x[1]
+			z=y.split(":")
+			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode)
+		}else{
+		//Standalone Form
+			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode)
+		}
+		formForms.close()
+	}
+	catch(err) {
+	
+		formForms.close()
+	}
+}
 function showhideSaveButton(pageName){
 	
 	
@@ -212,14 +237,14 @@ function showhideSaveButton(pageName){
 	
 	//	formMode='Close' if coming from Close Page
 	//need to read the json values into an array
-	loadFormFields(MyIFrameDoc)
+	
 
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
 		buildSelects(MyIFrameDoc);
-	
+		loadFormFields(MyIFrameDoc)
 
 	}
 }
@@ -231,10 +256,11 @@ function updateMergeField(fld){
 	}
 	
 }
+
 function buildHeaderFields(formDoc){
 	mapLocationField=''
 	var items = formDoc.getElementsByTagName("*");
-	console.log("Building Header Fields"+items.length)
+	
 	for (var i = items.length; i--;) {
 	    //do sth like hide the element
 	    if(items[i].hasAttribute("merge")){
@@ -243,8 +269,19 @@ function buildHeaderFields(formDoc){
 	    			
 	    			if(items[i].getAttribute("merge")=='mapLocation'){
 	    				mapLocationField=items[i].id
+	    			}else if(items[i].getAttribute("merge")=='~currenttime'){
+	    				items[i].value=getFormattedTime()
+	    			}else if(items[i].getAttribute("merge")=='~currentdate'){
+	    				items[i].value=getFormattedDMY();
 	    			}else{
-	    				items[i].value=selectedJobArray[items[i].getAttribute("merge")]
+	    				if(items[i].getAttribute("merge")=="notifdate")
+	    					{
+	    					items[i].value=formatDate(selectedJobArray[items[i].getAttribute("merge")])
+	    					}else if(items[i].getAttribute("merge")=="notiftime"){
+	    						items[i].value=formatTimeString(selectedJobArray[items[i].getAttribute("merge")])	
+	    					}else{
+	    						items[i].value=selectedJobArray[items[i].getAttribute("merge")]
+	    					}
 	    			}
 	    				
 	    			
@@ -258,33 +295,33 @@ function buildHeaderFields(formDoc){
 }
 function buildTables(formDoc){
 	var items = formDoc.getElementsByTagName("TABLE");
-	console.log("Tables Found"+items.length)
+	
 		for (var i = items.length; i--;) {
 		    //do sth like hide the element
 		    if(items[i].hasAttribute("merge")){
-		    	console.log("Found a Merge Table"+items[i].getAttribute("merge"))
+		    	if(items[i].getAttribute("merge")!="FormOutputTable"){
 		    		rows=items[i].children[0].children
 		    		rowtoClone=''    		
 		    		for (var r=0; r < rows.length; r++) {
 		    			if(rows[r].hasAttribute("mergerow")){
-		    			    console.log(rows[r].tagName)
+		    			   
 		    				rowtoClone=rows[r]; 			   
 		    			}
 		    		}
 		    	mergeTableData(items[i].getAttribute("merge"),items[i].children[0],rowtoClone)
 		    	items[i].deleteRow(1)
 		    	
-		    	
+		    	}
 		    }
 		}
 	}
 function buildSelects(formDoc){
 	var items = formDoc.getElementsByTagName("SELECT");
-	console.log("Selects Found"+items.length)
+	
 		for (var i = items.length; i--;) {
 		    //do sth like hide the element
 		    if(items[i].hasAttribute("merge")){
-		    	console.log("Found a Merge Select"+items[i].getAttribute("id")+items[i].getAttribute("merge"))
+		    	
 					
 					buildOptions(items[i].getAttribute("merge"),items[i]);
 
@@ -307,15 +344,17 @@ function buildOptions(sql,fld){
 					    fld.appendChild(option);
 				}
 				
-	
+				fld.value=""
 			},
 			 function(error, statement){
-				 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+				 console.log("Error: " + error.message + " when processing " + statement);
 			 }   
 		);
 }
+
+
 function buildRelatedSelect(fld,sql,val){
-	console.log(fld+":"+val+":"+sql)
+	
 
 	var theSelect=theIFrameDoc.getElementById(fld)
 	
@@ -325,6 +364,7 @@ for(var i = theSelect.options.length-1;i>0;i--)
 }
 		html5sql.process(sql+"'"+val+"'",
 				function(transaction, results, rowsArray){
+					console.log("found "+rowsArray.length)
 					for (var r=0; r < rowsArray.length; r++) {						    
 						    var option = document.createElement("option");
 						    option.text = rowsArray[r].description;
@@ -335,11 +375,39 @@ for(var i = theSelect.options.length-1;i>0;i--)
 		
 				},
 				 function(error, statement){
-					 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+					
+					console.log("Error: " + error.message + " when processing " + statement);
 				 }   
 			);
 
 }
+function buildRelatedSelectforLoad(fld,sql,val,defaultval){
+	
+	var theSelect=theIFrameDoc.getElementById(fld)
+	
+	for(var i = theSelect.options.length-1;i>0;i--)
+	{
+		theSelect.removeChild(theSelect.options[i]);
+	}
+			html5sql.process(sql+"'"+val+"'",
+					function(transaction, results, rowsArray){
+						console.log("found "+rowsArray.length)
+						for (var r=0; r < rowsArray.length; r++) {						    
+							    var option = document.createElement("option");
+							    option.text = rowsArray[r].description;
+							    option.value = rowsArray[r].value;
+							    theSelect.appendChild(option);
+						}
+						theSelect.value=defaultval
+			
+					},
+					 function(error, statement){
+						
+						console.log("Error: " + error.message + " when processing " + statement);
+					 }   
+				);
+	}
+
 	function cloneRow(row,table,cnt,dbArray) {
 
 	    var clone = row.cloneNode(true); // copy children too
@@ -369,10 +437,10 @@ var SQLStatement=''
 
 		                     SQLStatement+=" where orderno = '"+selectedJobArray["orderno"]+"'"
 
-		                     console.log("Doing Table "+tablename+SQLStatement)
+		                     
 		html5sql.process(SQLStatement,
 				function(transaction, results, rowsArray){
-			console.log(tablename+":"+rowsArray.length)
+			
 			for (var cnt=0; cnt<rowsArray.length ; cnt++) {
 				cloneRow(rowtoClone,table,cnt,rowsArray[cnt])
 	    	}
@@ -433,104 +501,94 @@ function setDlgTitle(formTitle){
 }
 	function buildJSONResponse(doc)
 	{
-		json=""
+		json="[{"
 	    var str = '';
-		
+		  console.log("tables")
+		   var items = doc.getElementsByTagName("TABLE");
+		   var mergeTables=[]
+		   for (var i=0;i<items.length; i++) {
+		      
+		       if(items[i].hasAttribute("merge")){
+		    	   mergeTables.push(items[i].getAttribute("id"));
+		      	   
+		       		
+		       	
+		       	
+		       }
+		   }		
 	    var elem = doc.getElementById('MyJobsForm').elements;
-		
+		var fldsop=0
 	    for(var i = 0; i < elem.length; i++)
 	    {
 	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
-	    		if(elem[i].name=="FormName"){
-	    			json+="{\n\""+elem[i].value+"\":[{\n"
-	    		}else{
-	    			json+="\""+elem[i].id+"\":\""+elem[i].value+"\",\n"
+	    		     
+	    		
+	    			if(!elem[i].hasAttribute("Ignore")){
+	    				if(fldsop>0){
+	    					json+=","	
+	    				}
+	    				json+="\""+elem[i].id+"\":\""+elem[i].value+"\""
+	    				fldsop++;
+	    			
 	    		}
 
 	    	}
 	    } 
 	    
 	   str=json
-	   
-	   var items = doc.getElementsByTagName("TABLE");
-	   var mergeTables=[]
-	   for (var i=0;i<items.length; i++) {
-	      
-	       if(items[i].hasAttribute("merge")){
-	    	   mergeTables.push(items[i].getAttribute("merge"));
-	      	   
-	       		
-	       	
-	       	
-	       }
-	   }
+	
 	   
 	   for (var i = mergeTables.length-1; i >-1; i--) {
-	    	   str+=getJSONTableContent(doc,mergeTables[i]);
-	      	   
-	      	   if(i>0){
-	      		 str+="],"
-	      	   }else{
-	      		 str+="]}"  
-	      	   }
+		  
+	    	   str+=","+getJSONTableContent(doc,mergeTables[i]);
+	      	   console.log(mergeTables[i])
+	      	  
 	   } 
 	   
 	   
 	   
 	   
 	  
-	    return str+"]}";
+	    return str+"}]";
 	    
 	}
+	
 	function getJSONTableContent(doc,tab)
 	{
-
-		var firstRow=true;
+		var str="";
+	table=doc.getElementById(tab)
+	console.log("doing:"+tab+table.rows.length)
+	var firstRow=true;
 		var startofRow=false;
 	    var str = "\""+tab+"\": ["
+	for (var i = 1, row; row = table.rows[i]; i++) {
+		   if(i>1){
+			   str+="},{"; 
+		   }else{
+			   str+="{";
+		   }
+		   console.log("doing row"+i+"cols+"+row.cells.length)
+		   //iterate through rows
+		   //rows would be accessed using the "row" variable assigned in the for loop
+		   for (var j = 0, col; col = row.cells[j]; j++) {
+			   if(row.cells[j].childNodes.length>1){
+			        //console.log("doing col"+j+row.cells[j].childNodes[1].id+":"+row.cells[j].childNodes[1].value)
+			       if(j>0){
+				       str+=","; 
+			       }
+		           str+="\""+row.cells[j].childNodes[1].id+"\":\""+row.cells[j].childNodes[1].value+":"+row.cells[j].childNodes[0].innerHTML+"\""
+		   	   }
+		   }  
+		}
+	    if(table.rows.length>1){
+	    	 str+="}";
+	    }
+	    str+="]";
 	   
-	    var elem = doc.getElementById(tab).querySelectorAll("*");
-	  
-	    for(var i = 0; i < elem.length; i++)
-	    {
-	    	
-	    
-	    if(elem[i].tagName=="TR"){
-	    	if(elem[i].children[0].tagName=="TD")	{
-	    		startofRow=true
-	    		if(firstRow){
-	    			firstRow=false
-	    		
-	    			}else{
-	    			str+="},"
-	    			}
-	    		
-	    		}
-	    	}
-	    
-	    
-	    //alert(elem[i].type+elem[i].type.length+elem[i].tagName)
-	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")=='mergecol')){
-	    		if(!elem[i].type){
-	    			val=elem[i].innerHTML;
-	    		}else{
-	    			 val= elem[i].value ;
-	    		}
-	    		if(startofRow){
-	    			str+="{"
-	    			startofRow=false;
-	    		}else{
-	    			str+=","
-	    		}
-
-	    		str += "\n\""+elem[i].id+"\": \""+val+"\""
-	    		
-	    	}
-	    } 
-
-	str+="}"
-	    return str;
+	    console.log(tab+":"+str)
+	    return str
 	}
+
 	function isObject(element) {
 	    return element.constructor == Object;
 	}
@@ -545,46 +603,76 @@ function setDlgTitle(formTitle){
 		var items = formDoc.getElementsByTagName("*");
 
 		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
-		
+		console.log("here")
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
-			
+			console.log("save record found="+rowsArray.length)
 					if( rowsArray.length > 0) {
 						
-						x=$.parseJSON(rowsArray[0].contents)
-						
-						for (var key in x.Feedback[0]) {
-						    if (x.Feedback[0].hasOwnProperty(key)) {
-						      var val = x.Feedback[0][key];
-						      
-						       if(isIterable(val)){
-								for (var key1 in val) {
-								    if (val.hasOwnProperty(key1)) {
-								      var val1 = val[key1];
-								      console.log("---tab--"+key+":"+key1+"-->"+val1);
-										for (var key2 in val1) {
-										    if (val1.hasOwnProperty(key2)) {
-										      var val2 = val1[key2];
-										      console.log("-------tab-fld---"+key2+"-->"+val2);
-										      
-										    }
-										  }
-								    }
-								  }
-						    	}else{
-						    		console.log(key+"field->"+val);
-						    		items[key].value=val
-						    	}
-						    }
-						  }
-										
+						jsonstr=$.parseJSON(rowsArray[0].contents)
+						console.log("1:"+jsonstr.length)
+						for(var i=0;i<jsonstr.length;i++){
+					        var obj = jsonstr[i];
+					        for(var key in obj){
+					            if(!Array.isArray(obj[key])){
+					            	formDoc.getElementById(key).value=obj[key]
+					            	
+						            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
+						            		try{
+						            			rselpars=formDoc.getElementById(key).getAttribute("onChange")
+						            			
+						            			rselpars=rselpars.substring(26, rselpars.length)
+						            			
+						            			rselparssplit=rselpars.split(",");
+						            			rsfld=rselparssplit[0].substring(1, rselparssplit[0].length-1)
+						            			rssql=(rselparssplit[1]+", "+rselparssplit[2]).substring(1, (rselparssplit[1]+", "+rselparssplit[2]).length-1)
+						            			rssql=rssql.replace(/\\/g, "");
+						            			
+						            			buildRelatedSelectforLoad(rsfld,rssql,formDoc.getElementById(key).value+"%",obj[rsfld]);
+							            		
+						            		}catch(err){}
+						            		
+						            		
+						            	}
+						           
+					            }else{
+					            	jsontable=obj[key];
+					            	console.log("Table:"+key+"length="+jsontable.length)
+					            	var table = formDoc.getElementById(key);
+					            
+					            	for(var t=0;t<jsontable.length;t++){
+					            		// Create an empty <tr> element and add it to the 1st position of the table:
+							            var row = table.insertRow(-1);
+
+					            		subobj = jsontable[t];
+								        for(var subkey in subobj){
+								            console.log(subkey+":"+subobj[subkey])
+								            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+								            var cell = row.insertCell(-1);								           
+								            // Add some text to the new cells:
+								            x=subobj[subkey].split(":")
+								            rc=subkey.split("-")
+								            cell.innerHTML = "<p>"+x[1]+"</p>"+
+								            			      '<input type="text" class="feedback-input-table" id="'+subkey + '" value="'+x[0]+'" HIDDEN/>'
+								           
+								        }
+								        var cell = row.insertCell(-1);	
+								        cell.innerHTML='<button onclick="delete'+key+'('+rc[1]+')" class="btn btn-small btn-danger">Del</button>'
+					            	}
+					            }
+					           
+					        }
+					    }
+				
 			
 					}
-
+			
+			document.getElementById("formIframe").contentWindow.loadCompleted();
 				},
 				 function(error, statement){
-					 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+					 console.log("Error: " + error.message + " when processing " + statement);
 				 }   
 			);	
 
 	}
+	

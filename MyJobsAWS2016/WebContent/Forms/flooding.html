@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html  manifest="cache.manifest" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
     <head>
         <link href="css/site.css" rel="stylesheet" />
@@ -7,7 +7,6 @@
         <script src="js/jqui.1.9.2.js"></script>
         <script src="js/bs.3.1.1.js"></script>
         <script src="js/functions.js"></script>
-
 		<script type="text/javascript" src="cordova.js"></script>
         <link rel="stylesheet" href="css/bs.3.1.1.css" />
         <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
@@ -49,7 +48,9 @@
                 <div class="form-group">
                     <div class="well row">
                         <div class="col-md-6 col-sm-6">
-                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate" readonly />
+                        <label>Attendance</label>
+                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate"  merge="~currentdate" readonly />
+                            <input name="attendancetime" type="time" class="feedback-input" placeholder="Attendance Time" id="attendancetime"  merge="~currenttime"  />
 
                             
                             <select class="feedback-input" id="attendanceweather" name="attendanceweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='ATW' AND LEVEL='2' ORDER BY CODEDESC">
@@ -62,13 +63,14 @@
                         </div>
 
                         <div class="col-md-6 col-sm-6">
-                            <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" readonly/>
-                         
+                        <label>Flooding</label>
+                            <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" merge="notifdate" readonly/>
+                          <input name="floodtime" type="time" class="feedback-input hideOnLoad" placeholder="Flood Time" id="floodtime" merge="notiftime"  />
                             
                             <select class="hideOnLoad feedback-input" id="floodweather" name="floodweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='FLW' AND LEVEL='2' ORDER BY CODEDESC">
                     	 
                          
-                           			<option value="" disabled selected>Attendance Weather</option>
+                           			<option value="" disabled selected>Flooding Weather</option>
                           
 
                         	
@@ -86,10 +88,12 @@
                         </div>
                         <div class="row col-md-12 col-sm-12">
                              <label style="margin-left: 16px" type="text" class="feedback-input col-md-9 col-sm-8">Has flooding caused pollution with measureable impact?</label>
-                            <div class="btn-group btn-toggle col-md-2 col-sm-3" id="measurableimpact">
-                                <button type="button" class="btn btn-lg btn-default">Yes</button>
-                                <button type="button" class="btn btn-lg btn-primary active">No</button>
-                            </div>
+                                <input type="TEXT" id="measurableimpactV" name="measurableimpactV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="measurableimpact" style="margin-left: 10px">                              
+                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+
                         </div>
                     </div>
 
@@ -100,7 +104,7 @@
 
                             </select>
 
-                            <select class="feedback-input cause" id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
+                            <select class="feedback-input cause" mergeonchange=true; id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
                              onChange="parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
                        
                                 <option value="" disabled selected>Cause of Flood</option>
@@ -135,14 +139,14 @@
                             <input name="psshortcode" type="text" class="feedback-input" placeholder="PS Short Code" id="psshortcode" />
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <input name="assetref" type="text" onclick= "window.open('../GoogleMapsGetLocation2.html','map')" class="feedback-input" placeholder="Asset Ref" id="assetref" />
+                            <input name="assetref" type="text" class="feedback-input" placeholder="Asset Ref" id="assetref" />
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <input name="gridref" onclick= "parent.formGMaps.open()" merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                     </div>
                     <div class="well row">  <!--Location Data-->
-						<table class="table table-bordered" id="location">
+						<table class="table table-bordered" id="location" name="location" merge="FormOutputTable">
                             <tr>
                                 <th width="15%">Flooding Type</th>
                                 <th width="15%">Flooding Sub Type</th>
@@ -158,27 +162,30 @@
                         <table>
                         
                         <TR><TD valign = "top" width="15%">
-		<select class="feedback-input-table" id="LocationFloodType" name="LocationFloodType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="LocationFloodType" name="LocationFloodType" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
+                           			<option value="x"  selected>xxx</option>
         </select>                   			
 		</TD><TD valign = "top" width="15%">
-		<select class="feedback-input-table" id="LocationFloodSubType" name="LocationFloodSubType" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
-                           			<option value="-1" disabled selected>[Select]</option>     
+		<select class="feedback-input-table" id="LocationFloodSubType" name="LocationFloodSubType" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
+                           			<option value="-1" disabled selected>[Select]</option>   
+                           			<option value="x"  selected>xxx</option>  
         </select>  
         </TD><TD valign = "top" width="15%">
-		<select class="feedback-input-table" id="LocationSeverity" name="LocationSeverity" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="LocationSeverity" name="LocationSeverity" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
+                           			<option value="x"  selected>xxx</option>
         </select> 
         </TD><TD valign = "top" width="20%">
-        <input type="text" class="feedback-input-table" id="LocationFloc" />
+        <input type="text" class="feedback-input-table" id="LocationFloc" ignore="yes" />
         </TD><td valign = "top" width="25%">
-        <textarea class="feedback-input-table"  id="LocationComments" name="LocationComments" rows="3" cols="40"></textarea></td>
+        <textarea class="feedback-input-table"  id="LocationComments" name="LocationComments" rows="3" cols="40" ignore="yes" ></textarea></td>
         <TD valign = "top" width="5%"><button id="addnewlocation" onclick="addNewLocation()" type="button" class="btn btn-small btn-success pull-right">New</button></TD></TR>
                         </table>
                         
                     </div>
                     <div class="well row">  <!--Room Data-->
-						<table class="table table-bordered" id="room">
+						<table class="table table-bordered" id="room"  name="room" merge="FormOutputTable">
                             <tr>
                                 <th width="15%">Location</th>
                                 <th width="30%">Room</th>
@@ -190,20 +197,23 @@
                         	<table >
 	<TR>
 	<TD valign="top" width="15%">
-		<select class="feedback-input-table" id="RoomLocSelect" name="RoomLocSelect" >
+		<select class="feedback-input-table" id="RoomLocSelect" name="RoomLocSelect" ignore="yes" >
                            			<option value="-1" disabled selected>[Select]</option>
+                           			<option value="x"  selected>xxx</option>
                         		</select> 
 		
 		</TD><TD valign="top" width="30%">
-		<select class="feedback-input-table" id="RoomSelect" name="RoomSelect" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRR' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="RoomSelect" name="RoomSelect" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRR' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
+                           			<option value="x"  selected>xxx</option>
                         		</select> 
 		</TD><TD valign="top" width="15%">
-		<select class="feedback-input-table" id="DepthSelect" name="DepthSelect" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRD' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="DepthSelect" name="DepthSelect" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRD' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
+                           			<option value="x"  selected>xxx</option>
                         		</select>
         </TD><TD valign="top" width="35%">
-        <textarea class="feedback-input-table" id="RoomComments" name="RoomComments" rows="4" cols="40"></textarea>
+        <textarea class="feedback-input-table" id="RoomComments" name="RoomComments" rows="4" cols="40" ignore="yes" ></textarea>
         </TD><TD valign="top" width="5%">
         
                         <button id="addnewroom" onclick="addNewRoom()" type="button" class="btn btn-small btn-success pull-right">New</button>
@@ -217,7 +227,9 @@
 
             </form>
         </div>
-   
+
+
+
     </body>
 
     <script>
@@ -246,15 +258,17 @@
         	.attr("selected",true)
         	.attr("disabled",true)
         	.text("[Select]")); 
- 	 
+  
     	var table = document.getElementById("location");
+
     	for (var i = 1, row; row = table.rows[i]; i++) {
     	   x=row.cells[3].innerHTML.split("<")
-    	   
+    	    var loc=x[1].substring(2, x[1].length);
+    	  
     	   $('#RoomLocSelect')
            	.append($("<option></option>")
-           	.attr("value",x[0])
-           	.text(x[0])); 
+           	.attr("value",loc)
+           	.text(loc)); 
     	}
     	
     }
@@ -279,8 +293,13 @@
     $("#attendancedate").datepicker({
         dateFormat: "dd/mm/yy"
     });    
+      
     $("#flooddate").datepicker({
         dateFormat: "dd/mm/yy"
+    });
+    $(".btn-group > .btn").click(function () {
+        $(this).addClass("active").siblings().removeClass("active");
+        $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
     });
     $(window).resize(function() {
     	
@@ -300,9 +319,10 @@
          		(document.getElementById("LocationFloc").value.length<1)){
          	return
          }
-        $('#location tr:last').after('<tr><td>'+$("#LocationFloodType>option:selected").html()+'<input type="text" class="feedback-input-table" id="loctype' + rowCount + '" value="'+document.getElementById("LocationFloodType").value+'" hidden/></td><td>'+$("#LocationFloodSubType>option:selected").html()+'<input type="text" class="feedback-input-table" id="locsubtype' + rowCount + '" value="'+document.getElementById("LocationFloodSubType").value+'" hidden /></td><td>'+$("#LocationSeverity>option:selected").html()+'<input type="text" class="feedback-input-table" id="locseverity' + rowCount + '" value="'+document.getElementById("LocationSeverity").value+'" hidden /></td><td>'+document.getElementById("LocationFloc").value+'<input type="text" class="feedback-input-table" id="locfloc' + rowCount + '" value="'+document.getElementById("LocationFloc").value+'" hidden  /></td><td>'+document.getElementById("LocationComments").value+'<input type="text" class="feedback-input-table" id="loccomments' + rowCount + '" value="'+document.getElementById("LocationComments").value+'" hidden  /></td><TD><button onclick="deleteLocation('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+        $('#location tr:last').after('<tr><td><p>'+$("#LocationFloodType>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="loctype-' + rowCount + '" value="'+document.getElementById("LocationFloodType").value+'" hidden/></td><td><p>'+$("#LocationFloodSubType>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locsubtype-' + rowCount + '" value="'+document.getElementById("LocationFloodSubType").value+'" hidden /></td><td><p>'+$("#LocationSeverity>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locseverity-' + rowCount + '" value="'+document.getElementById("LocationSeverity").value+'" hidden /></td><td><p>'+document.getElementById("LocationFloc").value+'</p><input type="text" class="feedback-input-table" id="locfloc-' + rowCount + '" value="'+document.getElementById("LocationFloc").value+'" hidden  /></td><td><p>'+document.getElementById("LocationComments").value+'</P><input type="text" class="feedback-input-table" id="loccomments-' + rowCount + '" value="'+document.getElementById("LocationComments").value+'" hidden  /></td><TD><button onclick="deletelocation('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+   
         refreshRoomsLocation();
-       
+      
         setLocationEmpty()
         setRoomEmpty()
     }
@@ -317,24 +337,28 @@
           		(document.getElementById("RoomComments").value.length<1)){
           	return
           }
-        $('#room tr:last').after('<tr><td>'+$("#RoomLocSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomloc' + rowCount + '" value="'+document.getElementById("RoomLocSelect").value+'" HIDDEN/></td><td>'+$("#RoomSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomroom' + rowCount + '" value="'+document.getElementById("RoomSelect").value+'" hidden /><td>'+$("#DepthSelect>option:selected").html()+'<input type="text" class="feedback-input-table" id="roomdepth' + rowCount + '" value="'+document.getElementById("DepthSelect").value+'" hidden /></td><td>'+document.getElementById("RoomComments").value+'<input type="text" class="feedback-input-table" id="roomcomments' + rowCount + '" value="'+document.getElementById("RoomComments").value+'" hidden /></td><TD><button onclick="deleteRoom('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+        $('#room tr:last').after('<tr><td><p>'+$("#RoomLocSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomloc-' + rowCount + '" value="'+
+        		document.getElementById("RoomLocSelect").value+'" HIDDEN/></td><td><p>'+$("#RoomSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomroom-' + 
+        		rowCount + '" value="'+document.getElementById("RoomSelect").value+'" hidden /><td><p>'+$("#DepthSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomdepth-' + 
+        		rowCount + '" value="'+document.getElementById("DepthSelect").value+'" hidden /></td><td><p>'+document.getElementById("RoomComments").value+'</p><input type="text" class="feedback-input-table" id="roomcomments' + 
+        		rowCount + '" value="'+document.getElementById("RoomComments").value+'" hidden /></td><TD><button onclick="deleteroom('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
         setRoomEmpty()
     }
-    function deleteLocation(n){
+    function deletelocation(n){
     	var table = document.getElementById("location");
     	loctoDelete=table.rows[n].cells[3].innerHTML.split("<");
     	
     	document.getElementById("location").deleteRow(n);
     	deleteRoomsForLoc(loctoDelete[0])
     }
-    function deleteRoom(n){
+    function deleteroom(n){
     	document.getElementById("room").deleteRow(n);
     }
     setLocationEmpty()
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(url){
-alert("opening"+url)
+
 var ref = window.open(url, '_blank', 'location=yes');
 
 // attach listener to loadstart
@@ -342,17 +366,59 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    var urlClosePage = "http://mobileapp/close/";
 	    var urlCancelPage = "http://mobileapp/cancel/";
 	    if (event.url == urlClosePage) {
-	    	alert("closing")
+	    	
 	    	document.getElementById("gridref").value=localStorage.getItem('mapLocation')
 	    ref.close();    
 	    }
 	    if (event.url == urlCancelPage) {
-	    	alert("cancel")
+	    	
 	    
 	    ref.close();    
 	    }
 	});
 }
+    
+ // This function is called once all data is loaded
+ function loadCompleted(){
+	
+    	 refreshRoomsLocation()	
+ }
+ function isComplete()
+ {
+	    var locCount = $('#location tr').length;
+	    var elem = document.getElementById('MyJobsForm').elements;
+		cnt = 0;
+		fvalid=0
+	    for(var i = 0; i < elem.length; i++)
+	    {
+	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
+	    		
+	    		
+	    			if(!elem[i].hasAttribute("Ignore")){
+	    				console.log(elem[i].id+":"+elem[i].value)
+	    				cnt=cnt+1
+	    				if(elem[i].value!=""){
+	    					fvalid++;
+	    				}
+	    			
+	    		}
 
+	    	}
+	    } 
+		
+	    console.log("valid Fields = "+fvalid+" of "+cnt)
+	    if(locCount<2){
+	    	
+	    	
+	    	return "At least 1 Locarion must be completed"
+	    }
+	    if(fvalid!=cnt){
+	    	return "All Fields must be completed must be completed"
+	    	return False
+	    }
+	    return "COMPLETE"
+ }
+ 
+ 
     </script>
 </html>

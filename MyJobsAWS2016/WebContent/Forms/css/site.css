@@ -557,7 +557,34 @@ select:focus{
     background-position: 11px 8px;
 	background-repeat: no-repeat;
 }
+#attendancetime{
+	background-image: url(../img/clock.svg);
+	background-size: 30px 30px;
+	background-position: 11px 8px;
+	background-repeat: no-repeat;
+}
 
+#attendancetime:focus{
+	background-image: url(../img/clock.svg);
+	background-size: 30px 30px;
+	background-position: 8px 5px;
+    background-position: 11px 8px;
+	background-repeat: no-repeat;
+}
+#floodtime{
+	background-image: url(../img/clock.svg);
+	background-size: 30px 30px;
+	background-position: 11px 8px;
+	background-repeat: no-repeat;
+}
+
+#floodtime:focus{
+	background-image: url(../img/clock.svg);
+	background-size: 30px 30px;
+	background-position: 8px 5px;
+    background-position: 11px 8px;
+	background-repeat: no-repeat;
+}
 #mtmechanical{
 	background-image: url(../img/user.svg);
 	background-size: 30px 30px;
