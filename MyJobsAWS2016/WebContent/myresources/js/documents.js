@@ -688,8 +688,8 @@ function errorHandler(error){
 function downloadAll()
 {
 	
-	
-alert("h");
+	oProgInd.setPercentValue(5);
+	oProgInd.setDisplayValue("5" + "%");
 
     $.getJSON('http://ostridge.synology.me/ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
         
@@ -698,6 +698,7 @@ alert("h");
         st=getFormattedTime()
         $.each(data.FILES, function (index) {
         	sPercent=getPercentage(data.FILES.length,cnt)
+        	if(sPercent < 5){sPercent=5}
         	oProgInd.setPercentValue(sPercent);
         	oProgInd.setDisplayValue(sPercent + "%");
             fileName = data.FILES[index].name;
