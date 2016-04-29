@@ -782,7 +782,7 @@ function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
     //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
+    fileTransfer.download("http://ostridge.synology.me/"+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
 		function (entry) {
 		    //alert(entry.fullPath)
 		   
