@@ -789,7 +789,7 @@ function downloadAsset(fileName,dir) {
 		},
 		function (error) {
 		    
-		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+		    //alert("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});
