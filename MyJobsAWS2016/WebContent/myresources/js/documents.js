@@ -693,14 +693,14 @@ alert("h");
 
     $.getJSON('http://ostridge.synology.me/ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
         
-alert(data.FILES)
+
         var cnt = 0;
         $.each(data.FILES, function (index) {
         	sPercent=getPercentage(data.FILES.length,cnt)
         	oProgInd.setPercentValue(parseInt(sPercent));
         	oProgInd.setDisplayValue(sPercent + "%");
             fileName = data.FILES[index].name;
-           // window.resolveLocalFileSystemURL( + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+data.FILES[index].url+"/"  + data.FILES[index].name, appStart, downloadAllAsset(data.FILES[index].name, data.FILES[index].url+"/"));
             cnt = cnt + 1;
 
         });
@@ -762,6 +762,22 @@ function downloadAsset1(fileName) {
 		    
 		});
 }
+function downloadAllAsset(fileName,dir) {
+    var fileTransfer = new FileTransfer();
+    x=fileName.split("/")
+    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
+		function (entry) {
+		    //alert(entry.fullPath)
+		   
+		},
+		function (error) {
+		    
+		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+	
+		    
+		});
+}
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
@@ -779,7 +795,7 @@ function downloadAsset(fileName,dir) {
 		});
 }
 function appStart() {
-    alert(downloadCount+" Downloaded")
+    //alert(downloadCount+" Downloaded")
 }
 	
 
