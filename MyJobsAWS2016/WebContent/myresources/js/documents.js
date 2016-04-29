@@ -762,7 +762,7 @@ function downloadAsset1(fileName) {
 		    
 		});
 }
-function downloadAllAsset(fileName,dir) {
+function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
     //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
@@ -778,7 +778,7 @@ function downloadAllAsset(fileName,dir) {
 		    
 		});
 }
-function downloadAsset(fileName,dir) {
+function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
     //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
