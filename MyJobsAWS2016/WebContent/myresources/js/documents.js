@@ -695,6 +695,7 @@ alert("h");
         
 
         var cnt = 0;
+        st=getFormattedTime()
         $.each(data.FILES, function (index) {
         	sPercent=getPercentage(data.FILES.length,cnt)
         	oProgInd.setPercentValue(sPercent);
@@ -706,6 +707,7 @@ alert("h");
         });
         oProgInd.setPercentValue(100);
     	oProgInd.setDisplayValue(100 + "%");
+    	alert("FieTransfer:"+st+" to "+getFormattedTime())
     });
    
 }
