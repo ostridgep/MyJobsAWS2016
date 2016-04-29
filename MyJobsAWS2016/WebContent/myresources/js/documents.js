@@ -7,6 +7,45 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 	var appDirectory=""
+		var oProgInd= new sap.m.ProgressIndicator("pi1", {
+			width:"100%",
+			percentValue:0,
+			displayValue:"0%",
+			showValue:true
+		});
+var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
+		    title:"Download Files",
+		    modal: true,
+		    contentWidth:"1em",
+		    buttons: [
+		   
+						new sap.m.Button( {
+						    text: "Close",
+						    type: 	sap.m.ButtonType.Reject,
+						    tap: [ function(oEvt) {		  
+								 
+						    	formDownloadFiles.close()
+								  } ]
+						}),
+						new sap.m.Button( {
+						    text: "Download",
+						    type: 	sap.m.ButtonType.Accept,
+						    tap: [ function(oEvt) {		  
+						    	downloadAll(); 
+						    	//formDownloadFiles.close()
+								  } ]
+						})
+						],					
+		    content:[
+		             oProgInd
+
+
+		            ],
+		            
+		            beforeOpen:function(){
+		            	
+		            }
+		 })
 
 	var formDisplayPhoto = new sap.m.Dialog("dlgDisplayPhoto",{
 	    title:"Display Photo",
@@ -82,21 +121,36 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                    
                                 }),   
                                 new sap.m.Button( {
+                                    text: "All files",
+                                    type: 	sap.m.ButtonType.Accept,
+                                    tap: [ function(oEvt) { 
+                                    	
+                                    	
+                                       	
+                                    	formDownloadFiles.open()
+                                       	
+                                    	//downloadMissing();
+                                    	//buildDocumentTables();
+                                    	
+                                              
+                                                } ]
+                                   
+                                }),  
+                                new sap.m.Button( {
                                     text: "files",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
                                     	
                                     	
                                        	
-                                       	
-                                       	
+                                    	
                                     	downloadMissing();
                                     	buildDocumentTables();
                                     	
                                               
                                                 } ]
                                    
-                                }),   
+                                }),  
                                 new sap.m.Button( {
                                     text: "Cancel",
                                     type: 	sap.m.ButtonType.Reject,
@@ -631,6 +685,36 @@ function errorHandler(error){
 	}
 
 
+function downloadAll()
+{
+	
+	
+alert("h");
+
+    $.getJSON('http://ostridge.synology.me/ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+        
+alert(data.FILES)
+        var cnt = 0;
+        $.each(data.FILES, function (index) {
+        	sPercent=getPercentage(data.FILES.length,cnt)
+        	oProgInd.setPercentValue(parseInt(sPercent));
+        	oProgInd.setDisplayValue(sPercent + "%");
+            fileName = data.FILES[index].name;
+           // window.resolveLocalFileSystemURL( + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            cnt = cnt + 1;
+
+        });
+    });
+   
+}
+function getPercentage(tot,val){
+	
+	var y = Math.round(tot/100) ;
+	
+	var percent = val / y
+
+	return Math.round(percent) ;
+}
 function downloadMissing()
 {
 	
