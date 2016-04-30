@@ -214,12 +214,14 @@ function buildDocumentList(){
 	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-	    	        												if(evt.getParameter("listItem").getCells()[2].getText()==""){
+	    	        												
+		    	        												if(evt.getParameter("listItem").getCells()[2].getText()==""){
+		    	        													
+		    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
+		    	        												}else{
+		    	        													showFile(evt.getParameter("listItem").getCells()[5].getText())
+		    	        												}
 	    	        													
-	    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
-	    	        												}else{
-	    	        													showFile(evt.getParameter("listItem").getCells()[5].getText())
-	    	        												}
 	    	        												
 	    	        										    },
 	    	            										columns:[
@@ -546,44 +548,44 @@ function docsGDReadFail(error) {
 }
 function gddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
-    var icon="document-text"
-    if(f.Type=="DIRECTORY"){
-    	icon="folder"
-    	ftype="";
-    	fsize=""
-    	fdate="";
-    }else{
-    	ftype=f.type
-    	fsize=f.size;
-    	fdate=d1.toString('yyyyMMdd');
-    }
+
     var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.addItem (new sap.m.ColumnListItem({
 		cells : 
 			[
-			new sap.ui.core.Icon({src : "sap-icon://"+icon}),
+			new sap.ui.core.Icon({src : "sap-icon://document-text"}),
 			new sap.m.Text({text: f.name}),
-            new sap.m.Text({text: ftype}),
-            new sap.m.Text({text: fsize}),
-			new sap.m.Text({text: fdate}),
+            new sap.m.Text({text: f.type}),
+            new sap.m.Text({text: f.size}),
+			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
 			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+f.name})
 	 		]
 		}));
 }
 function docsGDReadSuccess(entries) {
-	
+	 var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	
   
     var i;
     for (i = 0; i < entries.length; i++) {
        
-      //  if (entries[i].isFile) {
+        if (entries[i].isFile) {
             entries[i].file(gddocs_details_callback);
 
-    //    } else {
- //           console.log('docsDirectory - ' + entries[i].name);
+        } else {
+        	opTable.addItem (new sap.m.ColumnListItem({
+        		cells : 
+        			[
+        			new sap.ui.core.Icon({src : "sap-icon://folder"}),
+        			new sap.m.Text({text: entries[i].name}),
+                    new sap.m.Text({text: ""}),
+                    new sap.m.Text({text:""}),
+        			new sap.m.Text({text: ""}),
+        			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+entries[i].name})
+        	 		]
+        		}));
             
- //       }
+       }
     }
 }
 function buildPrivateUploads()
