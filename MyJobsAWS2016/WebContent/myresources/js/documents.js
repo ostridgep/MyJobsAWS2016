@@ -508,12 +508,26 @@ function photosReadFail(error) {
 function buildGlobalDownloads(dir)
 
 {
-GlobalDirectory=dir;
 
+   
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
-
+if(dir!="MyJobs/Global/Download/"){
+	
+		opTable.addItem (new sap.m.ColumnListItem({
+			cells : 
+				[
+				new sap.ui.core.Icon({src : "sap-icon://response"}),
+				new sap.m.Text({text: ""}),
+	            new sap.m.Text({text: ""}),
+	            new sap.m.Text({text: ""}),
+				new sap.m.Text({text: ""}),
+				new sap.m.Text({text: GlobalDirectory})
+		 		]
+			}));
+}
+GlobalDirectory=dir;
 	try {
 		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+dir, function (dirEntry) {
 	    	
@@ -563,13 +577,13 @@ function docsGDReadSuccess(entries) {
     var i;
     for (i = 0; i < entries.length; i++) {
        
-        if (entries[i].isFile) {
+      //  if (entries[i].isFile) {
             entries[i].file(gddocs_details_callback);
 
-        } else {
-            console.log('docsDirectory - ' + entries[i].name);
+    //    } else {
+ //           console.log('docsDirectory - ' + entries[i].name);
             
-        }
+ //       }
     }
 }
 function buildPrivateUploads()
