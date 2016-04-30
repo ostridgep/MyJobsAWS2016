@@ -110,25 +110,31 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 				})	
 				],					
     content:[
-             new sap.m.Label({text:""}),
-			 new sap.m.Button( {
-			    text: "Take Photo",
-			    type: 	sap.m.ButtonType.Accept,
-			    tap: [ function(oEvt) {		  
-					 
-			    	getPhoto("DOC");
-			    	formGetPhoto.close()
-					  } ]
-			 }),
-			 new sap.m.Label({text:""}),
-			 new sap.m.Button( {
-			    text: "Select Photo",
-			    type: 	sap.m.ButtonType.Reject,
-			    tap: [ function(oEvt) {		  
-					 
-			    	selectPhoto()
-			    	formGetPhoto.close()
-					  } ]
+		new sap.ui.layout.form.SimpleForm({
+			minWidth : 1024,
+			maxContainerCols : 2,
+			content : [
+		             new sap.m.Label({text:" "}),
+					 new sap.m.Button( {
+					    text: "Take Photo",
+					    type: 	sap.m.ButtonType.Accept,
+					    tap: [ function(oEvt) {		  
+							 
+					    	getPhoto("DOC");
+					    	formGetPhoto.close()
+							  } ]
+					 }),
+					 new sap.m.Label({text:" "}),
+					 new sap.m.Button( {
+					    text: "Select Photo",
+					    type: 	sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+							 
+					    	selectPhoto()
+					    	formGetPhoto.close()
+							  } ]
+					 	})
+				]
 			})
             ],
             
@@ -142,7 +148,7 @@ function selectPhoto(){
 	window.imagePicker.getPictures(
 	    function(results) {
 	        for (var i = 0; i < results.length; i++) {
-	        	opMessage('Image URI: ' + results[i]);
+	        	alert('Image URI: ' + results[i]);
 	            try {
 	  			  moveFile2(results[i], cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos",i)
 	  			}
