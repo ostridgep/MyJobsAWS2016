@@ -142,7 +142,7 @@ function selectPhoto(){
 	        for (var i = 0; i < results.length; i++) {
 	        	opMessage('Image URI: ' + results[i]);
 	            try {
-	  			  moveFile(results[i], cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+	  			  moveFile2(results[i], cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos",i)
 	  			}
 	  			catch(err) {
 	  			   
@@ -517,7 +517,44 @@ function moveFile(fileUri,dir) {
         }, errorMoveCallback);
     }, errorMoveCallback);
 }
+function moveFile2(fileUri,dir,cnt) {
+	
+	var opdir = dir;
 
+
+
+
+    var currentdate = new Date();
+    var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
+       + (currentdate.getHours()).toString()
+                       + (currentdate.getMinutes()).toString()
+                       + (currentdate.getSeconds()).toString();
+    
+                       oldFileUri = fileUri;
+                       fileExt = "." + oldFileUri.split('.').pop();
+
+                       newFileName = datetime +"_"+cnt+ fileExt;
+                  
+                       window.resolveLocalFileSystemURL(fileUri, function (file) {
+                    	                             
+                           window.resolveLocalFileSystemURL(opdir, function (opdir) {
+                        	                     	  
+            file.moveTo(opdir, newFileName, function (entry) {
+            	if(getPhotoCaller=="JOB"){
+            		buildJobPhotoList();
+            	}
+            	if(getPhotoCaller=="JOB"){
+            		buildPhotoList();
+            	}
+            	
+               
+            }, function (error) {
+            	
+                alert("error moving:"+error.code+":"+error.source+":"+error.target);
+            });
+        }, errorMoveCallback);
+    }, errorMoveCallback);
+}
 function buildPhotoList(){
 	
 	privatephotos = new Array()
