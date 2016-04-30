@@ -116,6 +116,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 			    tap: [ function(oEvt) {		  
 					 
 			    	getPhoto("DOC");
+			    	formGetPhoto.close()
 					  } ]
 			}),
 			new sap.m.Button( {
@@ -124,6 +125,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 			    tap: [ function(oEvt) {		  
 					 
 			    	selectPhoto()
+			    	formGetPhoto.close()
 					  } ]
 			})
             ],
@@ -175,14 +177,14 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                        	
                                        	
                                        	
-                                    	getPhoto("DOC");
+                                    	formGetPhoto.open()
                                     	
                                               
                                                 } ]
                                    
                                 }),   
                                 new sap.m.Button( {
-                                	icon:"sap-icon://pulldown",
+                                	icon:"sap-icon://pull-down",
                                     text: "All files",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
