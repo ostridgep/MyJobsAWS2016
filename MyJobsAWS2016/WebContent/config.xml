@@ -70,7 +70,7 @@
  <gap:plugin name="org.apache.cordova.file"  />
  <gap:plugin name="org.apache.cordova.file-transfer" />
  <gap:plugin name="com.cordova.plugins.fileopener" spec="1.0.1" source="pgb" />
-
+ <gap:plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
     <gap:plugin name="org.apache.cordova.vibration" />
 	<gap:splash src="splash.png" gap:platform="ios" width="320" height="480" />
 	<gap:splash src="splash.png" gap:platform="ios" width="640" height="960" />

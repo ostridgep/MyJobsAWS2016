@@ -94,7 +94,66 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            	alert(selectedPhoto)
 	            }
 	 })
-
+var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
+    title:"Attach Photo",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formGetPhoto.close()
+						  } ]
+				})	
+				],					
+    content:[
+			new sap.m.Button( {
+			    text: "Take Photo",
+			    type: 	sap.m.ButtonType.Accept,
+			    tap: [ function(oEvt) {		  
+					 
+			    	getPhoto("DOC");
+					  } ]
+			}),
+			new sap.m.Button( {
+			    text: "Select Photo",
+			    type: 	sap.m.ButtonType.Reject,
+			    tap: [ function(oEvt) {		  
+					 
+			    	selectPhoto()
+					  } ]
+			})
+            ],
+            
+            beforeOpen:function(){
+            
+            }
+ })
+function selectPhoto(){
+ 
+		 
+	window.imagePicker.getPictures(
+	    function(results) {
+	        for (var i = 0; i < results.length; i++) {
+	        	opMessage('Image URI: ' + results[i]);
+	            try {
+	  			  moveFile(results[i], cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+	  			}
+	  			catch(err) {
+	  			   
+	  			}  
+	        }
+	    }, function (error) {
+	        opMessage('Error: ' + error);
+	    }, {
+	        maximumImagesCount: 10,
+	        width: 800
+	    }
+	);
+}
 function showFile(file){
 	window.plugins.fileOpener.open(file)
 	//window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
@@ -107,6 +166,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     buttons: [
  
                                 new sap.m.Button( {
+                                	icon:"sap-icon://camera",
                                     text: "Photo",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
@@ -122,6 +182,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                    
                                 }),   
                                 new sap.m.Button( {
+                                	icon:"sap-icon://pulldown",
                                     text: "All files",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
@@ -138,6 +199,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                    
                                 }),  
                                 new sap.m.Button( {
+                                	icon:"sap-icon://download",
                                     text: "files",
                                     type: 	sap.m.ButtonType.Accept,
                                     tap: [ function(oEvt) { 
@@ -153,6 +215,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
                                    
                                 }),  
                                 new sap.m.Button( {
+                                	icon:"sap-icon://sys-cancel",
                                     text: "Cancel",
                                     type: 	sap.m.ButtonType.Reject,
                                     tap: [ function(oEvt) {         
