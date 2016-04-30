@@ -309,7 +309,7 @@ function buildDocumentList(){
 	    	            									]
 	    	            						           	  
 	    	            					    }),
-	       	                
+/*	       	                
 	    	                new sap.m.IconTabFilter( {
 	    	            	    key:'DocumentsDownload',
 	    	            	    tooltip: 'Download Documents',
@@ -340,6 +340,7 @@ function buildDocumentList(){
 	    	            									]
 	    	            						           	  
 	    	            					    }),
+*/	    	            					    
 	    	                new sap.m.IconTabFilter( {
 	    	            	    key:'DocumentsUpload',
 	    	            	    tooltip: 'Upload Documents',
@@ -424,7 +425,7 @@ function buildDocumentList(){
 }
 function buildDocumentTables(){
 	buildGlobalDownloads("MyJobs/Global/Download/")
-	buildPrivateDownloads()
+	//buildPrivateDownloads()
 	buildPrivateUploads()
 	
 }
