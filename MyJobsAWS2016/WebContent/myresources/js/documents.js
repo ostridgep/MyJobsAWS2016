@@ -6,6 +6,7 @@ var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
+	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
 		var oProgInd= new sap.m.ProgressIndicator("pi1", {
@@ -120,7 +121,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {		  
 							 
-					    	getPhoto("DOC");
+					    	getPhoto(selectedPhotoType);
 					    	formGetPhoto.close()
 							  } ]
 					 }),
@@ -175,22 +176,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     contentWidth:"1em",
     buttons: [
  
-                                new sap.m.Button( {
-                                	icon:"sap-icon://camera",
-                                    text: "Photo",
-                                    type: 	sap.m.ButtonType.Accept,
-                                    tap: [ function(oEvt) { 
-                                    	
-                                    	
-                                       	
-                                       	
-                                       	
-                                    	formGetPhoto.open()
-                                    	
-                                              
-                                                } ]
-                                   
-                                }),   
+  
                                 new sap.m.Button( {
                                 	icon:"sap-icon://pull-down",
                                     text: "All files",
@@ -385,7 +371,14 @@ function buildDocumentList(){
 	    	            	    tooltip: 'Photos',
 	    	            	    icon: "sap-icon://attachment-photo",
 	    	            	       	                   content:[
-	    	            	       	        	               
+new sap.m.Button( {
+  		icon:"sap-icon://camera",
+       type: 	sap.m.ButtonType.Accept,
+       tap: [ function(oEvt) {
+    	   selectedPhotoType="DOC"
+    	   formGetPhoto.open()
+                   } ]
+   }),     	            	       	        	               
 	    	            									new sap.m.Table("PhotosTable",{
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
@@ -395,7 +388,7 @@ function buildDocumentList(){
 	    	        												showFile(evt.getParameter("listItem").getCells()[4].getText())
 	    	        										    },
 	    	            										columns:[
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
+	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
 	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
@@ -403,22 +396,8 @@ function buildDocumentList(){
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
 	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
-	    	            	 										       	 new sap.m.Column({header: new sap.m.Button( {
-	    	            	  										       		icon:"sap-icon://camera",
-	    	            	  		    	                                    type: 	sap.m.ButtonType.Accept,
-	    	            	  		    	                                    tap: [ function(oEvt) { 
-	    	            	  		    	                                    	
-	    	            	  		    	                                    	
-	    	            	  		    	                                       	
-	    	            	  		    	                                       	
-	    	            	  		    	                                       	
-	    	            	  		    	                                    	getPhoto("JOB");
-	    	            	  		    	                                    	
-	    	            	  		    	                                              
-	    	            	  		    	                                                } ]
-	    	            	  		    	                                   
-	    	            	  		    	                                }),
-	    	            	     										       	 hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })         
+																		 new sap.m.Column({header: new sap.m.Label({text:""}),
+	    	            	     										     hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })         
 	    	            								           	     ]
 	    	            								           	  
 

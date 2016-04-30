@@ -4482,6 +4482,14 @@ formtab=null;
         	                  icon: "sap-icon://attachment-photo",
         	                 
            	                   content:[
+new sap.m.Button( {
+		icon:"sap-icon://camera",
+   type: 	sap.m.ButtonType.Accept,
+   tap: [ function(oEvt) {
+	   selectedPhotoType="JOB"
+	   formGetPhoto.open()
+               } ]
+}), 
     									new sap.m.Table("JobPhotoTable",{
     										 mode: sap.m.ListMode.SingleSelectMaster,
     											selectionChange: function(evt){
@@ -4498,21 +4506,7 @@ formtab=null;
    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
    										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
- 										       	 new sap.m.Column({header: new sap.m.Button( {
- 										       		icon:"sap-icon://camera",
- 		    	                                    type: 	sap.m.ButtonType.Accept,
- 		    	                                    tap: [ function(oEvt) { 
- 		    	                                    	
- 		    	                                    	
- 		    	                                       	
- 		    	                                       	
- 		    	                                       	
- 		    	                                    	getPhoto("JOB");
- 		    	                                    	
- 		    	                                              
- 		    	                                                } ]
- 		    	                                   
- 		    	                                }),
+ 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
     										       	 hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })
    								           	     ]
     									}) 
