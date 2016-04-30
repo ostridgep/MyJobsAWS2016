@@ -389,15 +389,15 @@ new sap.m.Button( {
 	    	        										    },
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
-	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
+	    	            										        	 hAlign: 'Left',width: '50%', minScreenWidth : "" , demandPopin: false}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
+	    	            										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
 																		 new sap.m.Column({header: new sap.m.Label({text:""}),
-	    	            	     										     hAlign: 'Right',width: '10%',minScreenWidth : "" , hidden:true, demandPopin: true })         
+	    	            	     										     hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })         
 	    	            								           	     ]
 	    	            								           	  
 
