@@ -110,7 +110,8 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 				})	
 				],					
     content:[
-			new sap.m.Button( {
+             new sap.m.Label({text:""}),
+			 new sap.m.Button( {
 			    text: "Take Photo",
 			    type: 	sap.m.ButtonType.Accept,
 			    tap: [ function(oEvt) {		  
@@ -118,8 +119,9 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 			    	getPhoto("DOC");
 			    	formGetPhoto.close()
 					  } ]
-			}),
-			new sap.m.Button( {
+			 }),
+			 new sap.m.Label({text:""}),
+			 new sap.m.Button( {
 			    text: "Select Photo",
 			    type: 	sap.m.ButtonType.Reject,
 			    tap: [ function(oEvt) {		  
