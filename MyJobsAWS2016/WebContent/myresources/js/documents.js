@@ -550,17 +550,22 @@ function gddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
 
     var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
-	opTable.addItem (new sap.m.ColumnListItem({
-		cells : 
-			[
-			new sap.ui.core.Icon({src : "sap-icon://document-text"}),
-			new sap.m.Text({text: f.name}),
-            new sap.m.Text({text: f.type}),
-            new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+f.name})
-	 		]
-		}));
+    if(f.type!=""){
+    	x=f.type.split("/")
+    	y=d1.toString('yyyyMMdd')
+    	z=y.substring(0,24)	
+		opTable.addItem (new sap.m.ColumnListItem({
+			cells : 
+				[
+				new sap.ui.core.Icon({src : "sap-icon://document-text"}),
+				new sap.m.Text({text: f.name}),
+	            new sap.m.Text({text: x[1]}),
+	            new sap.m.Text({text: f.size}),
+				new sap.m.Text({text: z}),
+				new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+f.name})
+		 		]
+			}));
+    }
 }
 function docsGDReadSuccess(entries) {
 	 var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
@@ -570,6 +575,7 @@ function docsGDReadSuccess(entries) {
     for (i = 0; i < entries.length; i++) {
        
         if (entries[i].isFile) {
+        	
             entries[i].file(gddocs_details_callback);
 
         } else {
