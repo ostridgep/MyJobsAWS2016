@@ -510,7 +510,7 @@ function photosReadFail(error) {
 function buildGlobalDownloads(dir)
 
 {
-alert(dir)
+
    
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
@@ -581,7 +581,7 @@ function docsGDReadSuccess(entries) {
                     new sap.m.Text({text: ""}),
                     new sap.m.Text({text:""}),
         			new sap.m.Text({text: ""}),
-        			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+entries[i].name+"/"})
+        			new sap.m.Text({text: GlobalDirectory+entries[i].name+"/"})
         	 		]
         		}));
             
