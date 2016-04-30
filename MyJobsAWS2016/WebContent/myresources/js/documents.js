@@ -6,6 +6,7 @@ var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
+	var GlobalDirectory=""
 	var appDirectory=""
 		var oProgInd= new sap.m.ProgressIndicator("pi1", {
 			width:"100%",
@@ -213,12 +214,19 @@ function buildDocumentList(){
 	    	            										
 	    	            										mode: sap.m.ListMode.SingleSelectMaster,
 	    	        											selectionChange: function(evt){
-
-	    	        												showFile(evt.getParameter("listItem").getCells()[4].getText())
+	    	        												if(evt.getParameter("listItem").getCells()[2].getText()==""){
+	    	        													
+	    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
+	    	        												}else{
+	    	        													showFile(evt.getParameter("listItem").getCells()[5].getText())
+	    	        												}
+	    	        												
 	    	        										    },
 	    	            										columns:[
+	    	            										         new sap.m.Column({header: new sap.m.Label({text:""}),
+	    	            										        	 hAlign: 'Left',width: '5%', minScreenWidth : "" , demandPopin: false}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
-	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
+	    	            										        	 hAlign: 'Left',width: '35%', minScreenWidth : "" , demandPopin: false}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
@@ -348,7 +356,7 @@ function buildDocumentList(){
 	return docsTabBar
 }
 function buildDocumentTables(){
-	buildGlobalDownloads()
+	buildGlobalDownloads("MyJobs/Global/Download/")
 	buildPrivateDownloads()
 	buildPrivateUploads()
 	
@@ -497,17 +505,17 @@ function photosReadSuccess(entries) {
 function photosReadFail(error) {
     alert("Failed to list Photos contents: "+ error);
 }
-function buildGlobalDownloads()
+function buildGlobalDownloads(dir)
 
 {
-
+GlobalDirectory=dir;
 
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
 
 	try {
-		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/", function (dirEntry) {
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+dir, function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
@@ -524,15 +532,27 @@ function docsGDReadFail(error) {
 }
 function gddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
+    var icon="document-text"
+    if(f.Type=="DIRECTORY"){
+    	icon="folder"
+    	ftype="";
+    	fsize=""
+    	fdate="";
+    }else{
+    	ftype=f.type
+    	fsize=f.size;
+    	fdate=d1.toString('yyyyMMdd');
+    }
     var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.addItem (new sap.m.ColumnListItem({
 		cells : 
 			[
+			new sap.ui.core.Icon({src : "sap-icon://"+icon}),
 			new sap.m.Text({text: f.name}),
-            new sap.m.Text({text: f.type}),
-            new sap.m.Text({text: f.size}),
-			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Global/Download/"+f.name})
+            new sap.m.Text({text: ftype}),
+            new sap.m.Text({text: fsize}),
+			new sap.m.Text({text: fdate}),
+			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+f.name})
 	 		]
 		}));
 }
