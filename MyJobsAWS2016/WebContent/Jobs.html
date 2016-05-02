@@ -443,7 +443,75 @@ new sap.m.Button( {
 			 CloseError='0'
 		 }  
    	 }
-
+   	 if (CloseError=='0'){
+ 		if(	 (sap.ui.getCore().getElementById("btnDG5").getEnabled()==true){
+ 			
+ 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+ 					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
+ 					function(transaction, results, rowsArray){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 							CloseError='0'
+ 						}else{
+ 							CloseError='4'
+ 							
+ 						}
+ 					 },
+ 					 function(error, statement){
+ 						CloseError='4'
+ 						opMessage("Error: " + error.message + " when checking DG5 Complete "+ statement);
+ 					 }        
+ 					);
+ 			
+ 		 }else{
+ 			 CloseError='0'
+ 		 }  
+    	 }
+   	if (CloseError=='0'){
+ 		if(	 (sap.ui.getCore().getElementById("btnPollution").getEnabled()==true){
+ 			
+ 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+ 					"' and opno = '"+CurrentOpNo+"' and formname = 'Pollution' and user = '"+localStorage.getItem('MobileUser')+"';",
+ 					function(transaction, results, rowsArray){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 							CloseError='0'
+ 						}else{
+ 							CloseError='5'
+ 							
+ 						}
+ 					 },
+ 					 function(error, statement){
+ 						CloseError='5'
+ 						opMessage("Error: " + error.message + " when checking Pollution Complete " + statement);
+ 					 }        
+ 					);
+ 			
+ 		 }else{
+ 			 CloseError='0'
+ 		 }  
+    	 }
+   	if (CloseError=='0'){
+ 		if(	 (sap.ui.getCore().getElementById("btnFeedback").getEnabled()==true){
+ 			
+ 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+ 					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
+ 					function(transaction, results, rowsArray){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 							CloseError='0'
+ 						}else{
+ 							CloseError='6'
+ 							
+ 						}
+ 					 },
+ 					 function(error, statement){
+ 						CloseError='6'
+ 						opMessage("Error: " + error.message + " when checking Customer Feedback Complete " + statement);
+ 					 }        
+ 					);
+ 			
+ 		 }else{
+ 			 CloseError='0'
+ 		 }  
+    	 }  	
     if(CloseError=="0"){
     	
     		  setStatusChangeDT()
@@ -540,8 +608,14 @@ new sap.m.Button( {
 						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment\n-Time Entries")
 						}else if (CloseError=="2"){
 						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Problem - Action - Impact")
-						}else{
+						}else if (CloseError=="3"){
 						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Follow On Work Variance - Reason")
+						}else if (CloseError=="4"){
+						DisplayErrorMessage("Close Job Error", "DG5 Form must be Completed")
+						}else if (CloseError=="5"){
+						DisplayErrorMessage("Close Job Error", "Pollution Form must be Completed")
+						}else{
+						DisplayErrorMessage("Close Job Error", "Customer Feedback form must be Completed")
 						}		
 			 		}  
       
