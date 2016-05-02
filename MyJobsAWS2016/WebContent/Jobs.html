@@ -444,12 +444,12 @@ new sap.m.Button( {
 		 }  
    	 }
    	 if (CloseError=='0'){
- 		if(	 (sap.ui.getCore().getElementById("btnDG5").getEnabled()==true){
+ 		if(	document.getElementById("btnDG5").getEnabled()){
  			
  			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
  					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
  					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
  							CloseError='0'
  						}else{
  							CloseError='4'
@@ -467,12 +467,12 @@ new sap.m.Button( {
  		 }  
     	 }
    	if (CloseError=='0'){
- 		if(	 (sap.ui.getCore().getElementById("btnPollution").getEnabled()==true){
+ 		if(	document.getElementById("btnPollution").getEnabled()==true){
  			
  			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
  					"' and opno = '"+CurrentOpNo+"' and formname = 'Pollution' and user = '"+localStorage.getItem('MobileUser')+"';",
  					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
  							CloseError='0'
  						}else{
  							CloseError='5'
@@ -490,12 +490,12 @@ new sap.m.Button( {
  		 }  
     	 }
    	if (CloseError=='0'){
- 		if(	 (sap.ui.getCore().getElementById("btnFeedback").getEnabled()==true){
+ 		if(	 document.getElementById("btnFeedback").getEnabled()==true){
  			
  			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
  					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
  					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE"){
+ 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
  							CloseError='0'
  						}else{
  							CloseError='6'
