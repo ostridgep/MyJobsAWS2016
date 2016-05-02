@@ -226,6 +226,9 @@ function isComplete()
 	    				cnt=cnt+1
 	    				if((elem[i].value!="")||(elem[i].disabled==true)){
 	    					fvalid++;
+	    					elem[i].style.borderColor=""
+	    				}else{
+	    					elem[i].style.borderColor = "red"
 	    				}
 	    			
 	    		}

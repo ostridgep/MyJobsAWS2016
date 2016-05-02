@@ -146,7 +146,7 @@ var formForms = new sap.m.Dialog("dlg",{
 					    	    
 							
 					    	}else{
-					    		saveFormData();
+					    		saveFormData("COMPLETE");
 					    	}
 						    	
 						    	
@@ -191,7 +191,8 @@ var formForms = new sap.m.Dialog("dlg",{
 	  }
 	
 	 })
-function saveFormData(){
+function saveFormData(type){
+	//Type is COMPLETE or SAVED
 	
 	var MyIFrame = document.getElementById("formIframe");
     var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
@@ -205,10 +206,10 @@ function saveFormData(){
 			x=w.split("#")
 			y=x[1]
 			z=y.split(":")
-			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode)
+			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
 		//Standalone Form
-			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode)
+			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode,type)
 		}
 		formForms.close()
 	}

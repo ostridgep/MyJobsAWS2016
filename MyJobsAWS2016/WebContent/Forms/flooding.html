@@ -399,6 +399,9 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    				cnt=cnt+1
 	    				if(elem[i].value!=""){
 	    					fvalid++;
+	    					elem[i].style.borderColor=""
+	    				}else{
+	    					elem[i].style.borderColor = "red"
 	    				}
 	    			
 	    		}

@@ -67,14 +67,14 @@ function showFormValidationMessage(title,msg){
 		autoClose: true,
 
 	});
-	  sap.m.MessageBox.show(msg, {
+	  sap.m.MessageBox.show(msg+"\nPress OK to return to form", {
 		         icon: sap.m.MessageBox.Icon.ERROR ,
 		         title: title,
-		         actions: [sap.m.MessageBox.Action.IGNORE, sap.m.MessageBox.Action.ABORT],
+		         actions: [sap.m.MessageBox.Action.IGNORE, sap.m.MessageBox.Action.OK],
 	  			 onClose: function(oAction){
 	  				
 	  				 if(oAction=="IGNORE"){
-	  					 saveFormData()
+	  					 saveFormData("SAVED")
 	  				 }
 	  			 }
 		       }

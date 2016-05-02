@@ -2035,7 +2035,7 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 	 }        
 	);
 }
-function createFormsResponse(formname, order,opno,user,content,mode)
+function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
 	
 	if (mode=="Close"){
@@ -2044,8 +2044,8 @@ function createFormsResponse(formname, order,opno,user,content,mode)
 		state="NEW"
 	}
 	sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
-	sqlStatement+="INSERT INTO  MyFormsResponses (formname, orderno , opno, user, contents, date , time , state) VALUES ("+
-	 "'"+formname+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');"
+	sqlStatement+="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
+	 "'"+formname+"','"+type+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');"
 	html5sql.process(sqlStatement,
 		 function(){
 			console.log("form done")
