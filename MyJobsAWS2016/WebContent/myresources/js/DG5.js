@@ -388,6 +388,8 @@ function buildDG5Tabs(){
 function setCloseButtons(key){
 	initCloseButtons()
 	if (key=="GEN-LE"){
+		oSwitchFlooding.setState(true);
+		oSwitchFlooding.setEnabled(false);
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
 		if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
 			sap.ui.getCore().getElementById('btnDG5').setText("Create");
@@ -396,10 +398,15 @@ function setCloseButtons(key){
 	
 	}else{
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
-	
+		if(!oSwitchFlooding.getEnabled()){
+			oSwitchFlooding.setState(false);
+			oSwitchFlooding.setEnabled(true);
+		}
 	}
-	
+
 	if (key=="GEN-OP"){
+		oSwitchPollution.setState(true);
+		oSwitchPollution.setEnabled(false);
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
 		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
 			sap.ui.getCore().getElementById('btnPollution').setText("Create");
@@ -408,7 +415,10 @@ function setCloseButtons(key){
 		
 	}else{
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
-		
+		if(!oSwitchPollution.getEnabled()){
+			oSwitchPollution.setState(false);
+			oSwitchPollution.setEnabled(true);
+		}
 	}
 }
 function setCloseswitch(){

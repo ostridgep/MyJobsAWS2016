@@ -23,7 +23,7 @@
             <div class="well row" style="margin-top: 10px">
                 <div class="col-md-6">
                     <div class="row">
-                        <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                       
                     </div>
                     <div class="row">
                         <h1><b>Flooding/DG5 Feedback Form</b></h1>
@@ -90,8 +90,8 @@
                              <label style="margin-left: 16px" type="text" class="feedback-input col-md-9 col-sm-8">Has flooding caused pollution with measureable impact?</label>
                                 <input type="TEXT" id="measurableimpactV" name="measurableimpactV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="measurableimpact" style="margin-left: 10px">                              
-                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="NO"parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);' class="btn btn-lg btn-primary active">No</button>
                                 </div>
 
                         </div>
@@ -105,7 +105,7 @@
                             </select>
 
                             <select class="feedback-input cause" mergeonchange=true; id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
-                             onChange="parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
+                             onChange="setPSShoreCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
                        
                                 <option value="" disabled selected>Cause of Flood</option>
 
@@ -162,19 +162,22 @@
                         <table>
                         
                         <TR><TD valign = "top" width="15%">
-		<select class="feedback-input-table" id="LocationFloodType" name="LocationFloodType" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="LocationFloodType" name="LocationFloodType" ignore="yes"
+		onChange="parent.buildRelatedSelect('LocationFloodSubType','SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = \'DL\' AND coderef=\'FLS\' AND LEVEL=\'2\' AND parentcode LIKE ',this.value+'%')" 
+		 merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLO' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
-                           			<option value="x"  selected>xxx</option>
+                           			
         </select>                   			
 		</TD><TD valign = "top" width="15%">
-		<select class="feedback-input-table" id="LocationFloodSubType" name="LocationFloodSubType" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='FLS' AND LEVEL='2' ORDER BY CODEDESC">
+		<select class="feedback-input-table" id="LocationFloodSubType" name="LocationFloodSubType" ignore="yes" >
+		
                            			<option value="-1" disabled selected>[Select]</option>   
-                           			<option value="x"  selected>xxx</option>  
+                           			
         </select>  
         </TD><TD valign = "top" width="15%">
 		<select class="feedback-input-table" id="LocationSeverity" name="LocationSeverity" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='SEV' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
-                           			<option value="x"  selected>xxx</option>
+                           			
         </select> 
         </TD><TD valign = "top" width="20%">
         <input type="text" class="feedback-input-table" id="LocationFloc" ignore="yes" />
@@ -199,18 +202,18 @@
 	<TD valign="top" width="15%">
 		<select class="feedback-input-table" id="RoomLocSelect" name="RoomLocSelect" ignore="yes" >
                            			<option value="-1" disabled selected>[Select]</option>
-                           			<option value="x"  selected>xxx</option>
+                           			
                         		</select> 
 		
 		</TD><TD valign="top" width="30%">
 		<select class="feedback-input-table" id="RoomSelect" name="RoomSelect" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRR' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
-                           			<option value="x"  selected>xxx</option>
+                           			
                         		</select> 
 		</TD><TD valign="top" width="15%">
 		<select class="feedback-input-table" id="DepthSelect" name="DepthSelect" ignore="yes" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DL' AND coderef='DRD' AND LEVEL='2' ORDER BY CODEDESC">
                            			<option value="-1" disabled selected>[Select]</option>
-                           			<option value="x"  selected>xxx</option>
+                           			
                         		</select>
         </TD><TD valign="top" width="35%">
         <textarea class="feedback-input-table" id="RoomComments" name="RoomComments" rows="4" cols="40" ignore="yes" ></textarea>
@@ -401,7 +404,13 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    					fvalid++;
 	    					elem[i].style.borderColor=""
 	    				}else{
-	    					elem[i].style.borderColor = "red"
+	    					if((elem[i].id=="psshortcode")||(elem[i].id=="assetref")||(elem[i].id=="gridref")){
+	    						fvalid++;
+		    					elem[i].style.borderColor=""
+	    					}else{
+	    						elem[i].style.borderColor = "red"
+	    					}
+	    					
 	    				}
 	    			
 	    		}
@@ -422,6 +431,16 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    return "COMPLETE"
  }
  
- 
+ function setPSShoreCodeEnabled(type){
+	 if ((type=='W')||(type=='P')){
+		
+		 document.getElementById("psshortcode").readOnly=false
+	 }else{
+		 document.getElementById("psshortcode").value=""
+			
+		 document.getElementById("psshortcode").readOnly=true
+	 }
+	 
+ }
     </script>
 </html>

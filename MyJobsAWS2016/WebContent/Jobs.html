@@ -443,182 +443,14 @@ new sap.m.Button( {
 			 CloseError='0'
 		 }  
    	 }
-   	 if (CloseError=='0'){
- 		if(	document.getElementById("btnDG5").getEnabled()){
- 			
- 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
- 					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
- 					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
- 							CloseError='0'
- 						}else{
- 							CloseError='4'
- 							
- 						}
- 					 },
- 					 function(error, statement){
- 						CloseError='4'
- 						opMessage("Error: " + error.message + " when checking DG5 Complete "+ statement);
- 					 }        
- 					);
- 			
- 		 }else{
- 			 CloseError='0'
- 		 }  
-    	 }
-   	 
-   	if (CloseError=='0'){
- 		if(	document.getElementById("btnPollution").getEnabled()==true){
- 			
- 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
- 					"' and opno = '"+CurrentOpNo+"' and formname = 'Pollution' and user = '"+localStorage.getItem('MobileUser')+"';",
- 					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
- 							CloseError='0'
- 						}else{
- 							CloseError='5'
- 							
- 						}
- 					 },
- 					 function(error, statement){
- 						CloseError='5'
- 						opMessage("Error: " + error.message + " when checking Pollution Complete " + statement);
- 					 }        
- 					);
- 			
- 		 }else{
- 			 CloseError='0'
- 		 }  
-    	 }
-   	if (CloseError=='0'){
- 		if(	 document.getElementById("btnFeedback").getEnabled()==true){
- 			
- 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
- 					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
- 					function(transaction, results, rowsArray){
- 						if((rowsArray.length>0)&&(rowsArray[0].lastupdated=="COMPLETE")){
- 							CloseError='0'
- 						}else{
- 							CloseError='6'
- 							
- 						}
- 					 },
- 					 function(error, statement){
- 						CloseError='6'
- 						opMessage("Error: " + error.message + " when checking Customer Feedback Complete " + statement);
- 					 }        
- 					);
- 			
- 		 }else{
- 			 CloseError='0'
- 		 }  
-    	 }  	
-    if(CloseError=="0"){
-    	
-    		  setStatusChangeDT()
-    		 formDG5.close()
-    		 followOnWork="NO"
-    		 followOnVariance=""
-    		 followOnReason=""
-             if(sap.ui.getCore().getElementById("Close_Work").getState()){
-            	 followOnWork="YES"
-             }
-    		  try {
-    			  followOnVariance=sap.ui.getCore().byId("Close_Variance").getSelectedItem().getKey()
-				  followOnReason= sap.ui.getCore().byId("Close_Reason").getValue()
-    			}
-    			catch(err) {
-    			    followOnWork="NO"
-    			}
-    			ifinal=''
-    			ofinal=''
-    			if(followOnWork=="NO")
-    				{
-    				followOnVariance=""
-    		    	followOnReason=""
-    				
-    				}
-    			//alert("out="+sap.ui.getCore().byId("Close_OutOfShiftTime").getValue())
-    			//alert("in="+sap.ui.getCore().byId("Close_InShiftTime").getValue())
-    			if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")){
-    				ofinal='X'
-    				ofollowOnVariance=followOnVariance
-    				ofollowOnReason=followOnReason
-    				ifollowOnVariance=''
-    				ifollowOnReason=''
-    				
-    			}else{
-    				ifinal='X'
-    					ifollowOnVariance=followOnVariance
-        				ifollowOnReason=followOnReason
-        				ofollowOnVariance=''
-        				ofollowOnReason=''
-    			}
-    			
-    			 if((sap.ui.getCore().byId("Close_InShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")){
-    				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPIS',
-    					ifollowOnVariance,
-    					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
-    					 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),'',
-    		           		ifollowOnReason,
-    		           		'',ifinal)
-    			 }
-    			 if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")){
-    				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPOS',
-    						 ofollowOnVariance,
-        					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
-        					 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),'',
-        		           		ofollowOnReason,
-        		           		'',ofinal)
-    			 }
-    			 if(sap.ui.getCore().getElementById("DG51F1C2").getVisible()){
-             createAWSJobClose(CurrentOrderNo, CurrentOpNo, currentNotifNo,  sap.ui.getCore().byId("Close_LongText").getValue(),localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,
-            		 statusUpdateDate,statusUpdateTime,
-            		 sap.ui.getCore().byId("Close_FunctionalLocation").getValue(),
-        			 sap.ui.getCore().byId("Close_Equipment").getValue(),
-        			 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),
-        			 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),
-        			 sap.ui.getCore().byId("Close_ProblemGroup").getSelectedItem().getKey(),
-        			 sap.ui.getCore().byId("Close_ProblemCode").getSelectedItem().getKey(),
-					 sap.ui.getCore().byId("Close_ActionGroup").getSelectedItem().getKey(),
-					 sap.ui.getCore().byId("Close_ActionCode").getSelectedItem().getKey(),
-					 sap.ui.getCore().byId("Close_ImpactGroup").getSelectedItem().getKey(),
-					 sap.ui.getCore().byId("Close_ImpactCode").getSelectedItem().getKey(),
-					 followOnWork,followOnVariance,followOnReason )
-    			 }else{
-    	             createAWSJobClose(CurrentOrderNo, CurrentOpNo, currentNotifNo,  '',localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,
-    	            		 statusUpdateDate,statusUpdateTime,
-    	            		 sap.ui.getCore().byId("Close_FunctionalLocation").getValue(),
-    	        			 sap.ui.getCore().byId("Close_Equipment").getValue(),
-    	        			 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),
-    	        			 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),
-    	        			 '','','','','','',
-    						 followOnWork,followOnVariance,followOnReason )  				 
-    			 }
-					updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
-					updateOperationStatus(CurrentOrderNo, CurrentOpNo, "CONF" ,"Confirmed")
-					currentStatus="CLOSED"
-					prepareChangeStatus()
-					
-					localStorage.setItem('totalAccepted','0');
-					document.getElementById("JobHead_Status").inner = "<Font color='RED'>Closed</font>";
-					
-					 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = "Closed";
-					}else{
-						if (CloseError=="1"){
-						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment\n-Time Entries")
-						}else if (CloseError=="2"){
-						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Problem - Action - Impact")
-						}else if (CloseError=="3"){
-						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Follow On Work Variance - Reason")
-						}else if (CloseError=="4"){
-						DisplayErrorMessage("Close Job Error", "DG5 Form must be Completed")
-						}else if (CloseError=="5"){
-						DisplayErrorMessage("Close Job Error", "Pollution Form must be Completed")
-						}else{
-						DisplayErrorMessage("Close Job Error", "Customer Feedback form must be Completed")
-						}		
-			 		}  
+   	 checkDG5Complete();
+   	
+
+  
+ 	
+
+   
+  
       
        } ]   
 }),
@@ -650,8 +482,214 @@ new sap.m.Button( {
          }
        
        })
+function checkDG5Complete(){
+	 
+	 		if(	sap.ui.getCore().getElementById('btnDG5').getEnabled()){
+	 		
+	 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+	 					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
+	 					function(transaction, results, rowsArray){
+	 						if(rowsArray.length<1){
+	 							CloseError='4'
+	 								processClose()
+	 						}else{
+		 						if(rowsArray[0].lastupdated=="COMPLETE"){
+		 							checkPollutionComplete();
+		 							
+		 						}else{
+		 							CloseError='4'
+		 							processClose()
+		 						}
+	 						}
+	 					 },
+	 					 function(error, statement){
+	 						CloseError='4'
+	 						opMessage("Error: " + error.message + " when checking DG5 Complete "+ statement);
+	 						processClose()
+	 					 }        
+	 					);
+	 			
+	 		 }else{
+	 			CloseError='0'
+	 			checkPollutionComplete();
+	 			
+	 		 }  
+	    	 
+}
+function checkPollutionComplete(){
+	if(	sap.ui.getCore().getElementById("btnPollution").getEnabled()==true){
+			
+			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+					"' and opno = '"+CurrentOpNo+"' and formname = 'Pollution' and user = '"+localStorage.getItem('MobileUser')+"';",
+					function(transaction, results, rowsArray){
+						if(rowsArray.length<1){
+							CloseError='5'
+								processClose()
+						}else{
+ 						if(rowsArray[0].lastupdated=="COMPLETE"){
+ 							CloseError='0'
+ 							checkFeedbackComplete()	
+ 						}else{
+ 							CloseError='5'
+ 								processClose()
+ 							
+ 						}
+						}
+					
+					 },
+					 function(error, statement){
+						CloseError='5'
+						opMessage("Error: " + error.message + " when checking Pollution Complete " + statement);
+						processClose()
+					 }        
+					);
+			
+	 }else{
+		 CloseError='0'
+			checkFeedbackComplete();
+			
+		 }  
 
-
+}
+function checkFeedbackComplete(){
+ 		if(	 sap.ui.getCore().getElementById("btnFeedback").getEnabled()==true){
+ 			
+ 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
+ 					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
+ 					function(transaction, results, rowsArray){
+ 						if(rowsArray.length<1){
+ 							CloseError='5'
+ 							
+ 						}else{
+	 						if(rowsArray[0].lastupdated=="COMPLETE"){
+	 							CloseError='0'
+	 						}else{
+	 							CloseError='5'
+	 							
+	 						}
+ 						}
+ 						processClose()
+ 					 },
+ 					 function(error, statement){
+ 						CloseError='6'
+ 						opMessage("Error: " + error.message + " when checking Customer Feedback Complete " + statement);
+ 					 }        
+ 					);
+ 		 }else{
+ 			CloseError='0'
+ 			processClose()
+ 			
+ 		 } 
+}
+function processClose(){
+    if(CloseError=="0"){
+    	
+		  setStatusChangeDT()
+		 formDG5.close()
+		 followOnWork="NO"
+		 followOnVariance=""
+		 followOnReason=""
+       if(sap.ui.getCore().getElementById("Close_Work").getState()){
+      	 followOnWork="YES"
+       }
+		  try {
+			  followOnVariance=sap.ui.getCore().byId("Close_Variance").getSelectedItem().getKey()
+			  followOnReason= sap.ui.getCore().byId("Close_Reason").getValue()
+			}
+			catch(err) {
+			    followOnWork="NO"
+			}
+			ifinal=''
+			ofinal=''
+			if(followOnWork=="NO")
+				{
+				followOnVariance=""
+		    	followOnReason=""
+				
+				}
+			//alert("out="+sap.ui.getCore().byId("Close_OutOfShiftTime").getValue())
+			//alert("in="+sap.ui.getCore().byId("Close_InShiftTime").getValue())
+			if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")){
+				ofinal='X'
+				ofollowOnVariance=followOnVariance
+				ofollowOnReason=followOnReason
+				ifollowOnVariance=''
+				ifollowOnReason=''
+				
+			}else{
+				ifinal='X'
+					ifollowOnVariance=followOnVariance
+  				ifollowOnReason=followOnReason
+  				ofollowOnVariance=''
+  				ofollowOnReason=''
+			}
+			
+			 if((sap.ui.getCore().byId("Close_InShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")){
+				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPIS',
+					ifollowOnVariance,
+					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
+					 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),'',
+		           		ifollowOnReason,
+		           		'',ifinal)
+			 }
+			 if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")){
+				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPOS',
+						 ofollowOnVariance,
+  					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
+  					 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),'',
+  		           		ofollowOnReason,
+  		           		'',ofinal)
+			 }
+			 if(sap.ui.getCore().getElementById("DG51F1C2").getVisible()){
+       createAWSJobClose(CurrentOrderNo, CurrentOpNo, currentNotifNo,  sap.ui.getCore().byId("Close_LongText").getValue(),localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,
+      		 statusUpdateDate,statusUpdateTime,
+      		 sap.ui.getCore().byId("Close_FunctionalLocation").getValue(),
+  			 sap.ui.getCore().byId("Close_Equipment").getValue(),
+  			 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),
+  			 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),
+  			 sap.ui.getCore().byId("Close_ProblemGroup").getSelectedItem().getKey(),
+  			 sap.ui.getCore().byId("Close_ProblemCode").getSelectedItem().getKey(),
+				 sap.ui.getCore().byId("Close_ActionGroup").getSelectedItem().getKey(),
+				 sap.ui.getCore().byId("Close_ActionCode").getSelectedItem().getKey(),
+				 sap.ui.getCore().byId("Close_ImpactGroup").getSelectedItem().getKey(),
+				 sap.ui.getCore().byId("Close_ImpactCode").getSelectedItem().getKey(),
+				 followOnWork,followOnVariance,followOnReason )
+			 }else{
+	             createAWSJobClose(CurrentOrderNo, CurrentOpNo, currentNotifNo,  '',localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,
+	            		 statusUpdateDate,statusUpdateTime,
+	            		 sap.ui.getCore().byId("Close_FunctionalLocation").getValue(),
+	        			 sap.ui.getCore().byId("Close_Equipment").getValue(),
+	        			 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),
+	        			 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),
+	        			 '','','','','','',
+						 followOnWork,followOnVariance,followOnReason )  				 
+			 }
+				updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
+				updateOperationStatus(CurrentOrderNo, CurrentOpNo, "CONF" ,"Confirmed")
+				currentStatus="CLOSED"
+				prepareChangeStatus()
+				
+				localStorage.setItem('totalAccepted','0');
+				document.getElementById("JobHead_Status").inner = "<Font color='RED'>Closed</font>";
+				
+				 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = "Closed";
+				}else{
+					console.log("CloseError:"+CloseError)
+					if (CloseError=="1"){
+					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment\n-Time Entries")
+					}else if (CloseError=="2"){
+					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Problem - Action - Impact")
+					}else if (CloseError=="3"){
+					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Follow On Work Variance - Reason")
+					}else if (CloseError=="4"){
+					DisplayErrorMessage("Close Job Error", "DG5 Form must be Completed")
+					}else if (CloseError=="5"){
+					DisplayErrorMessage("Close Job Error", "Pollution Form must be Completed")
+					}else{
+					DisplayErrorMessage("Close Job Error", "Customer Feedback form must be Completed")
+					}		
+		 		}
+}
 function setStatusChangeDT(){
 	 d=getDate()
 		t=getTime()
