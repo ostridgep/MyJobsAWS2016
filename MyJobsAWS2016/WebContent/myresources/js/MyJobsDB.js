@@ -124,7 +124,7 @@ function requestSAPData(page,params){
 	    dataType: "json",
 	    url: myurl,
 	    
-	    timeout: 30000
+	    timeout: 300000
 		}).done(function() {
 			console.log("success")
 			syncStatusType=sap.m.ButtonType.Accept			
@@ -2737,7 +2737,7 @@ function loadDemoData() {
 						SetConfigParam("LASTSYNC_REFERENCE", "20180316170000");
 						SetConfigParam("LASTSYNC_TRANSACTIONAL", "20180316224900");
 						SetConfigParam("LASTSYNC_UPLOAD", "20180316214900");
-						SetConfigParam("SERVERNAME", "XXXX://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobs/");
+						SetConfigParam("SERVERNAME", "XXXX://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
 						SetConfigParam("SAPCLIENT", "120");
 						//loadAssetXML("TestData\\T2_MPLT_ESVN.XML")
 						//loadAssetXML("TestData\\T2_MPLT_LSVM.XML")
