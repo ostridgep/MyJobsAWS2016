@@ -226,6 +226,7 @@ buildDocumentList()
             beforeOpen:function(){
             	buildDocumentTables()
             	//buildPhotoList();
+            	
             },
            contentWidth:"90%",
         	contentHeight: "90%",
