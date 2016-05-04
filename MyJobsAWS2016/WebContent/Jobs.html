@@ -4586,7 +4586,7 @@ formtab=null;
     										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
     										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
     										         new sap.m.Column({header: new sap.m.Label({text:"Node"}),
-    										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true }),,
+    										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true }),
     	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
     	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })       	                         
     								           	     ]
@@ -4639,6 +4639,7 @@ new sap.m.Button( {
 
 	}
 function downloadDrawFile(fname,nodeid,drawid){
+	alert(fname+":"+nodeid+":"+drawid)
 	if(nodeid!="Local"){
 		downloadLiveLink(fname,nodeid,drawid)
 	}
@@ -5097,7 +5098,8 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
 						[
 						new sap.m.Text({text: rowsArray[n].fname}),
 						new sap.m.Text({text: rowsArray[n].mime}),
-						new sap.m.Text({text: rowsArray[n].nodeid})   
+						new sap.m.Text({text: rowsArray[n].nodeid}),   
+						new sap.m.Text({text: rowsArray[n].id})
 				 		],
 
 					}));

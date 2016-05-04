@@ -889,7 +889,7 @@ function downloadMissing()
 function downloadLiveLink(fn,node,drawid)
 {
 
-            
+ alert("here"+fn+node+drawid)           
             window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,"MyJobs/LiveLink/",node,drawid));
 
    
