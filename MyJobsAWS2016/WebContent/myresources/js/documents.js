@@ -225,7 +225,7 @@ buildDocumentList()
             ],
             beforeOpen:function(){
             	buildDocumentTables()
-            	buildPhotoList();
+            	//buildPhotoList();
             },
            contentWidth:"90%",
         	contentHeight: "90%",
@@ -334,7 +334,7 @@ function buildDocumentList(){
 	    	            									]
 	    	            						           	  
 	    	            					    }),
-*/	    	            					    
+	    	            					    
 	    	                new sap.m.IconTabFilter( {
 	    	            	    key:'DocumentsUpload',
 	    	            	    tooltip: 'Upload Documents',
@@ -366,6 +366,7 @@ function buildDocumentList(){
 	    	            									]
 	    	            						           	  
 	    	            					    }),
+	    	            					   
 	    	                new sap.m.IconTabFilter( {
 	    	            	    key:'Photos',
 	    	            	    tooltip: 'Photos',
@@ -405,6 +406,7 @@ new sap.m.Button( {
 	    	            									]
 	    	            						           	  
 	    	            					    }),
+*/	    	            					    
 	       	                ]
 
 				});
@@ -413,7 +415,7 @@ new sap.m.Button( {
 function buildDocumentTables(){
 	buildGlobalDownloads("MyJobs/Global/Download/")
 	//buildPrivateDownloads()
-	buildPrivateUploads()
+	//buildPrivateUploads()
 	
 }
 //get photo and store locally
@@ -493,8 +495,8 @@ function moveFile(fileUri,dir) {
             	if(getPhotoCaller=="JOB"){
             		buildJobPhotoList();
             	}
-            	if(getPhotoCaller=="JOB"){
-            		buildPhotoList();
+            	if(getPhotoCaller=="DOC"){
+            		//buildPhotoList();
             	}
             	
                
@@ -531,8 +533,8 @@ function moveFile2(fileUri,dir,cnt) {
             	if(getPhotoCaller=="JOB"){
             		buildJobPhotoList();
             	}
-            	if(getPhotoCaller=="JOB"){
-            		buildPhotoList();
+            	if(getPhotoCaller=="DOC"){
+            		//buildPhotoList();
             	}
             	
                

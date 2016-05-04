@@ -88,10 +88,10 @@
                         </div>
                         <div class="row col-md-12 col-sm-12">
                              <label style="margin-left: 16px" type="text" class="feedback-input col-md-9 col-sm-8">Has flooding caused pollution with measureable impact?</label>
-                                <input type="TEXT" id="measurableimpactV" name="measurableimpactV" HIDDEN value="NO">
+                                <input type="TEXT" id="measurableimpactV" name="measurableimpactV"  HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="measurableimpact" style="margin-left: 10px">                              
-                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'document.getElementById("measurableimpactV").value="NO"parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);' class="btn btn-lg btn-primary active">No</button>
+                                    <button id ="measurableimpactYES" type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);' class="btn btn-lg btn-default">Yes</button>
+                                    <button id ="measurableimpactNO" type="button" onclick = 'document.getElementById("measurableimpactV").value="NO";parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);' class="btn btn-lg btn-primary active">No</button>
                                 </div>
 
                         </div>
@@ -384,7 +384,15 @@ var ref = window.open(url, '_blank', 'location=yes');
  // This function is called once all data is loaded
  function loadCompleted(){
 	
-    	 refreshRoomsLocation()	
+    	 refreshRoomsLocation()
+    	 if(document.getElementById('measurableimpactV').value=="NO"){
+    		 $('#measurableimpactNO').click()
+    		
+    		 
+    	 }else{
+    		$('#measurableimpactYES').click()
+    			 }
+    		 
  }
  function isComplete()
  {

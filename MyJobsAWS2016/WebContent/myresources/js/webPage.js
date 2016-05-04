@@ -187,6 +187,9 @@ var formForms = new sap.m.Dialog("dlg",{
     	
 	  } ,
 	  beforeClose:function(){
+		  if(formDG5.isOpen()){
+			  initCloseButtons()
+		  }
 		  formForms.destroyContent();
 	  }
 	
@@ -602,7 +605,7 @@ function setDlgTitle(formTitle){
 	}
 	function loadFormFields(formDoc){
 		var items = formDoc.getElementsByTagName("*");
-
+console.log(closeFormName)
 		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
 		console.log("here")
 		html5sql.process(sqlstatement,
@@ -617,7 +620,7 @@ function setDlgTitle(formTitle){
 					        for(var key in obj){
 					            if(!Array.isArray(obj[key])){
 					            	formDoc.getElementById(key).value=obj[key]
-					            	
+					            		console.log("setting "+key+"="+obj[key])
 						            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
 						            		try{
 						            			rselpars=formDoc.getElementById(key).getAttribute("onChange")

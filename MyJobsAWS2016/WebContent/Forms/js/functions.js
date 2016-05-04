@@ -24,12 +24,14 @@
     var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
     return dateTime;
 }
+
 $(window).resize(function() {
 	
 	 		location.href="#"
 	 		location.href="#"+document.activeElement.id
 	 	});
-window.onload = function () {
+/*
+window.onload function () {
 	pageName=document.location.toString()
 	
 	if( pageName.indexOf("formsindex")<1){
@@ -42,4 +44,5 @@ window.onload = function () {
 			document.body.insertBefore(div, lastChild.nextSibling);
 		}
 	}
-};
+}
+*/

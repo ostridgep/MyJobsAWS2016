@@ -246,7 +246,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                         				    				tap: 	[ function(oEvt) {
                         				    							formToOpen="Forms/CustomerFeedback.html"
                         				    							formMode="Close"
-                        				    								closeFormName="Feedback"
+                        				    								closeFormName="CustomerFeedback"
                         				    							formForms.open()
                         				    							} 
                         				    							
@@ -432,7 +432,11 @@ function setCloseswitch(){
 	
 	}else{
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
-	
+		if (!oSwitchPollution.getEnabled()){
+			oSwitchPollution.setState(false);
+			oSwitchPollution.setEnabled(true);
+		
+		}
 	}
 	
 	if (oSwitchPollution.getState()){

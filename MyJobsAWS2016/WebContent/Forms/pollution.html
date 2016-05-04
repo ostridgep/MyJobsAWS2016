@@ -83,8 +83,8 @@
                         <div class="btn-group btn-toggle col-md-2 col-sm-3" id="formalsampletaken"  style="margin-left: 10px">
                         	
                            
-                            <button type="button" onclick = 'document.getElementById("formalsampletakenV").value="YES"' class="btn btn-lg btn-default">Yes</button>
-                            <button type="button" onclick = 'document.getElementById("formalsampletakenV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                            <button id="formalsampletakenYES" type="button" onclick = 'document.getElementById("formalsampletakenV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                            <button id="formalsampletakenNO" type="button" onclick = 'document.getElementById("formalsampletakenV").value="NO"' class="btn btn-lg btn-primary active">No</button>
                         </div>
 
                        
@@ -106,12 +106,12 @@
                             <td><input class="feedback-input-table" id="upstreamdistance" name="upstreamdistance" disabled /></td>
                             <td><input class="feedback-input-table" id="upstreamonsitenh3" name="upstreamonsitenh3" disabled/></td>
                             <td>
-                             <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
+                             <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV"  value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
                                 
                                
-                                    <button type="button" onclick = 'setSample("1","YES");this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'setSample("1","NO");this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="upstreamsenttolabYES" type="button" onclick = 'setSample("1","YES");this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="upstreamsenttolabNO" type="button" onclick = 'setSample("1","NO");this.active=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -120,11 +120,11 @@
                             <td><input class="feedback-input-table" id="ptofdiscdistance" name="ptofdiscdistance"disabled /></td>
                             <td><input class="feedback-input-table" id="ptofdisconsitenh3" name="ptofdisconsitenh3" disabled/></td>
                             <td>
-                             <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
+                             <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV"  value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
                                
-                                    <button type="button" onclick = 'setSample("2","YES")' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'setSample("2","NO")' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="ptofdiscsenttolabYES" type="button" onclick = 'setSample("2","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="ptofdiscsenttolabNO" type="button" onclick = 'setSample("2","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -133,11 +133,11 @@
                             <td><input class="feedback-input-table" id="downstream1distance" name="downstream1distance" disabled/></td>
                             <td><input class="feedback-input-table" id="downstream1onsitenh3" name="downstream1onsitenh3" disabled/></td>
                             <td>
-                            <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
+                            <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV"  value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
                                 
-                                    <button type="button" onclick = 'setSample("3","YES")' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'dsetSample("3","NO")' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="downstream1senttolabYES" type="button" onclick = 'setSample("3","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="downstream1senttolabNO" type="button" onclick = 'setSample("3","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -146,11 +146,11 @@
                             <td><input class="feedback-input-table" id="downstream2distance" name="downstream2distance" disabled/></td>
                             <td><input class="feedback-input-table" id="downstream2onsitenh3" name="downstream2onsitenh3" disabled/></td>
                             <td>
-                            <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
+                            <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV"  value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
                                 
-                                    <button type="button" onclick = 'setSample("4","YES")' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'setSample("4","NO")' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="downstream2senttolabYES" type="button" onclick = 'setSample("4","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="downstream2senttolabNO"type="button" onclick = 'setSample("4","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -159,11 +159,11 @@
                             <td><input class="feedback-input-table" id="downstream3distance" name="downstream3distance" disabled/></td>
                             <td><input class="feedback-input-table" id="downstream3onsitenh3" name="downstream3onsitenh3" disabled/></td>
                             <td>
-                             <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
+                             <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV"  value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
                                
-                                    <button type="button" onclick = 'setSample("5","YES")' class="btn btn-lg btn-default">Yes</button>
-                                    <button type="button" onclick = 'setSample("5","NO")' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="downstream3senttolabYES" type="button" onclick = 'setSample("5","YES")' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="downstream3senttolabNO" type="button" onclick = 'setSample("5","NO")' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -209,7 +209,7 @@ function setSample(row,mode){
 		f3="upstreamsenttolabV"
 	}
 	console.log(f1+":"+f2+":"+f3)
-	document.getElementById(f3).value="NO"
+	document.getElementById(f3).value=mode
 	if(mode=="NO"){
 		disabledflag=true;
 	}else{
@@ -230,8 +230,36 @@ $(window).resize(function() {
 
 	});
 function loadCompleted(){
-	
-	 
+	 if(document.getElementById('upstreamsenttolabV').value=="NO"){
+		 $('#upstreamsenttolabNO').click()		 
+	 }else{
+		$('#upstreamsenttolabYES').click()
+	 }	
+	 if(document.getElementById('ptofdiscsenttolabV').value=="NO"){
+		 $('#ptofdiscsenttolabNO').click()		 
+	 }else{
+		$('#ptofdiscsenttolabYES').click()
+	 }	
+	 if(document.getElementById('downstream1senttolabV').value=="NO"){
+		 $('#downstream1senttolabNO').click()		 
+	 }else{
+		$('#downstream1senttolabYES').click()
+	 }	
+	 if(document.getElementById('downstream2senttolabV').value=="NO"){
+		 $('#downstream2senttolabNO').click()		 
+	 }else{
+		$('#downstream2senttolabYES').click()
+	 }
+	 if(document.getElementById('downstream3senttolabV').value=="NO"){
+		 $('#downstream3senttolabNO').click()		 
+	 }else{
+		$('#downstream3senttolabYES').click()
+	 }	
+	 if(document.getElementById('formalsampletakenV').value=="NO"){
+		 $('#formalsampletakenNO').click()		 
+	 }else{
+		$('#formalsampletakenYES').click()
+	 }	 
 }
 function isComplete()
 {

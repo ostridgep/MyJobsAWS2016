@@ -470,8 +470,7 @@ new sap.m.Button( {
             contentWidth:"85%",
             contentHeight: "85%",
       beforeOpen:function(){
-    	  oSwitchPollution.setState(false);
-    	  oSwitchFlooding.setState(false)
+    	  initCloseButtons();
 		BuildCloseScreen();
 
       },
