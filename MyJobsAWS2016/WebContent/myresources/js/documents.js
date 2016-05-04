@@ -896,8 +896,9 @@ function downloadLiveLink(fn,node,drawid)
    
 }
 function downloadLiveLinkFile(fileName,dir,node,drawid) {
+	alert("downloadlivelink"+fileName+":"+dir+":"+node+":"+drawid)
     var fileTransfer = new FileTransfer();
-    x=fileName.split("/")
+   
     llurl="http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc=ll%26objId%3d"+node+"%26objAction%3ddownload"
     alert(llurl + fileName + " to " +dir  + filename);
     fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory+ dir,
@@ -964,5 +965,7 @@ function downloadAllAsset(fileName,dir) {
 function appStart() {
     //alert(downloadCount+" Downloaded")
 }
-	
+function appStartLL() {
+    alert(" LL Download starting")
+}	
 
