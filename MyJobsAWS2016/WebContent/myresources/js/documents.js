@@ -879,7 +879,7 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL( + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL( cordova.file.externalApplicationStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
             cnt = cnt + 1;
 
         });
@@ -888,21 +888,21 @@ function downloadMissing()
 }
 function downloadLiveLink(fn,node,drawid)
 {
- alert("here"+fn+node+drawid)           
+ //alert("here"+fn+node+drawid)           
             window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,"MyJobs/LiveLink/",node,drawid));
   
    
 }
 function downloadLiveLinkFile(fileName,dir,node,drawid) {
-	alert("downloadlivelink"+fileName+":"+dir+":"+node+":"+drawid)
+	//alert("downloadlivelink"+fileName+":"+dir+":"+node+":"+drawid)
     var fileTransfer = new FileTransfer();
    
     llurl="http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc=ll%26objId%3d"+node+"%26objAction%3ddownload"
     alert(llurl + fileName + " to " +dir );
-    fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory+ dir+node+"_"+filename,
+    fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory+ dir+node+"_"+fileName,
 		function (entry) {
 		    alert(entry.fullPath+" Downloaded")
-		    updateMyJobsDraw(drawid,cordova.file.externalApplicationStorageDirectory+ dir+node+"_"+filename)
+		    updateMyJobsDraw(drawid,dir+node+"_"+fileName)
 		   
 		},
 		function (error) {
