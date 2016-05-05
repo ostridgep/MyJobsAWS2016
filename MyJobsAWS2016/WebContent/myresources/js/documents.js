@@ -910,6 +910,32 @@ function downloadLiveLinkFile(fileName,dir,node,drawid) {
 	
 		    
 		});
+    alert("ll2")
+    fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory + dir +fileName,
+    		function (entry) {
+    		    alert(" ll Downloaded")
+    		    updateMyJobDetsDraw(drawid,dir + node + "_" + fileName)
+    		   
+    		},
+    		function (error) {
+    		    
+    		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+    	
+    		    
+    		});
+    alert("ll3")
+    fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory +"/"+ dir +fileName,
+    		function (entry) {
+    		    alert(" ll Downloaded")
+    		    updateMyJobDetsDraw(drawid,dir + node + "_" + fileName)
+    		   
+    		},
+    		function (error) {
+    		    
+    		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+    	
+    		    
+    		});
 }
 function downloadAsset1(fileName) {
     var fileTransfer = new FileTransfer();
