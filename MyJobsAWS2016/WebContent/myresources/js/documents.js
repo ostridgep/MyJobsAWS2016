@@ -912,26 +912,26 @@ function downloadLiveLinkFile(fileName,dir,node,drawid) {
     alert("ll2")
     fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory + dir +fileName,
     		function (entry) {
-    		    alert(" ll Downloaded")
+    		    alert(" ll1 Downloaded")
     		    updateMyJobDetsDraw(drawid,dir + node + "_" + fileName)
     		   
     		},
     		function (error) {
     		    
-    		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+    		    alert("download error1 " + error.source+ ":" + error.target+": " + error.code);
     	
     		    
     		});
     alert("ll3")
     fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory +"/"+ dir +fileName,
     		function (entry) {
-    		    alert(" ll Downloaded")
+    		    alert(" ll2 Downloaded")
     		    updateMyJobDetsDraw(drawid,dir + node + "_" + fileName)
     		   
     		},
     		function (error) {
     		    
-    		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+    		    alert("download error2 " + error.source+ ":" + error.target+": " + error.code);
     	
     		    
     		});
