@@ -4639,9 +4639,9 @@ new sap.m.Button( {
 
 	}
 function downloadDrawFile(fname,nodeid,drawid){
-	alert(fname+":"+nodeid+":"+drawid)
+	
 	if(nodeid!="Local"){
-		downloadLiveLink(fname,nodeid,drawid)
+		downloadLiveLink(fname,nodeid.trim(),drawid)
 	}
 }
 function buildDetailsP100Tabs(tabsdesc,tabsid){
