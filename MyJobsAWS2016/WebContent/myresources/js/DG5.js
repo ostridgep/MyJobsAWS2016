@@ -199,10 +199,10 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                              ]
                                       }),
                                       new sap.ui.layout.form.FormElement({
-                                    	  label: "Flooding/DG5 Feedback",
+                                    	  label: " ",
                                           fields: [new sap.m.Button('btnDG5', {
                                         	  
-                  				    				text: 	"Create",
+                  				    				text: 	"Flooding/DG5 Feedback",
                   				    				icon:"sap-icon://form",
                				    	
                   				    				tap: 	[ function(oEvt) {
@@ -218,10 +218,10 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                           		]
                                       	}),
                                         new sap.ui.layout.form.FormElement({
-                                      	  label: "Polution",
+                                      	  label: " ",
                                             fields: [new sap.m.Button('btnPollution', {
                                           	  
-                    				    				text: 	"Create",
+                    				    				text: 	"Polution",
                     				    				icon:"sap-icon://form",
                  				    	
                     				    				tap: 	[ function(oEvt) {
@@ -237,10 +237,10 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                             		]
                                         	}),
                                             new sap.ui.layout.form.FormElement({
-                                          	  label: "Customer Feedback",
+                                          	  label: " ",
                                                 fields: [new sap.m.Button('btnFeedback', {
                                               	  
-                        				    				text: 	"Create",
+                        				    				text: 	"Customer Feedback",
                         				    				icon:"sap-icon://form",
                      				    	
                         				    				tap: 	[ function(oEvt) {
@@ -391,10 +391,10 @@ function setCloseButtons(key){
 		oSwitchFlooding.setState(true);
 		oSwitchFlooding.setEnabled(false);
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
-		if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
-			sap.ui.getCore().getElementById('btnDG5').setText("Create");
+		//if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
+		//	sap.ui.getCore().getElementById('btnDG5').setText("Create");
 			
-		}
+		//}
 	
 	}else{
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
@@ -408,10 +408,10 @@ function setCloseButtons(key){
 		oSwitchPollution.setState(true);
 		oSwitchPollution.setEnabled(false);
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
-		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
-			sap.ui.getCore().getElementById('btnPollution').setText("Create");
+		//if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
+		//	sap.ui.getCore().getElementById('btnPollution').setText("Create");
 			
-		}
+		//}
 		
 	}else{
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
@@ -425,10 +425,10 @@ function setCloseswitch(){
 	initCloseButtons()
 	if (oSwitchFlooding.getState()){
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
-		if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
-			sap.ui.getCore().getElementById('btnDG5').setText("Create");
+		//if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
+		//	sap.ui.getCore().getElementById('btnDG5').setText("Create");
 			
-		}
+		//}
 	
 	}else{
 		sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
@@ -441,10 +441,10 @@ function setCloseswitch(){
 	
 	if (oSwitchPollution.getState()){
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
-		if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
-			sap.ui.getCore().getElementById('btnPollution').setText("Create");
+		//if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
+		//	sap.ui.getCore().getElementById('btnPollution').setText("Create");
 			
-		}
+		//}
 		
 	}else{
 		sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
@@ -453,13 +453,13 @@ function setCloseswitch(){
 }
 function initCloseButtons(){
 	sap.ui.getCore().getElementById('btnFeedback').setEnabled(true);
-	sap.ui.getCore().getElementById('btnFeedback').setText("Create");
+	//sap.ui.getCore().getElementById('btnFeedback').setText("Create");
 	sap.ui.getCore().getElementById('btnFeedback').setType(sap.m.ButtonType.Accept);
 	sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
-	sap.ui.getCore().getElementById('btnDG5').setText("Not Required");
+	//sap.ui.getCore().getElementById('btnDG5').setText("Not Required");
 	sap.ui.getCore().getElementById('btnDG5').setType(sap.m.ButtonType.Accept);
 	sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
-	sap.ui.getCore().getElementById('btnPollution').setText("Not Required");
+	//sap.ui.getCore().getElementById('btnPollution').setText("Not Required");
 	sap.ui.getCore().getElementById('btnPollution').setType(sap.m.ButtonType.Accept);
 	sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"'"
 	
@@ -472,19 +472,19 @@ function initCloseButtons(){
 						if(rowsArray[n].formname=='Flooding'){
 							
 						
-							sap.ui.getCore().getElementById('btnDG5').setText("Change");
+							//sap.ui.getCore().getElementById('btnDG5').setText("Change");
 							sap.ui.getCore().getElementById('btnDG5').setType(sap.m.ButtonType.Emphasized);
 						}
 						if(rowsArray[n].formname=='Pollution'){
 							
 							
-							sap.ui.getCore().getElementById('btnPollution').setText("Change");
+							//sap.ui.getCore().getElementById('btnPollution').setText("Change");
 							sap.ui.getCore().getElementById('btnPollution').setType(sap.m.ButtonType.Emphasized);
 						}
 						if(rowsArray[n].formname=='Feedback'){
 							
 							sap.ui.getCore().getElementById('btnFeedback').setEnabled(true);
-							sap.ui.getCore().getElementById('btnFeedback').setText("Change");
+							//sap.ui.getCore().getElementById('btnFeedback').setText("Change");
 							sap.ui.getCore().getElementById('btnFeedback').setType(sap.m.ButtonType.Emphasized);
 						}
 
