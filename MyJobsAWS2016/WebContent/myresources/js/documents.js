@@ -880,7 +880,6 @@ function downloadMissing()
             fileName = data.FILES[index].name;
             window.resolveLocalFileSystemURL( cordova.file.externalApplicationStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
             cnt = cnt + 1;
-
         });
     });
   
