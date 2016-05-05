@@ -4,7 +4,7 @@
 						"name": "Callibration",
 						"type": "JOB",
 						"lastupdated": "20150124",
-						"url": "calibration.html",
+						"url": "Calibration.html",
 						"description": "Callibration Form"
 						
 					},
@@ -12,7 +12,7 @@
 						"name": "Flooding",
 						"type": "JOB",
 						"lastupdated": "20150124",
-						"url": "flooding.html",
+						"url": "Flooding.html",
 						"description": "Flooding/DG5 Feedback"
 						
 					},
@@ -44,7 +44,7 @@
 						"name": "Servicability",
 						"type": "JOB",
 						"lastupdated": "20150124",
-						"url": "maintenanceServiceability.html",
+						"url": "MaintenanceServiceability.html",
 						"description": "Pumping Station Service"
 						
 					},
@@ -52,7 +52,7 @@
 						"name": "Polution",
 						"type": "JOB",
 						"lastupdated": "20150124",
-						"url": "pollution.html",
+						"url": "Pollution.html",
 						"description": "Pollution Feedback"
 						
 					},

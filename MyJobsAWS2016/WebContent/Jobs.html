@@ -470,7 +470,8 @@ new sap.m.Button( {
             contentWidth:"85%",
             contentHeight: "85%",
       beforeOpen:function(){
-    	  initCloseButtons();
+    	 MandatedForms=[];
+    	  //initCloseButtons();
 		BuildCloseScreen();
 
       },
@@ -483,7 +484,7 @@ new sap.m.Button( {
        })
 function checkDG5Complete(){
 	 
-	 		if(	sap.ui.getCore().getElementById('btnDG5').getEnabled()){
+	 		if(	oSwitchFlooding.getState()){
 	 		
 	 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
 	 					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
@@ -516,7 +517,7 @@ function checkDG5Complete(){
 	    	 
 }
 function checkPollutionComplete(){
-	if(	sap.ui.getCore().getElementById("btnPollution").getEnabled()==true){
+	if(	oSwitchPollution.getState()){
 			
 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
 					"' and opno = '"+CurrentOpNo+"' and formname = 'Pollution' and user = '"+localStorage.getItem('MobileUser')+"';",
@@ -2126,7 +2127,8 @@ var detailFooterAWS = new sap.m.Bar({
 				    		text: 	"Forms",
 				    		 icon:"sap-icon://form",
 				    	
-				   			tap: 	[ function(oEvt) {		
+				   			tap: 	[ function(oEvt) {
+				   				MandatedForms= [];
 				   				formToOpen="Forms/formsindex.html"
 				   			    formMode="Forms"
 		   						formForms.open()

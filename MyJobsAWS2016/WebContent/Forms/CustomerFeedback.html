@@ -99,8 +99,8 @@
                                 <div class="btn-group btn-toggle" id="resolved" style="margin-left: 10px">
                                 
                                
-                                    <button id="resolvedYES" type="button" onclick = 'document.getElementById("resolvedV").value="YES";this.active=true;document.getElementById("cause").disabled=false' class="btn btn-lg btn-default">Yes</button>
-                                    <button id="resolvedNO" type="button" onclick = 'document.getElementById("resolvedV").value="NO";this.active=true;document.getElementById("cause").disabled=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="resolvedYES" type="button" onclick = 'document.getElementById("resolvedV").value="YES";this.active=true;document.getElementById("cause").disabled=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="resolvedNO" type="button" onclick = 'document.getElementById("resolvedV").value="NO";this.active=true;document.getElementById("cause").disabled=false' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -108,7 +108,7 @@
                             <td width = "50%">If no, what is the underlying cause of the problem?</td>
                            
                             <td align="left">
-                             <textarea id="cause" name="cause"  rows="4" cols="50" disabled=true ></textarea>
+                             <textarea id="cause" name="cause"  rows="4" cols="50" disabled=false ></textarea>
                                
                             </td>
                         </tr>
@@ -199,9 +199,7 @@ function loadCompleted(){
 	 }	 
 	 if(document.getElementById('contactcardV').value=="NO"){
 		 $('#contactcardNO').click()	
-		 document.getElementById("custsatifaction").value="CS06";
-		 document.getElementById("custsatifaction").disabled=true
-		 document.getElementById("reason").disabled=true
+		
 	 }else{
 		$('#contactcardYES').click()
 	 }	
@@ -212,10 +210,12 @@ function loadCompleted(){
 			$('#resolvedYES').click()
 		
 		}
+	
 	if((document.getElementById("custsatifaction").value=="CS04")||(document.getElementById("custsatifaction").value=="CS05")){
 		
 		document.getElementById("reason").disabled=false
 	}	else{
+		
 		document.getElementById("reason").disabled=true
 	}
 	if(document.getElementById("furtherworkV").value=="NO"){

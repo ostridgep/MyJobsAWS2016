@@ -105,7 +105,7 @@
                             </select>
 
                             <select class="feedback-input cause" mergeonchange=true; id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
-                             onChange="setPSShoreCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
+                             onChange="setPSShortCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
                        
                                 <option value="" disabled selected>Cause of Flood</option>
 
@@ -311,7 +311,7 @@
     		location.href="#"+document.activeElement.id
  
     	});
-    
+    //parent.showhideSaveButton(this.contentWindow.location.toString())  
 
     function addNewLocation() {
     	var rowCount = $('#location tr').length;
@@ -392,7 +392,8 @@ var ref = window.open(url, '_blank', 'location=yes');
     	 }else{
     		$('#measurableimpactYES').click()
     			 }
-    		 
+    	 
+    	 setPSShortCodeEnabled(document.getElementById('LocationFloodType').value)	 
  }
  function isComplete()
  {
@@ -439,11 +440,13 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    return "COMPLETE"
  }
  
- function setPSShoreCodeEnabled(type){
+ function setPSShortCodeEnabled(type){
+	 alert(type)
 	 if ((type=='W')||(type=='P')){
 		
 		 document.getElementById("psshortcode").readOnly=false
 	 }else{
+		
 		 document.getElementById("psshortcode").value=""
 			
 		 document.getElementById("psshortcode").readOnly=true

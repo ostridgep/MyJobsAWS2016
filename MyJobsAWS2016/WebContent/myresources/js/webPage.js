@@ -4,10 +4,11 @@ var closeFormName=""
 var selectedWebPage=''
 var mapLocationField
 currentPage=document.location.href;
-alert
+
 var theIFrameDoc=""
+var MandatedForms= [];
 var formWebPage = new sap.m.Dialog("dlgWebPage",{
-   
+
    
     horizontalScrolling:true,
     verticalScrolling:true,
@@ -52,6 +53,22 @@ var formWebPage = new sap.m.Dialog("dlgWebPage",{
    	}
 	
 	 })
+function addMandatedForm(formname) {
+	
+	var i = MandatedForms.indexOf(formname);
+	if(i == -1) {
+		MandatedForms.push(formname);
+	}  
+}
+function removeMandatedForm(formname)  {
+	
+var i = MandatedForms.indexOf(formname);
+if(i != -1) {
+	MandatedForms.splice(i, 1);
+}
+   
+   
+}
 var formGMaps = new sap.m.Dialog("dlgGMaps",{
 	   
 	title:"Map",  
@@ -170,6 +187,7 @@ var formForms = new sap.m.Dialog("dlg",{
             contentWidth:"99%",
             contentHeight: "99%",
       beforeOpen:function(){
+    	 
     	  formForms.addContent(new 		sap.ui.core.HTML({
     		
 
@@ -187,9 +205,14 @@ var formForms = new sap.m.Dialog("dlg",{
     	
 	  } ,
 	  beforeClose:function(){
-		  if(formDG5.isOpen()){
-			  initCloseButtons()
-		  }
+		  try {
+			  if(formDG5.isOpen()){
+				
+				  
+				 sap.ui.getCore().getElementById("DG5tabBar").setSelectedKey("DG51")
+			  }
+		  }catch(err)
+		  {}
 		  formForms.destroyContent();
 	  }
 	
@@ -222,8 +245,11 @@ function saveFormData(type){
 	}
 }
 function showhideSaveButton(pageName){
+	x=pageName.split("/")
+	y=x[(x.length)-1].split(".")
 	
 	
+	closeFormName=y[0];
 	if( pageName.indexOf("formsindex")>0){
 		sap.ui.getCore().getElementById('formSaveButton').setVisible(false);
 		var MyIFrame = document.getElementById("formIframe");
@@ -245,6 +271,7 @@ function showhideSaveButton(pageName){
 
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
+		MyIFrameDoc.getElementById("FormName").value=closeFormName;
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
 		buildSelects(MyIFrameDoc);
@@ -463,6 +490,11 @@ var SQLStatement=''
 
 
 	}
+	function reopenForm(url){
+		alert(url)
+		formToOpen=url;
+		formForms.fireBeforOpen()
+	}
 	function BuildFormsList(doc)
 	{
 		currentPage=document.location.href;
@@ -474,6 +506,13 @@ var SQLStatement=''
 			
 			doc.getElementById("stdFList").style.display = "block";
 		}
+		if(MandatedForms.length<1){
+
+			doc.getElementById("MandatoryDiv").style.display = "none";
+		}else{
+			
+			doc.getElementById("MandatoryDiv").style.display = "block";
+		}
 		 html5sql.process("Select * from MyForms",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
@@ -483,10 +522,17 @@ var SQLStatement=''
 	            	for(var cntx=0; cntx < rowsArray.length ; cntx++)
 					{	
 	            		item = rowsArray[cntx];
+	            	     
 	            		if(item.type=="ALL"){
-	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
+	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
 	            		}else{
-	            			doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a href='"+item["url"]+"' >"+item["description"]+"</a></label>"   					
+	            			if(MandatedForms.indexOf(item["url"])!=-1){
+	            				doc.getElementById("MandatoryFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"	
+	            			}else{
+	            				doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"	
+	            			}
+	            			
+	            							
 	            		
 	            		}
 	            	}	           
