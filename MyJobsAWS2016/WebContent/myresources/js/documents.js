@@ -886,6 +886,7 @@ function checkFileDownload () {
 			}                           
 	   }, 300)
 	}
+
 function getPercentage(tot,val){
 	
 	var y = Math.round(tot/100) ;
