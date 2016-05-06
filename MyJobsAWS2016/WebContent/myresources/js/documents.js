@@ -818,35 +818,75 @@ function errorHandler(error){
 
 	    alert("Failed to create The Directories: "+ error);
 	}
-
-
+var fileDownloadCnt=0;
+var percentagedownloaded=0;
+var filesToDownload = [];
 function downloadAll()
 {
 	
 	oProgInd.setPercentValue(5);
 	oProgInd.setDisplayValue("5" + "%");
-
+	percentagedownloaded=0;
+	filesToDownload = [];
+	
     $.getJSON('http://ostridge.synology.me/ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
         
-
+    	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
+        /*
         $.each(data.FILES, function (index) {
         	sPercent=getPercentage(data.FILES.length,cnt)
         	if(sPercent < 5){sPercent=5}
-        	oProgInd.setPercentValue(sPercent);
-        	oProgInd.setDisplayValue(sPercent + "%");
-            fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+data.FILES[index].url+"/"  + data.FILES[index].name, appStart, downloadAllAsset(data.FILES[index].name, data.FILES[index].url+"/"));
+        	if(sPercent!=oProgInd.getPercentValue())
+				{
+        		percentagedownloaded=sPercent			
+				}
+
+            //fileName = data.FILES[index].name;
+           // window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+data.FILES[index].url+"/"  + data.FILES[index].name, appStart, downloadAllAsset(data.FILES[index].name, data.FILES[index].url+"/"));
             cnt = cnt + 1;
 
         });
-        oProgInd.setPercentValue(100);
-    	oProgInd.setDisplayValue(100 + "%");
-    	alert("FieTransfer:"+st+" to "+getFormattedTime())
-    });
-   
+        */
+        percentagedownloaded=100;
+    }).success(function() { 
+    	alert("second success"); 
+    	})
+    .error(function() { 
+    	alert("error"); 
+    })
+    .complete(function() { 
+    	percentagedownloaded=100;
+    	if(filesToDownload.length>0){
+    		fileDownloadCnt=0;
+    		checkFileDownload ();
+    		
+    		}else{
+    		oProgInd.setPercentValue(100);
+        	oProgInd.setDisplayValue("100" + "%");
+    		}
+    	
+    	
+    	});
+    
+  
+	
 }
+
+function checkFileDownload () { 
+	
+	//  create a loop function
+	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+		   if(fileDownloadCnt<filesToDownload.length){
+		       fileName = filesToDownload[fileDownloadCnt].name;
+	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
+	           fileDownloadCnt++;
+			   checkFileDownload(); 	
+			}
+	                           
+	   }, 300)
+	}
 function getPercentage(tot,val){
 	
 	var y = Math.round(tot/100) ;
