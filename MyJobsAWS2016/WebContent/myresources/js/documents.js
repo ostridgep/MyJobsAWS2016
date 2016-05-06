@@ -883,8 +883,7 @@ function checkFileDownload () {
 	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 	           fileDownloadCnt++;
 			   checkFileDownload(); 	
-			}
-	                           
+			}                           
 	   }, 300)
 	}
 function getPercentage(tot,val){
