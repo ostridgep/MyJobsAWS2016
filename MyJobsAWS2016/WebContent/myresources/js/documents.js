@@ -837,7 +837,7 @@ function downloadAll()
         alert("Prepare Download"+filesToDownload.FILES.length); 
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
-    		checkFileDownload ();
+    		checkFileDownload();
     		
     		}else{
     		oProgInd.setPercentValue(100);
@@ -860,7 +860,7 @@ function downloadAll()
         */
         
     }).success(function() { 
-    	alert("second success"); 
+    	
     	})
     .error(function() { 
     	alert("error"); 
@@ -868,7 +868,7 @@ function downloadAll()
     	oProgInd.setDisplayValue("100" + "%");
     })
     .complete(function() { 
-    	alert("success"+filesToDownload.FILES.length); 
+    	
     	
 
     	
@@ -880,7 +880,10 @@ function downloadAll()
 }
 
 function checkFileDownload () { 
-	
+	if(fileDownloadCnt==0){
+		alert("in check")
+	}
+		
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		   if(fileDownloadCnt<filesToDownload.FILES.length){
@@ -896,10 +899,13 @@ function checkFileDownload () {
 	            	oProgInd.setDisplayValue(sPercent + "%");
 					}
 			   checkFileDownload(); 	
-			} 
-		   oProgInd.setPercentValue(100);
-       	oProgInd.setDisplayValue("100" + "%");
-	   }, 300)
+			}else 
+				{
+				oProgInd.setPercentValue(100);
+			    oProgInd.setDisplayValue("100" + "%");			
+				}
+
+	   }, 150)
 	}
 function getPercentage(tot,val){
 	

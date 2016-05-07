@@ -69,6 +69,14 @@ if(i != -1) {
    
    
 }
+function latLongToEastingNorthing(latlon) {
+	x=latlon.split(",")
+	var ll2w = new LatLng(x[0], x[1]);
+	ll2w.WGS84ToOSGB36();
+	var os2w = ll2w.toOSRef();
+	return os2w.easting+","+os2w.northing
+	
+	}
 var formGMaps = new sap.m.Dialog("dlgGMaps",{
 	   
 	title:"Map",  
@@ -119,7 +127,8 @@ var formGMaps = new sap.m.Dialog("dlgGMaps",{
    			
    			var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	    	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
-	    	MyIFrameDoc.getElementById(mapLocationField).value=localStorage.getItem('mapLocation')
+   			
+	    	MyIFrameDoc.getElementById(mapLocationField).value=latLongToEastingNorthing(localStorage.getItem('mapLocation'))
    		}	
    		
    		formGMaps.destroyContent()
