@@ -834,7 +834,7 @@ function downloadAll()
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
-        alert("Prepare Download"+filesToDownload.FILES.length); 
+     
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		checkFileDownload();
@@ -880,9 +880,7 @@ function downloadAll()
 }
 
 function checkFileDownload () { 
-	if(fileDownloadCnt==0){
-		alert("in check")
-	}
+	
 		
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
