@@ -491,7 +491,7 @@ var SQLStatement=''
 
 	}
 	function reopenForm(url){
-		alert(url)
+		
 		formToOpen=url;
 		formForms.fireBeforOpen()
 	}

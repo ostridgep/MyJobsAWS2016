@@ -3525,7 +3525,7 @@ opMessage("Callback Notifications triggured");
 					opMessage("Loading "+MyNotifications.notification[cntx].item.length+" Items");
 					for(var icnt=0; icnt < MyNotifications.notification[cntx].item.length ; icnt++)
 						{	
-				
+						MyNotifications.notification[cntx].item[icnt].txt_objptcd=MyNotifications.notification[cntx].item[icnt].txt_objptcd.replace("\"", "");;	
 						sqlstatement1+='INSERT INTO MyItems (notifno , item_id , descript , d_cat_typ , d_codegrp , d_code , dl_cat_typ , dl_codegrp , dl_code , stxt_grpcd , txt_probcd , txt_grpcd, txt_objptcd,  status, long_text) VALUES  (  '+
 							 '"'+MyNotifications.notification[cntx].notifno +'",'+
 							 '"'+MyNotifications.notification[cntx].item[icnt].id+'",'+ 

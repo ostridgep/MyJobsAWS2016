@@ -56,7 +56,7 @@
                             <select class="feedback-input" id="attendanceweather" name="attendanceweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='ATW' AND LEVEL='2' ORDER BY CODEDESC">
                     	 
                          
-                           			<option value="" disabled selected>Attendance Weather</option>
+                           			<option value="" disabled selected></option>
                           
 
                         	</select> 
@@ -80,8 +80,9 @@
 
                     <div class="well row">
                         <div class="row ccol-md-6 col-sm-8">
+                            <label>Is there any indication of previous flooding?</label>
                             <select class="feedback-input cause" id="previousflooding" name="previousflooding" style="margin-left: 20px" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='IPF' AND LEVEL='2' ORDER BY CODEDESC">
-                                <option value="" disabled selected>Is there any indication of previous flooding?</option>
+                                <option value="" disabled selected></option>
                                 
                             </select>
 
@@ -441,7 +442,7 @@ var ref = window.open(url, '_blank', 'location=yes');
  }
  
  function setPSShortCodeEnabled(type){
-	 alert(type)
+	
 	 if ((type=='W')||(type=='P')){
 		
 		 document.getElementById("psshortcode").readOnly=false

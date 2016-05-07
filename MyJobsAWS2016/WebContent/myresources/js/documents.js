@@ -858,7 +858,7 @@ function downloadAll()
     })
     .complete(function() { 
     	percentagedownloaded=100;
-    	if(filesToDownload.length>0){
+    	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		checkFileDownload ();
     		
@@ -878,9 +878,9 @@ function checkFileDownload () {
 	
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-		   if(fileDownloadCnt<filesToDownload.length){
-		       fileName = filesToDownload[fileDownloadCnt].name;
-	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
+		   if(fileDownloadCnt<filesToDownload.FILES.length){
+		       fileName = filesToDownload.FILES[fileDownloadCnt].name;
+	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload.FILES[fileDownloadCnt].url+"/"  + filesToDownload.FILES[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload.FILES[fileDownloadCnt].name, filesToDownload.FILES[fileDownloadCnt].url+"/"));
 	           fileDownloadCnt++;
 			   checkFileDownload(); 	
 			}                           
