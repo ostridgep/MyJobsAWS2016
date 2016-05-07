@@ -834,6 +834,15 @@ function downloadAll()
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
+        alert("Prepare Download"+filesToDownload.FILES.length); 
+    	if(filesToDownload.FILES.length>0){
+    		fileDownloadCnt=0;
+    		checkFileDownload ();
+    		
+    		}else{
+    		oProgInd.setPercentValue(100);
+        	oProgInd.setDisplayValue("100" + "%");
+    		}
         /*
         $.each(data.FILES, function (index) {
         	sPercent=getPercentage(data.FILES.length,cnt)
@@ -849,24 +858,19 @@ function downloadAll()
 
         });
         */
-        percentagedownloaded=100;
+        
     }).success(function() { 
     	alert("second success"); 
     	})
     .error(function() { 
     	alert("error"); 
+		oProgInd.setPercentValue(100);
+    	oProgInd.setDisplayValue("100" + "%");
     })
     .complete(function() { 
-    	alert("success"); 
+    	alert("success"+filesToDownload.FILES.length); 
     	
-    	if(filesToDownload.FILES.length>0){
-    		fileDownloadCnt=0;
-    		checkFileDownload ();
-    		
-    		}else{
-    		oProgInd.setPercentValue(100);
-        	oProgInd.setDisplayValue("100" + "%");
-    		}
+
     	
     	
     	});
