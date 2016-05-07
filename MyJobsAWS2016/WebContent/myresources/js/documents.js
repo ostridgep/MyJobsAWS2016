@@ -857,7 +857,8 @@ function downloadAll()
     	alert("error"); 
     })
     .complete(function() { 
-    	percentagedownloaded=100;
+    	alert("success"); 
+    	
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		checkFileDownload ();
@@ -882,8 +883,18 @@ function checkFileDownload () {
 		       fileName = filesToDownload.FILES[fileDownloadCnt].name;
 	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload.FILES[fileDownloadCnt].url+"/"  + filesToDownload.FILES[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload.FILES[fileDownloadCnt].name, filesToDownload.FILES[fileDownloadCnt].url+"/"));
 	           fileDownloadCnt++;
+	           sPercent=getPercentage(filesToDownload.FILES.length,fileDownloadCnt)
+	        	if(sPercent < 5){sPercent=5}
+	        	if(sPercent!=oProgInd.getPercentValue())
+					{
+	        		
+	        		oProgInd.setPercentValue(sPercent);
+	            	oProgInd.setDisplayValue(sPercent + "%");
+					}
 			   checkFileDownload(); 	
-			}                           
+			} 
+		   oProgInd.setPercentValue(100);
+       	oProgInd.setDisplayValue("100" + "%");
 	   }, 300)
 	}
 function getPercentage(tot,val){
