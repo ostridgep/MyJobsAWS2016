@@ -905,7 +905,7 @@ function checkFileDownload () {
 			    oProgInd.setDisplayValue("100" + "%");			
 				}
 
-	   }, 150)
+	   }, 10)
 	}
 function getPercentage(tot,val){
 	
