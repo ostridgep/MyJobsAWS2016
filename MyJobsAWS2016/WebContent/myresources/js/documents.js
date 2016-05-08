@@ -9,7 +9,7 @@ var selectedPhoto=""
 var DeviceStorageDirectory;
 try {
 	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
-	if(device.platform=="iOS"){
+	if(cordova.platformId=="iOS"){
 		DeviceStorageDirectory=cordova.file.documentsDirectory
 	}
 	}
