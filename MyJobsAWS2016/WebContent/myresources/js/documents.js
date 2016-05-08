@@ -20,7 +20,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 		    modal: true,
 		    contentWidth:"1em",
 		    buttons: [
-		   
+		  
 						new sap.m.Button( {
 						    text: "Close",
 						    type: 	sap.m.ButtonType.Reject,

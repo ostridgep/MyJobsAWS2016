@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="jscoord-1.1.1.js"></script>
+   <script>
+function eastingNorthingToLatLong(a, b) {
+var os1 = new OSRef(a, b);
+var ll1 = os1.toLatLng();
+ll1.OSGB36ToWGS84();
+var latVal= ll1.lat.toString();
+var longVal= ll1.lng.toString() ;
+document.getElementById('latitude').value=ll1.lat;
+document.getElementById('longitude').value= ll1.lng;
+}
+
+function latLongToEastingNorthing(a, b) {
+var ll2w = new LatLng(a, b);
+ll2w.WGS84ToOSGB36();
+var os2w = ll2w.toOSRef();
+document.getElementById('easting').value=os2w.easting;
+document.getElementById('northing').value= os2w.northing;
+}
+</script>
+
+</head>
+<body>
+Easting: <input type="text" id="easting" name="easting" value="545184"><br/><br/>
+Northing: <input type="text" id="northing" name="northing" value="268203"><br/><br/>
+
+<button onclick="eastingNorthingToLatLong(document.getElementById('easting').value,document.getElementById('northing').value)">To Lat/Long</button>
+<button onclick="latLongToEastingNorthing(document.getElementById('latitude').value,document.getElementById('longitude').value)">To Easting/Northing</button>
+<br/><br/>
+Latitude:  <input type="text" id="latitude" name=latitude"><br/><br/>
+Longitude: <input type="text" id="longitude" name="longitude"><br/>
+</body>
+</html>
