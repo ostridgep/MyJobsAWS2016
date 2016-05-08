@@ -62,7 +62,7 @@
 
     <gap:plugin name="org.apache.cordova.geolocation" />
     <gap:plugin name="org.apache.cordova.globalization" />
-
+	<gap:plugin name="cordova-plugin-device" spec="1.0.1" source="pgb" />
     <gap:plugin name="org.apache.cordova.media" />
     <gap:plugin name="org.apache.cordova.network-information" />
  <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
