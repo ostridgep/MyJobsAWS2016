@@ -10,7 +10,8 @@ var DeviceStorageDirectory;
 
 try {
 	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
-	if(device.platform=="iOS"){
+	alert("lsdev="+localStorage.getItem("DeviceType"))
+	if(localStorage.getItem("DeviceType")=="iOS"){
 		DeviceStorageDirectory=cordova.file.documentsDirectory
 	}
 	}

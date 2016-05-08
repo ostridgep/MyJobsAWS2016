@@ -958,11 +958,17 @@ content:[
          
          ]
  })
- try{
-	 alert(device.platform )
- }catch(err){
- alert("its Windows")
- }
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+	try{
+		localStorage.setItem("DeviceType",device.platform)
+		 alert(device.platform)
+	 }catch(err){
+		 localStorage.setItem("DeviceType","WINDOWS")
+	
+	 }
+}
+ 
 var formSettings = new sap.m.Dialog("dlgSettings",{
     title:"Settings 2016-05-08",
     modal: true,
