@@ -17,7 +17,7 @@ try {
 	   
 	} 
 
-	
+
 	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
