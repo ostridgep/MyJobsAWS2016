@@ -843,21 +843,7 @@ function downloadAll()
     		oProgInd.setPercentValue(100);
         	oProgInd.setDisplayValue("100" + "%");
     		}
-        /*
-        $.each(data.FILES, function (index) {
-        	sPercent=getPercentage(data.FILES.length,cnt)
-        	if(sPercent < 5){sPercent=5}
-        	if(sPercent!=oProgInd.getPercentValue())
-				{
-        		percentagedownloaded=sPercent			
-				}
-
-            //fileName = data.FILES[index].name;
-           // window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+data.FILES[index].url+"/"  + data.FILES[index].name, appStart, downloadAllAsset(data.FILES[index].name, data.FILES[index].url+"/"));
-            cnt = cnt + 1;
-
-        });
-        */
+       
         
     }).success(function() { 
     	
