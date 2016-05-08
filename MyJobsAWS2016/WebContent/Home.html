@@ -957,8 +957,13 @@ content:[
  
          ]
  })
+ try{
+	 alert(cordova.platformId )
+ }catch(err){
+ alert("its Windows")
+ }
 var formSettings = new sap.m.Dialog("dlgSettings",{
-    title:"Settings "+device.platform,
+    title:"Settings 2016-05-08",
     modal: true,
     contentWidth:"1em",
     buttons: [

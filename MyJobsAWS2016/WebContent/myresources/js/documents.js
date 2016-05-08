@@ -6,6 +6,18 @@ var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
+var DeviceStorageDirectory;
+try {
+	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
+	if(device.platform=="iOS"){
+		DeviceStorageDirectory=cordova.file.documentsDirectory
+	}
+	}
+	catch(err) {
+	   
+	} 
+
+	
 	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
@@ -151,7 +163,7 @@ function selectPhoto(){
 	        for (var i = 0; i < results.length; i++) {
 	        	alert('Image URI: ' + results[i]);
 	            try {
-	  			  moveFile2(results[i], cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos",i)
+	  			  moveFile2(results[i], DeviceStorageDirectory+"MyJobs/Private/Photos",i)
 	  			}
 	  			catch(err) {
 	  			   
@@ -423,7 +435,7 @@ function buildDocumentTables(){
 function getPhoto(caller) {
 	getPhotoCaller=caller
     // Take picture using device camera and retrieve image as base64-encoded string
-	//alert("about to take photo"+cordova.file.externalApplicationStorageDirectory)
+	//alert("about to take photo"+DeviceStorageDirectory)
 	
     navigator.camera.getPicture(onGetPhotoDataSuccess, onGetPhotoDataFail, { quality: 50 });
 }
@@ -438,7 +450,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     
 	  try {
-		  moveFile(imageData, cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos")
+		  moveFile(imageData, DeviceStorageDirectory+"MyJobs/Private/Photos")
 		}
 		catch(err) {
 		   
@@ -552,7 +564,7 @@ function buildPhotoList(){
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	opTable.destroyItems();
 	try {
-		 window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		 window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(photosReadSuccess, photosReadFail);
@@ -577,7 +589,7 @@ function photos_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')})  ,
-			new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Photos/"+f.name})
+			new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Photos/"+f.name})
 	 		]
 		}));
 }
@@ -624,7 +636,7 @@ if(dir!="MyJobs/Global/Download/"){
 }
 GlobalDirectory=dir;
 	try {
-		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+dir, function (dirEntry) {
+		window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir, function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
@@ -655,7 +667,7 @@ function gddocs_details_callback(f) {
 	            new sap.m.Text({text: x[1]}),
 	            new sap.m.Text({text: f.size}),
 				new sap.m.Text({text: z}),
-				new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+GlobalDirectory+f.name})
+				new sap.m.Text({text: DeviceStorageDirectory+GlobalDirectory+f.name})
 		 		]
 			}));
     }
@@ -695,7 +707,7 @@ function buildPrivateUploads()
 	var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
 	opTable.destroyItems();
 	try {
-		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
+		window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsPUReadSuccess, docsPUReadFail);
@@ -721,7 +733,7 @@ function pudocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Upload/"+f.name})
+			  new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Upload/"+f.name})
 	 		]
 		}));
 }
@@ -751,7 +763,7 @@ function buildPrivateDownloads()
 	opTable.destroyItems();
 
 	try {
-		  window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+		  window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
@@ -777,7 +789,7 @@ function pddocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			  new sap.m.Text({text: cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/"+f.name}) 
+			  new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Download/"+f.name}) 
 	 		]
 		}));
 }
@@ -872,7 +884,7 @@ function checkFileDownload () {
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		   if(fileDownloadCnt<filesToDownload.FILES.length){
 		       fileName = filesToDownload.FILES[fileDownloadCnt].name;
-	           window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+filesToDownload.FILES[fileDownloadCnt].url+"/"  + filesToDownload.FILES[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload.FILES[fileDownloadCnt].name, filesToDownload.FILES[fileDownloadCnt].url+"/"));
+	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[fileDownloadCnt].url+"/"  + filesToDownload.FILES[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload.FILES[fileDownloadCnt].name, filesToDownload.FILES[fileDownloadCnt].url+"/"));
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.FILES.length,fileDownloadCnt)
 	        	if(sPercent < 5){sPercent=5}
@@ -910,7 +922,7 @@ function downloadMissing()
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
             
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
+            window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
             cnt = cnt + 1;
            
         });
@@ -922,7 +934,7 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL( cordova.file.externalApplicationStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL( DeviceStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
             cnt = cnt + 1;
         });
     });
