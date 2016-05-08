@@ -10,7 +10,7 @@ var DeviceStorageDirectory;
 
 try {
 	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
-	if(cordova.platformId=="iOS"){
+	if(device.platform=="iOS"){
 		DeviceStorageDirectory=cordova.file.documentsDirectory
 	}
 	}
