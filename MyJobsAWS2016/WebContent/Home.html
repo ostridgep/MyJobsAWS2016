@@ -958,11 +958,17 @@ content:[
          
          ]
  })
+localStorage.setItem("DeviceType","xx")
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	try{
+		
+		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
+		
+		if(device.platform=="iOS"){
+			DeviceStorageDirectory=cordova.file.documentsDirectory
+		}
 		localStorage.setItem("DeviceType",device.platform)
-		 alert(device.platform)
 	 }catch(err){
 		 localStorage.setItem("DeviceType","WINDOWS")
 	

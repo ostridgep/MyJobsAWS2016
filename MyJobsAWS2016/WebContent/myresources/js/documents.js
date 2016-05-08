@@ -7,17 +7,7 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 var DeviceStorageDirectory;
-
-try {
-	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
-	alert("lsdev="+localStorage.getItem("DeviceType"))
-	if(localStorage.getItem("DeviceType")=="iOS"){
-		DeviceStorageDirectory=cordova.file.documentsDirectory
-	}
-	}
-	catch(err) {
-	   
-	} 
+ 
 
 
 	var selectedPhotoType=""
