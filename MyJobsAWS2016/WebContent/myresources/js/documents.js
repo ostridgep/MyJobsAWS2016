@@ -7,6 +7,7 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 var DeviceStorageDirectory;
+
 try {
 	DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
 	if(cordova.platformId=="iOS"){
