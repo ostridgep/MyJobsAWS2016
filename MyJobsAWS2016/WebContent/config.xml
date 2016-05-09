@@ -39,9 +39,9 @@
     <preference name="android-minSdkVersion"      value="7" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 	<preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
-   <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
-    <preference name="iosPersistentFileLocation" value="Compatibility" />
-    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
+    <preference name="iosExtraFilesystems"        value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
+    <preference name="iosPersistentFileLocation"  value="Library" />
+    <preference name="AndroidExtraFilesystems"    value="files,files-external,documents,sdcard,cache,cache-external,root" />
     <!-- Plugins -->
 
 
@@ -65,12 +65,12 @@
 	<gap:plugin name="cordova-plugin-device" spec="1.0.1" source="pgb" />
     <gap:plugin name="org.apache.cordova.media" />
     <gap:plugin name="org.apache.cordova.network-information" />
- <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
- <plugin name="cordova-plugin-whitelist" />
- <gap:plugin name="org.apache.cordova.file"  />
- <gap:plugin name="org.apache.cordova.file-transfer" />
- <gap:plugin name="com.cordova.plugins.fileopener" spec="1.0.1" source="pgb" />
- <gap:plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
+    <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
+    <plugin name="cordova-plugin-whitelist" />
+    <gap:plugin name="org.apache.cordova.file"  />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="com.cordova.plugins.fileopener" spec="1.0.1" source="pgb" />
+    <gap:plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
     <gap:plugin name="org.apache.cordova.vibration" />
 	<gap:splash src="splash.png" gap:platform="ios" width="320" height="480" />
 	<gap:splash src="splash.png" gap:platform="ios" width="640" height="960" />

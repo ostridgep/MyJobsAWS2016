@@ -7,7 +7,7 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 var DeviceStorageDirectory;
- 
+var AppDocDirectory;
 
 
 	var selectedPhotoType=""
@@ -155,7 +155,7 @@ function selectPhoto(){
 	        for (var i = 0; i < results.length; i++) {
 	        	alert('Image URI: ' + results[i]);
 	            try {
-	  			  moveFile2(results[i], DeviceStorageDirectory+"MyJobs/Private/Photos",i)
+	  			  moveFile2(results[i], DeviceStorageDirectory+AppDocDirectory+"/Private/Photos",i)
 	  			}
 	  			catch(err) {
 	  			   
@@ -418,7 +418,7 @@ new sap.m.Button( {
 	return docsTabBar
 }
 function buildDocumentTables(){
-	buildGlobalDownloads("MyJobs/Global/Download/")
+	buildGlobalDownloads(AppDocDirectory+"/Global/Download/")
 	//buildPrivateDownloads()
 	//buildPrivateUploads()
 	
@@ -442,7 +442,7 @@ function onGetPhotoDataSuccess(imageData) {
                        + (currentdate.getSeconds()).toString();
     
 	  try {
-		  moveFile(imageData, DeviceStorageDirectory+"MyJobs/Private/Photos")
+		  moveFile(imageData, DeviceStorageDirectory+AppDocDirectory+"/Private/Photos")
 		}
 		catch(err) {
 		   
@@ -555,7 +555,7 @@ function buildPhotoList(){
 	var opTable = sap.ui.getCore().getElementById('PhotosTable');
 	opTable.destroyItems();
 	try {
-		 window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Photos/", function (dirEntry) {
+		 window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/Private/Photos/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(photosReadSuccess, photosReadFail);
@@ -580,7 +580,7 @@ function photos_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')})  ,
-			new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Photos/"+f.name})
+			new sap.m.Text({text: DeviceStorageDirectory+AppDocDirectory+"/Private/Photos/"+f.name})
 	 		]
 		}));
 }
@@ -611,7 +611,7 @@ function buildGlobalDownloads(dir)
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
-if(dir!="MyJobs/Global/Download/"){
+if(dir!=AppDocDirectory+"/Global/Download/"){
 	
 		opTable.addItem (new sap.m.ColumnListItem({
 			cells : 
@@ -698,7 +698,7 @@ function buildPrivateUploads()
 	var opTable = sap.ui.getCore().getElementById('DocumentsUploadTable');
 	opTable.destroyItems();
 	try {
-		window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Upload/", function (dirEntry) {
+		window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/Private/Upload/", function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsPUReadSuccess, docsPUReadFail);
@@ -724,7 +724,7 @@ function pudocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			  new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Upload/"+f.name})
+			  new sap.m.Text({text: DeviceStorageDirectory+AppDocDirectory+"/Private/Upload/"+f.name})
 	 		]
 		}));
 }
@@ -754,7 +754,7 @@ function buildPrivateDownloads()
 	opTable.destroyItems();
 
 	try {
-		  window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Download/", function (dirEntry) {
+		  window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/Private/Download/", function (dirEntry) {
 		    	
 		        var directoryReader = dirEntry.createReader();
 		          directoryReader.readEntries(docsPDReadSuccess, docsPDReadFail);
@@ -780,7 +780,7 @@ function pddocs_details_callback(f) {
             new sap.m.Text({text: f.type}),
             new sap.m.Text({text: f.size}),
 			new sap.m.Text({text: d1.toString('yyyyMMdd')}),
-			  new sap.m.Text({text: DeviceStorageDirectory+"MyJobs/Private/Download/"+f.name}) 
+			  new sap.m.Text({text: DeviceStorageDirectory+AppDocDirectory+"/Private/Download/"+f.name}) 
 	 		]
 		}));
 }
@@ -913,7 +913,7 @@ function downloadMissing()
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
             
-            window.resolveLocalFileSystemURL(DeviceStorageDirectory+"MyJobs/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,"MyJobs/Private/Download/"));
+            window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/Private/Download/" + data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name,AppDocDirectory+"/Private/Download/"));
             cnt = cnt + 1;
            
         });
@@ -925,7 +925,7 @@ function downloadMissing()
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
-            window.resolveLocalFileSystemURL( DeviceStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, "MyJobs/Global/Download/"));
+            window.resolveLocalFileSystemURL( DeviceStorageDirectory+ data.FILES[index].name, appStart, downloadAsset(data.FILES[index].name, AppDocDirectory+"/Global/Download/"));
             cnt = cnt + 1;
         });
     });
@@ -934,7 +934,7 @@ function downloadMissing()
 function downloadLiveLink(fn,node,drawid)
 {
        
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+"MyJobs/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,"MyJobs/LiveLink/",node,drawid));
+            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+AppDocDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,AppDocDirectory+"/LiveLink/",node,drawid));
   
    
 }
