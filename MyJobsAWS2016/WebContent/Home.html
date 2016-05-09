@@ -966,7 +966,7 @@ function onDeviceReady() {
 		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
 		
 		if(device.platform=="iOS"){
-			DeviceStorageDirectory=cordova.file.documentsDirectory
+			DeviceStorageDirectory=cordova.file.documentsDirectory+"documents/"
 		}
 		localStorage.setItem("DeviceType",device.platform)
 	 }catch(err){
