@@ -518,7 +518,6 @@ function moveFile2(fileUri,dir,cnt) {
 
 
 
-
     var currentdate = new Date();
     var datetime = (currentdate.getFullYear()).toString() + (currentdate.getMonth() + 1).toString() + (currentdate.getFullYear()).toString()
        + (currentdate.getHours()).toString()
