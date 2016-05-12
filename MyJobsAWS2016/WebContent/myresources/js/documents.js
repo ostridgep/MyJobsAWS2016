@@ -832,7 +832,7 @@ function downloadAll()
 	percentagedownloaded=0;
 	filesToDownload = [];
 	
-    $.getJSON('http://ostridge.synology.me/ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
         
     	filesToDownload=data;
         var cnt = 0;
@@ -905,7 +905,7 @@ function getPercentage(tot,val){
 function downloadMissing()
 {
 		
-    $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
+    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
         downloadCount = 0
         
         alert("private"+data.FILES.length)
@@ -919,7 +919,7 @@ function downloadMissing()
         });
     });
 
-    $.getJSON('http://ostridge.synology.me/ListDirjson.php?directory=MyJobs/Global/download', function (data) {
+    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson.php?directory=MyJobs/Global/download', function (data) {
         downloadCount = 0
         alert("Global"+data.FILES.length)
         var cnt = 0;
@@ -962,8 +962,8 @@ window.open(llurl, "_blank", 'location=yes,closebuttoncaption=Return')
 function downloadAsset1(fileName) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.dataDirectory  + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
+    alert("About to start transfer " + localStorage.getItem("DOCSERVER")+  fileName + " to " + cordova.file.dataDirectory  + x[3]);
+    fileTransfer.download(localStorage.getItem("DOCSERVER") + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
 		function (entry) {
 		    alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
 		   
@@ -978,8 +978,8 @@ function downloadAsset1(fileName) {
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
-    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
+    //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    fileTransfer.download(localStorage.getItem("DOCSERVER")+ fileName, cordova.file.externalApplicationStorageDirectory + dir + x[3],
 		function (entry) {
 		    //alert(entry.fullPath)
 		   
@@ -994,8 +994,8 @@ function downloadAsset(fileName,dir) {
 function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
    
-    //alert("About to start transfer " + "http://ostridge.synology.me/" + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
-    fileTransfer.download("http://ostridge.synology.me/"+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
+    //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
 		function (entry) {
     	opMessage("Downloading"+entry.fullPath)
 		   

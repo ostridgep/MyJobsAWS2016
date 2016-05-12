@@ -65,7 +65,7 @@ if(n==1){
 				localStorage.setItem("VehicleReg",rowsArray[0].vehiclereg)	
 				localStorage.setItem("PinCode",rowsArray[0].pincode)
 				localStorage.setItem("MAPTYPE",rowsArray[0].maptype)
-				
+				localStorage.setItem("DOCSERVER",rowsArray[0].maptype)
 				SetLocalStorageChangePage('Home.html')
 					
 
@@ -202,7 +202,7 @@ var formNewUser = new sap.m.Dialog("dlgNewUser",{
 				   tap: [ function(oEvt) {		
 					 
 					    CreateUser(sap.ui.getCore().byId("NewUser").getValue(),"", sap.ui.getCore().byId("NewUser").getValue(),
-					    		sap.ui.getCore().byId("NewPassword").getValue(), "0", sap.ui.getCore().byId("NewPinCode").getValue(),"Intergraph")
+					    		sap.ui.getCore().byId("NewPassword").getValue(), "0", sap.ui.getCore().byId("NewPinCode").getValue(),"Intergraph","http://ostridge.synology.me/")
 					    		
 					    		formNewUser.close()
 					    		

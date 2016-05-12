@@ -660,6 +660,7 @@ var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
 				    type: 	sap.m.ButtonType.Accept,
 				    tap: [ function(oEvt) {		  
 				    	setUserAgent(window, sap.ui.getCore().getElementById('userAgent').getValue()); 
+				    	updateDocServer(sap.ui.getCore().getElementById('CurrentDocServer').getValue())
 				    	formMapSelect.close()
 						  } ]
 				})
@@ -671,6 +672,8 @@ var formMapSelect = new sap.m.Dialog("dlgMapSelect",{
 				content : [
 new sap.m.Label({text:"Current Map Type"}),
 new sap.m.Input("CurrentMapType",{type: sap.m.InputType.Input, enabled: false}),
+new sap.m.Label({text:"Documents Server"}),
+new sap.m.Input("CurrentDocServer",{type: sap.m.InputType.Input}),
 new sap.m.Label({text:"User Agent"}),
 new sap.m.Input("userAgent",{type: sap.m.InputType.Input}),
 new sap.m.Label({text:""}),							
