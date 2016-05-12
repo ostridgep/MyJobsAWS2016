@@ -80,6 +80,21 @@ function showFormValidationMessage(title,msg){
 		       }
 		     );
 }
+function showAreYouSure(title,msg,form){
+
+	  sap.m.MessageBox.show(msg, {
+		         icon: sap.m.MessageBox.Icon.WARNING ,
+		         title: title,
+		         actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+	  			 onClose: function(oAction){
+	  				
+	  				 if(oAction=="YES"){
+	  					 form.close()
+	  				 }
+	  			 }
+		       }
+		     );
+}
 function showErrorMessage(title,msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,

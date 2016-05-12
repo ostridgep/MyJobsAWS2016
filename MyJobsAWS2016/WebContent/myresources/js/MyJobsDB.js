@@ -22,6 +22,127 @@ var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
+function sendFormData(fname){
+	
+	var c040="NA"	
+		var d040=""		
+		var c060="NA"	
+		var d060=""	
+		var c100="NA"	
+		var d100=""
+var 	formalsampletaken = ""	
+var 	upstreamsenttolab= ""
+var 	ptofdiscsenttolab= ""
+var 	downstream1senttolab= ""
+var 	downstream2senttolab= ""
+var 	downstream3senttolab= ""
+		console.log("sendForm="+fname+CurrentOrderNo)
+	
+	
+			sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+fname+"'"
+			console.log(sqlstatement)
+			html5sql.process(sqlstatement,
+					function(transaction, results, rowsArray){
+					  if(rowsArray.length>0){
+						console.log("form record found="+rowsArray.length)
+						jsonstr=$.parseJSON(rowsArray[0].contents)
+						console.log("1:"+jsonstr.length)
+						console.log(jsonstr[0].workorder)
+						console.log("x:"+jsonstr[0]["workorder"])
+
+				
+
+
+						if(fname=="CustomerFeedback"){
+							if(jsonstr[0].reason.length>0){
+								c040="LT"	
+								d040=jsonstr[0].reason
+							}
+							if(jsonstr[0].cause.length>0){
+								c060="LT"	
+								d060=jsonstr[0].cause
+							}
+							if(jsonstr[0].ppmdetails.length>0){
+								c100="LT"	
+								d100=jsonstr[0].ppmdetails
+							}
+							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER=POSTRIDGE2&ORDER_ID="+CurrentOrderNo+
+							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+CurrentOpNo+
+							"&ACT_CODEGRP_1=CUST010&ACT_CODE_1="+jsonstr[0].spokentoV.substring(0,1)+"&ACT_TEXT_1="+jsonstr[0].spokentoV+
+							"&ACT_CODEGRP_2=CUST020&ACT_CODE_2="+jsonstr[0].contactcardV.substring(0,1)+"&ACT_TEXT_2="+jsonstr[0].contactcardV+
+							"&ACT_CODEGRP_3=CUST030&ACT_CODE_3="+jsonstr[0].custsatifaction+"&ACT_TEXT_3="+jsonstr[0].custsatifaction+
+							"&ACT_CODEGRP_4=CUST040&ACT_CODE_4="+c040+"&ACT_TEXT_4="+d040+
+							"&ACT_CODEGRP_5=CUST050&ACT_CODE_5="+jsonstr[0].resolvedV.substring(0,1)+"&ACT_TEXT_5="+jsonstr[0].resolvedV+
+							"&ACT_CODEGRP_6=CUST060&ACT_CODE_6="+c060+"&ACT_TEXT_6="+d060+
+							"&ACT_CODEGRP_7=CUST070&ACT_CODE_7="+jsonstr[0].furtherworkV.substring(0,1)+"&ACT_TEXT_7="+jsonstr[0].furtherworkV+
+							"&ACT_CODEGRP_8=CUST080&ACT_CODE_8="+jsonstr[0].additionalworkV.substring(0,1)+"&ACT_TEXT_8="+jsonstr[0].additionalworkV+
+							"&ACT_CODEGRP_9=CUST090&ACT_CODE_9="+jsonstr[0].ppmV.substring(0,1)+"&ACT_TEXT_9="+jsonstr[0].ppmV+
+							"&ACT_CODEGRP_10=CUST100&ACT_CODE_10="+c100+"&ACT_TEXT_10="+d100
+							sendSAPData("MyJobsCreateCFEED.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+						}
+						if(fname=="Pollution"){
+							if(jsonstr[0].formalsampletakenV=="YES"){	formalsampletaken="X"	}
+							if(jsonstr[0].upstreamsenttolabV=="YES"){	upstreamsenttolab="X"	}
+							if(jsonstr[0].ptofdiscsenttolabV=="YES"){	ptofdiscsenttolab="X"	}
+							if(jsonstr[0].downstream1senttolabV=="YES"){	downstream1senttolab="X"	}
+							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
+							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
+
+						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
+							
+							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
+							jsonstr[0].dischargetype.trim()+",,"+
+							jsonstr[0].watercoursetype.trim()+",,"+
+							jsonstr[0].watercoursewidth.trim()+",,"+
+							formalsampletaken.trim()+","+
+							jsonstr[0].sizeofimpact.trim()+","+
+							jsonstr[0].amenitiesimpact.trim()+",,"+
+							jsonstr[0].aestheticimpact.trim()+",,"+
+							jsonstr[0].upstreamdistance.trim()+","+jsonstr[0].ptofdiscdistance.trim()+","+jsonstr[0].downstream1distance.trim()+","+jsonstr[0].downstream2distance.trim()+","+jsonstr[0].downstream3distance.trim()+","+
+							jsonstr[0].upstreamonsitenh3.trim()+","+jsonstr[0].ptofdisconsitenh3.trim()+","+jsonstr[0].downstream1onsitenh3.trim()+","+jsonstr[0].downstream2onsitenh3.trim()+","+jsonstr[0].downstream3onsitenh3.trim()+","+
+							upstreamsenttolab.trim()+","+ptofdiscsenttolab.trim()+","+downstream1senttolab.trim()+","+downstream2senttolab.trim()+","+downstream3senttolab.trim()
+
+							sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+						}
+					  
+						if(fname=="Flooding"){
+							if(jsonstr[0].formalsampletakenV=="YES"){	formalsampletaken="X"	}
+							if(jsonstr[0].upstreamsenttolabV=="YES"){	upstreamsenttolab="X"	}
+							if(jsonstr[0].ptofdiscsenttolabV=="YES"){	ptofdiscsenttolab="X"	}
+							if(jsonstr[0].downstream1senttolabV=="YES"){	downstream1senttolab="X"	}
+							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
+							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
+
+						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
+							
+							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
+							jsonstr[0].dischargetype+",,"+
+							jsonstr[0].watercoursetype+",,"+
+							jsonstr[0].watercoursewidth+",,"+
+							formalsampletaken+","+
+							jsonstr[0].sizeofimpact+","+
+							jsonstr[0].amenitiesimpact+",,"+
+							jsonstr[0].aestheticimpact+",,"+
+							jsonstr[0].upstreamdistance+","+jsonstr[0].ptofdiscdistance+","+jsonstr[0].downstream1distance+","+jsonstr[0].downstream2distance+","+jsonstr[0].downstream3distance+","+
+							jsonstr[0].upstreamonsitenh3+","+jsonstr[0].ptofdisconsitenh3+","+jsonstr[0].downstream1onsitenh3+","+jsonstr[0].downstream2onsitenh3+","+jsonstr[0].downstream3onsitenh3+","+
+							upstreamsenttolab+","+ptofdiscsenttolab+","+downstream1senttolab+","+downstream2senttolab+","+downstream3senttolab
+
+							sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+						}
+					  }				
+				/*	
+				opMessage("NewTconf Details="+newTConfDets);
+				
+				sendSAPData("MyJobsCreateTConf.htm",newTConfDets,"UPDATE MyTimeConfs SET confno = 'NEW' WHERE id='"+item['id']+"'");
+						*/		
+							
+					},
+					 function(error, statement){
+						 console.log("send Form Error: " + error.message + " when processing " + statement);
+					 }   
+				);
+			
+}
 function setUserAgent(window, userAgent) {
     if (window.navigator.userAgent != userAgent) {
         var userAgentProp = { get: function () { return userAgent; } };
@@ -290,6 +411,7 @@ function sendSAPData(page,params,timedOutSQL){
 	localStorage.setItem("SAPCalling","true")
 	opMessage(page+getTime());
 	console.log(page+getTime())
+	
 	var myurl=SAPServerPrefix+page+SAPServerSuffix+params;
 	
 	$.ajax({
@@ -2315,7 +2437,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS FuncLocs			  	( id integer primary key autoincrement, flid TEXT, description TEXT, swerk TEXT, level TEXT, parentid TEXT, children TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS Equipments			  	( id integer primary key autoincrement, eqid TEXT, description TEXT, flid TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyMenuBar 		        ( id integer primary key autoincrement, scenario TEXT, level TEXT, item TEXT, position TEXT, type TEXT,  subitem TEXT, command TEXT, item2 TEXT);'+	
-					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT);'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, plant TEXT, orderplant TEXT, orderworkcentre TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT);'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT);'+					 
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT);'+					 
@@ -3015,8 +3137,8 @@ var orderlist="";
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'Orders:'+String(MyOrders.order.length));
 			}
 			opMessage("Deleting Existing Orders");
-			sqlstatementMP = 	'DELETE FROM MyJobDetsMPoints;'+
-							'DELETE FROM MyJobDetsMPCodes;'+'DELETE FROM MyJobDets;';
+			sqlstatementMP = 'DELETE FROM MyJobDetsMPoints;'+
+							'DELETE FROM MyJobDetsMPCodes;';
 			
 			
 			opMessage("Loading "+MyOrders.order.length+" Orders");
@@ -3045,47 +3167,7 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
 						}
-						//Loop and write JobDets
-						for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
-							{
-								if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
-									sqlstatementMP+='INSERT INTO MyJobDets (orderno, opno, notifno, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
-									'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].eworkcentre+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].oworkcentre+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].priority_code+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].priority_desc+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].pmactivity_code+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].pmactivity_desc+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].oppmactivity_code+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].oppmactivity_desc+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].start_date+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].start_time+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].duration+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].equipment_code+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].equipment_desc+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].equipment_gis+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].funcloc_code+'","'+ 
-									MyOrders.order[cntx].jobdets[pcnt].funcloc_desc+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].funcloc_gis+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].acpt_date+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].acpt_time+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].onsite_date+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].status+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].notif_cat_prof+'","'+
-									MyOrders.order[cntx].jobdets[pcnt].site+'");';
-								  
-								   
-								}
-							
-						}
+
 				
 					}
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
@@ -3111,7 +3193,50 @@ var orderlist="";
 					 '"'+MyOrders.order[cntx].property+  '","'+MyOrders.order[cntx].funcloc+  '","'+MyOrders.order[cntx].equipment+'",'+ 
 					 '"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
 				//Loop and write Draw Files to DB
-	
+				//Loop and write JobDets
+				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
+					{
+						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
+							sqlstatementMP+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
+							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].plant+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].orderplant+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].orderworkcentre+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].eworkcentre+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].oworkcentre+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].priority_code+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].priority_desc+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].pmactivity_code+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].pmactivity_desc+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].oppmactivity_code+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].oppmactivity_desc+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].start_date+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].start_time+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].duration+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].equipment_code+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].equipment_desc+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].equipment_gis+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].funcloc_code+'","'+ 
+							MyOrders.order[cntx].jobdets[pcnt].funcloc_desc+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].funcloc_gis+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].acpt_date+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].acpt_time+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].onsite_date+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].status+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].notif_cat_prof+'","'+
+							MyOrders.order[cntx].jobdets[pcnt].site+'");';
+						  
+						   
+						}
+					
+				}
 	 			//opMessage("Loading "+MyOrders.order[cntx].operation.length+" Operations");
 				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobdraw.length ; opscnt++)
 				{	
@@ -3693,6 +3818,60 @@ opMessage("Callback sapCB triggured");
 						sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
 					}else{
 						sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}
+					
+
+		
+			}
+			//Handle NewJob Create Customer Feedback
+			if (MySAP.message[0].type=="createcfeed"){
+				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				opMessage("-->Type= "+MySAP.message[0].type);
+				opMessage("-->row= "+MySAP.message[0].recno);
+				opMessage("-->Message= "+MySAP.message[0].sapmessage);
+				opMessage("-->Message= "+MySAP.message[0].message);
+				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
+				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
+					{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}else{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}
+					
+
+		
+			}
+			//Handle NewJob Create PIA
+			if (MySAP.message[0].type=="createpia"){
+				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				opMessage("-->Type= "+MySAP.message[0].type);
+				opMessage("-->row= "+MySAP.message[0].recno);
+				opMessage("-->Message= "+MySAP.message[0].sapmessage);
+				opMessage("-->Message= "+MySAP.message[0].message);
+				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
+				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
+					{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}else{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}
+					
+
+		
+			}
+			//Handle NewJob Create DG5
+			if (MySAP.message[0].type=="createdg5"){
+				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				opMessage("-->Type= "+MySAP.message[0].type);
+				opMessage("-->row= "+MySAP.message[0].recno);
+				opMessage("-->Message= "+MySAP.message[0].sapmessage);
+				opMessage("-->Message= "+MySAP.message[0].message);
+				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
+				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
+					{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					}else{
+						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
 					}
 					
 

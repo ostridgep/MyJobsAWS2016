@@ -43,20 +43,20 @@
                 <div class="well row">
                     <div class="col-md-6 col-sm-6">                       
                         <select class="feedback-input" id="pollutionsitetype" name="pollutionsitetype"  merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='PSI' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value="" selected>Pollution Site Type</option>
+                            <option value="" disabled selected>Pollution Site Type</option>
 
 
                         </select>                     
                         <select class="feedback-input" id="dischargetype" name="dischargetype"  merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='DIS' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value="" selected>Discharge Type</option>
+                            <option value="" disabled selected>Discharge Type</option>
                            
                         </select>
                         <select class="feedback-input" id="watercoursewidth" name="watercoursewidth" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='WCW' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value="" selected>Watercourse Width</option>
+                            <option value="" disabled selected>Watercourse Width</option>
 
                         </select>
                         <select class="feedback-input" id="amenitiesimpact" name="amenitiesimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AMI' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value="" selected>Amenities Impact</option>
+                            <option value="" disabled selected>Amenities Impact</option>
 
                         </select>
                     </div>
@@ -64,12 +64,12 @@
                     <div class="col-md-6 col-sm-6">
                         <input name="pollutionsite" type="text" class="feedback-input" placeholder="Pollution Site" id="pollutionsite" />
                         <select class="feedback-input" id="watercoursetype" name="watercoursetype" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='WCT' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value=""  selected>Watercourse Type</option>
+                            <option value=""  disabled selected>Watercourse Type</option>
 
                         </select>
                         <input name="sizeofimpact" type="text" class="feedback-input" placeholder="Size of Impact (m2)" id="sizeofimpact" />
                         <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
-                            <option value=""  selected>Aesthetic Impact</option>
+                            <option value=""  disabled selected>Aesthetic Impact</option>
                             
                         </select>
                     </div>

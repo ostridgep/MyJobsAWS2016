@@ -2,7 +2,7 @@
 <html>
 <head>
 <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"/> -->
-<meta name=”viewport” content=”width=device-width, initial-scale=1”>
+<meta name=ï¿½viewportï¿½ content=ï¿½width=device-width, initial-scale=1ï¿½>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>MyJobs - Jobs</title>
 
@@ -443,7 +443,12 @@ new sap.m.Button( {
 			 CloseError='0'
 		 }  
    	 }
-   	 checkDG5Complete();
+   	 if(CloseError!=0){
+   		processClose()
+   	 }else{
+   		checkDG5Complete();
+   	 }
+   	 
    	
 
   
@@ -510,7 +515,7 @@ function checkDG5Complete(){
 	 					);
 	 			
 	 		 }else{
-	 			CloseError='0'
+	 			
 	 			checkPollutionComplete();
 	 			
 	 		 }  
@@ -545,14 +550,14 @@ function checkPollutionComplete(){
 					);
 			
 	 }else{
-		 CloseError='0'
+		 
 			checkFeedbackComplete();
 			
 		 }  
 
 }
 function checkFeedbackComplete(){
- 		if(	 sap.ui.getCore().getElementById("btnFeedback").getEnabled()==true){
+ 		if(	 oSwitchCustFeed.getState()){
  			
  			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
  					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
@@ -576,7 +581,7 @@ function checkFeedbackComplete(){
  					 }        
  					);
  		 }else{
- 			CloseError='0'
+ 			
  			processClose()
  			
  		 } 
@@ -3370,7 +3375,7 @@ var NLongtext=''
        SQLStatement="SELECT MyNotifications.pcode,  substr(MyNotifications.startdate,1,8) as notifdate , substr(MyNotifications.startdate,10,6) as notiftime, MyNotifications.id as notifid, MyNotifications.type as jobtype, refnotificationtypes.notifprofile,MyRefOrderTypes.description as JobDescription, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, "
 	   SQLStatement+=" MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, "
 	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, MyNotifications.shorttext as notifshorttext, "
-	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
+	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.plant,MyJobDets.orderplant,MyJobDets.orderworkcentre,MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
        SQLStatement+="(SELECT GROUP_CONCAT(status ) "
        SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) as opstat,"
        SQLStatement+="(SELECT GROUP_CONCAT(statuscode ) "

@@ -145,15 +145,46 @@ var formForms = new sap.m.Dialog("dlg",{
 
     buttons: [
   
-
+new sap.m.Button( {
+    text: "Send CFEED",
+   
+    type: sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {	
+    	sendFormData("CustomerFeedback")
+    	
+    	} ]   
+}),
+new sap.m.Button( {
+    text: "Send PIA",
+   
+    type: sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {	
+    	sendFormData("Pollution")
+    	
+    	} ]   
+}),
+new sap.m.Button( {
+    text: "Send Flooding",
+   
+    type: sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {	
+    	sendFormData("Flooding")
+    	
+    	} ]   
+}),
 
 					new sap.m.Button( {
 					    text: "Close",
 					    icon:"sap-icon://sys-cancel",
 					    type: sap.m.ButtonType.Reject,
-					    tap: [ function(oEvt) {		  
-							 
-					    	formForms.close()} ]   
+					    tap: [ function(oEvt) {	
+					    	if(sap.ui.getCore().getElementById('formSaveButton').getVisible()){
+					    		showAreYouSure("Close Forms","Exit without Saving?",formForms) 
+					    	}else{
+					    		formForms.close()
+					    	}
+					    	
+					    	} ]   
 					}),
 					new sap.m.Button("formSaveButton" ,{
 						
@@ -659,6 +690,7 @@ function setDlgTitle(formTitle){
 	    return element.constructor == Array;
 	}
 	function loadFormFields(formDoc){
+
 		var items = formDoc.getElementsByTagName("*");
 console.log(closeFormName)
 		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"

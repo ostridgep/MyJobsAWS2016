@@ -65,7 +65,7 @@
                         <div class="col-md-6 col-sm-6">
                         <label>Flooding</label>
                             <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" merge="notifdate" readonly/>
-                          <input name="floodtime" type="time" class="feedback-input hideOnLoad" placeholder="Flood Time" id="floodtime" merge="notiftime"  />
+                          <input name="floodtime" type="time" class="feedback-input hideOnLoad" placeholder="Flood Time" id="floodtime" merge="notiftime"  readonly/>
                             
                             <select class="hideOnLoad feedback-input" id="floodweather" name="floodweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='FLW' AND LEVEL='2' ORDER BY CODEDESC">
                     	 
@@ -91,8 +91,8 @@
                              <label style="margin-left: 16px" type="text" class="feedback-input col-md-9 col-sm-8">Has flooding caused pollution with measureable impact?</label>
                                 <input type="TEXT" id="measurableimpactV" name="measurableimpactV"  HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="measurableimpact" style="margin-left: 10px">                              
-                                    <button id ="measurableimpactYES" type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);' class="btn btn-lg btn-default">Yes</button>
-                                    <button id ="measurableimpactNO" type="button" onclick = 'document.getElementById("measurableimpactV").value="NO";parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);' class="btn btn-lg btn-primary active">No</button>
+                                    <button id ="measurableimpactYES" type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);parent.addMandatedForm("Pollution.html");' class="btn btn-lg btn-default">Yes</button>
+                                    <button id ="measurableimpactNO" type="button" onclick = 'document.getElementById("measurableimpactV").value="NO";parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);parent.removeMandatedForm("Pollution.html");' class="btn btn-lg btn-primary active">No</button>
                                 </div>
 
                         </div>
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div class="well row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class="col-md-3 col-sm-3">
                             <input name="psshortcode" type="text" class="feedback-input" placeholder="PS Short Code" id="psshortcode" />
                         </div>
                         <div class="col-md-4 col-sm-4">
@@ -145,8 +145,12 @@
                         <div class="col-md-4 col-sm-4">
                             <input name="gridref" onclick= "parent.formGMaps.open()" merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
+                        <div >
+                        <img  src="img/clear.png"  onclick="document.getElementById('gridref').value=''" width="48" height="48">
+                        </div>
                     </div>
                     <div class="well row">  <!--Location Data-->
+                      <label>Locations</label>
 						<table class="table table-bordered" id="location" name="location" merge="FormOutputTable">
                             <tr>
                                 <th width="15%">Flooding Type</th>
@@ -189,6 +193,7 @@
                         
                     </div>
                     <div class="well row">  <!--Room Data-->
+                    <label>Rooms</label>
 						<table class="table table-bordered" id="room"  name="room" merge="FormOutputTable">
                             <tr>
                                 <th width="15%">Location</th>
@@ -429,14 +434,15 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    } 
 		
 	    console.log("valid Fields = "+fvalid+" of "+cnt)
-	    if(locCount<2){
-	    	
-	    	
-	    	return "At least 1 Locarion must be completed"
-	    }
+	  
 	    if(fvalid!=cnt){
 	    	return "All Fields must be completed must be completed"
 	    	return False
+	    }
+  	    if(locCount<2){
+	    	
+	    	
+	    	return "At least 1 Locarion must be completed"
 	    }
 	    return "COMPLETE"
  }
