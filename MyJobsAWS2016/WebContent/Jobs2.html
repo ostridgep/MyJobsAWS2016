@@ -50,7 +50,7 @@ span.tip {
     background: -webkit-linear-gradient(top, #eee, #ccc);
     background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
     background: -ms-linear-gradient(top, #eee, #ccc);
-/*    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#eeeeee,EndColorStr=#cccccc);*/
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#eeeeee,EndColorStr=#cccccc);
     zoom: 1;
     visibility: hidden;
 }
@@ -78,7 +78,7 @@ var appDirectory=""
 <script src="myresources/js/Globals.js"></script>
 <script src="myresources/js/DlgForms.js"></script>
 <script src="myresources/js/NotificationFunctions.js"></script>
-
+<script src="myresources/js/Globals1.js"></script>
 <script src="myresources/js/DG5.js"></script>
 <script src="myresources/js/documents.js"></script>
 <script src="myresources/js/NewNotif.js"></script>
@@ -2826,24 +2826,34 @@ var jobtooltip=[]
 var priorityicons=[]
 var prioritytooltip=[]
 countStatus()
-       SQLStatement="SELECT myjobdets.status_s, MyJobDets.orderno, Myoperations.shorttext, myjobdets.notif_cat_profile,  MyJobDets.opno, MyOrders.type, MyJobDets.start_date,MyJobDets.start_time,  MyOrders.priority,  " 
-
+       SQLStatement="SELECT MyNotifications.pcode, myjobdets.status_s, myjobdets.notif_cat_profile, MyNotifications.type as jobtype, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext ,MyOperations.shorttext as operationdesc , MyOrders.contact , " 
+       SQLStatement+="(SELECT GROUP_CONCAT(status ) "
+       SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) as opstat,"
+       SQLStatement+="(SELECT GROUP_CONCAT(statuscode ) "
+       SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) AS statuscode,"
+       SQLStatement+="(SELECT GROUP_CONCAT(statusdesc ) "
+       SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) AS statusdesc, "
        SQLStatement+="(SELECT GROUP_CONCAT(value1 ) "
-       SQLStatement+="FROM myoperationinfo  where MyJobDets.orderno =myoperationinfo.orderno and MyJobDets.opno = myoperationinfo.opno and myoperationinfo.type = 'JOBICON') AS jobicon_filename, "
+       SQLStatement+="FROM myoperationinfo  where MyOperations.orderno =myoperationinfo.orderno and MyOperations.opno = myoperationinfo.opno and myoperationinfo.type = 'JOBICON') AS jobicon_filename, "
        SQLStatement+="(SELECT GROUP_CONCAT(value2 ) "
-       SQLStatement+="FROM myoperationinfo  where MyJobDets.orderno =myoperationinfo.orderno and MyJobDets.opno = myoperationinfo.opno and myoperationinfo.type = 'JOBICON') AS jobicon_description, "
+       SQLStatement+="FROM myoperationinfo  where MyOperations.orderno =myoperationinfo.orderno and MyOperations.opno = myoperationinfo.opno and myoperationinfo.type = 'JOBICON') AS jobicon_description, "
        SQLStatement+="(SELECT GROUP_CONCAT(value1 ) "
-       SQLStatement+="FROM myoperationinfo  where MyJobDets.orderno =myoperationinfo.orderno and MyJobDets.opno = myoperationinfo.opno and myoperationinfo.type = 'PRIORITYICON') AS priorityicon_filename, "
+       SQLStatement+="FROM myoperationinfo  where MyOperations.orderno =myoperationinfo.orderno and MyOperations.opno = myoperationinfo.opno and myoperationinfo.type = 'PRIORITYICON') AS priorityicon_filename, "
        SQLStatement+="(SELECT GROUP_CONCAT(value2 ) "
-       SQLStatement+="FROM myoperationinfo  where MyJobDets.orderno =myoperationinfo.orderno and MyJobDets.opno = myoperationinfo.opno and myoperationinfo.type = 'PRIORITYICON') AS priorityicon_description "
+       SQLStatement+="FROM myoperationinfo  where MyOperations.orderno =myoperationinfo.orderno and MyOperations.opno = myoperationinfo.opno and myoperationinfo.type = 'PRIORITYICON') AS priorityicon_description "
       
       
        
-       SQLStatement+=" From MyJobDets "
-    	   SQLStatement+="left join myorders on myjobdets.orderno = myorders.orderno "
-    		   SQLStatement+="left join myoperations on myjobdets.orderno = myoperations.orderno and myjobdets.opno = myoperations.opno "
+       SQLStatement+=" From MyOperations "
 
-                     SQLStatement+=" where myjobdets.status not in ('CLOSED', 'CONF', 'REJ1', 'REJ2') order by  myjobdets.orderno,  myjobdets.opno"
+       SQLStatement+="left join myoperationssplit on myoperations.orderno = myoperationssplit.orderno "
+       SQLStatement+="      and myoperations.opno = myoperationssplit.opno "
+    	   SQLStatement+="left join myjobdets on myoperations.orderno = myjobdets.orderno "
+    	       SQLStatement+="      and myoperations.opno = myjobdets.opno "
+                     
+              SQLStatement+="left join myorders on myoperations.orderno = myorders.orderno "
+                     SQLStatement+="left join mynotifications on myorders.notifno = mynotifications.notifno "
+                     SQLStatement+=" where myoperationssplit.assignedto =  '"+EmployeeID+"' and myjobdets.status not in ('CLOSED', 'CONF', 'REJ1', 'REJ2') order by  MyOperations.orderno,  MyOperations.opno"
 html5sql.process(SQLStatement,
               function(transaction, results, rowsArray){
 					
@@ -2862,18 +2872,18 @@ html5sql.process(SQLStatement,
                                                 firstJob="job:"+item.orderno+':'+item.opno
                                   }
                            }
-
-                               jobType=  item.notif_cat_profile.substring(7,9);
-
+                          
+                                  jobType=item.jobtype.
+                           //}
                              
                             if(item.status_s=="CONF"){
                                   StatusText="Complete"
                                   StatusState=sap.ui.core.ValueState.Success
                                   StatusIcon="complete"
                            }else if(item.status_s=="CLOSED"){
-                                  StatusText="Complete"
-                                  StatusState=sap.ui.core.ValueState.Success
-                                  StatusIcon="complete"
+                               StatusText="Complete"
+                                   StatusState=sap.ui.core.ValueState.Success
+                                   StatusIcon="complete"
                             }else if(item.status_s=="SITE"){
                                   StatusText="On Site"
                                   StatusState=sap.ui.core.ValueState.Success
@@ -2932,10 +2942,10 @@ html5sql.process(SQLStatement,
 							  content: [new sap.ui.core.HTML({  
 							      content: 
 							    	    [
-"<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.shorttext+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
+"<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.operationdesc+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
 "<TR><TD colspan='3'  align='right'><B>"+item.orderno+'-'+item.opno+"</B></TD></TR>"+
-"<TR><TD align='left'><font size='2'>Start:</TD><TD align='left'><font size='2'>"+item.start_date+" "+item.start_time+"</font></TD><td  align='right'><p id='L"+item.orderno+'-'+item.opno+"'>"+StatusText+"</P></TD></TR>"+
-
+"<TR><TD align='left'><font size='2'>Start:</TD><TD align='left'><font size='2'>"+formatDateTime1(item.startdate)+"</font></TD><td  align='right'><p id='L"+item.orderno+'-'+item.opno+"'>"+StatusText+"</P></TD></TR>"+
+"<TR><TD align='left'><font size='2'>End:</TD><TD align='left'><font size='2'>"+formatDateTime1(item.enddate)+"</font></TD><td  align='right'></TD></TR>"+
 "<TR><TD align='left'><font size='2'>Job Type:</font></TD><TD colspan='2' align='left'><font size='2'>"+jobType+"</font></TD></TR>"+
 "<TR><TD align='left'>"+priorityiconsToDisplay+"</TD><TD colspan='2' align='right'>"+iconsToDisplay+"</TD></TR></TABLE>"
 							  			]

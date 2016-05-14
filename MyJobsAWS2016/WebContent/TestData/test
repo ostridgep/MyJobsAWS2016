@@ -1,0 +1,67 @@
+[{"workorder":"000052150718",
+"functionallocation":"Storm Tank 1",
+"FormName":"Flooding",
+"attendancedate":"01/05/2016",
+"attendancetime":"09:00:00",
+"attendanceweather":"RA",
+"flooddate":"11/05/2016",
+"floodtime":"13:25:45",
+"floodweather":"02",
+"previousflooding":"04",
+"measurableimpactV":"YES",
+"floodingsource":"AP",
+"causeofflood":"P",
+"rootcause":"",
+"spillsize":"3",
+"sewerstatus":"02",
+"sewertype":"02",
+"psshortcode":"",
+"assetref":"",
+"gridref":"",
+
+"room": [
+{
+"roomloc-1":"loc1:loc1",
+"roomroom-1":"BA:Bathroom",
+"roomdepth-1":"L1:&lt;100mm",
+"roomcomments1":"loc1 Bathroom comments:loc1 Bathroom comments"
+},
+{
+"roomloc-2":"loc2:loc2",
+"roomroom-2":"CO:Conservatory",
+"roomdepth-2":"G1:&gt;100mm",
+"roomcomments2":"loc2 concert comments:loc2 concert comments"
+}
+],
+"location": [
+{
+"loctype-1":"3:External",
+"locsubtype-1":"10:Other - Highways",
+"locseverity-1":"2:Minor",
+"locfloc-1":"loc1:loc1",
+"loccomments-1":"loc1 comments:loc1 comments"
+},
+{
+"loctype-2":"1:Internal Domestic",
+"locsubtype-2":"03:Uninhabited cellar",
+"locseverity-2":"3:Moderate",
+"locfloc-2":"loc2:loc2",
+"loccomments-2":"loc2 comments:loc2 comments"
+}
+]
+}]
+
+
+http://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/myjobsdg5create.htm?MYJOBSSYSTEM=AWXMYJOBS
+&AUFNR=52150427
+&USERID=POSTRIDGE2
+&RECNO=12345
+&PHDR=52150427,AREF, ,B,11:22,,07.05.2016,09:00:00,00100516,,,,,1,08.05.2016,10:00:00,DR,04,AP,C3
+&ZASTYP=05
+&ZAWEAT=01
+&ZAESSTA=02
+&LONG_TEXT=LT
+&NOTIF_NO=
+&RECNO=54321
+&PDEPTH=52150427,1,,BA,,1,,COMMENTS DEPTH 1,
+&PITEM=52150427,1,1,3,MILFSP,,,,,,,,,,,,,,,,COMMENTS1,,2

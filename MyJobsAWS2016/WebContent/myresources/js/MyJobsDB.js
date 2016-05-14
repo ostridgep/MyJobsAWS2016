@@ -106,28 +106,54 @@ var 	downstream3senttolab= ""
 						}
 					  
 						if(fname=="Flooding"){
-							if(jsonstr[0].formalsampletakenV=="YES"){	formalsampletaken="X"	}
-							if(jsonstr[0].upstreamsenttolabV=="YES"){	upstreamsenttolab="X"	}
-							if(jsonstr[0].ptofdiscsenttolabV=="YES"){	ptofdiscsenttolab="X"	}
-							if(jsonstr[0].downstream1senttolabV=="YES"){	downstream1senttolab="X"	}
-							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
-							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
-
-						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
 							
-							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
-							jsonstr[0].dischargetype+",,"+
-							jsonstr[0].watercoursetype+",,"+
-							jsonstr[0].watercoursewidth+",,"+
-							formalsampletaken+","+
-							jsonstr[0].sizeofimpact+","+
-							jsonstr[0].amenitiesimpact+",,"+
-							jsonstr[0].aestheticimpact+",,"+
-							jsonstr[0].upstreamdistance+","+jsonstr[0].ptofdiscdistance+","+jsonstr[0].downstream1distance+","+jsonstr[0].downstream2distance+","+jsonstr[0].downstream3distance+","+
-							jsonstr[0].upstreamonsitenh3+","+jsonstr[0].ptofdisconsitenh3+","+jsonstr[0].downstream1onsitenh3+","+jsonstr[0].downstream2onsitenh3+","+jsonstr[0].downstream3onsitenh3+","+
-							upstreamsenttolab+","+ptofdiscsenttolab+","+downstream1senttolab+","+downstream2senttolab+","+downstream3senttolab
+							
+							
 
-							sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+							
+
+
+						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+
+						"&ZASTYP="+jsonstr[0].sewertype.trim()+
+						"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
+						"&ZAWEAT="+jsonstr[0].attendanceweather.trim()
+						var pdepth="";
+						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
+						{
+							if(cnt>0){
+								pdepth+=",,"
+							}
+						 row=cnt+1;	
+						 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
+						 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
+						 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
+						 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
+						 pdepth+=loc[0]+",,"+room[0]+",,"+depth[0]+",,"+comments[0]
+						}
+
+						var pitem="";
+						for(var cnt=0; cnt < jsonstr[0].location.length ; cnt++)
+						{
+							if(cnt>0){
+								pitem+=",,"
+							}
+						 row=cnt+1;	
+						 type=jsonstr[0].location[cnt]["loctype-"+row].split(":")
+						 subtype=jsonstr[0].location[cnt]["locsubtype-"+row].split(":")
+						 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
+						 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
+						 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
+						 pitem+=type[0]+",,"+subtype[0]+",,"+severity[0]+",,"+floc[0]+",,"+comments[0]
+						
+					
+						}	
+						//need to populate the PHDR
+						params+="&PHDR="+CurrentOrderNo+','+jsonstr[0].assetref.trim()+
+						"&PDEPTH="+CurrentOrderNo+','+pdepth+
+						"&PITEM="+CurrentOrderNo+','+pitem
+					alert(params)		
+
+							//sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
 						}
 					  }				
 				/*	
