@@ -146,7 +146,7 @@
                             <input name="gridref" onclick= "parent.formGMaps.open()" merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                         <div >
-                        <img  src="img/clear.png"  onclick="document.getElementById('gridref').value=''" width="48" height="48">
+                        <img  src="img/delete.png"  onclick="document.getElementById('gridref').value=''" width="38" height="38">
                         </div>
                     </div>
                     <div class="well row">  <!--Location Data-->
@@ -310,13 +310,7 @@
         $(this).addClass("active").siblings().removeClass("active");
         $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
     });
-    $(window).resize(function() {
-    	alert("resize")
-    	console.log("scrolling 1 to "+document.activeElement.id)
-    		location.href="#"
-    		location.href="#"+document.activeElement.id
- 
-    	});
+
     window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
     function keyboardShowHandler(e){
