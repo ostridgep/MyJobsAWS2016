@@ -709,13 +709,30 @@ console.log(closeFormName)
 					            	formDoc.getElementById(key).value=obj[key]
 					            		console.log("setting "+key+"="+obj[key])
 						            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
+						            		
 						            		try{
-						            			rselpars=formDoc.getElementById(key).getAttribute("onChange")
 						            			
+						            			onChange=formDoc.getElementById(key).getAttribute("onChange")
+						            			x=onChange.split(";")
+						            			
+						            			if(x.length>1){
+						            				
+						            				for(var xcnt=0; xcnt < x.length ; xcnt++){
+						            					
+						            					if(x[xcnt].substring(0,25) == "parent.buildRelatedSelect"){
+						            						rselpars=x[xcnt];
+						            						xcnt=x.length;
+						            					}
+						            				}
+						            			}else{
+						            				rselpars=onChange;
+						            			}
+						            		
 						            			rselpars=rselpars.substring(26, rselpars.length)
 						            			
 						            			rselparssplit=rselpars.split(",");
 						            			rsfld=rselparssplit[0].substring(1, rselparssplit[0].length-1)
+						            			
 						            			rssql=(rselparssplit[1]+", "+rselparssplit[2]).substring(1, (rselparssplit[1]+", "+rselparssplit[2]).length-1)
 						            			rssql=rssql.replace(/\\/g, "");
 						            			

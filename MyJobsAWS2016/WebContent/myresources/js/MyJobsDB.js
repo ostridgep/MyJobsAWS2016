@@ -2224,10 +2224,11 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 	 "'"+formname+"','"+type+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');"
 	html5sql.process(sqlStatement,
 		 function(){
+		
 			console.log("form done")
 		 },
 		 function(error, statement){
-			 console.log("Error: " + error.message + " when FormsResponses processing " + statement);
+			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
 			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 		 }        
 		);

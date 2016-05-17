@@ -47,21 +47,7 @@
             <input id="FormName" name="FormName" value="Flooding" hidden>
                 <div class="form-group">
                     <div class="well row">
-                        <div class="col-md-6 col-sm-6">
-                        <label>Attendance</label>
-                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate"  merge="~currentdate" readonly />
-                            <input name="attendancetime" type="time" class="feedback-input" placeholder="Attendance Time" id="attendancetime"  merge="~currenttime"  />
-
-                            
-                            <select class="feedback-input" id="attendanceweather" name="attendanceweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='ATW' AND LEVEL='2' ORDER BY CODEDESC">
-                    	 
-                         
-                           			<option value="" disabled selected></option>
-                          
-
-                        	</select> 
-                        </div>
-
+ 
                         <div class="col-md-6 col-sm-6">
                         <label>Flooding</label>
                             <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" merge="notifdate" readonly/>
@@ -76,6 +62,21 @@
                         	
                             </select>
                         </div>
+                                               <div class="col-md-6 col-sm-6">
+                        <label>Attendance</label>
+                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate"  merge="~currentdate" readonly />
+                            <input name="attendancetime" type="time" class="feedback-input" placeholder="Attendance Time" id="attendancetime"  merge="~currenttime"  />
+
+                            
+                            <select class="feedback-input" id="attendanceweather" name="attendanceweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='ATW' AND LEVEL='2' ORDER BY CODEDESC">
+                    	 
+                         
+                           			<option value="" disabled selected>Attendance Weather</option>
+                          
+
+                        	</select> 
+                        </div>
+                        
                     </div>
 
                     <div class="well row">
@@ -310,7 +311,7 @@
         $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
     });
     $(window).resize(function() {
-    	
+    	alert("resize")
     	console.log("scrolling 1 to "+document.activeElement.id)
     		location.href="#"
     		location.href="#"+document.activeElement.id
@@ -398,7 +399,7 @@ var ref = window.open(url, '_blank', 'location=yes');
     		$('#measurableimpactYES').click()
     			 }
     	 
-    	 setPSShortCodeEnabled(document.getElementById('LocationFloodType').value)	 
+    	 setPSShortCodeEnabled(document.getElementById('causeofflood').value)	 
  }
  function isComplete()
  {

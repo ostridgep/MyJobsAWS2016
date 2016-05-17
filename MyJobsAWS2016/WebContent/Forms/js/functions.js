@@ -25,11 +25,7 @@
     return dateTime;
 }
 
-$(window).resize(function() {
-	
-	 		location.href="#"
-	 		location.href="#"+document.activeElement.id
-	 	});
+
 /*
 window.onload function () {
 	pageName=document.location.toString()
