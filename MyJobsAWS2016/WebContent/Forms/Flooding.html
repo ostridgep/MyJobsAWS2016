@@ -317,6 +317,13 @@
     		location.href="#"+document.activeElement.id
  
     	});
+    window.addEventListener('native.keyboardshow', keyboardShowHandler);
+
+    function keyboardShowHandler(e){
+    	alert("ionic")
+    	location.href="#"
+    		location.href="#"+document.activeElement.id
+    }
     //parent.showhideSaveButton(this.contentWindow.location.toString())  
 
     function addNewLocation() {
