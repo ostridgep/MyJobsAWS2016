@@ -10,7 +10,12 @@ var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
 function keyboardShowHandler(e){
-    alert('Webpage Keyboard height is: ' + e.keyboardHeight);
+	if( formForms.isOpen()){
+		alert('Webpage Keyboard height is: ' + e.keyboardHeight);
+		console.log("scrolling 1 to "+document.activeElement.id)
+		document.getElementById("formIframe").contentWindow.scrollfield()
+		}
+    
 }
 var formWebPage = new sap.m.Dialog("dlgWebPage",{
 
@@ -155,7 +160,10 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("CustomerFeedback")
+    	//sendFormData("CustomerFeedback")
+    	
+    	
+    	document.getElementById("formIframe").contentWindow.scrollfield()
     	
     	} ]   
 }),
@@ -208,7 +216,7 @@ new sap.m.Button( {
 					    	    
 							
 					    	}else{
-					    		saveFormData("COMPLETE");
+					    		saveFormData(fname,"COMPLETE");
 					    	}
 						    	
 						    	
@@ -262,7 +270,7 @@ new sap.m.Button( {
 	  }
 	
 	 })
-function saveFormData(type){
+function saveFormData(fname,type){
 	//Type is COMPLETE or SAVED
 	
 	var MyIFrame = document.getElementById("formIframe");
