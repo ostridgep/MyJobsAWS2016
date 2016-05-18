@@ -11,8 +11,8 @@ window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
 function keyboardShowHandler(e){
 	if( formForms.isOpen()){
-		alert('Webpage Keyboard height is: ' + e.keyboardHeight);
-		console.log("scrolling 1 to "+document.activeElement.id)
+		
+		
 		document.getElementById("formIframe").contentWindow.scrollfield()
 		}
     
