@@ -375,7 +375,7 @@ function buildDG5Tabs(){
                                     if(oEvt.getParameters().key=="DG52"){}
                                     if(oEvt.getParameters().key=="DG53"){
 	                                    formToOpen="Forms/formsindex.html"
-	        				   			    formMode="Forms"
+	        				   			    formMode="Close"
 	        		   						formForms.open()
                                     }
                                   

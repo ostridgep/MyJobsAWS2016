@@ -210,7 +210,7 @@ new sap.m.Button( {
 					    	fname=MyIFrameDoc.getElementById("FormName").value
 					    	
 					    	if(fstate!="COMPLETE"){
-					    	    showFormValidationMessage(fname+" Form",fstate)
+					    	    showFormValidationMessage(fname,fname+" Form",fstate)
 					    	    
 							
 					    	}else{
@@ -270,10 +270,10 @@ new sap.m.Button( {
 	 })
 function saveFormData(fname,type){
 	//Type is COMPLETE or SAVED
-	
-	var MyIFrame = document.getElementById("formIframe");
-    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
-    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
+
+var MyIFrame = document.getElementById("formIframe");
+						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
 	try {
 		
 		json=buildJSONResponse(MyIFrameDoc)
@@ -283,6 +283,7 @@ function saveFormData(fname,type){
 			x=w.split("#")
 			y=x[1]
 			z=y.split(":")
+			
 			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
 		//Standalone Form

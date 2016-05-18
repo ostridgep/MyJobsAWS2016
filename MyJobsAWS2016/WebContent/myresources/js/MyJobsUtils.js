@@ -57,7 +57,7 @@ function showMessage(msg){
 
 	});
 }
-function showFormValidationMessage(title,msg){
+function showFormValidationMessage(fname,title,msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,
 		duration: Number(3000),
@@ -74,7 +74,7 @@ function showFormValidationMessage(title,msg){
 	  			 onClose: function(oAction){
 	  				
 	  				 if(oAction=="IGNORE"){
-	  					 saveFormData("SAVED")
+	  					 saveFormData(fname,"SAVED")
 	  				 }
 	  			 }
 		       }
