@@ -25,7 +25,14 @@
     return dateTime;
 }
 
+function scrollfield()
+{
+currentPage=location.href.split("#")
 
+location.href=currentPage[0]+"#"+document.activeElement.id
+	
+
+}
 /*
 window.onload function () {
 	pageName=document.location.toString()
