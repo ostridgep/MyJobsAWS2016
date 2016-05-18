@@ -7,9 +7,14 @@ currentPage=document.location.href;
 
 var theIFrameDoc=""
 var MandatedForms= [];
+window.addEventListener('native.keyboardshow', keyboardShowHandler);
+
+function keyboardShowHandler(e){
+    alert('Webpage Keyboard height is: ' + e.keyboardHeight);
+}
 var formWebPage = new sap.m.Dialog("dlgWebPage",{
 
-   
+ 
     horizontalScrolling:true,
     verticalScrolling:true,
     modal: true,
