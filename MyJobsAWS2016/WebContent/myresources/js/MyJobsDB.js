@@ -2213,7 +2213,7 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 }
 function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
-	
+	alert(formname+":"+order+":"+opno+":"+user+":"+content+":"+mode+":"+type)
 	if (mode=="Close"){
 		state = "Close"
 	}else{
