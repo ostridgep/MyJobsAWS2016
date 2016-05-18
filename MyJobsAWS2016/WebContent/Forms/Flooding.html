@@ -398,9 +398,10 @@ var ref = window.open(url, '_blank', 'location=yes');
  }
  function scrollfield()
  {
+x=location.href
+alert(x+document.activeElement.id)
+ location.href=x+document.activeElement.id
  	
- 	alert(document.activeElement.id)
- 	location.href="#"+document.activeElement.id
  	
  }
  function isComplete()

@@ -160,10 +160,8 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	//sendFormData("CustomerFeedback")
+    	sendFormData("CustomerFeedback")
     	
-    	
-    	document.getElementById("formIframe").contentWindow.scrollfield()
     	
     	} ]   
 }),
