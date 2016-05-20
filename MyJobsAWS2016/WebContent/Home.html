@@ -61,11 +61,12 @@ var appDirectory=""
 
 
 <script type="text/javascript">
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 10*1024*1024);	
 
 var MenuBar=["My AnglianWater","Vehicles","End of Day", "Jobs", "Reference Documents", "MC Web", "Office", "Assets", "Material"]
 var MenuBarType=["U","C","C", "M", "M", "U", "M", "M", "U"]
 var MyMenu=[]
-html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 10*1024*1024);	
+
 
 jQuery.sap.require("sap.m.MessageBox");
 var LogState;
@@ -1670,6 +1671,8 @@ function createVehicleDefect(equipment,reg, mpoint,mileage,mdate,mtime,mreadby,u
 if(navigator.userAgent.indexOf("13F51a")>0){
 	setUserAgent(window,"Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E238 (4948555872)");
 }
-</Script>
+
+</script>
+
 </body>
 </html>

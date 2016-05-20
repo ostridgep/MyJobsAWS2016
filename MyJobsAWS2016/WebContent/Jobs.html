@@ -13,6 +13,26 @@
 	data-sap-ui-theme="sap_bluecrystal">
 	
 </script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bgsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+<script src="myresources/js/DG5.js"></script>
+<script src="myresources/js/NotificationFunctions.js"></script>
+<!--<script type="text/javascript" src="barcodescanner.js"></script>
+<script src="myresources/js/jSignature.js"></script>
+
+<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
+<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
+<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
+<script src="myresources/js/Globals.js"></script>
+<script src="myresources/js/DlgForms.js"></script>
+
+
+
+<script src="myresources/js/documents.js"></script>
+<script src="myresources/js/NewNotif.js"></script>
+<script src="myresources/js/webPage.js"></script>-->
 <style>
 .LargeFont {
     font-size: 400%;
@@ -62,27 +82,7 @@ var appDirectory=""
 
 	
 	</script>
-<script src="myresources/js/jscoord-1.1.1.js"></script> 
-<script src="myresources/js/html5sql.js"></script>  
-<script src="myresources/js/bgsync.js"></script>
-<script src="myresources/js/MyJobsDB.js"></script>
-<script src="myresources/js/MyJobsUtils.js"></script>
 
-
-<script type="text/javascript" src="barcodescanner.js"></script>
-<script src="myresources/js/jSignature.js"></script>
-
-<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
-<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
-<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
-<script src="myresources/js/Globals.js"></script>
-<script src="myresources/js/DlgForms.js"></script>
-<script src="myresources/js/NotificationFunctions.js"></script>
-
-<script src="myresources/js/DG5.js"></script>
-<script src="myresources/js/documents.js"></script>
-<script src="myresources/js/NewNotif.js"></script>
-<script src="myresources/js/webPage.js"></script>
 <style>
 
 .formHdr {
@@ -669,15 +669,17 @@ function processClose(){
 	        			 '','','','','','',
 						 followOnWork,followOnVariance,followOnReason )  				 
 			 }
+			 
 				updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
 				updateOperationStatus(CurrentOrderNo, CurrentOpNo, "CONF" ,"Confirmed")
 				currentStatus="CLOSED"
 				prepareChangeStatus()
 				
 				localStorage.setItem('totalAccepted','0');
-				document.getElementById("JobHead_Status").inner = "<Font color='RED'>Closed</font>";
+				document.getElementById("JobHead_Status").innerHTML = "<Font color='RED'>Closed</font>";
 				
-				 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).inner = "Closed";
+				 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = "Closed";
+				
 				}else{
 					console.log("CloseError:"+CloseError)
 					if (CloseError=="1"){
@@ -6126,10 +6128,6 @@ function refreshJobList(){
 if(navigator.userAgent.indexOf("13F51a")>0){
 	setUserAgent(window,"Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13E238 (4948555872)");
 }
-
-</script>
-</body>
-<script>
 $(document).on("swipeleft",function(e){
 
 	if(e.target.id=="detail-intHeader")
@@ -6143,6 +6141,26 @@ $(document).on("swiperight",function(e){
 	{
 		oSplitApp.setMode(sap.m.SplitAppMode.ShowHideMode)	
 	}
-});      
+});     
 </script>
+<script src="myresources/js/jscoord-1.1.1.js"></script> 
+
+
+
+<script type="text/javascript" src="barcodescanner.js"></script>
+<script src="myresources/js/jSignature.js"></script>
+
+<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
+<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
+<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
+<script src="myresources/js/Globals.js"></script>
+<script src="myresources/js/DlgForms.js"></script>
+<script src="myresources/js/NotificationFunctions.js"></script>
+
+
+<script src="myresources/js/documents.js"></script>
+<script src="myresources/js/NewNotif.js"></script>
+<script src="myresources/js/webPage.js"></script>
+</body>
+
 </html>
