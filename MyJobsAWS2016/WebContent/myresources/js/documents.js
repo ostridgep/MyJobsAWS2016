@@ -148,7 +148,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
             }
  })
 function selectPhoto(){
- 
+
 		 
 	window.imagePicker.getPictures(
 	    function(results) {
