@@ -144,7 +144,19 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
             ],
             
             beforeOpen:function(){
-            
+            	try{
+            		
+            		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
+            		AppDocDirectory="MyJobs"
+            		if(device.platform=="iOS"){
+            			DeviceStorageDirectory=cordova.file.dataDirectory
+            			AppDocDirectory="documents/MyJobs"
+            		}
+            		localStorage.setItem("DeviceType",device.platform)
+            	 }catch(err){
+            		 localStorage.setItem("DeviceType","WINDOWS")
+            	
+            	 }
             }
  })
 function selectPhoto(){
@@ -153,10 +165,10 @@ function selectPhoto(){
 	window.imagePicker.getPictures(
 	    function(results) {
 	        for (var i = 0; i < results.length; i++) {
-	        	alert('Image URI: ' + results[i]);
+	        	//alert('Image URI: ' + results[i]);
 	            try {
-	            	alert(DeviceStorageDirectory+"/"+AppDocDirectory+"/Private/Photos")
-	  			  moveFile2(results[i], DeviceStorageDirectory+"/"+AppDocDirectory+"/Private/Photos",i)
+	            	alert(DeviceStorageDirectory+AppDocDirectory+"/Private/Photos")
+	  			  moveFile2(results[i], DeviceStorageDirectory+AppDocDirectory+"/Private/Photos",i)
 	  			}
 	  			catch(err) {
 	  			   
