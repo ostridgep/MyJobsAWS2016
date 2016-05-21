@@ -155,7 +155,7 @@ function selectPhoto(){
 	        for (var i = 0; i < results.length; i++) {
 	        	alert('Image URI: ' + results[i]);
 	            try {
-	            	alert(DeviceStorageDirectory+"/"+AppDocDirectory+"/Private/Photos)
+	            	alert(DeviceStorageDirectory+"/"+AppDocDirectory+"/Private/Photos")
 	  			  moveFile2(results[i], DeviceStorageDirectory+"/"+AppDocDirectory+"/Private/Photos",i)
 	  			}
 	  			catch(err) {
