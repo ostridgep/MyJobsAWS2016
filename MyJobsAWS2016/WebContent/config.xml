@@ -89,7 +89,7 @@
  <icon 		src="icon.png" />
 
   <feature name="debug-server" required="true">
-    <param name="domain" value="http://19.168.1.225:8080"/>
+    <param name="domain" value="http://192.168.1.225:8080"/>
     <param name="key" value="myjobs"/>
   </feature>
 
