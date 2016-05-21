@@ -5053,15 +5053,19 @@ html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and op
 			var opTable = sap.ui.getCore().getElementById('TConfsTable');
 			sap.ui.getCore().getElementById('TConfsTable').destroyItems();
 			while (n < rowsArray.length) {
+				if(rowsArray[n].confno=="NEW"){
+					tcno="Local"
+				}else{
+					tcno=parseInt(rowsArray[n].confno,10)
+				}
 				
-		
 				opTable.addItem (new sap.m.ColumnListItem({
 					cells : 
 						[
-						new sap.m.Text({text: parseInt(rowsArray[n].confno,10)}),
+						new sap.m.Text({text: tcno }),
 			            new sap.m.Text({text: rowsArray[n].type}),
-						new sap.m.Text({text: formatDateTime(rowsArray[n].date+rowsArray[n].time)}),
-			            new sap.m.Text({text: formatDateTime(rowsArray[n].enddate+rowsArray[n].endtime)}),
+						new sap.m.Text({text: rowsArray[n].date+" "+rowsArray[n].time}),
+			            new sap.m.Text({text: rowsArray[n].enddate+" "+rowsArray[n].endtime}),
 						new sap.m.Text({text: rowsArray[n].duration}),
 			            new sap.m.Text({text: rowsArray[n].final}),
 			           
@@ -5173,14 +5177,18 @@ function rebuildTimeConfs()
 				sap.ui.getCore().getElementById('TConfsTable').destroyItems();
 				while (n < rowsArray.length) {
 					
-			
+					if(rowsArray[n].confno=="NEW"){
+						tcno="Local"
+					}else{
+						tcno=parseInt(rowsArray[n].confno,10)
+					}
 					opTable.addItem (new sap.m.ColumnListItem({
 						cells : 
 							[
-							new sap.m.Text({text: rowsArray[n].confno}),
+							new sap.m.Text({text: tcno}),
 				            new sap.m.Text({text: rowsArray[n].type}),
-							new sap.m.Text({text: formatDateTime(rowsArray[n].date+rowsArray[n].time)}),
-				            new sap.m.Text({text: formatDateTime(rowsArray[n].enddate+rowsArray[n].endtime)}),
+							new sap.m.Text({text: rowsArray[n].date+" "+rowsArray[n].time}),
+				            new sap.m.Text({text: rowsArray[n].enddate+" "+rowsArray[n].endtime}),
 							new sap.m.Text({text: rowsArray[n].duration}),
 				            new sap.m.Text({text: rowsArray[n].final}),
 				           
