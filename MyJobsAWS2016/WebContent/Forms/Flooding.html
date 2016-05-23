@@ -33,11 +33,11 @@
                 <form class="form-inline" id="MyJobsForm" method="get" action="ProcessForm.html">
             <div class="col-md-6">
                 <div class="row">
-				<input class="form-control" id="workorder" merge="orderno" placeholder="Enter Work Order"/>
+				<input class="form-control" id="workorder" merge="orderno" readonly placeholder="Enter Work Order"/>
                     <!--<label class="pull-right" id="workorderlabel"></label>-->
                 </div>
                 <div class="row">
-				<input class="form-control" id="functionallocation" merge="funcloc_desc"  placeholder="Enter Functional Location"/>
+				<input class="form-control" id="functionallocation" merge="funcloc_desc"  readonly placeholder="Enter Functional Location"/>
                     <!--<label class="pull-right" id="functionallocationlabel"></label>-->
                 </div>
             </div>
@@ -52,7 +52,7 @@
                         <div class="col-md-6 col-sm-6">
                         <label>Flooding</label>
                             <input name="flooddate" type="text" class="feedback-input hideOnLoad" placeholder="Flood Date" id="flooddate" merge="notifdate" readonly/>
-                          <input name="floodtime" type="time" class="feedback-input hideOnLoad" placeholder="Flood Time" id="floodtime" merge="notiftime"  readonly/>
+                          <input name="floodtime" type="time" class="feedback-input hideOnLoad" placeholder="Flood Time" id="floodtime" merge="notiftime"  />
                             
                             <select class="hideOnLoad feedback-input" id="floodweather" name="floodweather" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='FLW' AND LEVEL='2' ORDER BY CODEDESC">
                     	 
@@ -65,7 +65,7 @@
                         </div>
                                                <div class="col-md-6 col-sm-6">
                         <label>Attendance</label>
-                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate"  merge="~currentdate" readonly />
+                            <input name="attendancedate" type="text" class="feedback-input" placeholder="Attendance Date" id="attendancedate"  merge="~currentdate" readonly  />
                             <input name="attendancetime" type="time" class="feedback-input" placeholder="Attendance Time" id="attendancetime"  merge="~currenttime"  />
 
                             
@@ -431,7 +431,7 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    console.log("valid Fields = "+fvalid+" of "+cnt)
 	  
 	    if(fvalid!=cnt){
-	    	return "All Fields must be completed must be completed"
+	    	return "All Fields must be completed"
 	    	return False
 	    }
   	    if(locCount<2){

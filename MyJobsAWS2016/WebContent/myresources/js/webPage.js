@@ -238,7 +238,7 @@ new sap.m.Button( {
             contentWidth:"99%",
             contentHeight: "99%",
       beforeOpen:function(){
-    	 
+    	  formForms.destroyContent()
     	  formForms.addContent(new 		sap.ui.core.HTML({
     		
 
@@ -549,6 +549,9 @@ var SQLStatement=''
 	}
 	function BuildFormsList(doc)
 	{
+		doc.getElementById("MandatoryFormList").innerHTML='';
+ 		doc.getElementById("StandardFormList").innerHTML='';
+ 		doc.getElementById("JobFormList").innerHTML='';
 		currentPage=document.location.href;
 		
 		if(currentPage.indexOf("Home")>0) {
@@ -568,8 +571,7 @@ var SQLStatement=''
 		 html5sql.process("Select * from MyForms",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
-			 		doc.getElementById("StandardFormList").innerHTML='';
-			 		doc.getElementById("JobFormList").innerHTML='';
+			 		
 			 		//alert("hello")
 	            	for(var cntx=0; cntx < rowsArray.length ; cntx++)
 					{	
