@@ -104,8 +104,8 @@
                         </tr>
                         <tr>
                             <th>Upstream</th>
-                            <td><input class="feedback-input-table" id="upstreamdistance" name="upstreamdistance" disabled /></td>
-                            <td><input class="feedback-input-table" id="upstreamonsitenh3" name="upstreamonsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="upstreamdistance"  type="number" min="0"  step="0.01" max="9999999.99" name="upstreamdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3"  type="number" min="0"  step="1" max="99999999" name="upstreamonsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
@@ -118,8 +118,8 @@
                         </tr>
                         <tr>
                             <th>Pt of Disc</th>
-                            <td><input class="feedback-input-table" id="ptofdiscdistance" name="ptofdiscdistance"disabled /></td>
-                            <td><input class="feedback-input-table" id="ptofdisconsitenh3" name="ptofdisconsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="number" max="99999999" name="ptofdiscdistance"disabled /></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"  type="number" max="99999999" name="ptofdisconsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
@@ -132,7 +132,7 @@
                         <tr>
                             <th>Downstream 1</th>
                             <td><input class="feedback-input-table" id="downstream1distance" name="downstream1distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream1onsitenh3" name="downstream1onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3"  type="number" max="99999999" name="downstream1onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
@@ -145,7 +145,7 @@
                         <tr>
                             <th>Downstream 2</th>
                             <td><input class="feedback-input-table" id="downstream2distance" name="downstream2distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream2onsitenh3" name="downstream2onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="number" max="99999999" name="downstream2onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
@@ -158,7 +158,7 @@
                         <tr>
                             <th>Downstream 3</th>
                             <td><input class="feedback-input-table" id="downstream3distance" name="downstream3distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream3onsitenh3" name="downstream3onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="number" max="99999999" name="downstream3onsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
@@ -183,6 +183,8 @@
  
 	
 <script>
+
+
 function setSample(row,mode){
 	if (row=="5"){
 		f1="downstream3distance"
@@ -296,7 +298,41 @@ function isComplete()
 	    	return False
 	    }
 	    return "COMPLETE"
-}		
+}	
+jQuery.fn.ForceNumericOnly =
+	function()
+	{
+	    return this.each(function()
+	    {
+	        $(this).keydown(function(e)
+	        {
+	            var key = e.charCode || e.keyCode || 0;
+	            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+	            // home, end, period, and numpad decimal
+	            return (
+	                key == 8 || 
+	                key == 9 ||
+	                key == 13 ||
+	                key == 46 ||
+	                key == 110 ||
+	                key == 190 ||
+	                (key >= 35 && key <= 40) ||
+	                (key >= 48 && key <= 57) ||
+	                (key >= 96 && key <= 105));
+	        });
+	    });
+	};
+	$("#upstreamdistance").ForceNumericOnly();
+	$("#upstreamonsitenh3").ForceNumericOnly();
+	$("#ptofdiscdistance").ForceNumericOnly();
+	$("#ptofdisconsitenh3").ForceNumericOnly();
+	$("#downstream1distance").ForceNumericOnly();
+	$("#downstream1sitenh3").ForceNumericOnly();
+	$("#downstream2distance").ForceNumericOnly();
+	$("#downstream2sitenh3").ForceNumericOnly();
+	$("#downstream3distance").ForceNumericOnly();
+	$("#downstream3sitenh3").ForceNumericOnly();
+	
 	</script>
 	
 </body>

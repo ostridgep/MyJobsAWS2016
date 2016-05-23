@@ -52,8 +52,8 @@
                                 <div class="btn-group btn-toggle" id="spokento" style="margin-left: 10px">
                                 
                                
-                                    <button id="spokentoYES"  type="button" onclick = 'document.getElementById("spokentoV").value="YES";this.active=true;document.getElementById("custsatifaction").disabled=false' class="btn btn-lg btn-default">Yes</button>
-                                    <button  id="spokentoNO" type="button" onclick = 'document.getElementById("spokentoV").value="NO";this.active=true;document.getElementById("custsatifaction").value="CS06";document.getElementById("custsatifaction").disabled=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="spokentoYES"  type="button" onclick = 'document.getElementById("spokentoV").value="YES";this.active=true;removeNA();document.getElementById("custsatifaction").disabled=false' class="btn btn-lg btn-default">Yes</button>
+                                    <button  id="spokentoNO" type="button" onclick = 'document.getElementById("spokentoV").value="NO";this.active=true;addNA();document.getElementById("custsatifaction").value="CS06";document.getElementById("custsatifaction").disabled=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>
@@ -87,7 +87,7 @@
                             <td width = "50%">If Customer is Dissatisfied / Very Dissatisfied, please state why</td>
                            
                            <td align="left">
-                              <textarea id="reason" name="reason"  rows="4" cols="50" disabled=true></textarea>
+                              <textarea id="reason" name="reason"  rows="4" cols="50" maxlength="1500"  disabled=true></textarea>
                                
                             </td>
                         </tr>
@@ -108,7 +108,7 @@
                             <td width = "50%">If no, what is the underlying cause of the problem?</td>
                            
                             <td align="left">
-                             <textarea id="cause" name="cause"  rows="4" cols="50" disabled=false ></textarea>
+                             <textarea id="cause" name="cause"  rows="4" cols="50" maxlength="1500"  disabled=false ></textarea>
                                
                             </td>
                         </tr>
@@ -155,7 +155,7 @@
                             <td width = "50%">If yes, please provide details</td>
                            
                              <td align="left">
-                             <textarea id="ppmdetails" name="ppmdetails"  rows="4" cols="50" disabled=true ></textarea>
+                             <textarea id="ppmdetails" name="ppmdetails"  rows="4" cols="50" maxlength="1500"  disabled=true ></textarea>
                                
                             </td>
                         </tr>
@@ -280,7 +280,22 @@ function isComplete()
 	    	return False
 	    }
 	    return "COMPLETE"
-}				
+}	
+function addNA(){
+	 removeNA() 
+    var x = document.getElementById("custsatifaction");
+    var option = document.createElement("option");
+    option.text = "Non-Applicable";
+    option.value = "CS06";
+    x.add(option);
+}
+function removeNA() {
+	var selectobject=document.getElementById("custsatifaction")
+	  for (var i=0; i<selectobject.length; i++){
+	  if (selectobject.options[i].value == 'CS06' )
+	     selectobject.remove(i);
+	  }
+}
 	</script>
 	
 </body>

@@ -853,8 +853,9 @@ function downloadAll()
      
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
-    		checkFileDownload();
-    		
+    		//checkFileDownload();
+    		updateDocumemntsStatus("*","","","","","","DELETE")
+    		BuildDocumentsTable()
     		}else{
     		oProgInd.setPercentValue(100);
         	oProgInd.setDisplayValue("100" + "%");
@@ -880,7 +881,33 @@ function downloadAll()
   
 	
 }
+function BuildDocumentsTable() { 
+	
+	
+	//  create a loop function
+	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+		   if(fileDownloadCnt<filesToDownload.FILES.length){
+		      updateDocumemntsTable(filesToDownload.FILES[fileDownloadCnt].url,filesToDownload.FILES[fileDownloadCnt].name,filesToDownload.FILES[fileDownloadCnt].type,
+		    		  filesToDownload.FILES[fileDownloadCnt].size,filesToDownload.FILES[fileDownloadCnt].lastmod)
+	           fileDownloadCnt++;
+	           sPercent=getPercentage(filesToDownload.FILES.length,fileDownloadCnt)
+	        	if(sPercent < 5){sPercent=5}
+	        	if(sPercent!=oProgInd.getPercentValue())
+					{
+	        		
+	        		oProgInd.setPercentValue(sPercent);
+	            	oProgInd.setDisplayValue(sPercent + "%");
+					}
+	        	BuildDocumentsTable();
+			   
+			}else 
+				{
+				oProgInd.setPercentValue(100);
+			    oProgInd.setDisplayValue("100" + "%");			
+				}
 
+	   }, 10)
+	}
 function checkFileDownload () { 
 	
 		
@@ -898,6 +925,7 @@ function checkFileDownload () {
 	        		oProgInd.setPercentValue(sPercent);
 	            	oProgInd.setDisplayValue(sPercent + "%");
 					}
+	        	//BuildDocumentsTable();
 			   checkFileDownload(); 	
 			}else 
 				{

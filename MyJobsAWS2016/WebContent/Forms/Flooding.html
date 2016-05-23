@@ -188,7 +188,7 @@
         </TD><TD valign = "top" width="20%">
         <input type="text" class="feedback-input-table" id="LocationFloc" ignore="yes" />
         </TD><td valign = "top" width="25%">
-        <textarea class="feedback-input-table"  id="LocationComments" name="LocationComments" rows="3" cols="40" ignore="yes" ></textarea></td>
+        <textarea class="feedback-input-table"  id="LocationComments" name="LocationComments" rows="1" cols="40" maxlength="40" ignore="yes" ></textarea></td>
         <TD valign = "top" width="5%"><button id="addnewlocation" onclick="addNewLocation()" type="button" class="btn btn-small btn-success pull-right">New</button></TD></TR>
                         </table>
                         
@@ -223,7 +223,7 @@
                            			
                         		</select>
         </TD><TD valign="top" width="35%">
-        <textarea class="feedback-input-table" id="RoomComments" name="RoomComments" rows="4" cols="40" ignore="yes" ></textarea>
+        <textarea class="feedback-input-table" id="RoomComments" name="RoomComments" rows="2" cols="40" maxlength="72" ignore="yes" ></textarea>
         </TD><TD valign="top" width="5%">
         
                         <button id="addnewroom" onclick="addNewRoom()" type="button" class="btn btn-small btn-success pull-right">New</button>
@@ -337,9 +337,7 @@
     	var rowCount = $('#room tr').length;
     	 if ((document.getElementById("RoomLocSelect").value=="-1")||
           		(document.getElementById("RoomSelect").value=="-1")||
-          		(document.getElementById("DepthSelect").value=="-1")||
-          	
-          		(document.getElementById("RoomComments").value.length<1)){
+          		(document.getElementById("DepthSelect").value=="-1")){
           	return
           }
         $('#room tr:last').after('<tr><td><p>'+$("#RoomLocSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomloc-' + rowCount + '" value="'+
@@ -462,6 +460,6 @@ var ref = window.open(url, '_blank', 'location=yes');
 
 
     </script>
-    <button onclick="scrollfield()">xxxxx</button>
+    
     </body>
 </html>

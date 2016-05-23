@@ -222,6 +222,11 @@ function getSAPDate()	{
 	return zeroFill1(currentdate.getDate().toString()) + "."+zeroFill1((currentdate.getMonth()+1).toString() )  + "."+ zeroFill1(currentdate.getFullYear().toString());
 
 }
+function getShortSAPDate()	{			
+	var currentdate = new Date(); 
+return zeroFill1(currentdate.getDate().toString()) +zeroFill1((currentdate.getMonth()+1).toString() )  + zeroFill1(currentdate.getFullYear().toString());
+
+}
 function getSAPTime()	{			
 				var currentdate = new Date(); 
     x1=zeroFill1( currentdate.getHours()).toString();

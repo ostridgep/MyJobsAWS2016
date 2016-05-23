@@ -38,7 +38,9 @@ var 	downstream2senttolab= ""
 var 	downstream3senttolab= ""
 		console.log("sendForm="+fname+CurrentOrderNo)
 	
-	
+user=localStorage.getItem("MobileUser")
+empid=localStorage.getItem("EmployeeID")	
+alert(user+empid)
 			sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+fname+"'"
 			console.log(sqlstatement)
 			html5sql.process(sqlstatement,
@@ -66,7 +68,7 @@ var 	downstream3senttolab= ""
 								c100="LT"	
 								d100=jsonstr[0].ppmdetails
 							}
-							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER=POSTRIDGE2&ORDER_ID="+CurrentOrderNo+
+							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+CurrentOrderNo+
 							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+CurrentOpNo+
 							"&ACT_CODEGRP_1=CUST010&ACT_CODE_1="+jsonstr[0].spokentoV.substring(0,1)+"&ACT_TEXT_1="+jsonstr[0].spokentoV+
 							"&ACT_CODEGRP_2=CUST020&ACT_CODE_2="+jsonstr[0].contactcardV.substring(0,1)+"&ACT_TEXT_2="+jsonstr[0].contactcardV+
@@ -88,7 +90,7 @@ var 	downstream3senttolab= ""
 							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
 							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
 
-						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
 							
 							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
 							jsonstr[0].dischargetype.trim()+",,"+
@@ -113,7 +115,7 @@ var 	downstream3senttolab= ""
 							
 
 
-						params="&RECNO="+rowsArray[0].id+"&USERID=POSTRIDGE2&AUFNR="+CurrentOrderNo+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+CurrentOrderNo+
 						"&ZASTYP="+jsonstr[0].sewertype.trim()+
 						"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
 						"&ZAWEAT="+jsonstr[0].attendanceweather.trim()
@@ -121,21 +123,21 @@ var 	downstream3senttolab= ""
 						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
 						{
 							if(cnt>0){
-								pdepth+=",,"
+								pdepth+=","
 							}
 						 row=cnt+1;	
 						 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
 						 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
 						 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
 						 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
-						 pdepth+=loc[0]+",,"+room[0]+",,"+depth[0]+",,"+comments[0]
+						 pdepth+=CurrentOrderNo+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
 						}
 
 						var pitem="";
 						for(var cnt=0; cnt < jsonstr[0].location.length ; cnt++)
 						{
 							if(cnt>0){
-								pitem+=",,"
+								pitem+=","
 							}
 						 row=cnt+1;	
 						 type=jsonstr[0].location[cnt]["loctype-"+row].split(":")
@@ -143,17 +145,25 @@ var 	downstream3senttolab= ""
 						 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
 						 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
 						 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
-						 pitem+=type[0]+",,"+subtype[0]+",,"+severity[0]+",,"+floc[0]+",,"+comments[0]
+						 pitem+=CurrentOrderNo+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
 						
 					
 						}	
 						//need to populate the PHDR
-						params+="&PHDR="+CurrentOrderNo+','+jsonstr[0].assetref.trim()+
-						"&PDEPTH="+CurrentOrderNo+','+pdepth+
-						"&PITEM="+CurrentOrderNo+','+pitem
-					alert(params)		
+						//sort date & time formats
+						flooddate=jsonstr[0].flooddate.substring(0,2)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(6,10)
+						floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
+						attenddate=jsonstr[0].attendancedate.substring(0,2)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(6,10)
+						attendtime=jsonstr[0].attendancetime.substring(0,2)+jsonstr[0].attendancetime.substring(3,5)+jsonstr[0].attendancetime.substring(6,8)
+						params+="&PHDR="+CurrentOrderNo+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
+						jsonstr[0].gridref+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+
+						""+','+"Comments"+','+jsonstr[0].spillsize+","+attenddate+","+attendtime+','+
+						jsonstr[0].attendanceweather+","+jsonstr[0].previousflooding+','+jsonstr[0].floodingsource+','+jsonstr[0].rootcause+
+						"&PDEPTH="+pdepth+
+						"&PITEM="+pitem
+					    alert(params)		
 
-							//sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+							sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
 						}
 					  }				
 				/*	
@@ -2211,6 +2221,65 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 	 }        
 	);
 }
+function updateDocumemntsStatus(url,name,type,size,lastmod,status)
+{
+if(url=="*"){
+	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' where url = '*';"
+}else{
+	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' and size='"+zise+"' SET lastmod='"+lastmod+"' where url = '"+url+"' and name='"+name+"';"
+}
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+			console.log("docs status Updated")
+		 },
+		 function(error, statement){
+			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
+
+function updateDocumemntsTable(url, name,type,size,lastmod)
+{
+
+	sqlStatement="select * from MyJobsDocs where url  = '"+url+"' and name = '"+name+"';"
+	
+	html5sql.process(sqlStatement,
+		function(transaction, results, rowsArray){
+			if(rowsArray<1){
+				insertDocumemntsTable(url, name,type,size,lastmod) // New Download
+			}else if(rowsArray[0].url+rowsArray[0].name+rowsArray[0].type+rowsArray[0].size+rowsArray[0].lastmod==url+name+type+size+lastmod){
+				updateDocumemntsStatus(url,name,type,size,lastmod,'') // File not changed so dont Download
+			}else{
+				updateDocumemntsStatus(url,name,type,size,lastmod,'DOWNLOAD') // File Changed so download
+			}
+			console.log("form done")
+		 },
+		 function(error, statement){
+			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
+function insertDocumemntsTable(url, name,type,size,lastmod)
+{
+
+	sqlStatement="insert into MyJobsDocs (url, name,type,size,lastmod, status) values ("+
+	"'"+url+"',"+"'"+name+"',"+"'"+type+"',"+"'"+size+"',"+"'"+lastmod+"', 'DOWNLOAD');"
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+			console.log("insert Doc Done")
+		 },
+		 function(error, statement){
+			 alert("Error: " + error.message + " when InsertingDoc processing " + statement);
+			opMessage("Error: " + error.message + " when InsertingDoc processing " + statement);
+		 }        
+		);
+}
 function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
 	if (mode=="Close"){
@@ -2498,6 +2567,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT);'+
 
 
 					 
@@ -2678,6 +2748,7 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  DG5REL;'+
 					'DROP TABLE IF EXISTS  DG5CODES;'+
 					'DROP TABLE IF EXISTS  CFCODES;'+
+					'DROP TABLE IF EXISTS  MyJobsDocs;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
 					'DROP TABLE IF EXISTS  MyJobDetsDraw;'+
@@ -2768,6 +2839,7 @@ function emptyTables(type) {
 					'DELETE FROM  DG5REL;'+
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
+					'DELETE FROM  MyJobsDocs;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
@@ -2881,6 +2953,7 @@ function loadDemoData() {
 				'DELETE FROM  DG5REL;'+
 				'DELETE FROM  DG5CODES;'+
 				'DELETE FROM  CFCODES;'+
+				'DELETE FROM  MyJobsDocs;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
 				'DELETE FROM  MyJobDetsDraw;'+
@@ -3024,6 +3097,7 @@ function resetTables() {
 					'DELETE FROM  DG5REL;'+
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
+					'DELETE FROM  MyJobsDocs;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
@@ -3901,12 +3975,11 @@ opMessage("Callback sapCB triggured");
 			}
 			//Handle NewJob Create DG5
 			if (MySAP.message[0].type=="createdg5"){
-				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].message+":"+MySAP.message[0].message_type)
 				opMessage("-->Type= "+MySAP.message[0].type);
-				opMessage("-->row= "+MySAP.message[0].recno);
-				opMessage("-->Message= "+MySAP.message[0].sapmessage);
+				opMessage("-->row= "+MySAP.message[0].recno);				
 				opMessage("-->Message= "+MySAP.message[0].message);
-				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
+				opMessage("-->NotifNo= "+MySAP.message[0].message_type);
 				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
 					{
 						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";

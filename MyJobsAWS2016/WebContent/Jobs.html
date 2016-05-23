@@ -564,11 +564,11 @@ function checkFeedbackComplete(){
  					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
  					function(transaction, results, rowsArray){
  						if(rowsArray.length<1){
- 							CloseError='5'
+ 							CloseError='6'
  							
  						}else{
 	 						if(rowsArray[0].lastupdated=="COMPLETE"){
-	 							CloseError='0'
+	 							CloseError='6'
 	 						}else{
 	 							CloseError='5'
 	 							
