@@ -137,7 +137,7 @@ var formGMaps = new sap.m.Dialog("dlgGMaps",{
    			
    			var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	    	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
-   			
+   		
 	    	MyIFrameDoc.getElementById(mapLocationField).value=latLongToEastingNorthing(localStorage.getItem('mapLocation'))
    		}	
    		
@@ -160,7 +160,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("CustomerFeedback")
+    	sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo)
     	
     	
     	} ]   
@@ -170,7 +170,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("Pollution")
+    	sendFormData("Pollution",CurrentOrderNo,CurrentOpNo)
     	
     	} ]   
 }),
@@ -179,7 +179,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("Flooding")
+    	sendFormData("Flooding",CurrentOrderNo,CurrentOpNo)
     	
     	} ]   
 }),
@@ -295,6 +295,9 @@ var MyIFrame = document.getElementById("formIframe");
 	
 		formForms.close()
 	}
+	if(formDG5.isOpen()){
+		getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
+	}
 }
 function showhideSaveButton(pageName){
 	x=pageName.split("/")
@@ -320,7 +323,7 @@ function showhideSaveButton(pageName){
 	//	formMode='Close' if coming from Close Page
 	//need to read the json values into an array
 	
-
+		
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
 		MyIFrameDoc.getElementById("FormName").value=closeFormName;
@@ -549,6 +552,7 @@ var SQLStatement=''
 	}
 	function BuildFormsList(doc)
 	{
+		formForms.setTitle("Form List")
 		doc.getElementById("MandatoryFormList").innerHTML='';
  		doc.getElementById("StandardFormList").innerHTML='';
  		doc.getElementById("JobFormList").innerHTML='';

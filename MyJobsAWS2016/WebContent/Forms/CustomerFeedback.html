@@ -120,8 +120,8 @@
                                 <div class="btn-group btn-toggle" id="furtherwork" style="margin-left: 10px">
                                 
                                
-                                    <button id="furtherworkYES" type="button" onclick = 'document.getElementById("furtherworkV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
-                                    <button id="furtherworkNO" type="button" onclick = 'document.getElementById("furtherworkV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                    <button id="furtherworkYES" type="button" onclick = 'parent.setFollowOnMandatory(true); document.getElementById("furtherworkV").value="YES";document.getElementById("additionalworkNO").active=true;this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button id="furtherworkNO" type="button" onclick = 'parent.setFollowOnMandatory(false);document.getElementById("furtherworkV").value="NO";document.getElementById("additionalworkNO").click();document.getElementById("additionalworkNO").active=false;this.active=true' class="btn btn-lg btn-primary active">No</button>
                                 </div>
                             </td>
                         </tr>                                                

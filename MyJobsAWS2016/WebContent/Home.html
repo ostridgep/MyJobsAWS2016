@@ -1352,9 +1352,11 @@ function openWebPage(url){
 if (url.indexOf("mcweb")>4){
 	url="http://10.144.3.80/"
 }
-	ref1=window.open(url, "_blank", 'location=yes')
+
+window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
+	//ref1=window.open(url, "_blank", 'location=yes')
 	
-	ref1.show();
+	//ref1.show();
 }
 
 function MenuPressed(id){
@@ -1373,6 +1375,7 @@ function MenuPressed(id){
 						formSubMenu.open()
 					}else if (rowsArray[0].type=='B'){
 						selectedWebPage=rowsArray[0].command.replace("{SUPUSERNAME}", localStorage.getItem("MobileUser"));
+						
 						openWebPage(selectedWebPage)
 
 					}else if (rowsArray[0].type=='U'){
@@ -1385,6 +1388,7 @@ function MenuPressed(id){
 						}else if (rowsArray[0].command=='DayEndTravelViewModel'){
 							formEndOfDay.open()
 						}else{
+							
 						alert("Not Implemented")
 						
 						}
@@ -1418,6 +1422,7 @@ function SubMenuPressed(id){
 						alert("Not Implemented")
 					}else if (rowsArray[0].type=='B'){
 						selectedWebPage=rowsArray[0].command.replace("{SUPUSERNAME}", localStorage.getItem("MobileUser"));
+						
 						openWebPage(selectedWebPage)
 						
 					}else if (rowsArray[0].type=='U'){

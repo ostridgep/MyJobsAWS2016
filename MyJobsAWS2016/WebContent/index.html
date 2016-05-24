@@ -126,6 +126,7 @@ var pin=""
 
 
 }
+
 jQuery.sap.require("sap.m.MessageBox");
 var LogState;
 
@@ -137,15 +138,7 @@ var dispLog = 							new sap.m.Button("displayLog", {
 })
 
 function showMessage(msg){
-	sap.m.MessageToast.show(msg, {
-		type: Error,
-		duration: Number(3000),
-		width: "30em",
-		my: "center center",
-		at: "center center",		
-		autoClose: true,
 
-	});
 	  sap.m.MessageBox.show(msg, {
 		         icon: sap.m.MessageBox.Icon.ERROR ,
 		         title: "Login Error",
@@ -524,7 +517,7 @@ var SAPCalls = [];
 			function(transaction, results, rowsArray){
 				
 				if( rowsArray.length <10) {
-
+					
 					busycreateDB.open()
 					
 					createDB(1)
@@ -532,7 +525,7 @@ var SAPCalls = [];
 
 					
 					}else{
-						 
+						
 						 formLogin.open()
 						
 					}

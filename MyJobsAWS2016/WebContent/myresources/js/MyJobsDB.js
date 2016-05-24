@@ -22,7 +22,7 @@ var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
-function sendFormData(fname){
+function sendFormData(fname,orderno,opno){
 	
 	var c040="NA"	
 		var d040=""		
@@ -36,12 +36,12 @@ var 	ptofdiscsenttolab= ""
 var 	downstream1senttolab= ""
 var 	downstream2senttolab= ""
 var 	downstream3senttolab= ""
-		console.log("sendForm="+fname+CurrentOrderNo)
+		console.log("sendForm="+fname+orderno)
 	
 user=localStorage.getItem("MobileUser")
 empid=localStorage.getItem("EmployeeID")	
 alert(user+empid)
-			sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+fname+"'"
+			sqlstatement="SELECT * from myformsresponses where orderno = '"+orderno+"' and opno ='"+opno+"' and formname ='"+fname+"'"
 			console.log(sqlstatement)
 			html5sql.process(sqlstatement,
 					function(transaction, results, rowsArray){
@@ -68,8 +68,8 @@ alert(user+empid)
 								c100="LT"	
 								d100=jsonstr[0].ppmdetails
 							}
-							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+CurrentOrderNo+
-							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+CurrentOpNo+
+							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+orderno+
+							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+opno+
 							"&ACT_CODEGRP_1=CUST010&ACT_CODE_1="+jsonstr[0].spokentoV.substring(0,1)+"&ACT_TEXT_1="+jsonstr[0].spokentoV+
 							"&ACT_CODEGRP_2=CUST020&ACT_CODE_2="+jsonstr[0].contactcardV.substring(0,1)+"&ACT_TEXT_2="+jsonstr[0].contactcardV+
 							"&ACT_CODEGRP_3=CUST030&ACT_CODE_3="+jsonstr[0].custsatifaction+"&ACT_TEXT_3="+jsonstr[0].custsatifaction+
@@ -90,7 +90,7 @@ alert(user+empid)
 							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
 							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
 
-						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+CurrentOrderNo+"&PPIA="+CurrentOrderNo+','+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+"&PPIA="+orderno+','+
 							
 							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
 							jsonstr[0].dischargetype.trim()+",,"+
@@ -115,7 +115,7 @@ alert(user+empid)
 							
 
 
-						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+CurrentOrderNo+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+
 						"&ZASTYP="+jsonstr[0].sewertype.trim()+
 						"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
 						"&ZAWEAT="+jsonstr[0].attendanceweather.trim()
@@ -130,7 +130,7 @@ alert(user+empid)
 						 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
 						 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
 						 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
-						 pdepth+=CurrentOrderNo+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
+						 pdepth+=orderno+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
 						}
 
 						var pitem="";
@@ -145,7 +145,7 @@ alert(user+empid)
 						 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
 						 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
 						 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
-						 pitem+=CurrentOrderNo+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+						 pitem+=orderno+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
 						
 					
 						}	
@@ -155,7 +155,7 @@ alert(user+empid)
 						floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
 						attenddate=jsonstr[0].attendancedate.substring(0,2)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(6,10)
 						attendtime=jsonstr[0].attendancetime.substring(0,2)+jsonstr[0].attendancetime.substring(3,5)+jsonstr[0].attendancetime.substring(6,8)
-						params+="&PHDR="+CurrentOrderNo+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
+						params+="&PHDR="+orderno+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
 						jsonstr[0].gridref+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+
 						""+','+"Comments"+','+jsonstr[0].spillsize+","+attenddate+","+attendtime+','+
 						jsonstr[0].attendanceweather+","+jsonstr[0].previousflooding+','+jsonstr[0].floodingsource+','+jsonstr[0].rootcause+
@@ -179,6 +179,7 @@ alert(user+empid)
 				);
 			
 }
+
 function setUserAgent(window, userAgent) {
     if (window.navigator.userAgent != userAgent) {
         var userAgentProp = { get: function () { return userAgent; } };
@@ -370,7 +371,22 @@ function requestSAPDataTest(myurl){
   //})
  
   
-}	 
+}	
+function gxxxxetAssetHistoryURL(eq,fl)
+{
+	html5sql.process(
+			
+			["UPDATE MyJobDetsDraw set zurl  = '"+dir+"' WHERE id = "+ id],
+			function(transaction, results, rowsArray){
+				alert(" Jobdetdraw updated")
+			},
+			 function(error, statement){
+				alert("Error: " + error.message + " when jobdetsdraw processing " + statement);
+			 } 
+
+		)
+}
+
 function updateMyJobDetsDraw(id,dir)
 {
 	html5sql.process(
@@ -558,6 +574,37 @@ xtraceState="";
 		 }   
 	);
 }	
+function getCFeedFollowOnState(orderno,opno){
+	sap.ui.getCore().getElementById("Close_Work").setEnabled(true);
+	sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false)   
+	    sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)   
+		html5sql.process(
+			["SELECT * from MyFormsResponses where orderno = '"+orderno+"' and opno = '"+opno+"' and formname = 'CustomerFeedback'"],
+			function(transaction, results, rowsArray){
+				
+				if( rowsArray.length <1) {
+					sap.ui.getCore().getElementById("Close_Work").setState(false);
+					}else{
+						if(rowsArray[0].contents.indexOf("\"furtherworkV\":\"YES\"")>0){
+							
+							sap.ui.getCore().getElementById("Close_Work").setState(true);
+							sap.ui.getCore().getElementById("FEClose_Variance").setVisible(true)   
+                     	    sap.ui.getCore().getElementById("FEClose_Reason").setVisible(true)   
+							sap.ui.getCore().getElementById("Close_Work").setEnabled(false);
+						}else{
+							
+							sap.ui.getCore().getElementById("Close_Work").setState(false);
+						}
+					}
+				
+
+			},
+			 function(error, statement){
+				
+				sap.ui.getCore().getElementById("Close_Work").setState(false);
+			 }   
+		);
+	}
 function databaseExists(){
 
 	html5sql.process(
@@ -1352,26 +1399,9 @@ var syncDetails = false	;
 																}
 															for (var n = 0; n < rowsArray.length; n++) {
 																item = rowsArray[n];
-																/*newCloseTConfDets='&ORDERNO='+item['orderno']+'&OPNO='+item['opno']+'&USER='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+'&SDATE='+item['closedate'].substring(8,10)+"."+item['closedate'].substring(5,7)+"."+item['closedate'].substring(0,4)+'&STIME='+item['closetime']+'&EDATE='+item['closedate'].substring(8,10)+"."+item['closedate'].substring(5,7)+"."+item['closedate'].substring(0,4)+'&ETIME='+item['closetime']+
-																'&ACTIVITYTYPE=SMEPIS'+'&WORK_CNTR='+item['work_cntr']+'&PERS_NO='+item['empid']+
-																'&ACT_WORK='+item['inshift']
-																
-																newCloseTConfDets1='&ORDERNO='+item['orderno']+'&OPNO='+item['opno']+'&USER='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+'&SDATE='+item['closedate'].substring(8,10)+"."+item['closedate'].substring(5,7)+"."+item['closedate'].substring(0,4)+'&STIME='+item['closetime']+'&EDATE='+item['closedate'].substring(8,10)+"."+item['closedate'].substring(5,7)+"."+item['closedate'].substring(0,4)+'&ETIME='+item['closetime']+
-																'&ACTIVITYTYPE=SMEPOS'+'&WORK_CNTR='+item['work_cntr']+'&PERS_NO='+item['empid']+
-																'&ACT_WORK='+item['outofshift'];
-																if (item['followon']=='YES'){
-																	if (item['outofshift']>'0'){
-																		newCloseTConfDets1+='&CONF_TEXT='+item['reason']+'&REASON='+item['variance']
-																	}else{
-																		newCloseTConfDets+='&CONF_TEXT='+item['reason']+'&REASON='+item['variance']
-																	}
-																	
-																}
-																if (item['outofshift']>'0'){
-																	newCloseTConfDets1+='&FINAL='
-																}else{
-																	newCloseTConfDets+='&FINAL='
-																}*/
+																sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo)
+																sendFormData("Pollution",CurrentOrderNo,CurrentOpNo)
+																sendFormData("Flooding",CurrentOrderNo,CurrentOpNo)
 																newCloseDets='&NOTIFNO='+item['notifno']+'&USERID='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+
 																'&FUNCT_LOC='+item['funcloc']+
 																'&EQUIPMENT='+item['equipment']+
@@ -1391,14 +1421,9 @@ var syncDetails = false	;
 																n=rowsArray.length
 																html5sql.process("UPDATE MyJobClose SET state = 'SENDING' WHERE id='"+item['id']+"'",
 																		 function(){
-																	//alert("Doing TC1")
-																		//	sendSAPData("MyJobsCreateTConf.htm",newCloseTConfDets);
-																//			if (item['outofshift']>'0'){
-																//				alert("Doing TC2")
-															//					sendSAPData("MyJobsCreateTConf.htm",newCloseTConfDets1);
-															//				}
+																
 																			if (item['notifno'].length>5){
-																//				alert("Doing Notif Update")
+																
 																				sendSAPData("MyJobsUpdateNotif.htm",newCloseDets,"UPDATE MyJobClose SET state = 'NEW' WHERE id='"+item['id']+"'");
 																				
 																			}
@@ -2221,18 +2246,45 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 	 }        
 	);
 }
+function getAssetHistory(fl)
+{
+	sqlStatement="select * from MyMenuBar where subitem = 'Asset History'"
+	
+	html5sql.process(sqlStatement,
+		function(transaction, results, rowsArray){
+			if(rowsArray<1){
+				
+				return "";
+			}else{
+				
+				url=rowsArray[0].command
+				
+				url=url.replace("{SUPUSERNAME}",localStorage.getItem("MobileUser"))
+				url+="&TPLNR="+fl
+				window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
+			}
+			console.log("form done")
+		 },
+		 function(error, statement){
+			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
 function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 {
 if(url=="*"){
 	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' where url = '*';"
 }else{
-	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' and size='"+zise+"' SET lastmod='"+lastmod+"' where url = '"+url+"' and name='"+name+"';"
+	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' and size='"+size+"' and lastmod='"+lastmod+"' where url = '"+url+"' and name='"+name+"';"
 }
 	
 	html5sql.process(sqlStatement,
 		 function(){
 		
-			console.log("docs status Updated")
+				if(url=="*"){
+					BuildDocumentsTable()
+				}
 		 },
 		 function(error, statement){
 			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
@@ -2251,11 +2303,11 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 			if(rowsArray<1){
 				insertDocumemntsTable(url, name,type,size,lastmod) // New Download
 			}else if(rowsArray[0].url+rowsArray[0].name+rowsArray[0].type+rowsArray[0].size+rowsArray[0].lastmod==url+name+type+size+lastmod){
-				updateDocumemntsStatus(url,name,type,size,lastmod,'') // File not changed so dont Download
+				updateDocumemntsStatus(url,name,type,size,lastmod,' ') // File not changed so dont Download
 			}else{
 				updateDocumemntsStatus(url,name,type,size,lastmod,'DOWNLOAD') // File Changed so download
 			}
-			console.log("form done")
+			
 		 },
 		 function(error, statement){
 			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
@@ -2271,8 +2323,7 @@ function insertDocumemntsTable(url, name,type,size,lastmod)
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		
-			console.log("insert Doc Done")
+
 		 },
 		 function(error, statement){
 			 alert("Error: " + error.message + " when InsertingDoc processing " + statement);
@@ -3173,6 +3224,7 @@ function requestDEMOData(page){
 				
 			}
 			if(page=='MyJobsRefData.json'){
+				
 				refdataCB(data);
 				
 			}
@@ -3512,6 +3564,7 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE orderno NOT IN ("+orderlist+");"
 			console.log("about to tidy up orders")
 			html5sql.process(sqldeleteorders,
 					 function(transaction, results, rowsArray){
@@ -5006,7 +5059,7 @@ function refdataCB(MyReference){
 var sqlstatement="";
 
 opMessage("Callback Reference Data triggured");
-	    
+    
 	if(MyReference.scenario.length>0){
 			if(syncReferenceDetsUpdated){
 				localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', Scenarios:'+String(MyReference.scenario.length));
@@ -5034,7 +5087,7 @@ opMessage("Callback Reference Data triggured");
 				sqlstatement="";
 				opMessage("Loading Scenario "+MyReference.scenario[cntx].scenario + " Reference Data");
 				//Loop and write MenuBar to DB
-		
+				alert(MyReference.scenario[cntx].appbar.length)
 				opMessage("Loading "+MyReference.scenario[cntx].appbar.length+" Menu Bar");
 				for(var opscnt=0; opscnt < MyReference.scenario[cntx].appbar.length ; opscnt++)
 					{	
@@ -5047,7 +5100,7 @@ opMessage("Callback Reference Data triggured");
 						 '"'+MyReference.scenario[cntx].appbar[opscnt].type+'",'+
 						 '"'+MyReference.scenario[cntx].appbar[opscnt].subitem+'",'+
 						 '"'+unescape(MyReference.scenario[cntx].appbar[opscnt].command)+'",'+
-						 '"'+MyReference.scenario[cntx].appbar[opscnt].item2+'");';
+						 '"'+MyReference.scenario[cntx].appbar[opscnt].item2+'");';alert(unescape(MyReference.scenario[cntx].appbar[opscnt].command))
 					}
 					//Loop and write ordertypes to DB
 

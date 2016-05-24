@@ -554,3 +554,7 @@ function initCloseButtons(){
 		);	
 
 }
+function setFollowOnMandatory(val){
+	
+	sap.ui.getCore().getElementById("Close_Work").setState(val);
+}

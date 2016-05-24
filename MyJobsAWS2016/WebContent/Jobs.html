@@ -1,8 +1,7 @@
 <!DOCTYPE >
 <html>
 <head>
-<!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"/> -->
-<meta name=�viewport� content=�width=device-width, initial-scale=1�>
+
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>MyJobs - Jobs</title>
 
@@ -13,6 +12,7 @@
 	data-sap-ui-theme="sap_bluecrystal">
 	
 </script>
+<script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
 <script src="myresources/js/MyJobsDB.js"></script>
@@ -137,6 +137,7 @@ loadScript('http://maps.googleapis.com/maps/api/js?sensor=false',
 	}); */
 //directionsDisplay = new google.maps.DirectionsRenderer(); 
 //directionsService = new google.maps.DirectionsService(); 
+
 html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
 
 var statusUpdateDate="";
@@ -479,7 +480,7 @@ new sap.m.Button( {
     	 MandatedForms=[];
     	  //initCloseButtons();
 		BuildCloseScreen();
-
+		getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
       },
       afterOpen:function(){  
          } ,
@@ -2928,7 +2929,7 @@ html5sql.process(SQLStatement,
 						   }else{
 							   priorityiconsToDisplay=""
 						   }
-						  
+						 
                            standardList.addItem(
                            new sap.m.CustomListItem("Job:"+item.orderno+":"+item.opno,{
 							type:sap.m.ListType.Active,
@@ -3512,7 +3513,8 @@ html5sql.process(SQLStatement,
 +"<TR ><TD valign='top' width='20%' align='left'>Start Date:</TD><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].startdate)+"</TD ><TD valign='top'  width='20%' align='left'>End Date:</TD ><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].enddate)+"</TD ><TD valign='top'  width='20%'></TD></TR>"
 +"<tr ><TD valign='top'  width='20%' align='left'>Site:</TD><TD valign='top'  width='20%' align='left'>"+rowsArray[0].site+"</TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD></TR>"
 +"<tr><TD valign='top'  width='20%' align='left'>Address:</TD><TD valign='top'  colspan='4' align='left'>"+rowsArray[0].address+"</TD></TR>"
-+"<tr ><TD valign='top'  width='20%' align='left'>FuncLoc:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].funcloc_code+" - "+rowsArray[0].funcloc_desc+"</TD><TD colspan = '2' rowspan='2'><img src='images/historyicon.png' alt='History' height='42' width='42'></TD></TR>"
++"<tr ><TD valign='top'  width='20%' align='left'>FuncLoc:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].funcloc_code+" - "+rowsArray[0].funcloc_desc+
+"</TD><TD colspan = '2' rowspan='2'><img src='images/historyicon.png' alt='History' height='42' width='42' onclick='getAssetHistory(\""+rowsArray[0].funcloc_code+"\")'></TD></TR>"
 +"<tr height='20'><TD valign='top'  width='20%' align='left'>Equipment:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].equipment_code+" - "+rowsArray[0].equipment_desc+"</TD></TR>"
 +"<tr height='20'><TD valign='top'  width='20%' align='left'>Notification:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].notifno+"</TD><TD valign='top'  colspan='2' align='right'><H2 id='JobHead_Status'><Font color='"+StatusColour+"'>"+StatusText+"</font></H2></TD></TR>"
 +"<TR><TD align='right' colspan='5'>"+priorityiconsToDisplay+iconsToDisplay+"</TD></TR>"
@@ -6150,7 +6152,8 @@ $(document).on("swiperight",function(e){
 	{
 		oSplitApp.setMode(sap.m.SplitAppMode.ShowHideMode)	
 	}
-});     
+});  
+
 </script>
 
 </body>

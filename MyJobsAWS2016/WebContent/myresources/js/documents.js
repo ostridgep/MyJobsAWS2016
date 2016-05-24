@@ -845,8 +845,8 @@ function downloadAll()
 	percentagedownloaded=0;
 	filesToDownload = [];
 	
-    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
-        
+    //$.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+    	$.getJSON("TestData\\ListDir.json", function (data) {    
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
@@ -854,8 +854,11 @@ function downloadAll()
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		//checkFileDownload();
+    	
     		updateDocumemntsStatus("*","","","","","","DELETE")
-    		BuildDocumentsTable()
+    	
+    		
+    		
     		}else{
     		oProgInd.setPercentValue(100);
         	oProgInd.setDisplayValue("100" + "%");
@@ -887,7 +890,7 @@ function BuildDocumentsTable() {
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		   if(fileDownloadCnt<filesToDownload.FILES.length){
-		      updateDocumemntsTable(filesToDownload.FILES[fileDownloadCnt].url,filesToDownload.FILES[fileDownloadCnt].name,filesToDownload.FILES[fileDownloadCnt].type,
+		      updateDocumemntsTable(escape(filesToDownload.FILES[fileDownloadCnt].url),escape(filesToDownload.FILES[fileDownloadCnt].name),filesToDownload.FILES[fileDownloadCnt].type,
 		    		  filesToDownload.FILES[fileDownloadCnt].size,filesToDownload.FILES[fileDownloadCnt].lastmod)
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.FILES.length,fileDownloadCnt)
