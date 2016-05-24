@@ -7,7 +7,7 @@ src="http://maps.googleapis.com/maps/api/js">
 
 <script>
 var map;
-var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+var myCenter=""
 
 function initialize()
 {
@@ -34,7 +34,7 @@ marker.addListener('click', function(event) {
     var lat = marker.getPosition().lat();
 	var lng = marker.getPosition().lng();
 	localStorage.setItem('mapLocation',lat+","+lng)
-	
+	alert("setting"+lat+":"+lng)
 	
 	parent.formGMaps.close()
 
@@ -49,10 +49,12 @@ if (navigator.geolocation) {
     	myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         map.setCenter(myCenter);
     });
-google.maps.event.addDomListener(window, 'load', initialize);
 
+
+}else{
+	myCenter=new google.maps.LatLng(51.508742,-0.120850);
 }
-
+google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
 
