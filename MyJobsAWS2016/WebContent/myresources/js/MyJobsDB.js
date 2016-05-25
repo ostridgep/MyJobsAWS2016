@@ -2343,7 +2343,7 @@ d=getDate()+getTime();
 	
 	html5sql.process(sqlStatement,
 		 function(transaction, results, rowsArray){
-		
+	
 
 		
 		 },
