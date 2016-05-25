@@ -855,7 +855,7 @@ function downloadAll()
     		fileDownloadCnt=0;
     		//checkFileDownload();
     	
-    		updateDocumemntsStatus("*","","","","","","DELETE")
+    		updateDocumemntsStatus("*","","","","","DELETE")
     	
     		
     		

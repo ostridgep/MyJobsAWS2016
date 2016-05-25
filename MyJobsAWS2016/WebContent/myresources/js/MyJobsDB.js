@@ -1,5 +1,3 @@
-// delete not in
-// DELETE FROM myvehicleCheck WHERE id NOT IN (67,68,69)
 
 
  
@@ -40,14 +38,14 @@ var 	downstream3senttolab= ""
 	
 user=localStorage.getItem("MobileUser")
 empid=localStorage.getItem("EmployeeID")	
-alert(user+empid)
+
 			sqlstatement="SELECT * from myformsresponses where orderno = '"+orderno+"' and opno ='"+opno+"' and formname ='"+fname+"'"
 			console.log(sqlstatement)
 			html5sql.process(sqlstatement,
 					function(transaction, results, rowsArray){
 					  if(rowsArray.length>0){
 						console.log("form record found="+rowsArray.length)
-						jsonstr=$.parseJSON(rowsArray[0].contents)
+						jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
 						console.log("1:"+jsonstr.length)
 						console.log(jsonstr[0].workorder)
 						console.log("x:"+jsonstr[0]["workorder"])
@@ -585,7 +583,7 @@ function getCFeedFollowOnState(orderno,opno){
 				if( rowsArray.length <1) {
 					sap.ui.getCore().getElementById("Close_Work").setState(false);
 					}else{
-						if(rowsArray[0].contents.indexOf("\"furtherworkV\":\"YES\"")>0){
+						if(unescape(rowsArray[0].contents).indexOf("\"furtherworkV\":\"YES\"")>0){
 							
 							sap.ui.getCore().getElementById("Close_Work").setState(true);
 							sap.ui.getCore().getElementById("FEClose_Variance").setVisible(true)   
@@ -2274,15 +2272,20 @@ function getAssetHistory(fl)
 function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 {
 if(url=="*"){
-	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' where url = '*';"
+	
+	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"';"
+	//alert(sqlStatement)
 }else{
+	
 	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' and size='"+size+"' and lastmod='"+lastmod+"' where url = '"+url+"' and name='"+name+"';"
+	//alert(sqlStatement)
 }
 	
 	html5sql.process(sqlStatement,
 		 function(){
 		
 				if(url=="*"){
+					
 					BuildDocumentsTable()
 				}
 		 },
@@ -2303,7 +2306,7 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 			if(rowsArray<1){
 				insertDocumemntsTable(url, name,type,size,lastmod) // New Download
 			}else if(rowsArray[0].url+rowsArray[0].name+rowsArray[0].type+rowsArray[0].size+rowsArray[0].lastmod==url+name+type+size+lastmod){
-				updateDocumemntsStatus(url,name,type,size,lastmod,' ') // File not changed so dont Download
+				updateDocumemntsStatus(url,name,type,size,lastmod,'OK') // File not changed so dont Download
 			}else{
 				updateDocumemntsStatus(url,name,type,size,lastmod,'DOWNLOAD') // File Changed so download
 			}
@@ -2331,24 +2334,61 @@ function insertDocumemntsTable(url, name,type,size,lastmod)
 		 }        
 		);
 }
+function xxcreateFormsResponse(formname, order,opno,user,content,mode,type)
+{
+d=getDate()+getTime();
+	//sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
+	
+	sqlStatement="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ('"+d+"','1','1','1','1','1','1','1','1')"
+	
+	html5sql.process(sqlStatement,
+		 function(transaction, results, rowsArray){
+		
+
+		
+		 },
+		 function(error, statement){
+			 alert("Error"+error+statement)
+
+		 }        
+		);
+}
 function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
+	
 	if (mode=="Close"){
 		state = "Close"
 	}else{
 		state="NEW"
 	}
 	sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
+	
 	sqlStatement+="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
-	 "'"+formname+"','"+type+"','"+order+"','"+opno+"','"+user+"','"+content+"','"+getDate()+"','"+getTime()+"','"+state+"');"
+	"'"+formname+"',"+"'"+type+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+
 	html5sql.process(sqlStatement,
-		 function(){
+		 function(transaction, results, rowsArray){
 		
-			console.log("form done")
+		html5sql.process(sqlStatement,
+				 function(transaction, results, rowsArray){
+				
+				if(formDG5.isOpen()){
+					getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
+				}
+				formForms.close()
+				 },
+				 function(error, statement){
+					alert("Insert Error")
+					opMessage("Error: " + error.message + " when FormsResponses Insert " + statement);
+					formForms.close()
+				 }        
+				);
+		
 		 },
 		 function(error, statement){
-			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
-			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+			 alert("del Error")
+			opMessage("Error: " + error.message + " when Deleting during Insert FormsResponses processing " + statement);
+			 formForms.close()
 		 }        
 		);
 }
@@ -5087,7 +5127,7 @@ opMessage("Callback Reference Data triggured");
 				sqlstatement="";
 				opMessage("Loading Scenario "+MyReference.scenario[cntx].scenario + " Reference Data");
 				//Loop and write MenuBar to DB
-				alert(MyReference.scenario[cntx].appbar.length)
+				
 				opMessage("Loading "+MyReference.scenario[cntx].appbar.length+" Menu Bar");
 				for(var opscnt=0; opscnt < MyReference.scenario[cntx].appbar.length ; opscnt++)
 					{	
@@ -5100,7 +5140,7 @@ opMessage("Callback Reference Data triggured");
 						 '"'+MyReference.scenario[cntx].appbar[opscnt].type+'",'+
 						 '"'+MyReference.scenario[cntx].appbar[opscnt].subitem+'",'+
 						 '"'+unescape(MyReference.scenario[cntx].appbar[opscnt].command)+'",'+
-						 '"'+MyReference.scenario[cntx].appbar[opscnt].item2+'");';alert(unescape(MyReference.scenario[cntx].appbar[opscnt].command))
+						 '"'+MyReference.scenario[cntx].appbar[opscnt].item2+'");';
 					}
 					//Loop and write ordertypes to DB
 

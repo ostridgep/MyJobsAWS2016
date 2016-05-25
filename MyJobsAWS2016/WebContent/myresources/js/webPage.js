@@ -287,17 +287,17 @@ var MyIFrame = document.getElementById("formIframe");
 			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
 		//Standalone Form
+			
 			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode,type)
 		}
-		formForms.close()
+		
+		
 	}
 	catch(err) {
 	
 		formForms.close()
 	}
-	if(formDG5.isOpen()){
-		getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
-	}
+	
 }
 function showhideSaveButton(pageName){
 	x=pageName.split("/")
@@ -712,13 +712,14 @@ function setDlgTitle(formTitle){
 		var items = formDoc.getElementsByTagName("*");
 console.log(closeFormName)
 		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
-		console.log("here")
+		console.log("here"+sqlstatement)
+		
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
 			console.log("save record found="+rowsArray.length)
 					if( rowsArray.length > 0) {
 						
-						jsonstr=$.parseJSON(rowsArray[0].contents)
+						jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
 						console.log("1:"+jsonstr.length)
 						for(var i=0;i<jsonstr.length;i++){
 					        var obj = jsonstr[i];
