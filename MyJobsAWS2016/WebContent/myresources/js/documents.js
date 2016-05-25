@@ -1007,9 +1007,15 @@ function downloadMissing()
 }
 function downloadLiveLink(fn,node,drawid)
 {
-       
-            window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+AppDocDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,AppDocDirectory+"/LiveLink/",node,drawid));
+	
+	try
+	{
+     window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+AppDocDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,AppDocDirectory+"/LiveLink/",node,drawid));
+	}
+	  catch (err) {
   
+	  window.open("http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc%3dll%26objId%3d"+node+"%26objAction%3ddownload" ) 
+  }
    
 }
 function downloadLiveLinkFile(fileName,dir,node,drawid) {
