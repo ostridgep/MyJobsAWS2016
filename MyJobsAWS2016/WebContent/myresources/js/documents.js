@@ -1007,7 +1007,7 @@ function downloadMissing()
 }
 function downloadLiveLink(fn,node,drawid)
 {
-	
+
 	try
 	{
      window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory+AppDocDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,AppDocDirectory+"/LiveLink/",node,drawid));
