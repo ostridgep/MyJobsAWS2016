@@ -19,6 +19,12 @@ var AppDocDirectory;
 			displayValue:"0%",
 			showValue:true
 		});
+	var oProgIndDL= new sap.m.ProgressIndicator("pi2", {
+		width:"100%",
+		percentValue:0,
+		displayValue:"0%",
+		showValue:true
+	});
 var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 		    title:"Download Files",
 		    modal: true,
@@ -43,7 +49,18 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 						})
 						],					
 		    content:[
-		             oProgInd
+		             new sap.m.Label({text:"Checking Server for Documents:"}),
+		             oProgInd,
+		            new sap.ui.core.HTML({  
+					      content: 
+					    	    ["<Table><TR><TD>Total on Server:</TD><TD><label id ='DocTot'>0</LABEL></TD></TR>"+
+					    	     "<TR><TD>No to Delete:</TD><TD><LABEL id ='DocDel'>0</LABEL></TD></TR>" +
+					    	     "<TR><TD>New Documents:</TD><TD><LABEL id ='DocNew'>0</LABEL></TD></TR>"+
+					    	     "<TR><TD>Modified Ddocuments:</TD><TD><LABEL id ='DocMod'>0</LABEL></TD></TR>"+
+					    	     "<TR><TD>Local Documents:</TD><TD><LABEL id ='DocLoc'>0</LABEL></TD></TR></table>"
+					    	     ]}),
+					 new sap.m.Label({text:"Downloading Documents:"}),
+		             oProgIndDL,
 
 
 		            ],
@@ -839,7 +856,13 @@ var percentagedownloaded=0;
 var filesToDownload = [];
 function downloadAll()
 {
-	
+
+			document.getElementById('DocTot').innerHTML="0"
+			document.getElementById('DocDel').innerHTML="0"
+			document.getElementById('DocNew').innerHTML="0"
+			document.getElementById('DocMod').innerHTML="0"
+			document.getElementById('DocLoc').innerHTML="0"
+
 	oProgInd.setPercentValue(5);
 	oProgInd.setDisplayValue("5" + "%");
 	percentagedownloaded=0;
@@ -885,7 +908,7 @@ function downloadAll()
 	
 }
 function BuildDocumentsTable() { 
-	
+
 	
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
@@ -906,34 +929,41 @@ function BuildDocumentsTable() {
 			}else 
 				{
 				oProgInd.setPercentValue(100);
-			    oProgInd.setDisplayValue("100" + "%");			
+			    oProgInd.setDisplayValue("100" + "%");
+			   
+			    updateDocsTable()
+
 				}
 
 	   }, 10)
 	}
+
+
+
 function checkFileDownload () { 
 	
 		
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-		   if(fileDownloadCnt<filesToDownload.FILES.length){
-		       fileName = filesToDownload.FILES[fileDownloadCnt].name;
-	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[fileDownloadCnt].url+"/"  + filesToDownload.FILES[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload.FILES[fileDownloadCnt].name, filesToDownload.FILES[fileDownloadCnt].url+"/"));
+		   if(fileDownloadCnt<filesToDownload.length){
+		       fileName = filesToDownload[fileDownloadCnt].name;
+	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 	           fileDownloadCnt++;
-	           sPercent=getPercentage(filesToDownload.FILES.length,fileDownloadCnt)
+	           sPercent=getPercentage(filesToDownload.length,fileDownloadCnt)
 	        	if(sPercent < 5){sPercent=5}
 	        	if(sPercent!=oProgInd.getPercentValue())
 					{
 	        		
-	        		oProgInd.setPercentValue(sPercent);
-	            	oProgInd.setDisplayValue(sPercent + "%");
+	        		oProgIndDL.setPercentValue(sPercent);
+	            	oProgIndDL.setDisplayValue(sPercent + "%");
 					}
-	        	//BuildDocumentsTable();
+	        	
 			   checkFileDownload(); 	
 			}else 
 				{
-				oProgInd.setPercentValue(100);
-			    oProgInd.setDisplayValue("100" + "%");			
+				
+				oProgIndDL.setPercentValue(100);
+			    oProgIndDL.setDisplayValue("100" + "%");			
 				}
 
 	   }, 10)

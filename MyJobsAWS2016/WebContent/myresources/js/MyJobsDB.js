@@ -20,6 +20,7 @@ var syncTransactionalDetsUpdated=false;
 var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
+var sqlMyJobsDocs;
 function sendFormData(fname,orderno,opno){
 	
 	var c040="NA"	
@@ -2271,16 +2272,10 @@ function getAssetHistory(fl)
 }
 function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 {
-if(url=="*"){
+
 	
 	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"';"
-	//alert(sqlStatement)
-}else{
-	
-	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' and size='"+size+"' and lastmod='"+lastmod+"' where url = '"+url+"' and name='"+name+"';"
-	//alert(sqlStatement)
-}
-	
+	sqlMyJobsDocs="";	
 	html5sql.process(sqlStatement,
 		 function(){
 		
@@ -2299,16 +2294,21 @@ if(url=="*"){
 function updateDocumemntsTable(url, name,type,size,lastmod)
 {
 
+	
+	sqlStatement=
+	
 	sqlStatement="select * from MyJobsDocs where url  = '"+url+"' and name = '"+name+"';"
 	
 	html5sql.process(sqlStatement,
 		function(transaction, results, rowsArray){
 			if(rowsArray<1){
-				insertDocumemntsTable(url, name,type,size,lastmod) // New Download
-			}else if(rowsArray[0].url+rowsArray[0].name+rowsArray[0].type+rowsArray[0].size+rowsArray[0].lastmod==url+name+type+size+lastmod){
-				updateDocumemntsStatus(url,name,type,size,lastmod,'OK') // File not changed so dont Download
+				sqlMyJobsDocs+="insert into MyJobsDocs (url, name,type,size,lastmod, status) values ("+
+				"\""+url+"\","+"\""+name+"\","+"\""+type+"\","+"\""+size+"\","+"\""+lastmod+"\", \"REMOTE\");" // New Download
+			}else if((rowsArray[0].type==type)&&(rowsArray[0].size==size)&&(rowsArray[0].lastmod==lastmod)){
+				
+				sqlMyJobsDocs+="UPDATE MyJobsDocs SET status = \"LOCAL\" , size = \""+size+"\" , lastmod = \""+lastmod+"\" where id = "+rowsArray[0].id+";" // File not changed so dont Download
 			}else{
-				updateDocumemntsStatus(url,name,type,size,lastmod,'DOWNLOAD') // File Changed so download
+				sqlMyJobsDocs+="UPDATE MyJobsDocs SET status = \"REMOTECHANGED\" , type = \""+type+"\" , size = \""+size+"\" , lastmod = \""+lastmod+"\" where id = "+rowsArray[0].id+";"// File Changed so download
 			}
 			
 		 },
@@ -2318,21 +2318,53 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 		 }        
 		);
 }
-function insertDocumemntsTable(url, name,type,size,lastmod)
+function updateDocsTable()
 {
+	html5sql.process(sqlMyJobsDocs,
+			function(transaction, results, rowsArray){
+						
 
-	sqlStatement="insert into MyJobsDocs (url, name,type,size,lastmod, status) values ("+
-	"'"+url+"',"+"'"+name+"',"+"'"+type+"',"+"'"+size+"',"+"'"+lastmod+"', 'DOWNLOAD');"
+				html5sql.process("select count(*)  as tot,  (select count(*) from MyJobsDocs where status = \"DELETE\") as del,  " +
+						"(select count(*) from MyJobsDocs where status = \"REMOTE\") as ins, "+
+						"(select count(*) from MyJobsDocs where status = \"REMOTECHANGED\") as mod, "+
+						"(select count(*) from MyJobsDocs where status = \"LOCAL\") as loc from MyJobsDocs",
+		
+						function(transaction, results, rowsArray){
+
+							document.getElementById('DocTot').innerHTML=rowsArray[0].tot
+							document.getElementById('DocDel').innerHTML=rowsArray[0].del
+							document.getElementById('DocNew').innerHTML=rowsArray[0].ins
+							document.getElementById('DocMod').innerHTML=rowsArray[0].mod
+							document.getElementById('DocLoc').innerHTML=rowsArray[0].loc
+							html5sql.process("select * from MyJobsDocs where status = \"REMOTE\" or status = \"REMOTECHANGED\"",
+					
+									function(transaction, results, rowsArray){
+
+										oProgIndDL.setPercentValue(5);
+										oProgIndDL.setDisplayValue("5" + "%");
+										percentagedownloaded=0;
+										fileDownloadCnt=0;
+										filesToDownload = rowsArray;
+										checkFileDownload ()
+									 },
+									 function(error, statement){
+
+									 }        
+									);
+
+						 },
+						 function(error, statement){
+
+						 }        
+						);
+			 },
+			 function(error, statement){
+				 alert("Error: " + error.message + " docs " + statement);
+				opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+			 }        
+			);
 	
-	html5sql.process(sqlStatement,
-		 function(){
 
-		 },
-		 function(error, statement){
-			 alert("Error: " + error.message + " when InsertingDoc processing " + statement);
-			opMessage("Error: " + error.message + " when InsertingDoc processing " + statement);
-		 }        
-		);
 }
 function xxcreateFormsResponse(formname, order,opno,user,content,mode,type)
 {
@@ -3403,7 +3435,7 @@ var orderlist="";
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
 					{
 						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
-							sqlstatementMP+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
+							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
 							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
