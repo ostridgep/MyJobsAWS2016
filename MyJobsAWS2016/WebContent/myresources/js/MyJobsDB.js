@@ -3565,8 +3565,7 @@ var orderlist="";
 					
 					}
 				}				
-				
-				
+								
 				//Loop and write Assets to DB
 				
 	  
