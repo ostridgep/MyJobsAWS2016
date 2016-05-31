@@ -1131,7 +1131,7 @@ console.log("syncing Transactional")
 									syncTransactionalDetsUpdated=false;
 									SAPServerPrefix=$.trim(rowsArray[0].paramvalue);
 									currentlySyncing = true;
-									requestSAPData("MyJobsOrdersTest.htm",'');
+									requestSAPData("MyJobsOrders2.htm",'');
 									requestSAPData("MyJobsOrdersObjectsMP.htm",'');
 									requestSAPData("MyJobsNotifications.htm",'');
 									//requestSAPData("MyJobsMessages.htm",'');
@@ -3384,7 +3384,9 @@ var orderlist="";
 			}
 			opMessage("Deleting Existing Orders");
 			sqlstatementMP = 'DELETE FROM MyJobDetsMPoints;'+
-							'DELETE FROM MyJobDetsMPCodes;';
+							'DELETE FROM MyJobDetsMPCodes;'+
+							'DELETE FROM MyJobsDetsEQ;'+
+							'DELETE FROM MyJobsDetsATTR;';
 			
 			
 			opMessage("Loading "+MyOrders.order.length+" Orders");
@@ -3494,11 +3496,11 @@ var orderlist="";
 			
 				}
 				//loop Job Equipment
-			alert(MyOrders.order[cntx].jobequipment.length)
+			
 				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobequipment.length ; opscnt++)
 				{	
 
-				sqlstatement+='INSERT INTO MyJobsDetsEQ (equnr, obj_type , obj_type_desc , start_date ,manfacture ,manparno ,manserno ,user_status_code ,swerk  ,swerk_desc ,profile  ,device  ,device_info  ,install_date  , install_loc_desc ) VALUES ('+
+				sqlstatementMP+='INSERT INTO MyJobsDetsEQ (equnr, obj_type , obj_type_desc , start_date ,manfacture ,manparno ,manserno ,user_status_code ,swerk  ,swerk_desc ,profile  ,device  ,device_info  ,install_date  , install_loc_desc ) VALUES ('+
 					 '"'+MyOrders.order[cntx].jobequipment[opscnt].equnr+  '","'+ 
 					 MyOrders.order[cntx].jobequipment[opscnt].obj_type+  '","'+
 					 MyOrders.order[cntx].jobequipment[opscnt].obj_type_desc+  '","'+
@@ -3519,11 +3521,11 @@ var orderlist="";
 			
 				}
 				//loop Job Attribute
-				alert(MyOrders.order[cntx].jobattributes.length)
+				
 				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobattributes.length ; opscnt++)
 				{	
 				
-				sqlstatement+='INSERT INTO MyJobsDetsATTR (equnr  ,classnum  ,klassentext  ,charact  ,charact_desc ,value ) VALUES ('+
+					sqlstatementMP+='INSERT INTO MyJobsDetsATTR (equnr  ,classnum  ,klassentext  ,charact  ,charact_desc ,value ) VALUES ('+
 					 '"'+MyOrders.order[cntx].jobattributes[opscnt].equnr+  '","'+ 
 					 MyOrders.order[cntx].jobattributes[opscnt].classnum+  '","'+
 					 MyOrders.order[cntx].jobattributes[opscnt].klassentext+  '","'+
@@ -3586,20 +3588,25 @@ var orderlist="";
 
 				//opMessage("Loading "+MyOrders.order[cntx].operationinfo.length+" OperationInfo");
 				//Loop and write userstatus to DB
+				
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].operationinfo.length ; pcnt++)
-					{	
+					{
+					
+					
+					
 					sqlstatement+='INSERT INTO MyOperationInfo (orderno, opno , type , value1 , value2) VALUES ('+
 						'"'+MyOrders.order[cntx].operationinfo[pcnt].orderno+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].opno+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].type+  '",'+ 
-						'"'+MyOrders.order[cntx].operationinfo[pcnt].icon_filename+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].value2+'");';
+						'"'+MyOrders.order[cntx].operationinfo[pcnt].value1+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].value2+'");';
 				}
 				
 				//Loop and write priorityicons
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobicons.length ; pcnt++)
 					{
-					if (MyOrders.order[cntx].orderno==	MyOrders.order[cntx].jobicons[pcnt].orderno){					
+					if (MyOrders.order[cntx].orderno==	MyOrders.order[cntx].jobicons[pcnt].orderno){	
+						val2=MyOrders.order[cntx].jobicons[pcnt].tooltip_desc.replace(/,/g," ")	
 					   sqlstatement+='INSERT INTO MyOperationInfo (orderno, opno , type , value1 , value2) VALUES ('+
 						'"'+MyOrders.order[cntx].jobicons[pcnt].orderno+  '","'+  MyOrders.order[cntx].jobicons[pcnt].opno+  '","'+  "JOBICON"+  '",'+ 
-						'"'+MyOrders.order[cntx].jobicons[pcnt].icon_filename+  '","'+  MyOrders.order[cntx].jobicons[pcnt].tooltip_desc+'");';
+						'"'+MyOrders.order[cntx].jobicons[pcnt].icon_filename+  '","'+  val2+'");';
 						
 					}
 				}
@@ -3683,8 +3690,8 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
-			sqldeleteorders+="DELETE FROM MyJobDetsEQ where orderno NOT IN ("+orderlist+");"
-			sqldeleteorders+="DELETE FROM MyJobDetsATTR where orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyJobsDetsEQ;"
+			sqldeleteorders+="DELETE FROM MyJobsDetsATTR;"
 			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE orderno NOT IN ("+orderlist+");"
 			console.log("about to tidy up orders")
 			html5sql.process(sqldeleteorders,
@@ -3701,7 +3708,7 @@ var orderlist="";
 			     setSyncingIndicator(false)
 				     html5sql.process(sqlstatementMP,
 							 function(){
-								 
+								
 							 },
 							 function(error, statement){
 								
@@ -3710,7 +3717,8 @@ var orderlist="";
 					)
 					 },
 					 function(error, statement){
-					
+						 opMessage("Error: " + error.message + " when processing " + statement);
+						
 					 }        
 					);
 

@@ -80,7 +80,18 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                            							value : "0:0",
                            							displayFormat : "H'h' m'm'",
                            							
-                           						})
+                           						}),
+                           						new sap.m.Select('Close_InshiftCode',{
+                                                    
+                                                    items: [
+                                                           
+                                                    ],
+
+                                                    change: function(oControlEvent) {
+                                                           
+                                                   	 //BuildCloseImpactCodes(oControlEvent.getParameter("selectedItem").getKey());
+                                                    }
+                                             })
                               
                                              ]
                                       }),
@@ -95,7 +106,17 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                    							value : "0:0",
                    							displayFormat : "H'h' m'm'",
                    							
-                   						})
+                   						}),new sap.m.Select('Close_OutshiftCode',{
+                                            
+                                            items: [
+                                                   
+                                            ],
+
+                                            change: function(oControlEvent) {
+                                                   
+                                           	 //BuildCloseImpactCodes(oControlEvent.getParameter("selectedItem").getKey());
+                                            }
+                                     })
                                           ]
                                       }),
                    					 

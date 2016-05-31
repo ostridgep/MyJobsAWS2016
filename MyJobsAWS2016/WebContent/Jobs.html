@@ -28,7 +28,7 @@
 <script src="myresources/js/Globals.js"></script>
 <script src="myresources/js/DlgForms.js"></script>
 
-
+<script src="myresources/js/eqAttributes.js"></script>
 
 <script src="myresources/js/documents.js"></script>
 <script src="myresources/js/NewNotif.js"></script>
@@ -300,8 +300,7 @@ var formEQAttr = new sap.m.Dialog("dlgEQAttr",{
 				})
 				],					
     content:[
-
-eqAttributes
+frmEQAttr
 	         ],
 	         contentWidth:"50%",
 	            contentHeight: "50%"
@@ -472,8 +471,11 @@ new sap.m.Button( {
     type: sap.m.ButtonType.Accept,
     tap: [ function(oEvt) {  
     	 CloseError='0';
+    	 
     	 if(((sap.ui.getCore().byId("Close_FunctionalLocation").getValue().length>0)||
     			 (sap.ui.getCore().byId("Close_Equipment").getValue().length>0))&&
+    			 (sap.ui.getCore().byId("Close_InshiftCode").getSelectedItem().getKey()!="NOTSELECTED")||
+    			 ((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_OutshiftCode").getSelectedItem().getKey()!="NOTSELECTED"))||
     			 (sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")||
     			 (sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00"))
     			 {
@@ -696,7 +698,7 @@ function processClose(){
 			}
 			
 			 if((sap.ui.getCore().byId("Close_InShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")){
-				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPIS',
+				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,sap.ui.getCore().byId("Close_InshiftCode").getSelectedItem().getKey(),
 					ifollowOnVariance,
 					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
 					 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),'',
@@ -704,7 +706,7 @@ function processClose(){
 		           		'',ifinal)
 			 }
 			 if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="0:0")&&(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")){
-				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,'SMEPOS',
+				 createAWSTConf(CurrentOrderNo, CurrentOpNo,localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,sap.ui.getCore().byId("Close_OutshiftCode").getSelectedItem().getKey(),
 						 ofollowOnVariance,
   					 statusUpdateDate,statusUpdateTime,statusUpdateDate, statusUpdateTime, 
   					 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),'',
@@ -3429,7 +3431,7 @@ var NLongtext=''
        SQLStatement="SELECT MyNotifications.pcode,  substr(MyNotifications.startdate,1,8) as notifdate , substr(MyNotifications.startdate,10,6) as notiftime, MyNotifications.id as notifid, MyNotifications.type as jobtype, refnotificationtypes.notifprofile,MyRefOrderTypes.description as JobDescription, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, "
 	   SQLStatement+=" MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, "
 	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, MyNotifications.shorttext as notifshorttext, "
-	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.plant,MyJobDets.orderplant,MyJobDets.orderworkcentre,MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
+	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.plant, MyJobDets.duration as reduration, MyJobDets.orderplant,MyJobDets.orderworkcentre,MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
        SQLStatement+=" (select count(*) from MyJobsDetsEQ where MyJobsDetsEQ.equnr = MyJobDets.equipment_code) as eqcnt , "
 	   SQLStatement+="(SELECT GROUP_CONCAT(status ) "
        SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) as opstat,"
@@ -3555,11 +3557,15 @@ html5sql.process(SQLStatement,
 					  
 						priorityIcon="XX"+item.priorityicon_filename;		   
 					   var iconsToDisplay=''
+					   docsVisible=false;
 					   for (var n=0;n <jobicons.length;n++)
 					   {
 						if(jobtooltip[n]=="Measurements"){
 							iconsToDisplay+='<img src="images/'+jobicons[n]+'" onclick="formMeasPoints.open()">'
+						}else if(jobtooltip[n]=="Documents"){
+							  docsVisible=true;
 						}else{
+						
 							iconsToDisplay+='<img src="images/'+jobicons[n]+'" onclick="showMessage(\''+jobtooltip[n]+'\')">'	
 						}
 							
@@ -3577,15 +3583,15 @@ html5sql.process(SQLStatement,
                     	 
                     	 showAttributes=""
                     	 }else{
-                    	 showAttributes="<img src='images/attributes.jpeg' alt='History' height='35' width='35' onclick='showEQAttbites(\""+rowsArray[0].equipment_code+"\")'>"	 
+                    	 showAttributes="<img src='images/eqAttr.png' alt='History' height='35' width='35' onclick='showEQAttbites(\""+rowsArray[0].equipment_code+"\")'>"	 
                     	 }
-                     
+              
 		oDetailPage.addContent(	new sap.ui.core.HTML('JobHeader',{  
 	      content: 
 	    	    [
 "<TABLE width='100%' height='200' ><tr height='100'><TD valign='top' colspan='3' align='left' ><h3>"+unescape(rowsArray[0].orderdesc)+"</h3></TD><TD valign='top'  colspan='2' align='Right' ><h2 id='JobHead_JobNo'>"+rowsArray[0].orderno+"-"+rowsArray[0].opno+"</h2></TD></TR>"
-+"<TR ><TD valign='top' width='20%' align='left'>Start Date:</TD><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].startdate)+"</TD ><TD valign='top'  width='20%' align='left'>End Date:</TD ><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].enddate)+"</TD ><TD valign='top'  width='20%'></TD></TR>"
-+"<tr ><TD valign='top'  width='20%' align='left'>Site:</TD><TD valign='top'  width='20%' align='left'>"+rowsArray[0].site+"</TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD></TR>"
++"<TR ><TD valign='top' width='20%' align='left'>Start Date:</TD><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].startdate)+"</TD><TD valign='top'  width='20%' align='left'>End Date:  </TD ><TD valign='top'  width='20%' align='left'>"+formatDate(rowsArray[0].enddate)+"</TD ><TD valign='top'  width='20%'></TD></TR>"
++"<tr ><TD valign='top'  width='20%' align='left'>Site:</TD><TD valign='top'  width='20%' align='left'>"+rowsArray[0].site+                      "</TD><TD valign='top'  width='20%' align='left'>RE Duration:</TD><TD valign='top'  width='20%' align='left'>"+rowsArray[0].reduration+"</TD><TD valign='top'  width='20%'></TD></TR>"
 +"<tr><TD valign='top'  width='20%' align='left'>Address:</TD><TD valign='top'  colspan='4' align='left'>"+rowsArray[0].address+"</TD></TR>"
 +"<tr ><TD valign='top'  width='20%' align='left'>FuncLoc:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].funcloc_code+" - "+rowsArray[0].funcloc_desc+
 "</TD><TD colspan = '2' rowspan='2'><img src='images/historyicon.png' alt='History' height='42' width='42' onclick='getAssetHistory(\""+rowsArray[0].funcloc_code+"\")'>&nbsp;&nbsp;"+showAttributes+"</TD></TR>"
@@ -3674,7 +3680,7 @@ html5sql.process(SQLStatement,
                    
               if(JobType.length>3){
                      if(surveyID!="0"){
-                           oDetailPage.addContent(buildDetailsTabs("FORM",surveyID))
+                           oDetailPage.addContent(buildDetailsTabs("FORM",surveyID,docsVisible))
 
                                   
                              sap.ui.getCore().getElementById('LongText').setText(Longtext)      
@@ -3715,7 +3721,7 @@ html5sql.process(SQLStatement,
 
 
                
-                     oDetailPage.addContent(buildDetailsTabs("NORMAL","0"))
+                     oDetailPage.addContent(buildDetailsTabs("NORMAL","0",docsVisible))
 
                      
                        sap.ui.getCore().getElementById('LongText').setText(Longtext)   
@@ -4472,7 +4478,7 @@ function formChanged(oEvt){
 			 }        
 			);	
 }
-function buildDetailsTabs(Jtype,surveyID){
+function buildDetailsTabs(Jtype,surveyID,docsVisible){
 tabBar=null;
 formtab=null;
 //sap.ui.getCore().getElementById('saveData').setVisible(false)
@@ -4642,7 +4648,7 @@ formtab=null;
            	                	text:'Documents',
          	                   key:'JobDocs',
          	                  tooltip: 'Documents',
-								
+								visible:docsVisible,
          	                  icon: "sap-icon://documents",
             	                   content:[
      									new sap.m.Table("JobDocumentTable",{
@@ -5910,7 +5916,20 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 					SQLStatement="select * from refpaicodes where catalogue = 'R' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
 					html5sql.process(SQLStatement,
 							 function(transaction, results, rowsArray){
-						
+								sap.ui.getCore().getElementById("Close_InshiftCode").destroyItems();
+								sap.ui.getCore().getElementById("Close_InshiftCode").addItem(
+										new sap.ui.core.Item({
+											key: "NOTSELECTED",
+											text: 'Please Select'
+										}))
+								defaultInVal="NOTSELECTED"
+								sap.ui.getCore().getElementById("Close_OutshiftCode").destroyItems();
+								sap.ui.getCore().getElementById("Close_OutshiftCode").addItem(
+										new sap.ui.core.Item({
+											key: "NOTSELECTED",
+											text: 'Please Select'
+										}))
+								defaultOutVal="NOTSELECTED"
 								sap.ui.getCore().getElementById("Close_ActionGroup").destroyItems();
 								sap.ui.getCore().getElementById("Close_ActionGroup").addItem(
 										new sap.ui.core.Item({
@@ -5987,6 +6006,46 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 																					
 																					
 																				}
+																			
+																				html5sql.process("select * from REFACTIVITY where work_center = '"+CurrentJobWorkCentre+"'",
+																						 function(transaction, results, rowsArray){
+																							
+																							
+																							for (var n = 0; n < rowsArray.length; n++) {
+																								item = rowsArray[n];
+																								if(rowsArray[n].action=="I"){
+																									sap.ui.getCore().getElementById("Close_InshiftCode").addItem(
+																											new sap.ui.core.Item({
+																												key: item.activity,
+																												text: item.activity_desc
+																											}))
+																									if(item.deflt=='X'){
+																										defaultInVal=item.activity
+																										
+																									}
+																								}
+																								if(rowsArray[n].action=="O"){
+																									
+																									sap.ui.getCore().getElementById("Close_OutshiftCode").addItem(
+																											new sap.ui.core.Item({
+																												key: item.activity,
+																												text: item.activity_desc
+																											}))
+																									if(item.deflt=='X'){
+																										defaultOutVal=item.activity
+																										
+																									}
+																								}
+																								
+																							}
+																							
+																							sap.ui.getCore().getElementById("Close_InshiftCode").setSelectedKey(defaultInVal)
+																							sap.ui.getCore().getElementById("Close_OutshiftCode").setSelectedKey(defaultOutVal)
+																						 },
+																						 function(error, statement){
+																							
+																						 }        
+																						)
 																			
 																				
 																		 },
@@ -6228,7 +6287,8 @@ $(document).on("swiperight",function(e){
 	}
 });  
 function showEQAttbites(eq){
-	formEQAttr.setTitle("Equiment Attributes "+eq)
+	formEQAttr.setTitle("Equiment Attributes")
+	buildDEQAttr(eq)
 	formEQAttr.open()
 }
 </script>
