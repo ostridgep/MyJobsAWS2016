@@ -184,6 +184,48 @@ var selectedPhotoDir="";
 var selevctedMPDecimals=0;
 var selevctedMPLength=0;
 //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+var eqAttributes = new 		sap.ui.core.HTML({
+	content: '<TABLE width="90%">'+
+	'<TR><TD width="20%"><B>Asset:</B></TD><TD id="asset" colspan="3"><input value="123-gdgdgdgdgdgdgd" readonly></TD></TR>'+
+	'<TR><TD width="20%"><B>Make:</B></TD><TD width="30%" id="make">Ford</TD><TD width="20%"><B>Model:</B></TD><TD width="30%" id="maode">escort</TD></TR>'+
+	'<TR><TD width="20%"><B>Serial No:</B></TD><TD id="serialno" colspan="3">12345</TD></TR><TR><TD colspan="4"></TD</TR>'+
+	'<TR><TD></TD><TD colspan="2" ><B>attribute1:</B></TD><TD id="val1" >value</TD></TR>'+
+	'</TABLE>'
+
+
+})
+			var eqAttributes1 = new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+new 		sap.ui.core.HTML({
+	content: '<B>Asset</B>'}),
+				//	new sap.m.Label({
+				//		text: 'Asset'
+				//	}),
+					new sap.m.Input("attrEQ",{type: sap.m.InputType.Input,value: "123 - Description", enabled: false}),
+					new sap.m.Label({
+						
+						text: 'Make'
+					}),
+					new sap.m.Input("attrMake",{type: sap.m.InputType.Input,value: "Make", enabled: false}),
+					new sap.m.Label({
+						
+						width:"2em",
+						text: 'Model'
+					}),
+					new sap.m.Input("attrModel",{type: sap.m.InputType.Input,value: "model", enabled: false}),
+					new sap.m.Label({
+						text: 'attr1'
+					}),
+					new sap.m.Input("attrAttr0",{type: sap.m.InputType.Input,value: "model", enabled: false}),
+					new sap.m.Label({
+						text: 'attr2'
+					}),
+					new sap.m.Input("attrAttr1",{type: sap.m.InputType.Input,value: "attr", enabled: false}),					
+
+				]
+			});
 var flocList = new sap.m.List("flocList",{
 	mode: sap.m.ListMode.SingleSelectLeft,
 	 itemPress:[function(oEvt) {	
@@ -242,7 +284,29 @@ function loadLastSyncValues(){
 	
 }
 
+var formEQAttr = new sap.m.Dialog("dlgEQAttr",{
+    title:"Attributes",
+    modal: true,
+    //contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button({
+				    text: "Close",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formEQAttr.close()
+						  } ]
+				})
+				],					
+    content:[
 
+eqAttributes
+	         ],
+	         contentWidth:"50%",
+	            contentHeight: "50%"
+
+ })
 
 var formLastSync = new sap.m.Dialog("dlgLastSync",{
     title:"Last Synchronise",
@@ -3366,7 +3430,8 @@ var NLongtext=''
 	   SQLStatement+=" MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, "
 	   SQLStatement+=" MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOrders.longtext as orderlongtext,MyNotifications.longtext as notiflongtext, MyNotifications.shorttext as notifshorttext, "
 	   SQLStatement+=" MyOperations.shorttext as operationdesc , MyOrders.contact , MyJobDets.plant,MyJobDets.orderplant,MyJobDets.orderworkcentre,MyJobDets.eworkcentre, MyJobDets.oworkcentre, MyJobDets.status_s,MyJobDets.site, MyJobDets.equipment_code, MyJobDets.equipment_desc,MyJobDets.equipment_gis, MyJobDets.funcloc_code, MyJobDets.funcloc_desc, MyJobDets.funcloc_gis, " 
-       SQLStatement+="(SELECT GROUP_CONCAT(status ) "
+       SQLStatement+=" (select count(*) from MyJobsDetsEQ where MyJobsDetsEQ.equnr = MyJobDets.equipment_code) as eqcnt , "
+	   SQLStatement+="(SELECT GROUP_CONCAT(status ) "
        SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) as opstat,"
        SQLStatement+="(SELECT GROUP_CONCAT(statuscode ) "
        SQLStatement+="FROM myuserstatus  where MyOperations.orderno =myuserstatus.orderno and MyOperations.opno = myuserstatus.opno) AS statuscode,"
@@ -3506,6 +3571,15 @@ html5sql.process(SQLStatement,
 					   }
                      oDetailPage.destroyContent()
                      //oDetailPage.addContent(buildDetails())
+                   
+                     if(rowsArray[0].eqcnt==0)
+                    	 {
+                    	 
+                    	 showAttributes=""
+                    	 }else{
+                    	 showAttributes="<img src='images/attributes.jpeg' alt='History' height='35' width='35' onclick='showEQAttbites(\""+rowsArray[0].equipment_code+"\")'>"	 
+                    	 }
+                     
 		oDetailPage.addContent(	new sap.ui.core.HTML('JobHeader',{  
 	      content: 
 	    	    [
@@ -3514,7 +3588,7 @@ html5sql.process(SQLStatement,
 +"<tr ><TD valign='top'  width='20%' align='left'>Site:</TD><TD valign='top'  width='20%' align='left'>"+rowsArray[0].site+"</TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD><TD valign='top'  width='20%'></TD></TR>"
 +"<tr><TD valign='top'  width='20%' align='left'>Address:</TD><TD valign='top'  colspan='4' align='left'>"+rowsArray[0].address+"</TD></TR>"
 +"<tr ><TD valign='top'  width='20%' align='left'>FuncLoc:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].funcloc_code+" - "+rowsArray[0].funcloc_desc+
-"</TD><TD colspan = '2' rowspan='2'><img src='images/historyicon.png' alt='History' height='42' width='42' onclick='getAssetHistory(\""+rowsArray[0].funcloc_code+"\")'></TD></TR>"
+"</TD><TD colspan = '2' rowspan='2'><img src='images/historyicon.png' alt='History' height='42' width='42' onclick='getAssetHistory(\""+rowsArray[0].funcloc_code+"\")'>&nbsp;&nbsp;"+showAttributes+"</TD></TR>"
 +"<tr height='20'><TD valign='top'  width='20%' align='left'>Equipment:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].equipment_code+" - "+rowsArray[0].equipment_desc+"</TD></TR>"
 +"<tr height='20'><TD valign='top'  width='20%' align='left'>Notification:</TD><TD valign='top'  colspan='2' align='left'>"+rowsArray[0].notifno+"</TD><TD valign='top'  colspan='2' align='right'><H2 id='JobHead_Status'><Font color='"+StatusColour+"'>"+StatusText+"</font></H2></TD></TR>"
 +"<TR><TD align='right' colspan='5'>"+priorityiconsToDisplay+iconsToDisplay+"</TD></TR>"
@@ -6153,7 +6227,10 @@ $(document).on("swiperight",function(e){
 		oSplitApp.setMode(sap.m.SplitAppMode.ShowHideMode)	
 	}
 });  
-
+function showEQAttbites(eq){
+	formEQAttr.setTitle("Equiment Attributes "+eq)
+	formEQAttr.open()
+}
 </script>
 
 </body>

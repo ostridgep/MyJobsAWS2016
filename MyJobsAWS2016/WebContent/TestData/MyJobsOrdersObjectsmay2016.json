@@ -1,0 +1,2856 @@
+{"orderobjects":[
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062393",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062398",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062402",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062406",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062393",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062398",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062402",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062406",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"HUNTST",
+            "objtype": "FL",
+             "shorttext":"HUNTINGDON (GODMANCHESTER) STW",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000022063", "description": "GMEAV £" },
+
+    { "mpoint": "000000074919", "description": "FE sample point" },
+
+    { "mpoint": "000000084222", "description": "FE sample point" },
+
+    { "mpoint": "000000084223", "description": "FE sample point" },
+
+    { "mpoint": "000000084224", "description": "FE sample point" },
+
+    { "mpoint": "000000084225", "description": "FE sample point" },
+
+    { "mpoint": "000000084226", "description": "FE sample point" },
+
+    { "mpoint": "000000084227", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000084231", "description": "PST Safe access" },
+
+    { "mpoint": "000000084233", "description": "FST ASP safe access" },
+
+    { "mpoint": "000000084234", "description": "Humus safe access" },
+
+    { "mpoint": "000000084235", "description": "Mixed liquor" },
+
+    { "mpoint": "000000084236", "description": "Filter effluent" },
+
+    { "mpoint": "000000084237", "description": "FST effluent" },
+
+    { "mpoint": "000000084238", "description": "Humus tank" },
+
+    { "mpoint": "000000084239", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000084241", "description": "RAS point" },
+
+    { "mpoint": "000000084242", "description": "FST effluent" },
+
+    { "mpoint": "000000084243", "description": "FST effluent" },
+
+    { "mpoint": "000000084244", "description": "FST effluent" },
+
+    { "mpoint": "000000084245", "description": "Humus tank" },
+
+    { "mpoint": "000000084246", "description": "Humus tank" },
+
+    { "mpoint": "000000084247", "description": "ferric" },
+
+    { "mpoint": "000000086546", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000104398", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000104399", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000104400", "description": "Tank 1" },
+
+    { "mpoint": "000000104401", "description": "Tank 2" },
+
+    { "mpoint": "000000104402", "description": "Tank 3" }
+  ]
+
+},
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062393",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062398",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062402",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062406",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"HUNTST",
+            "objtype": "FL",
+             "shorttext":"HUNTINGDON (GODMANCHESTER) STW",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000022063", "description": "GMEAV £" },
+
+    { "mpoint": "000000074919", "description": "FE sample point" },
+
+    { "mpoint": "000000084222", "description": "FE sample point" },
+
+    { "mpoint": "000000084223", "description": "FE sample point" },
+
+    { "mpoint": "000000084224", "description": "FE sample point" },
+
+    { "mpoint": "000000084225", "description": "FE sample point" },
+
+    { "mpoint": "000000084226", "description": "FE sample point" },
+
+    { "mpoint": "000000084227", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000084231", "description": "PST Safe access" },
+
+    { "mpoint": "000000084233", "description": "FST ASP safe access" },
+
+    { "mpoint": "000000084234", "description": "Humus safe access" },
+
+    { "mpoint": "000000084235", "description": "Mixed liquor" },
+
+    { "mpoint": "000000084236", "description": "Filter effluent" },
+
+    { "mpoint": "000000084237", "description": "FST effluent" },
+
+    { "mpoint": "000000084238", "description": "Humus tank" },
+
+    { "mpoint": "000000084239", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000084241", "description": "RAS point" },
+
+    { "mpoint": "000000084242", "description": "FST effluent" },
+
+    { "mpoint": "000000084243", "description": "FST effluent" },
+
+    { "mpoint": "000000084244", "description": "FST effluent" },
+
+    { "mpoint": "000000084245", "description": "Humus tank" },
+
+    { "mpoint": "000000084246", "description": "Humus tank" },
+
+    { "mpoint": "000000084247", "description": "ferric" },
+
+    { "mpoint": "000000086546", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000104398", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000104399", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000104400", "description": "Tank 1" },
+
+    { "mpoint": "000000104401", "description": "Tank 2" },
+
+    { "mpoint": "000000104402", "description": "Tank 3" }
+  ]
+
+},
+
+
+{
+            "objid":"HUNTST-2D-PSM-PS01-MOT001",
+            "objtype": "FL",
+             "shorttext":"Motor - Primary Auto Desludge Pump 1",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001486587",
+            "objtype": "EQ",
+             "shorttext":"Induction (Lv)",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062393",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062398",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062402",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062406",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"HUNTST",
+            "objtype": "FL",
+             "shorttext":"HUNTINGDON (GODMANCHESTER) STW",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000022063", "description": "GMEAV £" },
+
+    { "mpoint": "000000074919", "description": "FE sample point" },
+
+    { "mpoint": "000000084222", "description": "FE sample point" },
+
+    { "mpoint": "000000084223", "description": "FE sample point" },
+
+    { "mpoint": "000000084224", "description": "FE sample point" },
+
+    { "mpoint": "000000084225", "description": "FE sample point" },
+
+    { "mpoint": "000000084226", "description": "FE sample point" },
+
+    { "mpoint": "000000084227", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000084231", "description": "PST Safe access" },
+
+    { "mpoint": "000000084233", "description": "FST ASP safe access" },
+
+    { "mpoint": "000000084234", "description": "Humus safe access" },
+
+    { "mpoint": "000000084235", "description": "Mixed liquor" },
+
+    { "mpoint": "000000084236", "description": "Filter effluent" },
+
+    { "mpoint": "000000084237", "description": "FST effluent" },
+
+    { "mpoint": "000000084238", "description": "Humus tank" },
+
+    { "mpoint": "000000084239", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000084241", "description": "RAS point" },
+
+    { "mpoint": "000000084242", "description": "FST effluent" },
+
+    { "mpoint": "000000084243", "description": "FST effluent" },
+
+    { "mpoint": "000000084244", "description": "FST effluent" },
+
+    { "mpoint": "000000084245", "description": "Humus tank" },
+
+    { "mpoint": "000000084246", "description": "Humus tank" },
+
+    { "mpoint": "000000084247", "description": "ferric" },
+
+    { "mpoint": "000000086546", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000104398", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000104399", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000104400", "description": "Tank 1" },
+
+    { "mpoint": "000000104401", "description": "Tank 2" },
+
+    { "mpoint": "000000104402", "description": "Tank 3" }
+  ]
+
+},
+
+
+{
+            "objid":"HUNTST-2D-PSM-PS01-MOT001",
+            "objtype": "FL",
+             "shorttext":"Motor - Primary Auto Desludge Pump 1",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001486587",
+            "objtype": "EQ",
+             "shorttext":"Induction (Lv)",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ALCOST-2F-SST-IQ01-PCV005",
+            "objtype": "FL",
+             "shorttext":"Process Valve - Isolation",
+             "address":", ALCONBURY STW, HUNTINGDON, PE28 4DN",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000002052500",
+            "objtype": "EQ",
+             "shorttext":"Gate Valve",
+             "address":", ALCONBURY STW, HUNTINGDON, PE28 4DN",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"000000000001001787",
+            "objtype": "EQ",
+             "shorttext":"HOLHAM COMPRESSOR",
+             "address":", , , ",
+             "swerk":"10000273",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000056541", "description": "4002373 HOLHAM COMPRESSOR" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2D-PSM-TS01-PRT001",
+            "objtype": "FL",
+             "shorttext":"Primary Tank 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000063203",
+            "objtype": "EQ",
+             "shorttext":"Radial Flow Tank",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000106641", "description": "High Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106642", "description": "Low Level Radial Flow Tank 1" },
+
+    { "mpoint": "000000106673", "description": "Has the check been completed" },
+
+    { "mpoint": "000000106674", "description": "Top Temperature" }
+  ]
+
+},
+
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST",
+            "objtype": "FL",
+             "shorttext":"SPALDING STW",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000037102", "description": "GMEAV £" },
+
+    { "mpoint": "000000078118", "description": "FE sample point" },
+
+    { "mpoint": "000000078119", "description": "FE sample point" },
+
+    { "mpoint": "000000078120", "description": "FE sample point" },
+
+    { "mpoint": "000000078122", "description": "PST 1" },
+
+    { "mpoint": "000000078124", "description": "PST 2" },
+
+    { "mpoint": "000000078126", "description": "IST 1" },
+
+    { "mpoint": "000000078128", "description": "IST 2" },
+
+    { "mpoint": "000000078130", "description": "FST 1" },
+
+    { "mpoint": "000000078132", "description": "FST 2" },
+
+    { "mpoint": "000000078133", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000103325", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000103326", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000103327", "description": "Sludge Tank 4" },
+
+    { "mpoint": "000000103328", "description": "Sludge Tank 5" },
+
+    { "mpoint": "000000103329", "description": "Sludge Tank 6" },
+
+    { "mpoint": "000000103330", "description": "Tank 1" },
+
+    { "mpoint": "000000103331", "description": "Tank 2" },
+
+    { "mpoint": "000000103332", "description": "Tank 3" },
+
+    { "mpoint": "000000103333", "description": "Tank 4" },
+
+    { "mpoint": "000000103334", "description": "Tank 5" },
+
+    { "mpoint": "000000103335", "description": "Tank 6" },
+
+    { "mpoint": "000000105002", "description": "FE Sample Point" },
+
+    { "mpoint": "000000105003", "description": "Lime pH reading" },
+
+    { "mpoint": "000000105004", "description": "Limed amount in tonnes" }
+  ]
+
+},
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062393",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-FEP001",
+            "objtype": "FL",
+             "shorttext":"Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062398",
+            "objtype": "EQ",
+             "shorttext":"Screw Pump",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS01-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 1",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062402",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SPALST-2K-FED-PS02-STA001",
+            "objtype": "FL",
+             "shorttext":"Starter Panel - Final Effluent Pump 2",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"LSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000062406",
+            "objtype": "EQ",
+             "shorttext":"Star Delta Starter Panel",
+             "address":", West Marsh Road, SPALDING, PE11 2BB",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"HUNTST",
+            "objtype": "FL",
+             "shorttext":"HUNTINGDON (GODMANCHESTER) STW",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000022063", "description": "GMEAV £" },
+
+    { "mpoint": "000000074919", "description": "FE sample point" },
+
+    { "mpoint": "000000084222", "description": "FE sample point" },
+
+    { "mpoint": "000000084223", "description": "FE sample point" },
+
+    { "mpoint": "000000084224", "description": "FE sample point" },
+
+    { "mpoint": "000000084225", "description": "FE sample point" },
+
+    { "mpoint": "000000084226", "description": "FE sample point" },
+
+    { "mpoint": "000000084227", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000084231", "description": "PST Safe access" },
+
+    { "mpoint": "000000084233", "description": "FST ASP safe access" },
+
+    { "mpoint": "000000084234", "description": "Humus safe access" },
+
+    { "mpoint": "000000084235", "description": "Mixed liquor" },
+
+    { "mpoint": "000000084236", "description": "Filter effluent" },
+
+    { "mpoint": "000000084237", "description": "FST effluent" },
+
+    { "mpoint": "000000084238", "description": "Humus tank" },
+
+    { "mpoint": "000000084239", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000084241", "description": "RAS point" },
+
+    { "mpoint": "000000084242", "description": "FST effluent" },
+
+    { "mpoint": "000000084243", "description": "FST effluent" },
+
+    { "mpoint": "000000084244", "description": "FST effluent" },
+
+    { "mpoint": "000000084245", "description": "Humus tank" },
+
+    { "mpoint": "000000084246", "description": "Humus tank" },
+
+    { "mpoint": "000000084247", "description": "ferric" },
+
+    { "mpoint": "000000086546", "description": "ASP Outlet weir" },
+
+    { "mpoint": "000000104398", "description": "Sludge Tank 2" },
+
+    { "mpoint": "000000104399", "description": "Sludge Tank 3" },
+
+    { "mpoint": "000000104400", "description": "Tank 1" },
+
+    { "mpoint": "000000104401", "description": "Tank 2" },
+
+    { "mpoint": "000000104402", "description": "Tank 3" }
+  ]
+
+},
+
+
+{
+            "objid":"HUNTST-2D-PSM-PS01-MOT001",
+            "objtype": "FL",
+             "shorttext":"Motor - Primary Auto Desludge Pump 1",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001486587",
+            "objtype": "EQ",
+             "shorttext":"Induction (Lv)",
+             "address":", Cow Lane, HUNTINGDON, PE29 2EJ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ALCOST-2F-SST-IQ01-PCV005",
+            "objtype": "FL",
+             "shorttext":"Process Valve - Isolation",
+             "address":", ALCONBURY STW, HUNTINGDON, PE28 4DN",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000002052500",
+            "objtype": "EQ",
+             "shorttext":"Gate Valve",
+             "address":", ALCONBURY STW, HUNTINGDON, PE28 4DN",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ALCOST",
+            "objtype": "FL",
+             "shorttext":"ALCONBURY STW",
+             "address":", ALCONBURY STW, HUNTINGDON, PE28 4DN",
+             "swerk":"RSVS",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [
+    { "mpoint": "000000001990", "description": "GMEAV £" },
+
+    { "mpoint": "000000049992", "description": "Meter Read for Serial No. E07BG15762 -R1" },
+
+    { "mpoint": "000000049993", "description": "Meter Read for Serial No. P01E00312" },
+
+    { "mpoint": "000000074588", "description": "FE sample point" },
+
+    { "mpoint": "000000084035", "description": "FE sample point" },
+
+    { "mpoint": "000000084036", "description": "FE sample point" },
+
+    { "mpoint": "000000084037", "description": "FE sample point" },
+
+    { "mpoint": "000000084038", "description": "FE sample point" },
+
+    { "mpoint": "000000084039", "description": "FE sample point" },
+
+    { "mpoint": "000000084040", "description": "Sludge Tank 1" },
+
+    { "mpoint": "000000084044", "description": "PST Safe access" },
+
+    { "mpoint": "000000084045", "description": "Filter  effluent" },
+
+    { "mpoint": "000000084048", "description": "recirc" },
+
+    { "mpoint": "000000084049", "description": "tertiary settlement" },
+
+    { "mpoint": "000000084050", "description": "floc chamber" },
+
+    { "mpoint": "000000084051", "description": "Poly dosing" },
+
+    { "mpoint": "000000084052", "description": "Poly" },
+
+    { "mpoint": "000000084054", "description": "ferric" },
+
+    { "mpoint": "000000095236", "description": "Meter Read for Serial No. E07BG15762 -R2" },
+
+    { "mpoint": "000000104181", "description": "Tank 1" }
+  ]
+
+},
+
+
+{"objid": "1", "objtype": "1", "shorttext":"1", "address":"1", "swerk":"1",
+
+"installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]}
+]
+}

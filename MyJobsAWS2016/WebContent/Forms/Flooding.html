@@ -108,14 +108,14 @@
                             </select>
 
                             <select class="feedback-input cause" mergeonchange=true; id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
-                             onChange="setPSShortCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%')">
+                             onChange="setPSShortCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%');documentgetElementById('rootcause').value=''">
                        
                                 <option value="" disabled selected>Cause of Flood</option>
 
                             </select>
 
-                            <select class="feedback-input root" id="rootcause" name="rootcause" >
-                                <option class="blockage" disabled selected>Root Cause</option>
+                            <select class="feedback-input root" id="rootcause" name="rootcause" merge="">
+                                <option value="" disabled selected>Root Cause</option>
 
                             </select>
                         </div>
@@ -138,10 +138,10 @@
                     </div>
                     <div class="well row">
                         <div class="col-md-3 col-sm-3">
-                            <input name="psshortcode" type="text" class="feedback-input" placeholder="PS Short Code" id="psshortcode" />
+                            <input name="psshortcode" type="text" class="feedback-input" placeholder="PS Short Code" maxlength="6" size= "6" id="psshortcode" />
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <input name="assetref" type="text" class="feedback-input" placeholder="Asset Ref" id="assetref" />
+                            <input name="assetref" type="text" class="feedback-input" placeholder="Asset Ref" maxlength="8" size= "8" id="assetref" />
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <input name="gridref" onclick= "parent.formGMaps.open()" merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
@@ -407,22 +407,29 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    {
 	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
 	    		
-	    		
+	    			elem[i].tagName
 	    			if(!elem[i].hasAttribute("Ignore")){
 	    				console.log(elem[i].id+":"+elem[i].value)
 	    				cnt=cnt+1
-	    				if(elem[i].value!=""){
-	    					fvalid++;
-	    					elem[i].style.borderColor=""
-	    				}else{
-	    					if((elem[i].id=="psshortcode")||(elem[i].id=="assetref")||(elem[i].id=="gridref")){
-	    						fvalid++;
+
+		    				if(elem[i].value!=""){
+		    					fvalid++;
 		    					elem[i].style.borderColor=""
-	    					}else{
-	    						elem[i].style.borderColor = "red"
-	    					}
-	    					
-	    				}
+		    				}else{
+		    					if((elem[i].id=="psshortcode")||(elem[i].id=="assetref")||(elem[i].id=="gridref")){
+		    						fvalid++;
+			    					elem[i].style.borderColor=""
+		    					}
+			    				else if((elem[i].tagName=="SELECT")&&(elem[i].length<2)){
+			    					fvalid++;
+			    					elem[i].style.borderColor=""
+			    				
+		    					}else {
+		    						elem[i].style.borderColor = "red"
+		    					}
+		    					
+		    				}
+	    				
 	    			
 	    		}
 

@@ -1,0 +1,2107 @@
+{"order":[
+    
+    {
+            "orderno":"000052150026",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Mechanical%20Repair",
+      "longtext": "",
+    "address": "Cow Lane, HUNTINGDON, PE29 2EJ",
+    "postcode": "PE29 2EJ",
+              "funcloc": "HUNTST",
+              "equipment": "",
+              "notifno": "000012698921",
+              "changed_by": "",
+              "changed_date": "2016-03-01",
+              "changed_time": "15:39:47",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Repair"
+,"startdate": "20160301 103000"
+,"enddate": "20160302 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+
+ "operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00113808" }
+                ],
+
+ "operationinfo":
+                  [{ "orderno":"000052150026","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+
+
+                ],
+ "jobdets":
+                  [{ "orderno":"000052150026","opno": "0010",  
+                  "eworkcentre":"MT032" ,"oworkcentre":"MT044" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-03-01" ,
+"start_time":"10:30:00" ,
+"duration":"120 " ,
+"equipment_code":"000000000000063203" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"HUNTST" ,
+"funcloc_desc":"HUNTINGDON (GODMANCHESTER) STW" ,
+"funcloc_gis":"52620000-27100000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012698921",
+"site":"HUNTST"}
+
+
+                ],
+ "priorityicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+
+                ],
+                 "jobdraw":
+                  [
+                  {"orderno":"000052150067","zact": "","zite":"1" ,"zmandatoryfield":"" ,"zurl":"" ,
+                  "nodeid":"24098663" ,"fname":"01-06-2015-09-46-20-554-51482751-0010_09_46_20-jBennett~IMGA0048.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"2" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102513" ,"fname":"01-06-2015-09-46-20-245-51482751-0010_09_46_20-jBennett~IMGA0049.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"3" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102516" ,"fname":"01-06-2015-09-46-20-474-51482751-0010_09_46_20-jBennett~IMGA0052.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"4" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24102833" ,"fname":"01-06-2015-09-46-20-399-51482751-0010_09_46_20-jBennett~IMGA0051.JPG" ,"mime":"imagejpeg"},
+{"orderno":"000052150067","zact": "","zite":"5" ,"zmandatoryfield":"" ,"zurl":"" ,"nodeid":"24098663" ,"fname":"01-06-2015-09-46-20-321-51482751-0010_09_46_20-jBennett~IMGA0050.JPG" ,"mime":"imagejpeg"}
+                  
+                ],
+                "jobmeaspoints":
+                  [{
+"meas_point":"000000106674",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Top Temperature" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000106674",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Top Temperature" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078118",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"TURBIDITY" ,
+"pttxt":"FE sample point" ,
+"format":"__" ,
+"no_char":"2 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"NTU" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078120",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FE sample point" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103329",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 6" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103325",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 2" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103326",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 3" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103328",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 5" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078119",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105002",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COD" ,
+"pttxt":"FE Sample Point" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103327",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 4" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078133",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 1" ,
+"format":"___" ,
+"no_char":"3 " ,
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105004",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"LIMED AMOUNT" ,
+"pttxt":"Limed amount in tonnes" ,
+"format":"_,___,___,___,___.__" ,
+"no_char":"15 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"TNH" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000105003",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"LIME PH READING" ,
+"pttxt":"Lime pH reading" ,
+"format":"__,___.__" ,
+"no_char":"7 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078126",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"IST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078122",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078128",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"IST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078130",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 1" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078124",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000078132",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 2" ,
+"format":"_,___.__" ,
+"no_char":"6 " ,
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+
+,{
+"meas_point":"000000103333",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 4" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103332",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 3" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103331",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 2" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103334",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 5" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103330",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 1" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000103335",
+"object_id": "SPALST",
+"object_desc":"SPALDING STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 6" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000106642",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK LOW LEVEL" ,
+"pttxt":"Low Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106641",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK HIGH LEVEL" ,
+"pttxt":"High Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106673",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"CHECKED" ,
+"pttxt":"Has the check been completed" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+,{
+"meas_point":"000000106642",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK LOW LEVEL" ,
+"pttxt":"Low Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106641",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"TANK HIGH LEVEL" ,
+"pttxt":"High Level Radial Flow Tank 1" ,
+"format":"_,___,___.__" ,
+"no_char":"9 " ,
+"no_deci":"2 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"M" ,
+"read_from":"3"}
+
+,{
+"meas_point":"000000106673",
+"object_id": "000000000000063203",
+"object_desc":"Radial Flow Tank" ,
+"psort":"CHECKED" ,
+"pttxt":"Has the check been completed" ,
+"format":"" ,
+"no_char":"0 " ,
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+
+
+                ],
+                "jobmeascodes":
+                  [{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+
+
+                ],
+            
+                 "tconf":
+                  [  ],
+
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052150026"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+
+    { "type": "OR" , "orderno": "000052150026"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+ ],
+
+"component":
+                  [ ],
+
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012698921","funcloc": "HUNTST" , "funclocdesc": "HUNTINGDON (GODMANCHESTER) STW", "equipment": "",
+  "equidescr": ""   }
+ ]
+},
+    {
+            "orderno":"000052150027",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Electrical%20Fault%2FInvestigation",
+      "longtext": "",
+    "address": "Cow Lane, HUNTINGDON, PE29 2EJ",
+    "postcode": "PE29 2EJ",
+              "funcloc": "HUNTST-2D-PSM-PS01-MOT001",
+              "equipment": "000000000001486587",
+              "notifno": "000012698922",
+              "changed_by": "",
+              "changed_date": "2016-03-01",
+              "changed_time": "15:39:46",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Electrical Defect Work"
+,"startdate": "20160301 133000"
+,"enddate": "20160302 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+
+ "operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00113808" }
+                ],
+
+ "operationinfo":
+                  [{ "orderno":"000052150027","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+
+
+                ],
+ "jobdets":
+                  [{ "orderno":"000052150027","opno": "0010",  "eworkcentre":"MT032" ,"oworkcentre":"MT044" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-03-01" ,
+"start_time":"13:30:00" ,
+"duration":"60 " ,
+"equipment_code":"000000000001486587" ,
+"equipment_desc":"Induction (Lv)" ,
+"equipment_gis":"52620000-27100000" ,
+"funcloc_code":"HUNTST-2D-PSM-PS01-MOT001" ,
+"funcloc_desc":"Motor - Primary Auto Desludge Pump 1" ,
+"funcloc_gis":"52620000-27100000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012698922",
+"site":"HUNTST"}
+
+
+                ],
+ "priorityicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+
+                ],
+                "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],
+                 "tconf":
+                  [  ],
+
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052150027"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+
+    { "type": "OR" , "orderno": "000052150027"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+ ],
+
+"component":
+                  [ ],
+
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012698922","funcloc": "HUNTST-2D-PSM-PS01-MOT001" , "funclocdesc": "Motor - Primary Auto Desludge Pump 1", "equipment": "000000000001486587",
+  "equidescr": "Induction (Lv)"   }
+ ]
+},
+    {
+            "orderno":"000052150028",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Mechanical%20Repair",
+      "longtext": "",
+    "address": "ALCONBURY STW, HUNTINGDON, PE28 4DN",
+    "postcode": "PE28 4DN",
+              "funcloc": "ALCOST-2F-SST-IQ01-PCV005",
+              "equipment": "000000000002052500",
+              "notifno": "000012698923",
+              "changed_by": "",
+              "changed_date": "2016-03-01",
+              "changed_time": "15:39:46",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Repair"
+,"startdate": "20160301 143000"
+,"enddate": "20160302 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+
+ "operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00113808" }
+                ],
+
+ "operationinfo":
+                  [{ "orderno":"000052150028","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+
+
+                ],
+ "jobdets":
+                  [{ "orderno":"000052150028","opno": "0010",  "eworkcentre":"MT032" ,"oworkcentre":"MT041" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-03-01" ,
+"start_time":"14:30:00" ,
+"duration":"120 " ,
+"equipment_code":"000000000002052500" ,
+"equipment_desc":"Gate Valve" ,
+"equipment_gis":"51960000-27560000" ,
+"funcloc_code":"ALCOST-2F-SST-IQ01-PCV005" ,
+"funcloc_desc":"Process Valve - Isolation" ,
+"funcloc_gis":"51960000-27560000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012698923",
+"site":"ALCOST"}
+
+
+                ],
+ "priorityicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+
+                ],
+                 "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],               
+                 "tconf":
+                  [  ],
+
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052150028"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+
+    { "type": "OR" , "orderno": "000052150028"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+ ],
+
+"component":
+                  [ ],
+
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012698923","funcloc": "ALCOST-2F-SST-IQ01-PCV005" , "funclocdesc": "Process Valve - Isolation", "equipment": "000000000002052500",
+  "equidescr": "Gate Valve"   }
+ ]
+},
+    {
+            "orderno":"000052150067",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Electrical%20Fault%2FInvestigation",
+      "longtext": "",
+    "address": "ALCONBURY STW, HUNTINGDON, PE28 4DN",
+    "postcode": "PE28 4DN",
+              "funcloc": "ALCOST",
+              "equipment": "",
+              "notifno": "000012698934",
+              "changed_by": "",
+              "changed_date": "2016-03-01",
+              "changed_time": "15:39:46",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Electrical Defect Work"
+,"startdate": "20160301 160000"
+,"enddate": "20160302 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+
+ "operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00113808" }
+                ],
+
+ "operationinfo":
+                  [{ "orderno":"000052150067","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+
+
+                ],
+ "jobdets":
+                  [{ "orderno":"000052150067","opno": "0010",  "eworkcentre":"MT032" ,"oworkcentre":"MT041" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-03-01" ,
+"start_time":"16:00:00" ,
+"duration":"60 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"SPALST" ,
+"funcloc_desc":"ALCONBURY STW" ,
+"funcloc_gis":"51960000-27560000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012698934",
+"site":"ALCOST"}
+
+
+                ],
+ "priorityicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+
+
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052072129","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052072129","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150000","opno": "0040",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150001","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150002","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150003","opno": "0020",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150026","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150027","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150028","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+,{ "orderno":"000052150067","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+
+
+                ],
+                                "jobdraw":[],
+                "jobmeaspoints":[],
+                "jobmeascodes":[],
+                 "tconf":
+                  [  ],
+
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052150067"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+
+    { "type": "OR" , "orderno": "000052150067"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+ ],
+
+"component":
+                  [ ],
+
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012698934","funcloc": "ALCOST" , "funclocdesc": "ALCONBURY STW", "equipment": "",
+  "equidescr": ""   }
+ ]
+}
+
+]
+}
+

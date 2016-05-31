@@ -2393,15 +2393,15 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 	}else{
 		state="NEW"
 	}
-	sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
+	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
 	
-	sqlStatement+="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
+	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
 	"'"+formname+"',"+"'"+type+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
 
-	html5sql.process(sqlStatement,
+	html5sql.process(sqlStatementDel,
 		 function(transaction, results, rowsArray){
 		
-		html5sql.process(sqlStatement,
+		html5sql.process(sqlStatementIns,
 				 function(transaction, results, rowsArray){
 				
 				if(formDG5.isOpen()){
@@ -2691,7 +2691,9 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT);'+
-
+					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT);'+
+					
 
 					 
 					 
@@ -2871,6 +2873,8 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  DG5REL;'+
 					'DROP TABLE IF EXISTS  DG5CODES;'+
 					'DROP TABLE IF EXISTS  CFCODES;'+
+					'DROP TABLE IF EXISTS  MyJobsDetsEQ;'+
+					'DROP TABLE IF EXISTS  MyJobsDetsATTR;'+
 					'DROP TABLE IF EXISTS  MyJobsDocs;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
@@ -2963,6 +2967,9 @@ function emptyTables(type) {
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobsDocs;'+
+
+					'DELETE FROM MyJobsDetsEQ;'+
+					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
@@ -3077,12 +3084,12 @@ function loadDemoData() {
 				'DELETE FROM  DG5CODES;'+
 				'DELETE FROM  CFCODES;'+
 				'DELETE FROM  MyJobsDocs;'+
+				'DELETE FROM MyJobsDetsEQ;'+
+				'DELETE FROM MyJobsDetsATTR;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
 				'DELETE FROM  MyJobDetsDraw;'+
 					'DELETE FROM  GASSurveyHDR;';
-					
-					
 
 					html5sql.process(sqlstatement,
 					 function(){
@@ -3106,9 +3113,9 @@ function loadDemoData() {
 						//loadAssetXML("TestData\\T2_MPLT_RSVM.XML")
 						//loadAssetXML("TestData\\T2_MPLT_RSVN.XML")
 						
-						
+			
 						requestDEMOData('MyJobsOrders.json');
-					
+			
 						requestDEMOData('MyJobsNotifications.json');
 					
 						requestDEMOData('MyJobsUsers.json');
@@ -3221,6 +3228,8 @@ function resetTables() {
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobsDocs;'+
+					'DELETE FROM MyJobsDetsEQ;'+
+					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
@@ -3350,7 +3359,6 @@ function requestDEMOData(page){
   .fail(function(data,status) {
     //alert( "error:"+status+":"+data );
   })
-
 }
 function orderCB(MyOrders){
 
@@ -3485,7 +3493,47 @@ var orderlist="";
 
 			
 				}
+				//loop Job Equipment
+			alert(MyOrders.order[cntx].jobequipment.length)
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobequipment.length ; opscnt++)
+				{	
+
+				sqlstatement+='INSERT INTO MyJobsDetsEQ (equnr, obj_type , obj_type_desc , start_date ,manfacture ,manparno ,manserno ,user_status_code ,swerk  ,swerk_desc ,profile  ,device  ,device_info  ,install_date  , install_loc_desc ) VALUES ('+
+					 '"'+MyOrders.order[cntx].jobequipment[opscnt].equnr+  '","'+ 
+					 MyOrders.order[cntx].jobequipment[opscnt].obj_type+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].obj_type_desc+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].start_date+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].manfacture+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].manparno+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].manserno+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].user_status_code+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].swerk+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].swerk_desc+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].profile+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].device+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].device_info+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].install_date+  '","'+
+					 MyOrders.order[cntx].jobequipment[opscnt].install_loc_desc+  '");';
+
+
 			
+				}
+				//loop Job Attribute
+				alert(MyOrders.order[cntx].jobattributes.length)
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobattributes.length ; opscnt++)
+				{	
+				
+				sqlstatement+='INSERT INTO MyJobsDetsATTR (equnr  ,classnum  ,klassentext  ,charact  ,charact_desc ,value ) VALUES ('+
+					 '"'+MyOrders.order[cntx].jobattributes[opscnt].equnr+  '","'+ 
+					 MyOrders.order[cntx].jobattributes[opscnt].classnum+  '","'+
+					 MyOrders.order[cntx].jobattributes[opscnt].klassentext+  '","'+
+					 MyOrders.order[cntx].jobattributes[opscnt].charact+  '","'+
+					 MyOrders.order[cntx].jobattributes[opscnt].charact_desc+  '","'+
+					 MyOrders.order[cntx].jobattributes[opscnt].value+  '");';
+
+
+			
+				}
 				for(var opscnt=0; opscnt < MyOrders.order[cntx].operation.length ; opscnt++)
 					{	
 					
@@ -3635,6 +3683,8 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyJobDetsEQ where orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyJobDetsATTR where orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE orderno NOT IN ("+orderlist+");"
 			console.log("about to tidy up orders")
 			html5sql.process(sqldeleteorders,
@@ -3696,6 +3746,8 @@ console.log(orderno+changeddatetime)
 											'DELETE FROM MyUserStatus where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationInfo where orderno = "'+orderno+'";'+
 											'DELETE FROM MyJobDetsDraw where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsEQ where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsATTR where orderno = "'+orderno+'";'+
 											'DELETE FROM MyJobDetsMPCodes where orderno = "'+orderno+'";'+
 											'DELETE FROM MyJobDetsMPoints where orderno = "'+orderno+'";'+
 											'DELETE FROM MyStatus where state="SERVER" and orderno = "'+orderno+'";'
@@ -3705,14 +3757,14 @@ console.log(orderno+changeddatetime)
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
 						
-console.log("OK")
+console.log(orderno+"OK")
 									//addNewJobToList(orderno){
 			
 										
 								 },
 								 function(error, statement){
 									 
-									 console.log("Failed"+statement)
+									 console.log(orderno+"Failed"+error+statement)
 								 }        
 								);
 

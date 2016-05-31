@@ -446,7 +446,9 @@ function buildRelatedSelect(fld,sql,val){
 	
 for(var i = theSelect.options.length-1;i>0;i--)
 {
-	theSelect.removeChild(theSelect.options[i]);
+	if(theSelect.options[i].value!=""){
+		theSelect.removeChild(theSelect.options[i]);
+	}
 }
 		html5sql.process(sql+"'"+val+"'",
 				function(transaction, results, rowsArray){
