@@ -66,7 +66,17 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 		            ],
 		            
 		            beforeOpen:function(){
-		            	
+
+		    			document.getElementById('DocTot').innerHTML="0"
+		    			document.getElementById('DocDel').innerHTML="0"
+		    			document.getElementById('DocNew').innerHTML="0"
+		    			document.getElementById('DocMod').innerHTML="0"
+		    			document.getElementById('DocLoc').innerHTML="0"
+				    	oProgInd.setPercentValue(0);
+				    	oProgInd.setDisplayValue("0" + "%");
+				    	oProgIndDL.setPercentValue(0);
+				    	oProgIndDL.setDisplayValue("0" + "%");
+		    	
 		            }
 		 })
 
@@ -948,6 +958,12 @@ function checkFileDownload () {
 		   if(fileDownloadCnt<filesToDownload.length){
 		       fileName = filesToDownload[fileDownloadCnt].name;
 	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
+if(fileDownloadCnt<10){
+    alert(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
+ 
+
+	
+}
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.length,fileDownloadCnt)
 	        	if(sPercent < 5){sPercent=5}
@@ -1073,7 +1089,12 @@ function downloadAsset(fileName,dir) {
 }
 function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
-   
+    if(fileDownloadCnt<10){
+        alert(  localStorage.getItem("DOCSERVER")+dir+"/" + fileName+"--"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName)
+     
+
+    	
+    }
     //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
 		function (entry) {
