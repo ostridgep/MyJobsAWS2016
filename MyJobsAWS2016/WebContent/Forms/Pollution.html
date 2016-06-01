@@ -67,7 +67,7 @@
                             <option value=""  disabled selected>Watercourse Type</option>
 
                         </select>
-                        <input id="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)"  type="TEXT"  maxlength=10 pattern="[0-9]* name="sizeofimpact"/>
+                        <input id="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" name="sizeofimpact"/>
                         <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  disabled selected>Aesthetic Impact</option>
                             
@@ -104,8 +104,8 @@
                         <tr>
                             <th>Upstream</th>
                             
-                            <td><input class="feedback-input-table" id="upstreamdistance"  type="TEXT"  maxlength=8 pattern="[0-9]* name="upstreamdistance" disabled /></td>
-                            <td><input class="feedback-input-table" id="upstreamonsitenh3"  type="TEXT"  maxlength=10 pattern="\d* name="upstreamonsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="upstreamdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="upstreamdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3" type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" name="upstreamonsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
@@ -118,8 +118,8 @@
                         </tr>
                         <tr>
                             <th>Pt of Disc</th>
-                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="TEXT"  maxlength=8 pattern="\d*  name="ptofdiscdistance" disabled /></td>
-                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   type="TEXT"  maxlength=10 pattern="\d*  name="ptofdisconsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"   name="ptofdiscdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   ttype="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="ptofdisconsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
@@ -131,8 +131,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 1</th>
-                            <td><input class="feedback-input-table" id="downstream1distance" type="TEXT"  maxlength=8 pattern="\d* name="downstream1distance" PLACEHOLDER: "99999999" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream1onsitenh3"    type="TEXT"  maxlength=10 pattern="\d*   name="downstream1onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="downstream1distance"  disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3"   type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="downstream1onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
@@ -144,8 +144,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 2</th>
-                            <td><input class="feedback-input-table" id="downstream2distance" type="TEXT"  maxlength=8 pattern="\d* name="downstream2distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="TEXT"  maxlength=10 pattern="\d*   name="downstream2onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="downstream2distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"   name="downstream2onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
@@ -157,8 +157,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 3</th>
-                            <td><input class="feedback-input-table" id="downstream3distance" type="TEXT"  maxlength=8 pattern="\d*   name="downstream3distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="TEXT"  maxlength=10 pattern="\d*  name="downstream3onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"    name="downstream3distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  ttype="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="downstream3onsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
@@ -332,7 +332,56 @@ jQuery.fn.ForceNumericOnly =
 	$("#downstream2sitenh3").ForceNumericOnly();
 	$("#downstream3distance").ForceNumericOnly();
 	$("#downstream3sitenh3").ForceNumericOnly();
-	
+	function checkInt(e,value){
+	    
+        var unicode=e.charCode? e.charCode : e.keyCode;
+        //if (value.indexOf(".") != -1){
+       		 if( unicode == 46 ){
+          
+              return false
+           }
+        //   alert("a1")
+        //};
+        if (unicode!=8){
+        	if((unicode<48||unicode>57)&&unicode!=46){
+          	
+          			return false;
+                }
+          }
+         
+    }
+function checkFloat(e,value){
+	    
+        var unicode=e.charCode? e.charCode : e.keyCode;
+        if (value.indexOf(".") != -1){
+       		 if( unicode == 46 ){
+             
+              return false
+           }
+        //   alert("a1")
+        };
+        if (unicode!=8){
+        	if((unicode<48||unicode>57)&&unicode!=46){
+          	
+          			return false;
+                }
+          }
+         
+    }
+    function checkLength(n,fld){
+    
+    var fieldLength = fld.value.length;
+    //Suppose u want 4 number of character
+    if(fieldLength <= n){
+        return true;
+    }
+    else
+    {
+        var str = fld.value;
+        str = str.substring(0, str.length - 1);
+    	fld.value = str;
+    }
+    }	
 	</script>
 	
 </body>
