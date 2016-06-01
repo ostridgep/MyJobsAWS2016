@@ -474,8 +474,8 @@ new sap.m.Button( {
     	 
     	 if(((sap.ui.getCore().byId("Close_FunctionalLocation").getValue().length>0)||
     			 (sap.ui.getCore().byId("Close_Equipment").getValue().length>0))&&
-    			 (sap.ui.getCore().byId("Close_InshiftCode").getSelectedItem().getKey()!="NOTSELECTED")||
-    			 ((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_OutshiftCode").getSelectedItem().getKey()!="NOTSELECTED"))||
+    			 (sap.ui.getCore().byId("Close_InshiftCode").getSelectedKey()!="NOTSELECTED")||
+    			 ((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_OutshiftCode").getSelectedKey()!="NOTSELECTED"))||
     			 (sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")||
     			 (sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00"))
     			 {
@@ -532,7 +532,7 @@ new sap.m.Button( {
                                       icon:"sap-icon://sys-cancel",
                                       type: sap.m.ButtonType.Reject,
                                       tap: [ function(oEvt) {         
-                                    	   
+                                    	 saveCloseScreenToLS()  
                                          formDG5.close()} ]   
                                   }),
                                   
@@ -546,15 +546,37 @@ new sap.m.Button( {
     	 MandatedForms=[];
     	  //initCloseButtons();
 		BuildCloseScreen();
-		getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
+		 
+		//getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
+		sap.m.IconTabBar
       },
       afterOpen:function(){  
+    	
          } ,
          beforeClose:function(){
               
          }
        
        })
+function saveCloseScreenToLS(){
+	if(sap.ui.getCore().byId("Close_Work").getState()){
+		FEV=sap.ui.getCore().byId("Close_Variance").getSelectedItem().getKey()
+		FER=sap.ui.getCore().byId("Close_Reason").getValue();
+	}else{
+		FEV="";
+		FER="";
+	}
+	scrvals=sap.ui.getCore().byId("Close_FunctionalLocation").getValue()+"|"+sap.ui.getCore().byId("Close_Equipment").getValue()+"|"+
+	        sap.ui.getCore().byId("Close_InshiftCode").getSelectedItem().getKey()+"|"+sap.ui.getCore().byId("Close_InShiftTime").getValue()+"|"+
+	        sap.ui.getCore().byId("Close_OutshiftCode").getSelectedItem().getKey()+"|"+sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()+"|"+
+	        oSwitchFlooding.getState()+"|"+oSwitchPollution.getState()+"|"+oSwitchCustFeed.getState()+"|"+
+	        sap.ui.getCore().byId("Close_ProblemGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().byId("Close_ProblemCode").getSelectedItem().getKey()+"|"+
+	        sap.ui.getCore().byId("Close_ActionGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().byId("Close_ActionCode").getSelectedItem().getKey()+"|"+
+	        sap.ui.getCore().byId("Close_ImpactGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().byId("Close_ImpactCode").getSelectedItem().getKey()+"|"+
+	        sap.ui.getCore().byId("Close_LongText").getValue()+"|"+sap.ui.getCore().byId("Close_Work").getState()+"|"+
+	        FEV+"|"+FER;
+	localStorage.setItem("closeScreen",scrvals)
+}
 function checkDG5Complete(){
 	 
 	 		if(	oSwitchFlooding.getState()){
@@ -5870,40 +5892,139 @@ function BuildChangeStatusReject(){
 		}
 
 function BuildCloseScreen(){
+	var PAIVisible = true;
+	if((CurrentJobProfile==null)||
+			(CurrentJobProfile==null)){
+		PAIVisible=false;
+	}
+	initscr=false
+	scrvals=localStorage.getItem("closeScreen");
+	
+	if (scrvals.length>5){
+		scrFlds=scrvals.split("|");
+		
+		initscr=true;
+	}
+	
+	sap.ui.getCore().getElementById("DG5tabBar").setSelectedKey("DG51")
 	initCloseButtons();
-	sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(CurrentJobFL)
-	sap.ui.getCore().getElementById("Close_Equipment").setValue(CurrentJobEQ)
-	sap.ui.getCore().getElementById("Close_LongText").setValue("")
-var PAIVisible = true;
-if((CurrentJobProfile==null)||
-		(CurrentJobProfile==null)){
-	PAIVisible=false;
-}
-sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false)   
-sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)   
-sap.ui.getCore().getElementById("DG51F1C2").setVisible(PAIVisible)
-sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
+	sap.ui.getCore().getElementById("DG51F1C2").setVisible(PAIVisible)
+	sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
+	if(initscr){ //Reloadingf screen from the Local Storage
+		sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(scrFlds[0])
+		sap.ui.getCore().getElementById("Close_Equipment").setValue(scrFlds[1])
+		sap.ui.getCore().getElementById("Close_LongText").setValue(scrFlds[15])
+		if(scrFlds[6]=="true"){
+			oSwitchFlooding.setState(true)
+		}else{
+			oSwitchFlooding.setState(false)
+		}
+		if(scrFlds[7]=="true"){
+			oSwitchPollution.setState(true)
+		}else{
+			oSwitchPollution.setState(false)
+		}
+		if(scrFlds[8]=="true"){
+			oSwitchCustFeed.setState(true)
+		}else{
+			oSwitchCustFeed.setState(false)
+		}
+		  
+		if(scrFlds[16]=="true"){
+			
+			sap.ui.getCore().getElementById("Close_Work").setState(true)
+			sap.ui.getCore().getElementById("FEClose_Variance").setVisible(true) 
+			sap.ui.getCore().getElementById("FEClose_Reason").setVisible(true)   		
+			
+			sap.ui.getCore().getElementById("Close_Reason").setValue(scrFlds[18])   
+		}else{
+			
+			sap.ui.getCore().getElementById("Close_Work").setState(false)
+			sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false) 
+			sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)   
+			sap.ui.getCore().getElementById("Close_Reason").setValue("") 
+		}
+		
+	}else{
+		sap.ui.getCore().getElementById("Close_Work").setState(false)
+		sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(CurrentJobFL)
+		sap.ui.getCore().getElementById("Close_Equipment").setValue(CurrentJobEQ)
+		sap.ui.getCore().getElementById("Close_LongText").setValue("")
+		sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false)   
+		sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)  
+		oSwitchPollution.setState(false)
+		oSwitchFlooding.setState(false)
+		oSwitchCustFeed.setState(false)
+
+
+	}
+
+	setCloseswitch()
 
 		var SQLStatement="";
 		var FirstVal="";
 		SQLStatement="select * from refpaicodes where catalogue = 'P' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
-		
+		sap.ui.getCore().getElementById("Close_ProblemGroup").destroyItems();
+		sap.ui.getCore().getElementById("Close_ProblemGroup").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		sap.ui.getCore().getElementById("Close_ProblemCode").destroyItems();
+		sap.ui.getCore().getElementById("Close_ProblemCode").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: ''
+				}))
+		sap.ui.getCore().getElementById("Close_InshiftCode").destroyItems();
+		sap.ui.getCore().getElementById("Close_InshiftCode").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		defaultInVal="NOTSELECTED"
+		sap.ui.getCore().getElementById("Close_OutshiftCode").destroyItems();
+		sap.ui.getCore().getElementById("Close_OutshiftCode").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		defaultOutVal="NOTSELECTED"
+		sap.ui.getCore().getElementById("Close_ActionGroup").destroyItems();
+		sap.ui.getCore().getElementById("Close_ActionGroup").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		sap.ui.getCore().getElementById("Close_ActionCode").destroyItems();
+		sap.ui.getCore().getElementById("Close_ActionCode").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: ''
+				}))	
+		sap.ui.getCore().getElementById("Close_Variance").destroyItems();
+		sap.ui.getCore().getElementById("Close_Variance").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		sap.ui.getCore().getElementById("Close_ImpactGroup").destroyItems();
+		sap.ui.getCore().getElementById("Close_ImpactGroup").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: 'Please Select'
+				}))
+		sap.ui.getCore().getElementById("Close_ImpactCode").destroyItems();
+		sap.ui.getCore().getElementById("Close_ImpactCode").addItem(
+				new sap.ui.core.Item({
+					key: "NOTSELECTED",
+					text: ''
+				}))
 		var ToOutput="";
 			html5sql.process(SQLStatement,
 			 function(transaction, results, rowsArray){
 				
-				sap.ui.getCore().getElementById("Close_ProblemGroup").destroyItems();
-				sap.ui.getCore().getElementById("Close_ProblemGroup").addItem(
-						new sap.ui.core.Item({
-							key: "NOTSELECTED",
-							text: 'Please Select'
-						}))
-				sap.ui.getCore().getElementById("Close_ProblemCode").destroyItems();
-				sap.ui.getCore().getElementById("Close_ProblemCode").addItem(
-						new sap.ui.core.Item({
-							key: "NOTSELECTED",
-							text: ''
-						}))
+				
 
 					for (var n = 0; n < rowsArray.length; n++) {
 						item = rowsArray[n];
@@ -5913,35 +6034,16 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 									text: item.kurztext_group
 								}))
 					}
+					if(initscr){ //Reloadingf screen from the Local Storage
+						
+						sap.ui.getCore().getElementById("Close_ProblemGroup").setSelectedKey(scrFlds[9])
+						BuildCloseProblemCodes(scrFlds[9],scrFlds[10]);
+					}
 					SQLStatement="select * from refpaicodes where catalogue = 'R' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
 					html5sql.process(SQLStatement,
 							 function(transaction, results, rowsArray){
-								sap.ui.getCore().getElementById("Close_InshiftCode").destroyItems();
-								sap.ui.getCore().getElementById("Close_InshiftCode").addItem(
-										new sap.ui.core.Item({
-											key: "NOTSELECTED",
-											text: 'Please Select'
-										}))
-								defaultInVal="NOTSELECTED"
-								sap.ui.getCore().getElementById("Close_OutshiftCode").destroyItems();
-								sap.ui.getCore().getElementById("Close_OutshiftCode").addItem(
-										new sap.ui.core.Item({
-											key: "NOTSELECTED",
-											text: 'Please Select'
-										}))
-								defaultOutVal="NOTSELECTED"
-								sap.ui.getCore().getElementById("Close_ActionGroup").destroyItems();
-								sap.ui.getCore().getElementById("Close_ActionGroup").addItem(
-										new sap.ui.core.Item({
-											key: "NOTSELECTED",
-											text: 'Please Select'
-										}))
-								sap.ui.getCore().getElementById("Close_ActionCode").destroyItems();
-								sap.ui.getCore().getElementById("Close_ActionCode").addItem(
-										new sap.ui.core.Item({
-											key: "NOTSELECTED",
-											text: ''
-										}))								
+								
+								
 									for (var n = 0; n < rowsArray.length; n++) {
 										item = rowsArray[n];
 										sap.ui.getCore().getElementById("Close_ActionGroup").addItem(
@@ -5950,23 +6052,15 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 													text: item.kurztext_group
 												}))
 									}
-								
+									if(initscr){ //Reloadingf screen from the Local Storage
+										sap.ui.getCore().getElementById("Close_ActionGroup").setSelectedKey(scrFlds[11])
+										BuildCloseActionCodes(scrFlds[11],scrFlds[12]);
+									}
 									SQLStatement="select * from refpaicodes where catalogue = 'S' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
 									html5sql.process(SQLStatement,
 											 function(transaction, results, rowsArray){
 										
-												sap.ui.getCore().getElementById("Close_ImpactGroup").destroyItems();
-												sap.ui.getCore().getElementById("Close_ImpactGroup").addItem(
-														new sap.ui.core.Item({
-															key: "NOTSELECTED",
-															text: 'Please Select'
-														}))
-												sap.ui.getCore().getElementById("Close_ImpactCode").destroyItems();
-												sap.ui.getCore().getElementById("Close_ImpactCode").addItem(
-														new sap.ui.core.Item({
-															key: "NOTSELECTED",
-															text: ''
-														}))
+
 													for (var n = 0; n < rowsArray.length; n++) {
 														item = rowsArray[n];
 														sap.ui.getCore().getElementById("Close_ImpactGroup").addItem(
@@ -5974,16 +6068,17 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 																	key: item.codegrp,
 																	text: item.kurztext_group
 																}))
+
+													}
+													if(initscr){ //Reloadingf screen from the Local Storage
+														sap.ui.getCore().getElementById("Close_ImpactGroup").setSelectedKey(scrFlds[13])
+														BuildCloseImpactCodes(scrFlds[13],scrFlds[14]);
+	
 													}
 													html5sql.process("select * from refvariancesrfv where job_activity = 'ADD'  and  work_cntr = '"+CurrentJobWorkCentre+"'  order  by dev_reas_txt",
 															 function(transaction, results, rowsArray){
 																
-																sap.ui.getCore().getElementById("Close_Variance").destroyItems();
-																sap.ui.getCore().getElementById("Close_Variance").addItem(
-																		new sap.ui.core.Item({
-																			key: "NOTSELECTED",
-																			text: 'Please Select'
-																		}))
+																
 																	for (var n = 0; n < rowsArray.length; n++) {
 																		item = rowsArray[n];
 																		sap.ui.getCore().getElementById("Close_Variance").addItem(
@@ -5992,7 +6087,10 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 																					text: item.dev_reas_txt
 																				}))
 																	}
-
+																	if(initscr){ //Reloadingf screen from the Local Storage
+																		sap.ui.getCore().getElementById("Close_Variance").setSelectedKey(scrFlds[17])
+																		
+																	}
 																html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
 																		 function(transaction, results, rowsArray){
 																			
@@ -6078,7 +6176,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 			);
 
 		}
- function BuildCloseProblemCodes(grp){
+ function BuildCloseProblemCodes(grp,selected){
 	
 		var SQLStatement="";
 		var FirstVal="";
@@ -6102,8 +6200,9 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 									key: item.code,
 									text: item.kurztext_code
 								}))
+				
 					}
-
+				sap.ui.getCore().getElementById("Close_ProblemCode").setSelectedKey(selected)
 					
 			 },
 			 function(error, statement){
@@ -6112,7 +6211,7 @@ sap.ui.getCore().getElementById("FEClose_LongText").setVisible(PAIVisible)
 			);
 
 		} 
-function BuildCloseActionCodes(grp){
+function BuildCloseActionCodes(grp,selected){
 	
 	var SQLStatement="";
 	var FirstVal="";
@@ -6138,7 +6237,7 @@ function BuildCloseActionCodes(grp){
 							}))
 				}
 
-				
+			sap.ui.getCore().getElementById("Close_ActionCode").setSelectedKey(selected)	
 		 },
 		 function(error, statement){
 			
@@ -6146,7 +6245,7 @@ function BuildCloseActionCodes(grp){
 		);
 
 	}
-function BuildCloseImpactCodes(grp){
+function BuildCloseImpactCodes(grp,selected){
 	
 	var SQLStatement="";
 	var FirstVal="";
@@ -6170,7 +6269,7 @@ function BuildCloseImpactCodes(grp){
 								text: item.kurztext_code
 							}))
 				}
-
+			sap.ui.getCore().getElementById("Close_ImpactCode").setSelectedKey(selected)
 				
 		 },
 		 function(error, statement){

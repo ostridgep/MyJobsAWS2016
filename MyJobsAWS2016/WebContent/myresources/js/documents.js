@@ -65,7 +65,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 
 		            ],
 		            
-		            beforeOpen:function(){
+		            afterOpen:function(){
 
 		    			document.getElementById('DocTot').innerHTML="0"
 		    			document.getElementById('DocDel').innerHTML="0"

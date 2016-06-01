@@ -152,7 +152,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                          change: function(oControlEvent) {
                                                                 setCloseButtons(oControlEvent.getParameter("selectedItem").getKey())
-                                                                BuildCloseProblemCodes(oControlEvent.getParameter("selectedItem").getKey());
+                                                                BuildCloseProblemCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
                                                          }
                                                   }),
                                                   ]
@@ -182,7 +182,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                  change: function(oControlEvent) {
                                                         
-                                                	 BuildCloseActionCodes(oControlEvent.getParameter("selectedItem").getKey());
+                                                	 BuildCloseActionCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
                                                  }
                                           }),
                                           ]
@@ -212,7 +212,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                  change: function(oControlEvent) {
                                                         
-                                                	 BuildCloseImpactCodes(oControlEvent.getParameter("selectedItem").getKey());
+                                                	 BuildCloseImpactCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
                                                  }
                                           }),
                                           ]
@@ -334,15 +334,18 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                          new sap.ui.layout.form.FormElement({
                                                 label: "Additional Work Required",
                                                 fields: [ new sap.m.Switch("Close_Work",{
-                                                state:false,
+                                              
+                                                
+                                				customTextOn:"Yes",
+                                				customTextOff:"No",
                                                 change:[function(evt){
                                                        
                                                     	   sap.ui.getCore().getElementById("FEClose_Variance").setVisible(this.getState())   
                                                     	   sap.ui.getCore().getElementById("FEClose_Reason").setVisible(this.getState())   
                                                        
                                                        
-                                                }],
-                                                type: sap.m.SwitchType.AcceptReject
+                                                }]
+                                                
                                          })
                                                 ]
                                          }),
@@ -387,7 +390,7 @@ function buildDG5Tabs(){
        var tabBar  = new sap.m.IconTabBar('DG5tabBar',
                      {
                            expanded:'{device>/isNoPhone}',
-
+                           expandable:false,
                            select:[function(oEvt) {   
                                   currentPage=window.location.href
 

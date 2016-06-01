@@ -62,12 +62,12 @@
                     </div>
 
                     <div class="col-md-6 col-sm-6">
-                        <input name="pollutionsite" type="text" class="feedback-input" placeholder="Pollution Site" id="pollutionsite" />
+                        <input name="pollutionsite" type="text" class="feedback-input" placeholder="Pollution Site" id="pollutionsite" maxlength="30" size= "30"/>
                         <select class="feedback-input" id="watercoursetype" name="watercoursetype" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='WCT' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  disabled selected>Watercourse Type</option>
 
                         </select>
-                        <input name="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)" type="number" min="0"  step="0.01" max="9999999.99" id="sizeofimpact" />
+                        <input name="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)" type="number" min="0"  step="0.01" maxlength="10" max="9999999.99" id="sizeofimpact" size= "10"/>
                         <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  disabled selected>Aesthetic Impact</option>
                             
