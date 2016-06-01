@@ -67,7 +67,7 @@
                             <option value=""  disabled selected>Watercourse Type</option>
 
                         </select>
-                        <input name="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)" type="TEXT"  maxlength=10 pattern="\d* id="sizeofimpact" size= "10"/>
+                        <input id="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)"  type="TEXT"  maxlength=10 pattern="[0-9]* name="sizeofimpact"/>
                         <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  disabled selected>Aesthetic Impact</option>
                             
@@ -104,7 +104,7 @@
                         <tr>
                             <th>Upstream</th>
                             
-                            <td><input class="feedback-input-table" id="upstreamdistance"  type="TEXT"  maxlength=8 pattern="\d* name="upstreamdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="upstreamdistance"  type="TEXT"  maxlength=8 pattern="[0-9]* name="upstreamdistance" disabled /></td>
                             <td><input class="feedback-input-table" id="upstreamonsitenh3"  type="TEXT"  maxlength=10 pattern="\d* name="upstreamonsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
