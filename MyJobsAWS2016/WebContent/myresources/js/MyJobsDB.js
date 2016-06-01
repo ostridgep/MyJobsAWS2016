@@ -110,7 +110,7 @@ empid=localStorage.getItem("EmployeeID")
 							
 							
 							
-							
+						
 
 
 						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+
