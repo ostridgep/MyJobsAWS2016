@@ -86,8 +86,8 @@ empid=localStorage.getItem("EmployeeID")
 							if(jsonstr[0].upstreamsenttolabV=="YES"){	upstreamsenttolab="X"	}
 							if(jsonstr[0].ptofdiscsenttolabV=="YES"){	ptofdiscsenttolab="X"	}
 							if(jsonstr[0].downstream1senttolabV=="YES"){	downstream1senttolab="X"	}
-							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolabV="X"	}
-							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolabV="X"	}
+							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolab="X"	}
+							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolab="X"	}
 
 						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+"&PPIA="+orderno+','+
 							

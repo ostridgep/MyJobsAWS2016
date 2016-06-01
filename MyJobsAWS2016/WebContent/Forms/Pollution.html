@@ -67,7 +67,7 @@
                             <option value=""  disabled selected>Watercourse Type</option>
 
                         </select>
-                        <input name="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)" type="number" min="0"  step="0.01" maxlength="10" max="9999999.99" id="sizeofimpact" size= "10"/>
+                        <input name="sizeofimpact" class="feedback-input" placeholder="Size of Impact (m2)" type="TEXT"  maxlength=10 pattern="\d* id="sizeofimpact" size= "10"/>
                         <select class="feedback-input" id="aestheticimpact" name="aestheticimpact" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'PI' AND coderef='AEI' AND LEVEL='2' ORDER BY CODEDESC">
                             <option value=""  disabled selected>Aesthetic Impact</option>
                             
@@ -103,8 +103,9 @@
                         </tr>
                         <tr>
                             <th>Upstream</th>
-                            <td><input class="feedback-input-table" id="upstreamdistance"  type="number" min="0"  step="1" max="99999999" name="upstreamdistance" disabled /></td>
-                            <td><input class="feedback-input-table" id="upstreamonsitenh3"  type="number" min="0"  step="0.01" max="9999999.99" name="upstreamonsitenh3" disabled/></td>
+                            
+                            <td><input class="feedback-input-table" id="upstreamdistance"  type="TEXT"  maxlength=8 pattern="\d* name="upstreamdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3"  type="TEXT"  maxlength=10 pattern="\d* name="upstreamonsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
@@ -117,8 +118,8 @@
                         </tr>
                         <tr>
                             <th>Pt of Disc</th>
-                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="number" min="0"  step="1" max="99999999"  name="ptofdiscdistance" disabled /></td>
-                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   type="number" min="0"  step="0.01" max="9999999.99" name="ptofdisconsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="TEXT"  maxlength=8 pattern="\d*  name="ptofdiscdistance" disabled /></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   type="TEXT"  maxlength=10 pattern="\d*  name="ptofdisconsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
@@ -130,8 +131,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 1</th>
-                            <td><input class="feedback-input-table" id="downstream1distance" type="number" min="0"  step="1" max="99999999" name="downstream1distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream1onsitenh3"    type="number" min="0"  step="0.01" max="9999999.99"  name="downstream1onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1distance" type="TEXT"  maxlength=8 pattern="\d* name="downstream1distance" PLACEHOLDER: "99999999" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3"    type="TEXT"  maxlength=10 pattern="\d*   name="downstream1onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
@@ -143,8 +144,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 2</th>
-                            <td><input class="feedback-input-table" id="downstream2distance" type="number" min="0"  step="1" max="99999999" name="downstream2distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="number" min="0"  step="0.01" max="9999999.99"  name="downstream2onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2distance" type="TEXT"  maxlength=8 pattern="\d* name="downstream2distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="TEXT"  maxlength=10 pattern="\d*   name="downstream2onsitenh3" disabled/></td>
                             <td>
                             <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
@@ -156,8 +157,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 3</th>
-                            <td><input class="feedback-input-table" id="downstream3distance" type="number" min="0"  step="1" max="99999999"  name="downstream3distance" disabled/></td>
-                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="number" min="0"  step="0.01" max="9999999.99" name="downstream3onsitenh3" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3distance" type="TEXT"  maxlength=8 pattern="\d*   name="downstream3distance" disabled/></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="TEXT"  maxlength=10 pattern="\d*  name="downstream3onsitenh3" disabled/></td>
                             <td>
                              <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
