@@ -149,17 +149,24 @@ empid=localStorage.getItem("EmployeeID")
 						}	
 						//need to populate the PHDR
 						//sort date & time formats
+						gridref=jsonstr[0].gridref.split(",");
+						if(gridref.length>1){
+							ENRef=gridref[0].substring(0,9)+":"+gridref[1].substring(0,9)
+						}else{
+							ENRef=gridref
+						}
+						
 						flooddate=jsonstr[0].flooddate.substring(0,2)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(6,10)
 						floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
 						attenddate=jsonstr[0].attendancedate.substring(0,2)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(6,10)
 						attendtime=jsonstr[0].attendancetime.substring(0,2)+jsonstr[0].attendancetime.substring(3,5)+jsonstr[0].attendancetime.substring(6,8)
 						params+="&PHDR="+orderno+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
-						jsonstr[0].gridref+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+
+						ENRef+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+
 						""+','+"Comments"+','+jsonstr[0].spillsize+","+attenddate+","+attendtime+','+
 						jsonstr[0].attendanceweather+","+jsonstr[0].previousflooding+','+jsonstr[0].floodingsource+','+jsonstr[0].rootcause+
 						"&PDEPTH="+pdepth+
 						"&PITEM="+pitem
-					    alert(params)		
+					   
 
 							sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
 						}
@@ -463,7 +470,7 @@ function sendSAPData(page,params,timedOutSQL){
 	console.log(page+getTime())
 	
 	var myurl=SAPServerPrefix+page+SAPServerSuffix+params;
-	if (page=="MyJobsDG5Create.htm"){
+	if ((page=="MyJobsDG5Create.htm")||(page=="MyJobsPIACreate.htm")){
 		
 		alert(myurl)
 	}
