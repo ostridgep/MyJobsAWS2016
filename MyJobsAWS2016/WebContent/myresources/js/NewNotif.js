@@ -15,7 +15,7 @@ var newEQField = 			new sap.m.Input("NewEquipment",{ type: sap.m.InputType.Input
 		}]});
 		//newEQField._getValueHelpIcon().setSrc("sap-icon://bar-code");
 var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
-    title:" Notification1",
+    title:"Raise New Job",
     modal: true,
     contentWidth:"1em",
     buttons: [
@@ -36,7 +36,7 @@ var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
 										sap.ui.getCore().byId("NewDetails").getValue(),
 										ndate[0], ndate[1],
 										sap.ui.getCore().byId("NewFuncLoc").getValue(),
-										sap.ui.getCore().byId("NewEquipment").getValue())
+										sap.ui.getCore().byId("NewEquipment").getValue(),sap.ui.getCore().byId("NewAssignToMe").getState())
 
 
 											formNewNotif.close()
@@ -139,9 +139,18 @@ var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
 			new sap.m.Label({text:"Equipment",
 				}),
 				newEQField,								
-                  
+				new sap.m.Label({text:"Assign to me"}),
+				new sap.m.Switch("NewAssignToMe",{
+					state: false,
+					customTextOn:"Yes",
+					customTextOff:"No",
+					change: function(evt){
+
+				    }
+				})     
 							]
  					})
+ 					
 
             ],
 	contentWidth:"60%",
