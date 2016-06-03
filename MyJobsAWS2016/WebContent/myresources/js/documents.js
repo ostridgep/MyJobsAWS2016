@@ -141,8 +141,9 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				new sap.m.Button( {
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
-				    tap: [ function(oEvt) {		  
-						 
+				    tap: [ function(oEvt) {		 
+				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , size, getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList())
+
 				    	formPhotoDetails.close()
 						  } ]
 				}),
@@ -598,19 +599,8 @@ function moveFile(fileUri,dir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
             	selectedPhoto=entry.fullPath
-            	html5sql.process(sqlstatement,
-						 function(){
-			            		formPhotoDetails.open()
-			            		if(getPhotoCaller=="JOB"){
-			                		buildJobPhotoList();
-			                	}
-						
-						 },
-					 function(error, statement){
-							 opMessage("Error: " + error.message + " when processing photo " + statement);
-
-						 }        
-					);	
+            	formPhotoDetails.open()
+	
             	
                
             }, function (error) {
@@ -642,23 +632,10 @@ function moveFile2(fileUri,dir,cnt) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	alert("D:"+opdir)
-            	alert("f:"+newFileName)
-            	alert("p:"+entry.fullPath)
-            	selectedPhoto=entry.fullPath
-            	html5sql.process(sqlstatement,
-						 function(){
-			            		formPhotoDetails.open()
-			            		if(getPhotoCaller=="JOB"){
-			                		buildJobPhotoList();
-			                	}
-						
-						 },
-					 function(error, statement){
-							 opMessage("Error: " + error.message + " when processing photo select " + statement);
 
-						 }        
-					);			
+            	selectedPhoto=entry.fullPath
+            	formPhotoDetails.open()
+            			
             	
             	
                

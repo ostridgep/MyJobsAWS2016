@@ -867,6 +867,21 @@ function SetAllConfigParam(p1,v1,p2,v2,p3,v3,p4,v4,p5,v5){
 	SetConfigParam(p4,v4);
 	SetConfigParam(p5,v5);
 }
+function CreatePhotoEntry(orderno, opno, url, name, desc , size, date, status,cb){
+	
+	opMessage("Creating User "+muser+":"+vehiclereg+":"+u+":"+p+":"+employeeid);
+
+	html5sql.process("INSERT INTO MyJobsPhotos (orderno, opno, url, name, desc , size, date, status) VALUES ('"+
+			orderno+"','" +opno+"','" +url+"','" +name+"','"+desc+"','"+size+"','" + date+"','" + status+"');",
+	 function(){
+		cb
+	 },
+	 function(error, statement){
+		opMessage("Error: " + error.message + " when inserting Photo" + statement);
+	 }        
+	);
+
+}
 //*************************************************************************************************************************
 //
 //  User Maintenance Functions

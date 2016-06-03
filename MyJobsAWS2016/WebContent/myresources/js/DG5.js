@@ -2,6 +2,7 @@ var oSwitchFlooding = new sap.m.Switch({
 				state: false,
 				customTextOn:"Yes",
 				customTextOff:"No",
+				width:"100%",
 				change: function(evt){
 					
 					setCloseswitch()
@@ -15,6 +16,7 @@ var oSwitchFlooding = new sap.m.Switch({
 				state: false,
 				customTextOn:"Yes",
 				customTextOff:"No",
+				width:"100%",
 					change: function(evt){
 						
 						setCloseswitch()
@@ -26,6 +28,7 @@ var oSwitchFlooding = new sap.m.Switch({
 				state: false,
 				customTextOn:"Yes",
 				customTextOff:"No",
+				width:"100%",
 					change: function(evt){
 						
 						setCloseswitch()
@@ -126,11 +129,11 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                        }),
                     					 new sap.ui.layout.form.FormElement({
                                              label: "Pollution Incident?",
-                                             fields: [oSwitchPollution,new sap.m.Label({text:""}),new sap.m.Label({text:""})]
+                                             fields: [oSwitchPollution,new sap.m.Label({text:""})]
                     					 }) ,
                     					 new sap.ui.layout.form.FormElement({
                                              label: "Customer Feedback?",
-                                             fields: [oSwitchCustFeed,new sap.m.Label({text:""}),new sap.m.Label({text:""}),new sap.m.Label({text:""})]
+                                             fields: [oSwitchCustFeed,new sap.m.Label({text:""})]
                     					 }) 
                                          ],
                                   layoutData: new sap.ui.core.VariantLayoutData({
