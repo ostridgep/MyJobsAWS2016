@@ -132,6 +132,34 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            	buildPhotoDetails()
 	            }
 	 })
+function uploadPhoto(imageURI) {
+	 
+	   var options = new FileUploadOptions();
+	   options.fileKey="file";
+	   options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+	   options.mimeType="image/jpeg";
+
+	   var params = new Object();
+	   params.user = "POSTRIDGE";
+	   params.filename = "Local"+options.fileName;
+
+	   options.params = params;
+	   options.chunkedMode = false;
+
+	   var ft = new FileTransfer();
+	   alert("xx"+imageURI);
+	   ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
+	}
+function win(r) {
+    alert("Code = " + r.responseCode);
+    alert("Response = " + r.response);
+    alert("Sent = " + r.bytesSent);
+   
+}
+
+function fail(error) {
+    alert("An error has occurred: Code = " + error.code);
+}
 function buildPhotoDetails(){
 	
 html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
@@ -172,7 +200,14 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     modal: true,
     contentWidth:"1em",
     buttons: [
-   
+new sap.m.Button( {
+    text: "UpLoad",
+    type: 	sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {		  
+    	uploadPhoto(selectedPhoto)
+    	//formPhotoDetails.close()
+		  } ]
+}),
 				new sap.m.Button( {
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
