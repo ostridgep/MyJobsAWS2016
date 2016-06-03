@@ -6,6 +6,7 @@ var downloadCount;
 var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
+var selectedPhotoID=0;
 var DeviceStorageDirectory;
 var AppDocDirectory;
 
@@ -128,10 +129,30 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            ],
 	            
 	            beforeOpen:function(){
-	            	alert(selectedPhoto)
+	            	buildPhotoDetails()
 	            }
 	 })
+function buildPhotoDetails(){
+	
+html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
+		 function(transaction, results, rowsArray){
+			
+		
+			if( rowsArray.length>0) {
+				sap.ui.getCore().getElementById('NewPhotoName').setValue(rowsArray[0].name)
+				sap.ui.getCore().getElementById('NewPhotoDetails').setValue(rowsArray[0].desc)
+				
+			 }else{
+				sap.ui.getCore().getElementById('NewPhotoName').setValue("")
+				sap.ui.getCore().getElementById('NewPhotoDetails').setValue("")
+			 }
 
+		 },
+		 function(error, statement){
+			 //outputLogToDB(); 
+		 }        
+		);
+}
 var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     title:"Display Photo",
     modal: true,
@@ -141,10 +162,18 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				new sap.m.Button( {
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
-				    tap: [ function(oEvt) {		 
-				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , "0", getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList)
-
-				    	formPhotoDetails.close()
+				    tap: [ function(oEvt) {	
+				    	if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
+							DisplayErrorMessage("Attach Photo", "Name is Mandatory")
+							}else{
+								if (selectedPhotoID==0){
+						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , "0", getSAPDate()+" "+getSAPTime(), "NEW")
+						    	}else{
+						    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
+						    	}
+						    	formPhotoDetails.close()
+							}
+				    	
 						  } ]
 				}),
 				new sap.m.Button( {
@@ -161,16 +190,6 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				minWidth : 1024,
 				maxContainerCols : 1,
 				content : 	[							
-new sap.m.Image("Ig311",{
-	src: "van1.gif",
-	width: "300px",
-	height: "300px"
-}),
-new sap.m.Image("I22",{
-	src: "file:///storage/emulated",
-	width: "300px",
-	height: "300px"
-}),
 				 			new sap.m.Image("confirmImage",{
 				 				src: selectedPhoto,
 				 				width: "300px",
@@ -192,7 +211,8 @@ new sap.m.Image("I22",{
             contentWidth:"360px",
             contentHeight: "60%",
             beforeOpen:function(){
-            	alert(selectedPhoto)
+            	buildPhotoDetails()
+            	
             }
  })
 var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
