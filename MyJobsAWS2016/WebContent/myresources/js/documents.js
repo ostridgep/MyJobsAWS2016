@@ -142,7 +142,7 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
 				    tap: [ function(oEvt) {		 
-				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , size, getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList())
+				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , size, getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList)
 
 				    	formPhotoDetails.close()
 						  } ]
@@ -598,7 +598,7 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	selectedPhoto=entry.fullPath
+            	selectedPhoto="file:///storage/emulated/0"+entry.fullPath
             	formPhotoDetails.open()
 	
             	
@@ -633,7 +633,7 @@ function moveFile2(fileUri,dir,cnt) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
 
-            	selectedPhoto=entry.fullPath
+            	selectedPhoto="file:///storage/emulated/0"+entry.fullPath
             	formPhotoDetails.open()
             			
             	
