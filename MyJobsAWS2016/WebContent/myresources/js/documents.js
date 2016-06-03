@@ -145,13 +145,13 @@ function uploadPhoto(imageURI) {
     params.filename = options.fileName;
 
     options.params = params;
-    options.chunkedMode = false;
+    //options.chunkedMode = false;
 alert(options.fileName);
     var ft = new FileTransfer();
     alert(imageURI);
     ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
     //ft.upload(imageURI, "http://192.168.1.20/FileUpload.php?user=POSTRIDGE&filename=x.jpg", win, fail, options);
-    movePic(imageURI);
+    //movePic(imageURI);
 }
 function uploadPhoto1(imageURI) {
 	 
@@ -172,9 +172,7 @@ function uploadPhoto1(imageURI) {
 	   ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
 	}
 function win(r) {
-    alert("Code = " + r.responseCode);
-    alert("Response = " + r.response);
-    alert("Sent = " + r.bytesSent);
+    alert("Code = " + r.responseCode+"\nResponse = " + r.response+"\nSent = " + r.bytesSent);
    
 }
 
