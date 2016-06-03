@@ -148,13 +148,15 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			 }
 			
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
+				  alert("1")
 			    oFile.file(function(readyFile) {
 			      var reader= new FileReader();
 			      reader.onloadend= function(evt) {
-			        document.getElementById("smallImage").style.display='block'; 
+			       alert("2:"+evt.target.result)
 			        sap.ui.getCore().getElementById('confirmImage').setSrc(evt.target.result);
 			      };
-			      //reader.readAsDataURL(readyFile); 
+			      reader.readAsDataURL(readyFile); 
+			      alert("3")
 			    });
 			  })
 			  }, function(err){
@@ -975,7 +977,7 @@ function downloadAll()
 	oProgInd.setDisplayValue("5" + "%");
 	percentagedownloaded=0;
 	filesToDownload = [];
-	alert(localStorage.getItem("DOCSERVER")+"Documents.json")
+	
     //$.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
     	$.getJSON(localStorage.getItem("DOCSERVER")+"Documents.json", function (data) {    
     	filesToDownload=data;
