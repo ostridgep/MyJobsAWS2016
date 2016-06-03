@@ -18,7 +18,7 @@ var mapProp = {
   };
 
   map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-  
+  map.checkResize()
   
   google.maps.event.addListener(map, 'click', function(event) {
     placeMarker(event.latLng);

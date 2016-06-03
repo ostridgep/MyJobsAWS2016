@@ -459,7 +459,7 @@ for(var i = theSelect.options.length-1;i>0;i--)
 						    option.value = rowsArray[r].value;
 						    theSelect.appendChild(option);
 					}
-					
+					theSelect.value="";
 		
 				},
 				 function(error, statement){

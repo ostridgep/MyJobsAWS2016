@@ -1,3 +1,14 @@
+
+jQuery.sap.require("sap.m.MessageBox");
+function DisplayErrorMessage(msgtitle,msgbody){
+sap.m.MessageBox.show(
+    msgbody, {
+        icon: sap.m.MessageBox.Icon.ERROR,
+        title: msgtitle,
+        actions: [sap.m.MessageBox.Action.OK]
+    }
+  );   
+}
 function validateDecimal(value, decimals, length) { 
 x=value.split(".")
 nlen = length-decimals;

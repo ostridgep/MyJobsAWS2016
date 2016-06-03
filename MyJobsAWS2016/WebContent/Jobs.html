@@ -471,21 +471,51 @@ new sap.m.Button( {
     type: sap.m.ButtonType.Accept,
     tap: [ function(oEvt) {  
     	 CloseError='0';
-    	 
-    	 if(((sap.ui.getCore().byId("Close_FunctionalLocation").getValue().length>0)||
-    			 (sap.ui.getCore().byId("Close_Equipment").getValue().length>0))&&
-    			 (sap.ui.getCore().byId("Close_InshiftCode").getSelectedKey()!="NOTSELECTED")||
-    			 ((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_OutshiftCode").getSelectedKey()!="NOTSELECTED"))||
-    			 (sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")||
-    			 (sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00"))
-    			 {
-    		 		CloseError='0'
-    			 }else{
-    				 CloseError='1'
-    			 }
+    	
+    	 if((sap.ui.getCore().byId("Close_FunctionalLocation").getValue().length>0)||(sap.ui.getCore().byId("Close_Equipment").getValue().length>0))
     			 
 
-		 			
+    			 {
+    		 
+    		 		
+    		 	   if((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()=="00:00")||((sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_OutshiftCode").getSelectedKey()!="NOTSELECTED")))
+    		    			 
+    	    			 {
+    		 		
+    		 		     if((sap.ui.getCore().byId("Close_InShiftTime").getValue()=="00:00")||((sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")&&(sap.ui.getCore().byId("Close_InshiftCode").getSelectedKey()!="NOTSELECTED")))
+		    		 	 
+		    	        			
+		         			 {
+		         		
+		    		 		if(sap.ui.getCore().byId("Close_InShiftTime").getValue()!="00:00")
+		             			
+				       			 {
+				       		
+				       		 		 CloseError='0'
+				       			 }else{
+				       				
+				       				 CloseError='InShiftZero'
+				       			 }
+		         			 }else{
+		         				
+		         				 CloseError='InShift'
+		         			 }
+    	    			 }else{
+    	    				 CloseError='OutOfShift'
+    	    			 }
+    			 }else{
+    				 CloseError='Asset'
+    			 }
+    			 
+    	
+
+    	 	 
+    	 
+    	 	
+    		
+    	 
+    	 
+    	 
     			
      	 if (CloseError=='0'){
     		if(	(sap.ui.getCore().byId("DG51F1C2").getVisible()==true)&&   				 
@@ -657,7 +687,7 @@ function checkFeedbackComplete(){
  							
  						}else{
 	 						if(rowsArray[0].lastupdated=="COMPLETE"){
-	 							CloseError='6'
+	 							CloseError='0'
 	 						}else{
 	 							CloseError='5'
 	 							
@@ -677,6 +707,7 @@ function checkFeedbackComplete(){
  		 } 
 }
 function processClose(){
+	
     if(CloseError=="0"){
     	
 		  setStatusChangeDT()
@@ -772,8 +803,14 @@ function processClose(){
 				
 				}else{
 					console.log("CloseError:"+CloseError)
-					if (CloseError=="1"){
-					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment\n-Time Entries")
+					if (CloseError=="Asset"){
+						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Functional Location\n-Equipment")
+						}else if (CloseError=="InShift"){
+						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-InShift Time")
+						}else if (CloseError=="OutOfShift"){
+						DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-OutOfShift Time")
+					}else if (CloseError=="InShiftZero"){
+					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-InShift Time mut be greater than 0")
 					}else if (CloseError=="2"){
 					DisplayErrorMessage("Close Job Error", "Close Details must be Completed\n-Problem - Action - Impact")
 					}else if (CloseError=="3"){

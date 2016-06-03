@@ -131,6 +131,45 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            	alert(selectedPhoto)
 	            }
 	 })
+
+var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
+    title:"Display Photo",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Test",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formPhotoDetails.close()
+						  } ]
+				}),
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formPhotoDetails.close()
+						  } ]
+				})
+				],					
+    content:[
+			new sap.m.Image("confirmImage",{
+				src: selectedPhoto,
+				width: "50px",
+				height: "50px"
+			}),
+			new sap.m.Label({text:"Details"}),
+			new sap.m.TextArea("NewDetails",{ rows: 3})
+
+            ],
+            
+            beforeOpen:function(){
+            	alert(selectedPhoto)
+            }
+ })
 var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
     title:"Attach Photo",
     modal: true,
@@ -535,19 +574,27 @@ function moveFile(fileUri,dir) {
                        oldFileUri = fileUri;
                        fileExt = "." + oldFileUri.split('.').pop();
 
-                       newFileName = datetime + fileExt;
+                       newFileName = CurrentOrderNo+CurrentOpNo+"-"+datetime + fileExt;
                   
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
                     	                             
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	if(getPhotoCaller=="JOB"){
-            		buildJobPhotoList();
-            	}
-            	if(getPhotoCaller=="DOC"){
-            		//buildPhotoList();
-            	}
+            	selectedPhoto=opdir+"/"+newFileName
+            	html5sql.process(sqlstatement,
+						 function(){
+			            		formPhotoDetails.open()
+			            		if(getPhotoCaller=="JOB"){
+			                		buildJobPhotoList();
+			                	}
+						
+						 },
+					 function(error, statement){
+							 opMessage("Error: " + error.message + " when processing photo " + statement);
+
+						 }        
+					);	
             	
                
             }, function (error) {
@@ -572,19 +619,28 @@ function moveFile2(fileUri,dir,cnt) {
                        oldFileUri = fileUri;
                        fileExt = "." + oldFileUri.split('.').pop();
 
-                       newFileName = datetime +"_"+cnt+ fileExt;
+                       newFileName = CurrentOrderNo+CurrentOpNo+"-"+datetime +"_"+cnt+ fileExt;
                   
                        window.resolveLocalFileSystemURL(fileUri, function (file) {
                     	                             
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	if(getPhotoCaller=="JOB"){
-            		buildJobPhotoList();
-            	}
-            	if(getPhotoCaller=="DOC"){
-            		//buildPhotoList();
-            	}
+            	selectedPhoto=opdir+"/"+newFileName
+            	html5sql.process(sqlstatement,
+						 function(){
+			            		formPhotoDetails.open()
+			            		if(getPhotoCaller=="JOB"){
+			                		buildJobPhotoList();
+			                	}
+						
+						 },
+					 function(error, statement){
+							 opMessage("Error: " + error.message + " when processing photo select " + statement);
+
+						 }        
+					);			
+            	
             	
                
             }, function (error) {

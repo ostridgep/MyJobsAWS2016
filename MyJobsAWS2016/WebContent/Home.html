@@ -1596,16 +1596,7 @@ $(function() {
 
 	
 })
-jQuery.sap.require("sap.m.MessageBox");
-function DisplayErrorMessage(msgtitle,msgbody){
-sap.m.MessageBox.show(
-    msgbody, {
-        icon: sap.m.MessageBox.Icon.ERROR,
-        title: msgtitle,
-        actions: [sap.m.MessageBox.Action.OK]
-    }
-  );   
-}
+
 function SaveVehicleCheck(vreg,vdesc,vmileage,vtype){
     var raiseNotification=false;
     var NotificationText=""
