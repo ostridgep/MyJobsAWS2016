@@ -142,7 +142,7 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
 				    tap: [ function(oEvt) {		 
-				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , size, getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList)
+				    	CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , "0", getShortSAPDate()+" "+getSAPTime(), "NEW",buildJobPhotoList)
 
 				    	formPhotoDetails.close()
 						  } ]
@@ -161,7 +161,16 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				minWidth : 1024,
 				maxContainerCols : 1,
 				content : 	[							
-				          	 new sap.m.Label({text:""}),
+new sap.m.Image("Ig311",{
+	src: "van1.gif",
+	width: "300px",
+	height: "300px"
+}),
+new sap.m.Image("I22",{
+	src: "file:///storage/emulated",
+	width: "300px",
+	height: "300px"
+}),
 				 			new sap.m.Image("confirmImage",{
 				 				src: selectedPhoto,
 				 				width: "300px",
