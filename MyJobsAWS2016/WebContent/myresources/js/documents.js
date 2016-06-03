@@ -139,8 +139,8 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     buttons: [
    
 				new sap.m.Button( {
-				    text: "Test",
-				    type: 	sap.m.ButtonType.Reject,
+				    text: "Save",
+				    type: 	sap.m.ButtonType.Accept,
 				    tap: [ function(oEvt) {		  
 						 
 				    	formPhotoDetails.close()
@@ -160,20 +160,27 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				minWidth : 1024,
 				maxContainerCols : 1,
 				content : 	[							
-				           
+				          	 new sap.m.Label({text:""}),
 				 			new sap.m.Image("confirmImage",{
 				 				src: selectedPhoto,
-				 				width: "200px",
-				 				height: "200px"
+				 				width: "300px",
+				 				height: "300px"
 				 			}),
+				 			new sap.m.Label({text:"Name"}),
+				 			new sap.m.Input("NewPhotoName",{ type: sap.m.InputType.Input, maxLength:30,width:"300px"}),
 				 			new sap.m.Label({text:"Details"}),
-				 			new sap.m.TextArea("NewPhotoDetails",{ rows:5})
+				 			new sap.m.TextArea("NewPhotoDetails",{
+				 				
+				 				height:"200px",
+				 				width:"300px"
+				 					})
 							]
  				})
 
 
             ],
-            
+            contentWidth:"360px",
+            contentHeight: "60%",
             beforeOpen:function(){
             	alert(selectedPhoto)
             }
@@ -262,6 +269,7 @@ function selectPhoto(){
 	);
 }
 function showFile(file){
+	alert(file)
 	window.plugins.fileOpener.open(file)
 	//window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
 	
@@ -637,7 +645,7 @@ function moveFile2(fileUri,dir,cnt) {
             	alert("D:"+opdir)
             	alert("f:"+newFileName)
             	alert("p:"+entry.fullPath)
-            	selectedPhoto=
+            	selectedPhoto=entry.fullPath
             	html5sql.process(sqlstatement,
 						 function(){
 			            		formPhotoDetails.open()

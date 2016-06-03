@@ -122,7 +122,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                       //new sap.m.Label({text:"sewage escape xxxxxxxxx"}),oSwitchFlooding,
                                       new sap.ui.layout.form.FormElement({
                                           label: "Escape of sewage?",
-                                          fields: [oSwitchFlooding,new sap.m.Label({text:""}),new sap.m.Label({text:""})]
+                                          fields: [oSwitchFlooding,new sap.m.Label({text:""})]
                                        }),
                     					 new sap.ui.layout.form.FormElement({
                                              label: "Pollution Incident?",
@@ -130,7 +130,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                     					 }) ,
                     					 new sap.ui.layout.form.FormElement({
                                              label: "Customer Feedback?",
-                                             fields: [oSwitchCustFeed,new sap.m.Label({text:""}),new sap.m.Label({text:""})]
+                                             fields: [oSwitchCustFeed,new sap.m.Label({text:""}),new sap.m.Label({text:""}),new sap.m.Label({text:""})]
                     					 }) 
                                          ],
                                   layoutData: new sap.ui.core.VariantLayoutData({
