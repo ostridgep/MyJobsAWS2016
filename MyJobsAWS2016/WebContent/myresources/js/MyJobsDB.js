@@ -2702,6 +2702,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT);'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT);'+
 					
@@ -2887,6 +2888,7 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  MyJobsDetsEQ;'+
 					'DROP TABLE IF EXISTS  MyJobsDetsATTR;'+
 					'DROP TABLE IF EXISTS  MyJobsDocs;'+
+					'DROP TABLE IF EXISTS  MyJobsPhotos;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
 					'DROP TABLE IF EXISTS  MyJobDetsDraw;'+
@@ -2978,7 +2980,7 @@ function emptyTables(type) {
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobsDocs;'+
-
+					'DELETE FROM  MyJobsPhotos;'+
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
@@ -3095,6 +3097,7 @@ function loadDemoData() {
 				'DELETE FROM  DG5CODES;'+
 				'DELETE FROM  CFCODES;'+
 				'DELETE FROM  MyJobsDocs;'+
+				'DELETE FROM  MyJobsPhotos;'+
 				'DELETE FROM MyJobsDetsEQ;'+
 				'DELETE FROM MyJobsDetsATTR;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
@@ -3239,6 +3242,7 @@ function resetTables() {
 					'DELETE FROM  DG5CODES;'+
 					'DELETE FROM  CFCODES;'+
 					'DELETE FROM  MyJobsDocs;'+
+					'DELETE FROM  MyJobsPhotos;'+
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
@@ -3726,6 +3730,7 @@ var orderlist="";
 								 opMessage("Error: " + error.message + " when processing " + statement);
 							 }        
 					)
+					DeleteOldPhotos(orderlist)
 					 },
 					 function(error, statement){
 						 opMessage("Error: " + error.message + " when processing " + statement);
@@ -5763,3 +5768,7 @@ function dg5CB(data){
 		}
 		
 	}
+function DeleteOldPhotos(orderlist){
+	console.log("Delete Old Photos")
+	
+}

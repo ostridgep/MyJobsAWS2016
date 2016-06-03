@@ -199,7 +199,7 @@ function selectPhoto(){
 	        for (var i = 0; i < results.length; i++) {
 	        	//alert('Image URI: ' + results[i]);
 	            try {
-	            	alert(DeviceStorageDirectory+AppDocDirectory+"/Private/Photos")
+	            	
 	  			  moveFile2(results[i], DeviceStorageDirectory+AppDocDirectory+"/Private/Photos",i)
 	  			}
 	  			catch(err) {
@@ -882,9 +882,9 @@ function downloadAll()
 	oProgInd.setDisplayValue("5" + "%");
 	percentagedownloaded=0;
 	filesToDownload = [];
-	
-    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
-    	//$.getJSON("TestData\\ListDir.json", function (data) {    
+	alert(localStorage.getItem("DOCSERVER")+"Documents.json")
+    //$.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+    	$.getJSON(localStorage.getItem("DOCSERVER")+"Documents.json", function (data) {    
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
