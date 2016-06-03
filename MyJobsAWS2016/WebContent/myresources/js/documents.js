@@ -634,7 +634,10 @@ function moveFile2(fileUri,dir,cnt) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	selectedPhoto=entry.fullPath
+            	alert("D:"+opdir)
+            	alert("f:"+newFileName)
+            	alert("p:"+entry.fullPath)
+            	selectedPhoto=
             	html5sql.process(sqlstatement,
 						 function(){
 			            		formPhotoDetails.open()
