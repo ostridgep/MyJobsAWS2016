@@ -141,12 +141,24 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			if( rowsArray.length>0) {
 				sap.ui.getCore().getElementById('NewPhotoName').setValue(rowsArray[0].name)
 				sap.ui.getCore().getElementById('NewPhotoDetails').setValue(rowsArray[0].desc)
-				
+				selectedPhoto=rowsArray[0].url;
 			 }else{
 				sap.ui.getCore().getElementById('NewPhotoName').setValue("")
 				sap.ui.getCore().getElementById('NewPhotoDetails').setValue("")
 			 }
-
+			
+			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
+			    oFile.file(function(readyFile) {
+			      var reader= new FileReader();
+			      reader.onloadend= function(evt) {
+			        document.getElementById("smallImage").style.display='block'; 
+			        sap.ui.getCore().getElementById('confirmImage').setSrc(evt.target.result);
+			      };
+			      //reader.readAsDataURL(readyFile); 
+			    });
+			  })
+			  }, function(err){
+			   alert("error")
 		 },
 		 function(error, statement){
 			 //outputLogToDB(); 
@@ -191,7 +203,7 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				maxContainerCols : 1,
 				content : 	[							
 				 			new sap.m.Image("confirmImage",{
-				 				src: selectedPhoto,
+				 				
 				 				width: "300px",
 				 				height: "300px"
 				 			}),
