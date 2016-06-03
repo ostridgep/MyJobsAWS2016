@@ -2355,6 +2355,7 @@ function updateDocsTable()
 										percentagedownloaded=0;
 										fileDownloadCnt=0;
 										filesToDownload = rowsArray;
+										
 										checkFileDownload ()
 									 },
 									 function(error, statement){

@@ -706,6 +706,7 @@ new sap.m.Button({
 beforeOpen:function(){
 	sap.ui.getCore().getElementById('userAgent').setValue(navigator.userAgent) 
 	sap.ui.getCore().getElementById('CurrentMapType').setValue(localStorage.getItem('MAPTYPE'));
+	sap.ui.getCore().getElementById('CurrentDocServer').setValue(localStorage.getItem('DOCSERVER'));
 
   }
  })
