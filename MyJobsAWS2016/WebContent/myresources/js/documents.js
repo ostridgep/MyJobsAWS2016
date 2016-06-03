@@ -77,6 +77,11 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 				    	oProgIndDL.setPercentValue(0);
 				    	oProgIndDL.setDisplayValue("0" + "%");
 		    	
+		            },
+		            afterClose:function(){
+
+		            	buildDocumentTables();	
+		    	
 		            }
 		 })
 
