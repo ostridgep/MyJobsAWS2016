@@ -156,13 +156,21 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
 				})
 				],					
     content:[
-			new sap.m.Image("confirmImage",{
-				src: selectedPhoto,
-				width: "50px",
-				height: "50px"
-			}),
-			new sap.m.Label({text:"Details"}),
-			new sap.m.TextArea("NewDetails",{ rows: 3})
+  			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 1,
+				content : 	[							
+				           
+				 			new sap.m.Image("confirmImage",{
+				 				src: selectedPhoto,
+				 				width: "200px",
+				 				height: "200px"
+				 			}),
+				 			new sap.m.Label({text:"Details"}),
+				 			new sap.m.TextArea("NewPhotoDetails",{ rows:5})
+							]
+ 				})
+
 
             ],
             
@@ -581,7 +589,7 @@ function moveFile(fileUri,dir) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	selectedPhoto=opdir+"/"+newFileName
+            	selectedPhoto=entry.fullPath
             	html5sql.process(sqlstatement,
 						 function(){
 			            		formPhotoDetails.open()
@@ -626,7 +634,7 @@ function moveFile2(fileUri,dir,cnt) {
                            window.resolveLocalFileSystemURL(opdir, function (opdir) {
                         	                     	  
             file.moveTo(opdir, newFileName, function (entry) {
-            	selectedPhoto=opdir+"/"+newFileName
+            	selectedPhoto=entry.fullPath
             	html5sql.process(sqlstatement,
 						 function(){
 			            		formPhotoDetails.open()

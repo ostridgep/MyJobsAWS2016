@@ -5,9 +5,13 @@ sap.m.MessageBox.show(
     msgbody, {
         icon: sap.m.MessageBox.Icon.ERROR,
         title: msgtitle,
+        onClose: enableFields(),
         actions: [sap.m.MessageBox.Action.OK]
     }
   );   
+}
+function enablefields(){
+	
 }
 function validateDecimal(value, decimals, length) { 
 x=value.split(".")
