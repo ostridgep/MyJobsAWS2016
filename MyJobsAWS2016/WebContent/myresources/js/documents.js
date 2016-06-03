@@ -878,8 +878,8 @@ function downloadAll()
 	percentagedownloaded=0;
 	filesToDownload = [];
 	
-    //$.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
-    	$.getJSON("TestData\\ListDir.json", function (data) {    
+    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+    	//$.getJSON("TestData\\ListDir.json", function (data) {    
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
@@ -959,7 +959,7 @@ function checkFileDownload () {
 		       fileName = filesToDownload[fileDownloadCnt].name;
 	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 if(fileDownloadCnt<10){
-    alert(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
+    //alert(DeviceStorageDirectory+":"+filesToDownload[fileDownloadCnt].url+":"  + filesToDownload[fileDownloadCnt].name)
  
 
 	
@@ -998,7 +998,7 @@ function downloadMissing()
     $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson.php?directory=MyJobs/POSTRIDGE/download', function (data) {
         downloadCount = 0
         
-        alert("private"+data.FILES.length)
+        //alert("private"+data.FILES.length)
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
@@ -1011,7 +1011,7 @@ function downloadMissing()
 
     $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson.php?directory=MyJobs/Global/download', function (data) {
         downloadCount = 0
-        alert("Global"+data.FILES.length)
+        //alert("Global"+data.FILES.length)
         var cnt = 0;
         $.each(data.FILES, function (index) {
             fileName = data.FILES[index].name;
@@ -1061,7 +1061,7 @@ function downloadAsset1(fileName) {
     alert("About to start transfer " + localStorage.getItem("DOCSERVER")+  fileName + " to " + cordova.file.dataDirectory  + x[3]);
     fileTransfer.download(localStorage.getItem("DOCSERVER") + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
 		function (entry) {
-		    alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
+		    //alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
 		   
 		},
 		function (error) {
@@ -1090,7 +1090,7 @@ function downloadAsset(fileName,dir) {
 function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     if(fileDownloadCnt<10){
-        alert(  localStorage.getItem("DOCSERVER")+dir+"/" + fileName+"--"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName)
+        //alert(  localStorage.getItem("DOCSERVER")+dir+"/" + fileName+"--"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName)
      
 
     	
