@@ -210,6 +210,7 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
 				 
 			    oFile.file(function(readyFile) {
+			    	alert(oFie.fileSize)
 			      var reader= new FileReader();
 			      reader.onloadend= function(evt) {
 			       
