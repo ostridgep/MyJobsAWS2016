@@ -137,7 +137,7 @@ function uploadPhoto(imageURI) {
 	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
 
-            var fileName = fileObj.fullPath;
+            var fileName = fileEntry.fullPath;
 alert("fn"+fileName)
             //now use the fileName in your upload method
             var options = new FileUploadOptions();
@@ -210,8 +210,8 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
 				 
 			    oFile.file(function(readyFile) {
-			    	alert(oFile.fileSize+":"+readyFile.fileSize)
-			    	alert(oFile.fullPath+":"+readyFile.fullPath)
+			    	alert(oFile.size)
+			    	alert(oFile.fullPath)
 			      var reader= new FileReader();
 			      reader.onloadend= function(evt) {
 			       
