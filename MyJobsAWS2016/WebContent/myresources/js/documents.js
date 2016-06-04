@@ -134,7 +134,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	 })
 function uploadPhoto(imageURI) {
 	alert("iuri"+imageURI)
-	window.resolveLocalFileSystemURI(imageURI, function(fileEntry) {
+	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
 
             var fileName = fileObj.fullPath;
@@ -158,7 +158,7 @@ alert("fn"+fileName)
 	   
   alert("end of FS")
    
-
+			  
     
 
   
