@@ -133,12 +133,12 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            }
 	 })
 function uploadPhoto(imageURI) {
-	
+	alert("iuri"+imageURI)
 	window.resolveLocalFileSystemURI(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
 
             var fileName = fileObj.fullPath;
-
+alert("fn"+fileName)
             //now use the fileName in your upload method
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -153,9 +153,10 @@ function uploadPhoto(imageURI) {
                 alert(imageURI);
                 ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
         });
+        alert("end of fe")
     }); 
 	   
-  
+  alert("end of FS")
    
 
     
