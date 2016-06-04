@@ -133,18 +133,19 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            }
 	 })
 function uploadPhoto(imageURI) {
-	alert("iuri"+imageURI)
+	
 	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
 
             var fileName = fileEntry.fullPath;
-alert("fn"+fileName)
+
             //now use the fileName in your upload method
             var options = new FileUploadOptions();
             options.fileKey = "file";
             options.fileName = fileName.substr(fileName.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
             var params = new Object();
-            params.user = "POSTRIDGE";
+            params.user = "POSTRIDGE2";
             params.filename = options.fileName;
             options.params = params;
             
@@ -210,11 +211,12 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
 				 
 			    oFile.file(function(readyFile) {
-			    	alert(oFile.size)
+			    	alert(oFile.size+":"+oFile.fileSize)
 			    	alert(oFile.fullPath)
+			    	alert(readyFile.size+":"+readyFile.lastModifiedDate)
 			      var reader= new FileReader();
 			      reader.onloadend= function(evt) {
-			       
+			    	  alert(reader.size+":"+reader.fileSize)
 			        sap.ui.getCore().getElementById('confirmImage').setSrc(evt.target.result);
 			      };
 			      reader.readAsDataURL(readyFile); 
