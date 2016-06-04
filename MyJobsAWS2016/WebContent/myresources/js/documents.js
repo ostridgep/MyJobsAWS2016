@@ -7,6 +7,7 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 var selectedPhotoID=0;
+var selectedPhotoSize=0;
 var DeviceStorageDirectory;
 var AppDocDirectory;
 
@@ -143,21 +144,22 @@ function uploadPhoto(imageURI) {
             var options = new FileUploadOptions();
             options.fileKey = "file";
             options.fileName = fileName.substr(fileName.lastIndexOf('/')+1);
-            options.mimeType="image/jpeg";
+            options.mimeType="image/jpeg"
+            options.chunkedMode = true;;
             var params = new Object();
             params.user = "POSTRIDGE2";
             params.filename = options.fileName;
             options.params = params;
             
-            alert(options.fileName);
+          
                 var ft = new FileTransfer();
-                alert(imageURI);
+               
                 ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
         });
-        alert("end of fe")
+        
     }); 
 	   
-  alert("end of FS")
+ 
    
 			  
     
@@ -211,12 +213,11 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
 				 
 			    oFile.file(function(readyFile) {
-			    	alert(oFile.size+":"+oFile.fileSize)
-			    	alert(oFile.fullPath)
-			    	alert(readyFile.size+":"+readyFile.lastModifiedDate)
+
+			    	selectedPhotoSize=readyFile.size
 			      var reader= new FileReader();
 			      reader.onloadend= function(evt) {
-			    	  alert(reader.size+":"+reader.fileSize)
+			    	  
 			        sap.ui.getCore().getElementById('confirmImage').setSrc(evt.target.result);
 			      };
 			      reader.readAsDataURL(readyFile); 
@@ -252,7 +253,7 @@ new sap.m.Button( {
 							DisplayErrorMessage("Attach Photo", "Name is Mandatory")
 							}else{
 								if (selectedPhotoID==0){
-						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , "0", getSAPDate()+" "+getSAPTime(), "NEW")
+						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "NEW")
 						    	}else{
 						    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
 						    	}
