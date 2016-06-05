@@ -23,7 +23,9 @@ var mapProp = {
   google.maps.event.addListener(map, 'click', function(event) {
     placeMarker(event.latLng);
   });
-  google.maps.event.trigger(map, "resize");
+  google.maps.event.addListenerOnce(map,'idle',function(){
+	  google.maps.event.trigger(map, "resize");
+  })
 }
 
 function placeMarker(location) {
