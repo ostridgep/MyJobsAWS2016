@@ -133,7 +133,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            	buildPhotoDetails()
 	            }
 	 })
-function uploadPhoto(imageURI) {
+function uploadPhotoxx(imageURI) {
     var options = new FileUploadOptions();
     options.fileKey="file";
     options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
@@ -148,7 +148,7 @@ function uploadPhoto(imageURI) {
     var ft = new FileTransfer();
     ft.upload(imageURI, encodeURI("http://192.168.1.20/FileUpload.php"), win, fail, options);
 }
-function uploadPhotoxx(imageURI) {
+function uploadPhoto(imageURI) {
 	
 	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
