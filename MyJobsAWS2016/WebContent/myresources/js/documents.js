@@ -133,21 +133,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            	buildPhotoDetails()
 	            }
 	 })
-function uploadPhotoxx(imageURI) {
-    var options = new FileUploadOptions();
-    options.fileKey="file";
-    options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
-    options.mimeType="image/jpeg";
 
-    var params = {};
-    params.user = "test";
-    params.filename = imageURI.substr(imageURI.lastIndexOf('/')+1);
-
-    options.params = params;
-
-    var ft = new FileTransfer();
-    ft.upload(imageURI, encodeURI("http://192.168.1.20/FileUpload.php"), win, fail, options);
-}
 function uploadPhoto(imageURI) {
 	
 	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
@@ -165,11 +151,11 @@ function uploadPhoto(imageURI) {
             params.value1 = "POSTRIDGE2";
             params.value2 = options.fileName;
             options.params = params;
-            alert(options.fileName)
+          
           
                 var ft = new FileTransfer();
                
-                ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
+                ft.upload(imageURI, localStorage.getItem("DOCSERVER")+"FileUpload.php", win, fail, options);
         });
         
     }); 
@@ -199,7 +185,7 @@ function uploadPhoto1(imageURI) {
 	   options.chunkedMode = false;
 
 	   var ft = new FileTransfer();
-	   alert("xx"+imageURI);
+	  
 	   ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
 	}
 function win(r) {
