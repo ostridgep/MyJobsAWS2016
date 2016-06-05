@@ -160,7 +160,7 @@ function uploadPhoto(imageURI) {
             options.fileKey = "file";
             options.fileName = fileName.substr(fileName.lastIndexOf('/')+1);
             options.mimeType="image/jpeg"
-            options.chunkedMode = true;
+            options.chunkedMode = false;
             var params = {};
             params.user = "POSTRIDGE2";
             params.filename = options.fileName;
@@ -208,7 +208,8 @@ function win(r) {
 }
 
 function fail(error) {
-    alert("An error has occurred: Code = " + error.code);
+    alert("An error has occurred: Code = " + error.code+" source = " + error.source+ " target = " + error.target);
+
 }
 function buildPhotoDetails(){
 	
