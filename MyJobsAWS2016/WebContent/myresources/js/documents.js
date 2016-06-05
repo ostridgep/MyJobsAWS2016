@@ -162,10 +162,10 @@ function uploadPhoto(imageURI) {
             options.mimeType="image/jpeg"
             options.chunkedMode = false;
             var params = {};
-            params.user = "POSTRIDGE2";
-            params.filename = options.fileName;
+            params.value1 = "POSTRIDGE2";
+            params.value2 = options.fileName;
             options.params = params;
-            
+            alert(options.fileName)
           
                 var ft = new FileTransfer();
                
@@ -208,7 +208,7 @@ function win(r) {
 }
 
 function fail(error) {
-    alert("An error has occurred: Code = " + error.code+" source = " + error.source+ " target = " + error.target);
+    alert("An error has occurred: Code = " + error.code+" source = " + error.source+ " target = " + error.target+" http"+error.http_status );
 
 }
 function buildPhotoDetails(){

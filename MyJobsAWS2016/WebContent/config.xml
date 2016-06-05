@@ -66,9 +66,9 @@
     <gap:plugin name="org.apache.cordova.media" />
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
-    <plugin name="cordova-plugin-whitelist" />
+    <gap:plugin name="cordova-plugin-whitelist" />
     <gap:plugin name="org.apache.cordova.file"  />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="cordova-plugin-file-transfer" />
     <gap:plugin name="com.cordova.plugins.fileopener" spec="1.0.1" source="pgb" />
     <gap:plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
     <gap:plugin name="org.apache.cordova.vibration" />
@@ -90,10 +90,10 @@
 
 <allow-navigation href="*"/>
 
-<allow-navigation href="file://*/*" />
+
 
 <access origin="*"/>
-<access origin="http://192.168.1.2:8080/*" />
+
 
 
 
