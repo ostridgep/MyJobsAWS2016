@@ -134,6 +134,21 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 	            }
 	 })
 function uploadPhoto(imageURI) {
+    var options = new FileUploadOptions();
+    options.fileKey="file";
+    options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+    options.mimeType="image/jpeg";
+
+    var params = {};
+    params.user = "test";
+    params.filename = imageURI.substr(imageURI.lastIndexOf('/')+1);
+
+    options.params = params;
+
+    var ft = new FileTransfer();
+    ft.upload(imageURI, encodeURI("http://192.168.1.20/FileUpload.php"), win, fail, options);
+}
+function uploadPhotoxx(imageURI) {
 	
 	window.resolveLocalFileSystemURL(imageURI, function(fileEntry) {
         fileEntry.file(function(fileObj) {
@@ -145,8 +160,8 @@ function uploadPhoto(imageURI) {
             options.fileKey = "file";
             options.fileName = fileName.substr(fileName.lastIndexOf('/')+1);
             options.mimeType="image/jpeg"
-            options.chunkedMode = true;;
-            var params = new Object();
+            options.chunkedMode = true;
+            var params = {};
             params.user = "POSTRIDGE2";
             params.filename = options.fileName;
             options.params = params;
