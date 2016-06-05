@@ -203,7 +203,7 @@ function uploadPhoto1(imageURI) {
 	   ft.upload(imageURI, "http://192.168.1.20/FileUpload.php", win, fail, options);
 	}
 function win(r) {
-	alert(error)
+
     alert("Code = " + r.responseCode+"\nResponse = " + r.response+"\nSent = " + r.bytesSent);
    
 }
