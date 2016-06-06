@@ -214,12 +214,13 @@ function setSample(row,mode){
 	console.log(f1+":"+f2+":"+f3)
 	document.getElementById(f3).value=mode
 	if(mode=="NO"){
-		disabledflag=true;
+		document.getElementById(f1).setAttribute("novalidation","")
+		document.getElementById(f2).setAttribute("novalidation","")
 	}else{
-		disabledflag=false;
+		document.getElementById(f1).removeAttribute("novalidation")
+		document.getElementById(f2).removeAttribute("novalidation")
 	}
-	//document.getElementById(f1).disabled=disabledflag
-	//document.getElementById(f2).disabled=disabledflag
+alert(document.getElementById(f1).hasAttribute("novalidation"))	
 }
 $(".btn-group > .btn").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
@@ -276,7 +277,7 @@ function isComplete()
 	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
 	    		
 	    		
-	    			if(!elem[i].hasAttribute("Ignore")&&!elem[i].hasAttribute("novalidation")){
+	    			if(!elem[i].hasAttribute("Ignore")&&elem[i].hasAttribute("novalidation")){
 	    				console.log(elem[i].id+":"+elem[i].value)
 	    				cnt=cnt+1
 	    				if((elem[i].value!="")||(elem[i].disabled==true)){

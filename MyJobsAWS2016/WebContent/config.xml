@@ -87,14 +87,16 @@
 
    
  <icon 		src="icon.png" />
+ <splash 	src="splash.png" />
 
 <allow-navigation href="*"/>
+<allow-navigation href="http://10.193.162.118"/>
 
 
 
 <access origin="*"/>
 
-
+<access origin="http://10.193.162.118"/>
 
 
 </widget>
