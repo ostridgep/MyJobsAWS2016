@@ -116,7 +116,7 @@ empid=localStorage.getItem("EmployeeID")
 						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+
 						"&ZASTYP="+jsonstr[0].sewertype.trim()+
 						"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
-						"&ZAWEAT="+jsonstr[0].attendanceweather.trim()
+						"&ZAWEAT="+jsonstr[0].floodweather.trim()
 						var pdepth="";
 						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
 						{
