@@ -155,10 +155,11 @@ empid=localStorage.getItem("EmployeeID")
 						}else{
 							ENRef=gridref
 						}
-						
-						flooddate=jsonstr[0].flooddate.substring(0,2)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(6,10)
+						jsonstr[0].floodtime=jsonstr[0].floodtime+"00"
+						jsonstr[0].attendancetime=jsonstr[0].attendancetime+"00"
+						flooddate=jsonstr[0].flooddate.substring(6,10)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(0,2)
 						floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
-						attenddate=jsonstr[0].attendancedate.substring(0,2)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(6,10)
+						attenddate=jsonstr[0].attendancedate.substring(6,10)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(0,2)
 						attendtime=jsonstr[0].attendancetime.substring(0,2)+jsonstr[0].attendancetime.substring(3,5)+jsonstr[0].attendancetime.substring(6,8)
 						params+="&PHDR="+orderno+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
 						ENRef+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+

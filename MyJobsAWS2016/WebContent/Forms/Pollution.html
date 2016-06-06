@@ -104,8 +104,8 @@
                         <tr>
                             <th>Upstream</th>
                             
-                            <td><input class="feedback-input-table" id="upstreamdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="upstreamdistance"  /></td>
-                            <td><input class="feedback-input-table" id="upstreamonsitenh3" type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" name="upstreamonsitenh3" /></td>
+                            <td><input class="feedback-input-table" id="upstreamdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  novalidation name="upstreamdistance"  /></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3" type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" novalidation name="upstreamonsitenh3" /></td>
                             <td>
                              <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
@@ -118,8 +118,8 @@
                         </tr>
                         <tr>
                             <th>Pt of Disc</th>
-                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"   name="ptofdiscdistance"  /></td>
-                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="ptofdisconsitenh3" /></td>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance"  type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"   novalidation name="ptofdiscdistance"  /></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3"   type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" novalidation name="ptofdisconsitenh3" /></td>
                             <td>
                              <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
@@ -131,8 +131,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 1</th>
-                            <td><input class="feedback-input-table" id="downstream1distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="downstream1distance"  /></td>
-                            <td><input class="feedback-input-table" id="downstream1onsitenh3"   type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="downstream1onsitenh3" /></td>
+                            <td><input class="feedback-input-table" id="downstream1distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)" novalidation name="downstream1distance"  /></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3"   type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" novalidation name="downstream1onsitenh3" /></td>
                             <td>
                             <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
@@ -144,8 +144,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 2</th>
-                            <td><input class="feedback-input-table" id="downstream2distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"  name="downstream2distance" /></td>
-                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"   name="downstream2onsitenh3" /></td>
+                            <td><input class="feedback-input-table" id="downstream2distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)" novalidation name="downstream2distance" /></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" novalidation  name="downstream2onsitenh3" /></td>
                             <td>
                             <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
@@ -157,8 +157,8 @@
                         </tr>
                         <tr>
                             <th>Downstream 3</th>
-                            <td><input class="feedback-input-table" id="downstream3distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)"    name="downstream3distance" /></td>
-                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)"  name="downstream3onsitenh3" /></td>
+                            <td><input class="feedback-input-table" id="downstream3distance" type="number"  onInput="checkLength(8,this)" onKeyPress="return checkInt(event,value)" novalidation   name="downstream3distance" /></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3"  type="number"  onInput="checkLength(10,this)" onKeyPress="return checkFloat(event,value)" novalidation name="downstream3onsitenh3" /></td>
                             <td>
                              <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
@@ -276,7 +276,7 @@ function isComplete()
 	    	if ((elem[i].type!='button')&&(elem[i].type!='submit')&&(elem[i].getAttribute("merge")!='mergecol')){
 	    		
 	    		
-	    			if(!elem[i].hasAttribute("Ignore")){
+	    			if(!elem[i].hasAttribute("Ignore")&&!elem[i].hasAttribute("novalidation")){
 	    				console.log(elem[i].id+":"+elem[i].value)
 	    				cnt=cnt+1
 	    				if((elem[i].value!="")||(elem[i].disabled==true)){

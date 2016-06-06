@@ -120,7 +120,7 @@ var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
 								new sap.m.Input("NewDescription",{ type: sap.m.InputType.Input}),
 								
 								new sap.m.Label({text:"Details"}),
-								new sap.m.TextArea("NewDetails",{ rows: 3}),
+								new sap.m.TextArea("NewDetails",{ rows: 5,height:"200px",}),
 
 			new sap.m.Label({text:"Functional Location"}),
 			new sap.m.SearchField("NewFuncLoc",{
