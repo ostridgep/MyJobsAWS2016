@@ -4716,16 +4716,19 @@ formtab=null;
      										selectionChange: function(evt){
      											
      											downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
-     													evt.getParameter("listItem").getCells()[4].getText(),
-     													evt.getParameter("listItem").getCells()[3].getText())
+     													evt.getParameter("listItem").getCells()[5].getText(),
+     													evt.getParameter("listItem").getCells()[2].getText(),
+     													evt.getParameter("listItem").getCells()[4].getText())
      									    },
      										columns:[
     										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
     										        	 hAlign: 'Left',width: '50%', minScreenWidth : "" , demandPopin: false}),
     										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
-    										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
+    										        	 hAlign: 'Left',width: '18%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
     										         new sap.m.Column({header: new sap.m.Label({text:"Node"}),
-    										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true }),
+    										        	 hAlign: 'Left',width: '17%',minScreenWidth : "" , demandPopin: true }),
+  										        	 new sap.m.Column({header: new sap.m.Label({text:"Local"}),
+      										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true }),
    	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
    	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }) ,
     										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
@@ -4768,6 +4771,7 @@ new sap.m.Button( {
    										        	 hAlign: 'Left',width: '10%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
    										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
+   										        
  										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
     										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }),
     										       	new sap.m.Column({header:  new sap.m.Label({text:""}),
@@ -4784,9 +4788,10 @@ new sap.m.Button( {
 	return tabBar;
 
 	}
-function downloadDrawFile(fname,url,drawid){
+function downloadDrawFile(fname,url,nodeid,drawid){
 	
 	if(url.length < 10){
+		alert("no url")
 		downloadLiveLink(fname,nodeid.trim(),drawid)
 	}
 }
@@ -5240,14 +5245,19 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
 		
 			while (n < rowsArray.length) {
 				
-		
+		        if (rowsArray[n].zurl.length <10){
+		        	local=""
+		        }else{
+		        	local="Local"
+		        }
 				opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 					
 					cells : 
 						[
 						new sap.m.Text({text: rowsArray[n].fname}),
 						new sap.m.Text({text: rowsArray[n].mime}),
-						new sap.m.Text({text: rowsArray[n].nodeid}),   
+						new sap.m.Text({text: rowsArray[n].nodeid}), 
+						new sap.m.Text({text: local}), 
 						new sap.m.Text({text: rowsArray[n].id}),
 						new sap.m.Text({text: rowsArray[n].zurl})
 				 		],

@@ -42,6 +42,9 @@
     <preference name="iosExtraFilesystems"        value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="iosPersistentFileLocation"  value="Library" />
     <preference name="AndroidExtraFilesystems"    value="files,files-external,documents,sdcard,cache,cache-external,root" />
+    <preference name="SplashScreen" value="splash"/>
+<preference name="SplashScreenDelay" value="3000"/>
+<preference name="AutoHideSplashScreen" value="false"/>
     <!-- Plugins -->
 
 
