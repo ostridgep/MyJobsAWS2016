@@ -385,7 +385,7 @@ function updateMyJobDetsDraw(id,dir)
 			
 			["UPDATE MyJobDetsDraw set zurl  = '"+dir+"' WHERE id = "+ id],
 			function(transaction, results, rowsArray){
-				
+				buildJobDocsTable();	
 			},
 			 function(error, statement){
 				alert("Error: " + error.message + " when jobdetsdraw processing " + statement);

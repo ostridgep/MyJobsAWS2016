@@ -1200,7 +1200,7 @@ function downloadLiveLink(fn,node,drawid)
 {
    	try
 	{
-     window.resolveLocalFileSystemURL(DeviceStorageDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,"/LiveLink/",node,drawid));
+     window.resolveLocalFileSystemURL(DeviceStorageDirectory+"/LiveLink/" + fn, appStart, downloadLiveLinkFile(fn,"LiveLink/",node,drawid));
 	}
 	  catch (err) {
   
