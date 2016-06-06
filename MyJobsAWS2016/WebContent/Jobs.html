@@ -680,7 +680,7 @@ function checkFeedbackComplete(){
  		if(	 oSwitchCustFeed.getState()){
  			
  			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
- 					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeed' and user = '"+localStorage.getItem('MobileUser')+"';",
+ 					"' and opno = '"+CurrentOpNo+"' and formname = 'CustomerFeedback' and user = '"+localStorage.getItem('MobileUser')+"';",
  					function(transaction, results, rowsArray){
  						if(rowsArray.length<1){
  							CloseError='6'
@@ -689,7 +689,7 @@ function checkFeedbackComplete(){
 	 						if(rowsArray[0].lastupdated=="COMPLETE"){
 	 							CloseError='0'
 	 						}else{
-	 							CloseError='5'
+	 							CloseError='6'
 	 							
 	 						}
  						}
