@@ -4715,7 +4715,9 @@ formtab=null;
      										 mode: sap.m.ListMode.SingleSelectMaster,
      										selectionChange: function(evt){
      											
-     											downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),evt.getParameter("listItem").getCells()[2].getText(),evt.getParameter("listItem").getCells()[3].getText())
+     											downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
+     													evt.getParameter("listItem").getCells()[4].getText(),
+     													evt.getParameter("listItem").getCells()[3].getText())
      									    },
      										columns:[
     										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
@@ -4724,8 +4726,10 @@ formtab=null;
     										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
     										         new sap.m.Column({header: new sap.m.Label({text:"Node"}),
     										        	 hAlign: 'Left',width: '25%',minScreenWidth : "" , demandPopin: true }),
-    	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
-    	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })       	                         
+   	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
+   	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }) ,
+    										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
+   	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })      
     								           	     ]
      									})
      									]          	                
@@ -4780,9 +4784,9 @@ new sap.m.Button( {
 	return tabBar;
 
 	}
-function downloadDrawFile(fname,nodeid,drawid){
+function downloadDrawFile(fname,url,drawid){
 	
-	if(nodeid!="Local"){
+	if(url.length < 10){
 		downloadLiveLink(fname,nodeid.trim(),drawid)
 	}
 }
@@ -5244,7 +5248,8 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+orderNo+"' ;",
 						new sap.m.Text({text: rowsArray[n].fname}),
 						new sap.m.Text({text: rowsArray[n].mime}),
 						new sap.m.Text({text: rowsArray[n].nodeid}),   
-						new sap.m.Text({text: rowsArray[n].id})
+						new sap.m.Text({text: rowsArray[n].id}),
+						new sap.m.Text({text: rowsArray[n].zurl})
 				 		],
 
 					}));

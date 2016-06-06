@@ -1204,7 +1204,7 @@ function downloadLiveLink(fn,node,drawid)
 	}
 	  catch (err) {
   
-	  window.open("http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc%3dll%26objId%3d"+node+"%26objAction%3ddownload" ) 
+	  //window.open("http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc%3dll%26objId%3d"+node+"%26objAction%3ddownload" ) 
   }
    
 }
@@ -1213,11 +1213,12 @@ function downloadLiveLinkFile(fileName,dir,node,drawid) {
     var fileTransfer = new FileTransfer();
    
     llurl="http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc%3dll%26objId%3d"+node+"%26objAction%3ddownload"
-    alert(llurl + fileName + " to " +dir );
-    fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory + dir + node + "_" + fileName,
+   
+    //fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory + dir + node + "_" + fileName,
+    fileTransfer.download(llurl, DeviceStorageDirectory+"/LiveLink/" + dir + node + "_" + fileName,
 		function (entry) {
-		    alert(" ll Downloaded")
-		    updateMyJobDetsDraw(drawid,dir + node + "_" + fileName)
+		    alert("Downloaded")
+		    updateMyJobDetsDraw(drawid,DeviceStorageDirectory+"/LiveLink/" + dir + node + "_" + fileName)
 		   
 		},
 		function (error) {
