@@ -1213,22 +1213,20 @@ function downloadLiveLinkFile(fileName,dir,node,drawid) {
     var fileTransfer = new FileTransfer();
    
     llurl="http://10.193.162.118/otcs/llisapi.dll?func=LL.login&UserName=Admin&Password=H3nd3rs0n2&NextURL=/otcs/llisapi.dll%3ffunc%3dll%26objId%3d"+node+"%26objAction%3ddownload"
-   
+  
     fileTransfer.download(llurl, cordova.file.externalApplicationStorageDirectory + dir + node + "_" + fileName,
     //fileTransfer.download(llurl, DeviceStorageDirectory+"/LiveLink/" + dir + node + "_" + fileName,
 		function (entry) {
-		    alert("Downloaded")
-		    updateMyJobDetsDraw(drawid,DeviceStorageDirectory+"/LiveLink/" + dir + node + "_" + fileName)
+		    opMessage(fileName+" Downloade from LiveLink Successfully");
+		    updateMyJobDetsDraw(drawid,cordova.file.externalApplicationStorageDirectory + dir + node + "_" + fileName)
 		   
 		},
 		function (error) {
-		    
-		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+			opMessage(fileName+" Downloade from LiveLink Failed -" + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});
-//alert("About to Open")
-//window.open(llurl, "_blank", 'location=yes,closebuttoncaption=Return') 
+
 }
 function downloadAsset1(fileName) {
     var fileTransfer = new FileTransfer();

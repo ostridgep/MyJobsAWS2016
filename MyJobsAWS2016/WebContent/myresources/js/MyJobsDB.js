@@ -378,20 +378,6 @@ function requestSAPDataTest(myurl){
  
   
 }	
-function gxxxxetAssetHistoryURL(eq,fl)
-{
-	html5sql.process(
-			
-			["UPDATE MyJobDetsDraw set zurl  = '"+dir+"' WHERE id = "+ id],
-			function(transaction, results, rowsArray){
-				alert(" Jobdetdraw updated")
-			},
-			 function(error, statement){
-				alert("Error: " + error.message + " when jobdetsdraw processing " + statement);
-			 } 
-
-		)
-}
 
 function updateMyJobDetsDraw(id,dir)
 {
@@ -399,7 +385,7 @@ function updateMyJobDetsDraw(id,dir)
 			
 			["UPDATE MyJobDetsDraw set zurl  = '"+dir+"' WHERE id = "+ id],
 			function(transaction, results, rowsArray){
-				alert(" Jobdetdraw updated")
+				
 			},
 			 function(error, statement){
 				alert("Error: " + error.message + " when jobdetsdraw processing " + statement);
