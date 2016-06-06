@@ -4793,6 +4793,9 @@ function downloadDrawFile(fname,url,nodeid,drawid){
 	if(url.length < 10){
 		alert("no url")
 		downloadLiveLink(fname,nodeid.trim(),drawid)
+	}else{
+		alert("About to Open")
+		window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
 	}
 }
 function buildDetailsP100Tabs(tabsdesc,tabsid){
