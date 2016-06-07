@@ -160,7 +160,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo)
+    	sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo,currentNotifNo)
     	
     	
     	} ]   
@@ -170,7 +170,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("Pollution",CurrentOrderNo,CurrentOpNo)
+    	sendFormData("Pollution",CurrentOrderNo,CurrentOpNo,currentNotifNo)
     	
     	} ]   
 }),
@@ -179,7 +179,7 @@ new sap.m.Button( {
    
     type: sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {	
-    	sendFormData("Flooding",CurrentOrderNo,CurrentOpNo)
+    	sendFormData("Flooding",CurrentOrderNo,CurrentOpNo,currentNotifNo)
     	
     	} ]   
 }),

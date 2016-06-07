@@ -21,7 +21,7 @@ var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
 var sqlMyJobsDocs;
-function sendFormData(fname,orderno,opno){
+function sendFormData(fname,orderno,opno,notifno){
 	
 	var c040="NA"	
 		var d040=""		
@@ -89,7 +89,7 @@ empid=localStorage.getItem("EmployeeID")
 							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolab="X"	}
 							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolab="X"	}
 
-						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+"&PPIA="+orderno+','+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+"&NOTIF_NO="+notifno+"&PPIA="+orderno+','+
 							
 							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
 							jsonstr[0].dischargetype.trim()+",,"+
@@ -1427,9 +1427,9 @@ var syncDetails = false	;
 																}
 															for (var n = 0; n < rowsArray.length; n++) {
 																item = rowsArray[n];
-																sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo)
-																sendFormData("Pollution",CurrentOrderNo,CurrentOpNo)
-																sendFormData("Flooding",CurrentOrderNo,CurrentOpNo)
+																sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo,currentNotifNo)
+																sendFormData("Pollution",CurrentOrderNo,CurrentOpNo,currentNotifNo)
+																sendFormData("Flooding",CurrentOrderNo,CurrentOpNo,currentNotifNo)
 																newCloseDets='&NOTIFNO='+item['notifno']+'&USERID='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+
 																'&FUNCT_LOC='+item['funcloc']+
 																'&EQUIPMENT='+item['equipment']+
