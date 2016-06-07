@@ -538,7 +538,7 @@ dtstamp=nowd+nowt;
 
 
 var sqlstatement='INSERT INTO LogFile (datestamp , type, message ) VALUES ("'+dtstamp+'","I","'+ msg+'");';
-	if (localStorage.Trace=='ON'){
+	if (localStorage.getItem("Trace")=='ON'){
 		html5sql.process(sqlstatement,
 						 function(){
 							 //alert("Success Creating Tables");
@@ -1427,9 +1427,7 @@ var syncDetails = false	;
 																}
 															for (var n = 0; n < rowsArray.length; n++) {
 																item = rowsArray[n];
-																sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo,currentNotifNo)
-																sendFormData("Pollution",CurrentOrderNo,CurrentOpNo,currentNotifNo)
-																sendFormData("Flooding",CurrentOrderNo,CurrentOpNo,currentNotifNo)
+
 																newCloseDets='&NOTIFNO='+item['notifno']+'&USERID='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+
 																'&FUNCT_LOC='+item['funcloc']+
 																'&EQUIPMENT='+item['equipment']+
@@ -1453,7 +1451,9 @@ var syncDetails = false	;
 																			if (item['notifno'].length>5){
 																
 																				sendSAPData("MyJobsUpdateNotif.htm",newCloseDets,"UPDATE MyJobClose SET state = 'NEW' WHERE id='"+item['id']+"'");
-																				
+																				sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo,currentNotifNo)
+																				sendFormData("Pollution",CurrentOrderNo,CurrentOpNo,currentNotifNo)
+																				sendFormData("Flooding",CurrentOrderNo,CurrentOpNo,currentNotifNo)
 																			}
 																			
 																		 },
@@ -2393,25 +2393,7 @@ function updateDocsTable()
 	
 
 }
-function xxcreateFormsResponse(formname, order,opno,user,content,mode,type)
-{
-d=getDate()+getTime();
-	//sqlStatement="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
-	
-	sqlStatement="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ('"+d+"','1','1','1','1','1','1','1','1')"
-	
-	html5sql.process(sqlStatement,
-		 function(transaction, results, rowsArray){
-	
 
-		
-		 },
-		 function(error, statement){
-			 alert("Error"+error+statement)
-
-		 }        
-		);
-}
 function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
 	
@@ -2420,36 +2402,45 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 	}else{
 		state="NEW"
 	}
-	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' and user = '"+user+"';"
+	
+	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
 	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
 	"'"+formname+"',"+"'"+type+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
-
+	
+   opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
+  
 	html5sql.process(sqlStatementDel,
 		 function(transaction, results, rowsArray){
 		
+		opMessage("Formdata Deleted OK")
+		
 		html5sql.process(sqlStatementIns,
 				 function(transaction, results, rowsArray){
-				
+			
+			  opMessage("Formdata inserted OK ")
+			 
 				if(formDG5.isOpen()){
 					getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
 				}
+			
 				formForms.close()
 				 },
 				 function(error, statement){
-					alert("Insert Error")
-					opMessage("Error: " + error.message + " when FormsResponses Insert " + statement);
+					
+					opMessage("Error: " + error.message + " when FormsResponses Insert " );
 					formForms.close()
 				 }        
 				);
 		
 		 },
 		 function(error, statement){
-			 alert("del Error")
-			opMessage("Error: " + error.message + " when Deleting during Insert FormsResponses processing " + statement);
+			
+			opMessage("Error: " + error.message + " when Deleting during FormsResponses " );
 			 formForms.close()
 		 }        
 		);
+	
 }
 function createAWSTConf(order,opno,empid,work_cntr,acttype,reasontype,startdate,starttime,enddate, endtime, actwork,remwork,text,details,finalconf)
 {
@@ -3289,7 +3280,7 @@ function resetTables() {
 function DeleteLog() { 
 		html5sql.process("DELETE FROM LogFile",
 						 function(){
-							 //alert("Success Creating Tables");
+							 alert("Delete Log Worked");
 						 },
 						 function(error, statement){
 							 opMessage("Error: " + error.message + " when processing " + statement);

@@ -108,13 +108,13 @@
                             </select>
 
                             <select class="feedback-input cause" mergeonchange=true; id="causeofflood" name="causeofflood" merge="SELECT CODE as value, CODEDESC as description FROM DG5CODES WHERE type = 'DF' AND coderef='CAU' AND LEVEL='2' ORDER BY CODEDESC" 
-                             onChange="setPSShortCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%');documentgetElementById('rootcause').value=''">
+                             onChange="setPSShortCodeEnabled(this.value);parent.buildRelatedSelect('rootcause','select code as value, CODEDESC as description from DG5CODES   where  type = \'DF\' AND coderef=\'RCA\' AND LEVEL=\'2\' AND code LIKE ',this.value+'%');document.getElementById('rootcause').value=''">
                        
                                 <option value="" disabled selected>Cause of Flood</option>
 
                             </select>
 
-                            <select class="feedback-input root" id="rootcause" name="rootcause" merge="">
+                            <select class="feedback-input root" id="rootcause" name="rootcause">
                                 <option value="" disabled selected>Root Cause</option>
 
                             </select>

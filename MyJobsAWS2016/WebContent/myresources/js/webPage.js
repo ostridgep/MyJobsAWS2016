@@ -269,11 +269,11 @@ new sap.m.Button( {
 	
 	 })
 function saveFormData(fname,type){
-	//Type is COMPLETE or SAVED
 
 var MyIFrame = document.getElementById("formIframe");
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
+						   				    
 	try {
 		
 		json=buildJSONResponse(MyIFrameDoc)
@@ -287,7 +287,7 @@ var MyIFrame = document.getElementById("formIframe");
 			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
 		//Standalone Form
-			
+			alert("5")
 			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode,type)
 		}
 		
@@ -433,7 +433,7 @@ function buildOptions(sql,fld){
 				fld.value=""
 			},
 			 function(error, statement){
-				 console.log("Error: " + error.message + " when processing " + statement);
+				 console.log("Error: " + error.message + " when processing " + statement+"x"+sql+":"+fld.id);
 			 }   
 		);
 }
