@@ -170,7 +170,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                     change: function(oControlEvent) {
                                                            
-                                                           //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                           checkMandatedForms("P",sap.ui.getCore().getElementById("Close_ProblemGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey())
                                                     }
                                              }),
                                              ]
@@ -199,7 +199,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                     ],
 
                                                     change: function(oControlEvent) {
-                                                           
+                                                    	 checkMandatedForms("S",sap.ui.getCore().getElementById("Close_ActionGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey()) 
                                                            //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
                                                     }
                                              }),
@@ -230,7 +230,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                     change: function(oControlEvent) {
                                                            
-                                                           
+                                                    	 checkMandatedForms("I",sap.ui.getCore().getElementById("Close_ImpactGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey())
                                                     }
                                              }),
                                              ]
@@ -440,45 +440,7 @@ function buildDG5Tabs(){
 
        }
 function setCloseButtons(key){
-	//initCloseButtons()
-	if (key=="GEN-LE"){
-		oSwitchFlooding.setState(true);
-		oSwitchFlooding.setEnabled(false);
-		addMandatedForm("Flooding.html")
-		//sap.ui.getCore().getElementById('btnDG5').setEnabled(true);
-		//if(sap.ui.getCore().getElementById('btnDG5').getText()=="Not Required"){
-		//	sap.ui.getCore().getElementById('btnDG5').setText("Create");
-			
-		//}
 	
-	}else{
-		removeMandatedForm("Flooding.html")
-		//sap.ui.getCore().getElementById('btnDG5').setEnabled(false);
-		if(!oSwitchFlooding.getEnabled()){
-			//removeMandatedForm("flooding.html")
-			oSwitchFlooding.setState(false);
-			oSwitchFlooding.setEnabled(true);
-		}
-	}
-
-	if (key=="GEN-OP"){
-		addMandatedForm("Pollution.html")
-		oSwitchPollution.setState(true);
-		oSwitchPollution.setEnabled(false);
-		//sap.ui.getCore().getElementById('btnPollution').setEnabled(true);
-		//if(sap.ui.getCore().getElementById('btnPollution').getText()=="Not Required"){
-		//	sap.ui.getCore().getElementById('btnPollution').setText("Create");
-			
-		//}
-		
-	}else{
-		removeMandatedForm("Pollution.html")
-		//sap.ui.getCore().getElementById('btnPollution').setEnabled(false);
-		if(!oSwitchPollution.getEnabled()){
-			oSwitchPollution.setState(false);
-			oSwitchPollution.setEnabled(true);
-		}
-	}
 }
 function setCloseswitch(){
 	initCloseButtons()

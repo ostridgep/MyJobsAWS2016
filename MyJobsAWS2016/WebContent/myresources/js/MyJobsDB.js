@@ -1356,7 +1356,7 @@ var syncDetails = false	;
 												}
 											for (var n = 0; n < rowsArray.length; n++) {
 												item = rowsArray[n];
-												newNotifDets='&NOTIF_TYPE='+item['type']+'&START_DATE='+item['startdate']+'&START_TIME='+item['starttime']+'&END_DATE='+item['startdate']+'&END_TIME='+item['starttime']+'&SHORT_TEXT='+item['shorttext']+'&LONG_TEXT='+item['longtext']+'&ID='+item['id'];
+												newNotifDets='&NOTIF_TYPE='+'&ASSIG_TOME='+item['assigntome']+item['type']+'&START_DATE='+item['startdate']+'&START_TIME='+item['starttime']+'&END_DATE='+item['startdate']+'&END_TIME='+item['starttime']+'&SHORT_TEXT='+item['shorttext']+'&LONG_TEXT='+item['longtext']+'&ID='+item['id'];
 												newNotifDets+='&CODING='+item['pcode']+'&CODE_GROUP='+item['pgroup']+'&EQUIPMENT='+item['equipment']+'&FUNCT_LOC='+item['funcloc']+'&REPORTED_BY='+localStorage.getItem('EmployeeID')+'&USERID='+localStorage.getItem('MobileUser');
 												opMessage("New Notifications Details="+newNotifDets);
 											
@@ -1364,7 +1364,7 @@ var syncDetails = false	;
 												n=rowsArray.length
 												html5sql.process("UPDATE MyNotifications SET notifno = 'SENDING' WHERE id='"+item['id']+"'",
 														 function(){
-															sendSAPData("MyJobsCreateNewJob.htm",newNotifDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");
+															sendSAPData("MyJobsCreateNewJob2.htm",newNotifDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");
 															
 														 },
 														 function(error, statement){
@@ -1486,7 +1486,7 @@ var syncDetails = false	;
 																		'&TIME='+item['duration']+'&USER='+item['user']+'&RECNO='+item['id']+
 																		'&SDATE='+item['date'].substring(8,10)+"."+item['date'].substring(5,7)+"."+item['date'].substring(0,4)+'&STIME='+item['time']+'&EDATE='+item['enddate'].substring(8,10)+"."+item['enddate'].substring(5,7)+"."+item['enddate'].substring(0,4)+'&ETIME='+item['endtime']+
 																		'&ACTIVITYTYPE='+item['type']+'&WORK_CNTR='+item['work_cntr']+'&PERS_NO='+item['empid']+'&LONG_TEXT='+item['longtext']+
-																		'&ACT_WORK='+item['act_work']+'&REM_WORK='+item['rem_work']+'&FINAL='+item['final']+'&ASSIG_TOME='+item['assigntome']
+																		'&ACT_WORK='+item['act_work']+'&REM_WORK='+item['rem_work']+'&FINAL='+item['final']
 																		if (item['reason']!=null){
 																			newTConfDets+='&REASON='+item['reason']
 																		}
@@ -1497,7 +1497,7 @@ var syncDetails = false	;
 																		n = rowsArray.length
 																		html5sql.process("UPDATE MyTimeConfs SET confno = 'SENDING' WHERE id='"+item['id']+"'",
 																				 function(){
-																					sendSAPData("MyJobsCreateTConf2.htm",newTConfDets,"UPDATE MyTimeConfs SET confno = 'NEW' WHERE id='"+item['id']+"'");
+																					sendSAPData("MyJobsCreateTConf.htm",newTConfDets,"UPDATE MyTimeConfs SET confno = 'NEW' WHERE id='"+item['id']+"'");
 																					
 																				 },
 																				 function(error, statement){

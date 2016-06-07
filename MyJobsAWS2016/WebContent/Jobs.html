@@ -179,10 +179,13 @@ var selectedHistoryDocument='';
 var currentEquipment_GIS="";
 var currentFuncLoc_GIS=""; 
 var selectedJobArray=[];
+
 var selectedPhoto="";
 var selectedPhotoDir="";
 var selevctedMPDecimals=0;
 var selevctedMPLength=0;
+var mandatedDG5=[]
+var mandatedPIA=[]
 //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
 var eqAttributes = new 		sap.ui.core.HTML({
 	content: '<TABLE width="90%">'+
@@ -5986,8 +5989,65 @@ function BuildChangeStatusReject(){
 			 
 
 		}
+function BuildFormsMandation(){
+	mandatedDG5=[]
+	mandatedPIA=[]
+	var SQLStatement="select * from DG5REL"
+	
+	
+	
+		html5sql.process(SQLStatement,
+		 function(transaction, results, rowsArray){			
+		
+				for (var n = 0; n < rowsArray.length; n++) {
+					item = rowsArray[n];
+					if(item.dg5rel=='X'){
+						mandatedDG5.push(item.catalogue+"|"+item.codegrp+"|"+item.code);
+					}
+					if(item.piarel=='X'){
+						mandatedPIA.push(item.catalogue+"|"+item.codegrp+"|"+item.code);
+					}
+			
+				}
+			
+				
+		 },
+		 function(error, statement){
+			
+		 }        
+		);
 
+	} 
+function checkMandatedForms(type,grp,code){
+	
+//check for DG5 Mandation	
+	if (mandatedDG5.indexOf(type+"|"+grp+"|"+code)<0){	
+		removeMandatedForm("Flooding.html")
+		if(!oSwitchFlooding.getEnabled()){
+			oSwitchFlooding.setState(false);
+			oSwitchFlooding.setEnabled(true);
+		}else{
+		oSwitchFlooding.setState(true);
+		oSwitchFlooding.setEnabled(false);
+		addMandatedForm("Flooding.html")
+		}
+	}
+		if (mandatedPIA.indexOf(type+"|"+grp+"|"+code)<0){	
+			removeMandatedForm("Pollution.html")
+			
+			if(!oSwitchPollution.getEnabled()){
+				oSwitchPollution.setState(false);
+				oSwitchPollution.setEnabled(true);
+			}else{
+				addMandatedForm("Pollution.html")
+				oSwitchPollution.setState(true);
+				oSwitchPollution.setEnabled(false);
+			}
+		}
+
+}
 function BuildCloseScreen(){
+	BuildFormsMandation()
 	var PAIVisible = true;
 	if((CurrentJobProfile==null)||
 			(CurrentJobProfile==null)){
@@ -6272,6 +6332,7 @@ function BuildCloseScreen(){
 			);
 
 		}
+
  function BuildCloseProblemCodes(grp,selected){
 	
 		var SQLStatement="";
