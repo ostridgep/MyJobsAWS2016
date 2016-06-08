@@ -457,10 +457,7 @@ function sendSAPData(page,params,timedOutSQL){
 	console.log(page+getTime())
 	
 	var myurl=SAPServerPrefix+page+SAPServerSuffix+params;
-	if ((page=="MyJobsDG5Create.htm")||(page=="MyJobsPIACreate.htm")){
-		
-		alert(myurl)
-	}
+
 	$.ajax({
 	    dataType: "json",
 	    url: myurl,  
@@ -1236,7 +1233,7 @@ function syncTransactional1(){
 
 }
 
-function syncUpload(){
+function syncUploadOriginal(){// Remove once syncing works
 
 var newDets="";
 var currentUser="";
@@ -1356,7 +1353,7 @@ var syncDetails = false	;
 												}
 											for (var n = 0; n < rowsArray.length; n++) {
 												item = rowsArray[n];
-												newNotifDets='&NOTIF_TYPE='+'&ASSIG_TOME='+item['assigntome']+item['type']+'&START_DATE='+item['startdate']+'&START_TIME='+item['starttime']+'&END_DATE='+item['startdate']+'&END_TIME='+item['starttime']+'&SHORT_TEXT='+item['shorttext']+'&LONG_TEXT='+item['longtext']+'&ID='+item['id'];
+												newNotifDets='&NOTIF_TYPE='+item['type']+'&ASSIG_TOME='+item['assigntome']+'&START_DATE='+item['startdate']+'&START_TIME='+item['starttime']+'&END_DATE='+item['startdate']+'&END_TIME='+item['starttime']+'&SHORT_TEXT='+item['shorttext']+'&LONG_TEXT='+item['longtext']+'&ID='+item['id'];
 												newNotifDets+='&CODING='+item['pcode']+'&CODE_GROUP='+item['pgroup']+'&EQUIPMENT='+item['equipment']+'&FUNCT_LOC='+item['funcloc']+'&REPORTED_BY='+localStorage.getItem('EmployeeID')+'&USERID='+localStorage.getItem('MobileUser');
 												opMessage("New Notifications Details="+newNotifDets);
 											
@@ -1705,6 +1702,815 @@ var syncDetails = false	;
 	
 
 }
+function syncUpload(){
+	
+
+	SQLStatement="select 'VehicleCheck' as type, '' as extra,id as id, recordupdated from MyVehicleCheck where state = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'NotificationsZ7' as type,   shorttext as extra,id    as id, recordupdated from MyNotifications where notifno = 'NEW' and type = 'Z7' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'Notifications' as type,   shorttext as extra,id    as id, recordupdated from MyNotifications where notifno = 'NEW' and type <> 'Z7' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'StatusUpdate' as type,  status as extra, id    as id, recordupdated from MyStatus where state = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'JobClose' as type,  '' as extra, id    as id, recordupdated from MyJobClose where state = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'TimeConf' as type,  '' as extra, id    as id, recordupdated from MyTimeConfs where confno = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'MessageRead' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'READ' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'MesssageNew' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'MPointDoc' as type,   '' as extra,id    as id, recordupdated from MyMpointDocs where state = 'NEW' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'Flooding' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'Flooding' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'Pollution' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'Pollution' "
+	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'CustomerFeedback' as type,  '' as extra, id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'CustomerFeedback' "
+	SQLStatement+=" 		order by recordupdated asc "
+
+	html5sql.process(SQLStatement,
+	 function(transaction, results, rowsArray){
+	//alert("ok"+rowsArray.length)
+			if (rowsArray.length>0) {
+				item = rowsArray[0];
+				
+				syncUploadNew(item.id,item.type)
+			}
+	 },
+	 function(error, statement){
+		alert(error+statement)
+	 }        
+	);
+
+}
+
+function syncUploadNew(id,type){
+	var c040="NA"	
+		var d040=""		
+		var c060="NA"	
+		var d060=""	
+		var c100="NA"	
+		var d100=""
+var 	formalsampletaken = ""	
+var 	upstreamsenttolab= ""
+var 	ptofdiscsenttolab= ""
+var 	downstream1senttolab= ""
+var 	downstream2senttolab= ""
+var 	downstream3senttolab= ""
+		
+	
+user=localStorage.getItem("MobileUser")
+empid=localStorage.getItem("EmployeeID")
+	var newDets="";
+	var currentUser="";
+	syncDetsSet=false;
+	var codeval
+	SAPServerPrefix=$.trim(localStorage.getItem('ServerName'));
+	sapCalls = 0;
+		if (!CheckSyncInterval('UPLOAD')){
+			console.log("u[pload interval not met")
+			return; }
+		if (localStorage.getItem("SAPCalling")=="true"){
+			console.log("SAP is being Called")
+			return
+			}
+		//opMessage("Synchronizing Upload Data");
+		console.log(id+"-----"+type)	
+	var syncDetails = false	;
+		html5sql.process(
+			"SELECT * from MyUserDets",
+			function(transaction, results, rowsArray){
+				if( rowsArray.length > 0) {
+					curremtUser="&username="+rowsArray[0].user;
+					SAPServerSuffix="?jsonCallback=?&MYJOBSSYSTEM="+localStorage.getItem('SAPSystem')+"&sap-client="+localStorage.getItem('SAPClient')+"&sap-user="+rowsArray[0].user+"&sap-password="+rowsArray[0].password;
+					if(type=="VehicleCheck")// Process Vehicle Defects
+						{
+						html5sql.process("SELECT * from MyVehicleCheck where id = '"+id+"'",
+								function(transaction, results, rowsArray){
+									if( rowsArray.length > 0) {
+										if (syncDetails){
+											localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", VehicleCheck:"+String(rowsArray.length));
+										}else{
+											syncDetails=true;
+											localStorage.setItem('LastSyncUploadDetails',"VehicleCheck:"+String(rowsArray.length));
+										}
+										if(!syncDetsSet){
+											syncDetsSet=true;
+											SetLastSyncDetails("LASTSYNC_UPLOAD");
+											
+											}
+										item = rowsArray[0];
+										if(item['desc'].length<1){
+											codeval='Y'
+										}else{
+											codeval='N'	
+										}
+										
+										newVehicleCheck='&MEAS_POINT='+item['mpoint']+'&MEAS_EQUIP='+item['equipment']+'&MEAS_DATE='+item['mdate']+'&MEAS_TIME='+item['mtime']+'&MEAS_TEXT='+item['desc']+'&MEAS_LONG_TEXT='+item['longtext']+'&RECNO='+item['id']+'&MEAS_READ_BY='+item['mreadby']+'&USER='+item['user']+'&MEAS_READING='+item['mileage']+'&MEAS_VAL_CODE='+codeval;
+										opMessage("Vehicle Defect"+newVehicleCheck);
+										
+										sapCalls+=1;
+										
+										html5sql.process("UPDATE MyNewJobs SET state = 'SENDING' WHERE id='"+item['id']+"'",
+												 function(){
+													if(item['reg'].length<1){
+														sendSAPData("MyJobsCreateVehicleDefect.htm",newVehicleCheck,"UPDATE MyVehicleCheck SET state = 'NEW' WHERE id='"+item['id']+"'");
+													}else{
+														sendSAPData("MyJobsCreateVehicleMileage.htm",newVehicleCheck,"UPDATE MyVehicleCheck SET state = 'NEW' WHERE id='"+item['id']+"'");
+													}
+													
+													
+													
+												 },
+												 function(error, statement){
+													 
+													 opMessage("Error: " + error.message + " when processing " + statement);
+												 }        
+										);
+									
+									 }
+								},
+								 function(error, statement){
+									 
+									 opMessage("Error: " + error.message + " when processing " + statement);
+								 });
+						}
+					
+					if(type=="NotificationsZ7")// Process New Notifications	EOD		
+					{					
+								
+							html5sql.process("SELECT * from MyNotifications where id = '"+id+"'",
+								function(transaction, results, rowsArray){
+									if( rowsArray.length > 0) {
+										if (syncDetails){
+											localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", EOD:"+String(rowsArray.length));
+										}else{
+											syncDetails=true;
+											localStorage.setItem('LastSyncUploadDetails',"EOD:"+String(rowsArray.length));
+										}
+										if(!syncDetsSet){
+											syncDetsSet=true;
+											SetLastSyncDetails("LASTSYNC_UPLOAD");
+											
+											}
+										
+											item = rowsArray[0];
+											newEODDets='&TYPE='+item['type']+'&ACT_START_DATE='+item['startdate']+'&ACT_START_TIME='+item['starttime']+'&ACT_END_DATE='+item['enddate']+'&ACT_END_TIME='+item['endtime']+'&SHORT_TEXT='+item['shorttext']
+											newEODDets+='&REPORTED_BY='+localStorage.getItem('EmployeeID')+'&USERID='+localStorage.getItem('MobileUser')+'&ID='+item['id'];;
+											opMessage("New EOD Notifications Details="+newEODDets);
+											
+											sapCalls+=1;
+											n=rowsArray.length
+											html5sql.process("UPDATE MyNotifications SET notifno = 'SENDING' WHERE id='"+item['id']+"'",
+													 function(){
+														sendSAPData("MyJobsCreateEODNotification.htm",newEODDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");
+														
+													 },
+													 function(error, statement){
+														 
+														 opMessage("Error: " + error.message + " when processing " + statement);
+													 }        
+											);
+										}
+									 
+									},
+									 function(error, statement){
+										 
+										 opMessage("Error: " + error.message + " when processing " + statement);
+									 });
+							}
+						
+						if(type=="Notifications")// Process New Notifications		
+						{	
+													
+									html5sql.process("SELECT * from MyNotifications where id = '"+id+"'",
+										function(transaction, results, rowsArray){
+											if( rowsArray.length > 0) {
+												if (syncDetails){
+													localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Notifications:"+String(rowsArray.length));
+												}else{
+													syncDetails=true;
+													localStorage.setItem('LastSyncUploadDetails',"Notifications:"+String(rowsArray.length));
+												}
+												if(!syncDetsSet){
+													syncDetsSet=true;
+													SetLastSyncDetails("LASTSYNC_UPLOAD");
+													
+													}
+												
+													item = rowsArray[0];
+													newNotifDets='&NOTIF_TYPE='+item['type']+'&ASSIG_TOME='+item['assigntome']+'&START_DATE='+item['startdate']+'&START_TIME='+item['starttime']+'&END_DATE='+item['startdate']+'&END_TIME='+item['starttime']+'&SHORT_TEXT='+item['shorttext']+'&LONG_TEXT='+item['longtext']+'&ID='+item['id'];
+													newNotifDets+='&CODING='+item['pcode']+'&CODE_GROUP='+item['pgroup']+'&EQUIPMENT='+item['equipment']+'&FUNCT_LOC='+item['funcloc']+'&REPORTED_BY='+localStorage.getItem('EmployeeID')+'&USERID='+localStorage.getItem('MobileUser');
+													opMessage("New Notifications Details="+newNotifDets);
+												
+													sapCalls+=1;
+													n=rowsArray.length
+													html5sql.process("UPDATE MyNotifications SET notifno = 'SENDING' WHERE id='"+item['id']+"'",
+															 function(){
+																sendSAPData("MyJobsCreateNewJob2.htm",newNotifDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");
+																
+															 },
+															 function(error, statement){
+																 
+																 opMessage("Error: " + error.message + " when processing " + statement);
+															 }        
+													);
+												}
+											 
+											},
+											 function(error, statement){
+												 
+												 opMessage("Error: " + error.message + " when processing " + statement);
+											 });
+									}
+								
+								if(type=="StatusUpdate")// Process Status Updates			
+								{														
+											html5sql.process("SELECT * from MyStatus where id = '"+id+"'",
+												function(transaction, results, rowsArray){
+													if( rowsArray.length > 0) {
+														if (syncDetails){
+															localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Status:"+String(rowsArray.length));
+														}else{
+															syncDetails=true;
+															localStorage.setItem('LastSyncUploadDetails',"Status:"+String(rowsArray.length));
+														}
+														if(!syncDetsSet){
+															syncDetsSet=true;
+															SetLastSyncDetails("LASTSYNC_UPLOAD");
+															
+															}
+														
+															item = rowsArray[0];
+															newStatusDets='&ORDERNO='+item['orderno']+'&OPNO='+item['opno']+'&STATUS='+item['status']+'&STSMA='+item['stsma']+'&ACT_DATE='+item['actdate'].substring(8,10)+"."+item['actdate'].substring(5,7)+"."+item['actdate'].substring(0,4)+'&ACT_TIME='+item['acttime']+'&RECNO='+item['id']+'&USERID='+localStorage.getItem('MobileUser');
+															opMessage("Newstatus Details="+newStatusDets);
+																
+															sapCalls+=1;							
+															n = rowsArray.length
+															html5sql.process("UPDATE MyStatus SET state = 'SENDING' where id='"+item['id']+"'",
+																	 function(){
+																		sendSAPData("MyJobsUpdateStatus.htm",newStatusDets,"UPDATE MyStatus SET state = 'NEW' where id='"+item['id']+"'");
+																		
+																	 },
+																	 function(error, statement){
+																		 
+																		 opMessage("Error: " + error.message + " when processing " + statement);
+																	 }        
+															);
+													}
+												 
+												},
+												 function(error, statement){
+													 
+													 opMessage("Error: " + error.message + " when processing " + statement);
+												 });
+										}
+									
+									if(type=="JobClose")// Process Close Jobs			
+									{														
+																										
+													html5sql.process("SELECT * from MyJobClose where id = '"+id+"'",	
+														function(transaction, results, rowsArray){
+															if( rowsArray.length > 0) {
+																if (syncDetails){
+																	localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Close:"+String(rowsArray.length));
+																}else{
+																	syncDetails=true;
+																	localStorage.setItem('LastSyncUploadDetails',"Close:"+String(rowsArray.length));
+																}
+																if(!syncDetsSet){
+																	syncDetsSet=true;
+																	SetLastSyncDetails("LASTSYNC_UPLOAD");
+																	
+																	}
+																
+																	item = rowsArray[0];
+
+																	newCloseDets='&NOTIFNO='+item['notifno']+'&USERID='+localStorage.getItem('MobileUser')+'&RECNO='+item['id']+
+																	'&FUNCT_LOC='+item['funcloc']+
+																	'&EQUIPMENT='+item['equipment']+
+																	'&LONG_TEXT='+item['details']+
+																	'&DL_CAT_TYP=P'+'&DL_CODE_GRP='+item['pgrp']+'&DL_CODE='+item['pcode']+
+																	'&D_CAT_TYP=R'+'&D_CODE_GRP='+item['agrp']+'&D_CODE='+item['acode']+
+																	'&CAUSE_CAT_TYP=S'+'&CAUSE_CODE_GRP='+item['igrp']+'&CAUSE_CODE='+item['icode']
+
+																	
+																	
+
+																	
+																	opMessage("Close Notif Update Details="+newCloseDets);
+																
+																	
+																	sapCalls+=1;		
+																	
+																	html5sql.process("UPDATE MyJobClose SET state = 'SENDING' WHERE id='"+item['id']+"'",
+																			 function(){
+																	
+																				if (item['notifno'].length>5){
+																	
+																					sendSAPData("MyJobsUpdateNotif.htm",newCloseDets,"UPDATE MyJobClose SET state = 'NEW' WHERE id='"+item['id']+"'");
+																					
+																				}
+																				
+																			 },
+																			 function(error, statement){
+																				// alert("Error: " + error.message + " when processing " + statement);
+																				 opMessage("Error: " + error.message + " when processing " + statement);
+																			 }        
+																	);
+															}
+														 
+														},
+														 function(error, statement){
+															 
+															 opMessage("Error: " + error.message + " when processing " + statement);
+														 });
+												}
+									if(type=="Flooding")// Flooding Form			
+									{														
+											
+													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
+													
+													html5sql.process(sqlstatement,
+															function(transaction, results, rowsArray){
+															
+															  if(rowsArray.length>0){
+																alert("found fl rec")
+																jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
+																if (syncDetails){
+																	localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Flooding:"+String(rowsArray.length));
+																}else{
+																	syncDetails=true;
+																	localStorage.setItem('LastSyncUploadDetails',"Flooding:"+String(rowsArray.length));
+																}
+																if(!syncDetsSet){
+																	syncDetsSet=true;
+																	SetLastSyncDetails("LASTSYNC_UPLOAD");
+																	
+																	}
+				
+																										
+													
+																
+																	item = rowsArray[0];
+
+																	params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+
+																"&ZASTYP="+jsonstr[0].sewertype.trim()+
+																	"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
+																	"&ZAWEAT="+jsonstr[0].floodweather.trim()
+																	var pdepth="";
+																	for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
+																	{
+																		if(cnt>0){
+																			pdepth+=","
+																		}
+																	 row=cnt+1;	
+																	 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
+																	 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
+																	 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
+																	 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
+																	 pdepth+=rowsArray[0].orderno+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
+																	}
+											
+																	var pitem="";
+																	for(var cnt=0; cnt < jsonstr[0].location.length ; cnt++)
+																	{
+																		if(cnt>0){
+																			pitem+=","
+																		}
+																	 row=cnt+1;	
+																	 type=jsonstr[0].location[cnt]["loctype-"+row].split(":")
+																	 subtype=jsonstr[0].location[cnt]["locsubtype-"+row].split(":")
+																	 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
+																	 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
+																	 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
+																	 pitem+=rowsArray[0].orderno+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+																	
+																
+																	}	
+																	//need to populate the PHDR
+																	//sort date & time formats
+																	gridref=jsonstr[0].gridref.split(",");
+																	if(gridref.length>1){
+																		ENRef=gridref[0].substring(0,9)+":"+gridref[1].substring(0,9)
+																	}else{
+																		ENRef=gridref
+																	}
+																	jsonstr[0].floodtime=jsonstr[0].floodtime+"00"
+																	jsonstr[0].attendancetime=jsonstr[0].attendancetime+"00"
+																	flooddate=jsonstr[0].flooddate.substring(6,10)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(0,2)
+																	floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
+																	attenddate=jsonstr[0].attendancedate.substring(6,10)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(0,2)
+																	attendtime=jsonstr[0].attendancetime.substring(0,2)+jsonstr[0].attendancetime.substring(3,5)+jsonstr[0].attendancetime.substring(6,8)
+																	params+="&PHDR="+rowsArray[0].orderno+','+jsonstr[0].assetref.trim()+','+jsonstr[0].psshortcode+','+jsonstr[0].causeofflood+','+
+																	ENRef+',,'+flooddate+','+floodtime+','+empid+','+getShortSAPDate()+','+user+','+''+','+
+																	""+','+"Comments"+','+jsonstr[0].spillsize+","+attenddate+","+attendtime+','+
+																	jsonstr[0].attendanceweather+","+jsonstr[0].previousflooding+','+jsonstr[0].floodingsource+','+jsonstr[0].rootcause+
+																	"&PDEPTH="+pdepth+
+																	"&PITEM="+pitem
+																   
+											alert("fl sending")
+																		sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");
+																														
+																	
+
+																	
+																	
+																
+																	
+																	sapCalls+=1;		
+																	
+																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
+																			 function(){
+																	
+																			alert("done fl"+"UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")	
+																				
+																			 },
+																			 function(error, statement){
+																				// alert("Error: " + error.message + " when processing " + statement);
+																				 opMessage("Error: " + error.message + " when processing " + statement);
+																			 }        
+																	);
+															}
+														 
+														},
+														 function(error, statement){
+															 
+															 opMessage("Error: " + error.message + " when processing " + statement);
+														 });
+												}
+if(type=="Pollution")// Pollution Form			
+									{														
+											
+													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
+													
+													html5sql.process(sqlstatement,
+															function(transaction, results, rowsArray){
+															
+															  if(rowsArray.length>0){
+																
+																jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
+																if (syncDetails){
+																	localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Pollution:"+String(rowsArray.length));
+																}else{
+																	syncDetails=true;
+																	localStorage.setItem('LastSyncUploadDetails',"Pollution:"+String(rowsArray.length));
+																}
+																if(!syncDetsSet){
+																	syncDetsSet=true;
+																	SetLastSyncDetails("LASTSYNC_UPLOAD");
+																	
+																	}
+				
+																										
+													
+																
+																	item = rowsArray[0];
+
+																								if(jsonstr[0].formalsampletakenV=="YES"){	formalsampletaken="X"	}
+							if(jsonstr[0].upstreamsenttolabV=="YES"){	upstreamsenttolab="X"	}
+							if(jsonstr[0].ptofdiscsenttolabV=="YES"){	ptofdiscsenttolab="X"	}
+							if(jsonstr[0].downstream1senttolabV=="YES"){	downstream1senttolab="X"	}
+							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolab="X"	}
+							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolab="X"	}
+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+"&NOTIF_NO="+notifno+"&PPIA="+rowsArray[0].orderno+','+
+							
+							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
+							jsonstr[0].dischargetype.trim()+",,"+
+							jsonstr[0].watercoursetype.trim()+",,"+
+							jsonstr[0].watercoursewidth.trim()+",,"+
+							formalsampletaken.trim()+","+
+							jsonstr[0].sizeofimpact.trim()+","+
+							jsonstr[0].amenitiesimpact.trim()+",,"+
+							jsonstr[0].aestheticimpact.trim()+",,"+
+							jsonstr[0].upstreamdistance.trim()+","+jsonstr[0].ptofdiscdistance.trim()+","+jsonstr[0].downstream1distance.trim()+","+jsonstr[0].downstream2distance.trim()+","+jsonstr[0].downstream3distance.trim()+","+
+							jsonstr[0].upstreamonsitenh3.trim()+","+jsonstr[0].ptofdisconsitenh3.trim()+","+jsonstr[0].downstream1onsitenh3.trim()+","+jsonstr[0].downstream2onsitenh3.trim()+","+jsonstr[0].downstream3onsitenh3.trim()+","+
+							upstreamsenttolab.trim()+","+ptofdiscsenttolab.trim()+","+downstream1senttolab.trim()+","+downstream2senttolab.trim()+","+downstream3senttolab.trim()
+
+							sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");							
+																	
+
+																	
+																	
+																
+																	
+																	sapCalls+=1;		
+																	
+																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
+																			 function(){
+																	
+																				alert("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")
+																				
+																			 },
+																			 function(error, statement){
+																				// alert("Error: " + error.message + " when processing " + statement);
+																				 opMessage("Error: " + error.message + " when processing " + statement);
+																			 }        
+																	);
+															}
+														 
+														},
+														 function(error, statement){
+															 
+															 opMessage("Error: " + error.message + " when processing " + statement);
+														 });
+												}
+												
+																	
+if(type=="CustomerFeedback")// Pollution Form			
+									{											
+													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
+													
+													html5sql.process(sqlstatement,
+															function(transaction, results, rowsArray){
+															
+															  if(rowsArray.length>0){
+																
+																jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
+																if (syncDetails){
+																	localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Pollution:"+String(rowsArray.length));
+																}else{
+																	syncDetails=true;
+																	localStorage.setItem('LastSyncUploadDetails',"Pollution:"+String(rowsArray.length));
+																}
+																if(!syncDetsSet){
+																	syncDetsSet=true;
+																	SetLastSyncDetails("LASTSYNC_UPLOAD");
+																	
+																	}
+				
+																										
+													
+																
+																	item = rowsArray[0];
+							if(jsonstr[0].reason.length>0){
+								c040="LT"	
+								d040=jsonstr[0].reason
+							}
+							if(jsonstr[0].cause.length>0){
+								c060="LT"	
+								d060=jsonstr[0].cause
+							}
+							if(jsonstr[0].ppmdetails.length>0){
+								c100="LT"	
+								d100=jsonstr[0].ppmdetails
+							}
+							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+rowsArray[0].orderno+"&NOTIF_NO="+notifno+
+							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+opno+
+							"&ACT_CODEGRP_1=CUST010&ACT_CODE_1="+jsonstr[0].spokentoV.substring(0,1)+"&ACT_TEXT_1="+jsonstr[0].spokentoV+
+							"&ACT_CODEGRP_2=CUST020&ACT_CODE_2="+jsonstr[0].contactcardV.substring(0,1)+"&ACT_TEXT_2="+jsonstr[0].contactcardV+
+							"&ACT_CODEGRP_3=CUST030&ACT_CODE_3="+jsonstr[0].custsatifaction+"&ACT_TEXT_3="+jsonstr[0].custsatifaction+
+							"&ACT_CODEGRP_4=CUST040&ACT_CODE_4="+c040+"&ACT_TEXT_4="+d040+
+							"&ACT_CODEGRP_5=CUST050&ACT_CODE_5="+jsonstr[0].resolvedV.substring(0,1)+"&ACT_TEXT_5="+jsonstr[0].resolvedV+
+							"&ACT_CODEGRP_6=CUST060&ACT_CODE_6="+c060+"&ACT_TEXT_6="+d060+
+							"&ACT_CODEGRP_7=CUST070&ACT_CODE_7="+jsonstr[0].furtherworkV.substring(0,1)+"&ACT_TEXT_7="+jsonstr[0].furtherworkV+
+							"&ACT_CODEGRP_8=CUST080&ACT_CODE_8="+jsonstr[0].additionalworkV.substring(0,1)+"&ACT_TEXT_8="+jsonstr[0].additionalworkV+
+							"&ACT_CODEGRP_9=CUST090&ACT_CODE_9="+jsonstr[0].ppmV.substring(0,1)+"&ACT_TEXT_9="+jsonstr[0].ppmV+
+							"&ACT_CODEGRP_10=CUST100&ACT_CODE_10="+c100+"&ACT_TEXT_10="+d100
+							sendSAPData("MyJobsCreateCFEED.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");
+																	
+																	
+																
+																	
+																	sapCalls+=1;		
+																	
+																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
+																			 function(){
+																	
+																				alert("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")
+																				
+																			 },
+																			 function(error, statement){
+																				// alert("Error: " + error.message + " when processing " + statement);
+																				 opMessage("Error: " + error.message + " when processing " + statement);
+																			 }        
+																	);
+															}
+														 
+														},
+														 function(error, statement){
+															 
+															 opMessage("Error: " + error.message + " when processing " + statement);
+														 });
+												}
+									if(type=="TimeConf")// Process Time Confirmations		
+											{														
+																												
+															html5sql.process("SELECT * from MyTimeConfs where id = '"+id+"'",
+
+																function(transaction, results, rowsArray){
+																	if( rowsArray.length > 0) {
+																		if (syncDetails){
+																			localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", TimeConfs:"+String(rowsArray.length));
+																		}else{
+																			syncDetails=true;
+																			localStorage.setItem('LastSyncUploadDetails',"TimeConfs:"+String(rowsArray.length));
+																		}
+																		
+																			item = rowsArray[0];
+																			if(item['final']=="Yes"){
+																				fconf="X";
+																			}else{
+																				fconf="";
+																			}									
+																			newTConfDets='&ORDERNO='+item['orderno']+'&OPNO='+item['opno']+'&CONF_TEXT='+item['description']+
+																			'&TIME='+item['duration']+'&USER='+item['user']+'&RECNO='+item['id']+
+																			'&SDATE='+item['date'].substring(8,10)+"."+item['date'].substring(5,7)+"."+item['date'].substring(0,4)+'&STIME='+item['time']+'&EDATE='+item['enddate'].substring(8,10)+"."+item['enddate'].substring(5,7)+"."+item['enddate'].substring(0,4)+'&ETIME='+item['endtime']+
+																			'&ACTIVITYTYPE='+item['type']+'&WORK_CNTR='+item['work_cntr']+'&PERS_NO='+item['empid']+'&LONG_TEXT='+item['longtext']+
+																			'&ACT_WORK='+item['act_work']+'&REM_WORK='+item['rem_work']+'&FINAL='+item['final']
+																			if (item['reason']!=null){
+																				newTConfDets+='&REASON='+item['reason']
+																			}
+																				
+																			opMessage("NewTconf Details="+newTConfDets);
+																		
+																			sapCalls+=1;
+																			n = rowsArray.length
+																			html5sql.process("UPDATE MyTimeConfs SET confno = 'SENDING' WHERE id='"+item['id']+"'",
+																					 function(){
+																						sendSAPData("MyJobsCreateTConf.htm",newTConfDets,"UPDATE MyTimeConfs SET confno = 'NEW' WHERE id='"+item['id']+"'");
+																						
+																					 },
+																					 function(error, statement){
+																						 
+																						 opMessage("Error: " + error.message + " when processing " + statement);
+																					 }        
+																			);
+																	}
+																 
+																},
+																 function(error, statement){
+																	 
+																	 opMessage("Error: " + error.message + " when processing " + statement);
+																 });
+														}
+													
+													if(type=="MessageRead")// Upload the Messages READ Indicator
+													{														
+																														
+																	html5sql.process("SELECT * from MyMessages where id = '"+id+"'",
+																		function(transaction, results, rowsArray){
+																			
+																			//opMessage("done READ Message Select");
+																			//opMessage("READ Messages = "+rowsArray.length);
+																			if( rowsArray.length > 0) {
+																				if (syncDetails){
+																					localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Read Messages:"+String(rowsArray.length));
+																				}else{
+																					syncDetails=true;
+																					localStorage.setItem('LastSyncUploadDetails',"Read Messages:"+String(rowsArray.length));
+																				}
+																				if(!syncDetsSet){
+																					syncDetsSet=true;
+																					SetLastSyncDetails("LASTSYNC_UPLOAD");
+																					
+																					}
+
+																				item = rowsArray[0];
+
+																				newMessageDets='&ID='+item['id']+'&DOCID='+item['msgid'];
+																				opMessage("READ Status= "+newMessageDets);
+																				
+																				
+																				html5sql.process("UPDATE MyMessages SET state = 'SENDING' WHERE id='"+item['id']+"'",
+																						 function(){
+																						///sendSAPData("MyJobsMessageSetReadFlag.htm",newMessageDets,"UPDATE MyMessages SET state = 'NEW' WHERE id='"+item['id']+"'");
+																						
+																						 },
+																						 function(error, statement){
+																							 
+																							 opMessage("Error: " + error.message + " when processing " + statement);
+																						 }        
+																				);
+																			}
+																		 
+																		},
+																		 function(error, statement){
+																			 
+																			 opMessage("Error: " + error.message + " when processing " + statement);
+																		 });
+																}
+															
+															if(type=="MesssageNew")// Upload the NEW Sent Messages
+															{														
+																																
+																			html5sql.process("SELECT * from MyMessages where id = '"+id+"'",
+																			
+																				function(transaction, results, rowsArray){
+																				
+																					//opMessage("done SEND Message Select");
+																					//opMessage("SEND Messages = "+rowsArray.length);
+																					if( rowsArray.length > 0) {
+																						if (syncDetails){
+																							localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Messages:"+String(rowsArray.length));
+																						}else{
+																							syncDetails=true;
+																							localStorage.setItem('LastSyncUploadDetails',"Messages:"+String(rowsArray.length));
+																						}
+																						if(!syncDetsSet){
+																							syncDetsSet=true;
+																							SetLastSyncDetails("LASTSYNC_UPLOAD");
+																							sapCalls+=1;
+																							}
+
+																						item = rowsArray[0];
+
+																						newSentMsgDets='&ID='+item['id']+'&TO='+item['msgtoid']+'&SUBJECT='+item['msgsubject']+'&CONTENT='+item['msgtext'];
+																						opMessage("SEND Status= "+newSentMsgDets);
+																						
+																						
+																						html5sql.process("UPDATE MyMessages SET state = 'SENDING' WHERE id='"+item['id']+"'",
+																									 function(){
+																									      //sendSAPData("MyJobsMessageSend.htm",newSentMsgDets,"UPDATE MyMessages SET state = 'NEW' WHERE id='"+item['id']+"'");
+																											
+																									 },
+																									 function(error, statement){
+																										 
+																										 opMessage("Error: " + error.message + " when processing " + statement);
+																									 }        
+																						);
+																					}
+																				 
+																				},
+																				 function(error, statement){
+																					 
+																					 opMessage("Error: " + error.message + " when processing " + statement);
+																				 });
+																		}
+																	
+							if(type=="MPointDoc")// Seding Measurement Docs
+							{														
+																								
+											html5sql.process("SELECT * from MyMpointDocs where id = '"+id+"'",
+													function(transaction, results, rowsArray){
+													
+														console.log("found MP"+rowsArray.length)
+														if( rowsArray.length > 0) {
+															if (syncDetails){
+																localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", MPDocs:"+String(rowsArray.length));
+															}else{
+																syncDetails=true;
+																localStorage.setItem('LastSyncUploadDetails',"MPDocs:"+String(rowsArray.length));
+															}
+															if(!syncDetsSet){
+																syncDetsSet=true;
+																SetLastSyncDetails("LASTSYNC_UPLOAD");
+																sapCalls+=1;
+																}
+
+															item = rowsArray[0];
+															var mpcode=""
+																if(item['code']!="-1"){
+																	mpcode=item['code'];
+																}
+															newMPDoc='&EQUIPMENT='+item['equipment']+'&FUNC_LOC='+item['funcloc']+'&MEAS_POINT='+item['meas_point']+
+															'&READING_DATE='+item['date']+
+															'&READING_TIME='+item['time']+
+															'&RECNO='+item['id']+
+															'&READER='+localStorage.getItem('MobileUser')+
+															'&RECORDED_VALUE='+item['value']+
+															'&VALUATION_CODE='+mpcode+
+															'&SHORT_TEXT='+item['shorttext']+
+															'&USERID='+localStorage.getItem('MobileUser')
+															opMessage("SEND Status= "+newMPDoc);
+															
+															
+															html5sql.process("UPDATE MyMpointDocs SET state = 'SENDING' WHERE id='"+item['id']+"'",
+																		 function(){
+																			sendSAPData("MyJobsCreateMPDoc.htm",newMPDoc,"UPDATE MyMpointDocs SET state = 'NEW' WHERE id='"+item['id']+"'");
+																				
+																		 },
+																		 function(error, statement){
+																			 
+																			 opMessage("Error: " + error.message + " when processing " + statement);
+																		 }        
+															);
+														}
+													 
+													},
+													 function(error, statement){
+														 
+														 opMessage("Error: " + error.message + " when processing " + statement);
+													 });
+							}
+				}
+			},
+		 function(error, statement){
+			 
+			 opMessage("Error: " + error.message + " when processing " + statement);
+		 });
+															
+
+		
+		
+		
+		
+
+	}
+
 function loadAssetXML(fname){
 	 $.ajax({
 		    type: "GET",
@@ -1865,7 +2671,7 @@ function downloadfile(fname){
 	    },
 	    function(error) {
 	    	opMessage("download error source " + error.source);
-	    	opMessage("download error target " + error.target);
+	    	opMessage("download error targe", as + error.target);
 	    	opMessage("download error code" + error.code);
 	    },
 	    true,
@@ -2255,7 +3061,7 @@ function createAWSEODNotif(workdate,homedate,empno)
 
 }
 
-function createAWSJobClose(order,opno,notifno, details, empid,work_cntr,closedate,closetime, funcloc , equipment, inshift , outofshift , pgrp, pcode, agrp, acode, igrp, icode, followon , variance, reason)
+function createAWSJobClose(order,opno,notifno, details, empid,work_cntr,closedate,closetime, funcloc , equipment, inshift , outofshift , pgrp, pcode, agrp, acode, igrp, icode, followon , variance, reason,oSwitchFlooding,oSwitchPollution,oSwitchCustFeed,scode,sdesc)
 {
 
 html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, empid, work_cntr, state , closedate, closetime, funcloc , equipment, inshift , outofshift , pgrp, pcode, agrp, acode, igrp, icode, followon , variance, reason) VALUES ("+
@@ -2263,7 +3069,25 @@ html5sql.process("INSERT INTO  MyJobClose (orderno , opno, notifno, details, emp
 			 funcloc+"','"+equipment+"','"+inshift+"','"+outofshift+"','"+pgrp+"','"+pcode+"','"+agrp+"','"+
 			 acode+"','"+igrp+"','"+icode+"','"+followon+"','"+variance+"','"+reason+"');",
 	 function(){
-		
+			updateOperationStatus(order, opno, scode ,sdesc)
+			if(oSwitchFlooding){
+				
+				 updateFormsResponseDate("Flooding",order,opno)
+				
+			 }else{
+				 
+				 deleteFormsResponseDate("Flooding",order,opno)
+			 }
+			 if(oSwitchPollution){
+				 updateFormsResponseDate("Pollution",order,opno)
+			 }else{
+				 deleteFormsResponseDate("Pollution",order,opno)
+			 }
+			 if(	 oSwitchCustFeed){
+				 updateFormsResponseDate("CustomerFeedback",order,opno)
+			 }else{
+				 deleteFormsResponseDate("CustomerFeedback",order,opno)
+			 }
 	 },
 	 function(error, statement){
 			
@@ -2393,7 +3217,61 @@ function updateDocsTable()
 	
 
 }
+function updateFormsResponseDate(formname, order,opno)
+{
+	
+	
+	
+	sqlStatement="UPDATE MyFormsResponses "+
+				 "SET recordupdated=STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW') "+
+				 "where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
+	
+		
+   opMessage("About to Update Formdata Date "+order+":"+opno+":"+formname)
+  
+	html5sql.process(sqlStatement,
+		 function(transaction, results, rowsArray){
+		
+		opMessage("Formdata Updated OK")
+		
 
+		
+		 },
+		 function(error, statement){
+			
+			opMessage("Error: " + error.message + " when Updateing FormsResponses Date" );
+			
+		 }        
+		);
+	
+}
+function deleteFormsResponseDate(formname, order,opno)
+{
+	
+	
+	
+	sqlStatement="DELETE from MyFormsResponses "+
+				 "where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
+	
+		
+   opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
+  
+	html5sql.process(sqlStatement,
+		 function(transaction, results, rowsArray){
+		
+		opMessage("Formdata Deleted OK")
+		
+
+		
+		 },
+		 function(error, statement){
+			
+			opMessage("Error: " + error.message + " when Deleting FormsResponses" );
+			
+		 }        
+		);
+	
+}
 function createFormsResponse(formname, order,opno,user,content,mode,type)
 {
 	
@@ -2628,90 +3506,90 @@ function createTables(type) {
 
 	//opMessage("Creating The Tables");	
         
-		sqlstatement='CREATE TABLE IF NOT EXISTS MyOrders     			( orderno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, startdate TEXT, enddate TEXT, contact TEXT,   telno TEXT,    type TEXT, priority TEXT, address TEXT, workaddress TEXT, house TEXT, houseno TEXT, street TEXT, district TEXT, city TEXT, postcode TEXT,gis TEXT, property TEXT, funcloc TEXT, equipment TEXT, propertygis TEXT, funclocgis TEXT, equipmentgis TEXT, notifno TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyOperations 			( orderno TEXT, opno TEXT,      type TEXT,     priority TEXT,  shorttext TEXT, startdate TEXT, enddate TEXT, duration TEXT, status TEXT, assignedto TEXT, apptstart TEXT, apptend TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyOperationsSplit 		( orderno TEXT, opno TEXT,      assignedto TEXT,  duration TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyPartners   			( orderno TEXT, notifno TEXT, id TEXT,        type TEXT,     name TEXT,      address TEXT,   postcode TEXT, telno TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyAssets     			( orderno TEXT, id TEXT,        type TEXT,     name TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyMaterials     		( orderno TEXT, id TEXT, material TEXT, qty TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyUserStatus     		( id integer primary key autoincrement, type TEXT, orderno TEXT, opno TEXT, inact TEXT, status TEXT, statuscode TEXT, statusdesc TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyOperationInfo     	( id integer primary key autoincrement, orderno TEXT, opno TEXT, type TEXT, value1 TEXT, value2 TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyNotifications     	( id integer primary key autoincrement, notifno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, cattype TEXT,  pgroup TEXT, pcode TEXT, grouptext TEXT, codetext TEXT, startdate TEXT, starttime TEXT, enddate TEXT, endtime TEXT, type TEXT, priority TEXT, funcloc TEXT,   equipment TEXT, orderno TEXT, reportedon TEXT,   reportedby TEXT, plant TEXT, funclocgis TEXT,   equipmentgis TEXT, assigntome TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyItems     			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, descript TEXT, d_cat_typ TEXT, d_codegrp TEXT, d_code TEXT, dl_cat_typ TEXT, dl_codegrp TEXT, dl_code TEXT, long_text TEXT, stxt_grpcd TEXT ,txt_probcd TEXT  ,txt_grpcd TEXT , txt_objptcd TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyCauses      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, cause_id TEXT, cause_text TEXT, cause_cat_typ TEXT, cause_codegrp TEXT, cause_code TEXT, long_text TEXT, txt_causegrp TEXT, txt_causecd TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyActivities     		( id integer primary key autoincrement, notifno TEXT, task_id TEXT, item_id TEXT,  act_id TEXT, act_text TEXT, act_cat_typ TEXT, act_codegrp TEXT, act_code TEXT,  start_date TEXT, start_time TEXT ,end_date TEXT  ,end_time TEXT , long_text TEXT, txt_actgrp TEXT, txt_actcd TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyTasks      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_text TEXT, task_cat_typ TEXT, task_codegrp TEXT, task_code TEXT, txt_taskgrp TEXT, txt_taskcd TEXT, plnd_start_date TEXT, plnd_start_time TEXT ,plnd_end_date TEXT  ,plnd_end_time TEXT , sla_end_date TEXT  ,sla_end_time TEXT , longtext TEXT, complete TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyEffects      		( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_id TEXT, effect_cat_typ TEXT, effect_codegrp TEXT, effect_code TEXT, txt_effectgrp TEXT, txt_effectcd TEXT, value TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyStatus     			( id integer primary key autoincrement, orderno TEXT, opno TEXT, stsma TEXT, status TEXT, statusdesc, state TEXT, actdate TEXT, acttime TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyTimeConfs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, confno TEXT, type TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT,act_work TEXT, rem_work TEXT, act_type TEXT, work_cntr TEXT, reason TEXT, longtext TEXT, duration TEXT, datestamp TEXT,  user TEXT,  empid TEXT, final TEXT, state TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyMPointDocs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, funcloc TEXT, equipment TEXT, meas_point TEXT, date TEXT, time TEXT, shorttext TEXT, value TEXT, code TEXT, state TEXT);'+
+		sqlstatement='CREATE TABLE IF NOT EXISTS MyOrders     			( sysid integer primary key autoincrement,orderno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, startdate TEXT, enddate TEXT, contact TEXT,   telno TEXT,    type TEXT, priority TEXT, address TEXT, workaddress TEXT, house TEXT, houseno TEXT, street TEXT, district TEXT, city TEXT, postcode TEXT,gis TEXT, property TEXT, funcloc TEXT, equipment TEXT, propertygis TEXT, funclocgis TEXT, equipmentgis TEXT, notifno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyOperations 			( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      type TEXT,     priority TEXT,  shorttext TEXT, startdate TEXT, enddate TEXT, duration TEXT, status TEXT, assignedto TEXT, apptstart TEXT, apptend TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyOperationsSplit 		( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      assignedto TEXT,  duration TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyPartners   			( sysid integer primary key autoincrement,orderno TEXT, notifno TEXT, id TEXT,        type TEXT,     name TEXT,      address TEXT,   postcode TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyAssets     			( sysid integer primary key autoincrement,orderno TEXT, id TEXT,        type TEXT,     name TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyMaterials     		( sysid integer primary key autoincrement,orderno TEXT, id TEXT, material TEXT, qty TEXT, description TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyUserStatus     		( id integer primary key autoincrement, type TEXT, orderno TEXT, opno TEXT, inact TEXT, status TEXT, statuscode TEXT, statusdesc TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyOperationInfo     	( id integer primary key autoincrement, orderno TEXT, opno TEXT, type TEXT, value1 TEXT, value2 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyNotifications     	( id integer primary key autoincrement, notifno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, cattype TEXT,  pgroup TEXT, pcode TEXT, grouptext TEXT, codetext TEXT, startdate TEXT, starttime TEXT, enddate TEXT, endtime TEXT, type TEXT, priority TEXT, funcloc TEXT,   equipment TEXT, orderno TEXT, reportedon TEXT,   reportedby TEXT, plant TEXT, funclocgis TEXT,   equipmentgis TEXT, assigntome TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyItems     			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, descript TEXT, d_cat_typ TEXT, d_codegrp TEXT, d_code TEXT, dl_cat_typ TEXT, dl_codegrp TEXT, dl_code TEXT, long_text TEXT, stxt_grpcd TEXT ,txt_probcd TEXT  ,txt_grpcd TEXT , txt_objptcd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyCauses      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, cause_id TEXT, cause_text TEXT, cause_cat_typ TEXT, cause_codegrp TEXT, cause_code TEXT, long_text TEXT, txt_causegrp TEXT, txt_causecd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyActivities     		( id integer primary key autoincrement, notifno TEXT, task_id TEXT, item_id TEXT,  act_id TEXT, act_text TEXT, act_cat_typ TEXT, act_codegrp TEXT, act_code TEXT,  start_date TEXT, start_time TEXT ,end_date TEXT  ,end_time TEXT , long_text TEXT, txt_actgrp TEXT, txt_actcd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyTasks      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_text TEXT, task_cat_typ TEXT, task_codegrp TEXT, task_code TEXT, txt_taskgrp TEXT, txt_taskcd TEXT, plnd_start_date TEXT, plnd_start_time TEXT ,plnd_end_date TEXT  ,plnd_end_time TEXT , sla_end_date TEXT  ,sla_end_time TEXT , longtext TEXT, complete TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyEffects      		( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_id TEXT, effect_cat_typ TEXT, effect_codegrp TEXT, effect_code TEXT, txt_effectgrp TEXT, txt_effectcd TEXT, value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyStatus     			( id integer primary key autoincrement, orderno TEXT, opno TEXT, stsma TEXT, status TEXT, statusdesc, state TEXT, actdate TEXT, acttime TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyTimeConfs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, confno TEXT, type TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT,act_work TEXT, rem_work TEXT, act_type TEXT, work_cntr TEXT, reason TEXT, longtext TEXT, duration TEXT, datestamp TEXT,  user TEXT,  empid TEXT, final TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyMPointDocs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, funcloc TEXT, equipment TEXT, meas_point TEXT, date TEXT, time TEXT, shorttext TEXT, value TEXT, code TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
-					 'CREATE TABLE IF NOT EXISTS MyJobClose             ( id integer primary key autoincrement, orderno TEXT , opno TEXT, notifno TEXT, details TEXT, empid TEXT, work_cntr TEXT, state TEXT , closedate TEXT, closetime TEXT, funcloc  TEXT, equipment TEXT, inshift  TEXT, outofshift  TEXT, pgrp TEXT, pcode TEXT, agrp TEXT, acode TEXT, igrp TEXT, icode TEXT, followon  TEXT, variance TEXT, reason TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT);'+													
-					 'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyRefPriorityTypes     (  id integer primary key autoincrement, scenario TEXT, type TEXT, priority TEXT, description TEXT);'+
-				  	 'CREATE TABLE IF NOT EXISTS MyRefUserStatusProfiles (  id integer primary key autoincrement, scenario TEXT, type TEXT, status TEXT, statuscode TEXT, statusdesc TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyJobClose             ( id integer primary key autoincrement, orderno TEXT , opno TEXT, notifno TEXT, details TEXT, empid TEXT, work_cntr TEXT, state TEXT , closedate TEXT, closetime TEXT, funcloc  TEXT, equipment TEXT, inshift  TEXT, outofshift  TEXT, pgrp TEXT, pcode TEXT, agrp TEXT, acode TEXT, igrp TEXT, icode TEXT, followon  TEXT, variance TEXT, reason TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+													
+					 'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyRefPriorityTypes     (  id integer primary key autoincrement, scenario TEXT, type TEXT, priority TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+				  	 'CREATE TABLE IF NOT EXISTS MyRefUserStatusProfiles (  id integer primary key autoincrement, scenario TEXT, type TEXT, status TEXT, statuscode TEXT, statusdesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
-					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS Assets     			(  type TEXT, id TEXT, eqart TEXT, eqtyp TEXT, shorttext TEXT,  address TEXT, workcenter TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS AssetClassVals     	(  type TEXT, id TEXT,  charact TEXT,  valuechar TEXT,  valueto TEXT, valueneutral TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS AssetMeasurementPoints (  type TEXT, id TEXT,  mpoint TEXT,  description TEXT,  value TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS AssetInstalledEquip    (  type TEXT, id TEXT,  eqno TEXT,  description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS LogFile    			( id integer primary key autoincrement, datestamp TEXT, type TEXT, message TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS RefNotifprofile  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, notif_type TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS RefCodeGroups  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS RefCodes  				( id integer primary key autoincrement, scenario TEXT, profile TEXT, code_cat_group TEXT, code TEXT, code_text TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS HRAbsence     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, type TEXT, days TEXT, status TEXT, comments TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS Assets     			(  sysid integer primary key autoincrement,type TEXT, id TEXT, eqart TEXT, eqtyp TEXT, shorttext TEXT,  address TEXT, workcenter TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS AssetClassVals     	(  sysid integer primary key autoincrement,type TEXT, id TEXT,  charact TEXT,  valuechar TEXT,  valueto TEXT, valueneutral TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS AssetMeasurementPoints (  sysid integer primary key autoincrement,type TEXT, id TEXT,  mpoint TEXT,  description TEXT,  value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS AssetInstalledEquip    (  sysid integer primary key autoincrement,type TEXT, id TEXT,  eqno TEXT,  description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS LogFile    			( id integer primary key autoincrement, datestamp TEXT, type TEXT, message TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS RefNotifprofile  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, notif_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS RefCodeGroups  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS RefCodes  				( id integer primary key autoincrement, scenario TEXT, profile TEXT, code_cat_group TEXT, code TEXT, code_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS HRAbsence     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, type TEXT, days TEXT, status TEXT, comments TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 
-					 'CREATE TABLE IF NOT EXISTS HRTravel     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, travelfrom TEXT, travelto TEXT, status TEXT, comments TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS AssetDetails     		( id integer primary key autoincrement,PLAN_PLANT TEXT, MTCE_PLANT TEXT, SITE TEXT, FUNC_LOC TEXT, FUNC_LOC_DESC TEXT, EQUIP TEXT, EQUIP_DESC TEXT, PLANT_GROUP TEXT, ASSET_TYPE TEXT, ASSET_DESC TEXT, MAKE TEXT, MODEL TEXT, SERIAL_NO TEXT, OBJ_TYPE TEXT, EQTYPE_DESC TEXT, EFUNC_TYPE TEXT, FTYPE_DESC TEXT, SYS_CODE TEXT, SCODE_DESC TEXT, ASSET_TAG TEXT, START_UP_DATE TEXT, STATUS TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS HRTravel     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, travelfrom TEXT, travelto TEXT, status TEXT, comments TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS AssetDetails     		( id integer primary key autoincrement,PLAN_PLANT TEXT, MTCE_PLANT TEXT, SITE TEXT, FUNC_LOC TEXT, FUNC_LOC_DESC TEXT, EQUIP TEXT, EQUIP_DESC TEXT, PLANT_GROUP TEXT, ASSET_TYPE TEXT, ASSET_DESC TEXT, MAKE TEXT, MODEL TEXT, SERIAL_NO TEXT, OBJ_TYPE TEXT, EQTYPE_DESC TEXT, EFUNC_TYPE TEXT, FTYPE_DESC TEXT, SYS_CODE TEXT, SCODE_DESC TEXT, ASSET_TAG TEXT, START_UP_DATE TEXT, STATUS TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
-					 'CREATE TABLE IF NOT EXISTS JobAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, item TEXT, task TEXT, value TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS StockSearch     		( id integer primary key autoincrement, materialno TEXT, description TEXT, depot TEXT, available TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS SurveyAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, surveyid TEXT, groupid TEXT, questionid TEXT, name TEXT, answer TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS Survey     			( id integer primary key autoincrement, surveyid TEXT, name TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS SurveyGroup     		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, name TEXT, title TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS SurveyQuestion    		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questiontype TEXT, defaultvalue TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS SurveySubQuestion  	( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, subquestionid TEXT, subquestiontype TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS SurveyQuestionChildren ( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questionvalue TEXT, childquestions TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS FuncLocs			  	( id integer primary key autoincrement, flid TEXT, description TEXT, swerk TEXT, level TEXT, parentid TEXT, children TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS Equipments			  	( id integer primary key autoincrement, eqid TEXT, description TEXT, flid TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyMenuBar 		        ( id integer primary key autoincrement, scenario TEXT, level TEXT, item TEXT, position TEXT, type TEXT,  subitem TEXT, command TEXT, item2 TEXT);'+	
-					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, plant TEXT, orderplant TEXT, orderworkcentre TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT);'+	
-					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT);'+	
-					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT);'+					 
-					 'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT);'+					 
-					 'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT);'+	
-					 'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS TSNPJobs			    ( id integer primary key autoincrement, jobno TEXT, subtype TEXT,  description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS TSData		    		( id integer primary key autoincrement, date TEXT, job TEXT, skill TEXT, activity TEXT, time TEXT, ot15 TEXT, ot20 TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurveyQ			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qtype TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurveyA			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qkey TEXT, qvalue TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurveyMake		    ( id integer primary key autoincrement, make TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurveyModel		    ( id integer primary key autoincrement, make TEXT, model TEXT, description TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurvey			    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, make TEXT, model TEXT, location TEXT, dv1 TEXT, dv2 TEXT, dv3 TEXT, dv4 TEXT, dv5 TEXT, dv6 TEXT, dv7 TEXT, dv8 TEXT, dv9 TEXT, dv10 TEXT, dv11 TEXT, dv12 TEXT, dv13 TEXT, dv14 TEXT, dv15 TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS GASSurveyHDR		    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, date TEXT, signed TEXT, hv1 TEXT, hv2 TEXT, hv3 TEXT, hv4 TEXT, text1 TEXT, text2 TEXT, text3 TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS REFPAICODES			( id integer primary key autoincrement, scenario TEXT, userid TEXT, level TEXT, stsma TEXT, plant TEXT, work_cntr TEXT, catalogue TEXT, codegrp TEXT, kurztext_group TEXT, code TEXT, kurztext_code TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS REFNOTIFICATIONTYPES	( id integer primary key autoincrement, scenario TEXT, userid TEXT, level_number TEXT, notiftype TEXT, notifdesc TEXT, notifprofile TEXT, priotype TEXT,priority TEXT, prioritydesc TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS REFVARIANCESRFV		( id integer primary key autoincrement, scenario TEXT, userid TEXT, plant TEXT, work_cntr TEXT, job_activity TEXT, dev_reason TEXT, dev_reas_txt TEXT, mandate TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS REFACTIVITY			( id integer primary key autoincrement, scenario TEXT, work_center TEXT, activity TEXT, activity_desc TEXT, action TEXT, deflt TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT);'+
-					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT);'+
+					 'CREATE TABLE IF NOT EXISTS JobAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, item TEXT, task TEXT, value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS StockSearch     		( id integer primary key autoincrement, materialno TEXT, description TEXT, depot TEXT, available TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS SurveyAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, surveyid TEXT, groupid TEXT, questionid TEXT, name TEXT, answer TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS Survey     			( id integer primary key autoincrement, surveyid TEXT, name TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS SurveyGroup     		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, name TEXT, title TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS SurveyQuestion    		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questiontype TEXT, defaultvalue TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS SurveySubQuestion  	( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, subquestionid TEXT, subquestiontype TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS SurveyQuestionChildren ( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questionvalue TEXT, childquestions TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS FuncLocs			  	( id integer primary key autoincrement, flid TEXT, description TEXT, swerk TEXT, level TEXT, parentid TEXT, children TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS Equipments			  	( id integer primary key autoincrement, eqid TEXT, description TEXT, flid TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyMenuBar 		        ( id integer primary key autoincrement, scenario TEXT, level TEXT, item TEXT, position TEXT, type TEXT,  subitem TEXT, command TEXT, item2 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, plant TEXT, orderplant TEXT, orderworkcentre TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+					 'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+					 'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS TSNPJobs			    ( id integer primary key autoincrement, jobno TEXT, subtype TEXT,  description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS TSData		    		( id integer primary key autoincrement, date TEXT, job TEXT, skill TEXT, activity TEXT, time TEXT, ot15 TEXT, ot20 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurveyQ			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qtype TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurveyA			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qkey TEXT, qvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurveyMake		    ( id integer primary key autoincrement, make TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurveyModel		    ( id integer primary key autoincrement, make TEXT, model TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurvey			    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, make TEXT, model TEXT, location TEXT, dv1 TEXT, dv2 TEXT, dv3 TEXT, dv4 TEXT, dv5 TEXT, dv6 TEXT, dv7 TEXT, dv8 TEXT, dv9 TEXT, dv10 TEXT, dv11 TEXT, dv12 TEXT, dv13 TEXT, dv14 TEXT, dv15 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS GASSurveyHDR		    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, date TEXT, signed TEXT, hv1 TEXT, hv2 TEXT, hv3 TEXT, hv4 TEXT, text1 TEXT, text2 TEXT, text3 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS REFPAICODES			( id integer primary key autoincrement, scenario TEXT, userid TEXT, level TEXT, stsma TEXT, plant TEXT, work_cntr TEXT, catalogue TEXT, codegrp TEXT, kurztext_group TEXT, code TEXT, kurztext_code TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS REFNOTIFICATIONTYPES	( id integer primary key autoincrement, scenario TEXT, userid TEXT, level_number TEXT, notiftype TEXT, notifdesc TEXT, notifprofile TEXT, priotype TEXT,priority TEXT, prioritydesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS REFVARIANCESRFV		( id integer primary key autoincrement, scenario TEXT, userid TEXT, plant TEXT, work_cntr TEXT, job_activity TEXT, dev_reason TEXT, dev_reas_txt TEXT, mandate TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS REFACTIVITY			( id integer primary key autoincrement, scenario TEXT, work_center TEXT, activity TEXT, activity_desc TEXT, action TEXT, deflt TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					
 
 					 
@@ -3280,7 +4158,7 @@ function resetTables() {
 function DeleteLog() { 
 		html5sql.process("DELETE FROM LogFile",
 						 function(){
-							 alert("Delete Log Worked");
+							
 						 },
 						 function(error, statement){
 							 opMessage("Error: " + error.message + " when processing " + statement);

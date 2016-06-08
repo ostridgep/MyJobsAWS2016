@@ -154,8 +154,9 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                          ],
 
                                                          change: function(oControlEvent) {
-                                                                setCloseButtons(oControlEvent.getParameter("selectedItem").getKey())
+                                                                //setCloseButtons(oControlEvent.getParameter("selectedItem").getKey())
                                                                 BuildCloseProblemCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
+                                                                checkMandatedForms()
                                                          }
                                                   }),
                                                   ]
@@ -169,8 +170,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                     ],
 
                                                     change: function(oControlEvent) {
-                                                           
-                                                           checkMandatedForms("P",sap.ui.getCore().getElementById("Close_ProblemGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey())
+                                                    	checkMandatedForms()
                                                     }
                                              }),
                                              ]
@@ -186,6 +186,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                  change: function(oControlEvent) {
                                                         
                                                 	 BuildCloseActionCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
+                                                	 checkMandatedForms()
                                                  }
                                           }),
                                           ]
@@ -199,8 +200,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                     ],
 
                                                     change: function(oControlEvent) {
-                                                    	 checkMandatedForms("S",sap.ui.getCore().getElementById("Close_ActionGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey()) 
-                                                           //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                    	 checkMandatedForms()
                                                     }
                                              }),
                                              ]
@@ -216,6 +216,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                  change: function(oControlEvent) {
                                                         
                                                 	 BuildCloseImpactCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
+                                                	 checkMandatedForms()
                                                  }
                                           }),
                                           ]
@@ -229,9 +230,8 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                     ],
 
                                                     change: function(oControlEvent) {
-                                                           
-                                                    	 checkMandatedForms("I",sap.ui.getCore().getElementById("Close_ImpactGroup").getSelectedItem().getKey(),oControlEvent.getParameter("selectedItem").getKey())
-                                                    }
+                                                    	checkMandatedForms()
+                                                        }
                                              }),
                                              ]
                                       })

@@ -613,7 +613,7 @@ function saveCloseScreenToLS(){
 function checkDG5Complete(){
 	 
 	 		if(	oSwitchFlooding.getState()){
-	 		
+	 			
 	 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
 	 					"' and opno = '"+CurrentOpNo+"' and formname = 'Flooding' and user = '"+localStorage.getItem('MobileUser')+"';",
 	 					function(transaction, results, rowsArray){
@@ -622,6 +622,7 @@ function checkDG5Complete(){
 	 								processClose()
 	 						}else{
 		 						if(rowsArray[0].lastupdated=="COMPLETE"){
+		 							
 		 							checkPollutionComplete();
 		 							
 		 						}else{
@@ -782,7 +783,7 @@ function processClose(){
 				 sap.ui.getCore().byId("Close_ActionCode").getSelectedItem().getKey(),
 				 sap.ui.getCore().byId("Close_ImpactGroup").getSelectedItem().getKey(),
 				 sap.ui.getCore().byId("Close_ImpactCode").getSelectedItem().getKey(),
-				 followOnWork,followOnVariance,followOnReason )
+				 followOnWork,followOnVariance,followOnReason ,oSwitchFlooding.getState(),oSwitchPollution.getState(), oSwitchCustFeed.getState(),"CONF" ,"Confirmed")
 			 }else{
 	             createAWSJobClose(CurrentOrderNo, CurrentOpNo, currentNotifNo,  '',localStorage.getItem("EmployeeID"),CurrentJobWorkCentre,
 	            		 statusUpdateDate,statusUpdateTime,
@@ -791,11 +792,11 @@ function processClose(){
 	        			 convertToMinutes(sap.ui.getCore().byId("Close_InShiftTime").getValue()),
 	        			 convertToMinutes(sap.ui.getCore().byId("Close_OutOfShiftTime").getValue()),
 	        			 '','','','','','',
-						 followOnWork,followOnVariance,followOnReason )  				 
+						 followOnWork,followOnVariance,followOnReason ,oSwitchFlooding.getState(),oSwitchPollution.getState(), oSwitchCustFeed.getState(),"CONF" ,"Confirmed")			 
 			 }
 			 
 				updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
-				updateOperationStatus(CurrentOrderNo, CurrentOpNo, "CONF" ,"Confirmed")
+				
 				currentStatus="CLOSED"
 				prepareChangeStatus()
 				
@@ -803,7 +804,7 @@ function processClose(){
 				document.getElementById("JobHead_Status").innerHTML = "<Font color='RED'>Closed</font>";
 				
 				 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = "Closed";
-				
+				 
 				}else{
 					console.log("CloseError:"+CloseError)
 					if (CloseError=="Asset"){
@@ -6018,32 +6019,42 @@ function BuildFormsMandation(){
 		);
 
 	} 
-function checkMandatedForms(type,grp,code){
-	
+function checkMandatedForms(){
+	pchk="P"+"|"+sap.ui.getCore().getElementById("Close_ProblemGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().getElementById("Close_ProblemCode").getSelectedItem().getKey()
+    
+	schk="S"+"|"+sap.ui.getCore().getElementById("Close_ActionGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().getElementById("Close_ActionCode").getSelectedItem().getKey()
+     
+	ichk="I"+"|"+sap.ui.getCore().getElementById("Close_ImpactGroup").getSelectedItem().getKey()+"|"+sap.ui.getCore().getElementById("Close_ImpactCode").getSelectedItem().getKey()
+
 //check for DG5 Mandation	
-	if (mandatedDG5.indexOf(type+"|"+grp+"|"+code)<0){	
+	if ((mandatedDG5.indexOf(pchk)<0)&&(mandatedDG5.indexOf(schk)<0)&&(mandatedDG5.indexOf(ichk)<0)){	
+		
 		removeMandatedForm("Flooding.html")
 		if(!oSwitchFlooding.getEnabled()){
 			oSwitchFlooding.setState(false);
 			oSwitchFlooding.setEnabled(true);
+			}
 		}else{
+			
 		oSwitchFlooding.setState(true);
 		oSwitchFlooding.setEnabled(false);
 		addMandatedForm("Flooding.html")
 		}
-	}
-		if (mandatedPIA.indexOf(type+"|"+grp+"|"+code)<0){	
+	
+	if ((mandatedPIA.indexOf(pchk)<0)&&(mandatedPIA.indexOf(schk)<0)&&(mandatedPIA.indexOf(ichk)<0)){	
 			removeMandatedForm("Pollution.html")
 			
 			if(!oSwitchPollution.getEnabled()){
 				oSwitchPollution.setState(false);
 				oSwitchPollution.setEnabled(true);
+			}
 			}else{
+				alert("pia")
 				addMandatedForm("Pollution.html")
 				oSwitchPollution.setState(true);
 				oSwitchPollution.setEnabled(false);
 			}
-		}
+		
 
 }
 function BuildCloseScreen(){

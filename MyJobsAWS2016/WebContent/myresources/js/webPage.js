@@ -278,16 +278,9 @@ var MyIFrame = document.getElementById("formIframe");
 		
 		json=buildJSONResponse(MyIFrameDoc)
 		if(currentPage.indexOf("Home")<1) {
-			w=localStorage.getItem("SelectedItem")
-
-			x=w.split("#")
-			y=x[1]
-			z=y.split(":")
-			
-			createFormsResponse(fname,z[1], z[2],localStorage.getItem("MobileUser"),json,formMode,type)
+			createFormsResponse(fname,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
-		//Standalone Form
-			alert("5")
+
 			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode,type)
 		}
 		
