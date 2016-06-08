@@ -4318,6 +4318,7 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
 						}
+						console.log("loch"+MyOrders.order[cntx].jobloch.length)
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
 					
@@ -4331,6 +4332,7 @@ var orderlist="";
 						}
 				
 					}
+				console.log("hh")
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
 				ordernos.push(MyOrders.order[cntx].orderno)
 				changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
