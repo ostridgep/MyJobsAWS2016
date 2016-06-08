@@ -1723,11 +1723,11 @@ function syncUpload(){
 	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'MPointDoc' as type,   '' as extra,id    as id, recordupdated from MyMpointDocs where state = 'NEW' "
 	SQLStatement+=" 	union "
-	SQLStatement+=" 	select 'Flooding' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'Flooding' "
+	SQLStatement+=" 	select 'Flooding' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'Flooding' "
 	SQLStatement+=" 	union "
-	SQLStatement+=" 	select 'Pollution' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'Pollution' "
+	SQLStatement+=" 	select 'Pollution' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'Pollution' "
 	SQLStatement+=" 	union "
-	SQLStatement+=" 	select 'CustomerFeedback' as type,  '' as extra, id    as id, recordupdated from MyFormsResponses where lastupdated='COMPLETE' and formname = 'CustomerFeedback' "
+	SQLStatement+=" 	select 'CustomerFeedback' as type,  '' as extra, id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'CustomerFeedback' "
 	SQLStatement+=" 		order by recordupdated asc "
 
 	html5sql.process(SQLStatement,
@@ -2037,7 +2037,7 @@ empid=localStorage.getItem("EmployeeID")
 															function(transaction, results, rowsArray){
 															
 															  if(rowsArray.length>0){
-																alert("found fl rec")
+																
 																jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
 																if (syncDetails){
 																	localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", Flooding:"+String(rowsArray.length));
@@ -2111,7 +2111,7 @@ empid=localStorage.getItem("EmployeeID")
 																	"&PDEPTH="+pdepth+
 																	"&PITEM="+pitem
 																   
-											alert("fl sending")
+											
 																		sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");
 																														
 																	
@@ -2125,7 +2125,6 @@ empid=localStorage.getItem("EmployeeID")
 																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
 																			 function(){
 																	
-																			alert("done fl"+"UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")	
 																				
 																			 },
 																			 function(error, statement){
@@ -2176,7 +2175,7 @@ if(type=="Pollution")// Pollution Form
 							if(jsonstr[0].downstream2senttolabV=="YES"){	downstream2senttolab="X"	}
 							if(jsonstr[0].downstream3senttolabV=="YES"){	downstream3senttolab="X"	}
 
-						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+"&NOTIF_NO="+notifno+"&PPIA="+rowsArray[0].orderno+','+
+						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+"&NOTIF_NO="+rowsArray[0].notifno+"&PPIA="+rowsArray[0].orderno+','+
 							
 							jsonstr[0].pollutionsitetype.trim()+",,"+jsonstr[0].pollutionsite.trim()+","+
 							jsonstr[0].dischargetype.trim()+",,"+
@@ -2202,8 +2201,6 @@ if(type=="Pollution")// Pollution Form
 																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
 																			 function(){
 																	
-																				alert("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")
-																				
 																			 },
 																			 function(error, statement){
 																				// alert("Error: " + error.message + " when processing " + statement);
@@ -2258,8 +2255,8 @@ if(type=="CustomerFeedback")// Pollution Form
 								c100="LT"	
 								d100=jsonstr[0].ppmdetails
 							}
-							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+rowsArray[0].orderno+"&NOTIF_NO="+notifno+
-							"&MAIN_WORK_CTR="+selectedJobArray["orderworkcentre"]+"&PLANT="+selectedJobArray["orderplant"]+"&USER_STATUS_H="+opno+
+							params="&RECNO="+rowsArray[0].id+"&NOTIF_TYPE=ZC&USER="+user+"&ORDER_ID="+rowsArray[0].orderno+"&NOTIF_NO="+rowsArray[0].notifno+
+							"&MAIN_WORK_CTR="+rowsArray[0].wc+"&PLANT="+rowsArray[0].plant+"&USER_STATUS_H="+rowsArray[0].opno+
 							"&ACT_CODEGRP_1=CUST010&ACT_CODE_1="+jsonstr[0].spokentoV.substring(0,1)+"&ACT_TEXT_1="+jsonstr[0].spokentoV+
 							"&ACT_CODEGRP_2=CUST020&ACT_CODE_2="+jsonstr[0].contactcardV.substring(0,1)+"&ACT_TEXT_2="+jsonstr[0].contactcardV+
 							"&ACT_CODEGRP_3=CUST030&ACT_CODE_3="+jsonstr[0].custsatifaction+"&ACT_TEXT_3="+jsonstr[0].custsatifaction+
@@ -2280,7 +2277,6 @@ if(type=="CustomerFeedback")// Pollution Form
 																	html5sql.process("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'",
 																			 function(){
 																	
-																				alert("UPDATE myformsresponses SET lastupdated = 'SENDING' WHERE id='"+item['id']+"'")
 																				
 																			 },
 																			 function(error, statement){
@@ -3223,7 +3219,7 @@ function updateFormsResponseDate(formname, order,opno)
 	
 	
 	sqlStatement="UPDATE MyFormsResponses "+
-				 "SET recordupdated=STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW') "+
+				 "SET lastupdated='CLOSED', recordupdated=STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW') "+
 				 "where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
 		
@@ -3272,7 +3268,7 @@ function deleteFormsResponseDate(formname, order,opno)
 		);
 	
 }
-function createFormsResponse(formname, order,opno,user,content,mode,type)
+function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,mode,type)
 {
 	
 	if (mode=="Close"){
@@ -3280,24 +3276,24 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 	}else{
 		state="NEW"
 	}
-	
+	console.log("here")
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
-	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, orderno , opno, user, contents, date , time , state) VALUES ("+
-	"'"+formname+"',"+"'"+type+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
-	
+	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, wc,plant, notifno,orderno , opno, user, contents, date , time , state) VALUES ("+
+	"'"+formname+"',"+"'"+type+"',"+"'"+wc+"',"+"'"+plant+"',"+"'"+notifno+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+	console.log(sqlStatementIns)
    opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
   
 	html5sql.process(sqlStatementDel,
 		 function(transaction, results, rowsArray){
-		
+		console.log("deldone")
 		opMessage("Formdata Deleted OK")
 		
 		html5sql.process(sqlStatementIns,
 				 function(transaction, results, rowsArray){
 			
 			  opMessage("Formdata inserted OK ")
-			 
+			 console.log("insdone")
 				if(formDG5.isOpen()){
 					getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
 				}
@@ -3305,7 +3301,7 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 				formForms.close()
 				 },
 				 function(error, statement){
-					
+					 console.log(error)
 					opMessage("Error: " + error.message + " when FormsResponses Insert " );
 					formForms.close()
 				 }        
@@ -3313,7 +3309,7 @@ function createFormsResponse(formname, order,opno,user,content,mode,type)
 		
 		 },
 		 function(error, statement){
-			
+			 console.log(error)
 			opMessage("Error: " + error.message + " when Deleting during FormsResponses " );
 			 formForms.close()
 		 }        
@@ -3537,7 +3533,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
 					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -3568,6 +3564,8 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, plant TEXT, orderplant TEXT, orderworkcentre TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+					 'CREATE TABLE IF NOT EXISTS MyJobDetsLoch          ( id integer primary key autoincrement, orderno TEXT, notification_no TEXT,not_type TEXT, not_date TEXT,not_time TEXT, not_shtxt TEXT,not_order TEXT, meter_no TEXT,meter_rdg TEXT, work_type TEXT, order_type TEXT, op_txt TEXRT, order_date TEXT, order_status TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+
 					 'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
 					 'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
 					 'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -3775,6 +3773,7 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  MyJobsDocs;'+
 					'DROP TABLE IF EXISTS  MyJobsPhotos;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
+					'DROP TABLE IF EXISTS  MyJobDetsLoch;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPCodes;'+
 					'DROP TABLE IF EXISTS  MyJobDetsDraw;'+
 					  
@@ -3869,6 +3868,7 @@ function emptyTables(type) {
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
+					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
 						'DELETE FROM  GASSurveyHDR;';
@@ -3986,6 +3986,7 @@ function loadDemoData() {
 				'DELETE FROM MyJobsDetsEQ;'+
 				'DELETE FROM MyJobsDetsATTR;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
+				'DELETE FROM  MyJobDetsLoch;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
 				'DELETE FROM  MyJobDetsDraw;'+
 					'DELETE FROM  GASSurveyHDR;';
@@ -4131,6 +4132,7 @@ function resetTables() {
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
+					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
 					'DELETE FROM  MyJobDetsDraw;'+
 					'DELETE FROM  MyUserDets;'+
@@ -4284,6 +4286,7 @@ var orderlist="";
 			}
 			opMessage("Deleting Existing Orders");
 			sqlstatementMP = 'DELETE FROM MyJobDetsMPoints;'+
+							'DELETE FROM  MyJobDetsLoch;'+
 							'DELETE FROM MyJobDetsMPCodes;'+
 							'DELETE FROM MyJobsDetsEQ;'+
 							'DELETE FROM MyJobsDetsATTR;';
@@ -4315,7 +4318,17 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
 						}
-
+						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
+						{	
+					
+						sqlstatementMP+='INSERT INTO MyJobDetsloch (order, notification_no, not_type, not_date,not_time,not_shtxt,not_order,meter_no,meter_rdg,work_type,order_type,op_txt, order_date, order_status) VALUES ('+
+							 '"'+MyOrders.order[cntx].jobloch[opscnt].order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].notification_no+  '","'+MyOrders.order[cntx].jobloch[opscnt].not_type+  '",'+
+							 '"'+MyOrders.order[cntx].jobloch[opscnt].not_date+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_time+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_shtxt+  '",'+  
+							 '"'+MyOrders.order[cntx].jobloch[opscnt].not_order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].meter_no+  '",'+  
+							 '"'+MyOrders.order[cntx].jobloch[opscnt].meter_rdg+  '","'+ MyOrders.order[cntx].jobloch[opscnt].work_type+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_type+  '",'+
+							 '"'+MyOrders.order[cntx].jobloch[opscnt].op_txt+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_date+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_status+'");';
+					
+						}
 				
 					}
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
@@ -5030,12 +5043,12 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->Message= "+MySAP.message[0].sapmessage);
 				opMessage("-->Message= "+MySAP.message[0].message);
 				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
-				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
-					{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
-					}else{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
-					}
+				if(MySAP.message[0].message_type=="E")
+				{
+					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
+				}else{
+					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
+				}
 					
 
 		
@@ -5048,12 +5061,12 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->Message= "+MySAP.message[0].sapmessage);
 				opMessage("-->Message= "+MySAP.message[0].message);
 				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
-				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
-					{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
-					}else{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
-					}
+				if(MySAP.message[0].message_type=="E")
+				{
+					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
+				}else{
+					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
+				}
 					
 
 		
@@ -5065,11 +5078,11 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->row= "+MySAP.message[0].recno);				
 				opMessage("-->Message= "+MySAP.message[0].message);
 				opMessage("-->NotifNo= "+MySAP.message[0].message_type);
-				if((MySAP.message[0].message=="Success")&&(MySAP.message[0].sapmessage.indexof("Created")>0))
+				if(MySAP.message[0].message_type=="E")
 					{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+						sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
 					}else{
-						//sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
+						sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
 					}
 					
 
@@ -5083,7 +5096,7 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->Message= "+MySAP.message[0].sapmessage);
 				opMessage("-->Message= "+MySAP.message[0].message);
 				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
-				if(MySAP.message[0].message=="Success")
+				if(MySAP.message[0].message=="E")
 					{
 					sqlstatement+="UPDATE MyNotifications SET notifno = '"+ MySAP.message[0].notifno+"' WHERE id='"+ MySAP.message[0].recno+"';";
 					}else{

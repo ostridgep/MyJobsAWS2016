@@ -278,10 +278,11 @@ var MyIFrame = document.getElementById("formIframe");
 		
 		json=buildJSONResponse(MyIFrameDoc)
 		if(currentPage.indexOf("Home")<1) {
-			createFormsResponse(fname,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),json,formMode,type)
+			
+			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),json,formMode,type)
 		}else{
 
-			createFormsResponse(fname,"", "",localStorage.getItem("MobileUser"),json,formMode,type)
+			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),json,formMode,type)
 		}
 		
 		
@@ -606,7 +607,7 @@ function setDlgTitle(formTitle){
 	{
 		json="[{"
 	    var str = '';
-		  console.log("tables")
+		  
 		   var items = doc.getElementsByTagName("TABLE");
 		   var mergeTables=[]
 		   for (var i=0;i<items.length; i++) {
