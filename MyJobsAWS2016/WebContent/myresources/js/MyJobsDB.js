@@ -4318,11 +4318,12 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
 						}
+						sqlstatementMP1=""
 						console.log("loch"+MyOrders.order[cntx].jobloch.length)
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
 					
-						sqlstatementMP+='INSERT INTO MyJobDetsloch (order, notification_no, not_type, not_date,not_time,not_shtxt,not_order,meter_no,meter_rdg,work_type,order_type,op_txt, order_date, order_status) VALUES ('+
+						sqlstatementMP+='INSERT INTO MyJobDetsloch (orderno, notification_no, not_type, not_date,not_time,not_shtxt,not_order,meter_no,meter_rdg,work_type,order_type,op_txt, order_date, order_status) VALUES ('+
 							 '"'+MyOrders.order[cntx].jobloch[opscnt].order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].notification_no+  '","'+MyOrders.order[cntx].jobloch[opscnt].not_type+  '",'+
 							 '"'+MyOrders.order[cntx].jobloch[opscnt].not_date+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_time+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_shtxt+  '",'+  
 							 '"'+MyOrders.order[cntx].jobloch[opscnt].not_order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].meter_no+  '",'+  
