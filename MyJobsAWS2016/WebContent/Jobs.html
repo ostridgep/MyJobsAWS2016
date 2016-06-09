@@ -1456,6 +1456,63 @@ var formAssetCharacteristic = new sap.m.Dialog("dlgAssetCharacteristic",{
 
             },
  })
+       var formLocHistory = new sap.m.Dialog("dlgLocHistory",{
+    	    title:"Location History",
+    	    modal: true,
+    	    contentWidth:"1em",
+    	    buttons: [
+    	  
+    					
+    					new sap.m.Button( {
+    					    text: "Close",
+    					    type: 	sap.m.ButtonType.Reject,
+    					    tap: [ function(oEvt) {		  
+    							 
+    					    	formLocHistory.close()
+    							  } ]
+    					})
+    					],	
+    		            contentWidth:"70%",
+    		            contentHeight: "50%",
+    	    content:[
+    	 				 			new sap.ui.layout.form.SimpleForm({
+    					minWidth : 1024,
+    					maxContainerCols : 2,
+    					content : [
+    								
+									new sap.m.Table("LocHistoryTable",{
+										 mode: sap.m.ListMode.SingleSelectMaster,
+											selectionChange: function(evt){
+												//selectedPhotoID=evt.getParameter("listItem").getCells()[5].getText()
+												//formPhotoDetails.open()  
+												//showFile(evt.getParameter("listItem").getCells()[5].getText())
+										    },
+										width:'100%',
+										columns:[
+										         new sap.m.Column({header: new sap.m.Label({text:"Notification"}),
+										        	 hAlign: 'Left',width: '15%', minScreenWidth : "" , demandPopin: false}),
+										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+ 										         	hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
+										         new sap.m.Column({header: new sap.m.Label({text:"Order"}),
+										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
+										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true }),
+									        	 new sap.m.Column({header: new sap.m.Label({text:"Date"}),
+										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true })
+										        
+									       	
+								           	     ]
+									})    				                
+    				                 
+    							]
+    	 					}),
+
+    	            ],
+    	            beforeOpen:function(){
+    	            	buildLocHistory();
+
+    	            },
+    	 })
        var oInp = new sap.m.Input("MPointValue",{
            liveChange : function(oEvent){
               
@@ -5318,6 +5375,39 @@ html5sql.process("SELECT * FROM MyJobsPhotos where orderno = '"+CurrentOrderNo+"
 		 }        
 		);
 }
+function buildLocHistory(){
+
+	html5sql.process("SELECT * FROM MyJobDetsLoch where orderno = '"+CurrentOrderNo+"'",
+			 function(transaction, results, rowsArray){
+				var n = 0;
+				var opTable = sap.ui.getCore().getElementById('LocHistoryTable');
+				
+				opTable.destroyItems();
+			
+				while (n < rowsArray.length) {
+					
+			
+					opTable.addItem (new sap.m.ColumnListItem({
+						
+						cells : 
+							[
+							new sap.m.Text({text: rowsArray[n].notification_no}),
+							new sap.m.Text({text: rowsArray[n].not_type}),
+							new sap.m.Text({text: rowsArray[n].not_order}),
+							new sap.m.Text({text: rowsArray[n].work_type}), 
+							new sap.m.Text({text: rowsArray[n].order_date})
+					 		],
+
+						}));
+					n++;
+				 }
+
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);
+	}
 function buildJobPhotoListOLD(){
 	
 	privatephotos = new Array()
@@ -6457,14 +6547,18 @@ sap.m.MessageBox.show(
   );   
 }
 function showMessage(msg){
-	sap.m.MessageToast.show(msg, {
-		duration: Number(500),
-		
-		my: "center center",
-		at: "center center",		
-		autoClose: true,
-
-	});
+	if (msg == "Location History"){
+		formLocHistory.open()
+	}else{
+		sap.m.MessageToast.show(msg, {
+			duration: Number(500),
+			
+			my: "center center",
+			at: "center center",		
+			autoClose: true,
+	
+		});
+	}
 
 }
 function startBGSync()
