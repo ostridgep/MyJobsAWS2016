@@ -235,6 +235,27 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 		 }        
 		);
 }
+function getBase64FromImageUrl(url) {
+    var img = new Image();
+
+    img.setAttribute('crossOrigin', 'anonymous');
+
+    img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width =this.width;
+        canvas.height =this.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(this, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        alert(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+    };
+
+    img.src = url;
+    
+}
 var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     title:"Display Photo",
     modal: true,
@@ -245,7 +266,7 @@ new sap.m.Button( {
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
     	window.plugins.Base64.encodeFile(filePath, function(base64){
-            alert('file base64 encoding: ' + base64);
+    		getBase64FromImageUrl(selectedPhoto)
         });
     	
 		  } ]
