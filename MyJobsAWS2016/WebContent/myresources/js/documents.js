@@ -241,6 +241,16 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     contentWidth:"1em",
     buttons: [
 new sap.m.Button( {
+    text: "base64",
+    type: 	sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {		  
+    	window.plugins.Base64.encodeFile(filePath, function(base64){
+            alert('file base64 encoding: ' + base64);
+        });
+    	
+		  } ]
+}),
+new sap.m.Button( {
     text: "UpLoad",
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
