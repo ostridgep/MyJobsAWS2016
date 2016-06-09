@@ -235,27 +235,53 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 		 }        
 		);
 }
-function getBase64FromImageUrl(url) {
-    var img = new Image();
+function getBase64FromImageUrl(imageUri) {
+	
+        var c = document.createElement('canvas');
+        var ctx = c.getContext("2d");
+        var img = new Image();
+        img.onload = function() {
+            c.width = this.width;
+            c.height = this.height;
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = imageUri;
+        var dataURL = c.toDataURL("image/jpeg");
 
-    img.setAttribute('crossOrigin', 'anonymous');
-
-    img.onload = function () {
-        var canvas = document.createElement("canvas");
-        canvas.width =this.width;
-        canvas.height =this.height;
-
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(this, 0, 0);
-
-        var dataURL = canvas.toDataURL("image/png");
-
-        alert(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-    };
-
-    img.src = url;
+        return dataURL.slice(22, dataURL.length);
+   
     
 }
+function createBase64XML(base64){
+	var xmlstring = '<?xml version="1.0" encoding="utf-8"?>'+
+					 '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
+					  '<jobMetadata>'+
+					  '  <order>000052151178</order>'+
+					  '  <operation>0010</operation>'+
+					  '  <customerNumber> </customerNumber>'+
+					  '  <customerName> </customerName>'+
+					  '  <equipmentNumber>000000000000063203</equipmentNumber>'+
+					  '  <notification>000012700507</notification>'+
+					  '  <location>SPALST-2D-PSM-TS01-PRT001</location>'+
+					  '  <equipmentDescription>Radial Flow Tank</equipmentDescription>'+
+					  '  <docSubmitDateTime>09-06-2016-10-52-00</docSubmitDateTime>'+
+					  '</jobMetadata>'+
+					  '<attachmentMetadata>'+
+					  '  <filename>52151178-0010_10_52_00-POSTRIDGE2~Worker.jpg</filename>'+
+					  '  <extension>jpg</extension>'+
+					  '  <modified>2016-06-09T10:52:00.2427092+01:00</modified>'+
+					  '  <created>2016-06-09T10:52:00.2427092.2407091+01:00</created>'+
+					  '  <fileDescription>'+
+					  '    <fileType>JPEG image</fileType>'+
+					  '    <mimeType>image/jpeg</mimeType>'+
+					  '  </fileDescription>'+
+					  '</attachmentMetadata>'+
+					  '<fileContent contentEncoding="base64">'+base64+
+					  '</fileContent>'+
+					  '</uploadRequest>'
+	alert(xmlstring)
+}
+
 var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     title:"Display Photo",
     modal: true,
@@ -265,9 +291,7 @@ new sap.m.Button( {
     text: "base64",
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
-    	window.plugins.Base64.encodeFile(filePath, function(base64){
-    		getBase64FromImageUrl(selectedPhoto)
-        });
+    	createBase64XML(getBase64FromImageUrl(selectedPhoto))
     	
 		  } ]
 }),
