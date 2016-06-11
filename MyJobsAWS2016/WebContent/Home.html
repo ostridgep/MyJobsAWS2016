@@ -45,6 +45,7 @@ var appDirectory=""
 	data-sap-ui-theme="sap_bluecrystal">
 	
 </script>
+<script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/aes.js"></script>  
 <script src="myresources/js/html5sql.js"></script>  
@@ -694,7 +695,14 @@ new sap.m.Button({
 		formMapSelect.close()} ]
 }),
 							
-
+new sap.m.Button({
+    text: "Properties",
+    type: 	sap.m.ButtonType.Accept,
+   tap: [ function(oEvt) {		
+	   window.open('GoogleMapsGetLocation2.html', "_blank", 'location=yes,closebuttoncaption=Return') 
+	   
+		formMapSelect.close()} ]
+}),
 									 
 					
 			               

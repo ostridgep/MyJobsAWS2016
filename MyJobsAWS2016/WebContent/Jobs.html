@@ -3869,19 +3869,7 @@ html5sql.process(SQLStatement,
 
 
 }
-function convertToLatLon(en){
 
-	x=en.split("-")
-	
-	var os1 = new OSRef(x[0].substring(0,6), x[1].substring(0,6));
-	//var os1 = new OSRef(x[0], x[1]);
-	var ll = os1.toLatLng();
-	y=ll.toString()
-	y=y.replace("(","")
-	y=y.replace(")","")
-	x=y.split(",")
-	return(x)
-}
 
 function BuildFormAssets(assetid){
 	var asset_id=""

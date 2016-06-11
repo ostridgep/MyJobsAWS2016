@@ -2,12 +2,7 @@
 
 {"funcloc":[
 
-{
-            "id":"LGF",
-            "type": "FL",
-             "shorttext":"GREENDALE PWR STN",
-             "swerk":"GMBC"
-},
+{"id":"LGF","type": "FL","shorttext":"GREENDALE PWR STN","swerk":"GMBC"},
 
 {
             "id":"LGF-01",

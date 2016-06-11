@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" 
+	
+	data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script
+src="http://maps.googleapis.com/maps/api/js">
+</script>
+
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/MyJobsDB.js"></script>
+
+
+
+
+
+
+<script>
+var houses=[]
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
+var infowindow = false;
+var map;
+var myCenter=""
+var markers = [
+	                ['house 1', 52.521487,-1.636626,"floc1"],
+	                ['house 2', 52.521587,-1.636726,"floc2"],
+	                ['house 3', 52.521687,-1.636826,"floc3"]
+	            ];
+function initialize()
+{
+	if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(function (position) {
+	    	//myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	    	myCenter = new google.maps.LatLng(52.33323376759313	, -0.18170186859980667)
+	        map.setCenter(myCenter);
+	    });
+	   
+
+	}else{
+		myCenter=new google.maps.LatLng(51.508742,-0.120850);
+	}
+var mapProp = {
+  center:myCenter,
+  zoom:18,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+
+  map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+ 
+  
+  google.maps.event.addListener(map, 'click', function(event) {
+    placeMarker(event.latLng);
+  });
+  google.maps.event.addListenerOnce(map,'idle',function(){
+	  google.maps.event.trigger(map, "resize");
+  })
+  google.maps.event.addListener(map, 'bounds_changed', function() {
+	  loadProps() 
+ })
+  loadProps() 
+}
+function placeMarkers(){
+// Display multiple markers on a map
+
+
+	// Loop through our array of markers & place each one on the map  
+	//for( i = 0; i < markers.length; i++ ) {
+	 //   var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+	  //  placeHouse(position,markers[i][0],markers[i][3]) 
+//	}
+}
+function placeHouse(location,Address,floc) {
+	  var marker = new google.maps.Marker({
+	    position: location,
+	    icon: "images/housesmall.png",
+	    map: map,
+	  });
+	houses.push(marker)
+	marker.addListener('click', function(event) {
+		infowindow.open(map,marker);
+	  });
+	  var infowindow = new google.maps.InfoWindow({
+	    content:"Address: "+Address+"<BR>"+"ID: "+floc
+	  });
+	  //infowindow.open(map,marker);
+	}
+function placeMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+  });
+marker.addListener('click', function(event) {
+	loadProps()
+	        
+    var lat = marker.getPosition().lat();
+	var lng = marker.getPosition().lng();
+	localStorage.setItem('mapLocation',lat+","+lng)
+	
+	
+	//parent.formGMaps.close()
+
+  });
+  var infowindow = new google.maps.InfoWindow({
+    content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+  });
+  infowindow.open(map,marker);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+function loadProps()
+{
+	  var bounds =  map.getBounds();
+      var ne = bounds.getNorthEast();
+      var sw = bounds.getSouthWest();
+      for (var n = 0; n < houses.length; n++) {
+    	  houses[n].setMap(null);
+      }
+      houses=[]
+	html5sql.process("select * from Properties where (lat < "+ ne.lat()+ " and lat > "+sw.lat()+ ") and ( lon > "+sw.lng()+" and lon < "+ne.lng()+")",
+			 function(transaction, results, rowsArray){
+//alert("select * from Properties where (lat < "+ ne.lat()+ " and lat > "+sw.lat()+ ") and ( lon > "+sw.lng()+" and lon < "+ne.lng()+")")
+//alert(rowsArray.length)
+				if(rowsArray.length>0){
+n = 0;
+
+					while (n < rowsArray.length) {
+						
+						 var position = new google.maps.LatLng(rowsArray[n].lat, rowsArray[n].lon);
+						 
+						 var address = rowsArray[n].street+", "+rowsArray[n].city+", "+rowsArray[n].postcode
+						 placeHouse(position,address,rowsArray[n].funcloc) 
+
+						n++;
+					 }
+			
+			 }
+	},
+			 function(error, statement){
+		alert("Error: " + error.message + " when reading mps processing " + statement);
+			 }        
+			);
+	
+	}
+</script>
+</head>
+
+<body>
+<div id="googleMap" style="width:1024;height:800px;"></div>
+<SCRIPT>
+
+</SCRIPT>
+</body>
+</html>

@@ -10,6 +10,26 @@ sap.m.MessageBox.show(
     }
   );   
 }
+function convertToLatLon(en){
+
+	x=en.split("-")
+	x[0]= x[0]+"000"
+	x[1]= x[1]+"000"
+	//var os1 = new OSRef(x[0], x[1]);
+	//var os6x = getOSRefFromSixFigureReference(os6);
+	
+	var os1 = new OSRef(x[0].substring(0,6)+"."+x[0].substring(6,8), x[1].substring(0,6)+"."+x[1].substring(6,8));
+
+	var ll = os1.toLatLng();
+	
+	y=ll.toString()
+	y=y.replace("(","")
+	y=y.replace(")","")
+	x=y.split(",")
+	return(x)
+}
+
+
 function enablefields(){
 	
 }

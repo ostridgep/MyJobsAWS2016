@@ -2608,6 +2608,7 @@ function syncReference(){
 							requestSAPData("MyJobsVehiclesDefault.htm",'');
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
+							requestDEMOData('PE29.json');
 							requestDEMOData('MyJobsDG5Codes.json');
 							//requestSAPDataPJO("getFormsJSON.php",'');
 							//requestSAPData("MyJobsFunclocs.htm",'');
@@ -3588,7 +3589,8 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					
+					 'CREATE TABLE IF NOT EXISTS Properties			    ( id integer primary key autoincrement, funcloc TEXT ,description TEXT ,street TEXT ,district TEXT ,city TEXT,postcode TEXT,easting TEXT,northing TEXT,lat FLOAT,lon FLOAT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+						
 
 					 
 					 
@@ -3770,6 +3772,7 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  CFCODES;'+
 					'DROP TABLE IF EXISTS  MyJobsDetsEQ;'+
 					'DROP TABLE IF EXISTS  MyJobsDetsATTR;'+
+					'DROP TABLE IF EXISTS  Properties;'+
 					'DROP TABLE IF EXISTS  MyJobsDocs;'+
 					'DROP TABLE IF EXISTS  MyJobsPhotos;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
@@ -3867,6 +3870,7 @@ function emptyTables(type) {
 					'DELETE FROM  MyJobsPhotos;'+
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
+					'DELETE FROM Properties;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
@@ -3985,6 +3989,7 @@ function loadDemoData() {
 				'DELETE FROM  MyJobsPhotos;'+
 				'DELETE FROM MyJobsDetsEQ;'+
 				'DELETE FROM MyJobsDetsATTR;'+
+				'DELETE FROM Properties;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
 				'DELETE FROM  MyJobDetsLoch;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
@@ -4028,6 +4033,7 @@ function loadDemoData() {
 						
 						//requestDEMOData('funclocs.json');
 						requestDEMOData('MyForms.json');
+						requestDEMOData('PE29.json');
 						requestDEMOData('MyJobsVehicles.json');
 						requestDEMOData('MyJobsVehiclesDefault.json');
 						requestDEMOData('MyJobsDG5Codes.json');
@@ -4131,6 +4137,7 @@ function resetTables() {
 					'DELETE FROM  MyJobsPhotos;'+
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
+					'DELETE FROM Properties;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
@@ -4200,6 +4207,10 @@ function requestDEMOData(page){
 			}
 			if(page=='MyForms.json'){
 				formCB(data);
+				
+			}
+			if(page=='PE29.json'){
+				propsCB(data);
 				
 			}
 			if(page=='MyJobsOrdersObjects.json'){
@@ -4319,7 +4330,7 @@ var orderlist="";
 					
 						}
 						sqlstatementMP1=""
-						console.log("loch"+MyOrders.order[cntx].jobloch.length)
+						//console.log("loch"+MyOrders.order[cntx].jobloch.length)
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
 					
@@ -5653,6 +5664,48 @@ function formCB(data){
 						'"'+data.forms[cntx].lastupdated +'",'+  
 						'"'+data.forms[cntx].url+'",'+  
 						'"'+data.forms[cntx].description+'");';			
+					}	
+
+				html5sql.process(sqlstatement,
+					 function(){
+							
+					 },
+					 function(error, statement){
+						 opMessage("Error: " + error.message + " when processing " + statement);
+					 }        
+				);
+
+
+		}
+	}
+function propsCB(data){
+	var sqlstatement="";		
+	
+		if(data.props.length>0){
+				if(syncReferenceDetsUpdated){
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', Props:'+String(data.props.length));
+				}else{
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'Props:'+String(data.props.length));
+				}
+
+				opMessage("Deleting Existing Properties");
+				sqlstatement+='DELETE FROM Properties;';
+				opMessage("Loading"+data.props.length+" Existing Props");
+				for(var cntx=0; cntx < data.props.length ; cntx++)
+					{	
+					en=data.props[cntx].SearchTerm.split("-")
+					y=convertToLatLon(data.props[cntx].SearchTerm)
+					sqlstatement+='INSERT INTO Properties (funcloc , description , street , district , city, postcode , easting , northing , lat , lon) VALUES ('+ 
+						'"'+data.props[cntx].FuncLoc +'",'+  
+						'"'+data.props[cntx].Description +'",'+  
+						'"'+data.props[cntx].Street +'",'+  
+						'"'+data.props[cntx].District+'",'+  
+						'"'+data.props[cntx].City +'",'+  
+						'"'+data.props[cntx].PostCode +'",'+  
+						'"'+en[0] +'",'+  
+						'"'+en[1] +'",'+  
+						'"'+y[0]+'",'+  
+						'"'+y[1]+'");';			
 					}	
 
 				html5sql.process(sqlstatement,
