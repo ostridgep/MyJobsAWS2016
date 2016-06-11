@@ -4330,7 +4330,7 @@ var orderlist="";
 					
 						}
 						sqlstatementMP1=""
-						//console.log("loch"+MyOrders.order[cntx].jobloch.length)
+						console.log("loch"+MyOrders.order[cntx].jobloch.length)
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
 					

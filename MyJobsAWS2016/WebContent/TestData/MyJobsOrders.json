@@ -82,6 +82,7 @@
   "jobdraw":
                   [
                 ],
+   "jobloch":[],
   "jobmeaspoints":
                   [{
 "meas_point":"000000078122",
@@ -3207,6 +3208,7 @@
   "jobdraw":
                   [
                 ],
+                "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -3399,7 +3401,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -3553,7 +3555,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -3707,7 +3709,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -3861,7 +3863,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -4037,6 +4039,7 @@
  
  
                 ],
+                  "jobloch": [],
   "jobdraw":
                   [
 {
@@ -4243,7 +4246,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -4416,7 +4419,7 @@
                 ],
   "jobdraw":
                   [
-                ],
+                ],  "jobloch": [],
   "jobmeaspoints":
                   [
  
@@ -4576,7 +4579,7 @@
  
  
  
-                ],
+                ],  "jobloch": [],
   "jobdraw":
                   [
 {
