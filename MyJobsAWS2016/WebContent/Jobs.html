@@ -611,7 +611,7 @@ function saveCloseScreenToLS(){
 	localStorage.setItem("closeScreen",scrvals)
 }
 function checkDG5Complete(){
-	 
+	
 	 		if(	oSwitchFlooding.getState()){
 	 			
 	 			html5sql.process("select lastupdated from MyFormsResponses where orderno = '"+CurrentOrderNo+
@@ -678,7 +678,7 @@ function checkPollutionComplete(){
 			checkFeedbackComplete();
 			
 		 }  
-
+	oSwitchFlooding.getState()
 }
 function checkFeedbackComplete(){
  		if(	 oSwitchCustFeed.getState()){
@@ -5560,8 +5560,9 @@ function rebuildTimeConfs()
 						   					icon:"sap-icon://synchronize",
 						  					 press: [ function(){						  						
 						  						SetConfigParam('LASTSYNC_TRANSACTIONAL', "20120101010101");
+						  						 syncUpload()
 						  						syncTransactional()
-						  					    syncUpload()
+						  					   
 												 syncDT=localStorage.getItem('LastSyncedDT')	
 												 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
 												 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
@@ -6143,7 +6144,7 @@ function BuildCloseScreen(){
 		PAIVisible=false;
 	}
 	initscr=false
-	scrvals=localStorage.getItem("closeScreen");
+	scrvals=localStorage.getItem("closeScreen")+" ";
 	
 	if (scrvals.length>5){
 		scrFlds=scrvals.split("|");
@@ -6574,11 +6575,12 @@ function startBGSync()
 					})]
                   })) */
          if(sap.ui.getCore().getElementById("jobsyncIndicator").getVisible()==false) { 
+        	 syncUpload()
 	         setSyncingIndicator(true)    
 			 //syncReference()
 			 syncTransactional()
 			 localStorage.setItem('SAPCalling','false')
-			 syncUpload()
+			 
 			 syncDT=localStorage.getItem('LastSyncedDT')	
 			 x=formatDateTime(localStorage.getItem("LastSyncedDT")).split(" ");
 			 sap.ui.getCore().byId("LastSyncMess").setText(x[1]);
@@ -6600,9 +6602,9 @@ function refreshJobList(){
 					for (var n = 0; n < rowsArray.length; n++) {
 						item = rowsArray[n];
 						x="x"+sap.ui.getCore().byId("Job:"+item.orderno+":"+item.opno)
-						console.log("listentry "+item.orderno+"-"+item.opno+" item:"+x+" length "+x.length)
+						opMessage"listentry "+item.orderno+"-"+item.opno+" item:"+x+" length "+x.length)
 						if (x.length<30){
-							console.log("about to add "+item.orderno+"-"+item.opno)
+							opMessage("about to add "+item.orderno+"-"+item.opno)
 							addNewJobToList(item.orderno,item.opno)
 						}
 							

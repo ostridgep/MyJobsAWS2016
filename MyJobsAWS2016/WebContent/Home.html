@@ -1564,13 +1564,14 @@ function startBGSync()
          w = new Worker("myresources/js/bgsync.js");
       }
       // Update timer div with output from Web Worker
-      w.onmessage = function (event) {   
+      w.onmessage = function (event) {  
+    	  syncUpload()
     	  setSyncingIndicator(true)
 		 //syncReference()
 		 syncTransactional()
 		 setCounts();
 		 localStorage.setItem('SAPCalling','false')
-		 syncUpload()
+		
 		 syncDT=localStorage.getItem('LastSyncedDT')		 
 		 sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(localStorage.getItem("LastSyncedDT")));
 		 setCounts();

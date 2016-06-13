@@ -548,12 +548,21 @@ var SQLStatement=''
 	}
 	function BuildFormsList(doc)
 	{
+	
 		formForms.setTitle("Form List")
 		doc.getElementById("MandatoryFormList").innerHTML='';
  		doc.getElementById("StandardFormList").innerHTML='';
  		doc.getElementById("JobFormList").innerHTML='';
 		currentPage=document.location.href;
+		if(oSwitchFlooding.getState()){
 		
+			addMandatedForm("Flooding.html")}
+		if(oSwitchPollution.getState()){
+			
+			addMandatedForm("Pollution.html")}
+		if(oSwitchCustFeed.getState()){
+			
+			addMandatedForm("CustomerFeedback.html")}
 		if(currentPage.indexOf("Home")>0) {
 			
 			doc.getElementById("stdFList").style.display = "none";
@@ -576,7 +585,7 @@ var SQLStatement=''
 	            	for(var cntx=0; cntx < rowsArray.length ; cntx++)
 					{	
 	            		item = rowsArray[cntx];
-	            	     
+	            	    
 	            		if(item.type=="ALL"){
 	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
 	            		}else{

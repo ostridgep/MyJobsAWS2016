@@ -108,7 +108,7 @@ empid=localStorage.getItem("EmployeeID")
 					  
 						if(fname=="Flooding"){
 							
-							
+						
 							
 						
 
@@ -2029,7 +2029,8 @@ empid=localStorage.getItem("EmployeeID")
 														 });
 												}
 									if(type=="Flooding")// Flooding Form			
-									{														
+									{		
+										
 											
 													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
 													
@@ -2056,7 +2057,7 @@ empid=localStorage.getItem("EmployeeID")
 																
 																	item = rowsArray[0];
 
-																	params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+
+																	params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+rowsArray[0].orderno+"&NOTIF_NO="+rowsArray[0].notifno+
 																"&ZASTYP="+jsonstr[0].sewertype.trim()+
 																	"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
 																	"&ZAWEAT="+jsonstr[0].floodweather.trim()
@@ -2142,7 +2143,7 @@ empid=localStorage.getItem("EmployeeID")
 												}
 if(type=="Pollution")// Pollution Form			
 									{														
-											
+	
 													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
 													
 													html5sql.process(sqlstatement,
@@ -2218,7 +2219,8 @@ if(type=="Pollution")// Pollution Form
 												
 																	
 if(type=="CustomerFeedback")// Pollution Form			
-									{											
+									{	
+	
 													sqlstatement="SELECT * from myformsresponses where  id = '"+id+"'",	
 													
 													html5sql.process(sqlstatement,
@@ -4296,8 +4298,8 @@ var orderlist="";
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'Orders:'+String(MyOrders.order.length));
 			}
 			opMessage("Deleting Existing Orders");
-			sqlstatementMP = 'DELETE FROM MyJobDetsMPoints;'+
-							'DELETE FROM  MyJobDetsLoch;'+
+			sqlstatementMP ='DELETE FROM MyJobDetsMPoints;'+
+							'DELETE FROM MyJobDetsLoch;'+
 							'DELETE FROM MyJobDetsMPCodes;'+
 							'DELETE FROM MyJobsDetsEQ;'+
 							'DELETE FROM MyJobsDetsATTR;';
@@ -4329,7 +4331,7 @@ var orderlist="";
 							 '"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
 					
 						}
-						sqlstatementMP1=""
+						
 						console.log("loch"+MyOrders.order[cntx].jobloch.length)
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
@@ -4344,7 +4346,7 @@ var orderlist="";
 						}
 				
 					}
-				console.log("hh")
+				
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
 				ordernos.push(MyOrders.order[cntx].orderno)
 				changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
@@ -4617,9 +4619,7 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
-			sqldeleteorders+="DELETE FROM MyJobsDetsEQ;"
-			sqldeleteorders+="DELETE FROM MyJobsDetsATTR;"
-			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE orderno NOT IN ("+orderlist+");"
+			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE lastupdated <> 'SENDING' and orderno NOT IN ("+orderlist+");"
 			console.log("about to tidy up orders")
 			html5sql.process(sqldeleteorders,
 					 function(transaction, results, rowsArray){
@@ -5051,7 +5051,7 @@ opMessage("Callback sapCB triggured");
 			}
 			//Handle NewJob Create Customer Feedback
 			if (MySAP.message[0].type=="createcfeed"){
-				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				//alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
 				opMessage("-->Type= "+MySAP.message[0].type);
 				opMessage("-->row= "+MySAP.message[0].recno);
 				opMessage("-->Message= "+MySAP.message[0].sapmessage);
@@ -5059,9 +5059,9 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
 				if(MySAP.message[0].message_type=="E")
 				{
-					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
 				}else{
-					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
+					sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
 				}
 					
 
@@ -5069,7 +5069,7 @@ opMessage("Callback sapCB triggured");
 			}
 			//Handle NewJob Create PIA
 			if (MySAP.message[0].type=="createpia"){
-				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				//alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
 				opMessage("-->Type= "+MySAP.message[0].type);
 				opMessage("-->row= "+MySAP.message[0].recno);
 				opMessage("-->Message= "+MySAP.message[0].sapmessage);
@@ -5077,9 +5077,9 @@ opMessage("Callback sapCB triggured");
 				opMessage("-->NotifNo= "+MySAP.message[0].notifno);
 				if(MySAP.message[0].message_type=="E")
 				{
-					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
+					sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = '"+ MySAP.message[0].message+"' WHERE id='"+ MySAP.message[0].recno+"';";
 				}else{
-					//sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
+					sqlstatement+="UPDATE MyFormsResponses SET LastUpdated = 'SAPRECEIVED' WHERE id='"+ MySAP.message[0].recno+"';";
 				}
 					
 
@@ -5087,7 +5087,7 @@ opMessage("Callback sapCB triggured");
 			}
 			//Handle NewJob Create DG5
 			if (MySAP.message[0].type=="createdg5"){
-				alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].message+":"+MySAP.message[0].message_type)
+				//alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].message+":"+MySAP.message[0].message_type)
 				opMessage("-->Type= "+MySAP.message[0].type);
 				opMessage("-->row= "+MySAP.message[0].recno);				
 				opMessage("-->Message= "+MySAP.message[0].message);
@@ -5276,6 +5276,8 @@ opMessage("Callback sapCB triggured");
 			html5sql.process(sqlstatement,
 						 function(){
 						 console.log("Success handling SAPCB"+sqlstatement);
+						 SetConfigParam('LASTSYNC_UPLOAD', "20120101010101");
+						
 						 },
 						 function(error, statement){
 							 console.log("Error: " + error.message + " when processing " + statement);
