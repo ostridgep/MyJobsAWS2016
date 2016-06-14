@@ -4279,6 +4279,7 @@ function orderCB(MyOrders){
 
 var sqlDelete="";
 OrdersProcessed=[]
+jdetops=[];
 var sqlstatement="";
 var sqlstatements=[];
 var ordernos=[];
@@ -4371,8 +4372,11 @@ var orderlist="";
 					 '"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
 				//Loop and write Draw Files to DB
 				//Loop and write JobDets
+				console.log( MyOrders.order[cntx].orderno+'--'+MyOrders.order[cntx].jobdets.length)
+				var orderJdets=MyOrders.order[cntx].orderno
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
 					{
+						orderJdets+=","+MyOrders.order[cntx].jobdets[pcnt].opno;
 						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
 							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
 							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
@@ -4593,6 +4597,7 @@ var orderlist="";
 				    if(OrdersProcessed.indexOf(MyOrders.order[cntx].orderno)==-1){
 				    	sqlstatements.push(sqlstatement);
 				        OrdersProcessed.push(MyOrders.order[cntx].orderno)
+				        jdetops.push(orderJdets)
 				    }
 				sqlstatement=""
 
@@ -4605,7 +4610,7 @@ var orderlist="";
 			for(var cntx=0; cntx < ordernos.length ; cntx++)
 			{
 				
-				InsertOrder(sqlstatements[cntx],ordernos[cntx],changeddatetime[cntx])
+				InsertOrder(sqlstatements[cntx],ordernos[cntx],changeddatetime[cntx],jdetops[cntx])
 			}
 			sqldeleteorders="delete from MyOrders WHERE orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyOperations WHERE orderno NOT IN ("+orderlist+");"
@@ -4655,20 +4660,27 @@ var orderlist="";
 		}
 
 }
-function InsertOrder(sqlstatement,orderno,changeddatetime){
+function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 	var sqlstatement1=""
-console.log(orderno+changeddatetime)
-
-	html5sql.process("select * from MyOrders where orderno = '"+orderno+"'",
+		console.log("xx"+orderno+changeddatetime)
+	var jdetslocal="";
+	html5sql.process("select * , (select GROUP_CONCAT(opno) from myJobDets where orderno = MyOrders.orderno)  as jdets  from MyOrders where  orderno = '"+orderno+"'",
 			 function(transaction, results, rowsArray){
+		if (rowsArray.length>0) {
+			jdetslocal=orderno+","+rowsArray[0].jdets;
+		}
 
-					if ((rowsArray.length<1)||(rowsArray[0].changeddatetime<changeddatetime)){
+			
+		if ((rowsArray.length<1)||((rowsArray.length >0) && (rowsArray[0].changeddatetime<changeddatetime))||(jdets!=jdetslocal)){
+						
 						if(rowsArray.length<1){
-							console.log("Inserting New Order details "+orderno)
-							opMessage("Inserting New Order details "+orderno);
+							
+							
 							sqlstatement1 = '';
 						}else{
+							console.log("ord:"+orderno+":"+rowsArray.length+":"+rowsArray[0].changeddatetime+":"+changeddatetime)
 							//alert("DB="+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
+							
 							opMessage("Deleting Existing Order details "+orderno);
 							sqlstatement1 = 'DELETE FROM MyOrders where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperations where orderno = "'+orderno+'";'+
@@ -4681,19 +4693,22 @@ console.log(orderno+changeddatetime)
 											'DELETE FROM MyTimeConfs where orderno = "'+orderno+'";'+
 											'DELETE FROM MyUserStatus where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationInfo where orderno = "'+orderno+'";'+
-											'DELETE FROM MyJobDetsDraw where orderno = "'+orderno+'";'+
-											'DELETE FROM MyJobDetsEQ where orderno = "'+orderno+'";'+
-											'DELETE FROM MyJobDetsATTR where orderno = "'+orderno+'";'+
-											'DELETE FROM MyJobDetsMPCodes where orderno = "'+orderno+'";'+
-											'DELETE FROM MyJobDetsMPoints where orderno = "'+orderno+'";'+
+											'DELETE FROM MyJobDetsDraw where orderno = "'+orderno+'";'+										
+											
 											'DELETE FROM MyStatus where state="SERVER" and orderno = "'+orderno+'";'
 						}
-						console.log("about to Insert");
+						if(rowsArray.length<1){
+							console.log("Inserting New Order details "+orderno);
+							
+						}else{
+							console.log("about to process"+orderno+":"+rowsArray[0].changeddatetime+":"+changeddatetime+sqlstatement1);
+						}
+						
 						
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
 						
-console.log(orderno+"OK")
+									console.log(orderno+"OK"+sqlstatement1+sqlstatement)
 									//addNewJobToList(orderno){
 			
 										
@@ -4701,11 +4716,12 @@ console.log(orderno+"OK")
 								 function(error, statement){
 									 
 									 console.log(orderno+"Failed"+error+statement)
+									 alert(sqlstatement1+sqlstatement)
 								 }        
 								);
 
-					}else{
-						console.log("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
+						}else{
+					console.log("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 						//alert("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 					}
 

@@ -6601,7 +6601,7 @@ function refreshJobList(){
 					for (var n = 0; n < rowsArray.length; n++) {
 						item = rowsArray[n];
 						x="x"+sap.ui.getCore().byId("Job:"+item.orderno+":"+item.opno)
-						opMessage"listentry "+item.orderno+"-"+item.opno+" item:"+x+" length "+x.length)
+						opMessage("listentry "+item.orderno+"-"+item.opno+" item:"+x+" length "+x.length)
 						if (x.length<30){
 							opMessage("about to add "+item.orderno+"-"+item.opno)
 							addNewJobToList(item.orderno,item.opno)

@@ -291,8 +291,10 @@
     	   //iterate through rows
     	   //rows would be accessed using the "row" variable assigned in the for loop
     	   row = table.rows[i]
-    	 
-    	   roomloc=row.cells[0].innerHTML.split("<")
+  
+    	   roomloc=row.cells[0].innerHTML.substring(3).split("<")
+    	     	
+    	     	
     	   if (roomloc[0]==loc) {
     		   
     		   document.getElementById("room").deleteRow(i);
@@ -326,7 +328,7 @@
          		(document.getElementById("LocationFloc").value.length<1)){
          	return
          }
-        $('#location tr:last').after('<tr><td><p>'+$("#LocationFloodType>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="loctype-' + rowCount + '" value="'+document.getElementById("LocationFloodType").value+'" hidden/></td><td><p>'+$("#LocationFloodSubType>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locsubtype-' + rowCount + '" value="'+document.getElementById("LocationFloodSubType").value+'" hidden /></td><td><p>'+$("#LocationSeverity>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locseverity-' + rowCount + '" value="'+document.getElementById("LocationSeverity").value+'" hidden /></td><td><p>'+document.getElementById("LocationFloc").value+'</p><input type="text" class="feedback-input-table" id="locfloc-' + rowCount + '" value="'+document.getElementById("LocationFloc").value+'" hidden  /></td><td><p>'+document.getElementById("LocationComments").value+'</P><input type="text" class="feedback-input-table" id="loccomments-' + rowCount + '" value="'+document.getElementById("LocationComments").value+'" hidden  /></td><TD><button onclick="deletelocation('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+        $('#location tr:last').after('<tr><td><p>'+$("#LocationFloodType>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="loctype-' + rowCount + '" value="'+document.getElementById("LocationFloodType").value+'" hidden/></td><td><p>'+$("#LocationFloodSubType>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locsubtype-' + rowCount + '" value="'+document.getElementById("LocationFloodSubType").value+'" hidden /></td><td><p>'+$("#LocationSeverity>option:selected").html()+'</P><input type="text" class="feedback-input-table" id="locseverity-' + rowCount + '" value="'+document.getElementById("LocationSeverity").value+'" hidden /></td><td><p>'+document.getElementById("LocationFloc").value+'</p><input type="text" class="feedback-input-table" id="locfloc-' + rowCount + '" value="'+document.getElementById("LocationFloc").value+'" hidden  /></td><td><p>'+document.getElementById("LocationComments").value+'</P><input type="text" class="feedback-input-table" id="loccomments-' + rowCount + '" value="'+document.getElementById("LocationComments").value+'" hidden  /></td><TD><button onclick="deletelocation('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD><td hidden>'+rowCount+'</td></tr>');
    
         refreshRoomsLocation();
       
@@ -346,19 +348,44 @@
         		document.getElementById("RoomLocSelect").value+'" HIDDEN/></td><td><p>'+$("#RoomSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomroom-' + 
         		rowCount + '" value="'+document.getElementById("RoomSelect").value+'" hidden /><td><p>'+$("#DepthSelect>option:selected").html()+'</p><input type="text" class="feedback-input-table" id="roomdepth-' + 
         		rowCount + '" value="'+document.getElementById("DepthSelect").value+'" hidden /></td><td><p>'+document.getElementById("RoomComments").value+'</p><input type="text" class="feedback-input-table" id="roomcomments' + 
-        		rowCount + '" value="'+document.getElementById("RoomComments").value+'" hidden /></td><TD><button onclick="deleteroom('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD></tr>');
+        		rowCount + '" value="'+document.getElementById("RoomComments").value+'" hidden /></td><TD><button onclick="deleteroom('+rowCount+')" class="btn btn-small btn-danger">Del</button></TD><td hidden>'+rowCount+'</td></tr>');
         setRoomEmpty()
     }
     function deletelocation(n){
     	var table = document.getElementById("location");
-    	loctoDelete=table.rows[n].cells[3].innerHTML.split("<");
+    	var rowCount = $('#location tr').length;
     	
-    	document.getElementById("location").deleteRow(n);
-    	deleteRoomsForLoc(loctoDelete[0])
+    	for(i = 1; i < rowCount; i++){
+    		
+    		if(table.rows[i].cells[6].innerHTML==n){
+        		loctoDelete=table.rows[i].cells[6].innerHTML.split("<");
+            	
+            	document.getElementById("location").deleteRow(i);
+            	deleteRoomsForLoc(loctoDelete[0])
+        	}
+    	}
+    	
+    	
+    	
+    	
     }
     function deleteroom(n){
-    	document.getElementById("room").deleteRow(n);
+    	var table = document.getElementById("location");
+    	var rowCount = $('#room tr').length;
+    	
+    	for(i = 1; i < rowCount; i++){
+    		
+    		if(table.rows[i].cells[5].innerHTML==n){
+             	document.getElementById("room").deleteRow(i);
+            	
+        	}
+    	}
+    	
+    	
+    	
+    	
     }
+   
     setLocationEmpty()
     setRoomEmpty()
     
