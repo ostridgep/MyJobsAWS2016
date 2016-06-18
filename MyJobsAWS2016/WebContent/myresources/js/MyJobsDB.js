@@ -2611,6 +2611,7 @@ function syncReference(){
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
 							requestDEMOData('PE29.json');
+							requestDEMOData('POSTRIDGE2.json');
 							requestDEMOData('MyJobsDG5Codes.json');
 							//requestSAPDataPJO("getFormsJSON.php",'');
 							//requestSAPData("MyJobsFunclocs.htm",'');
@@ -3592,6 +3593,8 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS Properties			    ( id integer primary key autoincrement, funcloc TEXT ,description TEXT ,street TEXT ,district TEXT ,city TEXT,postcode TEXT,easting TEXT,northing TEXT,lat FLOAT,lon FLOAT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS AssetDetailsAll		( id integer primary key autoincrement, floc TEXT ,planplant TEXT ,maintplant TEXT ,site TEXT ,flocdesc TEXT,eq TEXT,eqdesc TEXT,plgrpdesc TEXT,asstype TEXT,assdesc TEXT,manufacturer TEXT,partno TEXT,serialno TEXT,eqtype TEXT,eqtypedesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+						
 						
 
 					 
@@ -3775,6 +3778,7 @@ function dropTables() {
 					'DROP TABLE IF EXISTS  MyJobsDetsEQ;'+
 					'DROP TABLE IF EXISTS  MyJobsDetsATTR;'+
 					'DROP TABLE IF EXISTS  Properties;'+
+					'DROP TABLE IF EXISTS  AssetDetailsAll;'+
 					'DROP TABLE IF EXISTS  MyJobsDocs;'+
 					'DROP TABLE IF EXISTS  MyJobsPhotos;'+
 					'DROP TABLE IF EXISTS  MyJobDetsMPoints;'+
@@ -3873,6 +3877,7 @@ function emptyTables(type) {
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM Properties;'+
+					'DELETE FROM AssetDetailsAll;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
@@ -3992,6 +3997,7 @@ function loadDemoData() {
 				'DELETE FROM MyJobsDetsEQ;'+
 				'DELETE FROM MyJobsDetsATTR;'+
 				'DELETE FROM Properties;'+
+				'DELETE FROM AssetDetailsAll;'+
 				'DELETE FROM  MyJobDetsMPoints;'+
 				'DELETE FROM  MyJobDetsLoch;'+
 				'DELETE FROM  MyJobDetsMPCodes;'+
@@ -4036,6 +4042,7 @@ function loadDemoData() {
 						//requestDEMOData('funclocs.json');
 						requestDEMOData('MyForms.json');
 						requestDEMOData('PE29.json');
+						requestDEMOData('POSTRIDGE2.json');
 						requestDEMOData('MyJobsVehicles.json');
 						requestDEMOData('MyJobsVehiclesDefault.json');
 						requestDEMOData('MyJobsDG5Codes.json');
@@ -4140,6 +4147,7 @@ function resetTables() {
 					'DELETE FROM MyJobsDetsEQ;'+
 					'DELETE FROM MyJobsDetsATTR;'+
 					'DELETE FROM Properties;'+
+					'DELETE FROM AssetDetailsAll;'+
 					'DELETE FROM  MyJobDetsMPoints;'+
 					'DELETE FROM  MyJobDetsLoch;'+
 					'DELETE FROM  MyJobDetsMPCodes;'+
@@ -4190,7 +4198,7 @@ function createDB(type){
 function requestDEMOData(page){
 		
 		opMessage("DEMOLoad "+page);
-		
+		alert(page)
 		$.getJSON("TestData/"+page,function(data,status){ 	
 			
 			if(page=='MyJobsOrders.json'){
@@ -4213,6 +4221,11 @@ function requestDEMOData(page){
 			}
 			if(page=='PE29.json'){
 				propsCB(data);
+				
+			}
+			if(page=='POSTRIDGE2.json'){
+				alert("xx")
+				assetdetailsCB(data);
 				
 			}
 			if(page=='MyJobsOrdersObjects.json'){
@@ -4272,7 +4285,7 @@ function requestDEMOData(page){
 						}
 			  })
   .fail(function(data,status) {
-    //alert( "error:"+status+":"+data );
+    alert( "error:"+status+":"+data );
   })
 }
 function orderCB(MyOrders){
@@ -4625,16 +4638,16 @@ var orderlist="";
 			sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
 			sqldeleteorders+="DELETE FROM MyFormsResponses WHERE lastupdated <> 'SENDING' and orderno NOT IN ("+orderlist+");"
-			console.log("about to tidy up orders")
+			
 			html5sql.process(sqldeleteorders,
 					 function(transaction, results, rowsArray){
 				 var path = window.location.pathname;
 			     var page = path.split("/").pop();
 			     if(page=="Jobs.html"){
-						console.log("about to refreshList")
+						
 						refreshJobList()
 					}else if(page=="Home.html"){
-						console.log("about to refresh Counts")
+						
 						setCounts()
 					}
 			     setSyncingIndicator(false)
@@ -4662,7 +4675,7 @@ var orderlist="";
 }
 function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 	var sqlstatement1=""
-		console.log("xx"+orderno+changeddatetime)
+		
 	var jdetslocal="";
 	html5sql.process("select * , (select GROUP_CONCAT(opno) from myJobDets where orderno = MyOrders.orderno)  as jdets  from MyOrders where  orderno = '"+orderno+"'",
 			 function(transaction, results, rowsArray){
@@ -4678,8 +4691,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 							
 							sqlstatement1 = '';
 						}else{
-							console.log("ord:"+orderno+":"+rowsArray.length+":"+rowsArray[0].changeddatetime+":"+changeddatetime)
-							//alert("DB="+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
+							
 							
 							opMessage("Deleting Existing Order details "+orderno);
 							sqlstatement1 = 'DELETE FROM MyOrders where orderno = "'+orderno+'";'+
@@ -4708,21 +4720,20 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
 						
-									console.log(orderno+"OK"+sqlstatement1+sqlstatement)
-									//addNewJobToList(orderno){
+									
 			
 										
 								 },
 								 function(error, statement){
 									 
 									 console.log(orderno+"Failed"+error+statement)
-									 alert(sqlstatement1+sqlstatement)
+									
 								 }        
 								);
 
 						}else{
 					console.log("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
-						//alert("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
+						
 					}
 
 			 },
@@ -5731,6 +5742,55 @@ function propsCB(data){
 							
 					 },
 					 function(error, statement){
+						 opMessage("Error: " + error.message + " when processing " + statement);
+					 }        
+				);
+
+
+		}
+	}
+function assetdetailsCB(data){
+	var sqlstatement="";		
+	alert("about to do Asset Details")
+		if(data.allAsset.length>0){
+				if(syncReferenceDetsUpdated){
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', AssetDetailsAll:'+String(data.props.length));
+				}else{
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'AssetDetailsAll:'+String(data.props.length));
+				}
+
+				opMessage("Deleting Existing AssetDetailsAll");
+				sqlstatement+='DELETE FROM AssetDetailsAll;';
+				opMessage("Loading"+data.allAsset.length+" Existing Asset Details All");
+				for(var cntx=0; cntx < data.allAsset.length ; cntx++)
+					{
+					adets=data.allAsset[cntx].adata.split("|");
+					en=data.props[cntx].SearchTerm.split("-")
+					y=convertToLatLon(data.props[cntx].SearchTerm)
+					sqlstatement+='INSERT INTO AssetDetailsAll (floc , planplant , maintplant , site , flocdesc, eq , eqdesc , plgrpdesc , asstype , assdesc,manufacturer,partno ,serialno ,eqtype ,eqtypedesc ) VALUES ('+ 
+						'"'+adets[0] +'",'+  
+						'"'+adets[1] +'",'+  
+						'"'+adets[2] +'",'+  
+						'"'+adets[3]+'",'+  
+						'"'+adets[4] +'",'+  
+						'"'+adets[5] +'",'+  
+						'"'+adets[6] +'",'+  
+						'"'+adets[7] +'",'+  
+						'"'+adets[8]+'",'+  
+						'"'+adets[9] +'",'+  
+						'"'+adets[10] +'",'+  
+						'"'+adets[11] +'",'+  
+						'"'+adets[12]+'",'+  
+						'"'+adets[13]+'",'+  
+						'"'+adets[14]+'");';			
+					}	
+
+				html5sql.process(sqlstatement,
+					 function(){
+						alert("Asset Details Loaded")	
+					 },
+					 function(error, statement){
+						 alert("Asset Details Load failed"+error_message)	
 						 opMessage("Error: " + error.message + " when processing " + statement);
 					 }        
 				);

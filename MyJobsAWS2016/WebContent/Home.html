@@ -59,6 +59,7 @@ var appDirectory=""
 
 
 <script type="text/javascript">
+jQuery.sap.require("sap.m.MessageBox");
 html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 10*1024*1024);	
 
 var MenuBar=["My AnglianWater","Vehicles","End of Day", "Jobs", "Reference Documents", "MC Web", "Office", "Assets", "Material"]
@@ -1079,9 +1080,21 @@ var formSettings = new sap.m.Dialog("dlgSettings",{
 							    text: "Load DemoData",
 							    type: 	sap.m.ButtonType.Reject,
 							    tap: [ function(oEvt) {		  
-									 
-							    	formSettings.close()
-							    	loadDemoData(0);
+							  	  sap.m.MessageBox.show("Are you Sure?",{
+								         icon: sap.m.MessageBox.Icon.WARNING ,
+								         title: "Load Demo Data",
+								         actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+							  			 onClose: function(oAction){
+							  				
+							  				 if(oAction=="YES"){
+							  					formSettings.close()
+										    	loadDemoData(0);
+							  				 }else{
+							  					formSettings.close() 
+							  				 }
+							  			 }
+								       }) 
+							    	
 									  } ]
 							}),
 							new sap.m.Label({text:""}),

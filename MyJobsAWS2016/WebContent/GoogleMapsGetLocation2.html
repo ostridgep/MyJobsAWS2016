@@ -9,28 +9,136 @@
 	
 </script>
 <script
-src="http://maps.googleapis.com/maps/api/js">
+src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvFhNXJAWH4dyHHkDtyZc6bxLeDmLTaKA">
 </script>
+
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/MyJobsDB.js"></script>
 <script src="myresources/js/MyJobsUtils.js"></script>
-
+<script src="myresources/js/polys/geoxml3.js"></script>
+<script src="myresources/js/ProjectedOverlay.js"></script>
+ <link href="myresources/css/jq/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
 
 
 
 
 <script>
+
+var layers ="";
+var formLayers = new sap.m.Dialog("dlgLayers",{
+    title:"Layers Config",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button("dlgConfigCancel", {
+				    text: "Close",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formLayers.close()
+						  } ]
+				})
+				],					
+    content:[
+			new sap.m.Table({
+				columns : [
+							new sap.m.Column({
+								styleClass : "key",
+								valign : "Center",
+								width : "35%",
+								hAlign : "Right"
+							}),
+							new sap.m.Column({
+								minScreenWidth : "Medium",
+								demandPopin : true
+							})
+						],
+				items : [
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Sewers"
+									}),
+									new sap.m.Switch('layerSewer',{
+		   								state: true,
+										type: sap.m.SwitchType.AcceptReject,
+										change: function(evt){
+										if(!sap.ui.getCore().getElementById('layerSewer').getState()){
+											
+											layers.hideDocument(layers.docs[0]);
+										}else{
+											
+											layers.showDocument(layers.docs[0]);
+										}
+											
+											
+									    },
+										
+									})
+								]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Layer 2"
+									}),
+										new sap.m.Switch('layer2',{
+			   								state: true,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer2').getState()){
+												
+												layers.hideDocument(layers.docs[1]);
+											}else{
+												
+												layers.showDocument(layers.docs[1]);
+											}
+												
+												
+										    },
+											
+										})
+									]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Layer3"
+									}),
+										new sap.m.Switch('layer3',{
+			   								state: true,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer3').getState()){
+												
+												layers.hideDocument(layers.docs[2]);
+											}else{
+												
+												layers.showDocument(layers.docs[2]);
+											}
+												
+												
+										    },
+											
+										})
+									]
+							})
+			             ]
+			             
+			          
+			          })
+			        ]
+
+ })
 var houses=[]
 html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
 var infowindow = false;
 var map;
 var myCenter=""
-var markers = [
-	                ['house 1', 52.521487,-1.636626,"floc1"],
-	                ['house 2', 52.521587,-1.636726,"floc2"],
-	                ['house 3', 52.521687,-1.636826,"floc3"]
-	            ];
+
+
 function initialize()
 {
 	if (navigator.geolocation) {
@@ -52,17 +160,31 @@ var mapProp = {
 
   map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
  
-  
+     
   google.maps.event.addListener(map, 'click', function(event) {
-    placeMarker(event.latLng);
+    //placeMarker(event.latLng);
   });
   google.maps.event.addListenerOnce(map,'idle',function(){
 	  google.maps.event.trigger(map, "resize");
   })
   google.maps.event.addListener(map, 'bounds_changed', function() {
-	  loadProps() 
+	  //loadProps() 
  })
-  loadProps() 
+ google.maps.event.addListenerOnce(map, 'idle', function(){
+	layers = new geoXML3.parser({map: map, 
+		afterParse: layerLoaded,
+        zoom: false,
+		processStyles: true});
+     layers.parse("TestData/Huntingdon_Sewers_V2.kml");
+    
+	 sap.ui.getCore().byId("MapLoading").setVisible(false)
+	 sap.ui.getCore().byId("LayerLoading").setVisible(true)
+	 
+});
+  //loadProps() 
+}
+function layerLoaded(){
+	sap.ui.getCore().byId("LayerLoading").setVisible(false)
 }
 function placeMarkers(){
 // Display multiple markers on a map
@@ -111,9 +233,11 @@ marker.addListener('click', function(event) {
   infowindow.open(map,marker);
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+
 function loadProps()
 {
+
+
 	  var bounds =  map.getBounds();
       var ne = bounds.getNorthEast();
       var sw = bounds.getSouthWest();
@@ -148,13 +272,73 @@ n = 0;
 			);
 	
 	}
+var vpage  = new sap.m.Page('VehicleCheck',{
+    title:"MyJobs - Map",  
+    content: 
+        [new sap.ui.core.HTML("MAP",{
+        	visible:true,
+        	content: '<div id="googleMap" style="width:1024;height:800px;"></div>'
+
+
+        }),
+        new sap.m.VBox("LOADING", { 
+        	alignItems: sap.m.FlexAlignItems.Center,
+            items:[new sap.m.BusyIndicator("MapLoading",{
+            	  text: "Map Loading",
+              	  visible: true
+              }),
+              new sap.m.BusyIndicator("LayerLoading",{
+            	  text: "Layer Loading",
+              	  visible: false
+              })
+                
+            ]
+          
+            })
+        ],
+    footer:
+        new sap.m.Bar (
+                  {
+
+                  contentRight : [
+                         new sap.m.Button({
+                                      
+                                       icon:"sap-icon://settings",
+                                      text:"Layers",
+                                      type:        sap.m.ButtonType.Accept,
+                                             press: [ function(){
+                                                    formLayers.open()
+                                                    
+                                                           }]
+                                      }),
+                                                                         
+                               ],
+                        
+                  contentMiddle : [ ],
+                              
+                             
+                            	  
+           
+    }),
+
+
+ enableScrolling:true,showNavButton: "{device>/isPhone}" });
+
+var app = new sap.m.App();
+
+app.setInitialPage(vpage.getId()); 
+    
+
+
+vpage.placeAt("body");
+google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 </head>
+<body id="body" class="sapUiBody">
 
-<body>
-<div id="googleMap" style="width:1024;height:800px;"></div>
-<SCRIPT>
+   
 
-</SCRIPT>
+		
+
 </body>
 </html>
