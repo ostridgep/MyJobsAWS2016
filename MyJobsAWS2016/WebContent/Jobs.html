@@ -536,6 +536,7 @@ new sap.m.Button( {
      	 }
     
    	 if (CloseError=='0'){
+   		 console.log(sap.ui.getCore().byId("Close_Variance").getSelectedItem().getKey())
 		if(	 (sap.ui.getCore().getElementById("Close_Work").getState()==true)&&
 			 ((sap.ui.getCore().byId("Close_Variance").getSelectedItem().getKey()=="NOTSELECTED") ||
 			 (sap.ui.getCore().byId("Close_Reason").getValue().length < 1))){
@@ -6179,16 +6180,16 @@ function BuildCloseScreen(){
 		if(scrFlds[16]=="true"){
 			
 			sap.ui.getCore().getElementById("Close_Work").setState(true)
-			sap.ui.getCore().getElementById("FEClose_Variance").setVisible(true) 
-			sap.ui.getCore().getElementById("FEClose_Reason").setVisible(true)   		
+			sap.ui.getCore().getElementById("Close_Variance").setEnabled(true)   
+            sap.ui.getCore().getElementById("Close_Reason").setEnabled(true)   
 			
 			sap.ui.getCore().getElementById("Close_Reason").setValue(scrFlds[18])   
 		}else{
 			
 			sap.ui.getCore().getElementById("Close_Work").setState(false)
-			sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false) 
-			sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)   
-			sap.ui.getCore().getElementById("Close_Reason").setValue("") 
+			sap.ui.getCore().getElementById("Close_Variance").setEnabled(false)   
+            sap.ui.getCore().getElementById("Close_Reason").setEnabled(false)   
+            sap.ui.getCore().getElementById("Close_Reason").setValue("") 
 		}
 		
 	}else{
@@ -6196,8 +6197,8 @@ function BuildCloseScreen(){
 		sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(CurrentJobFL)
 		sap.ui.getCore().getElementById("Close_Equipment").setValue(CurrentJobEQ)
 		sap.ui.getCore().getElementById("Close_LongText").setValue("")
-		sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false)   
-		sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)  
+			sap.ui.getCore().getElementById("Close_Variance").setEnabled(false)   
+            sap.ui.getCore().getElementById("Close_Reason").setEnabled(false)   
 		oSwitchPollution.setState(false)
 		oSwitchFlooding.setState(false)
 		oSwitchCustFeed.setState(false)
@@ -6254,6 +6255,7 @@ function BuildCloseScreen(){
 					key: "NOTSELECTED",
 					text: 'Please Select'
 				}))
+		sap.ui.getCore().getElementById("Close_ImpactGroup").setSelectedKey("NOTSELECTED")
 		sap.ui.getCore().getElementById("Close_ImpactGroup").destroyItems();
 		sap.ui.getCore().getElementById("Close_ImpactGroup").addItem(
 				new sap.ui.core.Item({

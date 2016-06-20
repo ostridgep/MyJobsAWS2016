@@ -341,10 +341,9 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                 
                                 				customTextOn:"Yes",
                                 				customTextOff:"No",
-                                                change:[function(evt){
-                                                       
-                                                    	   sap.ui.getCore().getElementById("FEClose_Variance").setVisible(this.getState())   
-                                                    	   sap.ui.getCore().getElementById("FEClose_Reason").setVisible(this.getState())   
+                                                change:[function(evt){ alert(this.getState())
+                                                    	   sap.ui.getCore().getElementById("Close_Variance").setEnabled(this.getState())   
+                                                    	   sap.ui.getCore().getElementById("Close_Reason").setEnabled(this.getState())   
                                                        
                                                        
                                                 }]
@@ -546,4 +545,6 @@ function initCloseButtons(){
 function setFollowOnMandatory(val){
 	
 	sap.ui.getCore().getElementById("Close_Work").setState(val);
+	sap.ui.getCore().getElementById("Close_Variance").setEnabled(val)   
+    sap.ui.getCore().getElementById("Close_Reason").setEnabled(val)   
 }

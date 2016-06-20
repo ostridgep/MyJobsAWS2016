@@ -112,25 +112,11 @@ empid=localStorage.getItem("EmployeeID")
 							
 						
 
-
+						locsArray = [""]
 						params="&RECNO="+rowsArray[0].id+"&USERID="+user+"&AUFNR="+orderno+
 						"&ZASTYP="+jsonstr[0].sewertype.trim()+
 						"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
 						"&ZAWEAT="+jsonstr[0].floodweather.trim()
-						var pdepth="";
-						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
-						{
-							if(cnt>0){
-								pdepth+=","
-							}
-						 row=cnt+1;	
-						 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
-						 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
-						 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
-						 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
-						 pdepth+=orderno+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
-						}
-
 						var pitem="";
 						for(var cnt=0; cnt < jsonstr[0].location.length ; cnt++)
 						{
@@ -138,15 +124,64 @@ empid=localStorage.getItem("EmployeeID")
 								pitem+=","
 							}
 						 row=cnt+1;	
+						 litenno = row *10;
+						 litem = ("0000" + litenno).slice(-4)
 						 type=jsonstr[0].location[cnt]["loctype-"+row].split(":")
 						 subtype=jsonstr[0].location[cnt]["locsubtype-"+row].split(":")
 						 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
 						 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
 						 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
-						 pitem+=orderno+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+						 pitem+=orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+						 locsArray.push(floc[0])
+						 alert("Loc:"+orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0])
+						}
+						roomsArray=[]
+						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
+						{
+						row=cnt+1;	
+						 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
+						 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
+						 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
+						 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
+
+						 roomsArray.push(loc[0]+"|"+room[0]+"|"+depth[0]+"|"+comments[0])
+						  
 						
-					
-						}	
+						}
+						roomsArray.sort();
+						var pdepth="";
+						var wasitem=0;
+						dno=1;
+						for(var cnt=0; cnt < roomsArray.length ; cnt++)
+						{
+							if(cnt>0){
+								pdepth+=","
+							}
+						theroom = roomsArray[cnt].split("|");
+						 row=cnt+1;	
+						 loc=theroom[0]
+						 litemno = row *10;
+						 f1=locsArray.indexOf(loc);
+						 if (f1!=wasitem){
+							 wasitem = f1;
+							 dno=1;
+						 }else{
+							 dno++;
+						 }
+						 litem=("0000" + f1*10).slice(-4)
+						 ditem=("0000" + dno*10).slice(-4)
+						 
+						 room=theroom[1]
+						 depth=theroom[2]
+						 comments=theroom[3]
+						 pdepth+=orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments+","
+						alert("room:"+orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments)
+						 
+						  
+						
+						}
+						
+	
 						//need to populate the PHDR
 						//sort date & time formats
 						gridref=jsonstr[0].gridref.split(",");
@@ -169,7 +204,7 @@ empid=localStorage.getItem("EmployeeID")
 						"&PITEM="+pitem
 					   
 
-							sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+							//sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
 						}
 					  }				
 				/*	
@@ -568,8 +603,7 @@ xtraceState="";
 }	
 function getCFeedFollowOnState(orderno,opno){
 	sap.ui.getCore().getElementById("Close_Work").setEnabled(true);
-	sap.ui.getCore().getElementById("FEClose_Variance").setVisible(false)   
-	    sap.ui.getCore().getElementById("FEClose_Reason").setVisible(false)   
+	 
 		html5sql.process(
 			["SELECT * from MyFormsResponses where orderno = '"+orderno+"' and opno = '"+opno+"' and formname = 'CustomerFeedback'"],
 			function(transaction, results, rowsArray){
@@ -580,12 +614,14 @@ function getCFeedFollowOnState(orderno,opno){
 						if(unescape(rowsArray[0].contents).indexOf("\"furtherworkV\":\"YES\"")>0){
 							
 							sap.ui.getCore().getElementById("Close_Work").setState(true);
-							sap.ui.getCore().getElementById("FEClose_Variance").setVisible(true)   
-                     	    sap.ui.getCore().getElementById("FEClose_Reason").setVisible(true)   
+							
 							sap.ui.getCore().getElementById("Close_Work").setEnabled(false);
 						}else{
 							
 							sap.ui.getCore().getElementById("Close_Work").setState(false);
+							sap.ui.getCore().getElementById("Close_Work").setState(false);
+							
+							sap.ui.getCore().getElementById("Close_Work").setEnabled(false);
 						}
 					}
 				
@@ -4198,7 +4234,7 @@ function createDB(type){
 function requestDEMOData(page){
 		
 		opMessage("DEMOLoad "+page);
-		alert(page)
+		
 		$.getJSON("TestData/"+page,function(data,status){ 	
 			
 			if(page=='MyJobsOrders.json'){
@@ -4298,9 +4334,9 @@ var sqlstatements=[];
 var ordernos=[];
 var changeddatetime=[];
 var orderlist="";
-		opMessage("Doing Orders");
+		opMessage("Receied Orders Count ="+MyOrders.order.length);
 		
-		console.log(MyOrders.order.length+"Orders")
+		
 		if(MyOrders.order.length==0){
 			 setSyncingIndicator(false)
 		}
@@ -4319,7 +4355,7 @@ var orderlist="";
 							'DELETE FROM MyJobsDetsATTR;';
 			
 			
-			opMessage("Loading "+MyOrders.order.length+" Orders");
+			
 			
 				
 			for(var cntx=0; cntx < MyOrders.order.length ; cntx++)
@@ -4346,7 +4382,7 @@ var orderlist="";
 					
 						}
 						
-						console.log("loch"+MyOrders.order[cntx].jobloch.length)
+						
 						for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
 						{	
 					
@@ -4364,7 +4400,7 @@ var orderlist="";
 				orderlist+="'"+MyOrders.order[cntx].orderno+"'"
 				ordernos.push(MyOrders.order[cntx].orderno)
 				changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
-				console.log(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
+			
 				stext=MyOrders.order[cntx].shorttext.replace(/%2A%20/g,"%0D%0A")
 				stext=stext.replace("\/", "");;
 				stext=stext.replace(/&/g, "");;
@@ -4385,7 +4421,7 @@ var orderlist="";
 					 '"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
 				//Loop and write Draw Files to DB
 				//Loop and write JobDets
-				console.log( MyOrders.order[cntx].orderno+'--'+MyOrders.order[cntx].jobdets.length)
+				
 				var orderJdets=MyOrders.order[cntx].orderno
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
 					{
@@ -4693,7 +4729,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 						}else{
 							
 							
-							opMessage("Deleting Existing Order details "+orderno);
+							
 							sqlstatement1 = 'DELETE FROM MyOrders where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperations where orderno = "'+orderno+'";'+
 											'DELETE FROM MyOperationsSplit where orderno = "'+orderno+'";'+
@@ -4743,7 +4779,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 			);
 }
 function objectsCB(Objects){
-opMessage("Callback objects triggured");
+opMessage("Receing Objects Count ="+Objects.object.length);
 
 		if(Objects.object.length>0){
 			if(syncTransactionalDetsUpdated){
@@ -4751,7 +4787,7 @@ opMessage("Callback objects triggured");
 			}else{
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'Objects:'+String(Objects.object.length));
 			}
-			opMessage("Deleting Existing Ref Assets");
+			
 			sqlstatement = 	'DELETE FROM Assets;';
 			html5sql.process(sqlstatement,
 						 function(){
@@ -4762,7 +4798,7 @@ opMessage("Callback objects triggured");
 						 }        
 				);		
 			sqlstatement='';	
-			opMessage("Loading "+Objects.object.length+" Ref Assets");
+			
 			for(var cntx=0; cntx < Objects.object.length ; cntx++)
 				{
 				
@@ -4790,7 +4826,7 @@ function notificationCB(MyNotifications){
 var sqlstatement;
 var notiftype=""
 	var NotifProcessed=[]
-opMessage("Callback Notifications triggured");
+opMessage("Reecived Notifications Count = "+MyNotifications.notification.length);
 
 	if(MyNotifications.notification.length>0){
 			if(syncTransactionalDetsUpdated){
@@ -4798,7 +4834,7 @@ opMessage("Callback Notifications triggured");
 			}else{
 				localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'MyNotifications:'+String(MyNotifications.notification.length));
 			}	
-			opMessage("Deleting Existing Notifications");
+			//opMessage("Deleting Existing Notifications");
 			sqlstatement = 	'DELETE FROM MyNotifications where notifno!="NEW";'+
 							'DELETE FROM MyTasks;'+
 							'DELETE FROM MyItems;'+
@@ -4814,7 +4850,7 @@ opMessage("Callback Notifications triggured");
 							 //alert("Error: " + error.message + " when processing " + statement);
 						 }        
 				);		
-			opMessage("Loading "+MyNotifications.notification.length+" Notifications");
+			//opMessage("Loading "+MyNotifications.notification.length+" Notifications");
 			sqlstatement='';	
 			
 			for(var cntx=0; cntx < MyNotifications.notification.length ; cntx++)
@@ -4859,7 +4895,7 @@ opMessage("Callback Notifications triggured");
 					//Loop and write Items to DB
 	
 
-					opMessage("Loading "+MyNotifications.notification[cntx].task.length+" Tasks");
+					//opMessage("Loading "+MyNotifications.notification[cntx].task.length+" Tasks");
 					for(var tcnt=0; tcnt < MyNotifications.notification[cntx].task.length ; tcnt++)
 						{	
 
@@ -4884,7 +4920,7 @@ opMessage("Callback Notifications triggured");
 				
 						}
 						
-					opMessage("Loading "+MyNotifications.notification[cntx].effect.length+" Effect");
+					//opMessage("Loading "+MyNotifications.notification[cntx].effect.length+" Effect");
 					for(var ecnt=0; ecnt < MyNotifications.notification[cntx].effect.length ; ecnt++)
 						{	
 
@@ -4900,7 +4936,7 @@ opMessage("Callback Notifications triggured");
 							 '"'+MyNotifications.notification[cntx].effect[ecnt].value+'");';
 						}
 	
-					opMessage("Loading "+MyNotifications.notification[cntx].item.length+" Items");
+					//opMessage("Loading "+MyNotifications.notification[cntx].item.length+" Items");
 					for(var icnt=0; icnt < MyNotifications.notification[cntx].item.length ; icnt++)
 						{	
 						MyNotifications.notification[cntx].item[icnt].txt_objptcd=MyNotifications.notification[cntx].item[icnt].txt_objptcd.replace("\"", "");;	
@@ -4923,7 +4959,7 @@ opMessage("Callback Notifications triggured");
 						}
 					//Loop and write Causes to DB
 						
-					opMessage("Loading "+MyNotifications.notification[cntx].cause.length+" Causes");
+					//opMessage("Loading "+MyNotifications.notification[cntx].cause.length+" Causes");
 					for(var ccnt=0; ccnt < MyNotifications.notification[cntx].cause.length ; ccnt++)
 						{	
 
@@ -4940,7 +4976,7 @@ opMessage("Callback Notifications triggured");
 						}
 					//Loop and write Items to DB
 					
-					opMessage("Loading "+MyNotifications.notification[cntx].activity.length+" Activities");
+					//opMessage("Loading "+MyNotifications.notification[cntx].activity.length+" Activities");
 					for(var acnt=0; acnt < MyNotifications.notification[cntx].activity.length ; acnt++)
 						{	
 
@@ -4976,66 +5012,7 @@ opMessage("Callback Notifications triggured");
 			
 			html5sql.process(sqlstatement,
 							 function(transaction, results, rowsArray){
-								//setCounts()
-								/*var x = window.location.href.split("/")
-								if(x[x.length-1]=="Home.html"){
-									
-								}*/
 								
-/*								html5sql.process("select * from MyNotifications",
-												 function(transaction, results, rowsArray){
-													 for (var n = 0; n < rowsArray.length; n++) {
-														nitem = rowsArray[n];
-														//alert("select  CODEGROUP_TEXT from refcodegroups where catalog_type = '"+nitem.cattype+"' and codegroup = '"+nitem.pgroup+"' ORDER BY CODEGROUP_TEXT ASC LIMIT 1")
-														html5sql.process("select  CODEGROUP_TEXT from refcodegroups where catalog_type = '"+nitem.cattype+"' and codegroup = '"+nitem.pgroup+"' ORDER BY CODEGROUP_TEXT ASC LIMIT 1",
-																		 function(transaction, results, rowsArray1){
-																			 for (var n = 0; n < rowsArray1.length; n++) {
-																				if(rowsArray1.length>0){
-																					//alert("update  MyNotifications set pgrouptext = '"+rowsArray1[0].codegroup_text+"' where notifno = '"+nitem.notifno+"'")
-																					html5sql.process("update  MyNotifications set grouptext = '"+rowsArray1[0].codegroup_text+"' where notifno = '"+nitem.notifno+"'",
-																									 function(transaction, results, rowsArray2){
-																										 
-																									 },
-																									 function(error, statement){
-																										 opMessage("Error: " + error.message + " when processing " + statement);
-																									 }        
-																					);
-																				}
-																			 }
-																		 },
-																		 function(error, statement){
-																			 opMessage("Error: " + error.message + " when processing " + statement);
-																		 }        
-														);	
-														
-
-
-														html5sql.process("select CODE_TEXT from refcodes where code_cat_group = '"+nitem.cattype+nitem.pgroup+"' and code = '"+nitem.pcode+"' ORDER BY CODE_TEXT ASC LIMIT 1",
-																		 function(transaction, results, rowsArray3){
-																			 for (var n = 0; n < rowsArray3.length; n++) {
-																				if(rowsArray3.length>0){
-																					//alert("update  MyNotifications set pcodetext = '"+rowsArray3[0].code_text+"' where notifno = '"+nitem.notifno+"'")
-																					html5sql.process("update  MyNotifications set codetext = '"+rowsArray3[0].code_text+"' where notifno = '"+nitem.notifno+"'",
-																									 function(transaction, results, rowsArray4){
-																										 
-																									 },
-																									 function(error, statement){
-																										 opMessage("Error: " + error.message + " when processing " + statement);
-																									 }        
-																					);
-																				}
-																			 }
-																		 },
-																		 function(error, statement){
-																			 opMessage("Error: " + error.message + " when processing " + statement);
-																		 }        
-														);														
-													 }
-												 },
-												 function(error, statement){
-													 opMessage("Error: " + error.message + " when processing " + statement);
-												 }        
-								);	*/	
 							
 							 },
 							 function(error, statement){
