@@ -176,7 +176,7 @@ var mapProp = {
         zoom: false,
 		processStyles: true});
      //layers.parse("TestData/Huntingdon_Sewers.kml");
-     map.data.loadGeoJson('https://storage.googleapis.com/maps-devrel/google.json');
+     map.data.loadGeoJson('http://localhost:8080/Huntingdon_geojson_data/SAP_SupplyPoints_Huntingdon.json');
 	 sap.ui.getCore().byId("MapLoading").setVisible(false)
 	 sap.ui.getCore().byId("LayerLoading").setVisible(true)
 	 

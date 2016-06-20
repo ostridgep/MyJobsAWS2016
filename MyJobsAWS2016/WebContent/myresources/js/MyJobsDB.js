@@ -2098,35 +2098,77 @@ empid=localStorage.getItem("EmployeeID")
 																	"&ZAESSTA="+jsonstr[0].sewerstatus.trim()+
 																	"&ZAWEAT="+jsonstr[0].floodweather.trim()
 																	var pdepth="";
-																	for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
-																	{
-																		if(cnt>0){
-																			pdepth+=","
-																		}
-																	 row=cnt+1;	
-																	 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
-																	 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
-																	 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
-																	 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
-																	 pdepth+=rowsArray[0].orderno+','+row+',,'+room[0]+",,"+depth[0]+",,"+comments[0]+","
-																	}
-											
 																	var pitem="";
+																	
+																	
+																	
+																	
+
+																	locsArray = [""]
+																	
 																	for(var cnt=0; cnt < jsonstr[0].location.length ; cnt++)
 																	{
 																		if(cnt>0){
 																			pitem+=","
 																		}
 																	 row=cnt+1;	
+																	 litenno = row *10;
+																	 litem = ("0000" + litenno).slice(-4)
 																	 type=jsonstr[0].location[cnt]["loctype-"+row].split(":")
 																	 subtype=jsonstr[0].location[cnt]["locsubtype-"+row].split(":")
 																	 severity=jsonstr[0].location[cnt]["locseverity-"+row].split(":")
 																	 floc=jsonstr[0].location[cnt]["locfloc-"+row].split(":")
 																	 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
-																	 pitem+=rowsArray[0].orderno+','+row+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+																	 pitem+=rowsArray[0].orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
+																	 locsArray.push(floc[0])
+																	 //alert("Loc:"+orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0])
+																	}
+																	roomsArray=[]
+																	for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
+																	{
+																	row=cnt+1;	
+																	 loc=jsonstr[0].room[cnt]["roomloc-"+row].split(":")
+																	 room=jsonstr[0].room[cnt]["roomroom-"+row].split(":")
+																	 depth=jsonstr[0].room[cnt]["roomdepth-"+row].split(":")
+																	 comments=jsonstr[0].room[cnt]["roomcomments"+row].split(":")
+
+																	 roomsArray.push(loc[0]+"|"+room[0]+"|"+depth[0]+"|"+comments[0])
+																	  
 																	
-																
+																	}
+																	roomsArray.sort();
+																	var pdepth="";
+																	var wasitem=0;
+																	dno=1;
+																	for(var cnt=0; cnt < roomsArray.length ; cnt++)
+																	{
+																		if(cnt>0){
+																			pdepth+=","
+																		}
+																	theroom = roomsArray[cnt].split("|");
+																	 row=cnt+1;	
+																	 loc=theroom[0]
+																	 litemno = row *10;
+																	 f1=locsArray.indexOf(loc);
+																	 if (f1!=wasitem){
+																		 wasitem = f1;
+																		 dno=1;
+																	 }else{
+																		 dno++;
+																	 }
+																	 litem=("0000" + f1*10).slice(-4)
+																	 ditem=("0000" + dno*10).slice(-4)
+																	 
+																	 room=theroom[1]
+																	 depth=theroom[2]
+																	 comments=theroom[3]
+																	 pdepth+=rowsArray[0].orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments+","
+																	//alert("room:"+orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments)
+																	
+																	  
+																	
 																	}	
+																	
 																	//need to populate the PHDR
 																	//sort date & time formats
 																	gridref=jsonstr[0].gridref.split(",");
@@ -2647,7 +2689,7 @@ function syncReference(){
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
 							requestDEMOData('PE29.json');
-							requestDEMOData('POSTRIDGE2.json');
+							//requestDEMOData('POSTRIDGE2.json');
 							requestDEMOData('MyJobsDG5Codes.json');
 							//requestSAPDataPJO("getFormsJSON.php",'');
 							//requestSAPData("MyJobsFunclocs.htm",'');
@@ -3933,6 +3975,8 @@ function emptyTables(type) {
 							SetConfigParam("SYNC_UPLOAD_FREQUENCY", "2000");
 							SetConfigParam("LASTSYNC_REFERENCE", "20130316170000");
 							SetConfigParam("LASTSYNC_TRANSACTIONAL", "20130316224900");
+							
+
 							SetConfigParam("LASTSYNC_UPLOAD", "20130316214900");
 							SetConfigParam("SERVERNAME", "xxxx://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
 							SetConfigParam("SAPCLIENT", "120");
@@ -4078,7 +4122,7 @@ function loadDemoData() {
 						//requestDEMOData('funclocs.json');
 						requestDEMOData('MyForms.json');
 						requestDEMOData('PE29.json');
-						requestDEMOData('POSTRIDGE2.json');
+						//requestDEMOData('POSTRIDGE2.json');
 						requestDEMOData('MyJobsVehicles.json');
 						requestDEMOData('MyJobsVehiclesDefault.json');
 						requestDEMOData('MyJobsDG5Codes.json');
@@ -4199,6 +4243,8 @@ function resetTables() {
 						
 						SetConfigParam('LASTSYNC_REFERENCE', "20120101010101");
 						SetConfigParam('LASTSYNC_TRANSACTIONAL', "20120101010101");
+						SetConfigParam('LASTSYNC_UPLOAD', "20120101010101");
+
 
 						 window.location.href="index.html"
 
@@ -4260,7 +4306,7 @@ function requestDEMOData(page){
 				
 			}
 			if(page=='POSTRIDGE2.json'){
-				alert("xx")
+				
 				assetdetailsCB(data);
 				
 			}
