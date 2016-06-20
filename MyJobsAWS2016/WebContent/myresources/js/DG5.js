@@ -402,7 +402,9 @@ function buildDG5Tabs(){
                                     if(oEvt.getParameters().key=="DG53"){
 	                                    formToOpen="Forms/formsindex.html"
 	        				   			    formMode="Close"
+	        				   			    sap.ui.getCore().getElementById('DG5tabBar').setSelectedKey("DG52")
 	        		   						formForms.open()
+	        		   						
                                     }
                                   
                                   }
@@ -543,7 +545,7 @@ function initCloseButtons(){
 
 }
 function setFollowOnMandatory(val){
-	
+
 	sap.ui.getCore().getElementById("Close_Work").setState(val);
 	sap.ui.getCore().getElementById("Close_Variance").setEnabled(val)   
     sap.ui.getCore().getElementById("Close_Reason").setEnabled(val)   
