@@ -175,8 +175,8 @@ var mapProp = {
 		afterParse: layerLoaded,
         zoom: false,
 		processStyles: true});
-     layers.parse("TestData/Huntingdon_Sewers.kml");
-    
+     //layers.parse("TestData/Huntingdon_Sewers.kml");
+     map.data.loadGeoJson('https://storage.googleapis.com/maps-devrel/google.json');
 	 sap.ui.getCore().byId("MapLoading").setVisible(false)
 	 sap.ui.getCore().byId("LayerLoading").setVisible(true)
 	 

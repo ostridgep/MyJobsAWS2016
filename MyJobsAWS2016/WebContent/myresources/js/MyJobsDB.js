@@ -133,7 +133,7 @@ empid=localStorage.getItem("EmployeeID")
 						 comments=jsonstr[0].location[cnt]["loccomments-"+row].split(":")
 						 pitem+=orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0]+",,,,,,,,,,,,,,,,"+comments[0]+",,"+severity[0]+',1.00'
 						 locsArray.push(floc[0])
-						 alert("Loc:"+orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0])
+						 //alert("Loc:"+orderno+','+litem+","+type[0]+","+subtype[0]+","+floc[0])
 						}
 						roomsArray=[]
 						for(var cnt=0; cnt < jsonstr[0].room.length ; cnt++)
@@ -175,7 +175,7 @@ empid=localStorage.getItem("EmployeeID")
 						 depth=theroom[2]
 						 comments=theroom[3]
 						 pdepth+=orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments+","
-						alert("room:"+orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments)
+						//alert("room:"+orderno+','+litem+','+ditem+','+room+",,"+depth+",,"+comments)
 						 
 						  
 						
@@ -204,7 +204,7 @@ empid=localStorage.getItem("EmployeeID")
 						"&PITEM="+pitem
 					   
 
-							//sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
+							sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'NEW' WHERE id='"+rowsArray[0].id+"'");
 						}
 					  }				
 				/*	
