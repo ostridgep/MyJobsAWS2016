@@ -1768,7 +1768,7 @@ function syncUpload(){
 
 	html5sql.process(SQLStatement,
 	 function(transaction, results, rowsArray){
-	//alert("ok"+rowsArray.length)
+	alert("uploads"+rowsArray.length)
 			if (rowsArray.length>0) {
 				item = rowsArray[0];
 				
@@ -1783,6 +1783,7 @@ function syncUpload(){
 }
 
 function syncUploadNew(id,type){
+	alert(id+"--"+type)
 	var c040="NA"	
 		var d040=""		
 		var c060="NA"	
