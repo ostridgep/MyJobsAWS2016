@@ -1,9 +1,0 @@
-SELECT MyOperations.orderno, MyOperations.opno,MyOperations.startdate, MyOperations.enddate, MyOrders.address, MyOrders.gis, MyOperations.priority, MyOrders.shorttext, MyOperations.shorttext,MyOrders.contact
-FROM MyOperations
-INNER JOIN MyOrders
-ON MyOperations.orderno=MyOrders.orderno;
-
-
-
-
-
