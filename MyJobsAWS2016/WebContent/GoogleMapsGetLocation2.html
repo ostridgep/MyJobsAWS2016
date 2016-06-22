@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
 <script src="resources/sap-ui-core.js" type="text/javascript"
 	id="sap-ui-bootstrap" 
 	
@@ -54,7 +55,7 @@ var formLayers = new sap.m.Dialog("dlgLayers",{
 				    text: "Close",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
-						 
+					 
 				    	formLayers.close()
 						  } ]
 				})
@@ -238,11 +239,11 @@ var formLayers = new sap.m.Dialog("dlgLayers",{
 											change: function(evt){
 											if(!sap.ui.getCore().getElementById('layer7').getState()){
 											
-													hidelayer("TestData/kml/SAP_SupplyPoints_Huntingdon.kml");
+													hidelayer("http://pjomyjobs.azurewebsites.net/SAP.kml");
 													
 												}else{
 													
-													loadlayer("TestData/kml/SAP_SupplyPoints_Huntingdon.kml");
+													loadlayer("http://pjomyjobs.azurewebsites.net/SAP.kml");
 													
 												
 												}
@@ -309,7 +310,7 @@ var mapProp = {
   //loadProps() 
 }
 function layerLoaded(){
-	sap.ui.getCore().byId("LayerLoading").setVisible(false)
+	//sap.ui.getCore().byId("LayerLoading").setVisible(false)
 }
 function placeMarkers(){
 // Display multiple markers on a map
@@ -410,7 +411,7 @@ var vpage  = new sap.m.Page('VehicleCheck',{
         	alignItems: sap.m.FlexAlignItems.Center,
             items:[new sap.m.BusyIndicator("MapLoading",{
             	  text: "Map Loading",
-              	  visible: true
+              	  visible: false
               }),
               new sap.m.BusyIndicator("LayerLoading",{
             	  text: "Layer Loading",
