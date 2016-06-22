@@ -25,6 +25,24 @@ src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBvFhNXJAWH4dyHHkDtyZc6bxLe
 
 <script>
 
+var larr=[]
+function loadlayer(kml){
+	lno=larr.indexOf(kml)
+	if(lno<0){
+		layers.parse(kml);
+		larr.push(kml)
+	}else{
+		layers.showDocument(layers.docs[lno]);
+	}
+	
+}
+function hidelayer(kml){
+	lno=larr.indexOf(kml)
+	if(lno>=0){
+		layers.hideDocument(layers.docs[lno]);
+	}
+	
+}
 var layers ="";
 var formLayers = new sap.m.Dialog("dlgLayers",{
     title:"Layers Config",
@@ -61,18 +79,21 @@ var formLayers = new sap.m.Dialog("dlgLayers",{
 									new sap.m.Label({
 										text : "Sewers"
 									}),
-									new sap.m.Switch('layerSewer',{
-		   								state: true,
+									new sap.m.Switch('layer1',{
+		   								state: false,
 										type: sap.m.SwitchType.AcceptReject,
 										change: function(evt){
-										if(!sap.ui.getCore().getElementById('layerSewer').getState()){
+										if(!sap.ui.getCore().getElementById('layer1').getState()){
 											
-											layers.hideDocument(layers.docs[0]);
+											hidelayer("TestData/kml/Huntingdon_Sewers.kml");
+											
 										}else{
 											
-											layers.showDocument(layers.docs[0]);
-										}
+											loadlayer("TestData/kml/Huntingdon_Sewers.kml");
 											
+										
+										}
+										
 											
 									    },
 										
@@ -82,18 +103,20 @@ var formLayers = new sap.m.Dialog("dlgLayers",{
 							new sap.m.ColumnListItem({
 								cells : [
 									new sap.m.Label({
-										text : "Layer 2"
+										text : "Manholes"
 									}),
 										new sap.m.Switch('layer2',{
-			   								state: true,
+			   								state: false,
 											type: sap.m.SwitchType.AcceptReject,
 											change: function(evt){
 											if(!sap.ui.getCore().getElementById('layer2').getState()){
+												hidelayer("TestData/kml/Manholes_Huntingdon.kml");
 												
-												layers.hideDocument(layers.docs[1]);
 											}else{
 												
-												layers.showDocument(layers.docs[1]);
+												loadlayer("TestData/kml/Manholes_Huntingdon.kml");
+												
+											
 											}
 												
 												
@@ -105,19 +128,124 @@ var formLayers = new sap.m.Dialog("dlgLayers",{
 							new sap.m.ColumnListItem({
 								cells : [
 									new sap.m.Label({
-										text : "Layer3"
+										text : "Discharge"
 									}),
 										new sap.m.Switch('layer3',{
-			   								state: true,
+			   								state: false,
 											type: sap.m.SwitchType.AcceptReject,
 											change: function(evt){
 											if(!sap.ui.getCore().getElementById('layer3').getState()){
+												hidelayer("TestData/kml/SewDischarge_Huntingdon.kml");
 												
-												layers.hideDocument(layers.docs[2]);
 											}else{
 												
-												layers.showDocument(layers.docs[2]);
+												loadlayer("TestData/kml/SewDischarge_Huntingdon.kml");
+												
+											
 											}
+												
+												
+										    },
+											
+										})
+									]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Pump"
+									}),
+										new sap.m.Switch('layer4',{
+			   								state: false,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer4').getState()){
+											
+													hidelayer("TestData/kml/SewPump_Huntingdon.kml");
+													
+												}else{
+													
+													loadlayer("TestData/kml/SewPump_Huntingdon.kml");
+												
+												}
+												
+												
+										    },
+											
+										})
+									]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Storage"
+									}),
+										new sap.m.Switch('layer5',{
+			   								state: false,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer5').getState()){
+											
+													hidelayer("TestData/kml/SewStorage_Huntingdon.kml");
+													
+												}else{
+													
+													loadlayer("TestData/kml/SewStorage_Huntingdon.kml");
+													
+												
+												}
+												
+												
+										    },
+											
+										})
+									]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Treatment"
+									}),
+										new sap.m.Switch('layer6',{
+			   								state: false,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer6').getState()){
+											
+													hidelayer("TestData/kml/SewTreatment_Huntingdon.kml");
+													
+												}else{
+													
+													loadlayer("TestData/kml/SewTreatment_Huntingdon.kml");
+													
+												
+												}
+												
+												
+										    },
+											
+										})
+									]
+							}),
+							new sap.m.ColumnListItem({
+								cells : [
+									new sap.m.Label({
+										text : "Supply"
+									}),
+										new sap.m.Switch('layer7',{
+			   								state: false,
+											type: sap.m.SwitchType.AcceptReject,
+											change: function(evt){
+											if(!sap.ui.getCore().getElementById('layer7').getState()){
+											
+													hidelayer("TestData/kml/SAP_SupplyPoints_Huntingdon.kml");
+													
+												}else{
+													
+													loadlayer("TestData/kml/SAP_SupplyPoints_Huntingdon.kml");
+													
+												
+												}
 												
 												
 										    },
@@ -146,6 +274,10 @@ function initialize()
 	    	//myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	    	myCenter = new google.maps.LatLng(52.33323376759313	, -0.18170186859980667)
 	        map.setCenter(myCenter);
+	    	layers = new geoXML3.parser({map: map, 
+	    		afterParse: layerLoaded,
+	    	    zoom: false,
+	    		processStyles: true});
 	    });
 	   
 
@@ -171,19 +303,7 @@ var mapProp = {
 	  //loadProps() 
  })
  google.maps.event.addListenerOnce(map, 'idle', function(){
-	layers = new geoXML3.parser({map: map, 
-		afterParse: layerLoaded,
-        zoom: false,
-		processStyles: true});
-     layers.parse("TestData/kml/Huntingdon_Sewers.kml");
-     layers.parse("TestData/kml/Manholes_Huntingdon.kml");
-     layers.parse("TestData/kml/SewDischarge_Huntingdon.kml");
-     layers.parse("TestData/kml/SewPump_Huntingdon.kml");
-     layers.parse("TestData/kml/SewStorage_Huntingdon.kml");
-     layers.parse("TestData/kml/SewTreatment_Huntingdon.kml");
-    // map.data.loadGeoJson('http://localhost:8080/Huntingdon_geojson_data/SAP_SupplyPoints_Huntingdon1.json');
-	 sap.ui.getCore().byId("MapLoading").setVisible(false)
-	 sap.ui.getCore().byId("LayerLoading").setVisible(true)
+	
 	 
 });
   //loadProps() 
