@@ -175,8 +175,13 @@ var mapProp = {
 		afterParse: layerLoaded,
         zoom: false,
 		processStyles: true});
-     //layers.parse("TestData/Huntingdon_Sewers.kml");
-     map.data.loadGeoJson('http://localhost:8080/Huntingdon_geojson_data/SAP_SupplyPoints_Huntingdon.json');
+     layers.parse("TestData/kml/Huntingdon_Sewers.kml");
+     layers.parse("TestData/kml/Manholes_Huntingdon.kml");
+     layers.parse("TestData/kml/SewDischarge_Huntingdon.kml");
+     layers.parse("TestData/kml/SewPump_Huntingdon.kml");
+     layers.parse("TestData/kml/SewStorage_Huntingdon.kml");
+     layers.parse("TestData/kml/SewTreatment_Huntingdon.kml");
+    // map.data.loadGeoJson('http://localhost:8080/Huntingdon_geojson_data/SAP_SupplyPoints_Huntingdon1.json');
 	 sap.ui.getCore().byId("MapLoading").setVisible(false)
 	 sap.ui.getCore().byId("LayerLoading").setVisible(true)
 	 

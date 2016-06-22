@@ -21,6 +21,8 @@ var syncReferenceDetsUpdated=false;
 var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
 var sqlMyJobsDocs;
+var assetStatements=[];
+
 function sendFormData(fname,orderno,opno,notifno){
 	
 	var c040="NA"	
@@ -1768,8 +1770,10 @@ function syncUpload(){
 
 	html5sql.process(SQLStatement,
 	 function(transaction, results, rowsArray){
-	alert("uploads"+rowsArray.length)
+		
+	
 			if (rowsArray.length>0) {
+				
 				item = rowsArray[0];
 				
 				syncUploadNew(item.id,item.type)
@@ -2660,7 +2664,23 @@ function insertAssetDetails(sql){
 	);
 }	
 
-
+function getAllAssets(pplant,mplant){
+	
+	if(mplant.search(":")<0){
+		
+		requestSAPData("MyJobsassetextbyplant.htm",'&planttype=ZIWERK&plant='+pplant);
+	}else{
+		
+		mplants = mplant.split(":")
+		i=0;
+		 for (i = 0; i < mplants.length; i++) { 
+			 requestSAPData("MyJobsassetextbyplant.htm",'&planttype=ZSWERK&plant='+mplants[i]);
+		 }
+	}
+	
+	
+	
+}
 function syncReference(){
 
 
@@ -2686,6 +2706,7 @@ function syncReference(){
 							requestSAPData("MyJobsRefData.htm",'');
 							requestSAPData("MyJobsRefDataCodes.htm",'');
 							requestSAPData("MyJobsUsers.htm",'');
+							//requestSAPData("MyJobsAssetPlantsExt.htm",'');
 							requestSAPData("MyJobsVehiclesDefault.htm",'');
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
@@ -3608,7 +3629,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+													
+					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, maintplant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+													
 					 'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyRefPriorityTypes     (  id integer primary key autoincrement, scenario TEXT, type TEXT, priority TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -4113,6 +4134,7 @@ function loadDemoData() {
 						requestDEMOData('MyJobsNotifications.json');
 					
 						requestDEMOData('MyJobsUsers.json');
+						requestDEMOData('MyJobsAssetPlantsExt.json');
 						
 						requestDEMOData('MyJobsOrdersObjects.json');	
 						
@@ -4296,6 +4318,10 @@ function requestDEMOData(page){
 			}
 			if(page=='MyJobsUsers.json'){
 				userCB(data);
+				
+			}
+			if(page=='MyJobsAssetPlantsExt.json'){
+				assetPlantsCB(data);
 				
 			}
 			if(page=='MyForms.json'){
@@ -5822,6 +5848,102 @@ function assetdetailsCB(data){
 
 		}
 	}
+function assetPlantsCB(data){
+	var sqlstatement="";		
+
+		if(data.allAssetPlants.length>0){
+				if(syncReferenceDetsUpdated){
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', UserAssetPlants:'+String(data.allAssetPlants.length));
+				}else{
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'UserAssetPlants:'+String(data.allAssetPlants.length));
+				}
+
+				opMessage("Loading Users Mintenance Plants");
+				sqlstatement="UPDATE MyRefUsers SET maintplant = '"+data.allAssetPlants[0].MPLANTS+"' WHERE userid = '"+localStorage.getItem('MobileUser')+"';";
+				
+				html5sql.process(sqlstatement,
+					 function(){
+					 getAllAssets(data.allAssetPlants[0].PPLANT,data.allAssetPlants[0].MPLANTS)
+					 },
+					 function(error, statement){
+						 opMessage("Error: " + error.message + " when processing " + statement);
+						 alert("Error: " + error.message + " when processing " + statement);
+					 }        
+				);
+
+
+		}
+	}
+         
+function assetsByPlantsCB(data){
+	var sqlstatement="";
+	assetStatements=[];
+	
+	if(data.assetsByPlant.length>0){
+		//alert("Loading Assets for Plant "+data.assetsByPlant[0].planttype+" "+data.assetsByPlant[0].plant +" RECS="+data.assetsByPlant.length);
+		if(syncReferenceDetsUpdated){
+			localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', PlantAssets:'+String(data.assetsByPlant.length));
+		}else{
+			localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'PlantAssets:'+String(data.assetsByPlant.length));
+		}
+		if(data.assetsByPlant[0].planttype=="ZIWERK"){
+			sqlstatement= " Delete from AssetDetailsAll where planplant = '"+data.assetsByPlant[0].plant+"';"
+		}else{
+			sqlstatement= " Delete from AssetDetailsAll where maintplant = '"+data.assetsByPlant[0].plant+"';"
+		}
+		
+		reccnt=0
+		sqlcnt=0;
+		opMessage("Loading Assets for Plant "+data.assetsByPlant[0].planttype+" "+data.assetsByPlant[0].plant);
+		for(var cntx=0; cntx < data.assetsByPlant.length; cntx++)
+		{
+		adets=data.assetsByPlant[cntx].adata.split("|");
+		
+		sqlstatement+=' INSERT INTO AssetDetailsAll (floc , planplant , maintplant , site , flocdesc, eq , eqdesc , plgrpdesc , asstype , assdesc,manufacturer,partno ,serialno ,eqtype ,eqtypedesc ) VALUES ('+ 
+			'"'+adets[0] +'",'+  
+			'"'+adets[1] +'",'+  
+			'"'+adets[2] +'",'+  
+			'"'+adets[3]+'",'+  
+			'"'+adets[4] +'",'+  
+			'"'+adets[5] +'",'+  
+			'"'+adets[6] +'",'+  
+			'"'+adets[7] +'",'+  
+			'"'+adets[8]+'",'+  
+			'"'+adets[9] +'",'+  
+			'"'+adets[10] +'",'+  
+			'"'+adets[11] +'",'+  
+			'"'+adets[12]+'",'+  
+			'"'+adets[13]+'",'+  
+			'"'+adets[14]+'");';	
+			reccnt++;
+			if (reccnt>500){
+				sqlcnt++;
+			
+				assetStatements.push(sqlstatement)
+				reccnt=0;
+				sqlstatement="";
+				
+			}
+		}
+		
+		insertAssetsByPlant(0)
+	}		
+
+}
+function insertAssetsByPlant(cnt){
+console.log("Inserting Assets "+cnt)
+	if(cnt<assetStatements.length){
+		html5sql.process(assetStatements[cnt],
+				 function(){
+					insertAssetsByPlant(cnt+1)
+				 },
+				 function(error, statement){
+					 opMessage("Error: " + error.message + " when processing " + statement);
+					 console.log("Error: " + error.message + " when processing " + statement);
+				 }        
+			);
+	}		
+}
 function userCB(MyUsers){
 var sqlstatement="";		
 var MyEmployeeID=""
