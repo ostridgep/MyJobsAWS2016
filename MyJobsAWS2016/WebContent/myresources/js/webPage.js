@@ -155,34 +155,7 @@ var formForms = new sap.m.Dialog("dlg",{
 
     buttons: [
   
-new sap.m.Button( {
-    text: "Send CFEED",
-   
-    type: sap.m.ButtonType.Reject,
-    tap: [ function(oEvt) {	
-    	sendFormData("CustomerFeedback",CurrentOrderNo,CurrentOpNo,currentNotifNo)
-   	
-    	
-    	} ]   
-}),
-new sap.m.Button( {
-    text: "Send PIA",
-   
-    type: sap.m.ButtonType.Reject,
-    tap: [ function(oEvt) {	
-    	sendFormData("Pollution",CurrentOrderNo,CurrentOpNo,currentNotifNo)
-    	
-    	} ]   
-}),
-new sap.m.Button( {
-    text: "Send Flooding",
-   
-    type: sap.m.ButtonType.Reject,
-    tap: [ function(oEvt) {	
-    	sendFormData("Flooding",CurrentOrderNo,CurrentOpNo,currentNotifNo)
-    	
-    	} ]   
-}),
+
 
 					new sap.m.Button( {
 					    text: "Close",
@@ -261,6 +234,24 @@ new sap.m.Button( {
 				
 				  
 				 sap.ui.getCore().getElementById("DG5tabBar").setSelectedKey("DG51")
+             	html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+						 function(transaction, results, rowsArray){
+							
+							
+								if( rowsArray.length>0) {
+								
+									
+									travelTime = diffInTime(rowsArray[0].tconf_date,rowsArray[0].tconf_time,getFormattedDate(),getFormattedTime())
+									
+									sap.ui.getCore().getElementById("Close_InShiftTime").setValue(travelTime)
+									
+									
+								}
+					},
+						 function(error, statement){
+							 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+						 }        
+           	);
 			  }
 		  }catch(err)
 		  {}

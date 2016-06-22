@@ -1787,7 +1787,7 @@ function syncUpload(){
 }
 
 function syncUploadNew(id,type){
-	alert(id+"--"+type)
+	
 	var c040="NA"	
 		var d040=""		
 		var c060="NA"	

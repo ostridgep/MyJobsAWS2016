@@ -585,7 +585,8 @@ new sap.m.Button( {
 		sap.m.IconTabBar
       },
       afterOpen:function(){  
-    	
+    	  sap.ui.getCore().getElementById('DG5tabBar').setSelectedKey("DG52")
+    	   sap.ui.getCore().getElementById('DG5tabBar').setSelectedKey("DG51")
          } ,
          beforeClose:function(){
               
@@ -2283,7 +2284,10 @@ var detailFooterAWS = new sap.m.Bar({
 								  if( localStorage.getItem('MAPTYPE')=='Intergraph'){
 									  window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_system", 'location=yes,closebuttoncaption=Return')
 								  }else{
-									  window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return') 
+									  localStorage.setItem('latlon',x[0]+','+x[1])
+									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)
+									  window.open('GoogleMapsGetLocation3.html', "_blank", 'location=yes,closebuttoncaption=Return') 
+									 // window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return') 
 								  }
 								  
 								 
@@ -6197,8 +6201,8 @@ function BuildCloseScreen(){
 		sap.ui.getCore().getElementById("Close_FunctionalLocation").setValue(CurrentJobFL)
 		sap.ui.getCore().getElementById("Close_Equipment").setValue(CurrentJobEQ)
 		sap.ui.getCore().getElementById("Close_LongText").setValue("")
-			sap.ui.getCore().getElementById("Close_Variance").setEnabled(false)   
-            sap.ui.getCore().getElementById("Close_Reason").setEnabled(false)   
+		sap.ui.getCore().getElementById("Close_Variance").setEnabled(false)   
+        sap.ui.getCore().getElementById("Close_Reason").setEnabled(false)   
 		oSwitchPollution.setState(false)
 		oSwitchFlooding.setState(false)
 		oSwitchCustFeed.setState(false)

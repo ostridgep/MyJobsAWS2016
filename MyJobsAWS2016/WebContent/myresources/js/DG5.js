@@ -397,14 +397,34 @@ function buildDG5Tabs(){
                                   currentPage=window.location.href
 
                                          
-                                    if(oEvt.getParameters().key=="DG51"){}
+                                    if(oEvt.getParameters().key=="DG51"){
+                                    	html5sql.process("select * from myjobdets where orderno =  '"+CurrentOrderNo+"' and opno =  '"+CurrentOpNo+"'",
+												 function(transaction, results, rowsArray){
+													
+													
+														if( rowsArray.length>0) {
+														
+															
+															travelTime = diffInTime(rowsArray[0].tconf_date,rowsArray[0].tconf_time,getFormattedDate(),getFormattedTime())
+															
+															sap.ui.getCore().getElementById("Close_InShiftTime").setValue(travelTime)
+															
+															
+														}
+											},
+                       						 function(error, statement){
+                       							 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+                       						 }        
+                                    	);
+										
+                                    }
                                     if(oEvt.getParameters().key=="DG52"){}
                                     if(oEvt.getParameters().key=="DG53"){
 	                                    formToOpen="Forms/formsindex.html"
 	        				   			    formMode="Close"
 	        				   			    sap.ui.getCore().getElementById('DG5tabBar').setSelectedKey("DG52")
 	        		   						formForms.open()
-	        		   						
+
                                     }
                                   
                                   }
