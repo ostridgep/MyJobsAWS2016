@@ -2306,7 +2306,10 @@ var detailFooterAWS = new sap.m.Bar({
 								  if( localStorage.getItem('MAPTYPE')=='Intergraph'){
 									  window.open('mmwessentials://?x=-0.208453&y=52.341036', '_system', 'location=yes,closebuttoncaption=Return')
 								  }else{
-									  ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return')
+									  localStorage.setItem('latlon',x[0]+','+x[1])
+									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)
+									  window.open('GoogleMapsGetLocation3.html', "_blank", 'location=yes,closebuttoncaption=Return') 
+									  //ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return')
 								  }
 								  
 								 								  //ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_blank", 'location=yes,closebuttoncaption=Return')
