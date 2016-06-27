@@ -1,14 +1,80 @@
 
+var MB2Type=""
+var MBform=""
+	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
+var formMessageBox = new sap.m.Dialog("dlgMessageBox",{
+    title:"",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+  
+				new sap.m.Button({
+				    text: "OK",
+				    type: 	sap.m.ButtonType.Accept,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formMessageBox.close()
+						  } ]
+				})
+				],					
+    content:[
+             new sap.m.TextArea("MBmessage",{enabled:false, width: "100%" ,height:"100px",}),
+
+            ],
+            beforeOpen:function(){
+            	
+				}
+ })
+var formMessageBox2 = new sap.m.Dialog("dlgMessageBox2",{
+    title:"",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+  
+				new sap.m.Button({
+				    text: "YES",
+				    type: 	sap.m.ButtonType.Accept,
+				    tap: [ function(oEvt) {		  
+						if(MB2Type=="Validation") {
+							saveFormData(MB2fname,"SAVED")
+						}
+						if(MB2Type=="Close") {
+							MB2form.close();
+						}
+				    	formMessageBox2.close()
+						  } ]
+				}),
+				new sap.m.Button({
+				    text: "NO",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formMessageBox2.close()
+						  } ]
+				}),
+				],					
+    content:[
+             new sap.m.TextArea("MB2message",{enabled:false, width: "100%" ,height:"100px",}),
+
+            ],
+            beforeOpen:function(){
+            	
+				}
+ })
 function DisplayErrorMessage(msgtitle,msgbody){
-sap.m.MessageBox.show(
-    msgbody, {
-        icon: sap.m.MessageBox.Icon.ERROR,
-        title: msgtitle,
-        onClose: enableFields(),
-        actions: [sap.m.MessageBox.Action.OK]
-    }
-  );   
+	formMessageBox.setTitle(msgtitle);
+	formMessageBox.setState(sap.ui.core.ValueState.Error)
+	sap.ui.getCore().byId("MBmessage").setValue(msgbody)
+	formMessageBox.open();
+//sap.m.MessageBox.show(
+//    msgbody, {
+//        icon: sap.m.MessageBox.Icon.ERROR,
+//        title: msgtitle,
+//        onClose: enableFields(),
+//        actions: [sap.m.MessageBox.Action.OK]
+//    }
+//  );   
 }
 function convertToLatLon(en){
 
@@ -109,7 +175,7 @@ function showMessage(msg){
 
 	});
 }
-function showFormValidationMessage(fname,title,msg){
+function showFormValidationMessageWas(fname,title,msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,
 		duration: Number(3000),
@@ -132,7 +198,19 @@ function showFormValidationMessage(fname,title,msg){
 		       }
 		     );
 }
-function showAreYouSure(title,msg,form){
+function showFormValidationMessage(fname,msgtitle,msg){
+	formMessageBox2.setTitle(msgtitle);
+	formMessageBox2.setState(sap.ui.core.ValueState.Error)
+	sap.ui.getCore().byId("MB2message").setValue(msg+"\nPress YES to Save incomplete form")
+	MB2Type = "Validation"
+	MB2fname = fname
+	formMessageBox2.open();
+
+	
+	
+
+}
+function showAreYouSureWas(title,msg,form){
 
 	  sap.m.MessageBox.show(msg, {
 		         icon: sap.m.MessageBox.Icon.WARNING ,
@@ -147,7 +225,30 @@ function showAreYouSure(title,msg,form){
 		       }
 		     );
 }
-function showErrorMessage(title,msg){
+function showAreYouSure(msgtitle,msg,form){
+	formMessageBox2.setTitle(msgtitle);
+	formMessageBox2.setState(sap.ui.core.ValueState.Warning)
+	sap.ui.getCore().byId("MB2message").setValue(msg)
+	MB2Type = "Close"
+	MB2form = form
+	formMessageBox2.open();
+
+}
+function showErrorMessage(msgtitle,msgbody){
+	formMessageBox.setTitle(msgtitle);
+	formMessageBox.setState(sap.ui.core.ValueState.Error)
+	sap.ui.getCore().byId("MBmessage").setValue(msgbody)
+	formMessageBox.open();
+//sap.m.MessageBox.show(
+//    msgbody, {
+//        icon: sap.m.MessageBox.Icon.ERROR,
+//        title: msgtitle,
+//        onClose: enableFields(),
+//        actions: [sap.m.MessageBox.Action.OK]
+//    }
+//  );   
+}
+function showErrorMessageWas(title,msg){
 	sap.m.MessageToast.show(msg, {
 		type: Error,
 		duration: Number(3000),
@@ -171,7 +272,7 @@ function diffInMinutes(StartDate, StartTime, EndDate, EndTime){
 	return minutes
 }
 function diffInTime(StartDate, StartTime, EndDate, EndTime){
-	
+
 	if(("x"+StartDate).length<8){
 		StartDate=EndDate
 		StartTime = EndTime
@@ -179,12 +280,12 @@ function diffInTime(StartDate, StartTime, EndDate, EndTime){
 
 
 	StartTime=StartTime.substring(0, 6)+"00";
-	var sd=new Date(EndDate.substring(0,4),EndDate.substring(5,7),EndDate.substring(8,10),EndTime.substring(0,2),EndTime.substring(3,5),EndTime.substring(6,8))
-	var ed=new Date(StartDate.substring(0,4),StartDate.substring(5,7),StartDate.substring(8,10),StartTime.substring(0,2),StartTime.substring(3,5),StartTime.substring(6,8))
+	var sd=new Date(EndDate.substring(0,4),EndDate.substring(5,7)-1,EndDate.substring(8,10),EndTime.substring(0,2),EndTime.substring(3,5),EndTime.substring(6,8))
+	var ed=new Date(StartDate.substring(0,4),StartDate.substring(5,7)-1,StartDate.substring(8,10),StartTime.substring(0,2),StartTime.substring(3,5),StartTime.substring(6,8))
 	var diff=0;
-	
+
 	diff =    Math.abs( sd-ed)
-	
+
 	var minutes =diff/1000;
 	minutes = (diff/1000) 
 	minutes -= (minutes%60) 
@@ -192,7 +293,11 @@ function diffInTime(StartDate, StartTime, EndDate, EndTime){
 	
 	var m = minutes % 60;
 	var h = (minutes-m)/60
-	
+	if(h>23)
+		{
+		h=23;
+		m=59;
+		}
 	return h.toString()+":"+m.toString()
 }
 function convertToMinutes(time){

@@ -33,7 +33,13 @@ font-size: 150%;
 }
 .inAppBrowserWrap menu li.disabled {
     color: #777;
-}</style>
+    }
+						#pressedTile {
+				enabled: false;
+				color: red;
+				
+			}
+</style>
 <script type="text/javascript" src="cordova.js"></script>
 <script>
 var appDirectory=""
@@ -1283,7 +1289,10 @@ var tileContainer = new sap.m.TileContainer({
 			title:"Jobs",
 			icon:"sap-icon://eam-work-order",
 			number:'0',
-			press:[ function(){window.location.href="Jobs.html"}]
+			press:[ function(){		
+				
+				window.location.href="Jobs.html"
+				}]
 		
 		}),
 		new sap.m.StandardTile('NotifsCnt',

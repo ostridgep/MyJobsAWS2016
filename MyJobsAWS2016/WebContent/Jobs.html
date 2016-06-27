@@ -801,7 +801,7 @@ function processClose(){
 				
 				currentStatus="CLOSED"
 				prepareChangeStatus()
-				
+				localStorage.setItem("closeScreen"," ")
 				localStorage.setItem('totalAccepted','0');
 				document.getElementById("JobHead_Status").innerHTML = "<Font color='RED'>Closed</font>";
 				
@@ -6535,7 +6535,7 @@ function BuildCloseImpactCodes(grp,selected){
 
 	}
 jQuery.sap.require("sap.m.MessageBox");
-function DisplayErrorMessage(msgtitle,msgbody){
+function DisplayErrorMessage1(msgtitle,msgbody){
 sap.m.MessageBox.show(
     msgbody, {
         icon: sap.m.MessageBox.Icon.ERROR,
