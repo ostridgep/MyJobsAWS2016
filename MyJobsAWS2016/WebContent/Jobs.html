@@ -15,24 +15,8 @@
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
-<script src="myresources/js/MyJobsDB.js"></script>
-<script src="myresources/js/MyJobsUtils.js"></script>
-<script src="myresources/js/DG5.js"></script>
-<script src="myresources/js/NotificationFunctions.js"></script>
 
-<script src="myresources/js/jSignature.js"></script>
 
-<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
-<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
-<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
-<script src="myresources/js/Globals.js"></script>
-<script src="myresources/js/DlgForms.js"></script>
-
-<script src="myresources/js/eqAttributes.js"></script>
-
-<script src="myresources/js/documents.js"></script>
-<script src="myresources/js/NewNotif.js"></script>
-<script src="myresources/js/webPage.js"></script>
 
 <style>
 .LargeFont {
@@ -253,9 +237,9 @@ var currentPostcode;
 var currentJob;
 var firstJob="";
 var EmployeeID = localStorage.getItem("EmployeeID")
-var MapJob=getURLParameters("MapJob");
-MapJob1=MapJob+":"
-MapJobPar=MapJob1.split(":")
+//var MapJob=getURLParameters("MapJob");
+//MapJob1=MapJob+":"
+//MapJobPar=MapJob1.split(":")
 var selectedListItem=0;
 var Locs = [
             {
@@ -303,10 +287,15 @@ var formEQAttr = new sap.m.Dialog("dlgEQAttr",{
 				})
 				],					
     content:[
-frmEQAttr
+
 	         ],
 	         contentWidth:"50%",
-	            contentHeight: "50%"
+	            contentHeight: "50%",
+	            beforeOpen:function(){
+	            	this.setContent(frmEQAttr)
+	            	
+	            	
+					}
 
  })
 
@@ -571,12 +560,13 @@ new sap.m.Button( {
                                   }),
                                   
                                   ],                                
-    content:[buildDG5Tabs()
+    content:[
 
             ],
             contentWidth:"85%",
             contentHeight: "85%",
       beforeOpen:function(){
+    	  this.setContent(buildDG5Tabs())
     	 MandatedForms=[];
     	  //initCloseButtons();
 		BuildCloseScreen();
@@ -1949,13 +1939,13 @@ var formOrdNotification = new sap.m.Dialog("dlgOrdNotification",{
 					}),
 					
 					],					
-    content:[buildNotificationDetails(),buildNotificationDetailsTabs()
+    content:[
 
             ],
             contentWidth:"95%",
             contentHeight: "85%",
       beforeOpen:function(){
-
+			this.setContent(buildNotificationDetails(),buildNotificationDetailsTabs())
     	  
 		  buildNotificationDetailsContent("Notif:"+currentNotifId)
 		  buildNotificationDetailsTabContent(currentNotifNo)
@@ -3023,7 +3013,7 @@ var jobicons=[]
 var jobtooltip=[]
 var priorityicons=[]
 var prioritytooltip=[]
-countStatus()
+//countStatus()
        SQLStatement="SELECT myjobdets.status_s, MyJobDets.orderno, Myoperations.shorttext, myjobdets.notif_cat_profile,  MyJobDets.opno, MyOrders.type, MyJobDets.start_date,MyJobDets.start_time,  MyOrders.priority,  " 
 
        SQLStatement+="(SELECT GROUP_CONCAT(value1 ) "
@@ -3053,13 +3043,7 @@ html5sql.process(SQLStatement,
                                   firstJob="job:"+item.orderno+':'+item.opno
                            }
                            
-                           if(MapJobPar[0]=="job"){
-                                  if (MapJobPar[1]==item.orderno){
-                                         if (MapJobPar[2]==item.opno)
-                                                selectedListItem=cnt;
-                                                firstJob="job:"+item.orderno+':'+item.opno
-                                  }
-                           }
+
 
                                jobType=  item.notif_cat_profile.substring(7,9);
 
@@ -6650,8 +6634,35 @@ function showEQAttbites(eq){
 	buildDEQAttr(eq)
 	formEQAttr.open()
 }
-</script>
+function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+        var s;
+        s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
+}
 
+loadScript("myresources/js/MyJobsDB.js")
+loadScript("myresources/js/MyJobsUtils.js")
+loadScript("myresources/js/DG5.js")
+loadScript("myresources/js/NotificationFunctions.js")
+loadScript("myresources/js/jSignature.js")
+
+loadScript("myresources/js/plugins/jSignature.CompressorSVG.js")
+loadScript("myresources/js/plugins/jSignature.UndoButton.js")
+loadScript("myresources/js/plugins/signhere/jSignature.SignHere.js")
+loadScript("myresources/js/Globals.js")
+loadScript("myresources/js/DlgForms.js")
+
+loadScript("myresources/js/eqAttributes.js")
+
+loadScript("myresources/js/documents.js")
+loadScript("myresources/js/NewNotif.js")
+loadScript("myresources/js/webPage.js")
+</script>
 </body>
 
 </html>

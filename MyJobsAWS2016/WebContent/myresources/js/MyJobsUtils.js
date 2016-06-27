@@ -56,12 +56,13 @@ var formMessageBox2 = new sap.m.Dialog("dlgMessageBox2",{
 				],					
     content:[
              new sap.m.TextArea("MB2message",{enabled:false, width: "100%" ,height:"100px",}),
-
+             
             ],
             beforeOpen:function(){
             	
 				}
  })
+
 function DisplayErrorMessage(msgtitle,msgbody){
 	formMessageBox.setTitle(msgtitle);
 	formMessageBox.setState(sap.ui.core.ValueState.Error)

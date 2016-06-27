@@ -156,7 +156,7 @@ var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
 	contentWidth:"60%",
 	contentHeight: "70%",
 	beforeOpen:function(){
-	      
+		BuildNotificationTypes()  
 		sap.ui.getCore().byId("NewDescription").setValue('');
 		sap.ui.getCore().byId("NewDetails").setValue('');
 		
