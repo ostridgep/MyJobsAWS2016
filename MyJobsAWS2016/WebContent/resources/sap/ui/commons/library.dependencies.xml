@@ -838,7 +838,7 @@
       <module name="sap/ui/commons/library.js"/>
     </requires>
   </module>
-  <module name="sap/ui/commons/TabStrip.js" size="33645" compressedSize="15817">
+  <module name="sap/ui/commons/TabStrip.js" size="33728" compressedSize="15876">
     <description>Provides control sap.ui.commons.TabStrip.</description>
     <requires>
       <module name="jquery.sap.global.js"/>

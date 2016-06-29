@@ -864,20 +864,7 @@ sap.ui.define("sap/m/FacetFilterRenderer",['jquery.sap.global'],
 			oRm.writeClasses();
 			oRm.write(">");
 
-			var aLists = oControl._getSequencedLists();
-			for (var i = 0; i < aLists.length; i++) {
-						var button = oControl._getButtonForList(aLists[i]);
-						if (oControl.getShowPersonalization()) {
-								if (!button.getAriaDescribedBy() || button.getAriaDescribedBy() == '')	 {
-									button.addAriaDescribedBy(this.getAriaAnnouncement("ARIA_REMOVE"));
-								}
-						}
-				oRm.renderControl(button);
-				if (oControl.getShowPersonalization()) {
-
-					oRm.renderControl(oControl._getFacetRemoveIcon(aLists[i]));
-				}
-			}
+			FacetFilterRenderer.renderFacetFilterListButtons(oControl, oRm);
 
 			if (oControl.getShowPersonalization()) {
 				oRm.renderControl(oControl.getAggregation("addFacetButton"));
@@ -961,7 +948,7 @@ sap.ui.define("sap/m/FacetFilterRenderer",['jquery.sap.global'],
 		if (oControl.getShowPersonalization()) {
 			aDescribedBy.push(this.getAriaAnnouncement("ARIA_REMOVE"));
 		}
-
+		aDescribedBy = aDescribedBy.concat(oControl._aAriaPositionTextIds);
 
 		return aDescribedBy.join(" ");
 	};
@@ -982,7 +969,48 @@ sap.ui.define("sap/m/FacetFilterRenderer",['jquery.sap.global'],
 		};
 	};
 
+	FacetFilterRenderer.renderFacetFilterListButtons = function(oControl, oRm) {
+		var aLists = oControl._getSequencedLists(),
+			iLength = aLists.length, oButton,
+			i, sPosition, oAccText,
+			aOldAriaDescribedBy = [], aNewAriaDescribedBy = [],
+			sFacetFilterText = sap.ui.getCore().getLibraryResourceBundle("sap.m").getText("FACETFILTER_ARIA_FACET_FILTER"),
+			sRemoveFilterTextId = this.getAriaAnnouncement("ARIA_REMOVE");
 
+
+		for (i = 0; i < iLength; i++) {
+			oButton = oControl._getButtonForList(aLists[i]);
+
+			//remove all previous InvisibleText(s) related to the positioning
+			aOldAriaDescribedBy = oButton.removeAllAriaDescribedBy();
+			aOldAriaDescribedBy.forEach(destroyItem);
+
+			//get current position
+			sPosition = sap.ui.getCore().getLibraryResourceBundle("sap.m").getText("FACETFILTERLIST_ARIA_POSITION", [(i + 1), iLength]);
+			oAccText = new sap.ui.core.InvisibleText( {text: sFacetFilterText + " " + sPosition}).toStatic();
+			oButton.addAriaDescribedBy(oAccText);
+			aNewAriaDescribedBy.push(oAccText.getId());
+
+			if (oControl.getShowPersonalization()) {
+				oButton.addAriaDescribedBy(FacetFilterRenderer.getAriaAnnouncement("ARIA_REMOVE"));
+			}
+			oRm.renderControl(oButton);
+			if (oControl.getShowPersonalization()) {
+				oRm.renderControl(oControl._getFacetRemoveIcon(aLists[i]));
+			}
+		}
+		//needed because of FacetFilterRenderer.getAriaDescribedBy
+		oControl._aAriaPositionTextIds = aNewAriaDescribedBy;
+
+		function destroyItem (sItemId) {
+			if (sRemoveFilterTextId !== sItemId) {//exclude the acc text for removable facet, because it does not need change.
+				var oItem = sap.ui.getCore().byId(sItemId);
+				if (oItem) {
+					oItem.destroy();
+				}
+			}
+		}
+	};
 
 	return FacetFilterRenderer;
 
@@ -4511,7 +4539,7 @@ sap.ui.define("sap/m/MaskInputRule",['jquery.sap.global', 'sap/ui/core/Element']
 	 *
 	 * @author SAP SE
 	 * @extends sap.ui.core.Element
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 * @constructor
 	 * @since 1.34.0
@@ -12593,7 +12621,7 @@ sap.ui.define("sap/m/TabContainerItem",['sap/ui/core/Element', 'sap/ui/core/Cont
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -12816,7 +12844,7 @@ sap.ui.define("sap/m/TablePersoProvider",['jquery.sap.global', 'sap/ui/base/Mana
 	 * @extends sap.ui.base.ManagedObject
 	 * @abstract
 	 * @author SAP
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.m.TablePersoProvider
 	 */
 	var TablePersoProvider = ManagedObject.extend("sap.m.TablePersoProvider", /** @lends sap.m.TablePersoProvider */
@@ -14629,14 +14657,14 @@ sap.ui.define("sap/m/library",['jquery.sap.global', 'sap/ui/Device', 'sap/ui/bas
 	 * @namespace
 	 * @name sap.m
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 */
 
 	// delegate further initialization of this library to the Core
 	sap.ui.getCore().initLibrary({
 		name : "sap.m",
-		version: "1.36.7",
+		version: "1.36.8",
 		dependencies : ["sap.ui.core"],
 		types: [
 			"sap.m.BackgroundDesign",
@@ -18047,7 +18075,7 @@ sap.ui.define("sap/m/semantic/Segment",['jquery.sap.global', 'sap/ui/base/Metada
 	 * Constructor for a sap.m.semantic.Segment.
 	 *
 	 * @class Abstraction for a segment in a SegmentedContainer
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @private
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.Segment
@@ -18211,7 +18239,7 @@ sap.ui.define("sap/m/semantic/SegmentedContainer",['jquery.sap.global', 'sap/m/s
 	 * Constructor for a sap.m.semantic.SegmentedContainer.
 	 *
 	 * @class text
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @private
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.SegmentedContainer
@@ -18510,7 +18538,7 @@ sap.ui.define("sap/m/BusyDialog",['jquery.sap.global', './library', 'sap/ui/core
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -18835,7 +18863,7 @@ sap.ui.define("sap/m/BusyIndicator",['jquery.sap.global', './library', 'sap/ui/c
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -19132,7 +19160,7 @@ sap.ui.define("sap/m/Button",['jquery.sap.global', './library', 'sap/ui/core/Con
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -19678,7 +19706,7 @@ sap.ui.define("sap/m/Carousel",['jquery.sap.global', './library', 'sap/ui/core/C
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -20769,7 +20797,7 @@ sap.ui.define("sap/m/Column",['jquery.sap.global', './library', 'sap/ui/core/Ele
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -22017,7 +22045,7 @@ sap.ui.define("sap/m/FeedInput",['jquery.sap.global', './library', 'sap/ui/core/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -22502,7 +22530,7 @@ sap.ui.define("sap/m/FlexBox",['jquery.sap.global', './FlexBoxStylingHelper', '.
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -22959,7 +22987,7 @@ sap.ui.define("sap/m/FlexItemData",['jquery.sap.global', './FlexBoxStylingHelper
 	 * @class
 	 * Holds layout data for a FlexBox|HBox|VBox
 	 * @extends sap.ui.core.LayoutData
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -23276,7 +23304,7 @@ sap.ui.define("sap/m/HBox",['jquery.sap.global', './FlexBox', './library'],
 	 * @extends sap.m.FlexBox
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -23367,7 +23395,7 @@ sap.ui.define("sap/m/IconTabBar",['jquery.sap.global', './library', 'sap/ui/core
 	 * @implements sap.m.ObjectHeaderContainer
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -23889,7 +23917,7 @@ sap.ui.define("sap/m/IconTabFilter",['jquery.sap.global', './library', 'sap/ui/c
 	 * @implements sap.m.IconTab
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -24108,7 +24136,7 @@ sap.ui.define("sap/m/IconTabHeader",['jquery.sap.global', './library', 'sap/ui/c
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -25292,7 +25320,7 @@ sap.ui.define("sap/m/IconTabSeparator",['jquery.sap.global', './library', 'sap/u
 	 * @implements sap.m.IconTab
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -25398,7 +25426,7 @@ sap.ui.define("sap/m/Image",['jquery.sap.global', './library', 'sap/ui/core/Cont
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -25966,7 +25994,7 @@ sap.ui.define("sap/m/InputBase",['jquery.sap.global', './library', 'sap/ui/core/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -27156,7 +27184,7 @@ sap.ui.define("sap/m/Label",['jquery.sap.global', './library', 'sap/ui/core/Cont
 	 * @implements sap.ui.core.Label,sap.ui.core.IShrinkable
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -27275,7 +27303,7 @@ sap.ui.define("sap/m/Link",['jquery.sap.global', './library', 'sap/ui/core/Contr
 	 * @implements sap.ui.core.IShrinkable
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -27965,7 +27993,7 @@ sap.ui.define("sap/m/ListItemBase",['jquery.sap.global', './library', 'sap/ui/co
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -28887,7 +28915,7 @@ sap.ui.define("sap/m/MaskInput",['jquery.sap.global', './InputBase', './MaskInpu
 	 *
 	 * @author SAP SE
 	 * @extends sap.m.InputBase
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -30133,7 +30161,7 @@ sap.ui.define("sap/m/MessagePage",['jquery.sap.global', './library', 'sap/ui/cor
 		 *		- The application is loading
 		 *	The layout is unchanged but the text varies depending on the use case.
 		 * @extends sap.ui.core.Control
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -30395,7 +30423,7 @@ sap.ui.define("sap/m/MessagePopoverItem",["jquery.sap.global", "./library", "sap
 		 * @extends sap.ui.core.Element
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -30578,7 +30606,7 @@ sap.ui.define("sap/m/NavContainer",[
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -32292,7 +32320,7 @@ sap.ui.define("sap/m/ObjectAttribute",['jquery.sap.global', './library', 'sap/ui
 	 * @class
 	 * The ObjectAttribute control displays a text field that can be normal or active. The ObjectAttribute fires a press event when the user selects active text.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -32526,7 +32554,7 @@ sap.ui.define("sap/m/ObjectHeader",['jquery.sap.global', './library', 'sap/ui/co
 	 * @class
 	 * ObjectHeader is a display control that enables the user to easily identify a specific object. The object header title is the key identifier of the object and additional text and icons can be used to further distinguish it from other objects.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -33581,7 +33609,7 @@ sap.ui.define("sap/m/ObjectIdentifier",['jquery.sap.global', './library', 'sap/u
 	 * @class
 	 * The ObjectIdentifier is a display control that enables the user to easily identify a specific object. The ObjectIdentifier title is the key identifier of the object and additional text and icons can be used to further distinguish it from other objects.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -34036,7 +34064,7 @@ sap.ui.define("sap/m/ObjectListItem",['jquery.sap.global', './ListItemBase', './
 		 * @class
 		 * ObjectListItem is a display control that provides summary information about an object as a list item. The ObjectListItem title is the key identifier of the object. Additional text and icons can be used to further distinguish it from other objects. Attributes and statuses can be used to provide additional meaning about the object to the user.
 		 * @extends sap.m.ListItemBase
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -34420,7 +34448,7 @@ sap.ui.define("sap/m/ObjectNumber",['jquery.sap.global', './library', 'sap/ui/co
 	 * The ObjectNumber control displays number and number unit properties for an object. The number can be displayed using semantic
 	 * colors to provide additional meaning about the object to the user.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -34552,7 +34580,7 @@ sap.ui.define("sap/m/ObjectStatus",['jquery.sap.global', './library', 'sap/ui/co
 	 * @class
 	 * Status information that can be either text with a value state, or an icon.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -34719,7 +34747,7 @@ sap.ui.define("sap/m/OverflowToolbarButton",['sap/m/Button', 'sap/m/ButtonRender
 	 * @extends sap.m.Button
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @private
@@ -34767,7 +34795,7 @@ sap.ui.define("sap/m/P13nColumnsItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for <code>columnsItems</code> aggregation in P13nColumnsPanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @author SAP SE
 	 * @public
@@ -34856,7 +34884,7 @@ sap.ui.define("sap/m/P13nConditionPanel",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class The ConditionPanel Control will be used to implement the Sorting, Filtering and Grouping panel of the new Personalization dialog.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @experimental since version 1.26 !!! THIS CONTROL IS ONLY FOR INTERNAL USE !!!
@@ -37640,7 +37668,7 @@ sap.ui.define("sap/m/P13nDimMeasureItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for <code>columnsItems</code> aggregation in P13nDimMeasurePanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @author SAP SE
 	 * @public
@@ -37723,7 +37751,7 @@ sap.ui.define("sap/m/P13nFilterItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for <code>filterItems</code> aggregation in P13nFilterPanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nFilterItem
@@ -37826,7 +37854,7 @@ sap.ui.define("sap/m/P13nGroupItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for <code>groupItems</code> aggregation in P13nGroupPanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nGroupItem
@@ -37900,7 +37928,7 @@ sap.ui.define("sap/m/P13nItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Base type for <code>items</code> aggregation in P13nPanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.26.0
@@ -38074,7 +38102,7 @@ sap.ui.define("sap/m/P13nPanel",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Base type for <code>panels</code> aggregation in P13nDialog control.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.26.0
@@ -38260,7 +38288,7 @@ sap.ui.define("sap/m/P13nSortItem",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class Type for <code>sortItems</code> aggregation in P13nSortPanel control.
 	 * @extends sap.ui.core.Item
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nSortItem
@@ -38324,7 +38352,7 @@ sap.ui.define("sap/m/P13nSortPanel",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class The P13nSortPanel control is used to define settings for sorting in table personalization.
 	 * @extends sap.m.P13nPanel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nSortPanel
@@ -38773,7 +38801,7 @@ sap.ui.define("sap/m/PageAccessibleLandmarkInfo",['sap/ui/core/Element', './libr
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -39097,7 +39125,7 @@ sap.ui.define("sap/m/PagingButton",['jquery.sap.global', './Button', 'sap/ui/cor
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -39294,7 +39322,7 @@ sap.ui.define("sap/m/Panel",['jquery.sap.global', './library', 'sap/ui/core/Cont
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -39629,7 +39657,7 @@ sap.ui.define("sap/m/ProgressIndicator",['jquery.sap.global', './library', 'sap/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -39796,7 +39824,7 @@ sap.ui.define("sap/m/PullToRefresh",['jquery.sap.global', './library', 'sap/ui/c
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -40143,7 +40171,7 @@ sap.ui.define("sap/m/QuickViewBase",[
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -40536,7 +40564,7 @@ sap.ui.define("sap/m/QuickViewGroup",[
 		* @extends sap.ui.core.Element
 		*
 		* @author SAP SE
-		* @version 1.36.7
+		* @version 1.36.8
 		*
 		* @constructor
 		* @public
@@ -40650,7 +40678,7 @@ sap.ui.define("sap/m/RadioButton",['jquery.sap.global', './library', 'sap/ui/cor
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -41101,7 +41129,7 @@ sap.ui.define("sap/m/RadioButtonGroup",['jquery.sap.global', './library', 'sap/u
 			 * @extends sap.ui.core.Control
 			 *
 			 * @author SAP SE
-			 * @version 1.36.7
+			 * @version 1.36.8
 			 *
 			 * @constructor
 			 * @public
@@ -41803,7 +41831,7 @@ sap.ui.define("sap/m/RatingIndicator",['jquery.sap.global', './library', 'sap/ui
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -42770,7 +42798,7 @@ sap.ui.define("sap/m/ScrollContainer",["jquery.sap.global", "./library", "sap/ui
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -42966,7 +42994,7 @@ sap.ui.define("sap/m/SegmentedButton",['jquery.sap.global', './library', 'sap/ui
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -43760,7 +43788,7 @@ sap.ui.define("sap/m/SegmentedButtonItem",['jquery.sap.global', './library', 'sa
 		 * @extends sap.ui.core.Item
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -43870,7 +43898,7 @@ sap.ui.define("sap/m/SelectList",['jquery.sap.global', './library', 'sap/ui/core
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -44764,7 +44792,7 @@ sap.ui.define("sap/m/Shell",['jquery.sap.global', './library', 'sap/ui/core/Cont
 		 * The Shell control can be used as root element of applications. It can contain an App or a <code>SplitApp</code> control.
 		 * The Shell provides some overarching functionality for the overall application and takes care of visual adaptation, such as a frame around the App, on desktop browser platforms.
 		 * @extends sap.ui.core.Control
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -44985,7 +45013,7 @@ sap.ui.define("sap/m/Slider",['jquery.sap.global', './library', 'sap/ui/core/Con
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -45959,7 +45987,7 @@ sap.ui.define("sap/m/StandardListItem",['jquery.sap.global', './ListItemBase', '
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -46288,7 +46316,7 @@ sap.ui.define("sap/m/SuggestionItem",['jquery.sap.global', './library', 'sap/ui/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @constructor
@@ -46578,7 +46606,7 @@ sap.ui.define("sap/m/Switch",['jquery.sap.global', './library', 'sap/ui/core/Con
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -47028,7 +47056,7 @@ sap.ui.define("sap/m/TabContainer",['jquery.sap.global', './library', 'sap/ui/co
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -47549,7 +47577,7 @@ sap.ui.define("sap/m/Text",['jquery.sap.global', './library', 'sap/ui/core/Contr
 	 * @implements sap.ui.core.IShrinkable
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -47976,7 +48004,7 @@ sap.ui.define("sap/m/TextArea",['jquery.sap.global', './InputBase', './library']
 	 * @extends sap.m.InputBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -48274,7 +48302,7 @@ sap.ui.define("sap/m/Tile",['jquery.sap.global', './library', 'sap/ui/core/Contr
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -48560,7 +48588,7 @@ sap.ui.define("sap/m/TileContainer",['jquery.sap.global', './library', 'sap/ui/c
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -50374,7 +50402,7 @@ sap.ui.define("sap/m/TileContent",['jquery.sap.global', './library', 'sap/ui/cor
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -50564,7 +50592,7 @@ sap.ui.define("sap/m/TimePickerSlider",['jquery.sap.global', 'sap/ui/core/Contro
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @private
@@ -51688,7 +51716,7 @@ sap.ui.define("sap/m/TimePickerSliders",['jquery.sap.global', 'sap/ui/core/Contr
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @private
@@ -52228,7 +52256,7 @@ sap.ui.define("sap/m/Title",['jquery.sap.global', 'sap/ui/core/Control', 'sap/ui
 	 * @implements sap.ui.core.IShrinkable
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.27.0
 	 *
 	 * @constructor
@@ -52371,7 +52399,7 @@ sap.ui.define("sap/m/ToggleButton",['jquery.sap.global', './Button', './library'
 	 * @extends sap.m.Button
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -52463,7 +52491,7 @@ sap.ui.define("sap/m/Token",['jquery.sap.global', './library', 'sap/ui/core/Cont
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -52821,7 +52849,7 @@ sap.ui.define("sap/m/Tokenizer",['jquery.sap.global', './library', 'sap/ui/core/
 	 * @class
 	 * Tokenizer displays multiple tokens
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -53919,7 +53947,7 @@ sap.ui.define("sap/m/ToolbarLayoutData",['jquery.sap.global', './library', 'sap/
 	 * @class
 	 * Defines layout data for the toolbar items.
 	 * @extends sap.ui.core.LayoutData
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54015,7 +54043,7 @@ sap.ui.define("sap/m/ToolbarSeparator",['jquery.sap.global', './library', 'sap/u
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54062,7 +54090,7 @@ sap.ui.define("sap/m/ToolbarSpacer",['jquery.sap.global', './library', 'sap/ui/c
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54122,7 +54150,7 @@ sap.ui.define("sap/m/UploadCollectionItem",['jquery.sap.global', './library', 's
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54507,7 +54535,7 @@ sap.ui.define("sap/m/UploadCollectionParameter",['jquery.sap.global', './library
 	 * @extends sap.ui.core.Element
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54564,7 +54592,7 @@ sap.ui.define("sap/m/UploadCollectionToolbarPlaceholder",['jquery.sap.global', '
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54613,7 +54641,7 @@ sap.ui.define("sap/m/VBox",['jquery.sap.global', './FlexBox', './library'],
 	 * @extends sap.m.FlexBox
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54697,7 +54725,7 @@ sap.ui.define("sap/m/ViewSettingsCustomTab",['jquery.sap.global', './library', '
 			 * @extends sap.ui.core.Item
 			 *
 			 * @author SAP SE
-			 * @version 1.36.7
+			 * @version 1.36.8
 			 *
 			 * @constructor
 			 * @public
@@ -54803,7 +54831,7 @@ sap.ui.define("sap/m/ViewSettingsItem",['jquery.sap.global', './library', 'sap/u
 	 * @extends sap.ui.core.Item
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54898,7 +54926,7 @@ function (library, Control, ResizeHandler, ItemNavigation, jQuery) {
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @private
@@ -55733,7 +55761,7 @@ sap.ui.define("sap/m/WizardStep",["./library", "sap/ui/core/Control"],
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -55976,7 +56004,7 @@ sap.ui.define("sap/m/AccButton",['jquery.sap.global', './Button' ],
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @private
@@ -56025,7 +56053,7 @@ sap.ui.define("sap/m/ActionListItem",['jquery.sap.global', './ListItemBase', './
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -56113,7 +56141,7 @@ sap.ui.define("sap/m/App",['jquery.sap.global', './NavContainer', './library'],
 	 * @extends sap.m.NavContainer
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -56772,7 +56800,7 @@ sap.ui.define("sap/m/CheckBox",['jquery.sap.global', './Label', './library', 'sa
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -57091,7 +57119,7 @@ sap.ui.define("sap/m/ColumnListItem",['jquery.sap.global', 'sap/ui/core/Element'
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -57851,7 +57879,7 @@ sap.ui.define("sap/m/ComboBoxTextField",['jquery.sap.global', './InputBase', './
 		 * @extends sap.m.InputBase
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -57924,7 +57952,7 @@ sap.ui.define("sap/m/CustomListItem",['jquery.sap.global', './ListItemBase', './
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -57978,7 +58006,7 @@ sap.ui.define("sap/m/CustomTile",['jquery.sap.global', './Tile', './library'],
 	 * Use the CustomTile control to display application specific content in the Tile control.
 	 * The tile width is 8.5em and height is 10em.
 	 * @extends sap.m.Tile
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -58062,7 +58090,7 @@ sap.ui.define("sap/m/DatePicker",['jquery.sap.global', './InputBase', 'sap/ui/mo
 	 * This could lead to a waiting time before a <code>DatePicker</code> is opened the first time. To prevent this, applications using the <code>DatePicker</code> should also load
 	 * the <code>sap.ui.unified</code> library.
 	 * @extends sap.m.InputBase
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -59035,7 +59063,7 @@ sap.ui.define("sap/m/DateRangeSelection",['jquery.sap.global', './DatePicker', '
 	 * the <code>sap.ui.unified</code> library.
 	 *
 	 * @extends sap.m.DatePicker
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -59822,7 +59850,7 @@ sap.ui.define("sap/m/DateTimeInput",['jquery.sap.global', './InputBase', './Inst
 	 * @extends sap.m.InputBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -60998,7 +61026,7 @@ sap.ui.define("sap/m/DisplayListItem",['jquery.sap.global', './ListItemBase', '.
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -61056,7 +61084,7 @@ sap.ui.define("sap/m/DraftIndicator",["sap/ui/core/Control", "sap/m/Label"], fun
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -61257,7 +61285,7 @@ sap.ui.define("sap/m/FacetFilter",['jquery.sap.global', './NavContainer', './lib
 	 * The FacetFilter control is used to provide filtering functionality with multiple parameters.
 	 * @extends sap.ui.core.Control
 	 * @implements sap.ui.core.IShrinkable
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -63312,7 +63340,7 @@ sap.ui.define("sap/m/FacetFilterItem",['jquery.sap.global', './ListItemBase', '.
 	 * @class
 	 * Represents a value for the FacetFilterList control.
 	 * @extends sap.m.ListItemBase
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -63433,7 +63461,7 @@ sap.ui.define("sap/m/FeedContent",[ 'jquery.sap.global', './library', 'sap/ui/co
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -63664,7 +63692,7 @@ sap.ui.define("sap/m/FeedListItem",['jquery.sap.global', './ListItemBase', './li
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -64051,7 +64079,7 @@ sap.ui.define("sap/m/GenericTile",['jquery.sap.global', './library', 'sap/ui/cor
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -64608,7 +64636,7 @@ sap.ui.define("sap/m/GroupHeaderListItem",['jquery.sap.global', './ListItemBase'
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -64751,7 +64779,7 @@ sap.ui.define("sap/m/InputListItem",['jquery.sap.global', './ListItemBase', './l
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -64823,7 +64851,7 @@ sap.ui.define("sap/m/ListBase",['jquery.sap.global', './GroupHeaderListItem', '.
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -66546,7 +66574,7 @@ sap.ui.define("sap/m/MessageStrip",["jquery.sap.global", "./library", "sap/ui/co
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -66834,7 +66862,7 @@ sap.ui.define("sap/m/NewsContent",['jquery.sap.global', './library', 'sap/ui/cor
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -67037,7 +67065,7 @@ sap.ui.define("sap/m/NumericContent",['jquery.sap.global', './library', 'sap/ui/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -67355,7 +67383,7 @@ sap.ui.define("sap/m/OverflowToolbarLayoutData",['sap/m/ToolbarLayoutData', 'sap
 	 * Holds layout data for the OverflowToolbar items.
 	 * @extends sap.m.ToolbarLayoutData
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -67446,7 +67474,7 @@ sap.ui.define("sap/m/P13nFilterPanel",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class The P13nFilterPanel control is used to define filter-specific settings for table personalization.
 	 * @extends sap.m.P13nPanel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nFilterPanel
@@ -68199,7 +68227,7 @@ sap.ui.define("sap/m/P13nGroupPanel",[
 	 * @param {object} [mSettings] initial settings for the new control
 	 * @class The P13nGroupPanel control is used to define group-specific settings for table personalization.
 	 * @extends sap.m.P13nPanel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.m.P13nGroupPanel
@@ -68719,7 +68747,7 @@ sap.ui.define("sap/m/PlanningCalendarRow",['jquery.sap.global', 'sap/ui/core/Ele
 	 * This element holds the data of one row in the <code>PlanningCalendar</code>. Once the header information (e.g. person information)
 	 * is assigned, the appointments are assigned.
 	 * @extends sap.ui.core.Element
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -69084,7 +69112,7 @@ sap.ui.define("sap/m/PlanningCalendarView",['jquery.sap.global', 'sap/ui/core/El
 	 * The <code>PlanningCalendarView</code> defines the granularity of the output. It defines what type of intervals (hours, days or months)
 	 * and how many intervals are shown.
 	 * @extends sap.ui.core.Element
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -69183,7 +69211,7 @@ sap.ui.define("sap/m/QuickViewGroupElement",[
 		* @extends sap.ui.core.Element
 		*
 		* @author SAP SE
-		* @version 1.36.7
+		* @version 1.36.8
 		*
 		* @constructor
 		* @public
@@ -69375,7 +69403,7 @@ sap.ui.define("sap/m/SlideTile",['jquery.sap.global', './library', 'sap/ui/core/
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.34
 	 *
 	 * @public
@@ -69712,7 +69740,7 @@ sap.ui.define("sap/m/StandardTile",['jquery.sap.global', './Tile', './library', 
 	 * @extends sap.m.Tile
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -69864,7 +69892,7 @@ sap.ui.define("sap/m/TabStripItem",["jquery.sap.global", "./library", "sap/ui/co
 		 * @extends sap.ui.core.Item
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @private
@@ -70076,7 +70104,7 @@ sap.ui.define("sap/m/TabStripSelectList",['jquery.sap.global', './library', 'sap
 		 * @extends sap.ui.core.SelectList
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -70358,7 +70386,7 @@ sap.ui.define("sap/m/Table",['jquery.sap.global', './ListBase', './library'],
 	 * @extends sap.m.ListBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -71141,7 +71169,7 @@ sap.ui.define("sap/m/Toolbar",['jquery.sap.global', './BarInPageEnabler', './Too
 	 * @implements sap.ui.core.Toolbar,sap.m.IBar
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -71970,7 +71998,7 @@ sap.ui.define("sap/m/ViewSettingsCustomItem",['jquery.sap.global', './ViewSettin
 	 * @extends sap.m.ViewSettingsItem
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -72108,7 +72136,7 @@ sap.ui.define("sap/m/ViewSettingsFilterItem",['jquery.sap.global', './ViewSettin
 	 * @extends sap.m.ViewSettingsItem
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -72271,7 +72299,7 @@ sap.ui.define("sap/m/Wizard",[
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -73179,7 +73207,7 @@ sap.ui.define("sap/m/semantic/SemanticConfiguration",['jquery.sap.global', 'sap/
 	 * Constructor for a sap.m.semantic.SemanticConfiguration.
 	 *
 	 * @class Defines the visual properties and positioning for each supported semantic type
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @private
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.SemanticConfiguration
@@ -73741,7 +73769,7 @@ sap.ui.define("sap/m/semantic/SemanticControl",["sap/m/semantic/SemanticConfigur
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -73945,7 +73973,7 @@ sap.ui.define("sap/m/semantic/ShareMenu",['jquery.sap.global', 'sap/ui/base/Meta
 	 * ShareMenu is a special menu that is represented by (1) an actionSheet with the menu items and (2) a button that opens the actionSheet.
 	 * If the menu has only one item, then that item appears in place of the button that opens the actionSheet.
 	 *
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @private
 	 * @since 1.30.0
 	 * @alias sap.m.semantic.ShareMenu
@@ -74357,7 +74385,7 @@ sap.ui.define("sap/m/Bar",['jquery.sap.global', './BarInPageEnabler', './library
 	 * @implements sap.m.IBar
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -74798,7 +74826,7 @@ sap.ui.define("sap/m/List",['jquery.sap.global', './ListBase', './library'],
 	 * @extends sap.m.ListBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -74937,7 +74965,7 @@ sap.ui.define("sap/m/Page",["jquery.sap.global", "./library", "sap/ui/core/Contr
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -75472,7 +75500,7 @@ sap.ui.define("sap/m/PlanningCalendar",['jquery.sap.global', 'sap/ui/core/Contro
 	 * This could lead to a waiting time before a <code>PlanningCalendar</code> is used for the first time.
 	 * To prevent this, applications using the <code>PlanningCalendar</code> should also load the <code>sap.ui.unified</code> library.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -76935,7 +76963,7 @@ sap.ui.define("sap/m/Popover",['jquery.sap.global', './Bar', './Button', './Inst
 		 * @implements sap.ui.core.PopupInterface
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -79187,7 +79215,7 @@ sap.ui.define("sap/m/QuickViewCard",[
 	 * @extends sap.m.QuickViewBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -79333,7 +79361,7 @@ sap.ui.define("sap/m/QuickViewPage",[
 			* @extends sap.ui.core.Control
 			*
 			* @author SAP SE
-			* @version 1.36.7
+			* @version 1.36.8
 			*
 			* @constructor
 			* @public
@@ -80173,7 +80201,7 @@ sap.ui.define("sap/m/semantic/SemanticButton",['sap/m/semantic/SemanticControl',
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80267,7 +80295,7 @@ sap.ui.define("sap/m/semantic/SemanticToggleButton",['sap/m/semantic/SemanticBut
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80387,7 +80415,7 @@ sap.ui.define("sap/m/semantic/SendEmailAction",['sap/m/semantic/SemanticButton']
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80430,7 +80458,7 @@ sap.ui.define("sap/m/semantic/SendMessageAction",['sap/m/semantic/SemanticButton
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80473,7 +80501,7 @@ sap.ui.define("sap/m/semantic/ShareInJamAction",['sap/m/semantic/SemanticButton'
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80517,7 +80545,7 @@ sap.ui.define("sap/m/semantic/SortAction",['sap/m/semantic/SemanticButton'], fun
 	 * @implements sap.m.semantic.ISort
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -80565,7 +80593,7 @@ sap.ui.define("sap/m/FacetFilterList",['jquery.sap.global', './List', './library
 	 * @class
 	 * FacetFilterList represents a list of values for the FacetFilter control.
 	 * @extends sap.m.List
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -81262,7 +81290,7 @@ sap.ui.define("sap/m/GrowingList",['jquery.sap.global', './List', './library'],
 	 * @extends sap.m.List
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -81357,7 +81385,7 @@ sap.ui.define("sap/m/OverflowToolbarAssociativePopover",['./Popover', './Popover
 	 * @extends sap.ui.core.Popover
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @private
@@ -81566,7 +81594,7 @@ sap.ui.define("sap/m/SearchField",['jquery.sap.global', './library', 'sap/ui/cor
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -82368,7 +82396,7 @@ function(jQuery, library, Control, IconPool, Toolbar, CheckBox, SearchField) {
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85011,7 +85039,7 @@ sap.ui.define("sap/m/semantic/AddAction",['sap/m/semantic/SemanticButton'], func
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85053,7 +85081,7 @@ sap.ui.define("sap/m/semantic/CancelAction",['sap/m/semantic/SemanticButton'], f
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85096,7 +85124,7 @@ sap.ui.define("sap/m/semantic/DeleteAction",['sap/m/semantic/SemanticButton'], f
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85139,7 +85167,7 @@ sap.ui.define("sap/m/semantic/DiscussInJamAction",['sap/m/semantic/SemanticButto
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85182,7 +85210,7 @@ sap.ui.define("sap/m/semantic/EditAction",['sap/m/semantic/SemanticButton'], fun
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85225,7 +85253,7 @@ sap.ui.define("sap/m/semantic/FavoriteAction",['sap/m/semantic/SemanticToggleBut
 	 * @extends sap.m.semantic.SemanticToggleButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85268,7 +85296,7 @@ sap.ui.define("sap/m/semantic/FilterAction",['sap/m/semantic/SemanticButton'], f
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85314,7 +85342,7 @@ sap.ui.define("sap/m/semantic/FlagAction",['sap/m/semantic/SemanticToggleButton'
 	 * @extends sap.m.semantic.SemanticToggleButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85357,7 +85385,7 @@ sap.ui.define("sap/m/semantic/ForwardAction",['sap/m/semantic/SemanticButton'], 
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85400,7 +85428,7 @@ sap.ui.define("sap/m/semantic/GroupAction",['sap/m/semantic/SemanticButton'], fu
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85446,7 +85474,7 @@ sap.ui.define("sap/m/semantic/MainAction",['sap/m/semantic/SemanticButton'], fun
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85495,7 +85523,7 @@ sap.ui.define("sap/m/semantic/MessagesIndicator",['sap/m/semantic/SemanticButton
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85538,7 +85566,7 @@ sap.ui.define("sap/m/semantic/MultiSelectAction",['sap/m/semantic/SemanticToggle
 	 * @extends sap.m.semantic.SemanticToggleButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85615,7 +85643,7 @@ sap.ui.define("sap/m/semantic/NegativeAction",['sap/m/semantic/SemanticButton'],
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85664,7 +85692,7 @@ sap.ui.define("sap/m/semantic/OpenInAction",['sap/m/semantic/SemanticButton'], f
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85707,7 +85735,7 @@ sap.ui.define("sap/m/semantic/PositiveAction",['sap/m/semantic/SemanticButton'],
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85756,7 +85784,7 @@ sap.ui.define("sap/m/semantic/PrintAction",['sap/m/semantic/SemanticButton'], fu
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85799,7 +85827,7 @@ sap.ui.define("sap/m/semantic/SaveAction",['sap/m/semantic/SemanticButton'], fun
 	 * @extends sap.m.semantic.SemanticButton
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -85864,7 +85892,7 @@ sap.ui.define("sap/m/OverflowToolbar",[
 	 * @extends sap.ui.core.Toolbar
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -86795,7 +86823,7 @@ sap.ui.define("sap/m/P13nColumnsPanel",[
 	 * @class The P13nColumnsPanel control is used to define column-specific settings for table personalization.
 	 * @extends sap.m.P13nPanel
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.26.0
@@ -88717,7 +88745,7 @@ sap.ui.define("sap/m/P13nDimMeasurePanel",[
 	 *        dimensions and measures for table personalization.
 	 * @extends sap.m.P13nPanel
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.34.0
@@ -90020,7 +90048,7 @@ sap.ui.define("sap/m/AssociativeOverflowToolbar",['./OverflowToolbar', './Overfl
 		 * @extends sap.m.OverflowToolbar
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @private
@@ -90123,7 +90151,7 @@ sap.ui.define("sap/m/Dialog",['jquery.sap.global', './Bar', './InstanceManager',
 		 * @implements sap.ui.core.PopupInterface
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -91674,7 +91702,7 @@ sap.ui.define("sap/m/Input",['jquery.sap.global', './Bar', './Dialog', './InputB
 	 * @extends sap.m.InputBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -94319,7 +94347,7 @@ sap.ui.define("sap/m/MultiInput",['jquery.sap.global', './Input', './Token', './
 	 * @extends sap.m.Input
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -95798,7 +95826,7 @@ sap.ui.define("sap/m/NotificationListGroup",['jquery.sap.global', './library', '
 	 * @extends sap.m.ListItemBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -96345,7 +96373,7 @@ sap.ui.define("sap/m/NotificationListItem",['jquery.sap.global', './library', 's
 		 * @extends sap.m.ListItemBase
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -96994,7 +97022,7 @@ sap.ui.define("sap/m/P13nDialog",[
 	 *        tables.
 	 * @extends sap.m.Dialog
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.26.0
@@ -97757,7 +97785,7 @@ sap.ui.define("sap/m/ResponsivePopover",['jquery.sap.global', './Dialog', './Pop
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -98453,7 +98481,7 @@ sap.ui.define("sap/m/Select",['jquery.sap.global', './Bar', './Dialog', './Input
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -100413,7 +100441,7 @@ sap.ui.define("sap/m/SelectDialog",['jquery.sap.global', './Button', './Dialog',
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -101451,7 +101479,7 @@ sap.ui.define("sap/m/TabStripSelect",['jquery.sap.global', './Popover', './TabSt
 		 * @extends sap.m.Select
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 * @since 1.34
 		 *
 		 * @constructor
@@ -101977,7 +102005,7 @@ sap.ui.define("sap/m/TablePersoDialog",['jquery.sap.global', './Button', './Dial
 	 * @class Table Personalization Dialog
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.m.TablePersoDialog
 	 */
 	var TablePersoDialog = ManagedObject.extend("sap.m.TablePersoDialog", /** @lends sap.m.TablePersoDialog */
@@ -102707,7 +102735,7 @@ sap.ui.define("sap/m/TableSelectDialog",['jquery.sap.global', './Button', './Dia
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -103744,7 +103772,7 @@ sap.ui.define("sap/m/TimePicker",['jquery.sap.global', './InputBase', './MaskInp
 		 * @extends sap.m.MaskInput
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -105131,7 +105159,7 @@ sap.ui.define("sap/m/UploadCollection",['jquery.sap.global', './MessageBox', './
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -107977,7 +108005,7 @@ sap.ui.define("sap/m/semantic/SemanticSelect",['sap/m/semantic/SemanticControl',
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -108136,7 +108164,7 @@ sap.ui.define("sap/m/semantic/SortSelect",['sap/m/semantic/SemanticSelect'], fun
 	 * @implements sap.m.semantic.ISort
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -108184,7 +108212,7 @@ sap.ui.define("sap/m/ActionSelect",['jquery.sap.global', './Select', './library'
 		 * @extends sap.m.Select
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -108429,7 +108457,7 @@ sap.ui.define("sap/m/ActionSheet",['jquery.sap.global', './Dialog', './Popover',
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -108981,7 +109009,7 @@ sap.ui.define("sap/m/Breadcrumbs",[
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -109604,7 +109632,7 @@ sap.ui.define("sap/m/ComboBoxBase",['jquery.sap.global', './Dialog', './ComboBox
 		 * @extends sap.m.ComboBoxTextField
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -110420,7 +110448,7 @@ sap.ui.define("sap/m/MultiComboBox",['jquery.sap.global', './Bar', './InputBase'
 	 * @extends sap.m.ComboBoxBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -113018,7 +113046,7 @@ sap.ui.define("sap/m/QuickView",[
 	 * @extends sap.m.QuickViewBase
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -113462,7 +113490,7 @@ sap.ui.define("sap/m/TabStrip",['jquery.sap.global', 'sap/ui/core/Control', 'sap
 		 * space is exceeded, a horizontal scrollbar appears.
 		 *
 		 * @extends sap.ui.core.Control
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @private
@@ -114893,7 +114921,7 @@ sap.ui.define("sap/m/TablePersoController",['jquery.sap.global', './TablePersoDi
 	 * @class Table Personalization Controller
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.m.TablePersoController
 	 */
 	var TablePersoController = ManagedObject.extend("sap.m.TablePersoController", /** @lends sap.m.TablePersoController */
@@ -115656,7 +115684,7 @@ sap.ui.define("sap/m/semantic/FilterSelect",['sap/m/semantic/SemanticSelect'], f
 	 * @implements sap.m.semantic.ISort
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -115703,7 +115731,7 @@ sap.ui.define("sap/m/semantic/GroupSelect",['sap/m/semantic/SemanticSelect'], fu
 	 * @implements sap.m.semantic.ISort
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -115769,7 +115797,7 @@ function (jQuery, SegmentedContainer, SemanticConfiguration, Button, Title, Acti
 	 * @abstract
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -116522,7 +116550,7 @@ sap.ui.define("sap/m/semantic/ShareMenuPage",['jquery.sap.global', "sap/m/semant
 	 * @extends sap.m.semantic.SemanticPage
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -116707,7 +116735,7 @@ sap.ui.define("sap/m/ComboBox",['jquery.sap.global', './ComboBoxBase', './ComboB
 		 * @extends sap.m.ComboBoxBase
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -118021,7 +118049,7 @@ sap.ui.define("sap/m/MessagePopover",["jquery.sap.global", "./ResponsivePopover"
 		 * @extends sap.ui.core.Control
 		 *
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 *
 		 * @constructor
 		 * @public
@@ -119247,7 +119275,7 @@ sap.ui.define("sap/m/SplitContainer",['jquery.sap.global', './library', 'sap/ui/
 	 *
 	 * NOTE: This control must be rendered as a full screen control in order to make the show/hide master area work properly.
 	 * @extends sap.ui.core.Control
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -122052,7 +122080,7 @@ sap.ui.define("sap/m/semantic/DetailPage",["sap/m/semantic/ShareMenuPage", "sap/
 	 * @extends sap.m.semantic.ShareMenuPage
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -122329,7 +122357,7 @@ sap.ui.define("sap/m/semantic/FullscreenPage",["sap/m/semantic/ShareMenuPage", "
 	 * @extends sap.m.semantic.ShareMenuPage
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -122603,7 +122631,7 @@ sap.ui.define("sap/m/semantic/MasterPage",[ 'jquery.sap.global', "sap/m/semantic
 	 * @extends sap.m.semantic.SemanticPage
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -122756,7 +122784,7 @@ sap.ui.define("sap/m/SplitApp",['jquery.sap.global', './SplitContainer', './libr
 	 * @extends sap.m.SplitContainer
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public

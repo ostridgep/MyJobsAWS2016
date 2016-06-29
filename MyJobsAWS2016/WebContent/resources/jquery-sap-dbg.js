@@ -994,7 +994,7 @@
  * This API is independent from any other part of the UI5 framework. This allows it to be loaded beforehand, if it is needed, to create the UI5 bootstrap
  * dynamically depending on the capabilities of the browser or device.
  *
- * @version 1.36.7
+ * @version 1.36.8
  * @namespace
  * @name sap.ui.Device
  * @public
@@ -1020,7 +1020,7 @@ if (typeof window.sap.ui !== "object") {
 
 	//Skip initialization if API is already available
 	if (typeof window.sap.ui.Device === "object" || typeof window.sap.ui.Device === "function" ) {
-		var apiVersion = "1.36.7";
+		var apiVersion = "1.36.8";
 		window.sap.ui.Device._checkAPIVersion(apiVersion);
 		return;
 	}
@@ -1078,7 +1078,7 @@ if (typeof window.sap.ui !== "object") {
 
 	//Only used internal to make clear when Device API is loaded in wrong version
 	device._checkAPIVersion = function(sVersion){
-		var v = "1.36.7";
+		var v = "1.36.8";
 		if (v != sVersion) {
 			logger.log(WARNING, "Device API version differs: " + v + " <-> " + sVersion);
 		}
@@ -4972,7 +4972,7 @@ return URI;
 	 * @class Represents a version consisting of major, minor, patch version and suffix, e.g. '1.2.7-SNAPSHOT'.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.15.0
@@ -5420,7 +5420,7 @@ return URI;
 	/**
 	 * Root Namespace for the jQuery plug-in provided by SAP SE.
 	 *
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @namespace
 	 * @public
 	 * @static
@@ -14595,7 +14595,7 @@ sap.ui.predefine('jquery.sap.properties',['jquery.sap.global', 'jquery.sap.sjax'
 	 * currently in the list.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.Properties
 	 * @public
@@ -14921,7 +14921,7 @@ sap.ui.predefine('jquery.sap.resources',['jquery.sap.global', 'jquery.sap.proper
 	 * Exception: Fallback for "zh_HK" is "zh_TW" before zh.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.ResourceBundle
 	 * @public
@@ -15512,7 +15512,7 @@ sap.ui.predefine('jquery.sap.script',['jquery.sap.global'],
 	 * Use {@link jQuery.sap.getUriParameters} to create an instance of jQuery.sap.util.UriParameters.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.UriParameters
 	 * @public

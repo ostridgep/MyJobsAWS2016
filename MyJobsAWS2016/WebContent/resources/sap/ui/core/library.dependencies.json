@@ -208,16 +208,16 @@
     },
     {
       "name" : "sap-ui-core-nojQuery.js",
-      "size" : 1982995,
-      "compressedSize" : 557512,
+      "size" : 1983752,
+      "compressedSize" : 557614,
       "required" : [],
       "includes" : ["sap/ui/thirdparty/es6-promise.js", "sap/ui/Device.js", "sap/ui/thirdparty/URI.js", "jquery.sap.global.js", "jquery.sap.act.js", "jquery.sap.dom.js", "jquery.sap.encoder.js", "jquery.sap.events.js", "jquery.sap.keycodes.js", "jquery.sap.mobile.js", "jquery.sap.properties.js", "jquery.sap.resources.js", "jquery.sap.script.js", "jquery.sap.sjax.js", "jquery.sap.strings.js", "jquery.sap.trace.js", "jquery.sap.ui.js", "sap/ui/Global.js", "sap/ui/base/BindingParser.js", "sap/ui/base/DataType.js", "sap/ui/base/Event.js", "sap/ui/base/EventProvider.js", "sap/ui/base/Exception.js", "sap/ui/base/ExpressionParser.js", "sap/ui/base/Interface.js", "sap/ui/base/ManagedObject.js", "sap/ui/base/ManagedObjectMetadata.js", "sap/ui/base/Metadata.js", "sap/ui/base/Object.js", "sap/ui/base/ObjectPool.js", "sap/ui/core/BusyIndicatorUtils.js", "sap/ui/core/Component.js", "sap/ui/core/ComponentMetadata.js", "sap/ui/core/Configuration.js", "sap/ui/core/Control.js", "sap/ui/core/Core.js", "sap/ui/core/CustomStyleClassSupport.js", "sap/ui/core/Element.js", "sap/ui/core/ElementMetadata.js", "sap/ui/core/FocusHandler.js", "sap/ui/core/LabelEnablement.js", "sap/ui/core/Locale.js", "sap/ui/core/Manifest.js", "sap/ui/core/RenderManager.js", "sap/ui/core/ResizeHandler.js", "sap/ui/core/ThemeCheck.js", "sap/ui/core/UIArea.js", "sap/ui/core/message/ControlMessageProcessor.js", "sap/ui/core/message/Message.js", "sap/ui/core/message/MessageManager.js", "sap/ui/core/message/MessageProcessor.js", "sap/ui/model/Binding.js", "sap/ui/model/BindingMode.js", "sap/ui/model/ChangeReason.js", "sap/ui/model/ClientContextBinding.js", "sap/ui/model/ClientListBinding.js", "sap/ui/model/ClientModel.js", "sap/ui/model/ClientPropertyBinding.js", "sap/ui/model/ClientTreeBinding.js", "sap/ui/model/CompositeBinding.js", "sap/ui/model/CompositeDataState.js", "sap/ui/model/CompositeType.js", "sap/ui/model/Context.js", "sap/ui/model/ContextBinding.js", "sap/ui/model/DataState.js", "sap/ui/model/Filter.js", "sap/ui/model/FilterOperator.js", "sap/ui/model/FilterProcessor.js", "sap/ui/model/FilterType.js", "sap/ui/model/FormatException.js", "sap/ui/model/ListBinding.js", "sap/ui/model/Model.js", "sap/ui/model/ParseException.js", "sap/ui/model/PropertyBinding.js", "sap/ui/model/SimpleType.js", "sap/ui/model/Sorter.js", "sap/ui/model/SorterProcessor.js", "sap/ui/model/TreeBinding.js", "sap/ui/model/Type.js", "sap/ui/model/ValidateException.js", "sap/ui/model/message/MessageListBinding.js", "sap/ui/model/message/MessageModel.js", "sap/ui/model/message/MessagePropertyBinding.js", "sap/ui/thirdparty/jquery-mobile-custom.js", "sap/ui/thirdparty/jquery.js"],
       "excludeFromAllInOne" : true
     },
     {
       "name" : "sap-ui-core.js",
-      "size" : 1999329,
-      "compressedSize" : 564540,
+      "size" : 2000086,
+      "compressedSize" : 564642,
       "required" : [],
       "includes" : ["sap/ui/thirdparty/es6-promise.js", "sap/ui/Device.js", "sap/ui/thirdparty/URI.js", "sap/ui/thirdparty/jquery.js", "sap/ui/thirdparty/jqueryui/jquery-ui-position.js", "jquery.sap.global.js", "jquery.sap.act.js", "jquery.sap.dom.js", "jquery.sap.encoder.js", "jquery.sap.events.js", "jquery.sap.keycodes.js", "jquery.sap.mobile.js", "jquery.sap.properties.js", "jquery.sap.resources.js", "jquery.sap.script.js", "jquery.sap.sjax.js", "jquery.sap.strings.js", "jquery.sap.trace.js", "jquery.sap.ui.js", "sap/ui/Global.js", "sap/ui/base/BindingParser.js", "sap/ui/base/DataType.js", "sap/ui/base/Event.js", "sap/ui/base/EventProvider.js", "sap/ui/base/Exception.js", "sap/ui/base/ExpressionParser.js", "sap/ui/base/Interface.js", "sap/ui/base/ManagedObject.js", "sap/ui/base/ManagedObjectMetadata.js", "sap/ui/base/Metadata.js", "sap/ui/base/Object.js", "sap/ui/base/ObjectPool.js", "sap/ui/core/BusyIndicatorUtils.js", "sap/ui/core/Component.js", "sap/ui/core/ComponentMetadata.js", "sap/ui/core/Configuration.js", "sap/ui/core/Control.js", "sap/ui/core/Core.js", "sap/ui/core/CustomStyleClassSupport.js", "sap/ui/core/Element.js", "sap/ui/core/ElementMetadata.js", "sap/ui/core/FocusHandler.js", "sap/ui/core/LabelEnablement.js", "sap/ui/core/Locale.js", "sap/ui/core/Manifest.js", "sap/ui/core/RenderManager.js", "sap/ui/core/ResizeHandler.js", "sap/ui/core/ThemeCheck.js", "sap/ui/core/UIArea.js", "sap/ui/core/message/ControlMessageProcessor.js", "sap/ui/core/message/Message.js", "sap/ui/core/message/MessageManager.js", "sap/ui/core/message/MessageProcessor.js", "sap/ui/model/Binding.js", "sap/ui/model/BindingMode.js", "sap/ui/model/ChangeReason.js", "sap/ui/model/ClientContextBinding.js", "sap/ui/model/ClientListBinding.js", "sap/ui/model/ClientModel.js", "sap/ui/model/ClientPropertyBinding.js", "sap/ui/model/ClientTreeBinding.js", "sap/ui/model/CompositeBinding.js", "sap/ui/model/CompositeDataState.js", "sap/ui/model/CompositeType.js", "sap/ui/model/Context.js", "sap/ui/model/ContextBinding.js", "sap/ui/model/DataState.js", "sap/ui/model/Filter.js", "sap/ui/model/FilterOperator.js", "sap/ui/model/FilterProcessor.js", "sap/ui/model/FilterType.js", "sap/ui/model/FormatException.js", "sap/ui/model/ListBinding.js", "sap/ui/model/Model.js", "sap/ui/model/ParseException.js", "sap/ui/model/PropertyBinding.js", "sap/ui/model/SimpleType.js", "sap/ui/model/Sorter.js", "sap/ui/model/SorterProcessor.js", "sap/ui/model/TreeBinding.js", "sap/ui/model/Type.js", "sap/ui/model/ValidateException.js", "sap/ui/model/message/MessageListBinding.js", "sap/ui/model/message/MessageModel.js", "sap/ui/model/message/MessagePropertyBinding.js", "sap/ui/thirdparty/jquery-mobile-custom.js"],
       "excludeFromAllInOne" : true
@@ -456,8 +456,8 @@
     {
       "name" : "sap/ui/core/Core.js",
       "description" : "Provides the real core class sap.ui.core.Core of SAPUI5",
-      "size" : 109289,
-      "compressedSize" : 30506,
+      "size" : 110046,
+      "compressedSize" : 30608,
       "required" : ["jquery.sap.global.js", "sap/ui/Device.js", "sap/ui/Global.js", "sap/ui/base/DataType.js", "sap/ui/base/EventProvider.js", "sap/ui/base/Object.js", "sap/ui/core/Component.js", "sap/ui/core/Configuration.js", "sap/ui/core/Control.js", "sap/ui/core/Element.js", "sap/ui/core/ElementMetadata.js", "sap/ui/core/FocusHandler.js", "sap/ui/core/RenderManager.js", "sap/ui/core/ResizeHandler.js", "sap/ui/core/ThemeCheck.js", "sap/ui/core/UIArea.js", "sap/ui/core/message/MessageManager.js", "jquery.sap.act.js", "jquery.sap.dom.js", "jquery.sap.events.js", "jquery.sap.mobile.js", "jquery.sap.properties.js", "jquery.sap.resources.js", "jquery.sap.script.js", "sap/ui/core/tmpl/Template.js", "sap/ui/core/IntervalTrigger.js", "sap/ui/core/EventBus.js"],
       "includes" : []
     },
@@ -752,8 +752,8 @@
     {
       "name" : "sap/ui/core/ScrollBarRenderer.js",
       "description" : "A renderer for the ScrollBar control",
-      "size" : 4650,
-      "compressedSize" : 1965,
+      "size" : 4837,
+      "compressedSize" : 2015,
       "required" : ["jquery.sap.global.js", "sap/ui/Device.js"],
       "includes" : []
     },

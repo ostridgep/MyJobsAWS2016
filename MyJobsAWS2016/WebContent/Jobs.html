@@ -292,13 +292,13 @@ var formEQAttr = new sap.m.Dialog("dlgEQAttr",{
 	         contentWidth:"50%",
 	            contentHeight: "50%",
 	            beforeOpen:function(){
-	            	this.setContent(frmEQAttr)
-	            	
+	            	if(this.getContent().length==0){
+	            		this.addContent(frmEQAttr)
+	           			 }
 	            	
 					}
-
- })
-
+})
+ 
 var formLastSync = new sap.m.Dialog("dlgLastSync",{
     title:"Last Synchronise",
     modal: true,
@@ -566,7 +566,10 @@ new sap.m.Button( {
             contentWidth:"85%",
             contentHeight: "85%",
       beforeOpen:function(){
-    	  this.setContent(buildDG5Tabs())
+    	  if(this.getContent()+this.getContent().length==0){
+      		this.addContent(buildDG5Tabs())
+     			 }
+    	 
     	 MandatedForms=[];
     	  //initCloseButtons();
 		BuildCloseScreen();
@@ -1945,7 +1948,9 @@ var formOrdNotification = new sap.m.Dialog("dlgOrdNotification",{
             contentWidth:"95%",
             contentHeight: "85%",
       beforeOpen:function(){
-			this.setContent(buildNotificationDetails(),buildNotificationDetailsTabs())
+    	  if(this.getContent().length==0){
+			this.addContent(buildNotificationDetails(),buildNotificationDetailsTabs())
+    	  }
     	  
 		  buildNotificationDetailsContent("Notif:"+currentNotifId)
 		  buildNotificationDetailsTabContent(currentNotifNo)

@@ -482,7 +482,7 @@
       <module name="sap/ui/core/Renderer.js"/>
     </requires>
   </module>
-  <module name="sap/m/FacetFilterRenderer.js" size="5520" compressedSize="2366">
+  <module name="sap/m/FacetFilterRenderer.js" size="6824" compressedSize="2926">
     <description>! UI development toolkit for HTML5 (OpenUI5) (c) Copyright 2009-2016 SAP SE or an SAP affiliate company. Licensed under the Apache License, Version 2.0 - see LICENSE.txt.</description>
     <requires>
       <module name="jquery.sap.global.js"/>
@@ -2656,7 +2656,7 @@
   </module>
   <module name="sap/m/manifest.json" size="871">
   </module>
-  <module name="sap/m/messagebundle.properties" size="31221">
+  <module name="sap/m/messagebundle.properties" size="31440">
   </module>
   <module name="sap/m/messagebundle_ar.properties" size="45124">
   </module>

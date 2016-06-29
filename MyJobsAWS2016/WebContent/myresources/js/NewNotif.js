@@ -325,7 +325,7 @@ function BuildPriorities(selectedId){
 			suggestionItemSelected: function(oEvent){
 				var oItem = oEvent.getParameter("selectedRow");
 				//alert("sap.m.Input id " + this.getId() + " with suggestion: selected item text is " + oItem.getCells()[0].getText()+":"+oItem.getCells()[1].getText());
-				BuildAssetPlantGroups(oItem.getCells()[0].getText()+":"+oItem.getCells()[1].getText());
+				BuildAssetPlantGroups(oItem.getCells()[0].getText());
 			},
 			suggest: function(oEvent){
 				var sValue = oEvent.getParameter("suggestValue"),
@@ -355,14 +355,14 @@ function BuildPriorities(selectedId){
 					
 					//alert(sites.length)
 					for(var i=0;sites.length; i++){
-						x=sites[i].split(":")
-						if(jQuery.inArray(x[0], aAlreadyAddedProducts7) < 0 && jQuery.sap.startsWithIgnoreCase(x[0], sValue)){
+					
+						if(jQuery.inArray(sites[i], aAlreadyAddedProducts7) < 0 && jQuery.sap.startsWithIgnoreCase(sites[i], sValue)){
 						oSuggestionRow = oTableItemTemplate.clone();
-							oSuggestionRow.getCells()[0].setText(x[0]);
-							oSuggestionRow.getCells()[1].setText(x[1]);
+							oSuggestionRow.getCells()[0].setText(sites[i]);
+							
 							
 							oSuggestTableInput7.addSuggestionRow(oSuggestionRow);
-							aAlreadyAddedProducts7.push(x[0]);
+							aAlreadyAddedProducts7.push(sites[i]);
 					}
 						
 					}
@@ -521,17 +521,9 @@ function BuildPriorities(selectedId){
 		                    ],
 		             beforeOpen:function(){
 		            	 if(sites.length<1){
-			            	 $.ajax({
-				         		    type: "GET",
-				         		    url: "TestData/Sites.xml",
-				         		    dataType: "xml",
-				         		    success: function (xml) {    
-				         		       xmlDoc=xml 
+			            	
 				         		      BuildAssetSites();
 	
-				         		    }    
-				         		       
-				         		});
 		            	 }
 		                    
 		             },
@@ -558,19 +550,27 @@ function BuildPriorities(selectedId){
 			
 				sites=[]
 				
-			
-		
-		       
-		       $(xmlDoc).find('ASSET_EXTRACT ASSET').each(function(){
-		              
-		              var text= $(this).attr('SITE');
-		              var text1= $(this).attr('MTCE_PLANT');
-		              
-		               if ($.inArray(text+":"+text1, sites)===-1){
-		                   sites.push(text+":"+text1);
-		               }
-		   })
-		   //LoadSites()
+				html5sql.process("Select Distinct site from AssetDetailsAll",
+						 function(transaction, results, rowsArray){
+							
+						
+								for (var n = 0; n < rowsArray.length; n++) {
+									item = rowsArray[n];
+									 var text= item.site;
+						              
+						              
+						               if ($.inArray(text, sites)===-1){
+						                   sites.push(text);
+						               }
+								}
+							
+								
+						 },
+						 function(error, statement){
+							
+						 }        
+						);			
+
 
 
 		}
@@ -590,11 +590,11 @@ function BuildPriorities(selectedId){
 			   for (i=0;i<sites.length;i++)
 			   {
 			     
-				     x=sites[i].split(":")
+				    
 			          sap.ui.getCore().getElementById("AssetSite").addItem(
 			                           new sap.ui.core.Item({
 			                                  key: sites[i],
-			                                  text:  x[0]
+			                                  text:  sites[i]
 			                           }))   
 
 
@@ -619,67 +619,63 @@ function BuildPriorities(selectedId){
 			selectedAssetSearchSite=site
 			return
 		}
-			
 		sap.ui.getCore().getElementById('AssetSearchResults').destroyItems();	
-		x=site.split(":")
-		
-   	 if(navigator.platform=="Win32"){
-   		 AssetPath="Assets/"
-   	 }else{
-   		AssetPath=cordova.file.dataDirectory
-   	 }
-		opMessage(AssetPath+"T2_MPLT_"+x[1]+".XML")
-
-			 $.ajax({
-      		    type: "GET",
-      		    url: AssetPath+"T2_MPLT_"+x[1]+".XML",
-      		    dataType: "xml",
-      		    success: function (xml) {    
-      		       xmlDoc=xml 
-      		      
-     		      selectedAssetSearchSite=x[0];
-                   sap.ui.getCore().getElementById('AssetGroup').destroyItems()
-                   sap.ui.getCore().getElementById('AssetType').destroyItems()
-					     $(xmlDoc).find('ASSET_EXTRACT ASSET[SITE="'+x[0]+'"]').each(function(){
-					            
-					            var text= $(this).attr('PLANT_GROUP');
-					             if ($.inArray(text, plants)===-1){
-					                 plants.push(text);
-					             }
-					 })
+		sap.ui.getCore().getElementById('AssetGroup').destroyItems()
+        sap.ui.getCore().getElementById('AssetType').destroyItems()
+        selectedAssetSearchSite=site;
+		selectedAssetSearchGroup="ALL"
+        selectedAssetSearchType="ALL"
+        plants=[]
+		html5sql.process("Select * from AssetDetailsAll where site = '"+site+"'",
+				 function(transaction, results, rowsArray){
 					
-					 plants.sort();
-					                      
-					                      selectedAssetSearchGroup="ALL"
-					                      selectedAssetSearchType="ALL"
-					                    	                
-                	  sap.ui.getCore().getElementById("AssetGroup").addItem(
-			                   new sap.ui.core.Item({
-			                         key: "ALL",
-			                         text: "ALL"
-			                   })) 
-					 for (i=0;i<plants.length;i++)
-					 {
-					    
-					
-					        sap.ui.getCore().getElementById("AssetGroup").addItem(
-					                         new sap.ui.core.Item({
-					                                key: plants[i],
-					                                text: plants[i]
-					                         }))   
-					
-					
-					
-					 }
-					
-					 
-					                      sap.ui.getCore().getElementById("AssetType").addItem(
+				
+						for (var n = 0; n < rowsArray.length; n++) {
+							item = rowsArray[n];
+							 var text= item.plgrpdesc;
+				              
+				              
+				               if ($.inArray(text, plants)===-1){
+				            	   plants.push(text);
+				               }
+						}
+						 plants.sort();
+						  sap.ui.getCore().getElementById("AssetGroup").addItem(
+				                   new sap.ui.core.Item({
+				                         key: "ALL",
+				                         text: "ALL"
+				                   }))
+				          sap.ui.getCore().getElementById("AssetType").addItem(
 					                                       new sap.ui.core.Item({
 					                                              key: "ALL",
 					                                              text: "ALL"
 					                                       })) 
-      		    },
-			 })
+						 for (i=0;i<plants.length;i++)
+						 {
+						    
+						
+						        sap.ui.getCore().getElementById("AssetGroup").addItem(
+						                         new sap.ui.core.Item({
+						                                key: plants[i],
+						                                text: plants[i]
+						                         }))   
+						
+						
+						
+						 }
+						
+				 },
+				 function(error, statement){
+					
+				 }        
+				);				
+		
+
+					                    	                
+                	
+					
+					 
+	
 		       
 		}
 		
@@ -688,38 +684,40 @@ function BuildPriorities(selectedId){
      		      selectedAssetSearchGroup=AssetGroup;
      		      selectedAssetSearchType="ALL"
     		       sap.ui.getCore().getElementById('AssetType').destroyItems()
-					$(xmlDoc).find('ASSET_EXTRACT ASSET[SITE="'+selectedAssetSearchSite+'"]').each(function(){
-							              
-							              var text= $(this).attr('ASSET_DESC');
-							              
-							               
-							               if ($(this).attr('PLANT_GROUP')==AssetGroup){
-							               if ($.inArray(text, assets)===-1){
-							                   assets.push(text);
-							               }
-							              }
-							    })
-							assets.sort();
-     		     sap.ui.getCore().getElementById("AssetType").addItem(
-	                     new sap.ui.core.Item({
-	                           key: "ALL",
-	                           text: "ALL"
-	                     }))                       
-
-    			   for (i=0;i<assets.length;i++)
-    			   {
-    			      
-
-    			          sap.ui.getCore().getElementById("AssetType").addItem(
-    			                           new sap.ui.core.Item({
-    			                                  key: assets[i],
-    			                                  text: assets[i]
-    			                           }))   
-
-
-    			  
-    			   }
-    			  
+    		       		html5sql.process("Select distinct eqtypedesc from AssetDetailsAll where site = '"+selectedAssetSearchSite+"' and plgrpdesc = '"+AssetGroup+"'",
+				
+    		       			
+    		       				function(transaction, results, rowsArray){
+    		       		
+    		       			sap.ui.getCore().getElementById("AssetType").addItem(
+                                    new sap.ui.core.Item({
+                                           key: "ALL",
+                                           text: "ALL"
+                                    })) 
+				
+						for (var n = 0; n < rowsArray.length; n++) {
+							item = rowsArray[n];
+							 var text= item.eqtypedesc;
+							 sap.ui.getCore().getElementById("AssetType").addItem(
+			                         new sap.ui.core.Item({
+			                                key: text,
+			                                text: text
+			                         }))     
+				              
+				              
+						}
+						
+						
+				 },
+				 function(error, statement){
+					alert(error+statement)
+				 }        
+				);	
+    		       
+    		       
+    		       
+    		       
+					
 			 
 
 		}
@@ -729,6 +727,7 @@ function BuildPriorities(selectedId){
 		}
 
 		function showAssetSearchResults(){
+			
 		       var flocs=[]
 		       var flocdets=[];
 		       var TestGroup=""
@@ -740,50 +739,47 @@ function BuildPriorities(selectedId){
 		       var opTable = sap.ui.getCore().getElementById('AssetSearchResults');
                x=selectedAssetSearchSite.split(":")
 		       sap.ui.getCore().getElementById('AssetSearchResults').destroyItems();
-		       $(xmlDoc).find('ASSET_EXTRACT ASSET[SITE="'+x[0]+'"]').each(function(){
-		              
-		              var text= $(this).attr('ASSET_DESC');
-		              if(selectedAssetSearchGroup=="ALL"){
-		            	  TestGroup=$(this).attr('PLANT_GROUP')
-		              }else{
-		            	  TestGroup=selectedAssetSearchGroup
-		              }
-		            	  
-		               
-		               if ($(this).attr('PLANT_GROUP')==TestGroup){
-				    	   if(selectedAssetSearchType=="ALL"){
-				            	  TestType=$(this).attr('ASSET_DESC')
-				              }else{
-				            	  TestType=selectedAssetSearchType
-				              }
-		                     if ($(this).attr('ASSET_DESC')==TestType){
-		                    	
-					              // if ($.inArray(text, flocs)==-1){
-					               //    flocs.push(text);
-					                   flocdets.push($(this).attr('PLANT_GROUP')+":"+$(this).attr('ASSET_DESC')+":"+$(this).attr('FUNC_LOC')+":"+$(this).attr('FUNC_LOC_DESC')+":"+$(this).attr('EQUIP_DESC')+":"+$(this).attr('MAKE')+":"+$(this).attr('MODEL')+":"+$(this).attr('EQUIP'));
-					               //}
-		                     }
-		              }
-		    })
+               
+               
+               
+               sql= "select * from AssetDetailsAll where site = '"+selectedAssetSearchSite+"'"
+               if (selectedAssetSearchGroup!="ALL"){
+            	   sql+=" and plgrpdesc = '"+selectedAssetSearchGroup+"'"
+               }
+               if (selectedAssetSearchType!="ALL"){
+            	   sql+=" and eqtypedesc = '"+selectedAssetSearchType+"'"
+               }
 
-		                                                                             flocdets.sort();
-		                                                                                  for (n=0; n < flocdets.length; n++) {
-		                                                                                         x=flocdets[n].split(":")
-		                                                                           
-		                                                                                         opTable.addItem (new sap.m.ColumnListItem("Asset"+n+":"+x[2]+":"+x[7],{
-		                                                                                                
-		                                                                                                cells : 
-		                                                                                                       [
-		                                                                                                       new sap.m.Text({text: x[0]}),
-		                                                                                                       new sap.m.Text({text: x[1]}),
-		                                                                                                       new sap.m.Text({text: x[2]}),
-		                                                                                                       new sap.m.Text({text: x[3]}),
-		                                                                                                       new sap.m.Text({text: x[4]}),
-		                                                                                              new sap.m.Text({text: x[5]}),
-		                                                                                                       new sap.m.Text({text: x[6]})   
-		                                                                                                       ]
-		                                                                                                }));
-		                                                                                  
-		                                                                                  }
+	       		html5sql.process(sql,
+	    				
+		       			
+	       				function(transaction, results, rowsArray){
+	       		
+	       		
+		
+				for (var n = 0; n < rowsArray.length; n++) {
+                    opTable.addItem (new sap.m.ColumnListItem("Asset"+n+":"+rowsArray[n].floc+":"+rowsArray[n].eq,{
+                        
+                        cells : 
+                               [
+                               new sap.m.Text({text: rowsArray[n].plgrpdesc}),
+                               new sap.m.Text({text: rowsArray[n].assdesc}),  
+                               new sap.m.Text({text: rowsArray[n].floc}),
+                               new sap.m.Text({text: rowsArray[n].flocdesc}), 
+                               new sap.m.Text({text: rowsArray[n].eqdesc}),
+                               new sap.m.Text({text: rowsArray[n].manufacturer}),
+                               new sap.m.Text({text: rowsArray[n].partno}) 
+                               ]
+                        }));
+				}
+				
+		 },
+		 function(error, statement){
+			alert(error+statement)
+		 }        
+		);            
+               
+               
+               
 		}
 		

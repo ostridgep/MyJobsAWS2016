@@ -22,7 +22,7 @@ var syncStatusType=sap.m.ButtonType.Accept;
 var xmlDoc="";
 var sqlMyJobsDocs;
 var assetStatements=[];
-
+var allAssetCalls=[]
 function sendFormData(fname,orderno,opno,notifno){
 	
 	var c040="NA"	
@@ -352,69 +352,8 @@ function requestSAPData(page,params){
  
   
 }	 
-function requestSAPDataPJO(page,params){
-
-
-	opMessage("http://pjomyjobs.azurewebsites.net/Forms/"+page);
-	var myurl="http://pjomyjobs.azurewebsites.net/Forms/"+page;
-	
-	$.ajax({
-	    dataType: "jsonp",
-	    url: myurl,
-	    
-	    timeout: 300000
-		}).done(function() {
-		    opMessage("call success"+page );
-		  }).fail( function( xhr, status ) {
-			
-			  opMessage(page+status)
-			  	if (status!="parsererror"){
-					
-				    if( status == "timeout" ) {
-				    	
-				    	opMessage(page+status);
-				    }
-			  	}
-			}).always(function() {
-
-					opMessage("Complete"+page );
-					
-				
-			  });
-    
-  //})
  
-  
-}	 
-function requestSAPDataTest(myurl){
 
-
-//alert(myurl)
-	
-	$.ajax({
-	    dataType: "json",
-	    url: myurl,
-	    
-	    timeout: 300000
-		}).done(function() {
-		    //alert("Done")
-		  }).fail( function( xhr, status ) {
-			
-			
-			  //alert("failed with "+status)
-			 // alert("xhr"+xhr.statusCode())
-
-			}).always(function() {
-
-					//alert("all done")
-					
-				
-			  });
-    
-  //})
- 
-  
-}	
 
 function updateMyJobDetsDraw(id,dir)
 {
@@ -2665,17 +2604,26 @@ function insertAssetDetails(sql){
 }	
 
 function getAllAssets(pplant,mplant){
-	
+	allAssetCalls=[]
 	if(mplant.search(":")<0){
 		
 		requestSAPData("MyJobsassetextbyplant.htm",'&planttype=ZIWERK&plant='+pplant);
 	}else{
 		
 		mplants = mplant.split(":")
+		mplants[1]=mplants[0]
+		mplants[0]="NSVE"
 		i=0;
 		 for (i = 0; i < mplants.length; i++) { 
-			 requestSAPData("MyJobsassetextbyplant.htm",'&planttype=ZSWERK&plant='+mplants[i]);
+		
+			// requestSAPData("MyJobsassetextbyplant.htm",'&planttype=ZSWERK&plant='+mplants[i]);
+			 allAssetCalls.push("MyJobsassetextbyplant.htm"+"|"+"&planttype=ZSWERK&plant="+mplants[i]);
+			 
 		 }
+		 
+		 mplnt=allAssetCalls.splice(0,1)+" "
+		 x=mplnt.split("|")		
+		 requestSAPData(x[0],x[1])
 	}
 	
 	
@@ -2706,7 +2654,7 @@ function syncReference(){
 							requestSAPData("MyJobsRefData.htm",'');
 							requestSAPData("MyJobsRefDataCodes.htm",'');
 							requestSAPData("MyJobsUsers.htm",'');
-							//requestSAPData("MyJobsAssetPlantsExt.htm",'');
+							requestSAPData("MyJobsAssetPlantsExt.htm",'');
 							requestSAPData("MyJobsVehiclesDefault.htm",'');
 							requestSAPData("MyJobsVehicles.htm",'');
 							requestDEMOData('MyForms.json');
@@ -5894,30 +5842,113 @@ function assetsByPlantsCB(data){
 		
 		reccnt=0
 		sqlcnt=0;
+		console.log("Loading Assets for Plant "+data.assetsByPlant[0].planttype+" "+data.assetsByPlant[0].plant+" Length = "+data.assetsByPlant.length);
 		opMessage("Loading Assets for Plant "+data.assetsByPlant[0].planttype+" "+data.assetsByPlant[0].plant);
 		for(var cntx=0; cntx < data.assetsByPlant.length; cntx++)
 		{
 		adets=data.assetsByPlant[cntx].adata.split("|");
-		
+		flocdesc=unescape(adets[4])
+		flocdesc=flocdesc.replace(/`/g, "");
+		flocdesc=flocdesc.replace(/'/g, "");
+		flocdesc=flocdesc.replace(/"/g, "");
+		flocdesc=flocdesc.replace(/\\/g, "-");
+		flocdesc=flocdesc.replace(/\//g, "-");
+		flocdesc=flocdesc.replace(/&/g, "");
+		flocdesc=flocdesc.replace(/#/g, "");
+		flocdesc=flocdesc.replace(/\)/g, "");	
+		flocdesc=flocdesc.replace(/\(/g, "");	
+		eqdesc=unescape(adets[6])
+		eqdesc=eqdesc.replace(/`/g, "");
+		eqdesc=eqdesc.replace(/'/g, "");
+		eqdesc=eqdesc.replace(/"/g, "");
+		eqdesc=eqdesc.replace(/\\/g, "-");
+		eqdesc=eqdesc.replace(/\//g, "-");
+		eqdesc=eqdesc.replace(/&/g, "");
+		eqdesc=eqdesc.replace(/#/g, "");
+		eqdesc=eqdesc.replace(/\)/g, "");	
+		eqdesc=eqdesc.replace(/\(/g, "");
+		plgrpdesc=adets[8]
+		plgrpdesc=plgrpdesc.replace(/`/g, "");
+		plgrpdesc=plgrpdesc.replace(/'/g, "");
+		plgrpdesc=plgrpdesc.replace(/"/g, "");
+		plgrpdesc=plgrpdesc.replace(/\\/g, "-");
+		plgrpdesc=plgrpdesc.replace(/\//g, "-");
+		plgrpdesc=plgrpdesc.replace(/&/g, "");
+		plgrpdesc=plgrpdesc.replace(/#/g, "");
+		plgrpdesc=plgrpdesc.replace(/\)/g, "");	
+		plgrpdesc=plgrpdesc.replace(/\(/g, "");
+		assdesc=unescape(adets[9])
+		assdesc=assdesc.replace(/`/g, "");
+		assdesc=assdesc.replace(/'/g, "");
+		assdesc=assdesc.replace(/"/g, "");
+		assdesc=assdesc.replace(/\\/g, "-");
+		assdesc=assdesc.replace(/\//g, "-");
+		assdesc=assdesc.replace(/&/g, "");
+		assdesc=assdesc.replace(/#/g, "");
+		assdesc=assdesc.replace(/\)/g, "");	
+		assdesc=assdesc.replace(/\(/g, "");
+		manufacturer=adets[10]
+		manufacturer=manufacturer.replace(/`/g, "");
+		manufacturer=manufacturer.replace(/`/g, "");
+		manufacturer=manufacturer.replace(/'/g, "");
+		manufacturer=manufacturer.replace(/"/g, "");
+		manufacturer=manufacturer.replace(/\\/g, "-");
+		manufacturer=manufacturer.replace(/\//g, "-");
+		manufacturer=manufacturer.replace(/&/g, "");
+		manufacturer=manufacturer.replace(/#/g, "");
+		manufacturer=manufacturer.replace(/\)/g, "");	
+		manufacturer=manufacturer.replace(/\(/g, "");
+		partno=unescape(adets[11])
+		partno=partno.replace(/`/g, "");
+		partno=partno.replace(/'/g, "");
+		partno=partno.replace(/"/g, "");
+		partno=partno.replace(/\\/g, "-");
+		partno=partno.replace(/\//g, "-");
+		partno=partno.replace(/&/g, "");
+		partno=		partno.replace(/#/g, "");
+		partno=partno.replace(/\)/g, "");	
+		partno=partno.replace(/\(/g, "");
+		serialno=unescape(adets[12])
+		serialno=serialno.replace(/`/g, "");
+		serialno=serialno.replace(/'/g, "");
+		serialno=serialno.replace(/"/g, "");
+		serialno=serialno.replace(/\\/g, "-");
+		serialno=serialno.replace(/\//g, "-");
+		serialno=serialno.replace("\/", "-");
+
+		serialno=serialno.replace(/&/g, "");
+		serialno=serialno.replace(/#/g, "");
+		serialno=serialno.replace(/\)/g, "");	
+		serialno=serialno.replace(/\(/g, "");
+		eqtypedesc=unescape(adets[14])
+		eqtypedesc=eqtypedesc.replace(/`/g, "");
+		eqtypedesc=eqtypedesc.replace(/'/g, "");
+		eqtypedesc=eqtypedesc.replace(/"/g, "");
+		eqtypedesc=eqtypedesc.replace(/\\/g, "-");
+		eqtypedesc=eqtypedesc.replace(/\//g, "-");
+		eqtypedesc=eqtypedesc.replace(/&/g, "");
+		eqtypedesc=eqtypedesc.replace(/#/g, "");
+		eqtypedesc=eqtypedesc.replace(/\)/g, "");	
+		eqtypedesc=eqtypedesc.replace(/\(/g, "");
 		sqlstatement+=' INSERT INTO AssetDetailsAll (floc , planplant , maintplant , site , flocdesc, eq , eqdesc , plgrpdesc , asstype , assdesc,manufacturer,partno ,serialno ,eqtype ,eqtypedesc ) VALUES ('+ 
 			'"'+adets[0] +'",'+  
 			'"'+adets[1] +'",'+  
 			'"'+adets[2] +'",'+  
 			'"'+adets[3]+'",'+  
-			'"'+adets[4] +'",'+  
+			'"'+flocdesc +'",'+  
 			'"'+adets[5] +'",'+  
-			'"'+adets[6] +'",'+  
+			'"'+eqdesc +'",'+  
 			'"'+adets[7] +'",'+  
-			'"'+adets[8]+'",'+  
-			'"'+adets[9] +'",'+  
-			'"'+adets[10] +'",'+  
-			'"'+adets[11] +'",'+  
-			'"'+adets[12]+'",'+  
+			'"'+plgrpdesc+'",'+  
+			'"'+assdesc +'",'+  
+			'"'+manufacturer +'",'+  
+			'"'+escape(partno) +'",'+  
+			'"'+escape(serialno)+'",'+  
 			'"'+adets[13]+'",'+  
-			'"'+adets[14]+'");';	
+			'"'+eqtypedesc+'");';	
 			reccnt++;
 			if (reccnt>500){
-				sqlcnt++;
+				
 			
 				assetStatements.push(sqlstatement)
 				reccnt=0;
@@ -5925,24 +5956,56 @@ function assetsByPlantsCB(data){
 				
 			}
 		}
+		assetStatements.push(sqlstatement)
 		
-		insertAssetsByPlant(0)
+		insertAssetsByPlant()
+		
 	}		
 
 }
-function insertAssetsByPlant(cnt){
-console.log("Inserting Assets "+cnt)
-	if(cnt<assetStatements.length){
-		html5sql.process(assetStatements[cnt],
-				 function(){
-					insertAssetsByPlant(cnt+1)
-				 },
-				 function(error, statement){
-					 opMessage("Error: " + error.message + " when processing " + statement);
-					 console.log("Error: " + error.message + " when processing " + statement);
-				 }        
-			);
-	}		
+
+
+function insertAssetsByPlant(){
+	var sql=""
+console.log("Inserting "+assetStatements.length)
+	if(assetStatements.length>0){
+		
+		sql=assetStatements.splice(0,1)+" "
+		//if((assetStatements.length==2790)||(assetStatements.length==9)||(assetStatements.length==158)){
+			
+		//	console.log("xxxxz"+sql)
+			//insertAssetsByPlant()
+	//	}else{
+		try{
+			html5sql.process(sql,
+					 function(){
+						
+						insertAssetsByPlant()
+						
+					 },
+					 function(error, statement){
+						 opMessage("Error: " + error.message + " when processing " );
+						
+						 console.log("Error: " + error.message+ statement);
+	
+						 insertAssetsByPlant()
+					 }        
+				);
+		}catch (err){
+			
+		}
+		//}
+		
+	}else{
+		console.log("Inserting Finished")
+		console.log(allAssetCalls.length)
+		if(allAssetCalls.length>0){
+			 mplnt=allAssetCalls.splice(0,1)+" "
+			 x=mplnt.split("|")		
+			 requestSAPData(x[0],x[1])
+		}
+	}
+
 }
 function userCB(MyUsers){
 var sqlstatement="";		

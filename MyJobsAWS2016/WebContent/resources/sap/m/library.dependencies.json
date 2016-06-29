@@ -443,8 +443,8 @@
     {
       "name" : "sap/m/FacetFilterRenderer.js",
       "description" : "! UI development toolkit for HTML5 (OpenUI5) (c) Copyright 2009-2016 SAP SE or an SAP affiliate company. Licensed under the Apache License, Version 2.0 - see LICENSE.txt.",
-      "size" : 5520,
-      "compressedSize" : 2366,
+      "size" : 6824,
+      "compressedSize" : 2926,
       "required" : ["jquery.sap.global.js"],
       "includes" : []
     },
@@ -2392,7 +2392,7 @@
     },
     {
       "name" : "sap/m/messagebundle.properties",
-      "size" : 31221,
+      "size" : 31440,
       "required" : [],
       "includes" : []
     },

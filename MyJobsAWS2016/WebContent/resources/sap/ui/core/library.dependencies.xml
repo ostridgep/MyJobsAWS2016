@@ -183,7 +183,7 @@
       <module name="jquery.sap.global.js"/>
     </includes>
   </module>
-  <module name="sap-ui-core-nojQuery.js" size="1982995" compressedSize="557512" excludeFromAllInOne="true" dynamicDependencies="true">
+  <module name="sap-ui-core-nojQuery.js" size="1983752" compressedSize="557614" excludeFromAllInOne="true" dynamicDependencies="true">
     <includes>
       <module name="sap/ui/thirdparty/es6-promise.js"/>
       <module name="sap/ui/Device.js"/>
@@ -272,7 +272,7 @@
       <module name="sap/ui/thirdparty/jquery.js"/>
     </includes>
   </module>
-  <module name="sap-ui-core.js" size="1999329" compressedSize="564540" excludeFromAllInOne="true" dynamicDependencies="true">
+  <module name="sap-ui-core.js" size="2000086" compressedSize="564642" excludeFromAllInOne="true" dynamicDependencies="true">
     <includes>
       <module name="sap/ui/thirdparty/es6-promise.js"/>
       <module name="sap/ui/Device.js"/>
@@ -622,7 +622,7 @@
       <module name="sap/ui/core/BusyIndicatorUtils.js"/>
     </requires>
   </module>
-  <module name="sap/ui/core/Core.js" size="109289" compressedSize="30506" dynamicDependencies="true">
+  <module name="sap/ui/core/Core.js" size="110046" compressedSize="30608" dynamicDependencies="true">
     <description>Provides the real core class sap.ui.core.Core of SAPUI5</description>
     <requires>
       <module name="jquery.sap.global.js"/>
@@ -967,7 +967,7 @@
       <module name="sap/ui/thirdparty/zyngascroll.js" conditional="true"/>
     </requires>
   </module>
-  <module name="sap/ui/core/ScrollBarRenderer.js" size="4650" compressedSize="1965">
+  <module name="sap/ui/core/ScrollBarRenderer.js" size="4837" compressedSize="2015">
     <description>A renderer for the ScrollBar control</description>
     <requires>
       <module name="jquery.sap.global.js"/>

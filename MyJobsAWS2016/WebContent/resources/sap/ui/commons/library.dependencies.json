@@ -827,8 +827,8 @@
     {
       "name" : "sap/ui/commons/TabStrip.js",
       "description" : "Provides control sap.ui.commons.TabStrip.",
-      "size" : 33645,
-      "compressedSize" : 15817,
+      "size" : 33728,
+      "compressedSize" : 15876,
       "required" : ["jquery.sap.global.js", "sap/ui/commons/library.js", "sap/ui/core/Control.js", "sap/ui/core/delegate/ItemNavigation.js", "sap/ui/core/Icon.js", "sap/ui/core/delegate/ScrollEnablement.js", "sap/ui/Device.js"],
       "includes" : []
     },

@@ -28,7 +28,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control',
 	 * @extends sap.ui.core.Control
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -368,7 +368,7 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control',
 		var aTabs = this.getTabs();
 		var oTab = aTabs[iSelectedIndex];
 
-		if (oTab && oTab.$().length > 0) {
+		if (this._oScroller && oTab && oTab.$().length > 0) {
 			this._scrollIntoView(oTab.$(), TabStrip.SCROLL_ANIMATION_DURATION);
 		}
 
@@ -1081,7 +1081,10 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control',
 			}
 		}
 
-		this._oScroller.scrollTo(iScrollTarget, 0, iDuration);
+		if (this._oScroller) {
+			this._oScroller.scrollTo(iScrollTarget, 0, iDuration);
+		}
+
 		this._iCurrentScrollLeft = iScrollTarget;
 	};
 
@@ -1118,7 +1121,10 @@ sap.ui.define(['jquery.sap.global', './library', 'sap/ui/core/Control',
 
 			// store current scroll state to set it after re-rendering
 			this._iCurrentScrollLeft = iNewScrollLeft;
-			this._oScroller.scrollTo(iNewScrollLeft, 0, iDuration);
+
+			if (this._oScroller) {
+				this._oScroller.scrollTo(iNewScrollLeft, 0, iDuration);
+			}
 		}
 	};
 

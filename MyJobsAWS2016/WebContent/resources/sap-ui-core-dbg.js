@@ -994,7 +994,7 @@
  * This API is independent from any other part of the UI5 framework. This allows it to be loaded beforehand, if it is needed, to create the UI5 bootstrap
  * dynamically depending on the capabilities of the browser or device.
  *
- * @version 1.36.7
+ * @version 1.36.8
  * @namespace
  * @name sap.ui.Device
  * @public
@@ -1020,7 +1020,7 @@ if (typeof window.sap.ui !== "object") {
 
 	//Skip initialization if API is already available
 	if (typeof window.sap.ui.Device === "object" || typeof window.sap.ui.Device === "function" ) {
-		var apiVersion = "1.36.7";
+		var apiVersion = "1.36.8";
 		window.sap.ui.Device._checkAPIVersion(apiVersion);
 		return;
 	}
@@ -1078,7 +1078,7 @@ if (typeof window.sap.ui !== "object") {
 
 	//Only used internal to make clear when Device API is loaded in wrong version
 	device._checkAPIVersion = function(sVersion){
-		var v = "1.36.7";
+		var v = "1.36.8";
 		if (v != sVersion) {
 			logger.log(WARNING, "Device API version differs: " + v + " <-> " + sVersion);
 		}
@@ -15799,7 +15799,7 @@ $.ui.position = {
 	 * @class Represents a version consisting of major, minor, patch version and suffix, e.g. '1.2.7-SNAPSHOT'.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @since 1.15.0
@@ -16247,7 +16247,7 @@ $.ui.position = {
 	/**
 	 * Root Namespace for the jQuery plug-in provided by SAP SE.
 	 *
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @namespace
 	 * @public
 	 * @static
@@ -25608,7 +25608,7 @@ sap.ui.predefine('jquery.sap.properties',['jquery.sap.global', 'jquery.sap.sjax'
 	 * currently in the list.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.Properties
 	 * @public
@@ -25934,7 +25934,7 @@ sap.ui.predefine('jquery.sap.resources',['jquery.sap.global', 'jquery.sap.proper
 	 * Exception: Fallback for "zh_HK" is "zh_TW" before zh.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.ResourceBundle
 	 * @public
@@ -26525,7 +26525,7 @@ sap.ui.predefine('jquery.sap.script',['jquery.sap.global'],
 	 * Use {@link jQuery.sap.getUriParameters} to create an instance of jQuery.sap.util.UriParameters.
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.9.0
 	 * @name jQuery.sap.util.UriParameters
 	 * @public
@@ -28722,7 +28722,7 @@ sap.ui.predefine('jquery.sap.ui',['jquery.sap.global', 'sap/ui/Global' /* cyclic
  * sap.ui.lazyRequire("sap.ui.core.Control");
  * sap.ui.lazyRequire("sap.ui.commons.Button");
  *
- * @version 1.36.7
+ * @version 1.36.8
  * @author  Martin Schaus, Daniel Brinkmann
  * @public
  */
@@ -28744,7 +28744,7 @@ sap.ui.predefine('sap/ui/Global',['jquery.sap.global', 'jquery.sap.dom'],
 	 * The <code>sap</code> namespace is automatically registered with the
 	 * OpenAjax hub if it exists.
 	 *
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @namespace
 	 * @public
 	 * @name sap
@@ -28757,7 +28757,7 @@ sap.ui.predefine('sap/ui/Global',['jquery.sap.global', 'jquery.sap.dom'],
 	 * The <code>sap.ui</code> namespace is the central OpenAjax compliant entry
 	 * point for UI related JavaScript functionality provided by SAP.
 	 *
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @namespace
 	 * @name sap.ui
 	 * @public
@@ -28770,8 +28770,8 @@ sap.ui.predefine('sap/ui/Global',['jquery.sap.global', 'jquery.sap.dom'],
 			 * The version of the SAP UI Library
 			 * @type string
 			 */
-			version: "1.36.7",
-			buildinfo : { lastchange : "", buildtime : "20160419-1144" }
+			version: "1.36.8",
+			buildinfo : { lastchange : "", buildtime : "20160421-1415" }
 		});
 
 	/**
@@ -30107,7 +30107,7 @@ sap.ui.predefine('sap/ui/base/Event',['jquery.sap.global', './Object'],
 	 * @extends sap.ui.base.Object
 	 * @implements sap.ui.base.Poolable
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.ui.base.Event
 	 * @public
 	 */
@@ -30265,7 +30265,7 @@ sap.ui.predefine('sap/ui/base/EventProvider',['jquery.sap.global', './Event', '.
 	 * @abstract
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @public
 	 * @alias sap.ui.base.EventProvider
@@ -31432,7 +31432,7 @@ sap.ui.predefine('sap/ui/base/Interface',['jquery.sap.global'],
 	 *        only the defined functions will be visible, no internals of the class can be accessed.
 	 *
 	 * @author Malte Wedel, Daniel Brinkmann
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @param {sap.ui.base.Object}
 	 *            oObject the instance that needs an interface created
 	 * @param {string[]}
@@ -31656,7 +31656,7 @@ sap.ui.predefine('sap/ui/base/ManagedObject',[
 	 *
 	 * @extends sap.ui.base.EventProvider
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 * @alias sap.ui.base.ManagedObject
 	 * @experimental Since 1.11.2. ManagedObject as such is public and usable. Only the support for the optional parameter
@@ -35501,7 +35501,7 @@ sap.ui.predefine('sap/ui/base/ManagedObjectMetadata',['jquery.sap.global', './Da
 	 * </ul>
 	 *
 	 * @author Frank Weigel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.8.6
 	 * @alias sap.ui.base.ManagedObjectMetadata
 	 */
@@ -36674,7 +36674,7 @@ sap.ui.predefine('sap/ui/base/Metadata',['jquery.sap.global', 'jquery.sap.script
 	 *
 	 * @class Metadata for a class.
 	 * @author Frank Weigel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.8.6
 	 * @public
 	 * @alias sap.ui.base.Metadata
@@ -37061,7 +37061,7 @@ sap.ui.predefine('sap/ui/base/Object',['jquery.sap.global', './Interface', './Me
 	 * @class Base class for all SAPUI5 Objects
 	 * @abstract
 	 * @author Malte Wedel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 * @alias sap.ui.base.Object
 	 */
@@ -37255,7 +37255,7 @@ sap.ui.predefine('sap/ui/base/ObjectPool',['./Object'],
 	 *
 	 * @extends sap.ui.base.Object
 	 * @author Malte Wedel
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @alias sap.ui.base.ObjectPool
 	 * @public
@@ -37574,7 +37574,7 @@ sap.ui.predefine('sap/ui/core/Component',['jquery.sap.global', 'sap/ui/base/Mana
 	 * @extends sap.ui.base.ManagedObject
 	 * @abstract
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.ui.core.Component
 	 * @since 1.9.2
 	 */
@@ -38952,7 +38952,7 @@ sap.ui.predefine('sap/ui/core/ComponentMetadata',['jquery.sap.global', 'sap/ui/b
 	 * @public
 	 * @class
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 1.9.2
 	 * @alias sap.ui.core.ComponentMetadata
 	 */
@@ -41328,7 +41328,7 @@ sap.ui.predefine('sap/ui/core/Control',['jquery.sap.global', './CustomStyleClass
 	 * @extends sap.ui.core.Element
 	 * @abstract
 	 * @author Martin Schaus, Daniel Brinkmann
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.ui.core.Control
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
 	 */
@@ -42245,7 +42245,7 @@ sap.ui.predefine('sap/ui/core/Core',['jquery.sap.global', 'sap/ui/Device', 'sap/
 	 * @extends sap.ui.base.Object
 	 * @final
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @alias sap.ui.core.Core
 	 * @public
@@ -42968,23 +42968,36 @@ sap.ui.predefine('sap/ui/core/Core',['jquery.sap.global', 'sap/ui/Device', 'sap/
 	};
 
 	/**
-	 * Returns the URL of the folder in which the CSS file for the given theme and the given library is located .
-	 * The returned URL ends with a slash.
+	 * Makes sure to register the correct module path for the given library and theme
+	 * in case a themeRoot has been defined.
 	 *
-	 * @param sLibName
-	 * @param sThemeName
+	 * @param {string} sLibName Library name (dot separated)
+	 * @param {string} sThemeName Theme name
 	 * @private
 	 */
-	Core.prototype._getThemePath = function(sLibName, sThemeName) {
+	Core.prototype._ensureThemeRoot = function(sLibName, sThemeName) {
 		if (this._mThemeRoots) {
 			var path =  this._mThemeRoots[sThemeName + " " + sLibName] || this._mThemeRoots[sThemeName];
 			// check whether for this combination (theme+lib) a URL is registered or for this theme a default location is registered
 			if (path) {
 				path = path + sLibName.replace(/\./g, "/") + "/themes/" + sThemeName + "/";
 				jQuery.sap.registerModulePath(sLibName + ".themes." + sThemeName, path);
-				return path;
 			}
 		}
+	};
+
+	/**
+	 * Returns the URL of the folder in which the CSS file for the given theme and the given library is located.
+	 *
+	 * @param {string} sLibName Library name (dot separated)
+	 * @param {string} sThemeName Theme name
+	 * @returns {string} module path URL (ends with a slash)
+	 * @private
+	 */
+	Core.prototype._getThemePath = function(sLibName, sThemeName) {
+
+		// make sure to register correct theme module path in case themeRoots are defined
+		this._ensureThemeRoot(sLibName, sThemeName);
 
 		// use the library location as theme location
 		return jQuery.sap.getModulePath(sLibName + ".themes." + sThemeName, "/");
@@ -43696,12 +43709,18 @@ sap.ui.predefine('sap/ui/core/Core',['jquery.sap.global', 'sap/ui/Device', 'sap/
 		}
 
 		// include the library theme, but only if it has not been suppressed in library metadata or by configuration
-		if ( !oLibInfo.noLibraryCSS && jQuery.inArray(sLibName, this.oConfiguration['preloadLibCss']) < 0 ) {
+		if ( !oLibInfo.noLibraryCSS) {
 
-			// check for configured query parameters and use them
-			var sQuery = this._getLibraryCssQueryParams(oLibInfo);
+			// ensure to register correct library theme module path even when "preloadLibCss" prevents
+			// including the library theme as controls might use it to calculate theme-specific URLs
+			this._ensureThemeRoot(sLibName, this.sTheme);
 
-			this.includeLibraryTheme(sLibName, undefined, sQuery);
+			if (this.oConfiguration['preloadLibCss'].indexOf(sLibName) < 0) {
+				// check for configured query parameters and use them
+				var sQuery = this._getLibraryCssQueryParams(oLibInfo);
+
+				this.includeLibraryTheme(sLibName, undefined, sQuery);
+			}
 		}
 
 		// expose some legacy names
@@ -45526,7 +45545,7 @@ sap.ui.predefine('sap/ui/core/Element',['jquery.sap.global', '../base/Object', '
 	 * @class Base Class for Elements.
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 * @alias sap.ui.core.Element
 	 * @ui5-metamodel This control/element also will be described in the UI5 (legacy) designtime metamodel
@@ -46617,7 +46636,7 @@ sap.ui.predefine('sap/ui/core/ElementMetadata',['jquery.sap.global', 'sap/ui/bas
 	 *
 	 * @class
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @since 0.8.6
 	 * @alias sap.ui.core.ElementMetadata
 	 */
@@ -47222,7 +47241,7 @@ sap.ui.predefine('sap/ui/core/LabelEnablement',['jquery.sap.global', '../base/Ma
 	 * @see sap.ui.core.LabelEnablement#enrich
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @protected
 	 * @alias sap.ui.core.LabelEnablement
 	 * @namespace
@@ -47435,7 +47454,7 @@ sap.ui.predefine('sap/ui/core/Locale',['jquery.sap.global', 'sap/ui/base/Object'
 		 *
 		 * @extends sap.ui.base.Object
 		 * @author SAP SE
-		 * @version 1.36.7
+		 * @version 1.36.8
 		 * @constructor
 		 * @public
 		 * @alias sap.ui.core.Locale
@@ -47870,7 +47889,7 @@ sap.ui.predefine('sap/ui/core/Manifest',['jquery.sap.global', 'sap/ui/base/Objec
 	 * @class The Manifest class.
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @alias sap.ui.core.Manifest
 	 * @since 1.33.0
 	 */
@@ -48337,7 +48356,7 @@ sap.ui.predefine('sap/ui/core/RenderManager',[
 	 *
 	 * @extends sap.ui.base.Object
 	 * @author Jens Pflueger
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @constructor
 	 * @alias sap.ui.core.RenderManager
 	 * @public
@@ -49681,7 +49700,7 @@ sap.ui.predefine('sap/ui/core/ResizeHandler',['jquery.sap.global', 'sap/ui/base/
 	 * @alias sap.ui.core.ResizeHandler
 	 * @extends sap.ui.base.Object
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @public
 	 */
 
@@ -50309,7 +50328,7 @@ sap.ui.predefine('sap/ui/core/UIArea',['jquery.sap.global', 'sap/ui/base/Managed
 	 *
 	 * @extends sap.ui.base.ManagedObject
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 * @param {sap.ui.core.Core} oCore internal API of the <core>Core</code> that manages this UIArea
 	 * @param {object} [oRootNode] reference to the Dom Node that should be 'hosting' the UI Area.
 	 * @public
@@ -51293,7 +51312,7 @@ sap.ui.predefine('sap/ui/core/message/ControlMessageProcessor',['jquery.sap.glob
 	 * @extends sap.ui.core.message.MessageProcessor
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -51394,7 +51413,7 @@ sap.ui.predefine('sap/ui/core/message/Message',['jquery.sap.global', 'sap/ui/bas
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 *
@@ -51678,7 +51697,7 @@ sap.ui.predefine('sap/ui/core/message/MessageManager',[
 	 * @extends sap.ui.base.EventProvider
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -52070,7 +52089,7 @@ sap.ui.predefine('sap/ui/core/message/MessageProcessor',['jquery.sap.global', 's
 	 * @extends sap.ui.base.EventProvider
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -53210,7 +53229,7 @@ sap.ui.predefine('sap/ui/model/ClientModel',['jquery.sap.global', './ClientConte
 	 * @extends sap.ui.model.Model
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @param {object} oData URL where to load the data from
 	 * @constructor
@@ -54387,7 +54406,7 @@ sap.ui.predefine('sap/ui/model/CompositeDataState',[ 'jquery.sap.global', './Dat
 	 * @extends sap.ui.model.DataState
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -54729,7 +54748,7 @@ sap.ui.predefine('sap/ui/model/CompositeType',['./FormatException', './ParseExce
 	 * @extends sap.ui.model.SimpleType
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @param {object} [oFormatOptions] options as provided by concrete subclasses
@@ -55037,7 +55056,7 @@ sap.ui.predefine('sap/ui/model/DataState',[ 'jquery.sap.global', '../base/Object
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -56170,7 +56189,7 @@ sap.ui.predefine('sap/ui/model/Model',['jquery.sap.global', 'sap/ui/core/message
 	 * @extends sap.ui.core.message.MessageProcessor
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -57279,7 +57298,7 @@ sap.ui.predefine('sap/ui/model/SimpleType',['sap/ui/base/DataType', './FormatExc
 	 * @extends sap.ui.model.Type
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @param {object} [oFormatOptions] options as provided by concrete subclasses
@@ -57811,7 +57830,7 @@ sap.ui.predefine('sap/ui/model/Type',['sap/ui/base/Object'],
 	 * @extends sap.ui.base.Object
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @constructor
 	 * @public
@@ -58064,7 +58083,7 @@ sap.ui.predefine('sap/ui/model/message/MessageModel',['jquery.sap.global', 'sap/
 	 * @extends sap.ui.model.ClientModel
 	 *
 	 * @author SAP SE
-	 * @version 1.36.7
+	 * @version 1.36.8
 	 *
 	 * @param {sap.ui.core.message.MessageManager} oMessageManager The MessageManager instance
 	 * @constructor
