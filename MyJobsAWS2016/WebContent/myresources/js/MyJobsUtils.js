@@ -337,7 +337,9 @@ function getTime()	{
 }
 
 
-
+function trim(str){
+	return str.replace(/^\s+|\s+$/g,"")
+}
 
 function convertEODDate(dt)
 {

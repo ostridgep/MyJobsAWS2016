@@ -109,10 +109,12 @@ var formNewNotif = new sap.m.Dialog("dlgNewNotif",{
 										//jQuery.sap.log.info("Event fired: 'change' value property to " + oControlEvent.getParameter("selectedItem") + " on " + this);
 									}
 								}),
-								new sap.m.Label({text: "Start Date/Time:"}),
+								new sap.m.Label({text: "Start Date/Time1:"}),
 								
 								new sap.m.DateTimeInput('NewNotifStart',{
 									width : "99%",
+									displayFormat : "yyyy/MM/dd hh:mm",
+									valueFormat : "yyyy-MM-dd hh:mm",
 									type : "DateTime",
 									dateValue : new Date()
 								}),

@@ -389,6 +389,7 @@ var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
 								selectionChange: function(evt){
 
 									selectedMPoint=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()+":"+evt.getParameter("listItem").getCells()[3].getText()+":"+evt.getParameter("listItem").getCells()[4].getText()
+									this.removeSelections()
 									if(currentStatus=="SITE"){
 										formMPoint.open()
 									}
@@ -1263,6 +1264,7 @@ var formMaterialSearch = new sap.m.Dialog("dlgMaterial",{
 						
 						//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
 						selectedReserverMaterial="RS:"+evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()+":"+evt.getParameter("listItem").getCells()[3].getText()
+						this.removeSelections()
 						formReserveMaterial.open()
 				    },
 					columns:[
@@ -3942,6 +3944,7 @@ function BuildFormAssets(assetid){
 	    	            											
 	    	            											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
 	    	            											selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
+	    	            											this.removeSelections()
 	    	            											formAssetCharacteristic.open()
 	    	            									    },
 	    	            										columns:[
@@ -3972,6 +3975,7 @@ function BuildFormAssets(assetid){
         											
         											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
         											selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
+        											this.removeSelections()
         											formAssetMeasurementPoint.open()
         									    },
 	    										columns:[
@@ -4667,10 +4671,12 @@ formtab=null;
     	                									mode: sap.m.ListMode.SingleSelectMaster,
     	                									selectionChange: function(oEvt){
     	                										var x=oEvt.getParameter("listItem").getId().split(":")
-    	                										
+    	                										this.removeSelections()
     	                										selectedOrderAssetID=x[1];
+    	                										this.removeSelections()
     	                										formAssetDetails.open()
     	                								    },
+    	                								   
     	                									columns:[
     	                									         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
     	                									        	 hAlign: 'Left',width: '25%', minScreenWidth : "" , demandPopin: false}),
@@ -4723,6 +4729,7 @@ formtab=null;
     											
     											//sap.ui.getCore().byId("NewGroup").getSelectedItem().getKey()
     											selectedCharacteristic=evt.getParameter("listItem").getCells()[0].getText()+":"+evt.getParameter("listItem").getCells()[1].getText()+":"+evt.getParameter("listItem").getCells()[2].getText()
+    											this.removeSelections()
     											formMaterialConsume.open()
     									    },
      										columns:[
@@ -4783,6 +4790,7 @@ formtab=null;
      													evt.getParameter("listItem").getCells()[5].getText(),
      													evt.getParameter("listItem").getCells()[2].getText(),
      													evt.getParameter("listItem").getCells()[4].getText())
+     													this.removeSelections()
      									    },
      										columns:[
     										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
@@ -4822,6 +4830,7 @@ new sap.m.Button( {
     										 mode: sap.m.ListMode.SingleSelectMaster,
     											selectionChange: function(evt){
     												selectedPhotoID=evt.getParameter("listItem").getCells()[5].getText()
+    												this.removeSelections()
     												formPhotoDetails.open()  
     												//showFile(evt.getParameter("listItem").getCells()[5].getText())
     										    },
@@ -4856,11 +4865,19 @@ function downloadDrawFile(fname,url,nodeid,drawid){
 	
 	if(url.length < 10){
 		
-		downloadLiveLink(fname,nodeid.trim(),drawid)
+		requestLiveLink(fname,nodeid.trim(),drawid)
+		buildJobDocsTable()
 	}else{
+		if(url!="RequestLiveLink"){
+			window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
+		}else{
+			alert("Request is being Sent")
+		}
 		
-		window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
 	}
+}
+function requestLiveLink(fname,nodeid,drawid){
+	updateMyJobDetsDraw(drawid,"RequestLiveLink")
 }
 function buildDetailsP100Tabs(tabsdesc,tabsid){
 	
@@ -5320,7 +5337,11 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 		        if (rowsArray[n].zurl.length <10){
 		        	local=""
 		        }else{
+		        	if (rowsArray[n].zurl=="RequestLiveLink"){
+		        	local="Requesting..."	
+		        	}else{
 		        	local="Local"
+		        	}
 		        }
 				opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 					

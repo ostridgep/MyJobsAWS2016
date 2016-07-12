@@ -192,8 +192,8 @@ empid=localStorage.getItem("EmployeeID")
 						}else{
 							ENRef=gridref
 						}
-						jsonstr[0].floodtime=jsonstr[0].floodtime+"00"
-						jsonstr[0].attendancetime=jsonstr[0].attendancetime+"00"
+						jsonstr[0].floodtime=jsonstr[0].floodtime+":u00"
+						jsonstr[0].attendancetime=jsonstr[0].attendancetime+":00"
 						flooddate=jsonstr[0].flooddate.substring(6,10)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(0,2)
 						floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
 						attenddate=jsonstr[0].attendancedate.substring(6,10)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(0,2)
@@ -1694,6 +1694,8 @@ function syncUpload(){
 	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'TimeConf' as type,  '' as extra, id    as id, recordupdated from MyTimeConfs where confno = 'NEW' "
 	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'FileRequest' as type,  '' as extra, id    as id, recordupdated from MyJobDetsDraw where zurl = 'RequestLiveLink' "
+	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'MessageRead' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'READ' "
 	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'MesssageNew' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'NEW' "
@@ -1710,12 +1712,14 @@ function syncUpload(){
 	html5sql.process(SQLStatement,
 	 function(transaction, results, rowsArray){
 		
-	
+			
 			if (rowsArray.length>0) {
 				
 				item = rowsArray[0];
 				
 				syncUploadNew(item.id,item.type)
+			}else{
+				
 			}
 	 },
 	 function(error, statement){
@@ -1947,7 +1951,52 @@ empid=localStorage.getItem("EmployeeID")
 													 opMessage("Error: " + error.message + " when processing " + statement);
 												 });
 										}
-									
+								if(type=="FileRequest")// Process Status Updates			
+								{														
+											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
+												function(transaction, results, rowsArray){
+													if( rowsArray.length > 0) {
+														if (syncDetails){
+															localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", FileRequest:"+String(rowsArray.length));
+														}else{
+															syncDetails=true;
+															localStorage.setItem('LastSyncUploadDetails',"FileRequest:"+String(rowsArray.length));
+														}
+														if(!syncDetsSet){
+															syncDetsSet=true;
+															SetLastSyncDetails("LASTSYNC_UPLOAD");
+															
+															}
+														
+															item = rowsArray[0];
+															if(item['zact'].length<4){
+																opno="0010"
+															}else{
+																opno=item['opno']
+															}
+															params='?reqname='+localStorage.getItem('MobileUser')+item['orderno']+opno+item['id']+".xml"+"&id="+item['id']+
+																	'&orderno='+item['orderno']+'&opno='+opno+'&user='+localStorage.getItem('MobileUser')+'&scenario=Y008'+'&scenariodesc=Y008Desc'+'&mname='+localStorage.getItem('MobileUser')+'&nodeid='+trim(item['nodeid'])
+															opMessage("File Request="+params);
+																
+															sapCalls+=1;							
+															n = rowsArray.length
+															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'waitingLiveLink' where id='"+item['id']+"'",
+																	 function(){
+																		RequestLLFile(params)	
+																	 },
+																	 function(error, statement){
+																		 
+																		 opMessage("Error: " + error.message + " when processing " + statement);
+																	 }        
+															);
+													}
+												 
+												},
+												 function(error, statement){
+													 
+													 opMessage("Error: " + error.message + " when processing " + statement);
+												 });
+										}									
 									if(type=="JobClose")// Process Close Jobs			
 									{														
 																										
@@ -5070,6 +5119,23 @@ opMessage("Callback sapCB triggured");
 					}else{
 						sqlstatement+="UPDATE MyNotifications SET notifno = 'SENT"+MySAP.message[0].recno+"' WHERE id='"+ MySAP.message[0].recno+"';";
 					}
+					
+
+		
+			}
+			//Handle requestLL callback
+			if (MySAP.message[0].type=="requestll"){
+				//alert(MySAP.message[0].type+":"+MySAP.message[0].recno+":"+MySAP.message[0].sapmessage+":"+MySAP.message[0].message+":"+MySAP.message[0].notifno)
+				opMessage("-->Type= "+MySAP.message[0].type);
+				opMessage("-->row= "+MySAP.message[0].recno);
+				opMessage("-->Message= "+MySAP.message[0].message);
+				opMessage("-->NotifNo= "+MySAP.message[0].message_type);
+				if(MySAP.message[0].message_type=="E")
+				{
+					sqlstatement+="UPDATE MyJobDetsDraw SET zurl = '"+ MySAP.message[0].message+"' where id = '"+ MySAP.message[0].recno+"';";
+				}else{
+					sqlstatement+="UPDATE MyJobDetsDraw SET zurl = 'Waiting File Transfer' where id = '"+ MySAP.message[0].recno+"';";
+				}
 					
 
 		

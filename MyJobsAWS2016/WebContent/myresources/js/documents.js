@@ -235,26 +235,33 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 		 }        
 		);
 }
+function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
+	  var img = new Image();
+	  img.crossOrigin = 'Anonymous';
+	  img.onload = function() {
+	    var canvas = document.createElement('CANVAS');
+	    var ctx = canvas.getContext('2d');
+	    var dataURL;
+	    canvas.height = this.height;
+	    canvas.width = this.width;
+	    ctx.drawImage(this, 0, 0);
+	    dataURL = canvas.toDataURL(outputFormat);
+	    callback(dataURL);
+	    canvas = null;
+	  };
+	  img.src = url;
+	}
 function getBase64FromImageUrl(imageUri) {
 	
-        var c = document.createElement('canvas');
-        var ctx = c.getContext("2d");
-        var img = new Image();
-        img.onload = function() {
-            c.width = this.width;
-            c.height = this.height;
-            ctx.drawImage(img, 0, 0);
-        };
-        img.src = imageUri;
-        var dataURL = c.toDataURL("image/jpeg");
-
-        return dataURL.slice(22, dataURL.length);
-   
-    
+	convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
+		 
+		  createBase64XML(base64Img)
+		},"image/jpeg" );
 }
+
+
 function createBase64XML(base64){
-	var xmlstring = '<?xml version="1.0" encoding="utf-8"?>'+
-					 '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
+	var xmlstring =  '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
 					  '<jobMetadata>'+
 					  '  <order>000052151178</order>'+
 					  '  <operation>0010</operation>'+
@@ -280,8 +287,15 @@ function createBase64XML(base64){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	alert(xmlstring)
+	writer(xmlstring)
 }
-
+function writer(X){
+	var dataUrl='data:application/download,' + encodeURIComponent(
+		'<?xml version="1.0" encoding="UTF-8"?>'
+		+X
+	)
+	location.href=dataUrl
+}
 var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     title:"Display Photo",
     modal: true,
@@ -291,8 +305,8 @@ new sap.m.Button( {
     text: "base64",
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
-    	createBase64XML(getBase64FromImageUrl(selectedPhoto))
-    	
+    	//createBase64XML(getBase64FromImageUrl(selectedPhoto))
+    	getBase64FromImageUrl("images/Worker.jpg")
 		  } ]
 }),
 new sap.m.Button( {
@@ -398,7 +412,16 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 					    	selectPhoto()
 					    	formGetPhoto.close()
 							  } ]
-					 	})
+					 	}),
+						 new sap.m.Label({text:" "}),
+						 new sap.m.Button( {
+						    text: "Photo details",
+						    type: 	sap.m.ButtonType.Reject,
+						    tap: [ function(oEvt) {		  
+						    	formGetPhoto.close() 
+						    	formPhotoDetails.open()
+								  } ]
+						 	})
 				]
 			})
             ],
@@ -1108,8 +1131,8 @@ function downloadAll()
 	percentagedownloaded=0;
 	filesToDownload = [];
 	
-    //$.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
-    	$.getJSON(localStorage.getItem("DOCSERVER")+"Documents.json", function (data) {    
+    $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/download', function (data) {
+    	//$.getJSON(localStorage.getItem("DOCSERVER")+"Documents.json", function (data) {    
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
@@ -1135,6 +1158,32 @@ function downloadAll()
     	alert("error"); 
 		oProgInd.setPercentValue(100);
     	oProgInd.setDisplayValue("100" + "%");
+    })
+    .complete(function() { 
+    	
+    	
+
+    	
+    	
+    	});
+    
+  
+	
+}
+function RequestLLFile(params)
+{
+
+
+	filesToDownload = [];
+	
+    $.getJSON(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params, function (data) {
+    	
+        
+    }).success(function() { 
+    	
+    	})
+    .error(function() { 
+    	
     })
     .complete(function() { 
     	
@@ -1177,7 +1226,11 @@ function BuildDocumentsTable() {
 
 	   }, 10)
 	}
-
+function downlodRequestedFile(dir,fn){
+	
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/"+dir+  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
+	
+}
 
 
 function checkFileDownload () { 
@@ -1187,6 +1240,11 @@ function checkFileDownload () {
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		   if(fileDownloadCnt<filesToDownload.length){
 		       fileName = filesToDownload[fileDownloadCnt].name;
+		       if(fileDownloadCnt==100){
+		       alert(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
+		       alert(filesToDownload[fileDownloadCnt].name)
+		       alert(filesToDownload[fileDownloadCnt].url+"/")
+		       }
 	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 if(fileDownloadCnt<10){
     //alert(DeviceStorageDirectory+":"+filesToDownload[fileDownloadCnt].url+":"  + filesToDownload[fileDownloadCnt].name)
