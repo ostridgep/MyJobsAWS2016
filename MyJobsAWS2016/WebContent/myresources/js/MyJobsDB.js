@@ -3227,7 +3227,7 @@ function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 		 function(){
 		
 				if(url=="*"){
-					
+					alert("All Docs set to delete")
 					BuildDocumentsTable()
 				}
 		 },
@@ -3237,7 +3237,25 @@ function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 		 }        
 		);
 }
+function deleteAllDocs()
+{
 
+	
+	sqlStatement="delete from MyJobsDocs"
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+				
+					alert("All Docs deleted")
+				
+		 },
+		 function(error, statement){
+			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
+			
+		 }        
+		);
+}
 function updateDocumemntsTable(url, name,type,size,lastmod)
 {
 
@@ -3267,6 +3285,7 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 }
 function updateDocsTable()
 {
+	alert(sqlMyJobsDocs)
 	html5sql.process(sqlMyJobsDocs,
 			function(transaction, results, rowsArray){
 						
@@ -3292,7 +3311,7 @@ function updateDocsTable()
 										percentagedownloaded=0;
 										fileDownloadCnt=0;
 										filesToDownload = rowsArray;
-										
+										alert(rowsrray.length+"recs to download")
 										checkFileDownload ()
 									 },
 									 function(error, statement){

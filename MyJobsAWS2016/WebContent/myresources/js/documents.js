@@ -48,6 +48,14 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 						    	downloadAll(); 
 						    	//formDownloadFiles.close()
 								  } ]
+						}),
+						new sap.m.Button( {
+						    text: "Delete",
+						    type: 	sap.m.ButtonType.Accept,
+						    tap: [ function(oEvt) {		  
+						    	deleteAllDocs(); 
+						    	//formDownloadFiles.close()
+								  } ]
 						})
 						],					
 		    content:[
@@ -1142,7 +1150,7 @@ function downloadAll()
     		
     	
     		updateDocumemntsStatus("*","","","","","DELETE")
-    		BuildDocumentsTable()
+    		
     		
     		
     		}else{
@@ -1197,7 +1205,7 @@ function RequestLLFile(params)
 	
 }
 function BuildDocumentsTable() { 
-
+	alert("B Docs"+fileDownloadCnt)
 	
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
@@ -1244,12 +1252,7 @@ function checkFileDownload () {
 		       alert(filesToDownload[fileDownloadCnt].url+"/")
 		       }
 	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
-if(fileDownloadCnt<10){
-    //alert(DeviceStorageDirectory+":"+filesToDownload[fileDownloadCnt].url+":"  + filesToDownload[fileDownloadCnt].name)
- 
 
-	
-}
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.length,fileDownloadCnt)
 	        	if(sPercent < 5){sPercent=5}
