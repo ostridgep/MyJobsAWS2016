@@ -1228,8 +1228,7 @@ function BuildDocumentsTable() {
 	}
 function downlodRequestedFile(dir,fn){
 	
-	window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/"+dir+  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
-	
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/"+dir+  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));	
 }
 
 function checkFileDownload () { 
