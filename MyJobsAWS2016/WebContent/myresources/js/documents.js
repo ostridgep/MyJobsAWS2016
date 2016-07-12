@@ -1247,12 +1247,13 @@ function checkFileDownload () {
 		   if(fileDownloadCnt<filesToDownload.length){
 		       fileName = filesToDownload[fileDownloadCnt].name;
 		       if(fileDownloadCnt==10){
-		       alert(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
+
+		       alert(DeviceStorageDirectory+AppDocDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
 		       alert(filesToDownload[fileDownloadCnt].name)
 		       alert(filesToDownload[fileDownloadCnt].url+"/")
 		       }
-		       alert("about to resolve")
-	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
+		       alert("about to resolve"+DeviceStorageDirectory+AppDocDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
+	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 		       alert("about to resolve1")
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.length,fileDownloadCnt)
