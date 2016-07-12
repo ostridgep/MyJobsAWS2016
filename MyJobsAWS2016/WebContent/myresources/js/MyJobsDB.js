@@ -3302,6 +3302,7 @@ function updateDocsTable()
 							document.getElementById('DocNew').innerHTML=rowsArray[0].ins
 							document.getElementById('DocMod').innerHTML=rowsArray[0].mod
 							document.getElementById('DocLoc').innerHTML=rowsArray[0].loc
+							alert("checking if anything is to be downloaded")
 							html5sql.process("select * from MyJobsDocs where status = \"REMOTE\" or status = \"REMOTECHANGED\"",
 					
 									function(transaction, results, rowsArray){
@@ -3310,8 +3311,9 @@ function updateDocsTable()
 										oProgIndDL.setDisplayValue("5" + "%");
 										percentagedownloaded=0;
 										fileDownloadCnt=0;
+										alert(rowsArray.length+"recs to download")
 										filesToDownload = rowsArray;
-										alert(rowsrray.length+"recs to download")
+										
 										checkFileDownload()
 									 },
 									 function(error, statement){
