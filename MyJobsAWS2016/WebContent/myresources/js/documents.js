@@ -1238,7 +1238,7 @@ function checkFileDownload () {
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 		   if(fileDownloadCnt<filesToDownload.length){
 		       fileName = filesToDownload[fileDownloadCnt].name;
-		       if(fileDownloadCnt==100){
+		       if(fileDownloadCnt==10){
 		       alert(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name)
 		       alert(filesToDownload[fileDownloadCnt].name)
 		       alert(filesToDownload[fileDownloadCnt].url+"/")
