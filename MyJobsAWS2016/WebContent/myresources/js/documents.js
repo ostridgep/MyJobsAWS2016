@@ -1251,8 +1251,9 @@ function checkFileDownload () {
 		       alert(filesToDownload[fileDownloadCnt].name)
 		       alert(filesToDownload[fileDownloadCnt].url+"/")
 		       }
+		       alert("about to resolve")
 	           window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
-
+		       alert("about to resolve1")
 	           fileDownloadCnt++;
 	           sPercent=getPercentage(filesToDownload.length,fileDownloadCnt)
 	        	if(sPercent < 5){sPercent=5}
@@ -1262,7 +1263,7 @@ function checkFileDownload () {
 	        		oProgIndDL.setPercentValue(sPercent);
 	            	oProgIndDL.setDisplayValue(sPercent + "%");
 					}
-	        	
+	        	 alert("about to resolve2")
 			   checkFileDownload(); 	
 			}else 
 				{
