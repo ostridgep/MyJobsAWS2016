@@ -1139,10 +1139,10 @@ function downloadAll()
         alert(filesToDownload.FILES.length)
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
-    		checkFileDownload();
+    		
     	
     		updateDocumemntsStatus("*","","","","","DELETE")
-    	
+    		BuildDocumentsTable()
     		
     		
     		}else{
@@ -1232,7 +1232,7 @@ function downlodRequestedFile(dir,fn){
 }
 
 function checkFileDownload () { 
-	
+	alert("download "+fileDownloadCnt+" of "+filesToDownload.length)
 		
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
