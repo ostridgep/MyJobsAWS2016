@@ -1205,7 +1205,7 @@ function RequestLLFile(params)
 	
 }
 function BuildDocumentsTable() { 
-	alert("B Docs"+fileDownloadCnt)
+	
 	
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called

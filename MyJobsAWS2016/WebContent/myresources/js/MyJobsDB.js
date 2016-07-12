@@ -3312,7 +3312,7 @@ function updateDocsTable()
 										fileDownloadCnt=0;
 										filesToDownload = rowsArray;
 										alert(rowsrray.length+"recs to download")
-										checkFileDownload ()
+										checkFileDownload()
 									 },
 									 function(error, statement){
 
