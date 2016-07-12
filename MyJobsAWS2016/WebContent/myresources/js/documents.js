@@ -1136,10 +1136,10 @@ function downloadAll()
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
-     
+        alert(filesToDownload.FILES.length)
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
-    		//checkFileDownload();
+    		checkFileDownload();
     	
     		updateDocumemntsStatus("*","","","","","DELETE")
     	
