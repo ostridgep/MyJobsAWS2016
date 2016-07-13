@@ -1235,8 +1235,7 @@ function BuildDocumentsTable() {
 	   }, 10)
 	}
 function downlodRequestedFile(dir,fn,id){
-	alert("LLDir="+DeviceStorageDirectory+dir)
-	alert("LLFile="+fn)
+	
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, transferRequestedFile(fn, dir+"/",id));	
 }
 
@@ -1396,7 +1395,7 @@ function downloadAllAsset(fileName,dir) {
 }
 function transferRequestedFile(fileName,dir,id) {
     var fileTransfer = new FileTransfer();  
-    //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    alert("About to start transfer " + localStorage.getItem("DOCSERVER") + dir+"/" +fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir );
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
 		function (entry) {
     	opMessage("Downloading LL "+entry.fullPath)
