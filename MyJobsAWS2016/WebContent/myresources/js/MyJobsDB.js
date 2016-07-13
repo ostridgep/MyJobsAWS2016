@@ -2004,7 +2004,7 @@ empid=localStorage.getItem("EmployeeID")
 									
 											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
 												function(transaction, results, rowsArray){
-													alert("fd length="+rowsArray.length )
+													
 													if( rowsArray.length > 0) {
 														if (syncDetails){
 															localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", FileDownload:"+String(rowsArray.length));
