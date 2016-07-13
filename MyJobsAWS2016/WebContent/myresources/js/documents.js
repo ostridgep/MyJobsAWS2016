@@ -295,7 +295,7 @@ function createBase64XML(base64){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	alert(xmlstring)
-	writer(xmlstring)
+	sendPhotoToServer("1","photo.lpg",xmlstring)
 }
 function writer(X){
 	var dataUrl='data:application/download,' + encodeURIComponent(
@@ -314,7 +314,7 @@ new sap.m.Button( {
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
     	//createBase64XML(getBase64FromImageUrl(selectedPhoto))
-    	getBase64FromImageUrl("images/Worker.jpg")
+    	getBase64FromImageUrl("selectedPhoto")
 		  } ]
 }),
 new sap.m.Button( {
@@ -1185,6 +1185,32 @@ function RequestLLFile(params)
 	filesToDownload = [];
 	
     $.getJSON(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params, function (data) {
+    	
+        
+    }).success(function() { 
+    	
+    	})
+    .error(function() { 
+    	
+    })
+    .complete(function() { 
+    	
+    	
+
+    	
+    	
+    	});
+    
+  
+	
+}
+function sendPhotoToServer(id,fname,content)
+{
+
+
+	filesToDownload = [];
+	
+    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id'+id+"&fname="+fname+id+"&content="+content, function (data) {
     	
         
     }).success(function() { 
