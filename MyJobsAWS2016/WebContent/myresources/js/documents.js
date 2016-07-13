@@ -1235,8 +1235,8 @@ function BuildDocumentsTable() {
 	   }, 10)
 	}
 function downlodRequestedFile(dir,fn,id){
-	
-	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, transferRequestedFile(fn, dir+"/",id));	
+	alert("about to transfer")
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
 
 function checkFileDownload () { 
