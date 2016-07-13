@@ -1392,11 +1392,11 @@ function downloadAllAsset(fileName,dir) {
 }
 function transferRequestedFile(fileName,dir,id) {
     var fileTransfer = new FileTransfer();  
-    alert("About to start transfer " + localStorage.getItem("DOCSERVER") + dir+"/" +fileName + " to " + cordova.file.externalApplicationStorageDirectory+ dir + "/"+fileName)
-    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
+    alert("About to start transfer " + localStorage.getItem("DOCSERVER") + dir +fileName + " to " + cordova.file.externalApplicationStorageDirectory+ dir +fileName)
+    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir + fileName, cordova.file.externalApplicationStorageDirectory + dir +fileName,
 		function (entry) {
     	opMessage("Downloading LL "+entry.fullPath)
-    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName+"' where id='"+id+"'",
+    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+cordova.file.externalApplicationStorageDirectory + dir +fileName+"' where id='"+id+"'",
 				 function(){
 				 
 				 },
