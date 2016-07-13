@@ -1235,12 +1235,13 @@ function BuildDocumentsTable() {
 	   }, 10)
 	}
 function downlodRequestedFile(dir,fn){
-	
-	window.resolveLocalFileSystemURL(DeviceStorageDirectory+AppDocDirectory+"/"+dir+  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));	
+	alert("LLDir="+DeviceStorageDirectory+dir)
+	alert("LLFile="+fn)
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, downloadAllAsset(fn, dirl+"/"));	
 }
 
 function checkFileDownload () { 
-	alert("download "+fileDownloadCnt+" of "+filesToDownload.length)
+	
 		
 	//  create a loop function
 	   setTimeout(function () {    //  call a 3s setTimeout when the loop is called

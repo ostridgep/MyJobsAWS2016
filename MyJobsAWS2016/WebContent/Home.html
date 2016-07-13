@@ -981,7 +981,7 @@ localStorage.setItem("DeviceType","xx")
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	try{
-		alert("getting dir")
+		
 		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
 		AppDocDirectory="MyJobs"
 		if(device.platform=="iOS"){
@@ -991,9 +991,9 @@ function onDeviceReady() {
 		localStorage.setItem("DeviceType",device.platform)
 	 }catch(err){
 		 localStorage.setItem("DeviceType","WINDOWS")
-		alert("failed getdir")
+		
 	 }
-	 alert(DeviceStorageDirectory+AppDocDirectory)
+
 }
   
 var formSettings = new sap.m.Dialog("dlgSettings",{

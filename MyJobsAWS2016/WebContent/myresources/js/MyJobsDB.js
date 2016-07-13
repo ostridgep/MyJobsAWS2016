@@ -1696,6 +1696,8 @@ function syncUpload(){
 	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'FileRequest' as type,  '' as extra, id    as id, recordupdated from MyJobDetsDraw where zurl = 'RequestLiveLink' "
 	SQLStatement+=" 	union "
+	SQLStatement+=" 	select 'FileDownload' as type,  '' as extra, id    as id, recordupdated from MyJobDetsDraw where zurl = 'WaitingLiveLink' "
+	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'MessageRead' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'READ' "
 	SQLStatement+=" 	union "
 	SQLStatement+=" 	select 'MesssageNew' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'NEW' "
@@ -1983,6 +1985,45 @@ empid=localStorage.getItem("EmployeeID")
 															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'waitingLiveLink' where id='"+item['id']+"'",
 																	 function(){
 																		RequestLLFile(params)	
+																	 },
+																	 function(error, statement){
+																		 
+																		 opMessage("Error: " + error.message + " when processing " + statement);
+																	 }        
+															);
+													}
+												 
+												},
+												 function(error, statement){
+													 
+													 opMessage("Error: " + error.message + " when processing " + statement);
+												 });
+										}
+								if(type=="FileDownload")// Process LLDownloads			
+								{														
+											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
+												function(transaction, results, rowsArray){
+													if( rowsArray.length > 0) {
+														if (syncDetails){
+															localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", FileDownload:"+String(rowsArray.length));
+														}else{
+															syncDetails=true;
+															localStorage.setItem('LastSyncUploadDetails',"FileDownload:"+String(rowsArray.length));
+														}
+														if(!syncDetsSet){
+															syncDetsSet=true;
+															SetLastSyncDetails("LASTSYNC_UPLOAD");
+															
+															}
+														
+															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"parseInt(tem['orderno'],10)+"-0010"
+															
+																
+															sapCalls+=1;							
+															n = rowsArray.length
+															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+item['id']+"'",
+																	 function(){
+																		downlodRequestedFile(dir,item['fname'])
 																	 },
 																	 function(error, statement){
 																		 
@@ -3285,7 +3326,7 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 }
 function updateDocsTable()
 {
-	alert(sqlMyJobsDocs)
+	
 	html5sql.process(sqlMyJobsDocs,
 			function(transaction, results, rowsArray){
 						
@@ -3302,7 +3343,7 @@ function updateDocsTable()
 							document.getElementById('DocNew').innerHTML=rowsArray[0].ins
 							document.getElementById('DocMod').innerHTML=rowsArray[0].mod
 							document.getElementById('DocLoc').innerHTML=rowsArray[0].loc
-							alert("checking if anything is to be downloaded")
+							
 							html5sql.process("select * from MyJobsDocs where status = \"REMOTE\" or status = \"REMOTECHANGED\"",
 					
 									function(transaction, results, rowsArray){
@@ -3311,7 +3352,7 @@ function updateDocsTable()
 										oProgIndDL.setDisplayValue("5" + "%");
 										percentagedownloaded=0;
 										fileDownloadCnt=0;
-										alert(rowsArray.length+"recs to download")
+										
 										filesToDownload = rowsArray;
 										
 										checkFileDownload()
