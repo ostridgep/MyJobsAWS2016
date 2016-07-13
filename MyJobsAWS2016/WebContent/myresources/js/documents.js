@@ -267,7 +267,6 @@ function getBase64FromImageUrl(imageUri) {
 		},"image/jpeg" );
 }
 
-
 function createBase64XML(base64){
 	var xmlstring =  '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
 					  '<jobMetadata>'+
