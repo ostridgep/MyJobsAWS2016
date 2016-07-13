@@ -2004,6 +2004,7 @@ empid=localStorage.getItem("EmployeeID")
 									alert("fileDownload")
 											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
 												function(transaction, results, rowsArray){
+													alert("fd length="+rowsArray.length )
 													if( rowsArray.length > 0) {
 														if (syncDetails){
 															localStorage.setItem('LastSyncUploadDetails',localStorage.getItem('LastSyncUploadDetails')+", FileDownload:"+String(rowsArray.length));
@@ -2011,13 +2012,14 @@ empid=localStorage.getItem("EmployeeID")
 															syncDetails=true;
 															localStorage.setItem('LastSyncUploadDetails',"FileDownload:"+String(rowsArray.length));
 														}
+														alert("fd1")
 														if(!syncDetsSet){
 															syncDetsSet=true;
 															SetLastSyncDetails("LASTSYNC_UPLOAD");
 															
 															}
-														
-															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(tem['orderno'],10)+"-0010"
+														alert("fd2")
+															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(item['orderno'],10)+"-0010"
 															alert(dir)
 																
 															sapCalls+=1;							
