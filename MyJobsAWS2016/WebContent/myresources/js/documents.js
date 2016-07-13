@@ -1237,7 +1237,7 @@ function BuildDocumentsTable() {
 function downlodRequestedFile(dir,fn){
 	alert("LLDir="+DeviceStorageDirectory+dir)
 	alert("LLFile="+fn)
-	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, downloadAllAsset(fn, dirl+"/"));	
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, downloadAllAsset(fn, dir+"/"));	
 }
 
 function checkFileDownload () { 

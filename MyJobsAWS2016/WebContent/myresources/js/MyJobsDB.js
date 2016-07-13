@@ -2001,7 +2001,7 @@ empid=localStorage.getItem("EmployeeID")
 										}
 								if(type=="FileDownload")// Process LLDownloads			
 								{			
-									alert("fileDownload")
+									
 											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
 												function(transaction, results, rowsArray){
 													alert("fd length="+rowsArray.length )
@@ -2012,22 +2012,23 @@ empid=localStorage.getItem("EmployeeID")
 															syncDetails=true;
 															localStorage.setItem('LastSyncUploadDetails',"FileDownload:"+String(rowsArray.length));
 														}
-														alert("fd1")
+														
 														if(!syncDetsSet){
 															syncDetsSet=true;
 															SetLastSyncDetails("LASTSYNC_UPLOAD");
 															
 															}
-														alert("fd2")
-															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(item['orderno'],10)+"-0010"
-															alert(dir)
+														
+															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(item['orderno'],10).toString()+"-0010"
+															fname=item['fname']
+															alert(dir+"---"+fname)
 																
 															sapCalls+=1;							
 															n = rowsArray.length
 															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+item['id']+"'",
 																	 function(){
 																	alert("about to request")
-																		downlodRequestedFile(dir,item['fname'])
+																		downlodRequestedFile(dir,fname)
 																	 },
 																	 function(error, statement){
 																		 

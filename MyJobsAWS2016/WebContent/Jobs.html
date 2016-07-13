@@ -2978,6 +2978,7 @@ function changeStatus(Status){
 			 StatusState=sap.ui.core.ValueState.Error
 			 StatusIcon="decline"
 		} else if(Status=="PARK"){
+			alert("1")
 			localStorage.setItem('totalParked','1');
 			localStorage.setItem('totalAccepted','0');
 		 updateOperationStatus(CurrentOrderNo, CurrentOpNo, "PARK", "Job Suspended")
@@ -3038,8 +3039,10 @@ var jobicons=[]
 var jobtooltip=[]
 var priorityicons=[]
 var prioritytooltip=[]
+var jpark=0
+var jacpt=0;
 //countStatus()
-       SQLStatement="SELECT myjobdets.status_s, MyJobDets.orderno, Myoperations.shorttext, myjobdets.notif_cat_profile,  MyJobDets.opno, MyOrders.type, MyJobDets.start_date,MyJobDets.start_time,  MyOrders.priority,  " 
+       SQLStatement="SELECT myjobdets.status_s, myjobdets.status, MyJobDets.orderno, Myoperations.shorttext, myjobdets.notif_cat_profile,  MyJobDets.opno, MyOrders.type, MyJobDets.start_date,MyJobDets.start_time,  MyOrders.priority,  " 
 
        SQLStatement+="(SELECT GROUP_CONCAT(value1 ) "
        SQLStatement+="FROM myoperationinfo  where MyJobDets.orderno =myoperationinfo.orderno and MyJobDets.opno = myoperationinfo.opno and myoperationinfo.type = 'JOBICON') AS jobicon_filename, "
@@ -3063,6 +3066,9 @@ html5sql.process(SQLStatement,
                      cnt = 0;
                      oMasterPage.setTitle("Jobs = "+rowsArray.length)
                      while (cnt<rowsArray.length){
+                    	 if (rowsArray[cnt].status=="PARK"){jpark=1}
+                    	 if (rowsArray[cnt].status=="ACPT"){jacpt=1}
+                    	 if (rowsArray[cnt].status=="SITE"){jacpt=1}
                            item=rowsArray[cnt];
                            if(cnt==0){
                                   firstJob="job:"+item.orderno+':'+item.opno
@@ -3152,7 +3158,8 @@ html5sql.process(SQLStatement,
 						}));
 					  cnt++;
 			 }
-
+			localStorage.setItem("totalParked",jpark)
+			localStorage.setItem("totalAccepted",jacpt)
 			oMasterPage.destroyContent()
 			oMasterPage.addContent(standardList);
 			selectListDefault();
