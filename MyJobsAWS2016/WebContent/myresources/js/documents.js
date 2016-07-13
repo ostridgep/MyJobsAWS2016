@@ -1234,10 +1234,10 @@ function BuildDocumentsTable() {
 
 	   }, 10)
 	}
-function downlodRequestedFile(dir,fn){
+function downlodRequestedFile(dir,fn,id){
 	alert("LLDir="+DeviceStorageDirectory+dir)
 	alert("LLFile="+fn)
-	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, downloadAllAsset(fn, dir+"/"));	
+	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStart, transferRequestedFile(fn, dir+"/",id));	
 }
 
 function checkFileDownload () { 
@@ -1386,6 +1386,29 @@ function downloadAllAsset(fileName,dir) {
 		function (entry) {
     	opMessage("Downloading"+entry.fullPath)
 		   
+		},
+		function (error) {
+		    
+		    //alert("download error " + error.source+ ":" + error.target+": " + error.code);
+	
+		    
+		});
+}
+function transferRequestedFile(fileName,dir,id) {
+    var fileTransfer = new FileTransfer();  
+    //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
+    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
+		function (entry) {
+    	opMessage("Downloading LL "+entry.fullPath)
+    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName+"' where id='"+id+"'",
+				 function(){
+				 
+				 },
+				 function(error, statement){
+					 
+					 opMessage("Error: " + error.message + " when processing " + statement);
+				 }        
+		);  
 		},
 		function (error) {
 		    

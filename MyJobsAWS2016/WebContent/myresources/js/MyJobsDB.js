@@ -2028,7 +2028,7 @@ empid=localStorage.getItem("EmployeeID")
 															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+rowsArray[0]['id']+"'",
 																	 function(){
 																	 alert("about to request")
-																		downlodRequestedFile(dir,fname)
+																		downlodRequestedFile(dir,fname,rowsArray[0]['id'])
 																	 },
 																	 function(error, statement){
 																		 
