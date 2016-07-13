@@ -5337,10 +5337,12 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 		        if (rowsArray[n].zurl.length <10){
 		        	local=""
 		        }else{
-		        	if (rowsArray[n].zurl=="RequestLiveLink"){
-		        	local="Requesting..."	
-		        	}else{
 		        	local="Local"
+		        	if (rowsArray[n].zurl=="RequestLiveLink"){
+		        		local="Requesting..."	
+		        	}
+		        	if (rowsArray[n].zurl=="WaitingLiveLink"){
+		        		local="Waiting..."	
 		        	}
 		        }
 				opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{

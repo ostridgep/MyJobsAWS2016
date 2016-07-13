@@ -1982,7 +1982,7 @@ empid=localStorage.getItem("EmployeeID")
 																
 															sapCalls+=1;							
 															n = rowsArray.length
-															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'waitingLiveLink' where id='"+item['id']+"'",
+															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'WaitingLiveLink' where id='"+item['id']+"'",
 																	 function(){
 																		RequestLLFile(params)	
 																	 },
