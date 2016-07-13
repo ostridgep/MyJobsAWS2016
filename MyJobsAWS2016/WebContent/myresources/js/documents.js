@@ -260,7 +260,7 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 	  img.src = url;
 	}
 function getBase64FromImageUrl(imageUri) {
-	
+	alert(imageUri)
 	convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
 		 
 		  createBase64XML(base64Img)
@@ -268,6 +268,7 @@ function getBase64FromImageUrl(imageUri) {
 }
 
 function createBase64XML(base64){
+	alert("here")
 	var xmlstring =  '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
 					  '<jobMetadata>'+
 					  '  <order>000052151178</order>'+
@@ -313,7 +314,7 @@ new sap.m.Button( {
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
     	//createBase64XML(getBase64FromImageUrl(selectedPhoto))
-    	getBase64FromImageUrl("selectedPhoto")
+    	getBase64FromImageUrl(selectedPhoto)
 		  } ]
 }),
 new sap.m.Button( {
@@ -1205,7 +1206,7 @@ function RequestLLFile(params)
 }
 function sendPhotoToServer(id,fname,content)
 {
-
+alert("sending")
 
 	filesToDownload = [];
 	
@@ -1213,14 +1214,14 @@ function sendPhotoToServer(id,fname,content)
     	
         
     }).success(function() { 
-    	
+    	alert("sending done")
     	})
     .error(function() { 
-    	
+    	alert("sending err")
     })
     .complete(function() { 
     	
-    	
+    	alert("sending complete")
 
     	
     	
