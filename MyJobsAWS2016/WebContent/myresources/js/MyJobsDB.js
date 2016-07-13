@@ -2019,15 +2019,15 @@ empid=localStorage.getItem("EmployeeID")
 															
 															}
 														
-															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(item['orderno'],10).toString()+"-0010"
-															fname=item['fname']
+															dir="MyJobs/User/"+localStorage.getItem('MobileUser')+"/"+parseInt(rowsArray[0]['orderno'],10).toString()+"-0010"
+															fname=rowsArray[0]['fname']
 															alert(dir+"---"+fname)
 																
 															sapCalls+=1;							
 															n = rowsArray.length
-															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+item['id']+"'",
+															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+rowsArray[0]['id']+"'",
 																	 function(){
-																	alert("about to request")
+																	 alert("about to request")
 																		downlodRequestedFile(dir,fname)
 																	 },
 																	 function(error, statement){
