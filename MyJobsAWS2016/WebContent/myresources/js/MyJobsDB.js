@@ -2216,8 +2216,8 @@ empid=localStorage.getItem("EmployeeID")
 																	}else{
 																		ENRef=gridref
 																	}
-																	jsonstr[0].floodtime=jsonstr[0].floodtime+"00"
-																	jsonstr[0].attendancetime=jsonstr[0].attendancetime+"00"
+																	jsonstr[0].floodtime=jsonstr[0].floodtime+":00"
+																	jsonstr[0].attendancetime=jsonstr[0].attendancetime+":00"
 																	flooddate=jsonstr[0].flooddate.substring(6,10)+jsonstr[0].flooddate.substring(3,5)+jsonstr[0].flooddate.substring(0,2)
 																	floodtime=jsonstr[0].floodtime.substring(0,2)+jsonstr[0].floodtime.substring(3,5)+jsonstr[0].floodtime.substring(6,8)
 																	attenddate=jsonstr[0].attendancedate.substring(6,10)+jsonstr[0].attendancedate.substring(3,5)+jsonstr[0].attendancedate.substring(0,2)
@@ -4563,8 +4563,27 @@ var orderlist="";
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
 					{
 						orderJdets+=","+MyOrders.order[cntx].jobdets[pcnt].opno;
-						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){				
-							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
+						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){	
+							acptdt=MyOrders.order[cntx].jobdets[pcnt].acpt_date+"|"+MyOrders.order[cntx].jobdets[pcnt].acpt_time;
+							sitedt=MyOrders.order[cntx].jobdets[pcnt].site_date+"|"+MyOrders.order[cntx].jobdets[pcnt].site_time;
+							parkdt=MyOrders.order[cntx].jobdets[pcnt].park_date+"|"+MyOrders.order[cntx].jobdets[pcnt].park_time;
+							tcdates=[acptdt,sitedt,parkdt]
+							tcdates.sort()
+							if(acptdt.length>8){
+								x=tcdates[2].split("|");
+								tconfd=x[0]
+								tconft=x[1]
+							}else{
+								tconfd=""
+								tconft=""
+							}	
+							
+							
+							if((sitedt>acptdt)&&(sitedt>parkdt)){
+								tconfd=MyOrders.order[cntx].jobdets[pcnt].site_date
+								tconft=MyOrders.order[cntx].jobdets[pcnt].site_time
+							}
+							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, tconf_date, tconf_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
 							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
@@ -4594,6 +4613,8 @@ var orderlist="";
 							MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
 							MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
 							MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
+							tconfd+'","'+
+							tconft+'","'+
 							MyOrders.order[cntx].jobdets[pcnt].status+'","'+
 							MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
 							MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+

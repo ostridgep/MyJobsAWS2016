@@ -341,7 +341,7 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                                 
                                 				customTextOn:"Yes",
                                 				customTextOff:"No",
-                                                change:[function(evt){ alert(this.getState())
+                                                change:[function(evt){ 
                                                     	   sap.ui.getCore().getElementById("Close_Variance").setEnabled(this.getState())   
                                                     	   sap.ui.getCore().getElementById("Close_Reason").setEnabled(this.getState())   
                                                        
