@@ -261,28 +261,31 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 	}
 function getBase64FromImageUrl(imageUri) {
 	alert(imageUri)
+	x=imageUri.split("/")
+	fn=x[x.length-1]
+	alert(fn)
 	convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
 		 
-		  createBase64XML(base64Img)
+		  createBase64XML(base64Img,fn)
 		},"image/jpeg" );
 }
 
-function createBase64XML(base64){
-	alert("here")
-	var xmlstring =  '<uploadRequest userName="POSTRIDGE2" userRole="WaterNetworksContractor" userMyalmScenario="Y008" machineName="PAUL01">'+
+function createBase64XML(base64,fn){
+	
+	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
-					  '  <order>000052151178</order>'+
-					  '  <operation>0010</operation>'+
+					  '  <order>'+CurrentOrderNo+'</order>'+
+					  '  <operation>'+CurrentOrderNo+'</operation>'+
 					  '  <customerNumber> </customerNumber>'+
 					  '  <customerName> </customerName>'+
-					  '  <equipmentNumber>000000000000063203</equipmentNumber>'+
-					  '  <notification>000012700507</notification>'+
-					  '  <location>SPALST-2D-PSM-TS01-PRT001</location>'+
-					  '  <equipmentDescription>Radial Flow Tank</equipmentDescription>'+
+					  '  <equipmentNumber>'+selectedJobArray["equipment_code"]+'</equipmentNumber>'+
+					  '  <notification>'+selectedJobArray["notifno"]+'</notification>'+
+					  '  <location>'+selectedJobArray["funcloc_code"]+'</location>'+
+					  '  <equipmentDescription>'+selectedJobArray["equipment_desc"]+'</equipmentDescription>'+
 					  '  <docSubmitDateTime>09-06-2016-10-52-00</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>52151178-0010_10_52_00-POSTRIDGE2~Worker.jpg</filename>'+
+					  '  <filename>'+fn+'</filename>'+
 					  '  <extension>jpg</extension>'+
 					  '  <modified>2016-06-09T10:52:00.2427092+01:00</modified>'+
 					  '  <created>2016-06-09T10:52:00.2427092.2407091+01:00</created>'+
@@ -1209,7 +1212,7 @@ alert("sending")
 
 	filesToDownload = [];
 	
-    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id'+id+"&fname="+fname+id+"&content="+content, function (data) {
+    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+content, function (data) {
     	
         
     }).success(function() { 
