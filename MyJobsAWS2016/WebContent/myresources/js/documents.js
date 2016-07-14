@@ -1211,8 +1211,8 @@ function sendPhotoToServer(id,fname,content)
 alert("sending")
 
 	filesToDownload = [];
-	alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
-    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content", function (data) {
+	//alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
+    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content), function (data) {
     	
         
     }).success(function() { 
