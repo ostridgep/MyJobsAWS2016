@@ -1212,7 +1212,11 @@ alert("sending")
 
 	filesToDownload = [];
 	//alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
-    $.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content), function (data) {
+$.postJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content),{ call : 1 }, function (data) {
+	   alert(data.message.message);
+	});  
+
+/*$.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content), function (data) {
     	
         
     }).success(function() { 
@@ -1227,7 +1231,7 @@ alert("sending")
 
     	
     	
-    	});
+    	});*/
     
   
 	
