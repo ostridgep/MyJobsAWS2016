@@ -1212,15 +1212,15 @@ alert("sending")
 var jsondata="{xmlcontent:"+escape(content)+"}"
 	filesToDownload = [];
 	//alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
-$.post(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname,jsondata)
-     .done(function (response) {
-          alert(response.message.message)
-       })
-       .fail(function (jqxhr, textStatus, error) {
-          alert("failed")
-       }); 
-
-    
+$.post(localStorage.getItem("DOCSERVER")+'PhotoUpload.php',		
+				 {
+    id: id,
+    fname: fname,
+    content: escape(content)
+  },
+  function(data,status){
+      alert("Data: " + data.message.message + "\nStatus: " + status);
+  });
   
 	
 }
