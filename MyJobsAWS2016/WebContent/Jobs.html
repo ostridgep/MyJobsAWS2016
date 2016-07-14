@@ -5915,7 +5915,7 @@ function BuildChangeStatusOnSite(){
 						
 						sap.ui.getCore().getElementById("StatusOnSiteAcceptedTime").setValue(rowsArray[0].acpt_date+" "+rowsArray[0].acpt_time)
 						travelTime = diffInTime(rowsArray[0].tconf_date,rowsArray[0].tconf_time,getFormattedDate(),getFormattedTime())
-						
+						alert((rowsArray[0].tconf_date+"=="+rowsArray[0].tconf_time+"=="+getFormattedDate()+"=="+getFormattedTime())
 						sap.ui.getCore().getElementById("StatusOnSiteTravelTime").setValue(travelTime)
 						
 						
