@@ -1209,29 +1209,17 @@ function RequestLLFile(params)
 function sendPhotoToServer(id,fname,content)
 {
 alert("sending")
-
+var jsondata="{xmlcontent:"+escape(content)+"}"
 	filesToDownload = [];
 	//alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
-$.postJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content),{ call : 1 }, function (data) {
-	   alert(data.message.message);
-	});  
+$.post(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname,jsondata)
+     .done(function (response) {
+          alert(response.message.message)
+       })
+       .fail(function (jqxhr, textStatus, error) {
+          alert("failed")
+       }); 
 
-/*$.getJSON(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+escape(content), function (data) {
-    	
-        
-    }).success(function() { 
-    	alert("sending done")
-    	})
-    .error(function() { 
-    	alert("sending err")
-    })
-    .complete(function() { 
-    	
-    	alert("sending complete")
-
-    	
-    	
-    	});*/
     
   
 	
