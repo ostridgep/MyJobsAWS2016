@@ -2978,7 +2978,7 @@ function changeStatus(Status){
 			 StatusState=sap.ui.core.ValueState.Error
 			 StatusIcon="decline"
 		} else if(Status=="PARK"){
-			alert("1")
+			
 			localStorage.setItem('totalParked','1');
 			localStorage.setItem('totalAccepted','0');
 		 updateOperationStatus(CurrentOrderNo, CurrentOpNo, "PARK", "Job Suspended")

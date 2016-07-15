@@ -4558,19 +4558,29 @@ var orderlist="";
 					 '"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
 				//Loop and write Draw Files to DB
 				//Loop and write JobDets
-				
+				tcdates=[]
 				var orderJdets=MyOrders.order[cntx].orderno
 				for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
 					{
 						orderJdets+=","+MyOrders.order[cntx].jobdets[pcnt].opno;
 						if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){	
-							acptdt=MyOrders.order[cntx].jobdets[pcnt].acpt_date+"|"+MyOrders.order[cntx].jobdets[pcnt].acpt_time;
-							sitedt=MyOrders.order[cntx].jobdets[pcnt].site_date+"|"+MyOrders.order[cntx].jobdets[pcnt].site_time;
-							parkdt=MyOrders.order[cntx].jobdets[pcnt].park_date+"|"+MyOrders.order[cntx].jobdets[pcnt].park_time;
-							tcdates=[acptdt,sitedt,parkdt]
+							if (MyOrders.order[cntx].jobdets[pcnt].acpt_date.length>6){
+							
+								tcdates.push(MyOrders.order[cntx].jobdets[pcnt].acpt_date+"|"+MyOrders.order[cntx].jobdets[pcnt].acpt_time);
+							}
+							if (MyOrders.order[cntx].jobdets[pcnt].onsite_date.length>6){
+							
+								tcdates.push(MyOrders.order[cntx].jobdets[pcnt].onsite_date+"|"+MyOrders.order[cntx].jobdets[pcnt].onsite_time);
+							}
+							if (MyOrders.order[cntx].jobdets[pcnt].park_date.length>6){
+							
+								tcdates.push(MyOrders.order[cntx].jobdets[pcnt].park_date+"|"+MyOrders.order[cntx].jobdets[pcnt].park_time);
+							}
+
 							tcdates.sort()
-							if(acptdt.length>8){
-								x=tcdates[2].split("|");
+							
+							if(tcdates.length>0){
+								x=tcdates[tcdates.length-1].split("|");
 								tconfd=x[0]
 								tconft=x[1]
 							}else{
@@ -4578,8 +4588,6 @@ var orderlist="";
 								tconft=""
 							}	
 							
-							
-
 							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, tconf_date, tconf_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
 							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
@@ -4911,7 +4919,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
 						
-									
+								 alert(sqlstatement1)	
 			
 										
 								 },
@@ -4923,6 +4931,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 								);
 
 						}else{
+						
 					console.log("Order Exists "+rowsArray[0].changeddatetime+"SAP="+changeddatetime)
 						
 					}
