@@ -4579,10 +4579,7 @@ var orderlist="";
 							}	
 							
 							
-							if((sitedt>acptdt)&&(sitedt>parkdt)){
-								tconfd=MyOrders.order[cntx].jobdets[pcnt].site_date
-								tconft=MyOrders.order[cntx].jobdets[pcnt].site_time
-							}
+
 							sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, tconf_date, tconf_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
 							'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
 							MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
