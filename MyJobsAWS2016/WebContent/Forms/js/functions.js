@@ -28,9 +28,9 @@
 function scrollfield()
 {
 currentPage=location.href.split("#")
-
+alert(document.activeElement.tagName)
 location.href=currentPage[0]+"#"+document.activeElement.id
-	
+
 
 }
 /*
