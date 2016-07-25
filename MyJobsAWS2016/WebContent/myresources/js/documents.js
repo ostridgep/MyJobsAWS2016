@@ -297,8 +297,9 @@ function createBase64XML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	alert(xmlstring)
-	sendPhotoToServer("1","photo.lpg",xmlstring)
+	//alert(xmlstring)
+	sendPhotoToServer("1",fn,xmlstring)
+	//sendtoostridge("1","photo.lpg",xmlstring)
 }
 function writer(X){
 	var dataUrl='data:application/download,' + encodeURIComponent(
@@ -318,6 +319,7 @@ new sap.m.Button( {
     tap: [ function(oEvt) {		  
     	//createBase64XML(getBase64FromImageUrl(selectedPhoto))
     	getBase64FromImageUrl(selectedPhoto)
+    	
 		  } ]
 }),
 new sap.m.Button( {
@@ -409,7 +411,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 					    text: "Take Photo",
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {		  
-							 
+					    	getBase64FromImageUrl("images/cabanac.jpg")
 					    	getPhoto(selectedPhotoType);
 					    	formGetPhoto.close()
 							  } ]
@@ -1206,7 +1208,50 @@ function RequestLLFile(params)
 
 	
 }
-function sendPhotoToServer(id,fname,content)
+function sendtoostridge(id,fname,content){
+var jqxhr = $.post( "http://192.168.1.20/PhotoUpload.php",
+		{
+		fname: fname,
+		content:content
+		},
+		
+		
+		function(data) {
+	  alert( "success".data );
+	})
+	  .done(function() {
+	    alert( "second success" );
+	  })
+	  .fail(function() {
+	    alert( "error" );
+	  })
+	  .always(function() {
+	    alert( "finished" );
+	});
+}
+function sendPhotoToServer(id,fname,content){
+	alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php'+fname)
+	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
+			{
+			fname: "MyJobs\\Global\\Upload\\"+fname,
+			content:content
+			},
+			
+			
+			function(data) {
+		  alert( "success".data );
+		})
+		  .done(function() {
+		    alert( "second success" );
+		  })
+		  .fail(function() {
+		    alert( "error" );
+		  })
+		  .always(function() {
+		    alert( "finished" );
+		});
+	}
+function sendPhotoToServerxx(id,fname,content)
 {
 alert("sending")
 var jsondata="{xmlcontent:"+escape(content)+"}"
