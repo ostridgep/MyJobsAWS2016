@@ -1236,7 +1236,7 @@ function sendPhotoToServer(id,fname,content){
 			fname: "MyJobs\\Global\\Upload\\"+fname,
 			content:content
 			},
-			
+		
 			
 			function(data) {
 		  alert( "success".data );
