@@ -297,9 +297,9 @@ function createBase64XML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	//alert(xmlstring)
+	
 	sendPhotoToServer("1",fn,xmlstring)
-	//sendtoostridge("1","photo.lpg",xmlstring)
+	
 }
 function writer(X){
 	var dataUrl='data:application/download,' + encodeURIComponent(
@@ -313,20 +313,31 @@ var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     modal: true,
     contentWidth:"1em",
     buttons: [
-new sap.m.Button( {
-    text: "base64",
+new sap.m.Button( "btnPhotoDelete",{
+    text: "Delete",
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
-    	//createBase64XML(getBase64FromImageUrl(selectedPhoto))
-    	getBase64FromImageUrl(selectedPhoto)
+    	DeletePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID)
+    	
     	
 		  } ]
 }),
 new sap.m.Button( {
     text: "UpLoad",
     type: 	sap.m.ButtonType.Reject,
-    tap: [ function(oEvt) {		  
-    	uploadPhoto(selectedPhoto)
+    tap: [ function(oEvt) {	
+    	if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
+			DisplayErrorMessage("Attach Photo", "Name is Mandatory")
+			}else{
+				if (selectedPhotoID==0){
+		    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "NEW")
+		    	}else{
+		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
+		    	}
+				getBase64FromImageUrl(selectedPhoto)
+		    	formPhotoDetails.close()
+			}
+    	
     	//formPhotoDetails.close()
 		  } ]
 }),
@@ -382,6 +393,11 @@ new sap.m.Button( {
             contentWidth:"360px",
             contentHeight: "60%",
             beforeOpen:function(){
+            	if (selectedPhotoID==0){
+            		sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(false)
+            	}else{
+            		sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(true)
+            	}
             	buildPhotoDetails()
             	
             }
@@ -1208,30 +1224,10 @@ function RequestLLFile(params)
 
 	
 }
-function sendtoostridge(id,fname,content){
-var jqxhr = $.post( "http://192.168.1.20/PhotoUpload.php",
-		{
-		fname: fname,
-		content:content
-		},
-		
-		
-		function(data) {
-	  alert( "success".data );
-	})
-	  .done(function() {
-	    alert( "second success" );
-	  })
-	  .fail(function() {
-	    alert( "error" );
-	  })
-	  .always(function() {
-	    alert( "finished" );
-	});
-}
+
 function sendPhotoToServer(id,fname,content){
 	xx=fname.split(".")
-	alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php'+fname)
+
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
@@ -1240,36 +1236,19 @@ function sendPhotoToServer(id,fname,content){
 		
 			
 			function(data) {
-		  alert( "success"+data );
+		 
 		})
 		  .done(function() {
-		    alert( "second success" );
+		   
 		  })
 		  .fail(function() {
-		    alert( "error" );
+		   
 		  })
 		  .always(function() {
-		    alert( "finished" );
+		  
 		});
 	}
-function sendPhotoToServerxx(id,fname,content)
-{
-alert("sending")
-var jsondata="{xmlcontent:"+escape(content)+"}"
-	filesToDownload = [];
-	//alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php?id='+id+"&fname="+localStorage.getItem('MobileUser')+"-"+id+"-"+fname+"&content="+"content")
-$.post(localStorage.getItem("DOCSERVER")+'PhotoUpload.php',		
-				 {
-    id: id,
-    fname: fname,
-    content: escape(content)
-  },
-  function(data,status){
-      alert("Data: " + data.message.message + "\nStatus: " + status);
-  });
-  
-	
-}
+
 function BuildDocumentsTable() { 
 	
 	

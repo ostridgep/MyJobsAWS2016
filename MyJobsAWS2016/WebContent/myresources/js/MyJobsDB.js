@@ -857,6 +857,20 @@ function UpdatePhotoEntry(orderno, opno, id, name, desc ){
 	);
 
 }
+function DeletePhotoEntry(orderno, opno, id){
+	
+	
+
+	html5sql.process("Delete from  MyJobsPhotos where orderno ='"+orderno+"' and opno = '"+opno+"' and id = '"+id+"'",
+	 function(){
+		buildJobPhotoList()
+	 },
+	 function(error, statement){
+		opMessage("Error: " + error.message + " when inserting Photo" + statement);
+	 }        
+	);
+
+}
 //*************************************************************************************************************************
 //
 //  User Maintenance Functions
