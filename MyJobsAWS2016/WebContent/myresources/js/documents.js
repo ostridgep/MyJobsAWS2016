@@ -1230,16 +1230,17 @@ var jqxhr = $.post( "http://192.168.1.20/PhotoUpload.php",
 	});
 }
 function sendPhotoToServer(id,fname,content){
+	xx=fname.split(".")
 	alert(localStorage.getItem("DOCSERVER")+'PhotoUpload.php'+fname)
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
-			fname: "MyJobs\\Global\\Upload\\"+fname,
+			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
 			content:content
 			},
 		
 			
 			function(data) {
-		  alert( "success".data );
+		  alert( "success"+data );
 		})
 		  .done(function() {
 		    alert( "second success" );
