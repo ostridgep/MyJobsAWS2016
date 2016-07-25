@@ -395,6 +395,11 @@ function getSAPTime()	{
 	return x1 + ":"+x2 + ":"+x3;
 
 }
+function getFileUploadDT()	{			
+	var currentdate = new Date(); 
+return zeroFill1(currentdate.getFullYear().toString())+"-"+zeroFill1((currentdate.getMonth()+1).toString() ) +"-"+zeroFill1(currentdate.getDate().toString()) + "T"+zeroFill1( currentdate.getHours()).toString()+":"+zeroFill1(currentdate.getMinutes()).toString()+":"+zeroFill1( currentdate.getSeconds()).toString();
+
+}
 function formatDate(dt){
 
 	var formatteddt="";

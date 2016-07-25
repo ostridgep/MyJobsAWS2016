@@ -271,11 +271,11 @@ function getBase64FromImageUrl(imageUri) {
 }
 
 function createBase64XML(base64,fn){
-	
+	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
-					  '  <operation>'+CurrentOrderNo+'</operation>'+
+					  '  <operation>0010</operation>'+
 					  '  <customerNumber> </customerNumber>'+
 					  '  <customerName> </customerName>'+
 					  '  <equipmentNumber>'+selectedJobArray["equipment_code"]+'</equipmentNumber>'+
@@ -287,8 +287,8 @@ function createBase64XML(base64,fn){
 					  '<attachmentMetadata>'+
 					  '  <filename>'+fn+'</filename>'+
 					  '  <extension>jpg</extension>'+
-					  '  <modified>2016-06-09T10:52:00.2427092+01:00</modified>'+
-					  '  <created>2016-06-09T10:52:00.2427092.2407091+01:00</created>'+
+					  '  <modified>'+dt+'</modified>'+
+					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
 					  '    <fileType>JPEG image</fileType>'+
 					  '    <mimeType>image/jpeg</mimeType>'+
@@ -427,7 +427,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 					    text: "Take Photo",
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {		  
-					    	getBase64FromImageUrl("images/cabanac.jpg")
+					    	
 					    	getPhoto(selectedPhotoType);
 					    	formGetPhoto.close()
 							  } ]
