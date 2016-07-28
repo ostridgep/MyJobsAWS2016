@@ -260,10 +260,10 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 	  img.src = url;
 	}
 function getBase64FromImageUrl(imageUri) {
-	alert(imageUri)
+	
 	x=imageUri.split("/")
 	fn=x[x.length-1]
-	alert(fn)
+	
 	convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
 		 
 		  createBase64XML(base64Img,fn)
@@ -282,7 +282,7 @@ function createBase64XML(base64,fn){
 					  '  <notification>'+selectedJobArray["notifno"]+'</notification>'+
 					  '  <location>'+selectedJobArray["funcloc_code"]+'</location>'+
 					  '  <equipmentDescription>'+selectedJobArray["equipment_desc"]+'</equipmentDescription>'+
-					  '  <docSubmitDateTime>09-06-2016-10-52-00</docSubmitDateTime>'+
+					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
 					  '  <filename>'+fn+'</filename>'+
@@ -292,6 +292,37 @@ function createBase64XML(base64,fn){
 					  '  <fileDescription>'+
 					  '    <fileType>JPEG image</fileType>'+
 					  '    <mimeType>image/jpeg</mimeType>'+
+					  '  </fileDescription>'+
+					  '</attachmentMetadata>'+
+					  '<fileContent contentEncoding="base64">'+base64+
+					  '</fileContent>'+
+					  '</uploadRequest>'
+	alert(xmlstring)
+	sendPhotoToServer("1",fn,xmlstring)
+	
+}
+function createBase64FormXML(base64,fn){
+	dt=getFileUploadDT()
+	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
+					  '<jobMetadata>'+
+					  '  <order>'+CurrentOrderNo+'</order>'+
+					  '  <operation>0010</operation>'+
+					  '  <customerNumber> </customerNumber>'+
+					  '  <customerName> </customerName>'+
+					  '  <equipmentNumber>'+selectedJobArray["equipment_code"]+'</equipmentNumber>'+
+					  '  <notification>'+selectedJobArray["notifno"]+'</notification>'+
+					  '  <location>'+selectedJobArray["funcloc_code"]+'</location>'+
+					  '  <equipmentDescription>'+selectedJobArray["equipment_desc"]+'</equipmentDescription>'+
+					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
+					  '</jobMetadata>'+
+					  '<attachmentMetadata>'+
+					  '  <filename>'+fn+'</filename>'+
+					  '  <extension>html</extension>'+
+					  '  <modified>'+dt+'</modified>'+
+					  '  <created>'+dt+'</created>'+
+					  '  <fileDescription>'+
+					  '    <fileType>HTML Document</fileType>'+
+					  '    <mimeType>text/html</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
 					  '<fileContent contentEncoding="base64">'+base64+
@@ -318,7 +349,7 @@ new sap.m.Button( "btnPhotoDelete",{
     type: 	sap.m.ButtonType.Reject,
     tap: [ function(oEvt) {		  
     	DeletePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID)
-    	
+    	formPhotoDetails.close()
     	
 		  } ]
 }),
@@ -402,6 +433,69 @@ new sap.m.Button( {
             	
             }
  })
+var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
+    title:"Attach Document / Form",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formGetDoc.close()
+						  } ]
+				})	
+				],					
+    content:[
+		new sap.ui.layout.form.SimpleForm({
+			minWidth : 1024,
+			maxContainerCols : 2,
+			content : [
+		            
+					 new sap.m.Button( {
+					    text: "Template Document",
+					    type: 	sap.m.ButtonType.Accept,
+					    tap: [ function(oEvt) {		  
+					    	
+					    	alert("TemplateDocument")
+					    	formGetDoc.close()
+							  } ]
+					 }),
+					
+					 new sap.m.Button( {
+					    text: "Form",
+					    type: 	sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+					    	formGetDoc.close() 
+					    	MandatedForms= [];
+			   				formToOpen="Forms/formsindex.html"
+			   			    formMode="Forms"
+	   						formForms.open()
+					    	
+							  } ]
+					 	})
+				]
+			})
+            ],
+            
+            beforeOpen:function(){
+            	try{
+            		
+            		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
+            		AppDocDirectory="MyJobs"
+            		if(device.platform=="iOS"){
+            			DeviceStorageDirectory=cordova.file.dataDirectory
+            			AppDocDirectory="documents/MyJobs"
+            		}
+            		localStorage.setItem("DeviceType",device.platform)
+            	 }catch(err){
+            		 localStorage.setItem("DeviceType","WINDOWS")
+            	
+            	 }
+            }
+ })
 var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
     title:"Attach Photo",
     modal: true,
@@ -441,16 +535,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
 					    	selectPhoto()
 					    	formGetPhoto.close()
 							  } ]
-					 	}),
-						 new sap.m.Label({text:" "}),
-						 new sap.m.Button( {
-						    text: "Photo details",
-						    type: 	sap.m.ButtonType.Reject,
-						    tap: [ function(oEvt) {		  
-						    	formGetPhoto.close() 
-						    	formPhotoDetails.open()
-								  } ]
-						 	})
+					 	})
 				]
 			})
             ],
@@ -1465,3 +1550,5 @@ function appStartLL() {
     alert(" LL Download starting")
 }	
 
+
+b

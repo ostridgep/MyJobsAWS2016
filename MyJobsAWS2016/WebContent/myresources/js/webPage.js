@@ -3,6 +3,18 @@ var formMode="Forms"
 var closeFormName=""
 var selectedWebPage=''
 var mapLocationField
+var HTMLFormStart=	'<!DOCTYPE html>'+
+					'<html xmlns="http://www.w3.org/1999/xhtml">'+
+					'<head>'+
+					'<link href="server/css/site.css" rel="stylesheet" />'+
+					'<script src="server/js/jq.1.10.2.js"></script>'+
+					'<script src="server/js/jqui.1.9.2.js"></script>'+
+					'<script src="jserver/s/bs.3.1.1.js"></script>'+
+					'<script src="server/js/functions.js"></script>'+
+					'<link rel="stylesheet" href="server/css/bs.3.1.1.css" />'+
+					'<link rel="stylesheet" href="server/css/jqui.1.9.2_smoothness.css" />'+
+					'</head>'
+var HTMLFormEnd=	'</html>'
 currentPage=document.location.href;
 
 var theIFrameDoc=""
@@ -269,12 +281,14 @@ var MyIFrame = document.getElementById("formIframe");
 	try {
 		
 		json=buildJSONResponse(MyIFrameDoc)
+		htmlbody=window.btoa(HTMLFormStart+MyIFrameDoc.body.innerHTML+HTMLFormEnd)
+		createBase64FormXML(htmlbody,"paul.xml")
 		if(currentPage.indexOf("Home")<1) {
 			
-			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),json,formMode,type)
+			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),json,htmlbody,formMode,type)
 		}else{
 
-			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),json,formMode,type)
+			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),json,htmlbody,formMode,type)
 		}
 		
 		
@@ -811,3 +825,24 @@ console.log(closeFormName)
 
 	}
 	
+	function openJobForm(id){
+		
+		sqlstatement='select  MyFormsResponses.formname, MyFormsResponses.orderno, MyFormsResponses.opno, MyFormsResponses.lastupdated as status, MyForms.url as url, MyForms.description as description from MyFormsResponses '+
+		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = "'+id+'"';
+		html5sql.process(sqlstatement,
+				function(transaction, results, rowsArray){
+					if(rowsArray.length>0){
+						MandatedForms= [];
+						formToOpen="Forms/"+rowsArray[0].url
+					    formMode="Forms"
+						formForms.open()
+					}
+				 
+				 },
+				 function(error, statement){
+					 
+					 opMessage("Error: " + error.message + " when processing " + statement);
+				 }        
+		)
+		
+	}

@@ -4785,19 +4785,37 @@ formtab=null;
            	                	text:'Documents',
          	                   key:'JobDocs',
          	                  tooltip: 'Documents',
-								visible:docsVisible,
+								//visible:docsVisible,
          	                  icon: "sap-icon://documents",
             	                   content:[
+										new sap.m.Button( {
+											icon:"sap-icon://document",
+										type: 	sap.m.ButtonType.Accept,
+										tap: [ function(oEvt) {
+										   
+										   formGetDoc.open()
+										           } ]
+										}), 
      									new sap.m.Table("JobDocumentTable",{
      										width:'100%',
      										 mode: sap.m.ListMode.SingleSelectMaster,
      										selectionChange: function(evt){
-     											
-     											downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
+     											if(evt.getParameter("listItem").getCells()[1].getText()=="FORM"){
+     												
+     												openJobForm(evt.getParameter("listItem").getCells()[2].getText())
+     												
+     											}else if(evt.getParameter("listItem").getCells()[1].getText()=="TEMPLATE"){
+     												
+     											}else{
+     												
+     												downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
      													evt.getParameter("listItem").getCells()[5].getText(),
      													evt.getParameter("listItem").getCells()[2].getText(),
      													evt.getParameter("listItem").getCells()[4].getText())
-     													this.removeSelections()
+     													
+     											}
+     											
+     											this.removeSelections()
      									    },
      										columns:[
     										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
@@ -5328,6 +5346,7 @@ html5sql.process("SELECT * FROM MyTimeConfs where orderno = '"+orderNo+"' and op
 		);
  // Build Docs Table
 buildJobDocsTable();
+ 
 buildJobPhotoList();
 
 }
@@ -5370,7 +5389,37 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 					}));
 				n++;
 			 }
+			html5sql.process("SELECT * FROM MyFormsResponses where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' ;",
+					 function(transaction, results, rowsArray){
+						var n = 0;
+						var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
 
+						
+					
+						while (n < rowsArray.length) {
+							
+					       
+							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
+								
+								cells : 
+									[
+									new sap.m.Text({text: rowsArray[n].formname+"-"+rowsArray[n].id}),
+									new sap.m.Text({text: "FORM"}),
+									new sap.m.Text({text: rowsArray[n].id}), 
+									new sap.m.Text({text: rowsArray[n].lastupdated}), 
+									new sap.m.Text({text: rowsArray[n].id}),
+									new sap.m.Text({text: rowsArray[n].formname})
+							 		],
+
+								}));
+							n++;
+						 }
+
+					 },
+					 function(error, statement){
+						 //outputLogToDB(); 
+					 }        
+					);
 		 },
 		 function(error, statement){
 			 //outputLogToDB(); 

@@ -3450,7 +3450,7 @@ function deleteFormsResponseDate(formname, order,opno)
 		);
 	
 }
-function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,mode,type)
+function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
 	
 	if (mode=="Close"){
@@ -3461,8 +3461,8 @@ function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,
 	console.log("here")
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
-	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, wc,plant, notifno,orderno , opno, user, contents, date , time , state) VALUES ("+
-	"'"+formname+"',"+"'"+type+"',"+"'"+wc+"',"+"'"+plant+"',"+"'"+notifno+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"',"+"'"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
+	"'"+formname+"',"+"'"+type+"',"+"'"+wc+"',"+"'"+plant+"',"+"'"+notifno+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
 	console.log(sqlStatementIns)
    opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
   
@@ -3715,7 +3715,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, htmlbody TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
 					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -5194,7 +5194,7 @@ opMessage("Reecived Notifications Count = "+MyNotifications.notification.length)
 							
 							 },
 							 function(error, statement){
-								// alert("Error: " + error.message + " when processing " + statement);
+								
 								 opMessage("Error: " + error.message + " when processing " + statement);
 							 }        
 			);	
