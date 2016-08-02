@@ -1595,7 +1595,7 @@ function downloadAsset(fileName,dir) {
 		    
 		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
 	
-		    
+	    
 		});
 }
 function downloadAllAsset(fileName,dir) {
