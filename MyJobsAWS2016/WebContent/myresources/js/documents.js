@@ -1440,21 +1440,21 @@ function downloadForms () {
 	//  create a loop function
 
 		   while(n<+filesToDownload.FILES.length){
-		       fileName = filesToDownload[n].name;
+		       fileName = filesToDownload.FILES[n].name;
 		       alert(fileName)
-		   		x=filesToDownload[n].name.split(".")
+		   		x=filesToDownload.FILES[n].name.split(".")
 		   		if(x.length>1){
 		   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
 		   				y=x[1].split("~")
 		   				if(y.length==3)
 		   					{
-		   					InsertFormDetails(DeviceStorageDirectory+filesToDownload[n].url+"/"  + filesToDownload[n].name,y[0],y[1],y[2])
+		   					InsertFormDetails(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name,y[0],y[1],y[2])
 		   					}
 		   			}
 		   		}
 		       	
-		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[n].url+"/"  + filesToDownload[n].name, appStart, downloadAllAsset(filesToDownload[n].name, filesToDownload[n].url+"/"));
-		        filesToDownload[n].name
+		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name, appStart, downloadAllAsset(filesToDownload[n].name, filesToDownload[n].url+"/"));
+		        filesToDownload.FILES[n].name
 		        n++;
 	          		
 				}
