@@ -1456,12 +1456,11 @@ function downloadForms () {
 			   		
 		    	   }
 		       }
-		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name, appStart, downloadAllAsset(filesToDownload[n].name, filesToDownload[n].url+"/"));
+		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name, appStart, downloadAllAsset(filesToDownload.FILES[n].name, filesToDownload.FILES[n].url+"/"));
 		        filesToDownload.FILES[n].name
 		        n++;
 	          		
 				}
-
   
 	}
 function checkFileDownload () { 
