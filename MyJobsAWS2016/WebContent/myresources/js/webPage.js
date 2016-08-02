@@ -22,14 +22,14 @@ var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
 function getFormsDL()
 {
-
+alert("requesting Forms")
 			
 	
     $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/Forms', function (data) {
     	
     	filesToDownload=data;
         var cnt = 0;
-      
+        alert("requesting Forms"+filesToDownload.FILES.length)
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		

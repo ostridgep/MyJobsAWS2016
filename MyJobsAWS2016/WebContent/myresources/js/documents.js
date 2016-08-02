@@ -1435,12 +1435,13 @@ function downlodRequestedFile(dir,fn,id){
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
 function downloadForms () { 
-	
+	alert("downloadForms")
 	var n=0;
 	//  create a loop function
 
 		   while(n<filesToDownload.length){
 		       fileName = filesToDownload[n].name;
+		       alert(fileName)
 		   		x=filesToDownload[n].name.split(".")
 		   		if(x.length>1){
 		   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file

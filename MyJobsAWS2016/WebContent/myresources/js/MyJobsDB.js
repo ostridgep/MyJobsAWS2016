@@ -2770,9 +2770,7 @@ function syncReference(){
 							requestDEMOData('PE29.json');
 							//requestDEMOData('POSTRIDGE2.json');
 							requestDEMOData('MyJobsDG5Codes.json');
-							//requestSAPDataPJO("getFormsJSON.php",'');
-							//requestSAPData("MyJobsFunclocs.htm",'');
-							//requestSAPData("MyJobsEquipment.htm",'');
+							getFormsDL();
 						 }
 						 
 					},
@@ -3453,7 +3451,7 @@ function deleteFormsResponseDate(formname, order,opno)
 function deleteFormsAndDownload()
 {
 	
-	
+	alert("Deleted All Forms")
 	
 	sqlStatement="DELETE from MyForms "+
 				 "where type <> 'CLOSE' ;"
