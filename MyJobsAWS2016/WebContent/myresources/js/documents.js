@@ -1442,24 +1442,24 @@ function downloadForms () {
 		   while(n<+filesToDownload.FILES.length){
 		       fileName = filesToDownload.FILES[n].name;
 		      
-		       if(filesToDownload.FILES[n].type!="DIRECTORY"){
-		    	   if(filesToDownload.FILES[n].name.toUpperCase().indexOf(".HTML")>0){
-			   		x=filesToDownload.FILES[n].name.split(".")
-			   		
-			   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
-			   				
-			   				y=x[0].split("~")
-			   				
-			   				if(y.length==3)
-			   					{
-			   					InsertFormDetails(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name,y[0],y[1],y[2])
-			   					}
-			   			}
-			   		
-		    	   }
-		       }
+		       
 		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name, appStart, downloadAllAsset(filesToDownload.FILES[n].name, filesToDownload.FILES[n].url+"/"));
-		        filesToDownload.FILES[n].name
+		        if(filesToDownload.FILES[n].type!="DIRECTORY"){
+			    	   if(filesToDownload.FILES[n].name.toUpperCase().indexOf(".HTML")>0){
+				   		x=filesToDownload.FILES[n].name.split(".")
+				   		
+				   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
+				   				
+				   				y=x[0].split("~")
+				   				
+				   				if(y.length==3)
+				   					{
+				   					InsertFormDetails(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name,y[0],y[1],y[2])
+				   					}
+				   			}
+				   		
+			    	   }
+			       }
 		        n++;
 	          		
 				}
@@ -1602,12 +1602,12 @@ function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
 		function (entry) {
-    	opMessage("Downloading"+entry.fullPath)
+    	alert("Downloading"+entry.fullPath)
 		   
 		},
 		function (error) {
 		    
-		    //alert("download error " + error.source+ ":" + error.target+": " + error.code);
+		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});
