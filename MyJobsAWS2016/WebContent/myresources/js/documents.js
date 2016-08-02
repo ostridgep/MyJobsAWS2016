@@ -1600,9 +1600,9 @@ function downloadAsset(fileName,dir) {
 }
 function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
-    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
+    fileTransfer.download(localStorage.getItem("DOCSERVER")+dir + fileName, cordova.file.externalApplicationStorageDirectory + dir +fileName,
 		function (entry) {
-    	alert("Downloading"+entry.fullPath)
+    	console.log("Downloading"+entry.fullPath)
 		   
 		},
 		function (error) {
