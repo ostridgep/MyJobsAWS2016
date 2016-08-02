@@ -22,7 +22,7 @@ var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
 function getFormsDL()
 {
-alert("requesting Forms")
+
 			
 	
     $.getJSON(localStorage.getItem("DOCSERVER")+'ListDirjson1.php?directory=MyJobs/Global/Forms', function (data) {

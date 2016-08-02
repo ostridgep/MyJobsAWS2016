@@ -1435,19 +1435,21 @@ function downlodRequestedFile(dir,fn,id){
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
 function downloadForms () { 
-	alert("downloadForms fcnt="+filesToDownload.FILES.length)
+	
 	var n=0;
 	//  create a loop function
 
 		   while(n<+filesToDownload.FILES.length){
 		       fileName = filesToDownload.FILES[n].name;
-		       alert(fileName)
+		      
 		       if(filesToDownload.FILES[n].type!="DIRECTORY"){
 		    	   if(filesToDownload.FILES[n].name.toUpperCase().indexOf(".HTML")>0){
 			   		x=filesToDownload.FILES[n].name.split(".")
 			   		
 			   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
+			   				alert(x[0])
 			   				y=x[1].split("~")
+			   				alert(y.length)
 			   				if(y.length==3)
 			   					{
 			   					InsertFormDetails(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name,y[0],y[1],y[2])
