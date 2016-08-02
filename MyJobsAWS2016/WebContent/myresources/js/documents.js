@@ -1435,7 +1435,7 @@ function downlodRequestedFile(dir,fn,id){
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
 function downloadForms () { 
-	alert("downloadForms")
+	alert("downloadForms fcnt="+filesToDownload.length)
 	var n=0;
 	//  create a loop function
 
