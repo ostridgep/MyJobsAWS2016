@@ -1447,9 +1447,9 @@ function downloadForms () {
 			   		x=filesToDownload.FILES[n].name.split(".")
 			   		
 			   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
-			   				alert(x[0])
-			   				y=x[1].split("~")
-			   				alert(y.length)
+			   				
+			   				y=x[0].split("~")
+			   				
 			   				if(y.length==3)
 			   					{
 			   					InsertFormDetails(DeviceStorageDirectory+filesToDownload.FILES[n].url+"/"  + filesToDownload.FILES[n].name,y[0],y[1],y[2])
@@ -1601,7 +1601,7 @@ function downloadAsset(fileName,dir) {
 function downloadAllAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
    
-        alert(  localStorage.getItem("DOCSERVER")+dir+"/" + fileName+"--"+cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName)
+
 
     //alert("About to start transfer " + localStorage.getItem("DOCSERVER") + fileName + " to " + cordova.file.externalApplicationStorageDirectory + dir + x[3]);
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir+"/" + fileName, cordova.file.externalApplicationStorageDirectory + dir + "/"+fileName,
