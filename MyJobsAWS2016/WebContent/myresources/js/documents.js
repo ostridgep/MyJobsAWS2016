@@ -1435,11 +1435,11 @@ function downlodRequestedFile(dir,fn,id){
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
 function downloadForms () { 
-	alert("downloadForms fcnt="+filesToDownload.length)
+	alert("downloadForms fcnt="+filesToDownload.FILES.length)
 	var n=0;
 	//  create a loop function
 
-		   while(n<filesToDownload.length){
+		   while(n<+filesToDownload.FILES.length)){
 		       fileName = filesToDownload[n].name;
 		       alert(fileName)
 		   		x=filesToDownload[n].name.split(".")

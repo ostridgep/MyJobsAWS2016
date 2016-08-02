@@ -3451,7 +3451,7 @@ function deleteFormsResponseDate(formname, order,opno)
 function deleteFormsAndDownload()
 {
 	
-	alert("Deleted All Forms")
+	alert("Deleted All Forms"+filesToDownload.FILES.length)
 	
 	sqlStatement="DELETE from MyForms "+
 				 "where type <> 'CLOSE' ;"
