@@ -1,67 +1,31 @@
 {"forms":
 				[
-					{
-						"name": "Callibration",
-						"type": "JOB",
-						"lastupdated": "20150124",
-						"url": "Calibration.html",
-						"description": "Callibration Form"
-						
-					},
+					
 					{
 						"name": "Flooding",
-						"type": "JOB",
+						"type": "CLOSE",
 						"lastupdated": "20150124",
 						"url": "Flooding.html",
 						"description": "Flooding/DG5 Feedback"
 						
 					},
-					{
-						"name": "Holliday",
-						"type": "ALL",
-						"lastupdated": "20150124",
-						"url": "HolidayRequest.html",
-						"description": "Holiday Request"
-						
-					},
+					
 					{
 						"name": "CustomerFeedback",
-						"type": "JOB",
+						"type": "CLOSE",
 						"lastupdated": "20150124",
 						"url": "CustomerFeedback.html",
 						"description": "Customer Feedback Form"
 						
 					},
-					{
-						"name": "Sickness",
-						"type": "ALL",
-						"lastupdated": "20150124",
-						"url": "SickNote.html",
-						"description": "Sickness"
-						
-					},
-					{
-						"name": "Servicability",
-						"type": "JOB",
-						"lastupdated": "20150124",
-						"url": "MaintenanceServiceability.html",
-						"description": "Pumping Station Service"
-						
-					},
+					
+					
 					{
 						"name": "Pollution",
-						"type": "JOB",
+						"type": "CLOSE",
 						"lastupdated": "20150124",
 						"url": "Pollution.html",
 						"description": "Pollution Feedback"
-						
-					},
-					{
-						"name": "Faigue",
-						"type": "JOB",
-						"lastupdated": "20150124",
-						"url": "fatigue_risk_assesment.html",
-						"description": "Fatigue Risk Accessment"
 						
 					}
 				]

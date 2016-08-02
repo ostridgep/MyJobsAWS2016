@@ -116,6 +116,30 @@ select:focus{
 	outline: none;
   padding: 13px 13px 13px 54px;
 }
+.feedback-label{
+color:#3c3c3c;
+	font-family: Helvetica, Arial, sans-serif;
+  font-weight:500;
+	font-size: 18px;
+	border-radius: 0;
+	line-height: 22px;
+	background-color: #e0e0e0;
+	padding: 13px 13px 13px 54px;
+	margin-bottom: 10px;
+	width:100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+  border: 3px solid rgba(0,0,0,0);
+	/* font-family: Helvetica, Arial, sans-serif;
+    font-weight:500;
+	font-size: 18px;
+	box-shadow: 0;
+background-color: #c0c0c0;
+	outline: none;
+  padding: 13px 0px 13px 54px; */
+}
 .feedback-inputnoicon {
 	color:#3c3c3c;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1296,4 +1320,17 @@ font-weight:700;
 		padding-left: 3%;
 		padding-right: 3%;
 	}
+}
+/* icons for fatigue risk  */
+#time{
+	background-image: url(../img/clock.svg);
+	background-size: 30px 30px;
+	background-position: 11px 8px;
+	background-repeat: no-repeat;
+}
+#date ,#agreementdate, #completedon{
+	background-image: url(../img/calendar.svg);
+	background-size: 30px 30px;
+	background-position: 11px 8px;
+	background-repeat: no-repeat;
 }

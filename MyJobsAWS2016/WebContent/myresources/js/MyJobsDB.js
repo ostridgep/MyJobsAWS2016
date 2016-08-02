@@ -3450,40 +3450,208 @@ function deleteFormsResponseDate(formname, order,opno)
 		);
 	
 }
+function deleteFormsAndDownload()
+{
+	
+	
+	
+	sqlStatement="DELETE from MyForms "+
+				 "where type <> 'CLOSE' ;"
+	
+		
+   opMessage("About to Delete Forms")
+  
+	html5sql.process(sqlStatement,
+		 function(transaction, results, rowsArray){
+		
+		opMessage("Forms Deleted OK")
+		downloadForms();
+
+		
+		 },
+		 function(error, statement){
+			
+			opMessage("Error: " + error.message + " when Deleting FormsResponses" );
+			
+		 }        
+		);
+	
+}
+function renameDocument(id){
+	selectedDocId=id;
+	sqlStatement="select formname, formdesc from MyFormsResponses where id = '"+id+"'"
+	 
+
+
+
+html5sql.process(sqlStatement,
+function(transaction, results, rowsArray){
+
+if(rowsArray.length>0){
+	sap.ui.getCore().getElementById('attachmentFname').setValue(rowsArray[0].formdesc)
+}else{
+	sap.ui.getCore().getElementById('attachmentFname').setValue("")
+}
+formFileName.open()
+
+},
+function(error, statement){
+
+
+}        
+);
+}
+function uploadDocument(id){
+	alert("about to send "+id)
+	selectedDocId=id;
+	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
+	 
+
+
+
+html5sql.process(sqlStatement,
+function(transaction, results, rowsArray){
+
+if(rowsArray.length>0){
+	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)
+	createBase64FormXML(formHTML,formdesc+".html")	
+}
+
+
+},
+function(error, statement){
+
+
+}        
+);
+}
+function deleteDocument(id){
+	 sap.m.MessageBox.show("Delete Document", {
+         icon: sap.m.MessageBox.Icon.WARNING ,
+         title: "Are you sure?",
+         actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+			 onClose: function(oAction){
+				
+				 if(oAction=="YES"){
+					 
+					 sqlStatement="Delete from MyFormsResponses where id =  '"+id+"' ;"
+						 
+
+
+
+					html5sql.process(sqlStatement,
+					function(transaction, results, rowsArray){
+
+					
+						buildJobDocsTable()
+
+					},
+					function(error, statement){
+
+
+					}        
+					);
+				 }
+			 }
+       }
+     );
+	
+}
+function updateFormDescription(id, desc)
+{
+	
+	
+	
+	sqlStatement="UPDATE MyFormsResponses "+
+				 "SET formdesc='"+desc+"'" +
+				 "where id = '"+id+"' ;"
+	
+		
+   
+  
+	html5sql.process(sqlStatement,
+		 function(transaction, results, rowsArray){
+		buildJobDocsTable()
+		opMessage("Formdata Renamed")
+		
+
+		
+		 },
+		 function(error, statement){
+			
+			opMessage("Error: " + error.message + " when Updateing FormsResponses Date" );
+			
+		 }        
+		);
+	
+}
+function InsertFormDetails(url, name,type,desc)
+{
+alert("Inserting "+name)
+
+	
+	sqlStatementIns="INSERT INTO  MyForms (name, type, url, description) VALUES ("+
+	"'"+name+"','"+type+"','"+url+"','"+desc+"');"
+	
+   opMessage("About to Insert Form "+name+":"+desc)
+  
+	
+		
+		html5sql.process(sqlStatementIns,
+				 function(transaction, results, rowsArray){
+			
+			    opMessage("Form inserted OK ")
+				 },
+				 function(error, statement){
+					
+					opMessage("Error: " + error.message + " when FormsResponses Insert " );
+					
+				 }        
+				);
+		
+		
+	
+}
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
 	
-	if (mode=="Close"){
+var fdesc=""	
+	if (mode=="Close"){ //Called from the Close Screen
 		state = "Close"
+			fdesc=""
 	}else{
-		state="NEW"
+		state="FORM"
+		fdesc=formname	
 	}
-	console.log("here")
+	
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
-	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
-	"'"+formname+"',"+"'"+type+"',"+"'"+wc+"',"+"'"+plant+"',"+"'"+notifno+"',"+"'"+order+"',"+"'"+opno+"',"+"'"+user+"',"+"'"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
-	console.log(sqlStatementIns)
+	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
+	"'"+formname+"','"+fdesc+"','"+type+"','"+wc+"','"+plant+"','"+notifno+"','"+order+"','"+opno+"','"+user+"','"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+	
    opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
   
 	html5sql.process(sqlStatementDel,
 		 function(transaction, results, rowsArray){
-		console.log("deldone")
+	
 		opMessage("Formdata Deleted OK")
 		
 		html5sql.process(sqlStatementIns,
 				 function(transaction, results, rowsArray){
 			
 			  opMessage("Formdata inserted OK ")
-			 console.log("insdone")
+			
 				if(formDG5.isOpen()){
 					getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
 				}
-			
+			  if (mode=="Forms"){ //Called from the Close Screen
+					buildJobDocsTable()
+				}
+			  
 				formForms.close()
 				 },
 				 function(error, statement){
-					 console.log(error)
+					
 					opMessage("Error: " + error.message + " when FormsResponses Insert " );
 					formForms.close()
 				 }        
@@ -3491,7 +3659,7 @@ function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,
 		
 		 },
 		 function(error, statement){
-			 console.log(error)
+			 
 			opMessage("Error: " + error.message + " when Deleting during FormsResponses " );
 			 formForms.close()
 		 }        
@@ -3715,7 +3883,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, htmlbody TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, formdesc TEXT,user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, htmlbody TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
 					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -4933,7 +5101,7 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
 						
-								 alert(sqlstatement1)	
+								
 			
 										
 								 },

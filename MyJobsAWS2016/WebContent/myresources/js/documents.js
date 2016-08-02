@@ -10,8 +10,8 @@ var selectedPhotoID=0;
 var selectedPhotoSize=0;
 var DeviceStorageDirectory;
 var AppDocDirectory;
-
-
+var attachFilename=""
+var selectedDocId="";
 	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
@@ -297,7 +297,7 @@ function createBase64XML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	alert(xmlstring)
+	
 	sendPhotoToServer("1",fn,xmlstring)
 	
 }
@@ -328,7 +328,7 @@ function createBase64FormXML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	
+	alert()
 	sendPhotoToServer("1",fn,xmlstring)
 	
 }
@@ -339,6 +339,64 @@ function writer(X){
 	)
 	location.href=dataUrl
 }
+
+
+var formFileName = new sap.m.Dialog("dlgFileName",{
+    title:"Enter Filename",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+
+
+				new sap.m.Button( {
+				    text: "Save",
+				    type: 	sap.m.ButtonType.Accept,
+				    press: [ function(oEvt) {	
+				    	if (sap.ui.getCore().getElementById('attachmentFname').getValue().length<1){
+							DisplayErrorMessage("Attachment", "Name is Mandatory")
+							}else{
+								updateFormDescription(selectedDocId,sap.ui.getCore().getElementById('attachmentFname').getValue())
+								formFileName.close()
+							}
+				    	
+						  } ]
+				}),
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		
+				    	
+				    	showAreYouSure("Close Forms","Exit without Saving?",formFileName) 
+				    	
+						  } ]
+				})
+				],					
+    content:[
+  			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 1,
+				content : 	[							
+				 			
+				 			new sap.m.Label({text:"Name"}),
+				 			new sap.m.Input("attachmentFname",{ type: sap.m.InputType.Input, maxLength:30,width:"300px"}),
+				 			
+							]
+ 				})
+
+
+            ],
+            contentWidth:"360px",
+            
+            beforeOpen:function(){
+            	
+            	
+            }
+ })
+
+
+
+
+
 var formPhotoDetails = new sap.m.Dialog("dlgPhotoDetails",{
     title:"Display Photo",
     modal: true,
@@ -453,26 +511,33 @@ var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
 			minWidth : 1024,
 			maxContainerCols : 2,
 			content : [
-		            
+			        
 					 new sap.m.Button( {
 					    text: "Template Document",
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {		  
 					    	
-					    	alert("TemplateDocument")
-					    	formGetDoc.close()
+					    		formGetDoc.close() 
+						    	showErrorMessage("Attach Error","Template Selected")
+					    
+					    	
 							  } ]
 					 }),
 					
 					 new sap.m.Button( {
 					    text: "Form",
 					    type: 	sap.m.ButtonType.Reject,
-					    tap: [ function(oEvt) {		  
-					    	formGetDoc.close() 
-					    	MandatedForms= [];
-			   				formToOpen="Forms/formsindex.html"
-			   			    formMode="Forms"
-	   						formForms.open()
+					    tap: [ function(oEvt) {	
+					    	
+					    		formGetDoc.close() 
+						    	MandatedForms= [];
+				   				formToOpen="Forms/formsindex.html"
+				   			    formMode="Forms"
+		   						formForms.open()
+					    	
+					    		
+					    	
+					    	
 					    	
 							  } ]
 					 	})
@@ -481,6 +546,7 @@ var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
             ],
             
             beforeOpen:function(){
+            	attachFilename="";
             	try{
             		
             		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
@@ -1368,7 +1434,32 @@ function downlodRequestedFile(dir,fn,id){
 	
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  + fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
 }
+function downloadForms () { 
+	
+	var n=0;
+	//  create a loop function
 
+		   while(n<filesToDownload.length){
+		       fileName = filesToDownload[n].name;
+		   		x=filesToDownload[n].name.split(".")
+		   		if(x.length>1){
+		   			if(x[1].toUpperCase()=="HTML"){ //Its the Form file
+		   				y=x[1].split("~")
+		   				if(y.length==3)
+		   					{
+		   					InsertFormDetails(DeviceStorageDirectory+filesToDownload[n].url+"/"  + filesToDownload[n].name,y[0],y[1],y[2])
+		   					}
+		   			}
+		   		}
+		       	
+		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[n].url+"/"  + filesToDownload[n].name, appStart, downloadAllAsset(filesToDownload[n].name, filesToDownload[n].url+"/"));
+		        filesToDownload[n].name
+		        n++;
+	          		
+				}
+
+	  
+	}
 function checkFileDownload () { 
 	
 		
@@ -1520,6 +1611,7 @@ function downloadAllAsset(fileName,dir) {
 		    
 		});
 }
+
 function transferRequestedFile(fileName,dir,id) {
     var fileTransfer = new FileTransfer();  
     
@@ -1544,11 +1636,11 @@ function transferRequestedFile(fileName,dir,id) {
 		});
 }
 function appStart() {
-    //alert(downloadCount+" Downloaded")
+    
 }
 function appStartLL() {
     alert(" LL Download starting")
 }	
 
 
-b
+
