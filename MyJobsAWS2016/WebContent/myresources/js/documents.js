@@ -12,6 +12,8 @@ var DeviceStorageDirectory;
 var AppDocDirectory;
 var attachFilename=""
 var selectedDocId="";
+var selectedFormId="";
+
 	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
@@ -260,7 +262,7 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 	  img.src = url;
 	}
 function getBase64FromImageUrl(imageUri) {
-	
+	alert(imageUri)
 	x=imageUri.split("/")
 	fn=x[x.length-1];
 	imageToBase64(imageUri, function(blob) {
@@ -496,6 +498,99 @@ new sap.m.Button( {
             	
             }
  })
+var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
+    
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formFormFunctions.close()
+						  } ]
+				})	
+				],					
+    content:[
+		new sap.ui.layout.form.SimpleForm({
+			minWidth : 1024,
+			maxContainerCols : 2,
+			content : [
+			        
+					 new sap.m.Button( {
+					    text: "Rename",
+					    type: 	sap.m.ButtonType.Accept,
+					    tap: [ function(oEvt) {	
+					    	formFormFunctions.close() 
+					    	
+					    	renameDocument(selectedFormId)
+					    	
+						    	
+					    
+					    	
+							  } ]
+					 }),
+					 new sap.m.Button( {
+						    text: "Delete",
+						    type: 	sap.m.ButtonType.Reject,
+						    tap: [ function(oEvt) {		  
+						    	
+						    	formFormFunctions.close() 
+							    deleteDocument(selectedFormId)	
+						    
+						    	
+								  } ]
+						 }),
+						 new sap.m.Button( {
+							    text: "Upload",
+							    type: 	sap.m.ButtonType.Accept,
+							    tap: [ function(oEvt) {	
+							    	
+							    		
+							    	formFormFunctions.close() 
+							    	uploadDocument(selectedFormId)	
+							    	
+							    	
+							    	
+									  } ]
+							 	}),										
+					 new sap.m.Button( {
+					    text: "Edit",
+					    type: 	sap.m.ButtonType.Accept,
+					    tap: [ function(oEvt) {	
+					    	
+					    		
+					    	formFormFunctions.close() 
+					    		
+					    	
+					    	
+					    	
+							  } ]
+					 	})
+				]
+			})
+            ],
+            
+            beforeOpen:function(){
+            	attachFilename="";
+            	try{
+            		
+            		DeviceStorageDirectory=cordova.file.externalApplicationStorageDirectory
+            		AppDocDirectory="MyJobs"
+            		if(device.platform=="iOS"){
+            			DeviceStorageDirectory=cordova.file.dataDirectory
+            			AppDocDirectory="documents/MyJobs"
+            		}
+            		localStorage.setItem("DeviceType",device.platform)
+            	 }catch(err){
+            		 localStorage.setItem("DeviceType","WINDOWS")
+            	
+            	 }
+            }
+ })
+
 var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
     title:"Attach Document / Form",
     modal: true,

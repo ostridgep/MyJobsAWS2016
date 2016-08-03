@@ -4801,8 +4801,8 @@ formtab=null;
      										 mode: sap.m.ListMode.SingleSelectMaster,
      										selectionChange: function(evt){
      											if(evt.getParameter("listItem").getCells()[1].getText()=="FORM"){
-     												
-     												openJobForm(evt.getParameter("listItem").getCells()[2].getText())
+     												selectedFormId=evt.getParameter("listItem").getCells()[2].getText()
+     												formFormFunctions.open()
      												
      											}else if(evt.getParameter("listItem").getCells()[1].getText()=="TEMPLATE"){
      												
@@ -5397,37 +5397,7 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 						
 					
 						while (n < rowsArray.length) {
-							var editButtons = new sap.ui.layout.HorizontalLayout({
-								  content : [
-new sap.m.Button("docr:"+rowsArray[n].id, {
-    
-    icon:"sap-icon://edit",
-    press: [ function(oEvt) {	
-    	x=oEvt.getSource().getId().split(":")
-    	renameDocument(x[1])
-    	
-    	} ]   
-}),new sap.m.Label({text:"  "}),
-new sap.m.Button("docd:"+rowsArray[n].id, {
-    
-    icon:"sap-icon://delete",
-    press: [ function(oEvt) {	
-    	x=oEvt.getSource().getId().split(":")
-    	deleteDocument(x[1])
-    	
-    	} ]   
-}),new sap.m.Label({text:"  "}),
-new sap.m.Button("docu:"+rowsArray[n].id, {
-    
-    icon:"sap-icon://upload",
-    press: [ function(oEvt) {	
-    	x=oEvt.getSource().getId().split(":")
-    	uploadDocument(x[1])
-    	
-    	} ]   
-})
-]
-								});
+
 					       
 							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 								
@@ -5436,8 +5406,8 @@ new sap.m.Button("docu:"+rowsArray[n].id, {
 									new sap.m.Text({text: rowsArray[n].formdesc}),
 									new sap.m.Text({text: "FORM"}),
 									new sap.m.Text({text: rowsArray[n].id}), 
-									//new sap.m.Text({text: rowsArray[n].lastupdated}), 
-									editButtons,
+									new sap.m.Text({text: rowsArray[n].lastupdated}), 
+									
 									new sap.m.Text({text: rowsArray[n].id}),
 									new sap.m.Text({text: rowsArray[n].formname})
 							 		],
