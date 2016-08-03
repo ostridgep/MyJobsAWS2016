@@ -403,6 +403,10 @@ function buildHeaderFields(formDoc){
 	    				items[i].value=getFormattedTime()
 	    			}else if(items[i].getAttribute("merge")=='~currentdate'){
 	    				items[i].value=getFormattedDMY();
+	    			}else if(items[i].getAttribute("merge")=='~mobileuser'){
+	    				items[i].value=localStorage.getItem("MobileUser");
+	    			}else if(items[i].getAttribute("merge")=='~employeeid'){
+	    				items[i].value=localStorage.getItem("EmployeeID");
 	    			}else{
 	    				if(items[i].getAttribute("merge")=="notifdate")
 	    					{
