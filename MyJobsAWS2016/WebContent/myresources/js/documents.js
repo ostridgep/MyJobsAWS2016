@@ -281,11 +281,11 @@ function getFileContentAsBase64(path,callback){
     }
 }
 function getBase64FromImageUrl(imageUri) {
-	alert(imageUri)
+	
 	x=imageUri.split("/")
-	alert(x[x.length-1])
+	
 	getFileContentAsBase64(imageUri,function(base64Image){
-		alert("Calling the op")
+		
 		  createBase64XML(base64Image,x[x.length-1])
 		});
 
