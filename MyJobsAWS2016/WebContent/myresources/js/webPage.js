@@ -230,7 +230,7 @@ var formForms = new sap.m.Dialog("dlg",{
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
 					    	fname=MyIFrameDoc.getElementById("FormName").value
-					    	
+					    	alert(fstate+" is the Form State")
 					    	if(fstate!="COMPLETE"){
 					    		
 					    	    showFormValidationMessage(fname,fname+" Form",fstate)
@@ -312,7 +312,7 @@ var formForms = new sap.m.Dialog("dlg",{
 	 })
 function saveFormData(fname,type){
 
-
+alert("Saving"+fname)
 
 var MyIFrame = document.getElementById("formIframe");
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
