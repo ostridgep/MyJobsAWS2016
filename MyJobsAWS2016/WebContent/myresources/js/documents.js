@@ -263,10 +263,10 @@ function getBase64FromImageUrl(imageUri) {
 	
 	x=imageUri.split("/")
 	fn=x[x.length-1];
-	imageToBase64('https://i.imgur.com/uUGeiSFb.jpg', function(blob) {
+	imageToBase64(imageUri, function(blob) {
 		  // Array buffer to Base64:
 		  var str = btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
-		  
+		  alert
 		  createBase64XML(str,fn)
 		});
 	//convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
