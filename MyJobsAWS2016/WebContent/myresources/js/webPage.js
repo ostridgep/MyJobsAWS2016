@@ -645,10 +645,10 @@ var SQLStatement=''
 			doc.getElementById("MandatoryDiv").style.display = "block";
 		}
 		if (formDG5.isOpen()){
-			doc.getElementById("stdFList").style.display = "none";
+			doc.getElementById("stdFList").style.display = "block";
 			doc.getElementById("stdList").style.display = "none";
 		}
-		 html5sql.process("Select * from MyForms where type <> 'CLOSE'",
+		 html5sql.process("Select * from MyForms where ",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
 			 		
