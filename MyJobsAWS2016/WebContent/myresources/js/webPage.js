@@ -321,8 +321,14 @@ var MyIFrame = document.getElementById("formIframe");
 	try {
 		
 		formJSON=buildJSONResponse(MyIFrameDoc)
-		
-		formHTML=HTMLFormStart+MyIFrameDoc.body.innerHTML+HTMLFormEnd
+		xx=MyIFrameDoc.body;
+			 var elems = xx.getElementsByTagName("input");
+
+				for(var i = 0; i < elems.length; i++) {
+				// set attribute to property value
+				elems[i].setAttribute("value", elems[i].value);
+				}	
+		formHTML=HTMLFormStart+xx.innerHTML+HTMLFormEnd
 		
 		
 		if(currentPage.indexOf("Home")<1) {
