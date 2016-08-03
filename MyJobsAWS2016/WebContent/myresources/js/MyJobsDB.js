@@ -3511,9 +3511,11 @@ html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 alert(rowsArray.length)
 if(rowsArray.length>0){
-	
+	alert("about to base 64 the html")
 	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)
-	createBase64FormXML(formHTML,formdesc+".html")	
+	alert("done base 64 the html")
+	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html")	
+	alert("sending")
 }
 
 
