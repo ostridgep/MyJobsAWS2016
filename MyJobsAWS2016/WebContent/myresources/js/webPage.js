@@ -638,7 +638,7 @@ var SQLStatement=''
 			
 			doc.getElementById("MandatoryDiv").style.display = "block";
 		}
-		 html5sql.process("Select * from MyForms",
+		 html5sql.process("Select * from MyForms where type <> 'CLOSE'",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
 			 		
