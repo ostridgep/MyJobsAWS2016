@@ -312,7 +312,7 @@ var formForms = new sap.m.Dialog("dlg",{
 	 })
 function saveFormData(fname,type){
 
-alert("Saving"+fname)
+
 
 var MyIFrame = document.getElementById("formIframe");
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)

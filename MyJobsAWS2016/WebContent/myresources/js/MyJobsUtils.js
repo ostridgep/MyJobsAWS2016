@@ -4,19 +4,25 @@ var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
 function imageToBase64(uri, callback) {
+	alert("a1")
 	  var xhr = new XMLHttpRequest();
 	  xhr.open('GET', uri, true);
 	  xhr.responseType = 'arraybuffer';
-
+	  alert("a2")
 	  xhr.onload = function(e) {
 	    if (this.status == 200) {
+	    	alert("a2a")	
 	      var blob = this.response;
 	      if (callback) {
+	    	  alert("a2b") 
 	        callback(blob);
 	      }
 	    }
+	    alert("a3")
 	  };
+	  alert("a4")
 	  xhr.send();
+	  alert("a5")
 	};
 var formMessageBox = new sap.m.Dialog("dlgMessageBox",{
     title:"",

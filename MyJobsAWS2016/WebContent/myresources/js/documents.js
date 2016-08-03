@@ -265,8 +265,9 @@ function getBase64FromImageUrl(imageUri) {
 	alert(imageUri)
 	x=imageUri.split("/")
 	fn=x[x.length-1];
+	alert(fn)
 	imageToBase64(imageUri, function(blob) {
-		  // Array buffer to Base64:
+		alert("got here")
 		  var str = btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
 		  alert(str)
 		  createBase64XML(str,fn)
