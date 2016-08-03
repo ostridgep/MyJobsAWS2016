@@ -3588,7 +3588,7 @@ function updateFormDescription(id, desc)
 }
 function InsertFormDetails(url, name,type,desc)
 {
-alert("Inserting "+name)
+//alert("Inserting "+name)
 
 	
 	sqlStatementIns="INSERT INTO  MyForms (name, type, url, description) VALUES ("+

@@ -230,7 +230,7 @@ var formForms = new sap.m.Dialog("dlg",{
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;
 					    	fname=MyIFrameDoc.getElementById("FormName").value
-					    	alert(fstate+" is the Form State")
+
 					    	if(fstate!="COMPLETE"){
 					    		
 					    	    showFormValidationMessage(fname,fname+" Form",fstate)
@@ -631,8 +631,10 @@ var SQLStatement=''
 		if(currentPage.indexOf("Home")>0) {
 			
 			doc.getElementById("stdFList").style.display = "none";
+			doc.getElementById("stdList").style.display = "block";
+			doc.getElementById("MandatoryDiv").style.display = "none";
 		}else{
-			
+			doc.getElementById("stdList").style.display = "none";
 			doc.getElementById("stdFList").style.display = "block";
 		}
 		if(MandatedForms.length<1){
@@ -642,7 +644,11 @@ var SQLStatement=''
 			
 			doc.getElementById("MandatoryDiv").style.display = "block";
 		}
-		 html5sql.process("Select * from MyForms where type = 'JOB'",
+		if (formDG5.isOpen()){
+			doc.getElementById("stdFList").style.display = "none";
+			doc.getElementById("stdList").style.display = "none";
+		}
+		 html5sql.process("Select * from MyForms where type <> 'CLOSE'",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
 			 		

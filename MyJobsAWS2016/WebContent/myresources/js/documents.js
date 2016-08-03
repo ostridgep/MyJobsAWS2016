@@ -532,7 +532,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 			minWidth : 1024,
 			maxContainerCols : 2,
 			content : [
-			        
+			           new sap.m.Label({text:""}),
 					 new sap.m.Button( {
 					    text: "Rename",
 					    type: 	sap.m.ButtonType.Accept,
@@ -546,6 +546,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 					    	
 							  } ]
 					 }),
+					 new sap.m.Label({text:""}),
 					 new sap.m.Button( {
 						    text: "Delete",
 						    type: 	sap.m.ButtonType.Reject,
@@ -557,6 +558,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 						    	
 								  } ]
 						 }),
+						 new sap.m.Label({text:""}),
 						 new sap.m.Button( {
 							    text: "Upload",
 							    type: 	sap.m.ButtonType.Accept,
@@ -569,7 +571,8 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 							    	
 							    	
 									  } ]
-							 	}),										
+							 	}),	
+							 	 new sap.m.Label({text:""}),
 					 new sap.m.Button( {
 					    text: "Edit",
 					    type: 	sap.m.ButtonType.Accept,
