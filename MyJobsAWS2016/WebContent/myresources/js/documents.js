@@ -266,7 +266,7 @@ function getBase64FromImageUrl(imageUri) {
 	imageToBase64(imageUri, function(blob) {
 		  // Array buffer to Base64:
 		  var str = btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
-		  alert
+		  alert(str)
 		  createBase64XML(str,fn)
 		});
 	//convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
