@@ -3,6 +3,21 @@ var MB2Type=""
 var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
+function imageToBaseg64(uri, callback) {
+	  var xhr = new XMLHttpRequest();
+	  xhr.open('GET', uri, true);
+	  xhr.responseType = 'arraybuffer';
+
+	  xhr.onload = function(e) {
+	    if (this.status == 200) {
+	      var blob = this.response;
+	      if (callback) {
+	        callback(blob);
+	      }
+	    }
+	  };
+	  xhr.send();
+	};
 var formMessageBox = new sap.m.Dialog("dlgMessageBox",{
     title:"",
     modal: true,

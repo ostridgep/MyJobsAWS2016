@@ -262,12 +262,17 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 function getBase64FromImageUrl(imageUri) {
 	
 	x=imageUri.split("/")
-	fn=x[x.length-1]
-	
-	convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
+	fn=x[x.length-1];
+	imageToBase64('https://i.imgur.com/uUGeiSFb.jpg', function(blob) {
+		  // Array buffer to Base64:
+		  var str = btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
+		  
+		  createBase64XML(str,fn)
+		});
+	//convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
 		 
-		  createBase64XML(base64Img,fn)
-		},"image/jpeg" );
+	//	  createBase64XML(base64Img,fn)
+	//	},"image/jpeg" );
 }
 
 function createBase64XML(base64,fn){
