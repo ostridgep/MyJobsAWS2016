@@ -317,16 +317,17 @@ function saveFormData(fname,type){
 var MyIFrame = document.getElementById("formIframe");
 						    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 						    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
-						   				    
+						   					   				    
 	try {
 		
 		formJSON=buildJSONResponse(MyIFrameDoc)
+		
 		formHTML=HTMLFormStart+MyIFrameDoc.body.innerHTML+HTMLFormEnd
-		//createBase64FormXML(formHTML,"paul.html")
+		
 		
 		if(currentPage.indexOf("Home")<1) {
 			//Job Related
-		
+			
 			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,formHTML,formMode,type)
 		}else{
 			//Non Job Form
@@ -627,7 +628,13 @@ var SQLStatement=''
 		 
 	  }catch(err)
 	  {}
-		
+	  var closeOpen=false;
+	  try {
+			 if(formDG5.isOpen()){
+				 closeOpen=true; 
+			 } 
+	  }catch(err)
+	  {}
 		if(currentPage.indexOf("Home")>0) {
 			
 			doc.getElementById("stdFList").style.display = "none";
@@ -637,18 +644,16 @@ var SQLStatement=''
 			doc.getElementById("stdList").style.display = "none";
 			doc.getElementById("stdFList").style.display = "block";
 		}
-		if(MandatedForms.length<1){
-
-			doc.getElementById("MandatoryDiv").style.display = "none";
-		}else{
-			
-			doc.getElementById("MandatoryDiv").style.display = "block";
+		if(closeOpen){
+			if(MandatedForms.length<1){
+	
+				doc.getElementById("MandatoryDiv").style.display = "none";
+			}else{
+				
+				doc.getElementById("MandatoryDiv").style.display = "block";
+			}
 		}
-		if (formDG5.isOpen()){
-			doc.getElementById("stdFList").style.display = "block";
-			doc.getElementById("stdList").style.display = "none";
-		}
-		 html5sql.process("Select * from MyForms where ",
+		 html5sql.process("Select * from MyForms ",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
 			 		
@@ -657,9 +662,13 @@ var SQLStatement=''
 					{	
 	            		item = rowsArray[cntx];
 	            	    
-	            		if(item.type=="ALL"){
+	            		if((item.type=="ALL")&&(!closeOpen)){
 	            			doc.getElementById("StandardFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
-	            		}else{
+	            		}
+	            		if((item.type=="JOB")&&(!closeOpen)){
+	            			doc.getElementById("JobFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"				
+	            		}
+	            		if((item.type=="CLOSE")&&(closeOpen)){
 	            			if(MandatedForms.indexOf(item["url"])!=-1){
 	            				doc.getElementById("MandatoryFormList").innerHTML+="<label class='feedback-input' ><a  href='"+item["url"]+"' >"+item["description"]+"</a></label>"	
 	            			}else{
@@ -885,6 +894,7 @@ console.log(closeFormName)
 		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = "'+id+'"';
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
+			
 					if(rowsArray.length>0){
 						MandatedForms= [];
 						formToOpen="Forms/"+rowsArray[0].url

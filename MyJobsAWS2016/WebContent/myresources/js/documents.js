@@ -578,7 +578,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {	
 					    	
-					    		
+					    	
 					    	formFormFunctions.close() 
 					    	openJobForm(selectedFormId)	
 					    	
