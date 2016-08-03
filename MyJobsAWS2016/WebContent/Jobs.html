@@ -5398,7 +5398,11 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 					
 						while (n < rowsArray.length) {
 
-					       
+					       if(rowsArray[n].formdesc.indexOf("~")>0){
+					    	   fn=rowsArray[n].formname+rowsArray[n].id;
+					       }else{
+					    	   fn=rowsArray[n].formdesc;
+					       }
 							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 								
 								cells : 
