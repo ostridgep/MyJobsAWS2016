@@ -286,7 +286,7 @@ function getBase64FromImageUrl(imageUri) {
 	alert(x[x.length-1])
 	getFileContentAsBase64(imageUri,function(base64Image){
 		alert("Calling the op")
-		  createBase64XML(str,x[x.length-1])
+		  createBase64XML(base64Image,x[x.length-1])
 		});
 
 }
