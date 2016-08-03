@@ -328,7 +328,7 @@ function createBase64FormXML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	alert()
+	
 	sendPhotoToServer("1",fn,xmlstring)
 	
 }
@@ -1593,7 +1593,7 @@ function downloadAsset(fileName,dir) {
 		},
 		function (error) {
 		    
-		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+			opMessage("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 	    
 		});
@@ -1607,7 +1607,7 @@ function downloadAllAsset(fileName,dir) {
 		},
 		function (error) {
 		    
-		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+		    opMessage("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});

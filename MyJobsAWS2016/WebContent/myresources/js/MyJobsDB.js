@@ -3509,8 +3509,9 @@ function uploadDocument(id){
 
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
-
+alert(rowsArray.length)
 if(rowsArray.length>0){
+	
 	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)
 	createBase64FormXML(formHTML,formdesc+".html")	
 }
@@ -3519,7 +3520,7 @@ if(rowsArray.length>0){
 },
 function(error, statement){
 
-
+allert("uploadDocument:"+error+statement)
 }        
 );
 }

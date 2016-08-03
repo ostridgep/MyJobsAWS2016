@@ -29,7 +29,7 @@ function getFormsDL()
     	
     	filesToDownload=data;
         var cnt = 0;
-        alert("requesting Forms"+filesToDownload.FILES.length)
+        
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		
