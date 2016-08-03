@@ -3500,7 +3500,7 @@ function(error, statement){
 );
 }
 function uploadDocument(id){
-	alert("about to send "+id)
+	
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
 	 
@@ -3509,13 +3509,13 @@ function uploadDocument(id){
 
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
-alert(rowsArray.length)
+
 if(rowsArray.length>0){
-	alert("about to base 64 the html")
+
 	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)
-	alert("done base 64 the html")
+
 	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html")	
-	alert("sending")
+
 }
 
 

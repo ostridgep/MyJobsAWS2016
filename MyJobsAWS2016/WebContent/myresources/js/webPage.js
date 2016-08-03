@@ -321,7 +321,7 @@ var MyIFrame = document.getElementById("formIframe");
 	try {
 		
 		formJSON=buildJSONResponse(MyIFrameDoc)
-		formHTML=window.btoa(HTMLFormStart+MyIFrameDoc.body.innerHTML+HTMLFormEnd)
+		formHTML=HTMLFormStart+MyIFrameDoc.body.innerHTML+HTMLFormEnd
 		//createBase64FormXML(formHTML,"paul.html")
 		
 		if(currentPage.indexOf("Home")<1) {
