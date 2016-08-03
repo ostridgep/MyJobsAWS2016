@@ -285,8 +285,8 @@ function getBase64FromImageUrl(imageUri) {
 	x=imageUri.split("/")
 	
 	getFileContentAsBase64(imageUri,function(base64Image){
-		
-		  createBase64XML(base64Image,x[x.length-1])
+		b64=base64Image.split(",")
+		  createBase64XML(b64[1],x[x.length-1])
 		});
 
 }
