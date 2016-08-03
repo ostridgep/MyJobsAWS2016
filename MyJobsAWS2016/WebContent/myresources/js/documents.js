@@ -261,21 +261,32 @@ function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
 	  };
 	  img.src = url;
 	}
+function getFileContentAsBase64(path,callback){
+    window.resolveLocalFileSystemURL(path, gotFile, fail);
+            
+    function fail(e) {
+          alert('Cannot found requested file');
+    }
+
+    function gotFile(fileEntry) {
+           fileEntry.file(function(file) {
+              var reader = new FileReader();
+              reader.onloadend = function(e) {
+                   var content = this.result;
+                   callback(content);
+              };
+              // The most important point, use the readAsDatURL Method from the file plugin
+              reader.readAsDataURL(file);
+           });
+    }
+}
 function getBase64FromImageUrl(imageUri) {
 	alert(imageUri)
-	x=imageUri.split("/")
-	fn=x[x.length-1];
-	alert(fn)
-	imageToBase64(imageUri, function(blob) {
-		alert("got here")
-		  var str = btoa(String.fromCharCode.apply(null, new Uint8Array(blob)));
-		  alert(str)
-		  createBase64XML(str,fn)
+	getFileContentAsBase64(imageUri,function(base64Image){
+		alert("Calling the op")
+		  createBase64XML(str,"xx.jpeg")
 		});
-	//convertImgToDataURLviaCanvas(imageUri, function(base64Img) {
-		 
-	//	  createBase64XML(base64Img,fn)
-	//	},"image/jpeg" );
+
 }
 
 function createBase64XML(base64,fn){

@@ -3,6 +3,27 @@ var MB2Type=""
 var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
+function encodeImageBase64(fn) {
+
+  
+   
+     
+
+      var fileReader = new FileReader();
+
+      fileReader.onload = function(fileLoadedEvent) {
+        var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+        var newImage = document.createElement('img');
+        newImage.src = srcData;
+
+        document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+        alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+        console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+      }
+      fileReader.readAsDataURL(fn);
+    
+  }
 function imageToBase64(uri, callback) {
 	alert("a1")
 	  var xhr = new XMLHttpRequest();
@@ -10,6 +31,7 @@ function imageToBase64(uri, callback) {
 	  xhr.responseType = 'arraybuffer';
 	  alert("a2")
 	  xhr.onload = function(e) {
+		  alert("stat="+this.status)
 	    if (this.status == 200) {
 	    	alert("a2a")	
 	      var blob = this.response;
