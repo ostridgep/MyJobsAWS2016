@@ -6,13 +6,13 @@ var mapLocationField
 var HTMLFormStart=	'<!DOCTYPE html>'+
 					'<html xmlns="http://www.w3.org/1999/xhtml">'+
 					'<head>'+
-					'<link href="'+localStorage.getItem("DOCSERVER")+'Forms/css/site.css" rel="stylesheet" />'+
-					'<script src="'+localStorage.getItem("DOCSERVER")+'Forms/js/jq.1.10.2.js"></script>'+
-					'<script src="'+localStorage.getItem("DOCSERVER")+'Forms/js/jqui.1.9.2.js"></script>'+
-					'<script src="'+localStorage.getItem("DOCSERVER")+'Forms/js/bs.3.1.1.js"></script>'+
-					'<script src="'+localStorage.getItem("DOCSERVER")+'Forms/js/functions.js"></script>'+
-					'<link rel="stylesheet" href="'+localStorage.getItem("DOCSERVER")+'Forms/css/bs.3.1.1.css" />'+
-					'<link rel="stylesheet" href="'+localStorage.getItem("DOCSERVER")+'Forms/css/jqui.1.9.2_smoothness.css" />'+
+					'<link href="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/css/site.css" rel="stylesheet" />'+
+					'<script src="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/js/jq.1.10.2.js"></script>'+
+					'<script src="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/js/jqui.1.9.2.js"></script>'+
+					'<script src="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/js/bs.3.1.1.js"></script>'+
+					'<script src="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/js/functions.js"></script>'+
+					'<link rel="stylesheet" href="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/css/bs.3.1.1.css" />'+
+					'<link rel="stylesheet" href="'+localStorage.getItem("DOCSERVER")+'MyJobs/Global/Forms/css/jqui.1.9.2_smoothness.css" />'+
 					'</head>'
 var HTMLFormEnd=	'</html>'
 currentPage=document.location.href;
