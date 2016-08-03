@@ -642,7 +642,7 @@ var SQLStatement=''
 			
 			doc.getElementById("MandatoryDiv").style.display = "block";
 		}
-		 html5sql.process("Select * from MyForms where type <> 'CLOSE'",
+		 html5sql.process("Select * from MyForms where type = 'JOB'",
 	              function(transaction, results, rowsArray){
 			// alert("hello"+rowsArray.length)
 			 		
