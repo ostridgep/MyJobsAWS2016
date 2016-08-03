@@ -3,7 +3,7 @@ var MB2Type=""
 var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
-function imageToBaseg64(uri, callback) {
+function imageToBase64(uri, callback) {
 	  var xhr = new XMLHttpRequest();
 	  xhr.open('GET', uri, true);
 	  xhr.responseType = 'arraybuffer';
