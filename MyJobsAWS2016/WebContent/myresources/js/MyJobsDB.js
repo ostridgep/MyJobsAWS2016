@@ -3511,9 +3511,10 @@ html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 	alert("About to send found "+rowsArray.length)
 if(rowsArray.length>0){
-
-	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)
-
+	x=unescape(rowsArray[0].htmlbody)
+	console.log(x)
+	formHTML=window.btoa(HTMLFormStart+x+HTMLFormEnd)
+	
 	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html")	
 
 }
