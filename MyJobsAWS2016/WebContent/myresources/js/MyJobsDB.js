@@ -3500,7 +3500,7 @@ function(error, statement){
 );
 }
 function uploadDocument(id){
-	
+	alert("About to send"+id)
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
 	 
@@ -3509,7 +3509,7 @@ function uploadDocument(id){
 
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
-
+	alert("About to send found "+rowsArray.length)
 if(rowsArray.length>0){
 
 	formHTML=window.btoa(HTMLFormStart+unescape(rowsArray[0].htmlbody)+HTMLFormEnd)

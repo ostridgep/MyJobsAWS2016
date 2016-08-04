@@ -349,7 +349,7 @@ function createBase64FormXML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	
+	alert(xmlstring)
 	sendPhotoToServer("1",fn,xmlstring)
 	
 }
