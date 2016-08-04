@@ -349,7 +349,7 @@ function createBase64FormXML(base64,fn){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	alert(xmlstring)
+	
 	sendPhotoToServer("1",fn,xmlstring)
 	
 }
@@ -763,7 +763,7 @@ function selectPhoto(){
 	);
 }
 function showFile(file){
-	alert(file)
+	
 	window.plugins.fileOpener.open(file)
 	//window.open(file, "_blank", 'location=yes,closebuttoncaption=Return') 
 	
@@ -1506,13 +1506,13 @@ function sendPhotoToServer(id,fname,content){
 		 alert("1")
 		})
 		  .done(function() {
-			  alert("done")
+			  
 		  })
 		  .fail(function() {
-			  alert("faile")
+			  
 		  })
 		  .always(function() {
-			  alert("always")
+			 
 		});
 	}
 

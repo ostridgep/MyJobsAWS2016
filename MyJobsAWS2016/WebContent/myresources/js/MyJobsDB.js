@@ -3514,7 +3514,7 @@ if(rowsArray.length>0){
 	y=unescape(encodeURIComponent(x))
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
-	alert(formHTML)
+	
 	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html")	
 
 }
