@@ -328,6 +328,20 @@ var MyIFrame = document.getElementById("formIframe");
 				// set attribute to property value
 				elems[i].setAttribute("value", elems[i].value);
 				}	
+				var elems = xx.getElementsByTagName("textarea");
+
+				for(var i = 0; i < elems.length; i++) {
+				// set attribute to property value
+				name=elems[i].getAttribute("name")
+				id=elems[i].getAttribute("id")
+				fclass=elems[i].getAttribute("class")
+				x="<TEXTAREA>"+elems[i].value+"</TEXTAREA>"
+				
+				elems[i].outerHTML=x
+				elems[i].setAttribute("id",id)
+				elems[i].setAttribute("name",name)
+				elems[i].setAttribute("class",fclass)
+				}	
 		formHTML=HTMLFormStart+xx.innerHTML+HTMLFormEnd
 		
 		

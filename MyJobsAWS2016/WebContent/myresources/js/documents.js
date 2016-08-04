@@ -1504,16 +1504,16 @@ function sendPhotoToServer(id,fname,content){
 		
 			
 			function(data) {
-		 
+		 alert("1")
 		})
 		  .done(function() {
-		   
+			  alert("done")
 		  })
 		  .fail(function() {
-		   
+			  alert("faile")
 		  })
 		  .always(function() {
-		  
+			  alert("always")
 		});
 	}
 
