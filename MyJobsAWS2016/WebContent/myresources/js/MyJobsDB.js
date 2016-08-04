@@ -3506,7 +3506,6 @@ function uploadDocument(id){
 	 
 
 
-
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 	alert("About to send found "+rowsArray.length)
