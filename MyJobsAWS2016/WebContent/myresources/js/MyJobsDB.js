@@ -3653,7 +3653,7 @@ function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,
 	
 if(formname.indexOf("~")>0){
 	x=formname.split("~");
-	formname=x[0]+"-"+getFileUploadDT()
+	formname=x[0]
 }	
 var fdesc=""	
 	if (mode=="Close"){ //Called from the Close Screen
@@ -3661,7 +3661,7 @@ var fdesc=""
 			fdesc=""
 	}else{
 		state="FORM"
-		fdesc=formname	
+		fdesc=formname+"-"+getFileUploadDT()	
 	}
 
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
