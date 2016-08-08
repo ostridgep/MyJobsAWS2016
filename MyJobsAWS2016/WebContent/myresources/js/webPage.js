@@ -810,7 +810,7 @@ function setDlgTitle(formTitle){
 	function isIterable(element) {
 	    return isArray(element) || isObject(element);
 	}
-
+ 
 	function isArray(element) {
 	    return element.constructor == Array;
 	}
