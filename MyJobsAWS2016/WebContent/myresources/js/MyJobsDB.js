@@ -3275,6 +3275,40 @@ function getAssetHistory(fl)
 		 }        
 		);
 }
+function updateDocumentState(id,status)
+{
+
+	
+	sqlStatement="UPDATE MyJobsDocs SET lastupdated='"+status+"' where id = '"+id+"'";
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+				
+		 },
+		 function(error, statement){
+
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
+function updatePhotoState(id,status)
+{
+
+	
+	sqlStatement="UPDATE MyJobsPhotos SET status='"+status+"' where id = '"+id+"'";
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+				
+		 },
+		 function(error, statement){
+
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
 function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 {
 
@@ -3515,7 +3549,7 @@ if(rowsArray.length>0){
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
 	
-	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html")	
+	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id)	
 
 }
 
@@ -3523,7 +3557,7 @@ if(rowsArray.length>0){
 },
 function(error, statement){
 
-allert("uploadDocument:"+error+statement)
+opMessage("uploadDocument:"+error+statement)
 }        
 );
 }

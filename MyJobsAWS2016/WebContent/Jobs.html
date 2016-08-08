@@ -2340,23 +2340,7 @@ var detailFooterAWS = new sap.m.Bar({
 						    	  
 						    	 
 								}]
-					 }),
-						new sap.m.Button('btnForms', {
-				    		text: 	"Forms",
-				    		 icon:"sap-icon://form",
-				    	
-				   			tap: 	[ function(oEvt) {
-				   				MandatedForms= [];
-				   				formToOpen="Forms/formsindex.html"
-				   			    formMode="Forms"
-		   						formForms.open()
-				   				
-				   							
-				   					
-				    					} 
-				   			 		]   
-							}
-						),
+					 })
 
 					],
 					contentMiddle : [
@@ -4819,13 +4803,13 @@ formtab=null;
      									    },
      										columns:[
     										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
-    										        	 hAlign: 'Left',width: '50%', minScreenWidth : "" , demandPopin: false}),
+    										        	 hAlign: 'Left',width: '60%', minScreenWidth : "" , demandPopin: false}),
     										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
-    										        	 hAlign: 'Left',width: '18%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
+    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
     										         new sap.m.Column({header: new sap.m.Label({text:"Node"}),
-    										        	 hAlign: 'Left',width: '17%',minScreenWidth : "" , demandPopin: true }),
-  										        	 new sap.m.Column({header: new sap.m.Label({text:"Local"}),
-      										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true }),
+    										        	 hAlign: 'Left',width: '0%',minScreenWidth : "" ,  visible:false, demandPopin: true }),
+  										        	 new sap.m.Column({header: new sap.m.Label({text:"Status"}),
+      										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
    	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
    	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }) ,
     										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
@@ -4867,7 +4851,7 @@ new sap.m.Button( {
       										         hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
    										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
    										        	 hAlign: 'Left',width: '10%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
-   										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Status"}),
    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
    										        
  										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
@@ -5403,6 +5387,11 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 					       }else{
 					    	   fn=rowsArray[n].formdesc;
 					       }
+					       if(rowsArray[n].lastupdated.indexOf("COMPLETE")>0){
+					    	   status="Local";
+					       }else{
+					    	   status=rowsArray[n].lastupdated;
+					       }
 							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 								
 								cells : 
@@ -5410,7 +5399,7 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 									new sap.m.Text({text: rowsArray[n].formdesc}),
 									new sap.m.Text({text: "FORM"}),
 									new sap.m.Text({text: rowsArray[n].id}), 
-									new sap.m.Text({text: rowsArray[n].lastupdated}), 
+									new sap.m.Text({text: status}), 
 									
 									new sap.m.Text({text: rowsArray[n].id}),
 									new sap.m.Text({text: rowsArray[n].formname})
@@ -5450,7 +5439,7 @@ html5sql.process("SELECT * FROM MyJobsPhotos where orderno = '"+CurrentOrderNo+"
 						new sap.m.Text({text: rowsArray[n].name}),
 						new sap.m.Text({text: rowsArray[n].desc}),
 						new sap.m.Text({text: rowsArray[n].size}),
-						new sap.m.Text({text: rowsArray[n].date}),   
+						new sap.m.Text({text: rowsArray[n].status}),   
 						new sap.m.Text({text: rowsArray[n].url}),
 						new sap.m.Text({text: rowsArray[n].id})
 				 		],

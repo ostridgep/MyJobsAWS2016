@@ -280,18 +280,18 @@ function getFileContentAsBase64(path,callback){
            });
     }
 }
-function getBase64FromImageUrl(imageUri) {
+function getBase64FromImageUrl(imageUri,id) {
 	
 	x=imageUri.split("/")
 	
 	getFileContentAsBase64(imageUri,function(base64Image){
 		b64=base64Image.split(",")
-		  createBase64XML(b64[1],x[x.length-1])
+		  createBase64XML(b64[1],x[x.length-1],id)
 		});
 
 }
 
-function createBase64XML(base64,fn){
+function createBase64XML(base64,fn,id){
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
@@ -319,10 +319,10 @@ function createBase64XML(base64,fn){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	
-	sendPhotoToServer("1",fn,xmlstring)
+	sendPhotoToServer(id,fn,xmlstring)
 	
 }
-function createBase64FormXML(base64,fn){
+function createBase64FormXML(base64,fn,id){
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
@@ -350,7 +350,7 @@ function createBase64FormXML(base64,fn){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	
-	sendPhotoToServer("1",fn,xmlstring)
+	sendPhotoToServer(id,fn,xmlstring)
 	
 }
 function writer(X){
@@ -440,11 +440,11 @@ new sap.m.Button( {
 			DisplayErrorMessage("Attach Photo", "Name is Mandatory")
 			}else{
 				if (selectedPhotoID==0){
-		    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "NEW")
+		    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
 		    	}else{
 		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
 		    	}
-				getBase64FromImageUrl(selectedPhoto)
+				getBase64FromImageUrl(selectedPhoto,selectedPhotoID)
 		    	formPhotoDetails.close()
 			}
     	
@@ -580,6 +580,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 					    	
 					    	
 					    	formFormFunctions.close() 
+					    	alert("Edit"+selectedFormId)
 					    	openJobForm(selectedFormId)	
 					    	
 					    	
@@ -1503,19 +1504,41 @@ function sendPhotoToServer(id,fname,content){
 		
 			
 			function(data) {
-		 alert("1")
+				updateDocumentState(id,"Sending")
 		})
 		  .done(function() {
-			  
+			  updateDocumentState(id,"Sent")
 		  })
 		  .fail(function() {
-			  
+			  updateDocumentState(id,"Failed To Send")
 		  })
 		  .always(function() {
 			 
 		});
 	}
+function sendDocToServer(id,fname,content){
+	xx=fname.split(".")
 
+	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
+			{
+			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
+			content:content
+			},
+		
+			
+			function(data) {
+				updatePhotoState(id,"Sending")
+		})
+		  .done(function() {
+			  updatePhotoState(id,"Sent")
+		  })
+		  .fail(function() {
+			  updatePhotoState(id,"Failed To Send")
+		  })
+		  .always(function() {
+			 
+		});
+	}
 function BuildDocumentsTable() { 
 	
 	
