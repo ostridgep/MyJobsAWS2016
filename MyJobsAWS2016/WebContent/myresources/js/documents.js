@@ -293,6 +293,7 @@ function getBase64FromImageUrl(imageUri,id) {
 
 function createBase64XML(base64,fn,id){
 	dt=getFileUploadDT()
+	
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
@@ -324,6 +325,7 @@ function createBase64XML(base64,fn,id){
 }
 function createBase64FormXML(base64,fn,id){
 	dt=getFileUploadDT()
+	uploadfn=CurrentOrderNo+'0010-'+dt+'-'+fn
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
@@ -337,7 +339,7 @@ function createBase64FormXML(base64,fn,id){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+fn+'</filename>'+
+					  '  <filename>'+uploadfn+'</filename>'+
 					  '  <extension>html</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -350,7 +352,7 @@ function createBase64FormXML(base64,fn,id){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	
-	sendDocToServer(id,fn,xmlstring)
+	sendDocToServer(id,uploadfn,xmlstring)
 	
 }
 function writer(X){
