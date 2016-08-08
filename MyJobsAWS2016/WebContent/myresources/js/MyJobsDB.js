@@ -3650,9 +3650,10 @@ function InsertFormDetails(url, name,type,desc)
 }
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
-	alert("yyy")
+	alert("saving form")
 if(formname.indexOf("~")>0){
-	formname=formname.split("~")[0]+"-"+formatDateTime(new Date())
+	x=formname.split("~");
+	formname=x[0]+"-"+formatDateTime(new Date())
 }	
 var fdesc=""	
 	if (mode=="Close"){ //Called from the Close Screen
