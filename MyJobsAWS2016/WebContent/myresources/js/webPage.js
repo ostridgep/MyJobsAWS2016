@@ -913,7 +913,7 @@ console.log(closeFormName)
 	function openJobForm(id){
 		
 		sqlstatement='select  MyFormsResponses.formname, MyFormsResponses.orderno, MyFormsResponses.opno, MyFormsResponses.lastupdated as status, MyForms.url as url, MyForms.description as description from MyFormsResponses '+
-		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = "'+id+'"';
+		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = '+id;
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
 					alert(sqlstatement+"----->"+rowsArray.length)
