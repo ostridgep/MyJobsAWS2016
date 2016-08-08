@@ -3650,10 +3650,10 @@ function InsertFormDetails(url, name,type,desc)
 }
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
-	alert("saving form")
+	
 if(formname.indexOf("~")>0){
 	x=formname.split("~");
-	formname=x[0]+"-"+formatDateTime(new Date())
+	formname=x[0]+"-"+getFileUploadDT()
 }	
 var fdesc=""	
 	if (mode=="Close"){ //Called from the Close Screen
@@ -3663,7 +3663,7 @@ var fdesc=""
 		state="FORM"
 		fdesc=formname	
 	}
-alert(formname)	
+
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
 	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
