@@ -442,7 +442,7 @@ new sap.m.Button( {
 				if (selectedPhotoID==0){
 		    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
 		    	}else{
-		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
+		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local")
 		    	}
 				getBase64FromImageUrl(selectedPhoto,selectedPhotoID)
 		    	formPhotoDetails.close()
@@ -459,9 +459,9 @@ new sap.m.Button( {
 							DisplayErrorMessage("Attach Photo", "Name is Mandatory")
 							}else{
 								if (selectedPhotoID==0){
-						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "NEW")
+						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
 						    	}else{
-						    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() )
+						    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local" )
 						    	}
 						    	formPhotoDetails.close()
 							}
@@ -580,7 +580,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 					    	
 					    	
 					    	formFormFunctions.close() 
-					    	alert("Edit"+selectedFormId)
+					    	
 					    	openJobForm(selectedFormId)	
 					    	
 					    	
@@ -1504,13 +1504,13 @@ function sendPhotoToServer(id,fname,content){
 		
 			
 			function(data) {
-				updateDocumentState(id,"Sending")
+				updatePhotoState(id,"Sending")
 		})
 		  .done(function() {
-			  updateDocumentState(id,"Sent")
+			  updatePhotoState(id,"Sent")
 		  })
 		  .fail(function() {
-			  updateDocumentState(id,"Failed To Send")
+			  updatePhotoState(id,"Failed To Send")
 		  })
 		  .always(function() {
 			 
@@ -1527,13 +1527,13 @@ function sendDocToServer(id,fname,content){
 		
 			
 			function(data) {
-				updatePhotoState(id,"Sending")
+				updateDocumentState(id,"Sending")
 		})
 		  .done(function() {
-			  updatePhotoState(id,"Sent")
+			  updateDocumentState(id,"Sent")
 		  })
 		  .fail(function() {
-			  updatePhotoState(id,"Failed To Send")
+			  updateDocumentState(id,"Failed To Send")
 		  })
 		  .always(function() {
 			 

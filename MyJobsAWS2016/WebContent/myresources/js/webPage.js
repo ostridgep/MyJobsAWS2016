@@ -426,6 +426,8 @@ function buildHeaderFields(formDoc){
 	    				items[i].value=getFormattedDMY();
 	    			}else if(items[i].getAttribute("merge")=='~mobileuser'){
 	    				items[i].value=localStorage.getItem("MobileUser");
+	    			}else if(items[i].getAttribute("merge")=='~mobilefullname'){
+	    				items[i].value=localStorage.getItem("MobileFullname");
 	    			}else if(items[i].getAttribute("merge")=='~employeeid'){
 	    				items[i].value=localStorage.getItem("EmployeeID");
 	    			}else{
@@ -914,7 +916,7 @@ console.log(closeFormName)
 		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = "'+id+'"';
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
-			
+					alert(sqlstatement+"----->"+rowsArray.length)
 					if(rowsArray.length>0){
 						MandatedForms= [];
 						formToOpen="Forms/"+rowsArray[0].url

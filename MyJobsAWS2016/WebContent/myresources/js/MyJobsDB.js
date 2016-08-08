@@ -843,11 +843,11 @@ function CreatePhotoEntry(orderno, opno, url, name, desc , size, date, status){
 	);
 
 }
-function UpdatePhotoEntry(orderno, opno, id, name, desc ){
+function UpdatePhotoEntry(orderno, opno, id, name, desc ,status){
 	
 	
 
-	html5sql.process("Update MyJobsPhotos set name ='"+name+"', desc = '"+desc+"' where id = '"+id+"'",
+	html5sql.process("Update MyJobsPhotos set name ='"+name+"', desc = '"+desc+"', status = '"+status+"' where id = '"+id+"'",
 	 function(){
 		buildJobPhotoList()
 	 },
@@ -3650,7 +3650,9 @@ function InsertFormDetails(url, name,type,desc)
 }
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
-	
+if(formname.indexof("~")>0){
+	formname=formname.split("~")[0]+"-"+formatDateTime(new Date())
+}	
 var fdesc=""	
 	if (mode=="Close"){ //Called from the Close Screen
 		state = "Close"
