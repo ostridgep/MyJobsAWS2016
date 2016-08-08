@@ -350,7 +350,7 @@ function createBase64FormXML(base64,fn,id){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	
-	sendPhotoToServer(id,fn,xmlstring)
+	sendDocToServer(id,fn,xmlstring)
 	
 }
 function writer(X){
@@ -1518,7 +1518,7 @@ function sendPhotoToServer(id,fname,content){
 	}
 function sendDocToServer(id,fname,content){
 	xx=fname.split(".")
-
+	updateDocumentState(id,"Sending")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
@@ -1527,12 +1527,15 @@ function sendDocToServer(id,fname,content){
 		
 			
 			function(data) {
-				updateDocumentState(id,"Sending")
+				
+				
 		})
 		  .done(function() {
+			 
 			  updateDocumentState(id,"Sent")
 		  })
 		  .fail(function() {
+			  
 			  updateDocumentState(id,"Failed To Send")
 		  })
 		  .always(function() {

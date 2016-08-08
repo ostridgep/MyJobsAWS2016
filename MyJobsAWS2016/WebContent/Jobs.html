@@ -5388,12 +5388,12 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 					    	   fn=rowsArray[n].formdesc;
 					       }
 					      
-					       if(rowsArray[n].lastupdated.indexOf("COMPLETE")>0){
+					       if(rowsArray[n].lastupdated.indexOf("COMPLETE")>-1){
 					    	   status="Local";
 					       }else{
 					    	   status=rowsArray[n].lastupdated;
 					       }
-					       alert(rowsArray[n].lastupdated.indexOf("COMPLETE")+";"+rowsArray[n].lastupdated+";"+status)
+					      
 							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 								
 								cells : 

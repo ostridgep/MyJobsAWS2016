@@ -358,7 +358,7 @@ var MyIFrame = document.getElementById("formIframe");
 		
 	}
 	catch(err) {
-		
+		alert("asdfgh")
 		formForms.close()
 	}
 	

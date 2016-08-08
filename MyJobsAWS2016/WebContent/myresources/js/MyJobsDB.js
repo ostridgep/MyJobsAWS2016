@@ -3279,11 +3279,11 @@ function updateDocumentState(id,status)
 {
 
 	
-	sqlStatement="UPDATE MyJobsDocs SET lastupdated='"+status+"' where id = '"+id+"'";
+	sqlStatement="UPDATE MyFormsResponses SET lastupdated='"+status+"' where id = '"+id+"'";
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		
+		buildJobDocsTable()
 				
 		 },
 		 function(error, statement){
@@ -3300,7 +3300,7 @@ function updatePhotoState(id,status)
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		
+		buildJobDocsTable()
 				
 		 },
 		 function(error, statement){
@@ -3650,7 +3650,8 @@ function InsertFormDetails(url, name,type,desc)
 }
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
-if(formname.indexof("~")>0){
+	alert("yyy")
+if(formname.indexOf("~")>0){
 	formname=formname.split("~")[0]+"-"+formatDateTime(new Date())
 }	
 var fdesc=""	
@@ -3661,7 +3662,7 @@ var fdesc=""
 		state="FORM"
 		fdesc=formname	
 	}
-	
+alert(formname)	
 	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
 	
 	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
