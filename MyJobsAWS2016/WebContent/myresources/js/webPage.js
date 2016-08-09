@@ -342,7 +342,7 @@ var MyIFrame = document.getElementById("formIframe");
 				elems[i].setAttribute("name",name)
 				elems[i].setAttribute("class",fclass)
 				}	
-		formHTML=HTMLFormStart+xx.innerHTML+HTMLFormEnd
+		formHTML=HTMLFormStart+xx.outerHTML+HTMLFormEnd
 		
 		
 		if(currentPage.indexOf("Home")<1) {
@@ -364,7 +364,7 @@ var MyIFrame = document.getElementById("formIframe");
 	
 }
 function showhideSaveButton(pageName){
-console.log(pageName)
+
 	x=pageName.split("/")
 	y=x[(x.length)-1].split(".")
 	
@@ -391,7 +391,7 @@ console.log(pageName)
 		
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
-		MyIFrameDoc.getElementById("FormName").value=closeFormName;
+		//MyIFrameDoc.getElementById("FormName").value=closeFormName;
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
 		buildSelects(MyIFrameDoc);
@@ -811,10 +811,42 @@ function setDlgTitle(formTitle){
 	function isArray(element) {
 	    return element.constructor == Array;
 	}
+	function loadFormHTML(selectedFormId){
+		
+	var MyIFrame = document.getElementById("formIframe");
+	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
+	
+		sqlstatement="SELECT * from myformsresponses where id = "+selectedFormId	
+		html5sql.process(sqlstatement,
+				function(transaction, results, rowsArray){
+					if(rowsArray.length>0){
+						
+						bodycontent=unescape(rowsArray[0].htmlbody)
+						
+						bodystart=bodycontent.indexOf("<body>")
+						bodyend=bodycontent.indexOf("</body>")
+						
+				
+				
+						MyIFrameDoc.body.innerHTML=bodycontent.substring(bodystart+6, bodyend);
+						MyIFrame.contentWindow.initFields()
+						
+					}
+						   				    
+
+
+				},
+		 function(error, statement){
+			 console.log("Error: " + error.message + " when processing " + statement);
+		 }   
+	);	
+		
+	}
 	function loadFormFields(formDoc){
 
 		var items = formDoc.getElementsByTagName("*");
-console.log("fid="+selectedFormId+":"+closeFormName)
+		console.log("fid="+selectedFormId+":"+closeFormName)
 		//sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
 		if((closeFormName=="Flooding")||
 				(closeFormName=="pollution")||
@@ -822,9 +854,7 @@ console.log("fid="+selectedFormId+":"+closeFormName)
 				{
 			sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
 		
-			}else{
-				sqlstatement="SELECT * from myformsresponses where id = "+selectedFormId
-			}
+			
 
 		console.log("here"+sqlstatement)
 		
@@ -835,76 +865,77 @@ console.log("fid="+selectedFormId+":"+closeFormName)
 						selectedFormId=rowsArray[0].id
 						jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
 						console.log("1:"+jsonstr.length)
-						for(var i=0;i<jsonstr.length;i++){
-					        var obj = jsonstr[i];
-					        for(var key in obj){
-					            if(!Array.isArray(obj[key])){
-					            	formDoc.getElementById(key).value=obj[key]
-					            		console.log("setting "+key+"="+obj[key])
-						            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
-						            		
-						            		try{
-						            			
-						            			onChange=formDoc.getElementById(key).getAttribute("onChange")
-						            			x=onChange.split(";")
-						            			
-						            			if(x.length>1){
-						            				
-						            				for(var xcnt=0; xcnt < x.length ; xcnt++){
-						            					
-						            					if(x[xcnt].substring(0,25) == "parent.buildRelatedSelect"){
-						            						rselpars=x[xcnt];
-						            						xcnt=x.length;
-						            					}
-						            				}
-						            			}else{
-						            				rselpars=onChange;
-						            			}
-						            		
-						            			rselpars=rselpars.substring(26, rselpars.length)
-						            			
-						            			rselparssplit=rselpars.split(",");
-						            			rsfld=rselparssplit[0].substring(1, rselparssplit[0].length-1)
-						            			
-						            			rssql=(rselparssplit[1]+", "+rselparssplit[2]).substring(1, (rselparssplit[1]+", "+rselparssplit[2]).length-1)
-						            			rssql=rssql.replace(/\\/g, "");
-						            			
-						            			buildRelatedSelectforLoad(rsfld,rssql,formDoc.getElementById(key).value+"%",obj[rsfld]);
-							            		
-						            		}catch(err){}
-						            		
-						            		
-						            	}
-						           
-					            }else{
-					            	jsontable=obj[key];
-					            	console.log("Table:"+key+"length="+jsontable.length)
-					            	var table = formDoc.getElementById(key);
-					            
-					            	for(var t=0;t<jsontable.length;t++){
-					            		// Create an empty <tr> element and add it to the 1st position of the table:
-							            var row = table.insertRow(-1);
 
-					            		subobj = jsontable[t];
-								        for(var subkey in subobj){
-								            console.log(subkey+":"+subobj[subkey])
-								            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-								            var cell = row.insertCell(-1);								           
-								            // Add some text to the new cells:
-								            x=subobj[subkey].split(":")
-								            rc=subkey.split("-")
-								            cell.innerHTML = "<p>"+x[1]+"</p>"+
-								            			      '<input type="text" class="feedback-input-table" id="'+subkey + '" value="'+x[0]+'" HIDDEN/>'
-								           
-								        }
-								        var cell = row.insertCell(-1);	
-								        cell.innerHTML='<button onclick="delete'+key+'('+rc[1]+')" class="btn btn-small btn-danger">Del</button>'
-					            	}
-					            }
-					           
-					        }
-					    }
-				
+							for(var i=0;i<jsonstr.length;i++){
+						        var obj = jsonstr[i];
+						        for(var key in obj){
+						            if(!Array.isArray(obj[key])){
+						            	formDoc.getElementById(key).value=obj[key]
+						            		console.log("setting "+key+"="+obj[key])
+							            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
+							            		
+							            		try{
+							            			
+							            			onChange=formDoc.getElementById(key).getAttribute("onChange")
+							            			x=onChange.split(";")
+							            			
+							            			if(x.length>1){
+							            				
+							            				for(var xcnt=0; xcnt < x.length ; xcnt++){
+							            					
+							            					if(x[xcnt].substring(0,25) == "parent.buildRelatedSelect"){
+							            						rselpars=x[xcnt];
+							            						xcnt=x.length;
+							            					}
+							            				}
+							            			}else{
+							            				rselpars=onChange;
+							            			}
+							            		
+							            			rselpars=rselpars.substring(26, rselpars.length)
+							            			
+							            			rselparssplit=rselpars.split(",");
+							            			rsfld=rselparssplit[0].substring(1, rselparssplit[0].length-1)
+							            			
+							            			rssql=(rselparssplit[1]+", "+rselparssplit[2]).substring(1, (rselparssplit[1]+", "+rselparssplit[2]).length-1)
+							            			rssql=rssql.replace(/\\/g, "");
+							            			
+							            			buildRelatedSelectforLoad(rsfld,rssql,formDoc.getElementById(key).value+"%",obj[rsfld]);
+								            		
+							            		}catch(err){}
+							            		
+							            		
+							            	}
+							           
+						            }else{
+						            	jsontable=obj[key];
+						            	console.log("Table:"+key+"length="+jsontable.length)
+						            	var table = formDoc.getElementById(key);
+						            
+						            	for(var t=0;t<jsontable.length;t++){
+						            		// Create an empty <tr> element and add it to the 1st position of the table:
+								            var row = table.insertRow(-1);
+	
+						            		subobj = jsontable[t];
+									        for(var subkey in subobj){
+									            console.log(subkey+":"+subobj[subkey])
+									            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+									            var cell = row.insertCell(-1);								           
+									            // Add some text to the new cells:
+									            x=subobj[subkey].split(":")
+									            rc=subkey.split("-")
+									            cell.innerHTML = "<p>"+x[1]+"</p>"+
+									            			      '<input type="text" class="feedback-input-table" id="'+subkey + '" value="'+x[0]+'" HIDDEN/>'
+									           
+									        }
+									        var cell = row.insertCell(-1);	
+									        cell.innerHTML='<button onclick="delete'+key+'('+rc[1]+')" class="btn btn-small btn-danger">Del</button>'
+						            	}
+						            }
+						           
+						        }
+						    }
+							
 			
 					}
 			
@@ -913,7 +944,12 @@ console.log("fid="+selectedFormId+":"+closeFormName)
 				 function(error, statement){
 					 console.log("Error: " + error.message + " when processing " + statement);
 				 }   
-			);	
+			);
+	}else{
+		//not a close form
+		loadFormHTML(selectedFormId)
+
+	}
 
 	}
 	
@@ -926,7 +962,7 @@ console.log("fid="+selectedFormId+":"+closeFormName)
 					
 					if(rowsArray.length>0){
 						MandatedForms= [];
-						formToOpen=rowsArray[0].url
+						formToOpen="Forms/"+rowsArray[0].url
 					    formMode="Forms"
 						formForms.open()
 					}

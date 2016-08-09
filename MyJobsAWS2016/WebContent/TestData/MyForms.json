@@ -26,6 +26,22 @@
 						
 					},
 					{
+						"name": "ConfSpaceSA",
+						"type": "JOB",
+						"lastupdated": "20150124",
+						"url": "ConfSpaceSA.html",
+						"description": "Confined Space Self Assessment"
+						
+					},
+					{
+						"name": "ElecSafeLiveDiag",
+						"type": "JOB",
+						"lastupdated": "20150124",
+						"url": "ElecSafeLiveDiag.html",
+						"description": "Electrical Safety Live Diagnostic"
+						
+					},
+					{
 						"name": "CustomerFeedback",
 						"type": "CLOSE",
 						"lastupdated": "20150124",

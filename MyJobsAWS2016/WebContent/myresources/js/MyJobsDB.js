@@ -3682,7 +3682,7 @@ var fdesc=""
 
 	}	
 		
-	console.log(selectedFormId+"---"+sqlStatement)
+	
 		html5sql.process(sqlStatement,
 				 function(transaction, results, rowsArray){
 			
@@ -6399,7 +6399,7 @@ var MyEmployeeID=""
 			
 			html5sql.process(sqlstatement,
 				 function(){
-						sqlstatement="UPDATE MyUserDets SET employeeid = '"+localStorage.getItem('EmployeeID')+"', fullname='"+MyUsers.user[cntx].firstname +" "+ MyUsers.user[cntx].lastname+"' WHERE mobileuser = '"+localStorage.getItem('MobileUser')+"';";
+						sqlstatement="UPDATE MyUserDets SET employeeid = '"+localStorage.getItem('EmployeeID')+"', fullname='"+MyUsers.users[cntx].firstname +" "+ MyUsers.user[cntx].lastname+"' WHERE mobileuser = '"+localStorage.getItem('MobileUser')+"';";
 						
 						html5sql.process(sqlstatement,
 						 function(){
