@@ -1497,6 +1497,8 @@ function RequestLLFile(params)
 function sendPhotoToServer(id,fname,content){
 	xx=fname.split(".")
 	updatePhotoState(id,"Sending")
+	buildJobDocsTable()
+	alert("sending--->"+id+":"+xx[0]+".xml")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xx[0]+".xml",
@@ -1511,10 +1513,12 @@ function sendPhotoToServer(id,fname,content){
 		  .done(function() {
 			 
 			  updatePhotoState(id,"Sent")
+			  buildJobDocsTable()
 		  })
 		  .fail(function() {
 			  
 			  updatePhotoState(id,"Failed To Send")
+			  buildJobDocsTable()
 		  })
 		  .always(function() {
 			 
@@ -1522,6 +1526,34 @@ function sendPhotoToServer(id,fname,content){
 	}
 function sendDocToServer(id,fname,content){
 	xx=fname.split(".")
+	updateDocumentState(id,"Sending")
+	buildJobDocsTable()
+	alert("sending--->"+id+":"+xx[0]+".xml")
+	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
+			{
+			fname: xx[0]+".xml",
+			content:content
+			},
+		
+			
+			function(data) {
+				
+				
+		})
+		  .done(function() {
+			 
+			  updateDocumentState(id,"Sent")
+			   buildJobDocsTable()
+		  })
+		  .fail(function() {
+			  
+			  updateDocumentState(id,"Failed To Send")
+			   buildJobDocsTable()
+		  })
+		  .always(function() {
+			 
+		});
+/*	xx=fname.split(".")
 	updateDocumentState(id,"Sending")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
@@ -1544,7 +1576,7 @@ function sendDocToServer(id,fname,content){
 		  })
 		  .always(function() {
 			 
-		});
+		});*/
 	}
 function BuildDocumentsTable() { 
 	

@@ -3284,7 +3284,8 @@ function updateDocumentState(id,status)
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		buildJobDocsTable()
+		alert("setting doc"+id+":"+status)
+		
 				
 		 },
 		 function(error, statement){
@@ -3301,7 +3302,7 @@ function updatePhotoState(id,status)
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		buildJobDocsTable()
+		
 				
 		 },
 		 function(error, statement){

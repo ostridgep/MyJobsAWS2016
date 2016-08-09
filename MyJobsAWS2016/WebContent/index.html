@@ -61,7 +61,7 @@ if(n==1){
     SQLStatement+=" where MyUserDets.user = '"+user+"' and MyUserDets.password =  '"+pw+"'"
 	//SQLStatement="SELECT * from MyUserDets where user = '"+user+"' and password =  '"+pw+"'"
 }
-	alert(SQLStatement)
+	
 	html5sql.process(SQLStatement,
 	 function(transaction, results, rowsArray){
 			if( rowsArray.length > 0) {
