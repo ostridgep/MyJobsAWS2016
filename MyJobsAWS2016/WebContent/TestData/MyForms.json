@@ -13,7 +13,7 @@
 						"name": "Risk",
 						"type": "JOB",
 						"lastupdated": "20150124",
-						"url": "risk.html",
+						"url": "Risk.html",
 						"description": "Risk Form"
 						
 					},
@@ -21,7 +21,7 @@
 						"name": "Risk2",
 						"type": "ALL",
 						"lastupdated": "20150124",
-						"url": "risk2.html",
+						"url": "Risk2.html",
 						"description": "Risk 2 Form"
 						
 					},

@@ -594,7 +594,7 @@ new sap.m.Button( {
 		BuildCloseScreen();
 		 
 		//getCFeedFollowOnState(CurrentOrderNo,CurrentOpNo)
-		sap.m.IconTabBar
+		//sap.m.IconTabBar
       },
       afterOpen:function(){  
     	  sap.ui.getCore().getElementById('DG5tabBar').setSelectedKey("DG52")
@@ -3888,7 +3888,7 @@ function BuildFormAssets(assetid){
 	var	tabBar  = new sap.m.IconTabBar('AssetDetailsTabBar',
 				{
 					expanded:'{device>/isNoPhone}',
-
+					expandable:false,
 					select:[function(oEvt) {	
 						
 						  if(oEvt.getParameters().key=="AssetCharacteristics"){
@@ -4616,7 +4616,7 @@ formtab=null;
 	tabBar  = new sap.m.IconTabBar('tabBar',
 			{
 				expanded:'{device>/isNoPhone}',
-
+				expandable:false,
 				select:[function(oEvt) {	
 					
 					  if(oEvt.getParameters().key=="Assets"){oDetailPage.setFooter(detailFooterAWS)}
@@ -4776,6 +4776,7 @@ formtab=null;
 										type: 	sap.m.ButtonType.Accept,
 										tap: [ function(oEvt) {
 										   attachFilename="";
+										   selectedFormId=-1
 										   formGetDoc.open()
 										           } ]
 										}), 
@@ -4897,6 +4898,7 @@ selectedTab="Task:"+tabitemsid[0]
 			{
 				expanded:'{device>/isNoPhone}',
 				visible: false,
+				expandable:false,
 				select:[function(oEvt) {	
 						if(selectedTab!=oEvt.getParameters().key){
 							selectedTab=oEvt.getParameters().key;

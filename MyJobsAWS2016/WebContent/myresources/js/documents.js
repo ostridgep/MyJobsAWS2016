@@ -582,7 +582,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 					    	
 					    	
 					    	formFormFunctions.close() 
-					    	
+					    	console.log(selectedFormId)
 					    	openJobForm(selectedFormId)	
 					    	
 					    	

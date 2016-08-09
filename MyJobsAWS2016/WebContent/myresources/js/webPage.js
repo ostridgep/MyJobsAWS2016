@@ -364,7 +364,7 @@ var MyIFrame = document.getElementById("formIframe");
 	
 }
 function showhideSaveButton(pageName){
-	
+console.log(pageName)
 	x=pageName.split("/")
 	y=x[(x.length)-1].split(".")
 	
@@ -817,15 +817,25 @@ function setDlgTitle(formTitle){
 	function loadFormFields(formDoc){
 
 		var items = formDoc.getElementsByTagName("*");
-console.log(closeFormName)
-		sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
+console.log("fid="+selectedFormId+":"+closeFormName)
+		//sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
+		if((closeFormName=="Flooding")||
+				(closeFormName=="pollution")||
+				(closeFormName=="CustomerFeedback"))
+				{
+			sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
+		
+			}else{
+				sqlstatement="SELECT * from myformsresponses where id = "+selectedFormId
+			}
+
 		console.log("here"+sqlstatement)
 		
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
 			console.log("save record found="+rowsArray.length)
 					if( rowsArray.length > 0) {
-						
+						selectedFormId=rowsArray[0].id
 						jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
 						console.log("1:"+jsonstr.length)
 						for(var i=0;i<jsonstr.length;i++){
@@ -916,7 +926,7 @@ console.log(closeFormName)
 		'INNER JOIN MyForms ON MyFormsResponses.formname=MyForms.name where MyFormsResponses.id = '+id;
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
-					alert(sqlstatement+"----->"+rowsArray.length)
+					
 					if(rowsArray.length>0){
 						MandatedForms= [];
 						formToOpen="Forms/"+rowsArray[0].url

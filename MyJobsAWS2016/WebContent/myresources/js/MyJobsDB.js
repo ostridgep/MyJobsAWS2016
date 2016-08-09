@@ -1991,7 +1991,7 @@ empid=localStorage.getItem("EmployeeID")
 																opno=item['opno']
 															}
 															params='?reqname='+localStorage.getItem('MobileUser')+item['orderno']+opno+item['id']+".xml"+"&id="+item['id']+
-																	'&orderno='+item['orderno']+'&opno='+opno+'&user='+localStorage.getItem('MobileUser')+'&scenario=Y008'+'&scenariodesc=Y008Desc'+'&mname='+localStorage.getItem('MobileUser')+'&nodeid='+trim(item['nodeid'])
+																	'&orderno='+parseInt(item['orderno'], 10)+'&opno='+opno+'&user='+localStorage.getItem('MobileUser')+'&scenario=Y008'+'&scenariodesc=Y008Desc'+'&mname='+localStorage.getItem('MobileUser')+'&nodeid='+trim(item['nodeid'])
 															opMessage("File Request="+params);
 																
 															sapCalls+=1;							
@@ -3648,8 +3648,12 @@ function InsertFormDetails(url, name,type,desc)
 		
 	
 }
+// need to sort out not a delete if the form already exists
+
+
 function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
 {
+	
 	
 if(formname.indexOf("~")>0){
 	x=formname.split("~");
@@ -3664,19 +3668,24 @@ var fdesc=""
 		fdesc=formname+"-"+getFileUploadDT()	
 	}
 
-	sqlStatementDel="Delete from MyFormsResponses where orderno = '"+order+"' and opno = '"+opno+"' and formname = '"+formname+"' ;"
-	
-	sqlStatementIns="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
-	"'"+formname+"','"+fdesc+"','"+type+"','"+wc+"','"+plant+"','"+notifno+"','"+order+"','"+opno+"','"+user+"','"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
-	
-   opMessage("About to Delete Formdata "+order+":"+opno+":"+formname)
-  
-	html5sql.process(sqlStatementDel,
-		 function(transaction, results, rowsArray){
-	
-		opMessage("Formdata Deleted OK")
+	if(selectedFormId>0)
+	{
+		sqlStatement="UPDATE  MyFormsResponses set lastupdated='"+type+"',  "+
+		"contents='"+escape(content) +"', "+
+		"htmlbody='"+escape(htmlbody)+"', "+
+		"date='"+getDate()+"', "+
+		"time='"+getTime()+"', "+
 		
-		html5sql.process(sqlStatementIns,
+		"state='"+state+"' where id = "+selectedFormId+";"
+
+	}else{
+		sqlStatement="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
+		"'"+formname+"','"+fdesc+"','"+type+"','"+wc+"','"+plant+"','"+notifno+"','"+order+"','"+opno+"','"+user+"','"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+
+	}	
+		
+	console.log(selectedFormId+"---"+sqlStatement)
+		html5sql.process(sqlStatement,
 				 function(transaction, results, rowsArray){
 			
 			  opMessage("Formdata inserted OK ")
@@ -3697,13 +3706,7 @@ var fdesc=""
 				 }        
 				);
 		
-		 },
-		 function(error, statement){
-			 
-			opMessage("Error: " + error.message + " when Deleting during FormsResponses " );
-			 formForms.close()
-		 }        
-		);
+		
 	
 }
 function createAWSTConf(order,opno,empid,work_cntr,acttype,reasontype,startdate,starttime,enddate, endtime, actwork,remwork,text,details,finalconf)
