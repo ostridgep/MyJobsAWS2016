@@ -1475,19 +1475,19 @@ function RequestLLFile(params)
 
 
 	filesToDownload = [];
-	
+	alert(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params)
     $.getJSON(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params, function (data) {
     	
         
     }).success(function() { 
-    	
+    	alert("LLREQ Success")
     	})
     .error(function() { 
     	
     })
     .complete(function() { 
     	
-    	
+    	alert("LLREQ Failed")
     	
     	
     	});

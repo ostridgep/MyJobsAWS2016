@@ -1968,7 +1968,8 @@ empid=localStorage.getItem("EmployeeID")
 												 });
 										}
 								if(type=="FileRequest")// Process Status Updates			
-								{														
+								{		
+									alert("About to Request File");
 											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
 												function(transaction, results, rowsArray){
 													if( rowsArray.length > 0) {
