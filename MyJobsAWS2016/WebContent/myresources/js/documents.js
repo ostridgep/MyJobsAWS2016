@@ -1497,24 +1497,24 @@ function RequestLLFile(params)
 
 function sendPhotoToServer(id,fname,content){
 	xx=fname.split(".")
-
+	updatePhotoState(id,"Sending")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
-			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
+			fname: xx[0]+".xml",
 			content:content
 			},
 		
 			
 			function(data) {
-				alert("Sending Photo")
-				updatePhotoState(id,"Sending")
+				
+				
 		})
 		  .done(function() {
-			  alert("Sent Photo")
+			 
 			  updatePhotoState(id,"Sent")
 		  })
 		  .fail(function() {
-			  alert("Sent Photo Failed")
+			  
 			  updatePhotoState(id,"Failed To Send")
 		  })
 		  .always(function() {
@@ -1526,21 +1526,21 @@ function sendDocToServer(id,fname,content){
 	updateDocumentState(id,"Sending")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
-			fname: "MyJobs\\Global\\Upload\\"+xx[0]+".xml",
+			fname: xx[0]+".xml",
 			content:content
 			},
 			
 			
 			function(data) {
-				alert("Sending Doc")
+			
 				
 		})
 		  .done(function() {
-			  alert("Sent Doc Done")
+			 
 			  updateDocumentState(id,"Sent")
 		  })
 		  .fail(function() {
-			  alert("Sent Doc Failed")
+			 
 			  updateDocumentState(id,"Failed To Send")
 		  })
 		  .always(function() {
