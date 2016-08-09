@@ -1507,7 +1507,7 @@ function sendPhotoToServer(id,fname,content){
 		
 			
 			function(data) {
-				
+			
 				
 		})
 		  .done(function() {
