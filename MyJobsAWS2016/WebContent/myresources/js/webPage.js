@@ -400,11 +400,8 @@ console.log(pageName)
 	}
 }
 function updateMergeField(fld){
-	alert(fld.value)
-	if(fld.value=="~OrderNo"){
-		fld.value="123456"
-			alert(fld.value)
-	}
+	
+	
 	
 }
 
@@ -712,7 +709,7 @@ var SQLStatement=''
 	            )
 	}
 function setDlgTitle(formTitle){
-	alert(formTitle)
+	
 }
 	function buildJSONResponse(doc)
 	{

@@ -466,7 +466,7 @@ html5sql.process("select distinct mp.object_id, mp.meas_point, mp.psort, mp.pttx
 		 }
 },
 		 function(error, statement){
-	alert("Error: " + error.message + " when reading mps processing " + statement);
+	opMessage("Error: " + error.message + " when reading mps processing " + statement);
 		 }        
 		);
 }
@@ -1707,7 +1707,7 @@ function buildMpointDetails(mp){
 					}
     			},
     			 function(error, statement){
-    				alert(error) 
+    				opMessage(error) 
     			 }        
     			);
     	}
@@ -3150,7 +3150,7 @@ html5sql.process(SQLStatement,
 			
 		 },
 		 function(error, statement){
-			 alert(error+statement)
+			 opMessage(error+statement)
 		 }        
 		);	
 cnt = 0;
@@ -3313,7 +3313,7 @@ function addNewJobToList(orderno,opno){
 				
 			 },
 			 function(error, statement){
-				 alert(error+statement)
+				 opMessage(error+statement)
 			 }        
 			);	
 	cnt = 0;
@@ -3508,7 +3508,7 @@ function  getCurrentJob(aid){
 
 	html5sql.process(SQLStatement,
 			function(transaction, results, rowsArray){
-		alert(rowsArray.length)
+		opMessage(rowsArray.length)
 		//selectedJobArray
 		 if (rowsArray.length>0){
 			
@@ -4155,14 +4155,14 @@ function BuildFormAssets(assetid){
 																					
 																				 },
 																				 function(error, statement){
-																					 alert(error+statement)
+																					 opMessage(error+statement)
 																				 }        
 																				);
 																		
 																		
 																	 },
 																	 function(error, statement){
-																		 alert(error+statement)
+																		 opMessage(error+statement)
 																	 }        
 																	);	
 															
@@ -4240,7 +4240,7 @@ SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestio
 
 							 },
 							 function(error, statement){
-								alert(error+statement)
+								 opMessage(error+statement)
 							 }        
 							); 
 			
@@ -4289,7 +4289,7 @@ SQLStatement1+="where surveyquestion.surveyid = '"+surveyID+"' and surveyquestio
 
 							 },
 							 function(error, statement){
-								alert(error+statement)
+								 opMessage(error+statement)
 							 }        
 							); 
 			
@@ -4591,7 +4591,7 @@ function formChanged(oEvt){
 						
 			 },
 			 function(error, statement){
-				alert("Error: " + error.message + " when SetConfigParam processing " + statement)
+				 opMessage("Error: " + error.message + " when SetConfigParam processing " + statement)
 			 }        
 			);	
 }
@@ -5062,7 +5062,7 @@ var tabcontentQ;
 
 			 },
 			 function(error, statement){
-				alert(statement)
+				 opMessage(statement)
 			 }        
 			);	
 }
@@ -5125,7 +5125,7 @@ function saveTheData()
 
 			 },
 			 function(error, statement){
-				alert(statement)
+				 opMessage(statement)
 			 }        
 			);	
 }
@@ -5156,7 +5156,7 @@ function P100TabContData(notifno,tabid){
 
 				 },
 				 function(error, statement){
-					alert(statement)
+					 opMessage(statement)
 				 }        
 				);	
 	}
@@ -5198,7 +5198,6 @@ function setP100FieldVal(type,fldid,user,order,opno,item,task)	{
 					}
 			 },
 			 function(error, statement){
-				 alert("Error: " + error.message + " when updateOrderLatLong processing " + statement);
 				opMessage("Error: " + error.message + " when updateOrderLatLong processing " + statement);
 			 }        
 			);
@@ -5730,7 +5729,7 @@ sap.ui.getCore().getElementById("imagePreview"+x[1]).setSrc(imageData)
 	}
 
 	function onCamFail(message) {
-	    alert('Failed because: ' + message);
+		opMessage('Failed because: ' + message);
 	}
 	function takePhoto(){
 	
@@ -6219,7 +6218,7 @@ function checkMandatedForms(){
 				oSwitchPollution.setEnabled(true);
 			}
 			}else{
-				alert("pia")
+				opMessage("pia")
 				addMandatedForm("Pollution.html")
 				oSwitchPollution.setState(true);
 				oSwitchPollution.setEnabled(false);

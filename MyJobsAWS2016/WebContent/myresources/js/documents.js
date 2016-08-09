@@ -200,12 +200,12 @@ function uploadPhoto1(imageURI) {
 	}
 function win(r) {
 
-    alert("Code = " + r.responseCode+"\nResponse = " + r.response+"\nSent = " + r.bytesSent);
+	opMessage("Code = " + r.responseCode+"\nResponse = " + r.response+"\nSent = " + r.bytesSent);
    
 }
 
 function fail(error) {
-    alert("An error has occurred: Code = " + error.code+" source = " + error.source+ " target = " + error.target+" http"+error.http_status );
+	opMessage("An error has occurred: Code = " + error.code+" source = " + error.source+ " target = " + error.target+" http"+error.http_status );
 
 }
 function buildPhotoDetails(){
@@ -265,7 +265,7 @@ function getFileContentAsBase64(path,callback){
     window.resolveLocalFileSystemURL(path, gotFile, fail);
             
     function fail(e) {
-          alert('Cannot found requested file');
+          //alert('Cannot found requested file');
     }
 
     function gotFile(fileEntry) {
@@ -1049,24 +1049,24 @@ function onGetPhotoDataSuccess(imageData) {
 
 //Callback function when the picture has not been successfully taken
 function onGetPhotoDataFail(message) {
-    alert('Failed to load picture because: ' + message);
+	opMessage('Failed to load picture because: ' + message);
 }
 function successMoveCallback(entry) {
- alert("New Path: " + entry.fullPath);
+	opMessage("New Path: " + entry.fullPath);
    
 }
 
 function errorMoveCallback(error) {
-    alert("moveCallbackError:" + error.code+":" + error.source+":" + error.target)
+	opMessage("moveCallbackError:" + error.code+":" + error.source+":" + error.target)
     
 }
 function onDirectorySuccess(parent) {
-    alert(" Directory created successfuly")
+	opMessage(" Directory created successfuly")
 }
 
 function onDirectoryFail(error) {
     //Error while creating directory
-    alert("Unable to create new directory: " + error.code);
+	opMessage("Unable to create new directory: " + error.code);
 
 }
 
@@ -1101,7 +1101,7 @@ function moveFile(fileUri,dir) {
                
             }, function (error) {
             	
-                alert("error moving:"+error.code+":"+error.source+":"+error.target);
+            	opMessage("error moving:"+error.code+":"+error.source+":"+error.target);
             });
         }, errorMoveCallback);
     }, errorMoveCallback);
@@ -1137,7 +1137,7 @@ function moveFile2(fileUri,dir,cnt) {
                
             }, function (error) {
             	
-                alert("error moving:"+error.code+":"+error.source+":"+error.target);
+            	opMessage("error moving:"+error.code+":"+error.source+":"+error.target);
             });
         }, errorMoveCallback);
     }, errorMoveCallback);
@@ -1194,7 +1194,7 @@ function photosReadSuccess(entries) {
     }
 }
 function photosReadFail(error) {
-    alert("Failed to list Photos contents: "+ error);
+	opMessage("Failed to list Photos contents: "+ error);
 }
 function buildGlobalDownloads(dir)
 
@@ -1233,7 +1233,7 @@ GlobalDirectory=dir;
 
 }
 function docsGDReadFail(error) {
-    alert("Failed to list Photos contents: "+ error);
+	opMessage("Failed to list Photos contents: "+ error);
 }
 function gddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
@@ -1305,7 +1305,7 @@ function buildPrivateUploads()
 
 }
 function docsPUReadFail(error) {
-    alert("Failed to list Photos contents: "+ error);
+	opMessage("Failed to list Photos contents: "+ error);
 }
 function pudocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
@@ -1361,7 +1361,7 @@ function buildPrivateDownloads()
 
 }
 function docsPDReadFail(error) {
-    alert("Failed to list Photos contents: "+ error);
+	opMessage("Failed to list Photos contents: "+ error);
 }
 function pddocs_details_callback(f) {
     var d1 = new Date(f.lastModifiedDate);
@@ -1412,7 +1412,7 @@ function createDir(rootDirEntry, folders) {
 
 function errorHandler(error){
 
-	    alert("Failed to create The Directories: "+ error);
+	opMessage("Failed to create The Directories: "+ error);
 	}
 var fileDownloadCnt=0;
 var percentagedownloaded=0;
@@ -1436,7 +1436,7 @@ function downloadAll()
     	filesToDownload=data;
         var cnt = 0;
         st=getFormattedTime()
-        alert(filesToDownload.FILES.length)
+       
     	if(filesToDownload.FILES.length>0){
     		fileDownloadCnt=0;
     		
@@ -1455,7 +1455,7 @@ function downloadAll()
     	
     	})
     .error(function() { 
-    	alert("error"); 
+    
 		oProgInd.setPercentValue(100);
     	oProgInd.setDisplayValue("100" + "%");
     })
@@ -1475,19 +1475,18 @@ function RequestLLFile(params)
 
 
 	filesToDownload = [];
-	alert(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params)
     $.getJSON(localStorage.getItem("DOCSERVER")+'FileRequest.php'+params, function (data) {
     	
         
     }).success(function() { 
-    	alert("LLREQ Success")
+    	
     	})
     .error(function() { 
     	
     })
     .complete(function() { 
     	
-    	alert("LLREQ Failed")
+    	
     	
     	
     	});
@@ -1498,7 +1497,6 @@ function sendPhotoToServer(id,fname,content){
 	xx=fname.split(".")
 	updatePhotoState(id,"Sending")
 	buildJobDocsTable()
-	alert("sending--->"+id+":"+xx[0]+".xml")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xx[0]+".xml",
@@ -1525,10 +1523,9 @@ function sendPhotoToServer(id,fname,content){
 		});
 	}
 function sendDocToServer(id,fname,content){
-	xmlname=CurrentOrderNo+CurrentOpNo+"-"+getDate()+getTime+".xml"
+	xmlname=CurrentOrderNo+CurrentOpNo+"-"+getDate()+getTime()+".xml"
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
-	alert("sending--->"+id+":"+xmlname)
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xmlname,
@@ -1652,8 +1649,6 @@ function checkFileDownload () {
 		       fileName = filesToDownload[fileDownloadCnt].name;
 		       if(fileDownloadCnt==10){
 
-		       alert(filesToDownload[fileDownloadCnt].name)
-		       alert(filesToDownload[fileDownloadCnt].url+"/")
 		       }
 		        window.resolveLocalFileSystemURL(DeviceStorageDirectory+filesToDownload[fileDownloadCnt].url+"/"  + filesToDownload[fileDownloadCnt].name, appStart, downloadAllAsset(filesToDownload[fileDownloadCnt].name, filesToDownload[fileDownloadCnt].url+"/"));
 		       fileDownloadCnt++;
@@ -1744,22 +1739,6 @@ function downloadLiveLinkFile(fileName,dir,node,drawid) {
 		});
 
 }
-function downloadAsset1(fileName) {
-    var fileTransfer = new FileTransfer();
-    x=fileName.split("/")
-    alert("About to start transfer " + localStorage.getItem("DOCSERVER")+  fileName + " to " + cordova.file.dataDirectory  + x[3]);
-    fileTransfer.download(localStorage.getItem("DOCSERVER") + fileName, cordova.file.externalApplicationStorageDirectory+ x[3],
-		function (entry) {
-		    //alert("xx"+cordova.file.dataDirectory  + x[3]+":::"+entry.fullPath)
-		   
-		},
-		function (error) {
-		    
-		    alert("xxdownload error " + error.source+ ":" + error.target+": " + error.code);
-	
-		    
-		});
-}
 function downloadAsset(fileName,dir) {
     var fileTransfer = new FileTransfer();
     x=fileName.split("/")
@@ -1809,7 +1788,7 @@ function transferRequestedFile(fileName,dir,id) {
 		},
 		function (error) {
 		    
-		    alert("download error " + error.source+ ":" + error.target+": " + error.code);
+			opMessage("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
 		});
@@ -1818,7 +1797,7 @@ function appStart() {
     
 }
 function appStartLL() {
-    alert(" LL Download starting")
+	opMessage(" LL Download starting")
 }	
 
 

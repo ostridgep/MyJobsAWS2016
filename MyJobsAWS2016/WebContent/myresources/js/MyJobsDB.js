@@ -1969,7 +1969,7 @@ empid=localStorage.getItem("EmployeeID")
 										}
 								if(type=="FileRequest")// Process Status Updates			
 								{		
-									alert("About to Request File");
+									
 											html5sql.process("SELECT * from MyJobDetsDraw where id = '"+id+"'",
 												function(transaction, results, rowsArray){
 													if( rowsArray.length > 0) {
@@ -3271,7 +3271,6 @@ function getAssetHistory(fl)
 			console.log("form done")
 		 },
 		 function(error, statement){
-			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
 			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 		 }        
 		);
@@ -3284,7 +3283,7 @@ function updateDocumentState(id,status)
 	
 	html5sql.process(sqlStatement,
 		 function(){
-		alert("setting doc"+id+":"+status)
+		
 		
 				
 		 },
@@ -3321,12 +3320,11 @@ function updateDocumemntsStatus(url,name,type,size,lastmod,status)
 		 function(){
 		
 				if(url=="*"){
-					alert("All Docs set to delete")
+					
 					BuildDocumentsTable()
 				}
 		 },
 		 function(error, statement){
-			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
 			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 		 }        
 		);
@@ -3341,11 +3339,11 @@ function deleteAllDocs()
 		 function(){
 		
 				
-					alert("All Docs deleted")
+		opMessage("All Docs deleted")
 				
 		 },
 		 function(error, statement){
-			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
+			 opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 			
 		 }        
 		);
@@ -3372,7 +3370,6 @@ function updateDocumemntsTable(url, name,type,size,lastmod)
 			
 		 },
 		 function(error, statement){
-			 alert("Error: " + error.message + " when FormsResponses processing " + statement);
 			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 		 }        
 		);
@@ -3422,7 +3419,6 @@ function updateDocsTable()
 						);
 			 },
 			 function(error, statement){
-				 alert("Error: " + error.message + " docs " + statement);
 				opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
 			 }        
 			);
@@ -3713,17 +3709,6 @@ var fdesc=""
 }
 function createAWSTConf(order,opno,empid,work_cntr,acttype,reasontype,startdate,starttime,enddate, endtime, actwork,remwork,text,details,finalconf)
 {
-/*	alert(work_cntr+":"+CurrentJobWorkCentreOp)
-html5sql.process("INSERT INTO  MyTimeConfs (orderno , opno,reason,type, confno , description , longtext, date , time , enddate, endtime, act_work, rem_work, empid, work_cntr, final , datestamp, user, state) VALUES ("+
-			 "'"+order+"','"+opno+"','"+reasontype+"','"+acttype+"','NEW','"+text+"','"+details+"','"+startdate+"','"+starttime+"','"+enddate+"','"+endtime+"','"+actwork+"','"+remwork+"','"+empid+"','"+work_cntr+"','"+finalconf+"','"+getDate()+" "+getTime()+"','"+localStorage.getItem("MobileUser")+"','');",
-	 function(){
-		rebuildTimeConfs();
-	 },
-	 function(error, statement){
-
-		opMessage("Error: " + error.message + " when createTConf processing " + statement);
-	 }        
-	);*/
 
 	html5sql.process("INSERT INTO  MyTimeConfs (orderno , opno,reason,type, confno , description , longtext, date , time , enddate, endtime, act_work, rem_work, empid, work_cntr, final , datestamp, user, state) VALUES ("+
 				 "'"+order+"','"+opno+"','"+reasontype+"','"+acttype+"','NEW','"+text+"','"+details+"','"+startdate+"','"+starttime+"','"+enddate+"','"+endtime+"','"+actwork+"','"+remwork+"','"+empid+"','"+CurrentJobWorkCentreOp+"','"+finalconf+"','"+getDate()+" "+getTime()+"','"+localStorage.getItem("MobileUser")+"','');",
@@ -3784,8 +3769,6 @@ function createTConf(order,opno,empid,type,startdate,enddate,duration,finalconf,
 	if (finalconf=="tconfFinalYes"){
 		xfinalconf="X"
 	}
-	//alert("INSERT INTO  MyTimeConfs (orderno , opno,type, confno , description , date , time , enddate, endtime, duration, empid, final , datestamp, user, state) VALUES ("+
-	//		 "'"+order+"','"+opno+"','"+xtctype+"','NEW','"+comments+"','"+xstartdate[0]+"','"+xstartdate[1]+"','"+xenddate[0]+"','"+xenddate[1]+"','"+duration+"','"+xempid[2]+"','"+xfinalconf+"','"+getDate()+" "+getTime()+"','"+localStorage.getItem("MobileUser")+"','');")
 
 	html5sql.process("INSERT INTO  MyTimeConfs (orderno , opno,type, confno , description , date , time , enddate, endtime, duration, empid, final , datestamp, user, state) VALUES ("+
 			 "'"+order+"','"+opno+"','"+xtctype+"','NEW','"+comments+"','"+xstartdate[0]+"','"+xstartdate[1]+"','"+xenddate[0]+"','"+xenddate[1]+"','"+duration+"','"+xempid[2]+"','"+xfinalconf+"','"+getDate()+" "+getTime()+"','"+localStorage.getItem("MobileUser")+"','');",
@@ -3798,29 +3781,12 @@ function createTConf(order,opno,empid,type,startdate,enddate,duration,finalconf,
 	 }        
 	);
 }
-function xxcreateNotification(type,priority,group,code,grouptext,codetext,description,details,startdate,funcloc,equipment)
-{
-var ReportedpOn=getDate()+" "+getTime();
-var ReportedBy=localStorage.getItem("MobileUser");
 
-
-	html5sql.process("INSERT INTO  MyNotifications (notifno , type, startdate, shorttext, longtext , priority , pgroup , pcode , grouptext, codetext, funcloc, equipment, reportedby, reportedon, plant , orderno, funclocgis, equipmentgis) VALUES ("+
-					 "'NEW','"+type+"','"+startdate+"','"+description+"','"+details+"','"+priority+"','"+group+"','"+code+"','"+grouptext+"','"+codetext+"','"+funcloc+"','"+equipment+"','"+ReportedBy+"','"+ReportedpOn+"','','','','');",
-	 function(){
-		 //alert("Success dropping Tables");
-	 },
-	 function(error, statement){
-		opMessage("Error: " + error.message + " when createNotification processing " + statement);
-	 }        
-	);
-}
 function createVehicleDefect(type,description,details,equipment)
 {
 var startdate=getSAPDate();
 var starttime=getSAPTime();
 var ReportedBy=localStorage.getItem("MobileUser");
-//alert("INSERT INTO  MyNewJobs (state , type, date, time, shorttext, longtext, equipment, reportedby) VALUES ("+
-//					 "'VEHICLEDEFECT','"+type+"','"+startdate+"','"+starttime+"','"+description+"','"+details+"','"+equipment+"','"+ReportedBy+"');");
 	html5sql.process("INSERT INTO  MyNewJobs (state , type, date, time, shorttext, longtext, equipment, reportedby) VALUES ("+
 					 "'VEHICLEDEFECT','"+type+"','"+startdate+"','"+starttime+"','"+description+"','"+details+"','"+equipment+"','"+ReportedBy+"');",
 	 function(){
@@ -4020,7 +3986,7 @@ function createTables(type) {
 
 function buildDirsErrorHandler(error){
 
-    alert("Failed to create The Directories: "+ error);
+	opMessage("Failed to create The Directories: "+ error);
 }
 function buildDirs(fs) {
 
@@ -4685,7 +4651,7 @@ function requestDEMOData(page){
 						}
 			  })
   .fail(function(data,status) {
-    alert( "error:"+status+":"+data );
+	  opMessage( "error:"+status+":"+data );
   })
 }
 function orderCB(MyOrders){
@@ -6172,10 +6138,8 @@ function assetdetailsCB(data){
 
 				html5sql.process(sqlstatement,
 					 function(){
-						alert("Asset Details Loaded")	
 					 },
 					 function(error, statement){
-						 alert("Asset Details Load failed"+error_message)	
 						 opMessage("Error: " + error.message + " when processing " + statement);
 					 }        
 				);
@@ -6202,7 +6166,6 @@ function assetPlantsCB(data){
 					 },
 					 function(error, statement){
 						 opMessage("Error: " + error.message + " when processing " + statement);
-						 alert("Error: " + error.message + " when processing " + statement);
 					 }        
 				);
 
