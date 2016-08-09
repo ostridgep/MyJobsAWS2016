@@ -1525,13 +1525,13 @@ function sendPhotoToServer(id,fname,content){
 		});
 	}
 function sendDocToServer(id,fname,content){
-	xx=fname.split(".")
+	xmlname=CurrentOrderNo+CurrentOpNo+"-"+getDate()+getTime+".xml"
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
 	alert("sending--->"+id+":"+xx[0]+".xml")
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
-			fname: xx[0]+".xml",
+			fname: xmlname,
 			content:content
 			},
 		
