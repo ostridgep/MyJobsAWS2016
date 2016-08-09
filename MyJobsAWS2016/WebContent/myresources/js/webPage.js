@@ -929,7 +929,7 @@ console.log("fid="+selectedFormId+":"+closeFormName)
 					
 					if(rowsArray.length>0){
 						MandatedForms= [];
-						formToOpen="Forms/"+rowsArray[0].url
+						formToOpen=rowsArray[0].url
 					    formMode="Forms"
 						formForms.open()
 					}
