@@ -4879,12 +4879,15 @@ function downloadDrawFile(fname,url,nodeid,drawid){
 	}else{
 		if(url!="RequestLiveLink"){
 			window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
+			
 		}
 		
 	}
 }
 function requestLiveLink(fname,nodeid,drawid){
 	updateMyJobDetsDraw(drawid,"RequestLiveLink")
+	SetConfigParam('LASTSYNC_UPLOAD', "20120101010101");
+	syncUpload()
 }
 function buildDetailsP100Tabs(tabsdesc,tabsid){
 	
