@@ -1494,7 +1494,6 @@ function RequestLLFile(params)
     
 	
 }
-
 function sendPhotoToServer(id,fname,content){
 	xx=fname.split(".")
 	updatePhotoState(id,"Sending")
