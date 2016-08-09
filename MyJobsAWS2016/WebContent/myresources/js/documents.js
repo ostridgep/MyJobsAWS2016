@@ -1528,7 +1528,7 @@ function sendDocToServer(id,fname,content){
 	xmlname=CurrentOrderNo+CurrentOpNo+"-"+getDate()+getTime+".xml"
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
-	alert("sending--->"+id+":"+xx[0]+".xml")
+	alert("sending--->"+id+":"+xmlname)
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xmlname,
