@@ -294,7 +294,7 @@ function getBase64FromImageUrl(imageUri,id,name) {
 function createBase64XML(base64,fn,id,name){
 	xx=fn.split(".")
 	dt=getFileUploadDT()
-	
+	alert('<filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.'+xx[1]+'</filename>')
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
@@ -308,7 +308,7 @@ function createBase64XML(base64,fn,id,name){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+"."+xx[1]+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.'+xx[1]+'</filename>'+
 					  '  <extension>jpg</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -327,6 +327,7 @@ function createBase64XML(base64,fn,id,name){
 function createBase64FormXML(base64,fn,id,name){
 	dt=getFileUploadDT()
 	uploadfn=CurrentOrderNo+'0010-'+dt+'-'+fn
+	alert( '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.html</filename>');
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
@@ -1496,6 +1497,7 @@ function RequestLLFile(params)
 }
 function sendPhotoToServer(id,fname,content){
 	xmlname=getFileUploadName()+".xml"
+	alert("Photo"+xmlname)
 	updatePhotoState(id,"Sending")
 	buildJobDocsTable()
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
@@ -1526,6 +1528,7 @@ function sendPhotoToServer(id,fname,content){
 function sendDocToServer(id,fname,content){
 	
 	xmlname=getFileUploadName()+".xml"
+	alert("Doc"+xmlname)
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
