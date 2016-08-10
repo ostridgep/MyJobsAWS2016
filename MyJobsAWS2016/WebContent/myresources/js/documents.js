@@ -1491,7 +1491,7 @@ function RequestLLFile(params)
     	
     	});
     
-	
+
 }
 function sendPhotoToServer(id,fname,content){
 	xmlname=getFileUploadName()+".xml"
