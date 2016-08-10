@@ -365,7 +365,6 @@ var MyIFrame = document.getElementById("formIframe");
 	
 }
 function showhideSaveButton(pageName){
-alert("Form Loaded and now doing the data load"+pageName)
 	x=pageName.split("/")
 	y=x[(x.length)-1].split(".")
 	
@@ -389,7 +388,6 @@ alert("Form Loaded and now doing the data load"+pageName)
 	//	formMode='Close' if coming from Close Page
 	//need to read the json values into an array
 	
-		alert("Its needs data loaded")
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
 		//MyIFrameDoc.getElementById("FormName").value=closeFormName;
@@ -813,7 +811,6 @@ function setDlgTitle(formTitle){
 	    return element.constructor == Array;
 	}
 	function loadFormHTML(selectedFormId){
-		alert("Loading the HTML"+document.getElementById("formIframe").src)
 	var MyIFrame = document.getElementById("formIframe");
 	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
@@ -946,7 +943,6 @@ function setDlgTitle(formTitle){
 				 }   
 			);
 	}else{
-		alert()
 		//not a close form
 		loadFormHTML(selectedFormId)
 
@@ -970,7 +966,7 @@ function setDlgTitle(formTitle){
 						}
 					
 						
-						alert("opening Form"+rowsArray[0].url+"---->"+window.location.toString())
+						
 					    formMode="Forms"
 						formForms.open()
 					}
