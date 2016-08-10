@@ -292,6 +292,7 @@ function getBase64FromImageUrl(imageUri,id,name) {
 }
 
 function createBase64XML(base64,fn,id,name){
+	xx=fn.split(".")
 	dt=getFileUploadDT()
 	
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
@@ -307,7 +308,7 @@ function createBase64XML(base64,fn,id,name){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+"."+xx[1]+'</filename>'+
 					  '  <extension>jpg</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -339,7 +340,7 @@ function createBase64FormXML(base64,fn,id,name){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.html</filename>'+
 					  '  <extension>html</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
