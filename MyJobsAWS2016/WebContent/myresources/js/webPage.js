@@ -829,8 +829,8 @@ function setDlgTitle(formTitle){
 						
 				
 				
-						MyIFrameDoc.body.innerHTML=bodycontent.substring(bodystart+6, bodyend);
-						MyIFrame.contentWindow.initFields()
+						//MyIFrameDoc.body.innerHTML=bodycontent.substring(bodystart+6, bodyend);
+						//MyIFrame.contentWindow.initFields()
 						
 					}
 						   				    
