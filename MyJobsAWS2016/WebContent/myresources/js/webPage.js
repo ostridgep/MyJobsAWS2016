@@ -835,7 +835,6 @@ function setDlgTitle(formTitle){
 					}
 						   				    
 
-
 				},
 		 function(error, statement){
 			 console.log("Error: " + error.message + " when processing " + statement);
