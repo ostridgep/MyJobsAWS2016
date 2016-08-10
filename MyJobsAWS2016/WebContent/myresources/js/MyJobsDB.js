@@ -3547,7 +3547,7 @@ if(rowsArray.length>0){
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
 	
-	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id,formdesc)	
+	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id,rowsArray[0].formdesc)	
 
 }
 
