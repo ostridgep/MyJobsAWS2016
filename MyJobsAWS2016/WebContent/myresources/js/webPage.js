@@ -963,14 +963,14 @@ function setDlgTitle(formTitle){
 					
 					if(rowsArray.length>0){
 						MandatedForms= [];
-						if(window.location.indexOf("http:")>-1){
+						if(window.location.toString().indexOf("http:")>-1){
 							formToOpen="Forms/"+rowsArray[0].url	//URL for Laptop
 						}else{
 							formToOpen=""+rowsArray[0].url// url for Tablet
 						}
 					
 						
-						alert("opening Form"+rowsArray[0].url)
+						alert("opening Form"+rowsArray[0].url+"---->"+window.location.toString())
 					    formMode="Forms"
 						formForms.open()
 					}
