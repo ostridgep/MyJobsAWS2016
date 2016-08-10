@@ -1503,7 +1503,7 @@ function sendPhotoToServer(id,fname,content){
 			content:content
 			},
 		
-			
+		
 			function(data) {
 			
 				
