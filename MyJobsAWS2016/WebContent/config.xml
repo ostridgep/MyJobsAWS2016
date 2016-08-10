@@ -106,6 +106,6 @@
 <access origin="*"/>
 
 <access origin="http://10.193.162.118"/>
-
+<allow-intent href="*" />
 
 </widget>
