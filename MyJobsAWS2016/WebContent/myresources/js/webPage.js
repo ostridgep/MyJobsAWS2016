@@ -321,6 +321,7 @@ var MyIFrame = document.getElementById("formIframe");
 	try {
 		
 		formJSON=buildJSONResponse(MyIFrameDoc)
+		
 		xx=MyIFrameDoc.body;
 			 var elems = xx.getElementsByTagName("input");
 
@@ -364,7 +365,7 @@ var MyIFrame = document.getElementById("formIframe");
 	
 }
 function showhideSaveButton(pageName){
-
+alert("Form Loaded and now doing the data load"+pageName)
 	x=pageName.split("/")
 	y=x[(x.length)-1].split(".")
 	
@@ -388,7 +389,7 @@ function showhideSaveButton(pageName){
 	//	formMode='Close' if coming from Close Page
 	//need to read the json values into an array
 	
-		
+		alert("Its needs data loaded")
 		formForms.setTitle(MyIFrameDoc.title)
 		theIFrameDoc=MyIFrameDoc;
 		//MyIFrameDoc.getElementById("FormName").value=closeFormName;
@@ -812,7 +813,7 @@ function setDlgTitle(formTitle){
 	    return element.constructor == Array;
 	}
 	function loadFormHTML(selectedFormId){
-		
+		alert("Loading the HTML"+document.getElementById("formIframe").src)
 	var MyIFrame = document.getElementById("formIframe");
 	var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
 	if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;   
@@ -829,8 +830,8 @@ function setDlgTitle(formTitle){
 						
 				
 				
-						//MyIFrameDoc.body.innerHTML=bodycontent.substring(bodystart+6, bodyend);
-						//MyIFrame.contentWindow.initFields()
+						MyIFrameDoc.body.innerHTML=bodycontent.substring(bodystart+6, bodyend);
+						MyIFrame.contentWindow.initFields()
 						
 					}
 						   				    
@@ -843,7 +844,7 @@ function setDlgTitle(formTitle){
 		
 	}
 	function loadFormFields(formDoc){
-
+		
 		var items = formDoc.getElementsByTagName("*");
 		console.log("fid="+selectedFormId+":"+closeFormName)
 		//sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
@@ -945,6 +946,7 @@ function setDlgTitle(formTitle){
 				 }   
 			);
 	}else{
+		alert()
 		//not a close form
 		loadFormHTML(selectedFormId)
 
@@ -962,6 +964,7 @@ function setDlgTitle(formTitle){
 					if(rowsArray.length>0){
 						MandatedForms= [];
 						formToOpen="Forms/"+rowsArray[0].url
+						alert("opening Form"+rowsArray[0].url)
 					    formMode="Forms"
 						formForms.open()
 					}
