@@ -398,7 +398,19 @@ function getSAPTime()	{
 }
 function getFileUploadDT()	{			
 	var currentdate = new Date(); 
-return zeroFill1(currentdate.getFullYear().toString())+"-"+zeroFill1((currentdate.getMonth()+1).toString() ) +"-"+zeroFill1(currentdate.getDate().toString()) + "T"+zeroFill1( currentdate.getHours()).toString()+":"+zeroFill1(currentdate.getMinutes()).toString()+":"+zeroFill1( currentdate.getSeconds()).toString();
+return zeroFill1(currentdate.getFullYear().toString())+"-"+zeroFill1((currentdate.getMonth()+1).toString() ) +"-"+zeroFill1(currentdate.getDate().toString()) + "T"+zeroFill1( currentdate.getHours()).toString()+":"+zeroFill1(currentdate.getMinutes()).toString()+":"+zeroFill1( currentdate.getSeconds()).toString()+":"+currentdate.getMilliseconds().toString();
+
+}
+function getFileUploadName()	{			
+	var currentdate = new Date(); 
+	h=zeroFill1( currentdate.getHours()).toString();
+    m=zeroFill1(currentdate.getMinutes()).toString();
+    s=zeroFill1( currentdate.getSeconds()).toString();
+    ms=currentdate.getMilliseconds().toString()
+    cy=zeroFill1(currentdate.getFullYear().toString()).substring(2) 
+    cm=zeroFill1((currentdate.getMonth()+1).toString() ) 
+    cd=zeroFill1(currentdate.getDate().toString())
+	return CurrentOrderNo+CurrentOpNo+"-"+cy+cm+cd+h+m+s+ms
 
 }
 function formatDate(dt){

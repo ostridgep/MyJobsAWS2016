@@ -280,24 +280,24 @@ function getFileContentAsBase64(path,callback){
            });
     }
 }
-function getBase64FromImageUrl(imageUri,id) {
+function getBase64FromImageUrl(imageUri,id,name) {
 	
 	x=imageUri.split("/")
 	
 	getFileContentAsBase64(imageUri,function(base64Image){
 		b64=base64Image.split(",")
-		  createBase64XML(b64[1],x[x.length-1],id)
+		  createBase64XML(b64[1],x[x.length-1],id,name)
 		});
 
 }
 
-function createBase64XML(base64,fn,id){
+function createBase64XML(base64,fn,id,name){
 	dt=getFileUploadDT()
 	
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
-					  '  <operation>0010</operation>'+
+					  '  <operation>'+CurrentOpNo+'</operation>'+
 					  '  <customerNumber> </customerNumber>'+
 					  '  <customerName> </customerName>'+
 					  '  <equipmentNumber>'+selectedJobArray["equipment_code"]+'</equipmentNumber>'+
@@ -307,7 +307,7 @@ function createBase64XML(base64,fn,id){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+fn+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
 					  '  <extension>jpg</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -323,13 +323,13 @@ function createBase64XML(base64,fn,id){
 	sendPhotoToServer(id,fn,xmlstring)
 	
 }
-function createBase64FormXML(base64,fn,id){
+function createBase64FormXML(base64,fn,id,name){
 	dt=getFileUploadDT()
 	uploadfn=CurrentOrderNo+'0010-'+dt+'-'+fn
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
 					  '  <order>'+CurrentOrderNo+'</order>'+
-					  '  <operation>0010</operation>'+
+					  '  <operation>'+CurrentOpNo+'</operation>'+
 					  '  <customerNumber> </customerNumber>'+
 					  '  <customerName> </customerName>'+
 					  '  <equipmentNumber>'+selectedJobArray["equipment_code"]+'</equipmentNumber>'+
@@ -339,7 +339,7 @@ function createBase64FormXML(base64,fn,id){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+uploadfn+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
 					  '  <extension>html</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -446,7 +446,7 @@ new sap.m.Button( {
 		    	}else{
 		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local")
 		    	}
-				getBase64FromImageUrl(selectedPhoto,selectedPhotoID)
+				getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
 		    	formPhotoDetails.close()
 			}
     	
@@ -1494,12 +1494,12 @@ function RequestLLFile(params)
 	
 }
 function sendPhotoToServer(id,fname,content){
-	xx=fname.split(".")
+	xmlname=getFileUploadName()+".xml"
 	updatePhotoState(id,"Sending")
 	buildJobDocsTable()
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
-			fname: xx[0]+".xml",
+			fname: xmlname,
 			content:content
 			},
 		
@@ -1523,7 +1523,8 @@ function sendPhotoToServer(id,fname,content){
 		});
 	}
 function sendDocToServer(id,fname,content){
-	xmlname=CurrentOrderNo+CurrentOpNo+"-"+getDate()+getTime()+".xml"
+	
+	xmlname=getFileUploadName()+".xml"
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',

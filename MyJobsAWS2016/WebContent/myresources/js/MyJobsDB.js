@@ -3547,7 +3547,7 @@ if(rowsArray.length>0){
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
 	
-	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id)	
+	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id,formdesc)	
 
 }
 
@@ -3663,7 +3663,7 @@ var fdesc=""
 			fdesc=""
 	}else{
 		state="FORM"
-		fdesc=formname+"-"+getFileUploadDT()	
+		fdesc=formname	
 	}
 
 	if(selectedFormId>0)
