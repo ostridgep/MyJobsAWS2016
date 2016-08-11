@@ -633,13 +633,12 @@ var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
 			content : [
 			        
 					 new sap.m.Button( {
-					    text: "Template Document",
+					    text: "Attach Document",
 					    type: 	sap.m.ButtonType.Accept,
 					    tap: [ function(oEvt) {		  
 					    	
 					    		formGetDoc.close() 
-						    	showErrorMessage("Attach Error","Template Selected")
-					    
+						    	formDocuments.open()
 					    	
 							  } ]
 					 }),
@@ -776,41 +775,7 @@ var formDocuments = new sap.m.Dialog("dlgDocuments",{
     modal: true,
     contentWidth:"1em",
     buttons: [
- 
   
-                                new sap.m.Button( {
-                                	icon:"sap-icon://pull-down",
-                                    text: "All files",
-                                    type: 	sap.m.ButtonType.Accept,
-                                    tap: [ function(oEvt) { 
-                                    	
-                                    	
-                                       	
-                                    	formDownloadFiles.open()
-                                       	
-                                    	//downloadMissing();
-                                    	//buildDocumentTables();
-                                    	
-                                              
-                                                } ]
-                                   
-                                }),  
-                                new sap.m.Button( {
-                                	icon:"sap-icon://download",
-                                    text: "files",
-                                    type: 	sap.m.ButtonType.Accept,
-                                    tap: [ function(oEvt) { 
-                                    	
-                                    	
-                                       	
-                                    	
-                                    	downloadMissing();
-                                    	buildDocumentTables();
-                                    	
-                                              
-                                                } ]
-                                   
-                                }),  
                                 new sap.m.Button( {
                                 	icon:"sap-icon://sys-cancel",
                                     text: "Cancel",
@@ -880,7 +845,7 @@ function buildDocumentList(){
 		    	        													
 		    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
 		    	        												}else{
-		    	        													showFile(evt.getParameter("listItem").getCells()[5].getText())
+		    	        													alert(evt.getParameter("listItem").getCells()[5].getText())
 		    	        												}
 	    	        													
 	    	        												
@@ -1015,7 +980,7 @@ new sap.m.Button( {
 	return docsTabBar
 }
 function buildDocumentTables(){
-	buildGlobalDownloads(AppDocDirectory+"/Global/Download/")
+	buildGlobalDownloads(cordova.file.externalRootDirectory+"/Documents")
 	//buildPrivateDownloads()
 	//buildPrivateUploads()
 	
@@ -1199,12 +1164,12 @@ function photosReadFail(error) {
 function buildGlobalDownloads(dir)
 
 {
-
+//need to sort out up directory
    
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
-if(dir!=AppDocDirectory+"/Global/Download/"){
+if(dir!=cordova.file.externalRootDirectory+"/Documents"){
 	
 		opTable.addItem (new sap.m.ColumnListItem({
 			cells : 
@@ -1218,9 +1183,9 @@ if(dir!=AppDocDirectory+"/Global/Download/"){
 		 		]
 			}));
 }
-GlobalDirectory=dir;
+
 	try {
-		window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir, function (dirEntry) {
+		window.resolveLocalFileSystemURL(dir, function (dirEntry) {
 	    	
 	        var directoryReader = dirEntry.createReader();
 	          directoryReader.readEntries(docsGDReadSuccess, docsGDReadFail);
