@@ -2829,10 +2829,18 @@ function prepareChangeStatus(){
 		sap.ui.getCore().getElementById('btnStatusReject').setEnabled(true);
 
 	}else if(currentStatus=="ACPT"){
-
+		
+		if(localStorage.getItem('totalParked')=='0'){
+			sap.ui.getCore().getElementById('btnStatusSuspend').setText("Park") 
+			sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(true);
+			sap.ui.getCore().getElementById('btnStatusSuspend').setEnabled(true);
+		}else{
+			sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(false);
+		}
 		sap.ui.getCore().getElementById('btnStatusAccept').setVisible(false);
 		sap.ui.getCore().getElementById('btnStatusReject').setVisible(true);
-		sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(false);
+		
+		//sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(true); //Change to allow park pn Accept
 		sap.ui.getCore().getElementById('btnStatusUpdate').setVisible(false);
 		sap.ui.getCore().getElementById('btnStatusOnSite').setVisible(true);
 		sap.ui.getCore().getElementById('btnStatusClose').setVisible(false);
@@ -2854,6 +2862,7 @@ function prepareChangeStatus(){
 
 	}else if(currentStatus=="SITE"){
 		if(localStorage.getItem('totalParked')=='0'){
+			sap.ui.getCore().getElementById('btnStatusSuspend').setText("Park") 
 			sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(true);
 		}else{
 			sap.ui.getCore().getElementById('btnStatusSuspend').setVisible(false);

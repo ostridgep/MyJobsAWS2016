@@ -326,9 +326,45 @@ var MyIFrame = document.getElementById("formIframe");
 			 var elems = xx.getElementsByTagName("input");
 
 				for(var i = 0; i < elems.length; i++) {
-				// set attribute to property value
+				
+					if(elems[i].type=="checkbox"){
+						
+						if(elems[i].checked) {
+							elems[i].setAttribute("checked",true)
+						}else{
+							elems[i].removeAttribute("checked",false)
+						}
+						
+					}else if(elems[i].type=="radio"){
+						
+						if(elems[i].checked) {
+							elems[i].setAttribute("checked",true)
+						}else{
+							elems[i].removeAttribute("checked",false)
+						}
+					}else{
+						
 				elems[i].setAttribute("value", elems[i].value);
-				}	
+					}
+				}
+//Process Selects				
+				var elems = xx.getElementsByTagName("select");
+				for(var i = 0; i < elems.length; i++) {
+					
+					//alert(elems[i].value+"--"+elems[i].selectedIndex)
+					for(var o = 0; o < elems[i].options.length; o++) {
+						if(elems[i].selectedIndex==o){
+							elems[i].options[o].setAttribute("selected",true);
+						}else{
+							
+								elems[i].options[o].removeAttribute("selected",false);
+							
+							
+						}
+					}
+
+					 
+				}
 				var elems = xx.getElementsByTagName("textarea");
 
 				for(var i = 0; i < elems.length; i++) {
@@ -359,7 +395,7 @@ var MyIFrame = document.getElementById("formIframe");
 		
 	}
 	catch(err) {
-		
+		alert(err)
 		formForms.close()
 	}
 	
