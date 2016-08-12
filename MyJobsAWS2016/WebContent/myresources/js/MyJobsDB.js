@@ -3581,8 +3581,8 @@ function uploadAttachment(id){
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
 	 
-alert(id)
-/*
+
+
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 
@@ -3592,7 +3592,7 @@ if(rowsArray.length>0){
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
 	
-	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id,rowsArray[0].formdesc)	
+	getBase64FromAttachmentUrl(rowsArray[0].url,rowsArray[0].id,rowsArray[0].name,rowsArray[0].type)	
 
 }
 
@@ -3603,7 +3603,7 @@ function(error, statement){
 opMessage("uploadDocument:"+error+statement)
 }        
 );
-*/
+
 }
 function deleteAttachment(id){
 	 sap.m.MessageBox.show("Delete Attachment", {

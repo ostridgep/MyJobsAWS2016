@@ -290,9 +290,19 @@ function getBase64FromImageUrl(imageUri,id,name) {
 		});
 
 }
+function getBase64FromAttachmentUrl(url,id,name,type) {
+	alert("Building base64 "+name)
+	
 
+	
+	getFileContentAsBase64(url,function(base64){
+		b64=base64.split(",")
+		  createBase64XML(b64[1],name,id,name)
+		});
+
+}
 function createBase64XML(base64,fn,id,name){
-	xx=fn.split(".")
+	
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
 					  '<jobMetadata>'+
@@ -319,7 +329,7 @@ function createBase64XML(base64,fn,id,name){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	
+alert(xmlstring)	
 	sendPhotoToServer(id,fn,xmlstring)
 	
 }
