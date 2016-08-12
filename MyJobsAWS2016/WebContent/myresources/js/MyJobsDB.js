@@ -3353,7 +3353,7 @@ function addAttachment(orderno,opno, url, name, type, size)
 
 	
 	sqlstatement="insert into MyJobsDocs (orderno,opno, url, name, type, size, status) values ("+
-	"'"+orderno+"','"+opno+"','"+url+"','"+name+"','"+type+"','"+size+"','NEW')";
+	"'"+orderno+"','"+opno+"','"+url+"','"+name+"','"+type+"','"+size+"','Local')";
 	
 	html5sql.process(sqlstatement,
 		function(transaction, results, rowsArray){
