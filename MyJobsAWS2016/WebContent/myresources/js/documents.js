@@ -610,6 +610,64 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
             	 }
             }
  })
+var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
+    
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+				new sap.m.Button( {
+				    text: "Cancel",
+				    type: 	sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formFormFunctions.close()
+						  } ]
+				})	
+				],					
+    content:[
+		new sap.ui.layout.form.SimpleForm({
+			minWidth : 1024,
+			maxContainerCols : 2,
+			content : [
+			           new sap.m.Label({text:""}),
+					 new sap.m.Button( {
+					    text: "Delete",
+					    type: 	sap.m.ButtonType.Accept,
+					    tap: [ function(oEvt) {	
+					    	formAttachmentFunctions.close() 
+					    	
+					    	deleteAttachment(selectedFormId)
+					    	
+						    	
+					    
+					    	
+							  } ]
+					 }),
+
+						 new sap.m.Label({text:""}),
+						 new sap.m.Button( {
+							    text: "Upload",
+							    type: 	sap.m.ButtonType.Accept,
+							    tap: [ function(oEvt) {	
+							    	
+							    		
+							    	formAttachmentFunctions.close() 
+							    	uploadAttachment(selectedFormId)	
+							    	
+							    	
+							    	
+									  } ]
+							 	})
+				]
+			})
+            ],
+            
+            beforeOpen:function(){
+
+
+            }
+ })
 
 var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
     title:"Attach Document / Form",
@@ -845,7 +903,7 @@ function buildDocumentList(){
 		    	        													
 		    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
 		    	        												}else{
-		    	        													alert(evt.getParameter("listItem").getCells()[5].getText())
+		    	        													addAttachment(CurrentOrderNo,CurrentOpNo, evt.getParameter("listItem").getCells()[5].getText(), evt.getParameter("listItem").getCells()[2].getText(),evt.getParameter("listItem").getCells()[3].getText(),getCells()[5].getText(), evt.getParameter("listItem").getCells()[4].getText(),"Local")
 		    	        												}
 	    	        													
 	    	        												

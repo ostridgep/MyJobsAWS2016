@@ -4797,8 +4797,9 @@ formtab=null;
      												selectedFormId=evt.getParameter("listItem").getCells()[2].getText()
      												formFormFunctions.open()
      												
-     											}else if(evt.getParameter("listItem").getCells()[1].getText()=="TEMPLATE"){
-     												
+     											}else if(evt.getParameter("listItem").getCells()[1].getText()=="ATTACHMENT"){
+     												selectedFormId=evt.getParameter("listItem").getCells()[2].getText()
+     												formAttachmentFunctions.open()
      											}else{
      												
      												downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
@@ -5431,6 +5432,49 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 			 //outputLogToDB(); 
 		 }        
 		);
+		
+
+//add the attached Files
+html5sql.process("SELECT * FROM MyJobsDocs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' and status = 'Local';",
+		 function(transaction, results, rowsArray){
+			var n = 0;
+			var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
+
+			
+		
+			while (n < rowsArray.length) {
+
+		       
+		      
+		       
+		      
+				opTable.addItem (new sap.m.ColumnListItem("Att:"+rowsArray[n].id,{
+					
+					cells : 
+						[
+						new sap.m.Text({text: rowsArray[n].name}),
+						new sap.m.Text({text: "ATTACHMENT"}),
+						new sap.m.Text({text: rowsArray[n].id}), 
+						new sap.m.Text({text: status}), 
+						
+						new sap.m.Text({text: rowsArray[n].id}),
+						new sap.m.Text({text: rowsArray[n].type})
+				 		],
+
+					}));
+				n++;
+			 }
+
+		 },
+		 function(error, statement){
+			 //outputLogToDB(); 
+		 }        
+		);
+},
+function(error, statement){
+//outputLogToDB(); 
+}        
+);
 }
 function buildJobPhotoList(){
 

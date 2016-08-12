@@ -3348,6 +3348,23 @@ function deleteAllDocs()
 		 }        
 		);
 }
+function addAttachment(orderno,opno, url, name, type, size)
+{
+
+	
+	sqlstatement="insert into MyJobsDocs (orderno,opno, url, name, type, size, status) values ("+
+	"'"+orderno+"','"+opno+"','"+url+"','"+name+"','"+type+"','"+size+"','NEW')";
+	
+	html5sql.process(sqlstatement,
+		function(transaction, results, rowsArray){
+			
+			
+		 },
+		 function(error, statement){
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
 function updateDocumemntsTable(url, name,type,size,lastmod)
 {
 
@@ -3558,6 +3575,67 @@ function(error, statement){
 opMessage("uploadDocument:"+error+statement)
 }        
 );
+}
+function uploadAttachment(id){
+	
+	selectedDocId=id;
+	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
+	 
+alert(id)
+/*
+html5sql.process(sqlStatement,
+function(transaction, results, rowsArray){
+
+if(rowsArray.length>0){
+	x=unescape(rowsArray[0].htmlbody)
+	y=unescape(encodeURIComponent(x))
+	
+	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
+	
+	createBase64FormXML(formHTML,rowsArray[0].formdesc+".html",id,rowsArray[0].formdesc)	
+
+}
+
+
+},
+function(error, statement){
+
+opMessage("uploadDocument:"+error+statement)
+}        
+);
+*/
+}
+function deleteAttachment(id){
+	 sap.m.MessageBox.show("Delete Attachment", {
+        icon: sap.m.MessageBox.Icon.WARNING ,
+        title: "Are you sure?",
+        actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+			 onClose: function(oAction){
+				
+				 if(oAction=="YES"){
+					 
+					 sqlStatement="Delete from MyJobsDocs where id =  '"+id+"' ;"
+						 
+
+
+
+					html5sql.process(sqlStatement,
+					function(transaction, results, rowsArray){
+
+					
+						buildJobDocsTable()
+
+					},
+					function(error, statement){
+
+
+					}        
+					);
+				 }
+			 }
+      }
+    );
+	
 }
 function deleteDocument(id){
 	 sap.m.MessageBox.show("Delete Document", {
@@ -3945,7 +4023,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
