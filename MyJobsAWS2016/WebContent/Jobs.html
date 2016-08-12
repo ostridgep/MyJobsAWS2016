@@ -5421,6 +5421,42 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 								}));
 							n++;
 						 }
+						//add the attached Files
+						html5sql.process("SELECT * FROM MyJobsDocs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' and status = 'Local';",
+								 function(transaction, results, rowsArray){
+									var n = 0;
+									var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
+
+									
+								
+									while (n < rowsArray.length) {
+
+								       
+								      
+								       
+								      
+										opTable.addItem (new sap.m.ColumnListItem("Att:"+rowsArray[n].id,{
+											
+											cells : 
+												[
+												new sap.m.Text({text: rowsArray[n].name}),
+												new sap.m.Text({text: "ATTACHMENT"}),
+												new sap.m.Text({text: rowsArray[n].id}), 
+												new sap.m.Text({text: status}), 
+												
+												new sap.m.Text({text: rowsArray[n].id}),
+												new sap.m.Text({text: rowsArray[n].type})
+										 		],
+
+											}));
+										n++;
+									 }
+
+								 },
+								 function(error, statement){
+									 //outputLogToDB(); 
+								 }        
+								);
 
 					 },
 					 function(error, statement){
@@ -5434,47 +5470,7 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 		);
 		
 
-//add the attached Files
-html5sql.process("SELECT * FROM MyJobsDocs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' and status = 'Local';",
-		 function(transaction, results, rowsArray){
-			var n = 0;
-			var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
 
-			
-		
-			while (n < rowsArray.length) {
-
-		       
-		      
-		       
-		      
-				opTable.addItem (new sap.m.ColumnListItem("Att:"+rowsArray[n].id,{
-					
-					cells : 
-						[
-						new sap.m.Text({text: rowsArray[n].name}),
-						new sap.m.Text({text: "ATTACHMENT"}),
-						new sap.m.Text({text: rowsArray[n].id}), 
-						new sap.m.Text({text: status}), 
-						
-						new sap.m.Text({text: rowsArray[n].id}),
-						new sap.m.Text({text: rowsArray[n].type})
-				 		],
-
-					}));
-				n++;
-			 }
-
-		 },
-		 function(error, statement){
-			 //outputLogToDB(); 
-		 }        
-		);
-},
-function(error, statement){
-//outputLogToDB(); 
-}        
-);
 }
 function buildJobPhotoList(){
 
