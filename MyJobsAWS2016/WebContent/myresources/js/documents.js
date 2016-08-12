@@ -913,7 +913,12 @@ function buildDocumentList(){
 		    	        													
 		    	        													buildGlobalDownloads(evt.getParameter("listItem").getCells()[5].getText())
 		    	        												}else{
-		    	        													addAttachment(CurrentOrderNo,CurrentOpNo, evt.getParameter("listItem").getCells()[5].getText(), evt.getParameter("listItem").getCells()[2].getText(),evt.getParameter("listItem").getCells()[3].getText(),getCells()[5].getText(), evt.getParameter("listItem").getCells()[4].getText(),"Local")
+		    	        													addAttachment(CurrentOrderNo,CurrentOpNo, evt.getParameter("listItem").getCells()[5].getText(),
+		    	        															evt.getParameter("listItem").getCells()[1].getText(),
+		    	        															evt.getParameter("listItem").getCells()[2].getText(),
+		    	        															evt.getParameter("listItem").getCells()[3].getText(),
+		    	        															"Local")
+		    	        															formDocuments.close()
 		    	        												}
 	    	        													
 	    	        												
