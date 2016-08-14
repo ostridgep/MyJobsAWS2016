@@ -328,7 +328,7 @@ function createBase64XML(base64,fn,id,name,mimetype){
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
-					  '    <fileType>'+xx[0]+'</fileType>'+
+					  '    <fileType>'+xx[1]+'</fileType>'+
 					  '    <mimeType>'+mimetype+'</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
