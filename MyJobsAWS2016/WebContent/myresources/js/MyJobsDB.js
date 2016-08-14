@@ -3579,18 +3579,14 @@ opMessage("uploadDocument:"+error+statement)
 function uploadAttachment(id){
 	
 	selectedDocId=id;
-	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
+	sqlStatement="select formname, formdesc, htmlbody from MyJobsDocs where id = '"+id+"'"
 	 
 
-
+alert(sqlState)
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 
 if(rowsArray.length>0){
-	x=unescape(rowsArray[0].htmlbody)
-	y=unescape(encodeURIComponent(x))
-	
-	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
 	
 	getBase64FromAttachmentUrl(rowsArray[0].url,rowsArray[0].id,rowsArray[0].name,rowsArray[0].type)	
 

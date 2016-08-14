@@ -621,7 +621,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
             }
  })
 var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
-    
+    title:"Attachment",
     modal: true,
     contentWidth:"1em",
     buttons: [
@@ -643,7 +643,7 @@ var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
 			           new sap.m.Label({text:""}),
 					 new sap.m.Button( {
 					    text: "Delete",
-					    type: 	sap.m.ButtonType.Accept,
+					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {	
 					    	formAttachmentFunctions.close() 
 					    	
