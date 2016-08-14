@@ -286,7 +286,7 @@ function getBase64FromImageUrl(imageUri,id,name) {
 	
 	getFileContentAsBase64(imageUri,function(base64Image){
 		b64=base64Image.split(",")
-		  createBase64XML(b64[1],x[x.length-1],id,name)
+		  createBase64XML(b64[1],x[x.length-1],id,name,"image/jpeg")
 		});
 
 }
@@ -296,12 +296,18 @@ function getBase64FromAttachmentUrl(url,id,name,type) {
 
 	
 	getFileContentAsBase64(url,function(base64){
-		b64=base64.split(",")
-		  createBase64XML(b64[1],name,id,name)
+		  b64=base64.split(",")
+		  createBase64XML(b64[1],name,id,name,type)
 		});
 
 }
-function createBase64XML(base64,fn,id,name){
+function createBase64XML(base64,fn,id,name,mimetype){
+	xx=fn.split(".")
+	yy=name.split(".")
+	if(yy<2){
+		name+="."+xx[1] //append the Extenstion from fn if no extention on name
+	}
+	fileType = "JPEG image"
 	
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
@@ -317,13 +323,13 @@ function createBase64XML(base64,fn,id,name){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.'+xx[1]+'</filename>'+
-					  '  <extension>jpg</extension>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
+					  '  <extension>'+xx[0]+'</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
-					  '    <fileType>JPEG image</fileType>'+
-					  '    <mimeType>image/jpeg</mimeType>'+
+					  '    <fileType>'+xx[0]+'</fileType>'+
+					  '    <mimeType>'+mimetype+'</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
 					  '<fileContent contentEncoding="base64">'+base64+
@@ -943,110 +949,7 @@ function buildDocumentList(){
 	    	            									]
 	    	            						           	  
 	    	            					    }),
-/*	       	                
-	    	                new sap.m.IconTabFilter( {
-	    	            	    key:'DocumentsDownload',
-	    	            	    tooltip: 'Download Documents',
-	    	            	    icon: "sap-icon://download",
-	    	            	       	                   content:[
-	    	            	       	        	               
-	    	            									new sap.m.Table("DocumentsDownloadTable",{
-	    	            										
-	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	        											selectionChange: function(evt){
-	    	        												showFile(evt.getParameter("listItem").getCells()[4].getText())
-	    	        										    },
-	    	            										columns:[
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
-	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }) ,
-	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})    
-	    	            								           	     ]
-	    	            								           	  
-
-	    	            									})
-	    	            									]
-	    	            						           	  
-	    	            					    }),
-	    	            					    
-	    	                new sap.m.IconTabFilter( {
-	    	            	    key:'DocumentsUpload',
-	    	            	    tooltip: 'Upload Documents',
-	    	            	    icon: "sap-icon://upload",
-	    	            	       	                   content:[
-	    	            	       	        	               
-	    	            									new sap.m.Table("DocumentsUploadTable",{
-	    	            										
-	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	            										selectionChange: function(evt){
-	    	            											
-	    	            											showFile(evt.getParameter("listItem").getCells()[4].getText())
-	    	            									    },
-	    	            										columns:[
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
-	    	            										        	 hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true }),
-	    	            										        	 new sap.m.Column({header: new sap.m.Label({text:"Path"}),
-		    	            										        	 hAlign: 'Left',width: '0%', minScreenWidth : "" , visible:false, demandPopin: false})    
-	    	            								           	     ]
-	    	            								           	  
-
-	    	            									})
-	    	            									]
-	    	            						           	  
-	    	            					    }),
-	    	            					   
-	    	                new sap.m.IconTabFilter( {
-	    	            	    key:'Photos',
-	    	            	    tooltip: 'Photos',
-	    	            	    icon: "sap-icon://attachment-photo",
-	    	            	       	                   content:[
-new sap.m.Button( {
-  		icon:"sap-icon://camera",
-       type: 	sap.m.ButtonType.Accept,
-       tap: [ function(oEvt) {
-    	   selectedPhotoType="DOC"
-    	   formGetPhoto.open()
-                   } ]
-   }),     	            	       	        	               
-	    	            									new sap.m.Table("PhotosTable",{
-	    	            										mode: sap.m.ListMode.SingleSelectMaster,
-	    	        											selectionChange: function(evt){
-	    	        												//selectedPhoto=evt.getParameter("listItem").getCells()[4].getText();
-	    	        												
-	    	        												//formDisplayPhoto.open()
-	    	        												showFile(evt.getParameter("listItem").getCells()[4].getText())
-	    	        										    },
-	    	            										columns:[
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
-	    	            										        	 hAlign: 'Left',width: '50%', minScreenWidth : "" , demandPopin: false}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
-	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Last Modified"}),
-	    	            										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
-																		 new sap.m.Column({header: new sap.m.Label({text:""}),
-	    	            	     										     hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })         
-	    	            								           	     ]
-	    	            								           	  
-
-	    	            									})
-	    	            									]
-	    	            						           	  
-	    	            					    }),
-*/	    	            					    
+		    
 	       	                ]
 
 				});
@@ -1242,6 +1145,7 @@ function buildGlobalDownloads(dir)
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
+	GlobalDirectory=dir
 if(dir!=cordova.file.externalRootDirectory+"/Documents"){
 	
 		opTable.addItem (new sap.m.ColumnListItem({
@@ -1289,7 +1193,7 @@ function gddocs_details_callback(f) {
 	            new sap.m.Text({text: x[1]}),
 	            new sap.m.Text({text: f.size}),
 				new sap.m.Text({text: z}),
-				new sap.m.Text({text: DeviceStorageDirectory+GlobalDirectory+f.name})
+				new sap.m.Text({text: GlobalDirectory+"/"+f.name})
 		 		]
 			}));
     }

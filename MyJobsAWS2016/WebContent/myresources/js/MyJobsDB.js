@@ -3579,10 +3579,10 @@ opMessage("uploadDocument:"+error+statement)
 function uploadAttachment(id){
 	
 	selectedDocId=id;
-	sqlStatement="select formname, formdesc, htmlbody from MyJobsDocs where id = '"+id+"'"
+	sqlStatement="select * from MyJobsDocs where id = '"+id+"'"
 	 
 
-alert(sqlState)
+
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 
@@ -3704,7 +3704,6 @@ function InsertFormDetails(url, name,type,desc)
    opMessage("About to Insert Form "+name+":"+desc)
   
 	
-		
 		html5sql.process(sqlStatementIns,
 				 function(transaction, results, rowsArray){
 			
