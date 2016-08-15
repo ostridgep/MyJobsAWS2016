@@ -310,7 +310,7 @@ function createBase64XML(base64,fn,id,name,mimetype){
 		filename = name+"."+xx[1]
 	}
 	fileType = "JPEG image"
-	
+
 	
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
