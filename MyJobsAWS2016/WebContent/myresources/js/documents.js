@@ -291,7 +291,7 @@ function getBase64FromImageUrl(imageUri,id,name) {
 
 }
 function getBase64FromAttachmentUrl(url,id,name,type) {
-	alert("Building base64 "+name)
+	
 	
 
 	
@@ -302,12 +302,15 @@ function getBase64FromAttachmentUrl(url,id,name,type) {
 
 }
 function createBase64XML(base64,fn,id,name,mimetype){
+	var filename = name;
 	xx=fn.split(".")
 	yy=name.split(".")
 	if(yy<2){
 		name+="."+xx[1] //append the Extenstion from fn if no extention on name
+		filename = name+"."+xx[1]
 	}
 	fileType = "JPEG image"
+	
 	
 	dt=getFileUploadDT()
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
@@ -323,7 +326,7 @@ function createBase64XML(base64,fn,id,name,mimetype){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+filename+'</filename>'+
 					  '  <extension>'+xx[0]+'</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
@@ -335,7 +338,7 @@ function createBase64XML(base64,fn,id,name,mimetype){
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-alert(xmlstring)	
+
 	sendPhotoToServer(id,fn,xmlstring)
 	
 }
@@ -626,6 +629,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
             	 }
             }
  })
+
 var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
     title:"Attachment",
     modal: true,
@@ -642,10 +646,25 @@ var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
 				})	
 				],					
     content:[
+
 		new sap.ui.layout.form.SimpleForm({
 			minWidth : 1024,
 			maxContainerCols : 2,
 			content : [
+new sap.m.Label({text:""}),
+new sap.m.Button( {
+   text: "Network Status",
+   type: 	sap.m.ButtonType.Reject,
+   tap: [ function(oEvt) {	
+   	formAttachmentFunctions.close() 
+   	
+   	checkConnection();
+   	
+	    	
+   
+   	
+		  } ]
+}),
 			           new sap.m.Label({text:""}),
 					 new sap.m.Button( {
 					    text: "Delete",

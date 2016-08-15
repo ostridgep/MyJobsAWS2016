@@ -61,6 +61,7 @@
     <gap:plugin name="org.apache.cordova.dialogs" />
     <gap:plugin name="com.ionic.keyboard" />
     <gap:plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="pgb" />
+    <gap:plugin name="com.venkykowshik.startup" spec="0.0.1" source="pgb" />
    
 
     <gap:plugin name="org.apache.cordova.geolocation" />

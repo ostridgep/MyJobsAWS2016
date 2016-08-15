@@ -1330,7 +1330,16 @@ var tileContainer = new sap.m.TileContainer({
 			title:"Documents",
 			icon:"sap-icon://documents",
 			
-			press:[ function(){formDocuments.open()}]
+			press:[ function(){
+				
+				//formDocuments.open()
+				navigator.startApp.start("com.aws.myjobsdocs",function(message){
+					alert("docs open ok")
+				},function(error){
+					alert("docs failed open "+error)
+				})
+				
+			}]
 		
 		
 		}),
