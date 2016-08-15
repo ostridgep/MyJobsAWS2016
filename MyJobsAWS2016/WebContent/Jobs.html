@@ -5361,6 +5361,10 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 		        	local=""
 		        }else{
 		        	local="Local"
+		        		
+	        		if (rowsArray[n].zurl=="Download Failed"){
+		        		local="Download Failed..."	
+		        	}
 		        	if (rowsArray[n].zurl=="RequestLiveLink"){
 		        		local="Requesting..."	
 		        	}

@@ -1760,7 +1760,8 @@ var 	downstream1senttolab= ""
 var 	downstream2senttolab= ""
 var 	downstream3senttolab= ""
 		
-	
+
+
 user=localStorage.getItem("MobileUser")
 empid=localStorage.getItem("EmployeeID")
 	var newDets="";

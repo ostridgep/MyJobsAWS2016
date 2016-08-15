@@ -465,7 +465,12 @@ new sap.m.Button( {
 		    	}else{
 		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local")
 		    	}
-				getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
+				if(!isFastConnection())	{
+					DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
+					}else{
+						getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
+					
+					}
 		    	formPhotoDetails.close()
 			}
     	
@@ -587,7 +592,12 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 							    	
 							    		
 							    	formFormFunctions.close() 
-							    	uploadDocument(selectedFormId)	
+							    	if(!isFastConnection())	{
+										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
+										}else{
+											uploadDocument(selectedFormId)	
+										}
+							    	
 							    	
 							    	
 							    	
@@ -688,7 +698,12 @@ new sap.m.Button( {
 							    	
 							    		
 							    	formAttachmentFunctions.close() 
-							    	uploadAttachment(selectedFormId)	
+							    	if(!isFastConnection())	{
+										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
+										}else{
+											uploadAttachment(selectedFormId)	
+										}
+							    		
 							    	
 							    	
 							    	
@@ -1738,8 +1753,8 @@ function downloadAllAsset(fileName,dir) {
 function transferRequestedFile(fileName,dir,id) {
 	
     var fileTransfer = new FileTransfer();  
-    alert("Transfering:"+localStorage.getItem("DOCSERVER")+dir + escape(fileName)+" To "+
-    			cordova.file.externalApplicationStorageDirectory + dir +escape(fileName))
+    //alert("Transfering:"+localStorage.getItem("DOCSERVER")+dir + escape(fileName)+" To "+
+    //			cordova.file.externalApplicationStorageDirectory + dir +escape(fileName))
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir + escape(fileName), cordova.file.externalApplicationStorageDirectory + dir +escape(fileName),
 		function (entry) {
     	opMessage("Downloading LL "+entry.fullPath)
