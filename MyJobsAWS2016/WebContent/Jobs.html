@@ -4887,11 +4887,13 @@ function downloadDrawFile(fname,url,nodeid,drawid){
 		requestLiveLink(fname,nodeid.trim(),drawid)
 		buildJobDocsTable()
 	}else{
-		if(url!="RequestLiveLink"){
+		if(url=="Download Failed"){
+			requestLiveLink(fname,nodeid.trim(),drawid)
+			buildJobDocsTable()
+		}else if(url!="RequestLiveLink"){
 			window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
 			
 		}
-		
 	}
 }
 function requestLiveLink(fname,nodeid,drawid){

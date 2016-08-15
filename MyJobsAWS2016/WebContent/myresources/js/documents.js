@@ -1743,7 +1743,7 @@ function transferRequestedFile(fileName,dir,id) {
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir + escape(fileName), cordova.file.externalApplicationStorageDirectory + dir +escape(fileName),
 		function (entry) {
     	opMessage("Downloading LL "+entry.fullPath)
-    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+dir +escape(fileName)+"' where id='"+id+"'",
+    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+cordova.file.externalApplicationStorageDirectory + dir +fileName+"' where id='"+id+"'",
 				 function(){
 				 
 				 },
@@ -1754,7 +1754,15 @@ function transferRequestedFile(fileName,dir,id) {
 		);  
 		},
 		function (error) {
-		    
+	    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'Download Failed' where id='"+id+"'",
+					 function(){
+					 
+					 },
+					 function(error, statement){
+						 
+						 opMessage("Error: " + error.message + " when processing " + statement);
+					 }        
+			);
 			opMessage("download error " + error.source+ ":" + error.target+": " + error.code);
 	
 		    
