@@ -19,7 +19,6 @@ function checkConnection() {
     alert('Connection type: ' + states[networkState]);
 }
 
-
 var formMessageBox = new sap.m.Dialog("dlgMessageBox",{
     title:"",
     modal: true,
