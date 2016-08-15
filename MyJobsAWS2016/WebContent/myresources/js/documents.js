@@ -1572,7 +1572,7 @@ function BuildDocumentsTable() {
 function downlodRequestedFile(dir,fn,id){
 	
 	window.resolveLocalFileSystemURL(DeviceStorageDirectory+dir+  fn, appStartLL, transferRequestedFile(fn, dir+"/",id));	
-	alert(DeviceStorageDirectory+":"+dir+ ":" + fn)
+	alert("aa"+DeviceStorageDirectory+":"+dir+ ":" + fn)
 }
 function downloadForms () { 
 	
@@ -1736,9 +1736,10 @@ function downloadAllAsset(fileName,dir) {
 }
 
 function transferRequestedFile(fileName,dir,id) {
-	alert(fileName+":"+dir+":"+id)
+	alert("bb"+fileName+":"+dir+":"+id)
     var fileTransfer = new FileTransfer();  
-    
+    alert("Transfering From:"+localStorage.getItem("DOCSERVER")+dir + escape(fileName))
+    alert("Transfering To:"+cordova.file.externalApplicationStorageDirectory + dir +escape(fileName))
     fileTransfer.download(localStorage.getItem("DOCSERVER")+dir + escape(fileName), cordova.file.externalApplicationStorageDirectory + dir +escape(fileName),
 		function (entry) {
     	opMessage("Downloading LL "+entry.fullPath)
