@@ -465,7 +465,7 @@ new sap.m.Button( {
 		    	}else{
 		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local")
 		    	}
-				if(!isFastConnection())	{
+				if(!isCellConnection())	{
 					DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
 					}else{
 						getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
@@ -592,7 +592,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 							    	
 							    		
 							    	formFormFunctions.close() 
-							    	if(!isFastConnection())	{
+							    	if(!isCellConnection())	{
 										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
 										}else{
 											uploadDocument(selectedFormId)	
@@ -698,7 +698,7 @@ new sap.m.Button( {
 							    	
 							    		
 							    	formAttachmentFunctions.close() 
-							    	if(!isFastConnection())	{
+							    	if(!isCellConnection())	{
 										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
 										}else{
 											uploadAttachment(selectedFormId)	
