@@ -158,7 +158,6 @@ function uploadPhoto(imageURI) {
             options.mimeType="image/jpeg"
             options.chunkedMode = false;
             var params = {};
-            params.value1 = "POSTRIDGE2";
             params.value2 = options.fileName;
             options.params = params;
           
@@ -364,13 +363,13 @@ function createBase64FormXML(base64,fn,id,name){
 					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
 					  '    <fileType>Image</fileType>'+
-					  '    <mimeType>image/png</mimeType>'+
+					  '    <mimeType>image/jpeg</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
 					  '<fileContent contentEncoding="base64">'+base64+
 					  '</fileContent>'+
 					  '</uploadRequest>'
-	
+	console.log(base64)
 	sendDocToServer(id,uploadfn,xmlstring)
 	
 }

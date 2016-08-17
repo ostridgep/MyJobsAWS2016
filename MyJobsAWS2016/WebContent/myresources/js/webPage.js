@@ -25,7 +25,7 @@ window.addEventListener('native.keyboardshow', keyboardShowHandler);
 function createImageFromHTML(body,fname,type){
 	html2canvas(body, {
 		  onrendered: function(canvas) {
-			  var base64 = canvas.toDataURL("image/png").split(",")
+			  var base64 = canvas.toDataURL("image/jpeg").split(",")
 			  
 			  saveFormDataDB(fname,type,base64[1])
 		  }
