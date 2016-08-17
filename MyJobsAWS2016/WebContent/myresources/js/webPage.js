@@ -1,3 +1,4 @@
+
 var formToOpen="Forms/formsindex.html"
 var formMode="Forms"
 var closeFormName=""
