@@ -23,18 +23,16 @@ var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
 function createImageFromHTML(body){
-	getCanvas(body).then(function(canvas){
-		var base64 = canvas.toDataURL("image/png")
-		return base64		
-	});
+	html2canvas(body, {
+		  onrendered: function(canvas) {
+			  var base64 = canvas.toDataURL("image/png").split(",")
+			  
+			  saveFormDataDB(fname,type,base64[1])
+		  }
+		});
+	
 }
-function getCanvas(body){
-return html2canvas(body, {
-	  onrendered: function(canvas) {
-		
-	  }
-	});
-}
+
 
 function getFormsDL()
 {
@@ -333,19 +331,10 @@ function saveFormData(fname,type){
 	var MyIFrame = document.getElementById("formIframe");
     var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
     if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;  
-    base64=createImageFromHTML(MyIFrameDoc.body)
-    alert(base64)
-    if(currentPage.indexOf("Home")<1) {
-		//Job Related
-		
-		createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,base64[1],formMode,type)
-	}else{
-		//Non Job Form
-		
-		createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,base64[1],formMode,type)
-	}					   					   				    
+    createImageFromHTML(MyIFrameDoc.body,fname,type)
+    				   					   				    
 }
-function saveFormDataOld(fname,type){
+function saveFormDataDB(fname,type,base64){
 
 
 
@@ -420,11 +409,11 @@ var MyIFrame = document.getElementById("formIframe");
 		if(currentPage.indexOf("Home")<1) {
 			//Job Related
 			
-			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,formHTML,formMode,type)
+			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,base64,formMode,type)
 		}else{
 			//Non Job Form
 			
-			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,formHTML,formMode,type)
+			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,base64,formMode,type)
 		}
 		
 		
