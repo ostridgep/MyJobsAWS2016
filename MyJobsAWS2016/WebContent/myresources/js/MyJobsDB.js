@@ -1760,7 +1760,9 @@ var 	downstream1senttolab= ""
 var 	downstream2senttolab= ""
 var 	downstream3senttolab= ""
 		
-
+if(checkConnection()=='No network connection'){
+	return
+}
 
 user=localStorage.getItem("MobileUser")
 empid=localStorage.getItem("EmployeeID")
@@ -1771,7 +1773,7 @@ empid=localStorage.getItem("EmployeeID")
 	SAPServerPrefix=$.trim(localStorage.getItem('ServerName'));
 	sapCalls = 0;
 		if (!CheckSyncInterval('UPLOAD')){
-			console.log("u[pload interval not met")
+			console.log("upload interval not met")
 			return; }
 		if (localStorage.getItem("SAPCalling")=="true"){
 			console.log("SAP is being Called")
@@ -3550,6 +3552,33 @@ function(error, statement){
 );
 }
 function uploadDocument(id){
+	
+	selectedDocId=id;
+	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
+	 
+
+
+html5sql.process(sqlStatement,
+function(transaction, results, rowsArray){
+
+if(rowsArray.length>0){
+	
+	
+	
+	
+	createBase64FormXML(rowsArray[0].htmlbody,rowsArray[0].formdesc+".html",id,rowsArray[0].formdesc)	
+
+}
+
+
+},
+function(error, statement){
+
+opMessage("uploadDocument:"+error+statement)
+}        
+);
+}
+function uploadDocumentOld(id){
 	
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"

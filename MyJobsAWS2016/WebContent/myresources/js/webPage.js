@@ -20,6 +20,21 @@ currentPage=document.location.href;
 var theIFrameDoc=""
 var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
+
+function createImageFromHTML(body){
+	getCanvas(body).then(function(canvas){
+		var base64 = canvas.toDataURL("image/png")
+		return base64		
+	});
+}
+function getCanvas(body){
+return html2canvas(document.body, {
+	  onrendered: function(canvas) {
+		
+	  }
+	});
+}
+
 function getFormsDL()
 {
 
@@ -311,6 +326,24 @@ var formForms = new sap.m.Dialog("dlg",{
 	
 	 })
 function saveFormData(fname,type){
+
+
+
+	var MyIFrame = document.getElementById("formIframe");
+    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
+    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;  
+    base64=createImageFromHTML(MyIFrameDoc.body).split(',')
+    if(currentPage.indexOf("Home")<1) {
+		//Job Related
+		
+		createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,base64[1],formMode,type)
+	}else{
+		//Non Job Form
+		
+		createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,base64[1],formMode,type)
+	}					   					   				    
+}
+function saveFormDataOld(fname,type){
 
 
 

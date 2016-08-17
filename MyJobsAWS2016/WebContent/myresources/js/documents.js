@@ -358,13 +358,13 @@ function createBase64FormXML(base64,fn,id,name){
 					  '  <docSubmitDateTime>'+dt+'</docSubmitDateTime>'+
 					  '</jobMetadata>'+
 					  '<attachmentMetadata>'+
-					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.html</filename>'+
+					  '  <filename>'+CurrentOrderNo+CurrentOpNo+'-'+name+'.png</filename>'+
 					  '  <extension>html</extension>'+
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
-					  '    <fileType>HTML Document</fileType>'+
-					  '    <mimeType>text/html</mimeType>'+
+					  '    <fileType>Image</fileType>'+
+					  '    <mimeType>image/png</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
 					  '<fileContent contentEncoding="base64">'+base64+
