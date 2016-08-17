@@ -29,7 +29,7 @@ function createImageFromHTML(body){
 	});
 }
 function getCanvas(body){
-return html2canvas(document.body, {
+return html2canvas(body, {
 	  onrendered: function(canvas) {
 		
 	  }
@@ -333,7 +333,8 @@ function saveFormData(fname,type){
 	var MyIFrame = document.getElementById("formIframe");
     var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
     if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;  
-    base64=createImageFromHTML(MyIFrameDoc.body).split(',')
+    base64=createImageFromHTML(MyIFrameDoc.body)
+    alert(base64)
     if(currentPage.indexOf("Home")<1) {
 		//Job Related
 		
