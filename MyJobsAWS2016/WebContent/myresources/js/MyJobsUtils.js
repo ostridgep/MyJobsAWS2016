@@ -5,7 +5,6 @@ var MBform=""
 jQuery.sap.require("sap.m.MessageBox");
 function checkConnection() {
     var networkState = navigator.connection.type;
-
     var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
     states[Connection.ETHERNET] = 'Ethernet connection';
