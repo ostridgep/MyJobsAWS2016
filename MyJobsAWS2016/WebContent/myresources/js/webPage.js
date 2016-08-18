@@ -23,11 +23,29 @@ var MandatedForms= [];
 window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
 function createImageFromHTML(body,fname,type){
+	
+	html2canvas(document.body, {
+		  onrendered: function(canvas) {
+			canvas.id="FormImage"
+			
+		    document.body.appendChild(canvas);
+		    xx=document.getElementById("FormImage")
+		    
+		    document.getElementById("FormImage").remove();
+		     var img = xx.toDataURL("image/jpeg")
+		  
+		    console.log(img)
+		    		   
+		  }
+		});
+	
+	
 	html2canvas(body, {
 		  onrendered: function(canvas) {
-			  var base64 = canvas.toDataURL("image/jpeg").split(",")
-			  
-			  saveFormDataDB(fname,type,base64[1])
+			  canvas.id="FormImage"
+			  body.appendChild(canvas);
+			  img=canvas.toDataURL("image/jpeg")
+			  saveFormDataDB(fname,type,img)
 		  }
 		});
 	
@@ -324,7 +342,7 @@ var formForms = new sap.m.Dialog("dlg",{
 	  }
 	
 	 })
-function saveFormData(fname,type){
+function saveFormDataxx(fname,type){
 
 
 	var MyIFrame = document.getElementById("formIframe");
@@ -333,7 +351,7 @@ function saveFormData(fname,type){
     createImageFromHTML(MyIFrameDoc.body,fname,type)
     				   					   				    
 }
-function saveFormDataDB(fname,type,base64){
+function saveFormData(fname,type){
 
 
 
@@ -346,6 +364,20 @@ var MyIFrame = document.getElementById("formIframe");
 		formJSON=buildJSONResponse(MyIFrameDoc)
 		
 		xx=MyIFrameDoc.body;
+		
+/*		var elems = xx.getElementsByTagName("*");
+		for(var i = 0; i < elems.length; i++) {
+		cconsole.log(elems[i].tagName+"--"+elems[i].id)
+		}
+		 var elems = MyIFrameDoc.getElementsByTagName("canvas");
+		 alert(elems.length)
+	    formcanvas=elems[0]	
+	    var img = formcanvas.toDataURL("image/jpeg")
+	    
+	    elems[0].remove();
+	    Image canvas not working
+*/
+	   
 			 var elems = xx.getElementsByTagName("input");
 
 				for(var i = 0; i < elems.length; i++) {
@@ -408,11 +440,11 @@ var MyIFrame = document.getElementById("formIframe");
 		if(currentPage.indexOf("Home")<1) {
 			//Job Related
 			
-			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,base64,formMode,type)
+			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,formHTML,formMode,type)
 		}else{
 			//Non Job Form
 			
-			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,base64,formMode,type)
+			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,img,formMode,type)
 		}
 		
 		

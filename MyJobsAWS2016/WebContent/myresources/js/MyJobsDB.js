@@ -3551,7 +3551,7 @@ function(error, statement){
 }        
 );
 }
-function uploadDocument(id){
+function uploadDocument_Image_NotUsed(id){
 	
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
@@ -3578,7 +3578,7 @@ opMessage("uploadDocument:"+error+statement)
 }        
 );
 }
-function uploadDocumentOld(id){
+function uploadDocument(id){
 	
 	selectedDocId=id;
 	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"

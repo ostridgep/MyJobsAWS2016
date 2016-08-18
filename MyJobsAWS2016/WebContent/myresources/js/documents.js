@@ -362,8 +362,8 @@ function createBase64FormXML(base64,fn,id,name){
 					  '  <modified>'+dt+'</modified>'+
 					  '  <created>'+dt+'</created>'+
 					  '  <fileDescription>'+
-					  '    <fileType>Image</fileType>'+
-					  '    <mimeType>image/jpeg</mimeType>'+
+					  '    <fileType>HTML</fileType>'+
+					  '    <mimeType>text/html</mimeType>'+
 					  '  </fileDescription>'+
 					  '</attachmentMetadata>'+
 					  '<fileContent contentEncoding="base64">'+base64+
