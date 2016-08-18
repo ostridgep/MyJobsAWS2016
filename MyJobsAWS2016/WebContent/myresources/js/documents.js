@@ -304,7 +304,7 @@ function createBase64XML(base64,fn,id,name,mimetype){
 	var filename = name;
 	xx=fn.split(".")
 	yy=name.split(".")
-	if(yy<2){
+	if(yy.length<2){
 		name+="."+xx[1] //append the Extenstion from fn if no extention on name
 		filename = name+"."+xx[1]
 	}
