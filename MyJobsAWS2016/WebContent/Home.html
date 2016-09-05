@@ -64,7 +64,9 @@ var appDirectory=""
 <script src="myresources/js/webPage.js"></script>
 
 <script src="myresources/js/documents.js"></script>
-
+<script src="myresources/js/Globals.js"></script>
+<script src="myresources/js/DlgForms.js"></script>
+<script src="myresources/js/NotificationFunctions.js"></script>
 
 <script type="text/javascript">
 jQuery.sap.require("sap.m.MessageBox");
@@ -1394,7 +1396,8 @@ if (url.indexOf("mcweb")>4){
 	url="http://10.144.3.80/"
 }
 
-window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
+window.open(url, "system", 'location=yes,closebuttoncaption=Return') 
+//window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
 	//ref1=window.open(url, "_blank", 'location=yes')
 	
 	//ref1.show();
