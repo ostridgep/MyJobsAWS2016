@@ -3006,7 +3006,8 @@ html5sql.process(SQLStatement,
 			selectListDefault();
 	 }
 			else{
-				window.location.href="Home.html";
+				//window.location.href="Home.html";
+				homepage.placeAt("body","only");
 			}	
 		 },
 		 function(error, statement){
@@ -5590,7 +5591,8 @@ function rebuildTimeConfs()
 				 headerContent : new sap.m.Button({
                      icon: "sap-icon://home",
                      press : function() {
-                    	 window.location.href="Home.html"
+                    	 //window.location.href="Home.html"
+                    	 homepage.placeAt("body","only");
                      }
 }).addStyleClass("HomeButton"),
 				title : "Jobs",
