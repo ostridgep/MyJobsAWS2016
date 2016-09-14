@@ -2137,8 +2137,8 @@ var detailFooterAWS = new sap.m.Bar({
 							  if(currentEquipment_GIS.length>6){
 								 
 								  x=convertToLatLon(currentEquipment_GIS)
-								  if( localStorage.getItem('MAPTYPE')=='Intergraph'){
-									  window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_system", 'location=yes,closebuttoncaption=Return')
+								  if( localStorage.getItem('MAPTYPE')=='MyJobsMaps'){
+									  window.open('myjobsmap://?MYJOBS=plotjob|'+x[1]+'|'+x[0], "_system", 'location=yes,closebuttoncaption=Return')
 								  }else{
 									  localStorage.setItem('latlon',x[0]+','+x[1])
 									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)

@@ -393,8 +393,13 @@
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(url){
-
-var ref = window.open(url, '_blank', 'location=yes');
+    	ref=cordova.InAppBrowser.open('myjobschild://?MYJOBS=getlocation','_system')
+    	
+    	window.plugins.clipboard.paste(function (text) { 
+    		document.getElementById("gridref").value=text; 
+    		});
+/*
+    	var ref = window.open(url, '_blank', 'location=yes');
 
 // attach listener to loadstart
 	ref.addEventListener('loadstart', function(event) { 
@@ -411,6 +416,7 @@ var ref = window.open(url, '_blank', 'location=yes');
 	    ref.close();    
 	    }
 	});
+	*/
 }
     
  // This function is called once all data is loaded
