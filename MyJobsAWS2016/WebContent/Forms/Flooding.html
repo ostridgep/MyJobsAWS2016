@@ -147,7 +147,7 @@
                             <input name="gridref"  merge="mapLocation" type="text" class="feedback-input" placeholder="Grid Ref" id="gridref" />
                         </div>
                         <div >
-                        <img  src="img/location.svg"  onclick= "parent.formGMaps.open()" width="38" height="38">
+                        <img  src="img/location.svg"  onclick= "openGoogleMapsGetLocation()" width="38" height="38">
                           <!--<img  src="img/delete.png"  onclick="document.getElementById('gridref').value=''" width="38" height="38">-->
                         </div>
                     </div>
@@ -392,7 +392,7 @@
     setLocationEmpty()
     setRoomEmpty()
     
-function openGoogleMapsGetLocation(url){
+function openGoogleMapsGetLocation(){
     	ref=cordova.InAppBrowser.open('myjobschild://?MYJOBS=getlocation','_system')
     	
     	window.plugins.clipboard.paste(function (text) { 
