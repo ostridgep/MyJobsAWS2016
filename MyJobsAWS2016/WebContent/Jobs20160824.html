@@ -14,8 +14,7 @@
 </script>
 <script src="myresources/js/jscoord-1.1.1.js"></script> 
 <script src="myresources/js/html5sql.js"></script>  
-<script src="myresources/js/assetRecord.js"></script> 
- <script src="myresources/js/AssetList.js"></script> 
+<script src="myresources/js/html2canvas.min.js"></script>  
 <script src="myresources/js/bgsync.js"></script>
 <script src="myresources/js/MyJobsDB.js"></script>
 <script src="myresources/js/MyJobsUtils.js"></script>
@@ -35,10 +34,7 @@
 <script src="myresources/js/documents.js"></script>
 <script src="myresources/js/NewNotif.js"></script>
 <script src="myresources/js/webPage.js"></script>
-<script src="myresources/TL/js/main.js"></script> 
 
-<script src="myresources/js/html2canvas.min.js"></script> 
-<link rel="stylesheet" href="myresources/TL/css/style.css"> <!-- Resource style -->
 
 
 <style>
@@ -84,26 +80,15 @@ span.tip {
 }
 </style>
 
-<script type="text/javascript" src="cordova.js"></script>
+
 <script>
 var appDirectory=""
-var disableformFlag=false;
+
 	
 	</script>
 
 <style>
-.Labelstyle{
-	font-size:18;
-}
-.LabelText{
-	font-size:15;
-}
-.TableText .sapMText .sapMListTbl .sapMLabel{
-font-size: 1rem;
-}
-.HomeButton .sapMBtnIcon{
-	  font-size: 2rem;
-}
+
 .formHdr {
 				font-weight: bold;
 			}
@@ -825,11 +810,8 @@ function processClose(){
 						 followOnWork,followOnVariance,followOnReason ,oSwitchFlooding.getState(),oSwitchPollution.getState(), oSwitchCustFeed.getState(),"CONF" ,"Confirmed")			 
 			 }
 			 
-				UpdateJobDetClose(CurrentOrderNo, CurrentOpNo)
-				//updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
-				sendJobPhotos(CurrentOrderNo,CurrentOpNo)
-				sendJobAttachments(CurrentOrderNo,CurrentOpNo)
-				sendJobForms(CurrentOrderNo,CurrentOpNo)
+				updateJobDetsStatus(CurrentOrderNo, CurrentOpNo, "CLOSED")
+				
 				currentStatus="CLOSED"
 				prepareChangeStatus()
 				localStorage.setItem("closeScreen"," ")
@@ -837,7 +819,6 @@ function processClose(){
 				document.getElementById("JobHead_Status").innerHTML = "<Font color='RED'>Closed</font>";
 				
 				 document.getElementById('L'+CurrentOrderNo+'-'+CurrentOpNo).innerHTML = "Closed";
-				 //BuildJobs();
 				 
 				}else{
 					console.log("CloseError:"+CloseError)
@@ -915,7 +896,6 @@ function confirmAcceptStatus()
                                             
                                          }),   
                                          new sap.m.Button( {
-                                        	 icon:"sap-icon://sys-cancel",
                                              text: "Cancel",
                                              type: 	sap.m.ButtonType.Reject,
                                              tap: [ function(oEvt) {         
@@ -990,7 +970,6 @@ function confirmAcceptStatus()
                                             
                                          }),   
                                          new sap.m.Button( {
-                                        	 icon:"sap-icon://sys-cancel",
                                         	 type: 	sap.m.ButtonType.Reject,
                                              text: "Cancel",
                                              tap: [ function(oEvt) {         
@@ -1093,7 +1072,6 @@ function confirmAcceptStatus()
                                             
                                          }),   
                                          new sap.m.Button( {
-                                        	 icon:"sap-icon://sys-cancel",
                                              text: "Cancel",
                                              type: 	sap.m.ButtonType.Reject,
                                              tap: [ function(oEvt) {         
@@ -1192,7 +1170,6 @@ var formChangeStatusReject = new sap.m.Dialog("dlgStatusReject",{
                                             
                                          }),   
                                          new sap.m.Button( {
-                                        	 icon:"sap-icon://sys-cancel",
                                              text: "Cancel",
                                              type: 	sap.m.ButtonType.Reject,
                                              tap: [ function(oEvt) {         
@@ -2325,7 +2302,7 @@ var detailFooterAWS = new sap.m.Bar({
 								  }else{
 									  localStorage.setItem('latlon',x[0]+','+x[1])
 									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)
-									  window.open('GoogleMapsGetLocation3.html', "_system", 'location=yes,closebuttoncaption=Return') 
+									  window.open('GoogleMapsGetLocation3.html', "_blank", 'location=yes,closebuttoncaption=Return') 
 									 // window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return') 
 								  }
 								  
@@ -2347,8 +2324,8 @@ var detailFooterAWS = new sap.m.Bar({
 								  }else{
 									  localStorage.setItem('latlon',x[0]+','+x[1])
 									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)
-									  //window.open('GoogleMapsGetLocation3.html', "_blank", 'location=yes,closebuttoncaption=Return') 
-									  ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_system", 'location=yes,closebuttoncaption=Return')
+									  window.open('GoogleMapsGetLocation3.html', "_blank", 'location=yes,closebuttoncaption=Return') 
+									  //ref1=window.open('http://maps.google.com/maps?q='+x[0]+','+x[1], "_blank", 'location=yes,closebuttoncaption=Return')
 								  }
 								  
 								 								  //ref1=window.open('mmwessentials://?x='+x[1]+'&y='+x[0], "_blank", 'location=yes,closebuttoncaption=Return')
@@ -2640,7 +2617,6 @@ var historyList  = new sap.m.List("HistoryList",
 					   
 					}),   
 					new sap.m.Button( {
-						icon:"sap-icon://sys-cancel",
 					    text: "Cancel",
 					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {		  
@@ -2728,7 +2704,6 @@ var historyList  = new sap.m.List("HistoryList",
 	      buttons: [
  
 						new sap.m.Button( {
-							icon:"sap-icon://sys-cancel",
 						    text: "Cancel",
 						    type: 	sap.m.ButtonType.Reject,
 						    tap: [ function(oEvt) {		  
@@ -3081,18 +3056,14 @@ var jacpt=0;
                      SQLStatement+=" where myjobdets.status not in ('CLOSED', 'CONF', 'REJ1', 'REJ2') order by  myjobdets.orderno,  myjobdets.opno"
 html5sql.process(SQLStatement,
               function(transaction, results, rowsArray){
-	 if(rowsArray.length>0){
-	standardList.destroyItems();
+					
                      cnt = 0;
-                    
                      oMasterPage.setTitle("Jobs = "+rowsArray.length)
                      while (cnt<rowsArray.length){
                     	 if (rowsArray[cnt].status=="PARK"){jpark=1}
                     	 if (rowsArray[cnt].status=="ACPT"){jacpt=1}
                     	 if (rowsArray[cnt].status=="SITE"){jacpt=1}
                            item=rowsArray[cnt];
-                           //item.orderno=(item.orderno).replace(/^[0]+/g,"");
-                          // item.opno=(item.opno).replace(/^[0]+/g,"");
                            if(cnt==0){
                                   firstJob="job:"+item.orderno+':'+item.opno
                            }
@@ -3169,7 +3140,7 @@ html5sql.process(SQLStatement,
 							      content: 
 							    	    [
 "<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.shorttext+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
-"<TR><TD><B>"+item.site+"</B></TD><TD colspan='2'  align='right'><B>"+item.orderno.replace(/^[0]+/g,"")+'-'+item.opno+"</B></TD></TR>"+
+"<TR><TD><B>"+item.site+"</B></TD><TD colspan='2'  align='right'><B>"+item.orderno+'-'+item.opno+"</B></TD></TR>"+
 "<TR><TD align='left'><font size='2'>Start:</TD><TD align='left'><font size='2'>"+item.start_date+" "+item.start_time+"</font></TD><td  align='right'><p id='L"+item.orderno+'-'+item.opno+"'>"+StatusText+"</P></TD></TR>"+
 
 "<TR><TD align='left'><font size='2'>Job Type:</font></TD><TD colspan='2' align='left'><font size='2'>"+jobType+"</font></TD></TR>"+
@@ -3183,28 +3154,21 @@ html5sql.process(SQLStatement,
 			 }
 			localStorage.setItem("totalParked",jpark)
 			localStorage.setItem("totalAccepted",jacpt)
-			/* oMasterPage.destroyContent()*/
+			oMasterPage.destroyContent()
 			oMasterPage.addContent(standardList);
-			
 			selectListDefault();
-	 }
-			else{
-				window.location.href="Home.html";
-			}	
+			
 		 },
 		 function(error, statement){
 			 opMessage(error+statement)
 		 }        
 		);	
 cnt = 0;
+
+
+
+
 }
-
-
-
-
-
-
-
 var deviceWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 
 function addNewJobToList(orderno,opno){
@@ -3252,11 +3216,9 @@ function addNewJobToList(orderno,opno){
 	              function(transaction, results, rowsArray){
 		 
 	                     cnt = 0;
-	                  
+	                   
 	                     while (cnt<rowsArray.length){
 	                           item=rowsArray[cnt];
-	                           //item.orderno=(item.orderno).replace(/^[0]+/g,"");
-	                          // item.opno=(item.opno).replace(/^[0]+/g,"");
 	                           if(cnt==0){
 	                                  firstJob="job:"+item.orderno+':'+item.opno
 	                           }
@@ -3343,7 +3305,7 @@ function addNewJobToList(orderno,opno){
 								      content: 
 								    	    [
 	"<TABLE width='100%'><TR><TD width='25%'><TD width='50%'><TD width='25%'></TD></TR><TR><TD  colspan='2' align='left'>"+item.operationdesc+"</TD><TD  align='right'><H4>"+item.type+"</H4></TD></TR>"+
-	"<TR><TD colspan='3'  align='right'><B>"+item.orderno.replace(/^[0]+/g,"")+'-'+item.opno+"</B></TD></TR>"+
+	"<TR><TD colspan='3'  align='right'><B>"+item.orderno+'-'+item.opno+"</B></TD></TR>"+
 	"<TR><TD align='left'><font size='2'>Start:</TD><TD align='left'><font size='2'>"+formatDateTime1(item.startdate)+"</font></TD><td  align='right'><p id='L"+item.orderno+'-'+item.opno+"'>"+StatusText+"</P></TD></TR>"+
 	"<TR><TD align='left'><font size='2'>End:</TD><TD align='left'><font size='2'>"+formatDateTime1(item.enddate)+"</font></TD><td  align='right'></TD></TR>"+
 	"<TR><TD align='left'><font size='2'>Job Type:</font></TD><TD colspan='2' align='left'><font size='2'>"+jobType+"</font></TD></TR>"+
@@ -3458,7 +3420,7 @@ function  buildHistoryForm(did){
 			 if (rowsArray.length>0){
 				 if(res[0]=="Notif"){
 					 sap.ui.getCore().getElementById('historyTitle').setText("Notification")
-					 sap.ui.getCore().getElementById('historyID').setValue(rowsArray[0].notifno.replace(/^[0]+/g,""))
+					 sap.ui.getCore().getElementById('historyID').setValue(rowsArray[0].notifno)
 					 sap.ui.getCore().getElementById('historyType').setValue(rowsArray[0].type)
 					 sap.ui.getCore().getElementById('historyPriority').setValue(rowsArray[0].priority)
 					 sap.ui.getCore().getElementById('historyDescription').setValue(rowsArray[0].shorttext)
@@ -3466,7 +3428,7 @@ function  buildHistoryForm(did){
 					 sap.ui.getCore().getElementById('historyStartDate').setValue(formatDateTime1(rowsArray[0].startdate))
 				 }else{
 					 sap.ui.getCore().getElementById('historyTitle').setText("Order")
-					 sap.ui.getCore().getElementById('historyID').setValue(rowsArray[0].orderno.replace(/^[0]+/g,""))
+					 sap.ui.getCore().getElementById('historyID').setValue(rowsArray[0].orderno)
 					 sap.ui.getCore().getElementById('historyType').setValue(rowsArray[0].type)
 					 sap.ui.getCore().getElementById('historyPriority').setValue(rowsArray[0].priority)
 					 sap.ui.getCore().getElementById('historyDescription').setValue(rowsArray[0].shorttext)
@@ -3589,7 +3551,7 @@ if(aid.length<2){
 //getCurrentJob(aid)	
 currentOrderListItem=aid;
 var res = aid.split(":")
-var orderno=prefixZeroes(res[1]);
+var orderno=res[1];
 var opno=res[2];
 var StatusState="";
 var StatusIcon="";
@@ -3761,7 +3723,7 @@ html5sql.process(SQLStatement,
                     	 showAttributes="<img src='images/eqAttr.png' alt='History' height='35' width='35' onclick='showEQAttbites(\""+rowsArray[0].equipment_code+"\")'>"	 
                     	 }
               
-		/* oDetailPage.addContent(	new sap.ui.core.HTML('JobHeader',{  
+		oDetailPage.addContent(	new sap.ui.core.HTML('JobHeader',{  
 	      content: 
 	    	    [
 "<TABLE width='100%' height='200' ><tr height='100'><TD valign='top' colspan='3' align='left' ><h3>"+unescape(rowsArray[0].orderdesc)+"</h3></TD><TD valign='top'  colspan='2' align='Right' ><h2 id='JobHead_JobNo'>"+rowsArray[0].orderno+"-"+rowsArray[0].opno+"</h2></TD></TR>"
@@ -3776,9 +3738,10 @@ html5sql.process(SQLStatement,
 +"</table>"  	 
 ]
 
-	})) */
-	oDetailPage.addContent(CreateMatrix(selectedJobArray,StatusColour,StatusText,priorityiconsToDisplay,iconsToDisplay,showAttributes));
-
+	}))
+                     
+                    
+                    
                      //res=rowsArray[0].notiftype.split(":");
                      ////if(res[0]=="FORM"){
                       //     jobType=getJobType(res[1])
@@ -3845,7 +3808,7 @@ html5sql.process(SQLStatement,
                        sap.ui.getCore().getElementById('Equipment').setText(rowsArray[0].equipment_code+" "+rowsArray[0].equipment_desc)   */
 					  
 					   //sap.ui.getCore().getElementById('Equipment').setCustomContent(sap.m.icon("images/"+jobicons[0]))				   
-                     NLongtext=buildTimeline(rowsArray[0].notifshorttext+unescape(rowsArray[0].notiflongtext))
+                     NLongtext=rowsArray[0].notifshorttext+unescape(rowsArray[0].notiflongtext)
                      
                      Longtext=unescape(rowsArray[0].orderlongtext) 
              
@@ -3857,15 +3820,9 @@ html5sql.process(SQLStatement,
                            oDetailPage.addContent(buildDetailsTabs("FORM",surveyID,docsVisible))
 
                                   
-                             sap.ui.getCore().getElementById('LongText').setText(Longtext) 
-                             if(currentNotifNo=="" || currentNotifNo==null){
-                            	 sap.ui.getCore().getElementById('LONGTEXT').setVisible(false);
-                             }
-                             else
-                            	 {
-                              sap.ui.getCore().getElementById('LONGTEXT').addContent(new sap.ui.core.HTML({content: NLongtext})) ;
-                              sap.ui.getCore().getElementById('LONGTEXT').setVisible(true);
-                            	 }
+                             sap.ui.getCore().getElementById('LongText').setText(Longtext)      
+                              sap.ui.getCore().getElementById('NLongText').setText(NLongtext)      
+
                            buildDetailsTabContent(orderno,opno,"FORM",surveyID)
                      }else{
                      html5sql.process("Select * from myitems where notifno = '"+currentNotifNo+"'",
@@ -3904,15 +3861,9 @@ html5sql.process(SQLStatement,
                      oDetailPage.addContent(buildDetailsTabs("NORMAL","0",docsVisible))
 
                      
-                       sap.ui.getCore().getElementById('LongText').setText(Longtext)  
-                       if(currentNotifNo=="" || currentNotifNo==null){
-                      	 sap.ui.getCore().getElementById('LONGTEXT').setVisible(false);
-                       }
-                       else{
-                    	   sap.ui.getCore().getElementById('LONGTEXT').setVisible(true);
-                       sap.ui.getCore().getElementById('LONGTEXT').addContent(new sap.ui.core.HTML({content: NLongtext})) ;
-                       
-                       }
+                       sap.ui.getCore().getElementById('LongText').setText(Longtext)   
+                       sap.ui.getCore().getElementById('NLongText').setText(NLongtext)      
+
                      buildDetailsTabContent(orderno,opno,"NORMAL","0")
 
               }
@@ -4732,9 +4683,7 @@ formtab=null;
     	                									         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
     	                									        	 hAlign: 'Left',width: '10%',minScreenWidth : "" , demandPopin: true}),
     	                									         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
-    	                									        	 hAlign: 'Left',width: '65%',minScreenWidth : "" , demandPopin: true }),
-    	                									        new sap.m.Column({header: new sap.m.Label({text:""}),
-        	                									        hAlign: 'Left',width: '5%',minScreenWidth : "" , demandPopin: true })
+    	                									        	 hAlign: 'Left',width: '65%',minScreenWidth : "" , demandPopin: true })       	                         
     	                							           	     ]
     	                							           	  
 
@@ -4766,7 +4715,6 @@ formtab=null;
     									]          	                
         	                }),
            	                new sap.m.IconTabFilter( 'MATERIALS',{
-           	                	visible:false,
            	                	text:'Materials',
          	                   key:'Materials',
          	                   tooltip: 'Materials',
@@ -4848,71 +4796,37 @@ formtab=null;
      										selectionChange: function(evt){
      											if(evt.getParameter("listItem").getCells()[1].getText()=="FORM"){
      												selectedFormId=evt.getParameter("listItem").getCells()[2].getText()
-     												//if(sap.ui.getCore().getElementById(evt.getParameter("listItem").getCells()[6].getId()).getVisible()){
-     													if(evt.getParameter("listItem").getCells()[3].getText()=="Sent"){
-     														sap.ui.getCore().getElementById("Rename").setVisible(false);
-     														sap.ui.getCore().getElementById("Delete").setVisible(false);
-     														sap.ui.getCore().getElementById("Upload").setVisible(false);
-     														sap.ui.getCore().getElementById("Edit").setText("View");
-     														sap.ui.getCore().getElementById("Edit").setIcon("sap-icon://detail-view");
-     														disableformFlag=true;
-     														NewFormflag=false;
-     													}
-     													else{
-     														sap.ui.getCore().getElementById("Rename").setVisible(true);
-     														sap.ui.getCore().getElementById("Delete").setVisible(true);
-     														sap.ui.getCore().getElementById("Upload").setVisible(true);
-     														sap.ui.getCore().getElementById("Edit").setText("Edit");
-     														sap.ui.getCore().getElementById("Edit").setIcon("sap-icon://edit");
-     														disableformFlag=false;
-     														NewFormflag=false;
-     													}
-     													this.removeSelections()
-     													formFormFunctions.open()
-     													
-     												//}
-     												
+     												formFormFunctions.open()
      												
      											}else if(evt.getParameter("listItem").getCells()[1].getText()=="ATTACHMENT"){
      												selectedFormId=evt.getParameter("listItem").getCells()[2].getText()
-     												if(sap.ui.getCore().getElementById(evt.getParameter("listItem").getCells()[6].getId()).getVisible()){
-     													this.removeSelections()
-     													formAttachmentFunctions.open()
-     													
-     												}
-     												
-     												
+     												formAttachmentFunctions.open()
      											}else{
-     												selectedFormId=evt.getParameter("listItem").getCells()[2].getText();
-     												if(sap.ui.getCore().getElementById(evt.getParameter("listItem").getCells()[6].getId()).getVisible()){
-     													downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
-     	     													evt.getParameter("listItem").getCells()[5].getText(),
-     	     													evt.getParameter("listItem").getCells()[2].getText(),
-     	     													evt.getParameter("listItem").getCells()[4].getText())
-     												}
      												
-     												this.removeSelections()		
+     												downloadDrawFile(evt.getParameter("listItem").getCells()[0].getText(),
+     													evt.getParameter("listItem").getCells()[5].getText(),
+     													evt.getParameter("listItem").getCells()[2].getText(),
+     													evt.getParameter("listItem").getCells()[4].getText())
+     													
      											}
      											
-     											
+     											this.removeSelections()
      									    },
      										columns:[
-    										         new sap.m.Column({header: new sap.m.Label({text:"Filename",design:sap.m.LabelDesign.Bold}),
+    										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
     										        	 hAlign: 'Left',width: '60%', minScreenWidth : "" , demandPopin: false}),
-    										         new sap.m.Column({header: new sap.m.Label({text:"Type",design:sap.m.LabelDesign.Bold}),
-    										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
-    										         new sap.m.Column({header: new sap.m.Label({text:"Node",design:sap.m.LabelDesign.Bold}),
+    										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true}),										                   										        	 
+    										         new sap.m.Column({header: new sap.m.Label({text:"Node"}),
     										        	 hAlign: 'Left',width: '0%',minScreenWidth : "" ,  visible:false, demandPopin: true }),
-  										        	 new sap.m.Column({header: new sap.m.Label({text:"Status",design:sap.m.LabelDesign.Bold}),
+  										        	 new sap.m.Column({header: new sap.m.Label({text:"Status"}),
       										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
    	 										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
    	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }) ,
     										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
-   	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }),
-   	    										      new sap.m.Column({header:  new sap.m.Label({text:""}),
-    	    										       	 hAlign: 'Right',width: '5%',minScreenWidth : "" , demandPopin: true }) 
+   	    										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })      
     								           	     ]
-     									}).addStyleClass("TableText")
+     									})
      									]          	                
          	                }),	
          	               new sap.m.IconTabFilter( 'JOBPHOTOS',{
@@ -4943,23 +4857,21 @@ new sap.m.Button( {
     										    },
     										width:'100%',
     										columns:[
-   										         new sap.m.Column({header: new sap.m.Label({text:"Description",design:sap.m.LabelDesign.Bold}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Description"}),
    										        	 hAlign: 'Left',width: '30%', minScreenWidth : "" , demandPopin: false}),
-   										         new sap.m.Column({header: new sap.m.Label({text:"Details",design:sap.m.LabelDesign.Bold}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Details"}),
       										         hAlign: 'Left',width: '40%', minScreenWidth : "" , demandPopin: false}),
-   										         new sap.m.Column({header: new sap.m.Label({text:"Size",design:sap.m.LabelDesign.Bold}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Size"}),
    										        	 hAlign: 'Left',width: '10%',minScreenWidth : "" , demandPopin: true}),	    	            										        	 
-   										         new sap.m.Column({header: new sap.m.Label({text:"Status",design:sap.m.LabelDesign.Bold}),
+   										         new sap.m.Column({header: new sap.m.Label({text:"Status"}),
    										        	 hAlign: 'Left',width: '20%',minScreenWidth : "" , demandPopin: true }),
    										        
  										       	 new sap.m.Column({header:  new sap.m.Label({text:""}),
     										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }),
     										       	new sap.m.Column({header:  new sap.m.Label({text:""}),
-       										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true }),
-       										  	new sap.m.Column({header:  new sap.m.Label({text:""}),
-      										       	 hAlign: 'Right',width: '5%',minScreenWidth : "" , visible:true, demandPopin: true })
+       										       	 hAlign: 'Right',width: '0%',minScreenWidth : "" , visible:false, demandPopin: true })
    								           	     ]
-    									}).addStyleClass("TableText")
+    									}) 
     									]          	                
         	                }),	
        	                ]
@@ -4981,7 +4893,7 @@ function downloadDrawFile(fname,url,nodeid,drawid){
 			requestLiveLink(fname,nodeid.trim(),drawid)
 			buildJobDocsTable()
 		}else if(url!="RequestLiveLink"){
-			window.open(url, "_system", 'location=yes,closebuttoncaption=Return') 
+			window.open(url, "_blank", 'location=yes,closebuttoncaption=Return') 
 			
 		}
 	}
@@ -5334,8 +5246,7 @@ html5sql.process("SELECT * FROM MyAssets where orderno = '"+orderNo+"' ;",
 						[
 						new sap.m.Text({text: rowsArray[n].id}),
 			            new sap.m.Text({text: rowsArray[n].type}),
-						new sap.m.Text({text: rowsArray[n].name}),
-						new sap.ui.core.Icon("Icon:"+rowsArray[n].id,{src:"sap-icon://menu2",visible:false })
+						new sap.m.Text({text: rowsArray[n].name})   
 				 		],
 
 					}));
@@ -5466,10 +5377,6 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 		        		local="Waiting..."	
 		        	}
 		        }
-		        visiblestate=false
-		        if(local=="Local"){
-		        	visiblestate=true
-		        }
 				opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 					
 					cells : 
@@ -5479,8 +5386,7 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 						new sap.m.Text({text: rowsArray[n].nodeid}), 
 						new sap.m.Text({text: local}), 
 						new sap.m.Text({text: rowsArray[n].id}),
-						new sap.m.Text({text: rowsArray[n].zurl}),
-						new sap.ui.core.Icon("Icon:"+rowsArray[n].id,{src:"sap-icon://menu2",visible:visiblestate })
+						new sap.m.Text({text: rowsArray[n].zurl})
 				 		],
 
 					}));
@@ -5507,7 +5413,7 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 					    	   status=rowsArray[n].lastupdated;
 					       }
 					      
-							opTable.addItem (new sap.m.ColumnListItem("Form:"+rowsArray[n].id,{
+							opTable.addItem (new sap.m.ColumnListItem("Doc:"+rowsArray[n].id,{
 								
 								cells : 
 									[
@@ -5517,15 +5423,14 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 									new sap.m.Text({text: status}), 
 									
 									new sap.m.Text({text: rowsArray[n].id}),
-									new sap.m.Text({text: rowsArray[n].formname}),
-									new sap.ui.core.Icon("FormIcon:"+rowsArray[n].id,{src:"sap-icon://menu2",visible:true })
+									new sap.m.Text({text: rowsArray[n].formname})
 							 		],
 
 								}));
 							n++;
 						 }
 						//add the attached Files
-						html5sql.process("SELECT * FROM MyJobsDocs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"';",
+						html5sql.process("SELECT * FROM MyJobsDocs where orderno = '"+CurrentOrderNo+"' and opno = '"+CurrentOpNo+"' and status = 'Local';",
 								 function(transaction, results, rowsArray){
 									var n = 0;
 									var opTable = sap.ui.getCore().getElementById('JobDocumentTable');
@@ -5534,10 +5439,8 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 								
 									while (n < rowsArray.length) {
 
-										visiblestate=true
-								      if(rowsArray[n].status=="Sent"){
-								    	  visiblestate=false
-								      }
+								       
+								      
 								       
 								      
 										opTable.addItem (new sap.m.ColumnListItem("Att:"+rowsArray[n].id,{
@@ -5547,11 +5450,10 @@ html5sql.process("SELECT * FROM MyJobDetsDraw where orderno = '"+CurrentOrderNo+
 												new sap.m.Text({text: rowsArray[n].name}),
 												new sap.m.Text({text: "ATTACHMENT"}),
 												new sap.m.Text({text: rowsArray[n].id}), 
-												new sap.m.Text({text: rowsArray[n].status}), 
+												new sap.m.Text({text: status}), 
 												
 												new sap.m.Text({text: rowsArray[n].id}),
-												new sap.m.Text({text: rowsArray[n].type}),
-												new sap.ui.core.Icon("AttIcon:"+rowsArray[n].id,{src:"sap-icon://menu2",visible:visiblestate })
+												new sap.m.Text({text: rowsArray[n].type})
 										 		],
 
 											}));
@@ -5599,8 +5501,7 @@ html5sql.process("SELECT * FROM MyJobsPhotos where orderno = '"+CurrentOrderNo+"
 						new sap.m.Text({text: rowsArray[n].size}),
 						new sap.m.Text({text: rowsArray[n].status}),   
 						new sap.m.Text({text: rowsArray[n].url}),
-						new sap.m.Text({text: rowsArray[n].id}),
-						new sap.ui.core.Icon("PhotoIcon:"+rowsArray[n].id,{src:"sap-icon://menu2",visible:true })
+						new sap.m.Text({text: rowsArray[n].id})
 				 		],
 
 					}));
@@ -5775,10 +5676,10 @@ function rebuildTimeConfs()
                      press : function() {
                     	 window.location.href="Home.html"
                      }
-}).addStyleClass("HomeButton"),
+}),
 				title : "Jobs",
 				
-				content : [buildJobs()],
+				content : [ buildJobs()],
 				//showNavButton: "{device>/isPhone}" ,
 				showNavButton: false,
 				footer  : new sap.m.Bar (
@@ -5841,7 +5742,6 @@ function rebuildTimeConfs()
 		initialDetail: "detail",
 		initialMaster: "master",
 		afterMasterOpen: function(){
-			buildJobs()
 			console.log("master is opened");
 		},
 		afterMasterClose: function(){
@@ -6504,24 +6404,6 @@ function BuildCloseScreen(){
 					key: "NOTSELECTED",
 					text: 'Please Select'
 				}))
-		sap.ui.getCore().getElementById("Close_WD_Group").destroyItems();
-		sap.ui.getCore().getElementById("Close_WD_Group").addItem(
-				new sap.ui.core.Item({
-					key: "NOTSELECTED",
-					text: 'Please Select'
-				}))
-		sap.ui.getCore().getElementById("Close_WD_Code").destroyItems();
-		sap.ui.getCore().getElementById("Close_WD_Code").addItem(
-				new sap.ui.core.Item({
-					key: "NOTSELECTED",
-					text: 'Please Select'
-				}))
-		sap.ui.getCore().getElementById("Close_WD_Assignment").destroyItems();
-		sap.ui.getCore().getElementById("Close_WD_Assignment").addItem(
-				new sap.ui.core.Item({
-					key: "NOTSELECTED",
-					text: 'Please Select'
-				}))
 		sap.ui.getCore().getElementById("Close_ImpactGroup").setSelectedKey("NOTSELECTED")
 		sap.ui.getCore().getElementById("Close_ImpactGroup").destroyItems();
 		sap.ui.getCore().getElementById("Close_ImpactGroup").addItem(
@@ -6654,70 +6536,6 @@ function BuildCloseScreen(){
 																							
 																							sap.ui.getCore().getElementById("Close_InshiftCode").setSelectedKey(defaultInVal)
 																							sap.ui.getCore().getElementById("Close_OutshiftCode").setSelectedKey(defaultOutVal)
-																							SQLStatement="select * from refpaicodes where catalogue = 'W' and level='1' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' group by codegrp"
-
-																							html5sql.process(SQLStatement,
-																									 function(transaction, results, rowsArray){
-																										
-																										
-																										for (var n = 0; n < rowsArray.length; n++) {
-																											item = rowsArray[n];
-																											
-																											sap.ui.getCore().getElementById("Close_WD_Group").addItem(
-																													new sap.ui.core.Item({
-																														key: item.codegrp,
-																														text: item.kurztext_group
-																													}))
-																											
-																										}
-																										
-
-																										html5sql.process("select * from MyRefUsers where workcenter = '"+localStorage.getItem('EmployeeWorkCenter')+"'",
-																												 function(transaction, results, rowsArray){
-																													
-																													
-																													for (var n = 0; n < rowsArray.length; n++) {
-																														item = rowsArray[n];
-																														sap.ui.getCore().getElementById("Close_WD_Assignment").addItem(
-																																new sap.ui.core.Item({
-																																	key: item.userid,
-																																	text: item.lastname+", "+item.firstname+" ("+item.userid+")"
-																																}))
-																														
-																													}
-																													
-
-																													
-																													
-																													
-																													
-																													
-																													
-																													
-																													
-																												 },
-																												 function(error, statement){
-																													
-																												 }        
-																									);
-																										
-																										
-																										
-																										
-																										
-																										
-																										
-																									 },
-																									 function(error, statement){
-																										
-																									 }        
-																						);
-																							
-																							
-																							
-																							
-																							
-																							
 																						 },
 																						 function(error, statement){
 																							
@@ -6783,41 +6601,6 @@ function BuildCloseScreen(){
 				
 					}
 				sap.ui.getCore().getElementById("Close_ProblemCode").setSelectedKey(selected)
-					
-			 },
-			 function(error, statement){
-				
-			 }        
-			);
-
-		} 
- function BuildCloseWDCodes(grp,selected){
-		
-		var SQLStatement="";
-		var FirstVal="";
-		SQLStatement="select * from refpaicodes where catalogue = 'W' and level='2' and work_cntr='"+CurrentJobWorkCentre+"' and stsma = '"+CurrentJobProfile+"' and codegrp = '"+grp+"' group  by code"
-		
-		var ToOutput="";
-			html5sql.process(SQLStatement,
-			 function(transaction, results, rowsArray){
-				
-				
-				sap.ui.getCore().getElementById("Close_WD_Code").destroyItems();
-				sap.ui.getCore().getElementById("Close_WD_Code").addItem(
-						new sap.ui.core.Item({
-							key: "NOTSELECTED",
-							text: 'Please Select'
-						}))
-					for (var n = 0; n < rowsArray.length; n++) {
-						item = rowsArray[n];
-						sap.ui.getCore().getElementById("Close_WD_Code").addItem(
-								new sap.ui.core.Item({
-									key: item.code,
-									text: item.kurztext_code
-								}))
-				
-					}
-				sap.ui.getCore().getElementById("Close_WD_Code").setSelectedKey(selected)
 					
 			 },
 			 function(error, statement){
@@ -6972,7 +6755,7 @@ function refreshJobList(){
 						opMessage("listentry "+item.orderno+"-"+item.opno+" item:"+x+" length "+x.length)
 						if (x.length<30){
 							opMessage("about to add "+item.orderno+"-"+item.opno)
-							addNewJobToList((item.orderno).replace(/^[0]+/g,""),item.opno)
+							addNewJobToList(item.orderno,item.opno)
 						}
 							
 						

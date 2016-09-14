@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml">
+    <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+    <head>
+        <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+
+
+        <!--<script language="JavaScript">
+            $(document).ready(function () {
+                var thisURL = document.URL;
+                var urlArray = thisURL.split("?");
+                var cleanArray = urlArray[1].split("&");
+
+                $.each(cleanArray, function (index, value) {
+                    var thisQS = value;
+                    var QSarray = thisQS.split("=");
+                    var thisValue = QSarray[index, 1];
+                    var thisProp = QSarray[index, 0];
+
+                    $('#' + thisProp + '').val(thisValue);
+                });
+            
+                //set headers for W-orker & Func loc
+                $('#workorderlabel').text($('#workorder').val());
+                $('#functionallocationlabel').text($('#functionallocation').val().toUpperCase());
+            });
+        </script>-->
+
+
+        <title>Calibration Form</title>
+    </head>
+    <body>
+        <div class="container">
+        
+            <div class="well row" style="margin-top: 10px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                    </div>
+                    <div class="row">
+                        <h1><b>Holiday Request</b></h1>
+                    </div>
+                </div>
+
+
+            </div>
+            
+            <form class="form-inline" method="get" id="MyJobsForm" action="ProcessForm.html">
+            <input id="FormName" name="FormName" value="HolidayRequest" hidden>
+                   <div class="well row">
+                        <table class="table table-bordered">
+                            
+                            <tr>
+                                <td width="25%"><label class="feedback-input" >Start Date</label></td>
+                                <td width="25%"><input type="text" class="feedback-input" placeholder="Start Date" id="startdate" readonly /></td>
+                                 <td width="25%"><label class="feedback-input" >End Date</label></td>
+                                <td width="25%"><input type="text" class="feedback-input" placeholder="End Date" id="enddate" readonly/></td></tr>
+                            <TR>
+								<td width="25%"><label class="feedback-input" >Duration</label></td>
+                                <td colspan=3><input type="number" class="feedback-input" placeholder="Duration" id="duration" /></td>
+                               </tr>
+                            <TR>
+                            <td><label class="feedback-input" >Reason</label></td>
+
+                            <td colspan=3><textarea rows="4" cols="80"></textarea></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                           <input type="submit" name="Save" value="SEND"  id="Save" hidden />
+
+
+                </div>
+
+            </form>
+        </div>
+    
+    </body>
+
+    <script>
+        $(function () {
+        	 $("#startdate").datepicker({
+                 dateFormat: "dd/mm/yy"
+             });
+        	 $("#enddate").datepicker({
+                 dateFormat: "dd/mm/yy"
+             });
+
+           
+
+            $("#datecompleted").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+
+            $(".btn-group > .btn").click(function () {
+                $(this).addClass("active").siblings().removeClass("active");
+                $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+            });
+        
+            
+
+        });
+function isComplete()
+{
+   
+    return "COMPLETE"
+}
+ 
+
+function loadCompleted(){
+
+ 
+}
+$(window).resize(function() {
+
+console.log("scrolling 1 to "+document.activeElement.id)
+location.href="#"
+location.href="#"+document.activeElement.id
+
+});
+    </script>
+</html>

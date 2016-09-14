@@ -252,7 +252,7 @@ var formForms = new sap.m.Dialog("dlg",{
 					    	} ]   
 					}),
 					new sap.m.Button("formSaveButton" ,{
-						
+						visible:false,
 					    text: "Save",
 					    icon:"sap-icon://sys-save",
 					    type: sap.m.ButtonType.Accept,
@@ -342,15 +342,7 @@ var formForms = new sap.m.Dialog("dlg",{
 	  }
 	
 	 })
-function saveFormDataxx(fname,type){
 
-
-	var MyIFrame = document.getElementById("formIframe");
-    var MyIFrameDoc = (MyIFrame.contentWindow || MyIFrame.contentDocument)
-    if (MyIFrameDoc.document) MyIFrameDoc = MyIFrameDoc.document;  
-    createImageFromHTML(MyIFrameDoc.body,fname,type)
-    				   					   				    
-}
 function saveFormData(fname,type){
 
 
@@ -365,18 +357,7 @@ var MyIFrame = document.getElementById("formIframe");
 		
 		xx=MyIFrameDoc.body;
 		
-/*		var elems = xx.getElementsByTagName("*");
-		for(var i = 0; i < elems.length; i++) {
-		cconsole.log(elems[i].tagName+"--"+elems[i].id)
-		}
-		 var elems = MyIFrameDoc.getElementsByTagName("canvas");
-		 alert(elems.length)
-	    formcanvas=elems[0]	
-	    var img = formcanvas.toDataURL("image/jpeg")
-	    
-	    elems[0].remove();
-	    Image canvas not working
-*/
+
 	   
 			 var elems = xx.getElementsByTagName("input");
 
@@ -433,18 +414,32 @@ var MyIFrame = document.getElementById("formIframe");
 				elems[i].setAttribute("id",id)
 				elems[i].setAttribute("name",name)
 				elems[i].setAttribute("class",fclass)
-				}	
-		formHTML=HTMLFormStart+xx.outerHTML+HTMLFormEnd
-		
+				}
+				formHTML=HTMLFormStart+xx.outerHTML+HTMLFormEnd
+				disableFields(xx);			
+		formHTMLreadonly=HTMLFormStart+xx.outerHTML+HTMLFormEnd
+		if(MyIFrameDoc.getElementById("FormName").value=="Flooding"){
+			
+            if(MyIFrameDoc.getElementById("measurableimpactV").value=="YES"){
+            	oSwitchPollution.setState(true); 
+            	oSwitchPollution.setEnabled(false);
+            	addMandatedForm("Pollution.html");
+            }else{
+            	oSwitchPollution.setState(false); 
+            	oSwitchPollution.setEnabled(true);
+            	removeMandatedForm("Pollution.html");
+            }
+
+		}
 		
 		if(currentPage.indexOf("Home")<1) {
 			//Job Related
 			
-			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,formHTML,formMode,type)
+			createFormsResponse(fname,selectedJobArray["orderworkcentre"],selectedJobArray["orderplant"],currentNotifNo,CurrentOrderNo,CurrentOpNo,localStorage.getItem("MobileUser"),formJSON,formHTML,formHTMLreadonly,formMode,type)
 		}else{
 			//Non Job Form
 			
-			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,img,formMode,type)
+			createFormsResponse(fname,"","","","", "",localStorage.getItem("MobileUser"),formJSON,img,formHTMLreadonly,formMode,type)
 		}
 		
 		
@@ -485,8 +480,12 @@ function showhideSaveButton(pageName){
 		buildHeaderFields(MyIFrameDoc);
 		buildTables(MyIFrameDoc);
 		buildSelects(MyIFrameDoc);
-		loadFormFields(MyIFrameDoc)
-
+		loadFormFields(MyIFrameDoc);
+if(disableformFlag && !NewFormflag)
+	{
+	disableFields(MyIFrameDoc);
+	sap.ui.getCore().getElementById('formSaveButton').setVisible(false);
+	}
 	}
 }
 function updateMergeField(fld){
@@ -910,8 +909,13 @@ function setDlgTitle(formTitle){
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
 					if(rowsArray.length>0){
+						if(disableformFlag && !NewFormflag){
+							bodycontent=unescape(rowsArray[0].htmlreadonly)
+						}
+						else{
+							bodycontent=unescape(rowsArray[0].htmlbody)
+						}
 						
-						bodycontent=unescape(rowsArray[0].htmlbody)
 						
 						bodystart=bodycontent.indexOf("<body>")
 						bodyend=bodycontent.indexOf("</body>")
@@ -934,7 +938,7 @@ function setDlgTitle(formTitle){
 	function loadFormFields(formDoc){
 		
 		var items = formDoc.getElementsByTagName("*");
-		console.log("fid="+selectedFormId+":"+closeFormName)
+		
 		//sqlstatement="SELECT * from myformsresponses where orderno = '"+CurrentOrderNo+"' and opno ='"+CurrentOpNo+"' and formname ='"+closeFormName+"'"
 		if((closeFormName=="Flooding")||
 				(closeFormName=="pollution")||
@@ -944,22 +948,22 @@ function setDlgTitle(formTitle){
 		
 			
 
-		console.log("here"+sqlstatement)
 		
+		selectedFormId=0
 		html5sql.process(sqlstatement,
 				function(transaction, results, rowsArray){
-			console.log("save record found="+rowsArray.length)
+			
 					if( rowsArray.length > 0) {
 						selectedFormId=rowsArray[0].id
 						jsonstr=$.parseJSON(unescape(rowsArray[0].contents))
-						console.log("1:"+jsonstr.length)
+						
 
 							for(var i=0;i<jsonstr.length;i++){
 						        var obj = jsonstr[i];
 						        for(var key in obj){
 						            if(!Array.isArray(obj[key])){
 						            	formDoc.getElementById(key).value=obj[key]
-						            		console.log("setting "+key+"="+obj[key])
+						            		
 							            	if (formDoc.getElementById(key).hasAttribute("mergeonchange")) { 
 							            		
 							            		try{
@@ -997,7 +1001,7 @@ function setDlgTitle(formTitle){
 							           
 						            }else{
 						            	jsontable=obj[key];
-						            	console.log("Table:"+key+"length="+jsontable.length)
+						            	
 						            	var table = formDoc.getElementById(key);
 						            
 						            	for(var t=0;t<jsontable.length;t++){
@@ -1006,7 +1010,7 @@ function setDlgTitle(formTitle){
 	
 						            		subobj = jsontable[t];
 									        for(var subkey in subobj){
-									            console.log(subkey+":"+subobj[subkey])
+									           
 									            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
 									            var cell = row.insertCell(-1);								           
 									            // Add some text to the new cells:
@@ -1025,8 +1029,16 @@ function setDlgTitle(formTitle){
 						    }
 							
 			
+					}else{
+
 					}
-			
+					if(formDoc.getElementById("FormName").value=="Flooding"){
+						
+						if(oSwitchPollution.getState()){
+							formDoc.getElementById("measurableimpactV").value="YES"
+						}
+						
+					}
 			document.getElementById("formIframe").contentWindow.loadCompleted();
 				},
 				 function(error, statement){
@@ -1070,3 +1082,20 @@ function setDlgTitle(formTitle){
 		)
 		
 	}
+	function disableFields(formDoc){
+if(formDoc.parentNode==null ||formDoc.parentNode==""){
+	return;
+}
+else{
+		var items =formDoc.parentNode.parentNode.getElementById("MyJobsForm").elements;
+
+
+		cnt=0;
+		
+		for (var i = 0; i < items.length; i++) {
+	
+		items[i].setAttribute('disabled', 'disabled'); 
+		   
+		}
+}
+		}

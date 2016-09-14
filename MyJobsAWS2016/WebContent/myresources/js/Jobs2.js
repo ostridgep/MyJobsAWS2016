@@ -1,162 +1,23 @@
-<!DOCTYPE >
-<html>
-<head>
-
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>MyJobs - Jobs</title>
-
-<script src="resources/sap-ui-core.js" type="text/javascript"
-	id="sap-ui-bootstrap" 
-	
-	data-sap-ui-libs="sap.m,sap.ui.commons"
-	data-sap-ui-theme="sap_bluecrystal">
-	
-</script>
-<script src="myresources/js/jscoord-1.1.1.js"></script> 
-<script src="myresources/js/html5sql.js"></script>  
-<script src="myresources/js/assetRecord.js"></script> 
- <script src="myresources/js/AssetList.js"></script> 
-<script src="myresources/js/bgsync.js"></script>
-<script src="myresources/js/MyJobsDB.js"></script>
-<script src="myresources/js/MyJobsUtils.js"></script>
-<script src="myresources/js/DG5.js"></script>
-<script src="myresources/js/NotificationFunctions.js"></script>
-
-<script src="myresources/js/jSignature.js"></script>
-
-<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
-<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
-<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
-<script src="myresources/js/Globals.js"></script>
-<script src="myresources/js/DlgForms.js"></script>
-
-<script src="myresources/js/eqAttributes.js"></script>
-
-<script src="myresources/js/documents.js"></script>
-<script src="myresources/js/NewNotif.js"></script>
-<script src="myresources/js/webPage.js"></script>
-<script src="myresources/TL/js/main.js"></script> 
-
-<script src="myresources/js/html2canvas.min.js"></script> 
-<link rel="stylesheet" href="myresources/TL/css/style.css"> <!-- Resource style -->
 
 
-<style>
-.LargeFont {
-    font-size: 400%;
-    
-}
 
-.sapUiTheme-sap_bluecrystal {
-font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif !important;
-font-size:small;
-}
-span.tool {
-    position: relative;
-    display: inline-block;
-    
-    
-}
-span.tool:hover {
-    cursor: help;
-}
-span.tip {
-    position: absolute;
-    bottom: 20px;
-    left: 0px;
-    display: block;
-    width: auto;
-    white-space: nowrap;
-    font-size: .9em;
-    border: 0px solid black; /* change as desired */
-    border-radius: 6px;
-    padding: 1px 5px;
-    background: #eee;
-    background: linear-gradient(top, #eee, #ccc);
-    background: -moz-linear-gradient(top, #eee, #ccc);
-    background: -o-linear-gradient(top, #eee, #ccc);
-    background: -webkit-linear-gradient(top, #eee, #ccc);
-    background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
-    background: -ms-linear-gradient(top, #eee, #ccc);
-/*    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#eeeeee,EndColorStr=#cccccc);*/
-    zoom: 1;
-    visibility: hidden;
-}
-</style>
 
-<script type="text/javascript" src="cordova.js"></script>
-<script>
+
+
+
+
+
+
+
 var appDirectory=""
 var disableformFlag=false;
 	
-	</script>
-
-<style>
-.Labelstyle{
-	font-size:18;
-}
-.LabelText{
-	font-size:15;
-}
-.TableText .sapMText .sapMListTbl .sapMLabel{
-font-size: 1rem;
-}
-.HomeButton .sapMBtnIcon{
-	  font-size: 2rem;
-}
-.formHdr {
-				font-weight: bold;
-			}
-	#signatureparent {
-		color:darkblue;
-		background-color:darkgrey;
-		/*max-width:600px;*/
 	
-		padding:20px;
-	}
-	
-	/*This is the div within which the signature canvas is fitted*/
-	#signature {
-		border: 2px dotted black;
-		background-color:lightgrey;
-	}
 
-	/* Drawing the 'gripper' for touch-enabled devices */ 
-	.touch #content {
-		float:left;
-		width:92%;
-	}
-	.touch #scrollgrabber {
-		float:right;
-		width:4%;
-		margin-right:2%;
-		background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAFCAAAAACh79lDAAAAAXNSR0IArs4c6QAAABJJREFUCB1jmMmQxjCT4T/DfwAPLgOXlrt3IwAAAABJRU5ErkJggg==)
-	}
-	.borderradius #scrollgrabber {
-		border-radius: 1em;
-	}			
-			</style>
 
-<script type="text/javascript">
-/* function loadScript(src,callback){
-	  
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    if(callback)script.onload=callback;
-    document.getElementsByTagName("head")[0].appendChild(script);
-    script.src = src;
-  }
-loadScript('http://maps.googleapis.com/maps/api/js?sensor=false',
-		
-        function(){
-	
-	  directionsDisplay = new google.maps.DirectionsRenderer(); 
-	  directionsService = new google.maps.DirectionsService(); 
-	}); */
-//directionsDisplay = new google.maps.DirectionsRenderer(); 
-//directionsService = new google.maps.DirectionsService(); 
 
-html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
+
+
 
 var statusUpdateDate="";
 var statusUpdateTime="";
@@ -333,51 +194,7 @@ var formEQAttr = new sap.m.Dialog("dlgEQAttr",{
 					}
 })
  
-var formLastSync = new sap.m.Dialog("dlgLastSync",{
-    title:"Last Synchronise",
-    modal: true,
-    contentWidth:"1em",
-    buttons: [
-   
-				new sap.m.Button("dlgLastSyncCancel", {
-				    text: "Cancel",
-				    type: 	sap.m.ButtonType.Reject,
-				    tap: [ function(oEvt) {		  
-						 
-				    	formLastSync.close()
-						  } ]
-				})
-				],					
-    content:[
- 			new sap.ui.layout.form.SimpleForm({
-				minWidth : 1024,
-				maxContainerCols : 2,
-				content : [
-							
-			                new sap.m.Label({text:"Server"}),
-							new sap.m.Input("lastSyncServer",{type: sap.m.InputType.Input, enabled: false}),
-							new sap.m.Label("RefDate",{text:"Reference Data"}),
-							new sap.m.TextArea("lastSyncReferenceData",{enabled: false}),
-					        new sap.m.Label("TrxDate",{text:"Sync Transactional Data"}),
-							new sap.m.TextArea("lastSyncTransactionalData",{enabled: false}),
-							new sap.m.Label("UplDate",{text:"Sync Upload Data"}),
-							new sap.m.TextArea("lastSyncUploadData",{enabled: false}),
-							new sap.m.Label({text:"Logging"}),
-							new sap.m.Switch('lastSyncLogState',{
-								state: true,
-								enabled: false,
-								type: sap.m.SwitchType.AcceptReject
-							})
 
-									 
-					
-			               
-			                 
-						]
- 					})
-
-            ]
- })
 var formMeasPoints = new sap.m.Dialog("dlgMeasPoints",{
     title:"MeasurementPoints",
     modal: true,
@@ -5783,7 +5600,7 @@ function rebuildTimeConfs()
 				showNavButton: false,
 				footer  : new sap.m.Bar (
 						{
-							id : 'master-footer',
+							id : 'Jobsmaster-footer',
 
 							contentLeft : [
 									new sap.m.Button("Add1", {
@@ -5796,7 +5613,7 @@ function rebuildTimeConfs()
 					  							}]
 										 })
 								],
-						contentRight : [new sap.m.Button("LastSyncMess", {
+						contentRight : [new sap.m.Button("LastSyncMess1", {
 		 	      			 text:"",
 		 	      			 
 	 	      				 press: [ function(){
@@ -5853,26 +5670,9 @@ function rebuildTimeConfs()
 		oSplitApp.setDefaultTransitionNameDetail("fade");	
 	}
 
-	oSplitApp.placeAt("body");
-	oSplitApp.onAfterRendering = function() {  
-		
-		selectListDefault() 
-		
+	
 
-        }  
-	
-</script>
-</head>
-<body id="body" class="sapUiBody">
-<script>
-$(function() {
-	startBGSync()
-	
-	
-	BuildNotificationTypes()
-	//BuildTCEmployees()
 
-	});
 function selectListDefault(){
 
 	firstItem = sap.ui.getCore().getElementById("JobList").getItems()[0];   
@@ -7019,9 +6819,3 @@ function loadScript(src) {
         document.head.appendChild(s);
     });
 }
-
-
-</script>
-</body>
-
-</html>

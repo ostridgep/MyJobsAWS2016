@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+        <title>Mgt of Water Jetting Checklist</title>
+</head>
+<body>
+<div class="container">
+            <div class="well row" style="margin-top: 10px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <h1><b>Mgt of Water Jetting Checklist</b></h1>
+                    </div>
+                </div>
+                
+            
+	<div class="well row"><h3><b>to be used to plan every jetting operation:</b></h3></div>
+<form   id="MyJobsForm" >
+<input id="FormName" name="FormName" value="WaterJetCL" hidden>
+<table class="table table-bordered">
+ 						<tr>
+                            <td width="15%"><label class="feedback-labelnoicon">Work Activity</td>
+                            <td width="35%"><input class="feedback-inputnoicon" merge="operationdesc"></td>
+                            <td width="15%"><label class="feedback-labelnoicon" >Location</td>
+                            <td width="35%"><input class="feedback-inputnoicon" merge="funcloc_code"></td>
+                        </tr>
+                        
+</table>
+ <!-- <div class="header"><p><h4><b>Required PPE:</b> Appropriate work wear, class 3 (long sleeve) high-vis, safety footwear, hard hat, full face shield or goggles with face mask, gloves, ear defenders (where necessary). Where large amounts of aerosols are likely to be generated wear respiratory protective equipment (RPE) fitted with a P3 filter.</h4></p></div> -->
+ <table class="table table-bordered">
+ <tr>
+ <td colspan="3" width="100%" <label class="header">Required PPE:</b> Appropriate work wear, class 3 (long sleeve) high-vis, safety footwear, hard hat, full face shield or goggles with face mask, gloves, ear defenders (where necessary). Where large amounts of aerosols are likely to be generated wear respiratory protective equipment (RPE) fitted with a P3 filter</label></td>
+ </tr>
+ 						<tr>
+                          <td colspan="2" width="75%"><label class="alert alert-danger">Planning of jetting operation on site. All questions must be answered Yes or NA before work may start. If answer is No corrective action must be recorded below*</label></td>  
+                          <td width="25%"><label class="header">NA / Yes/No (STOP)</td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" width="100%"><label class="feedback-labelnoicon">Is this the first jetting job of the day - if yes complete 1 to 5, if no go to 6</label></td>  
+                        
+                        </tr>
+                        <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">1</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Is the jetting unit suitable for the task, free from obvious damage and does it have an in date maintenance sticker?</label></td>
+                          <td width="25%"><select id="select_10" >
+ <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">2</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Are fluid levels (engine, gearbox, and pump) ok and jetting line filters clean?</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">3</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Has the formation of ice in the hose and tank been considered / addressed? (remember to monitor throughout the shift as temperatures can change)</label></td>
+                          <td width="25%"><select id="select_10">
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">4</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Does the safety cut out work properly?</label></td>
+                          <td width="25%"><select id="select_10" >
+ <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">5</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Is the person in charge of the jetting operation; trained, appointed, familiar with all the equipment and carrying a HPWJ emergency card?</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" width="100%"><label class="feedback-labelnoicon">To be completed before each jetting task:</label></td>  
+                        
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">6</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Is vehicle parked in safe position with appropriate signing, lighting & guarding?</label></td>
+                          <td width="25%"><select id="select_10" >
+ <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">7</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Do all those involved in the operation have the necessary PPE? (see above)</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">8</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Can hoses trailing over footpaths/access ways be protected? (i.e. hose covers)</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                          <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">9</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Can hoses trailing over footpaths/access ways be protected? (i.e. hose covers)</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                          <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">10</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Do you have adequate fall protection? (see relevant Work at Height WI)</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                          <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">11</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Are the correct accessories available and suitable for task? (i.e. Nozzles, leaderhose, anti-turn device, tiger tail)</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                          <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">12</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Are 3rd parties protected from the void and the jetting operation?</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                          <tr>
+                          <td rowspan="2" width="0.5%"><label class="feedback-labelnoicon">13</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon"><b>For two man operations </b>- can clear line of sight be maintained between both parties and phone or radio contact maintained at all times?</label></td>
+                          <td width="25%"><select id="select_10" >
+<option value="" ></option> 
+<option value="Y"  >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                     
+                          <td width="75%"><label class="feedback-labelnoicon"><b>For single man / remote control operation - </b>can line of sight with the master jetting controls be maintained or the doors to the jetting unit locked?</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>
+  <option value="Y" >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A"  >NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">14</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon">Will emergency / remote stop be within arms length at all times?</label></td>
+                          <td width="25%"><select id="select_10" >
+   <option value="" ></option>
+  <option value="Y" >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A" >NA</option>
+</select></td>
+                        </tr>
+                         <tr>
+                          <td width="0.5%"><label class="feedback-labelnoicon">15</td>  
+                          <td width="74.5%"><label class="feedback-labelnoicon"><b>For two man operations- </b>is everybody involved in the jetting operation aware of their role and responsibilities?</label></td>
+                          <td width="25%"><select id="select_10" >
+  <option value="" ></option>                        
+  <option value="Y" >Yes</option>
+  <option value="N"  >No</option>
+  <option value="N/A">NA</option>
+</select></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" width="100%"><label class="header">*Details of corrections made or other site/ task specific controls required- complete site specific task risk assessment if necessary.</label></td>  
+                         
+                        </tr> 
+                         <tr>
+                             <td colspan="3">
+                               <textarea rows="4" id="paul" name="paul" class="feedback-inputnoicon" >
+Enter text here...</textarea></td>
+                               </tr>
+                       
+                        
+</table>
+<table class="table table-bordered">
+ <tr>
+                          <td colspan="2" width="49.5%"><label class="feedback-labelnoicon">Name of Person in charge of jetting operation:</td>  
+                          <td width="25%"><label class="feedback-labelnoicon">Date:</label></td>
+                          <td width="25%"><label class="feedback-labelnoicon">Time:</label></td>
+                        </tr> 
+                        <tr>
+                        <td colspan="2" width="49.5%%"><input class="feedback-inputnoicon" merge="~mobilefullname"></td>
+                        <td width="25%"><input class="feedback-input" id="date"></td>
+                        <td width="25%"><input type="time" class="feedback-input hideOnLoad" placeholder="Time" id="time"></td>
+                        
+                        </tr>
+                        
+                       
+</table>
+</form>
+
+<div class="alert alert-danger"><b>CLOSE DOWN - </b>Don't forget to:</br>1. Store equipment correctly (antifreeze where required)</br>2. Leave site in a safe and tidy condition - all access covers replaced etc.</div>
+ <div class="alert alert-danger"><p>If impact from water jet occurs - seek medical attention as soon as possible.Take your HPWJ emergency card with you.</p></div>
+</body>
+<script>
+$(function () {
+       	 $("#date").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+ $("#date").datepicker("setDate",new Date());
+});
+var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        $("#time").val(time);
+
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
+function loadCompleted(){
+	 
+}
+function isComplete()
+{
+	   
+	    
+	    return "COMPLETE"
+}
+       	</script> 
+</html>

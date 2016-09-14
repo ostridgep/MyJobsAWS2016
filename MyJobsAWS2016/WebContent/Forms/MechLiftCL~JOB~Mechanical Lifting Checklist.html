@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+        <title>Mechanical Lifting</title>
+</head>
+<body>
+<div class="container">
+            <div class="well row" style="margin-top: 10px">
+                <div class="col-md-12">
+                    <div class="row">
+                        <h1><b>Management of Mechanical Lifting Mechanical Lifting Checklist</b></h1>
+                    </div>
+                </div>
+                <form class="form-inline" method="get" id="MyJobsForm" >
+            <input id="FormName" name="FormName" value="MechLiftCL" hidden>
+            <div class="well row">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%"><label class="feedback-labelnoicon" >Work Activity</label></td>
+                             <td width="30%"><label class="feedback-labelnoicon" >Site Name</label></td>
+                                <td width="30%"><label class="feedback-labelnoicon" >Location Onsite</label></td>
+                               </tr>
+                            <tr>                               
+                                <td width="15%"><input type="text" class="feedback-inputnoicon" merge="operationdesc" id="workactivity" name="workactivity" /></td>                                
+                                <td width="10%"><input type="text" class="feedback-input" merge="funcloc_code" id="sitename" name="sitename" /></td>                                
+                                <td width="15%"><input type="text" class="feedback-inputnoicon" placeholder="Location" id="loconsite" name="loconsite" /></td></tr>
+                            <TR>
+                            <tr>
+                                <td width="15%"><label class="feedback-labelnoicon" >Weight</label></td>
+                                 <td width="15%"><label class="feedback-labelnoicon" >BreakOut Weight</label></td>
+                                  <td width="15%"><label class="feedback-labelnoicon" >Work/Job number</label></td>
+                                </tr> 
+                                <tr>  
+                                <td width="15%"><input type="text" class="feedback-inputnoicon" id="weight" name="weight" /></td>          
+                                <td width="10%"><input type="text" class="feedback-inputnoicon" id="breakoutweight" name="breakoutweight" /></td>
+                                <td width="15%"><input type="text" class="feedback-inputnoicon" merge="orderno" id="jobnumber" name="jobnumber" /></td></tr>
+                                
+                            </table>
+                            <div class="alert alert-danger"><p>You must be trained in Mechanical Lifting Modules 1-4 to complete this checklist</p></div>
+                            <div class=""><p>a. For all lifts from wells - criteria for single person lift:</p></div>
+                              <table class="table table-bordered">
+                            <tr>
+                       <td width = "50%">Do you know if the load is 200kg or less?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech1" name="toggle_mech1" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech1" name="button_mech1" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech1" name="tb_mech1" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech2" name="tb_mech2" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Is the lift in daylight or adequate fixed lighting?</td>
+                          <td>
+                            
+                              <input type="TEXT" id="toggle_mech2" name="toggle_mech2" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech2" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech3" name="tb_mech3" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech4" name="tb_mech4" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Have you worked less than a 12 hour shift?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech3" name="toggle_mech3" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech3" name="button_mech3" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech5" name="tb_mech5" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech6" name="tb_mech6" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                    <div class="alert alert-danger"><p>If No to any of the above you must request a 2nd person</p></div>
+                    <div class=""><p>b. For lifts from wells and chambers:</p></div>
+                    
+                              <table class="table table-bordered">
+                            <tr>
+                       <td width = "50%">If there is a need to remove a section of grid flooring will all the remaining section be secured in position i.e. clamped or cable tied?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech4" name="toggle_mech4" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech4" name="button_mech4" style="margin-left: 10px">
+                                
+                                
+                               <button type="button" id="tb_mech7" name="tb_mech7" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech8" name="tb_mech8" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       </table>
+                        <div class="alert alert-danger"><p>If the answer to the above question is No, STOP work and secure the sections with clamps or steel cable ties</p></div>
+                       <table class="table table-bordered">
+                        <tr>
+                       <td width = "50%">Are fall protection arrangements adequate for this lift? State below which method is in place/being used</td>
+                          <td>
+                            
+                              <input type="TEXT" id="toggle_mech5" name="toggle_mech5" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech5" name="button_mech5" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech9" name="tb_mech9" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech10" name="tb_mech10" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">I. Permanent fixed barriers</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech6" name="toggle_mech6" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech6" name="button_mech6" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech11" name="tb_mech11" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech12" name="tb_mech12" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">II. Fixed cover with integral gated grid</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech7" name="toggle_mech7" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech7" name="button_mech7" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech13" name="tb_mech13" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech14" name="tb_mech14" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">III.Quatrosafe barrier, Quatrosafe large pump lifting grid or AW's pump lifting grid - can only be used with minimum of 2 people present</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech8" name="toggle_mech8" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech8"  name="button_mech8" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech15" name="tb_mech15" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech16" name="tb_mech16" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                         <div class="alert alert-danger"><p>I,II or III must be yes. If not, STOP WORK-there MUST be fall protection arrangements in place and the safe system of work MUST be detailed in a Site Specific Task Risk Assessment. Temporary scaffolding or barriers may be required, they must be robust and stable to prevent someone falling into the well/chamber</p></div>
+                         <div class=""><p>c. For all lifts - preparing for the lift:</p></div>
+                         <table class="table table-bordered">
+                        <tr>
+                       <td width = "50%">Is all lifting equipment suitably marked ("Scafftagged" etc.) and in date?</td>
+                          <td>
+                            
+                              <input type="TEXT" id="toggle_mech9" name="toggle_mech9" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech9"  name="button_mech9" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech17" name="tb_mech17" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech18" name="tb_mech18" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Is appropriate PPE being worn by all parties involved i.e. hard hat, gloves, overalls, safety footwear, high visibility jackets.</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech10" name="toggle_mech10" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech10"  name="button_mech10" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech19" name="tb_mech19" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech20" name="tb_mech20" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Is the lifting equipment adequate for the anticipated load?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech11" name="toggle_mech11" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech11" name="button_mech11" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech21" name="tb_mech21" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech22" name="tb_mech22" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Have pre-use checks been carried out on the lifting equipment?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech12" name="toggle_mech12" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech12"  name="button_mech12" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech23" name="tb_mech23 class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech24" name="tb_mech24 class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr>
+                       <td width = "50%">Has the load been isolated from electrical / mechanical attachment?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech13" name="toggle_mech13" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech13" name="button_mech13" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech25" name="tb_mech25" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech26" name="tb_mech26" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr>
+                       <td width = "50%">Can the load be manoeuvred to a safe position on site?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech14" name="toggle_mech14" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech14"   name="button_mech14" style="margin-left: 10px">
+                                
+                               <button type="button"  id="tb_mech27" name="tb_mech27" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech28" name="tb_mech28" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                        <div class="alert alert-danger"><p>If the answer to any of the above questions is No, STOP work and seek management guidance</p></div>
+                        <div class=""><p>d. For all lifts - planning for the lift:</p></div>
+                        <table class="table table-bordered">
+                        <tr>
+                       <td width = "50%">Have you considered the shape, dimension and balance of the load?</td>
+                          <td>
+                            
+                              <input type="TEXT" id="toggle_mech15" name="toggle_mech15" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech15"  name="button_mech15" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech29" name="tb_mech29" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech30" name="tb_mech30" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Have the weather conditions been taken into account?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech16" name="toggle_mech16" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech16" name="button_mech16" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech31" name="tb_mech31" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech32" name="tb_mech32" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Does suitable lighting exist, either natural or artificial?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech7" name="toggle_mech17" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech17" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech33" name="tb_mech33" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech34" name="tb_mech34" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Are ground conditions and working area suitable for the lift?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech18" name="toggle_mech18" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech18" name="button_mech18 style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech35" name="tb_mech35" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech36" name="tb_mech36" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr>
+                       <td width = "50%">Confident that no underground or overhead cables/plant poses a hazard?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech19" name="toggle_mech19" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech19"  name="button_mech19" style="margin-left: 10px">
+                                
+                               <button type="button"  id="tb_mech37" name="tb_mech37" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button"  id="tb_mech38" name="tb_mech38" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr>
+                       <td width = "50%">Can the lifting equipment be erected or positioned safely?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech20" name="toggle_mech20" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech20" name="button_mech20" style="margin-left: 10px">
+                                
+                               <button type="button"  id="tb_mech39" name="tb_mech39" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button"  id="tb_mech40" name="tb_mech40" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Can the load be slewed safely?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech21" name="toggle_mech21" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech21" name="button_mech21" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech41" name="tb_mech41" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech42" name="tb_mech42" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                       <td width = "50%">Does the lifting area have a suitable cordon?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech22" name="toggle_mech22" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech22" name="button_mech22" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech43" name="tb_mech43" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech44" name="tb_mech44" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                        <div class="alert alert-danger"><p>If the answer to any of the above questions is No, STOP work - a site specific task risk assessment MUST be completed to determine if the lift can be carried out safely</p></div>
+                        <div class=""><p>e. For lifts where breakout forces exist:</p></div>
+                        <table class="table table-bordered">
+                         <tr>
+                       <td width = "50%">I. Can a load cell or slipping clutch be used throughout the lift?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech23" name="toggle_mech23" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech23" name="button_mech23" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech45" name="tb_mech45" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech46" name="tb_mech46" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr>
+                       <td width = "50%">II. If not, is there an adequate safety factor of at least 2:1?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech24" name="toggle_mech24" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech24" name="button_mech24" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech47" name="tb_mech47" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech48" name="tb_mech48" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                        <div class="alert alert-danger"><p>I or II must be yes. If not, STOP WORK, - a site specific task risk assessment MUST be completed</p></div>
+                        <div class=""><p>f. For single person lifts:</p></div>
+                         <table class="table table-bordered">
+                         <tr>
+                       <td width = "50%">With all of the relevant controls above in place - can you safely carry out a single person lift?</td>
+                          <td>
+                             <input type="TEXT" id="toggle_mech25" name="toggle_mech25" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button_mech25" style="margin-left: 10px">
+                                
+                               <button type="button" id="tb_mech49" name="tb_mech49" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="tb_mech50" name="tb_mech50" class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                         </table>
+                         <div class="alert alert-danger"><p>If no STOP work and request second person - complete the section below detailing why and send checklist back to your manager</p></div>
+                        <div class=""><p>g. For all lifts:</p></div>
+                        <table class="table table-bordered">
+                            
+                            <tr>
+                                <td colspan="3" width="30%"><label class="feedback-labelnoicon" >Details of any problems/events:</label></td></tr>
+                                <tr>
+                             <td colspan="3">Enter text here...
+                               <textarea rows="4"  id="textarea_details" name="textarea_details" class="feedback-inputnoicon" placeholder="Enter text here...">
+</textarea></td>
+                               </tr>
+                                <tr>
+                                <td width="30%"><label class="feedback-labelnoicon" >The person planning this lift is:</label></td>
+                             <td width="30%"><label class="feedback-labelnoicon" >Date</label></td>
+                               
+                                 <td width="30%"><label class="feedback-labelnoicon" >Time</label></td>
+                               </tr>
+                            <TR>
+                            <tr>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" merge="~mobilefullname" id="formcompletedby" name="formcompletedby" /></td>
+                            <td width="25%"><input type="text" class="feedback-input" placeholder="Date" id="date_mech" name="date_mech" /></td>
+                            <td width="25%"><input type="time" class="feedback-input hideOnLoad" placeholder="Time" id="time_mech" name="time_mech" /></td></tr>
+                            </table>
+                    </form>
+        </div>
+        <script>
+        $(function () {
+       	 $("#date_mech").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+$("#date_mech").datepicker("setDate",new Date());
+var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        $("#time_mech").val(time);
+
+       	 
+})
+$(".btn-group > .btn").click(function () {
+    $(this).addClass("active").siblings().removeClass("active");
+    $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+});
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
+function loadCompleted(){
+	 
+}
+function isComplete()
+{
+	   
+	    
+	    return "COMPLETE"
+}	
+        </script>
+</body>
+</html>

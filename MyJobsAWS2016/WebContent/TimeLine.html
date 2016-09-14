@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Display DB</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons,sap.suite"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bqsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+<script type="text/javascript">
+
+var tlItem = new sap.suite.ui.commons.TimelineItem({
+	dateTime : "01/01/2016 09:00",
+	userNameClickable : "Paul",
+	text : "bla bla vbla",
+	userName : "username",
+	title : "title",
+	icon : "sap-icon://notes"
+});
+var tlItem1 = new sap.suite.ui.commons.TimelineItem({
+	dateTime : new Date(),
+	userNameClickable : "Paul",
+	text : "bla bla vbla",
+	userName : "username",
+	title : "title",
+	icon : "sap-icon://notes"
+});
+
+oPopover.addContent(oVCard);
+tlItem.attachUserNameClicked(function(oControlEvent) {
+	var oItem = oControlEvent.getSource();
+	vCardName.setText(oItem.getUserName());
+	oVCard.setIconPath("images/persons/male_MillerM.jpg");
+	oPopover.openBy(oItem._userNameLink);
+});
+var timeline = new sap.suite.ui.commons.Timeline();
+
+timeline.addContent(tlItem);
+timeline.addContent(tlItem1);
+timeline.addContent(tlItem);
+timeline.addContent(tlItem1);
+
+
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+
+
+
+
+var page  = new sap.m.Page('timeline',{
+	title:"Time Line",  
+
+
+	headerContent: new sap.m.Button({
+		
+		icon: "sap-icon://home",
+		press : function(){ window.location.href="Home.html"}
+		
+	}),
+	
+	footer:
+	    new sap.m.Bar (
+			{
+
+				contentLeft : [
+
+				       		
+					],
+					contentMiddle: [] 	,
+			contentRight : [
+					]
+		
+	}),
+    content: 	[timeline]
+	
+	
+}) 
+
+
+var app = new sap.m.App();
+
+app.setInitialPage(page.getId());	
+	
+
+
+page.placeAt("body");
+$(function() {
+	
+	
+	
+	});
+</script>
+</head>
+<body id="body" class="sapUiBody">
+<script></script>
+</body>
+<script></script>
+</html>
+
+
+
+

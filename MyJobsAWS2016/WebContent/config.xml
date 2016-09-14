@@ -4,7 +4,7 @@
     <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.pjo.myjobs2016"
-        version   = "1.160209.0000">
+        version   = "DEV 1.160209.0000">
 
     <name>MyJobs</name>
     <description>
@@ -62,7 +62,7 @@
     <gap:plugin name="com.ionic.keyboard" />
     <gap:plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="pgb" />
     <gap:plugin name="com.venkykowshik.startapp" spec="0.0.1" source="pgb" />
-   
+   <gap:plugin name="uk.co.whiteoctober.cordova.appversion" spec="0.1.4" source="pgb" />
 
     <gap:plugin name="org.apache.cordova.geolocation" />
     <gap:plugin name="org.apache.cordova.globalization" />

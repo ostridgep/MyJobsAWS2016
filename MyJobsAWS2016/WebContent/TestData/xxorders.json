@@ -1,0 +1,4899 @@
+ 
+{"order":[
+    {
+            "orderno":"000052194208",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "pump",
+      "longtext": "",
+    "address": "Fen End, CAMBRIDGE, CB24 5NE",
+    "postcode": "CB24 5NE",
+              "funcloc": "OVERST",
+              "equipment": "",
+              "notifno": "000012746665",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:15",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 080000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194208","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194208",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"5" ,
+"priority_desc":"A5 - Within 1 week" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"08:00:00" ,
+"duration":"90 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"OVERST" ,
+"funcloc_desc":"OVER STW" ,
+"funcloc_gis":"53850000-27080000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746665",
+"site":"OVERST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [{
+"meas_point":"000000076278",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FE sample point" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076276",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"TURBIDITY" ,
+"pttxt":"FE sample point" ,
+"format":"__" ,
+"no_char": "2 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"NTU" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082144",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082152",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"HST's" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082154",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FST's" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082169",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"CHEMICAL TANK LEVELS" ,
+"pttxt":"ferric" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082163",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082165",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST  1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082159",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 5 (new filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082160",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 6 (new filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082156",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 2 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082155",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 1 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082157",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 3 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082162",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082158",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 4 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082166",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST  2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082168",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DOSE RATE" ,
+"pttxt":"ferric" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MLM" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082147",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"IRON" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082148",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"MLSS" ,
+"pttxt":"AS Outlet Weir" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082146",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"P" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082172",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"PREPARED SLUDGE" ,
+"pttxt":"dewatered sludge" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082150",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"RASSS" ,
+"pttxt":"RAS point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082171",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 1" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076280",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000095417",
+"object_id": "WALPSP",
+"object_desc":"WALPOLE-WALNUT ROAD SP" ,
+"psort":"E08BG10218 RATE 2" ,
+"pttxt":"Meter Read for Serial No. E08BG10218 -R2" ,
+"format":"___,___" ,
+"no_char": "6 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"KWH" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000055909",
+"object_id": "WALPSP",
+"object_desc":"WALPOLE-WALNUT ROAD SP" ,
+"psort":"E08BG10218 RATE 1" ,
+"pttxt":"Meter Read for Serial No. E08BG10218 -R1" ,
+"format":"___,___" ,
+"no_char": "6 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"KWH" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000095466",
+"object_id": "OURCSP",
+"object_desc":"OUTWELL ROBBS CHASE V1SP" ,
+"psort":"Z01E088352 RATE 2" ,
+"pttxt":"Meter Read for Serial No. Z01E088352 -R2" ,
+"format":"___,___" ,
+"no_char": "6 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"KWH" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000054264",
+"object_id": "OURCSP",
+"object_desc":"OUTWELL ROBBS CHASE V1SP" ,
+"psort":"Z01E088352 RATE 1" ,
+"pttxt":"Meter Read for Serial No. Z01E088352 -R1" ,
+"format":"___,___" ,
+"no_char": "6 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"KWH" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082151",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"HST's" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082153",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FST's" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082145",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FE sample point" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082143",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TURBIDITY" ,
+"pttxt":"FE sample point" ,
+"format":"__" ,
+"no_char": "2 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"NTU" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076307",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"Filter effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076277",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076308",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"ASP effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076304",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"CHEMICAL TANK LEVELS" ,
+"pttxt":"Ferrous tanks" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076282",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 4" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076294",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076290",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 4" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076284",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 6" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076289",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 3" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076283",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 5" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076287",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076285",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 7" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076288",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076281",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 3" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076293",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST 1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000101053",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge tank" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082163",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076279",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076291",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 5" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076286",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 8" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000098516",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 9" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076306",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DOSE RATE" ,
+"pttxt":"Ferrous - Ditch dose pt" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MLM" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076305",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DOSE RATE" ,
+"pttxt":"Ferrous - crude dose pt" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MLM" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076303",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"IRON" ,
+"pttxt":"ASP effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076301",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"IRON" ,
+"pttxt":"Filter effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076299",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"IRON" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076296",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"MLSS" ,
+"pttxt":"AS Outlet Weir" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076300",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"P" ,
+"pttxt":"Filter effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076302",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"P" ,
+"pttxt":"ASP effluent" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076298",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"P" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000098118",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"PREPARED SLUDGE" ,
+"pttxt":"dewatered sludge" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076295",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"SHTs or sludge beds" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000086390",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"SSVI" ,
+"pttxt":"Ditch outlet weir" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"VAL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076309",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Mixed liquor" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076310",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"Filter effluent" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082144",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082152",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"HST's" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082154",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"AMMONIA" ,
+"pttxt":"FST's" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082169",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"CHEMICAL TANK LEVELS" ,
+"pttxt":"ferric" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082143",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TURBIDITY" ,
+"pttxt":"FE sample point" ,
+"format":"__" ,
+"no_char": "2 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"NTU" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000086499",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SSVI" ,
+"pttxt":"Outlet weir" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"VAL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000076292",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 6" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082165",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST  1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082159",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 5 (new filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082160",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 6 (new filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082156",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 2 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082155",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 1 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082157",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 3 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082162",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"HST 1" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082158",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"PST 4 (old filter works)" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082166",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DEPTH TO SLUDGE" ,
+"pttxt":"FST  2" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"M" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082168",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"DOSE RATE" ,
+"pttxt":"ferric" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MLM" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082147",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"IRON" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082148",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"MLSS" ,
+"pttxt":"AS Outlet Weir" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082146",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"P" ,
+"pttxt":"FE sample point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082172",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"PREPARED SLUDGE" ,
+"pttxt":"dewatered sludge" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082150",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"RASSS" ,
+"pttxt":"RAS point" ,
+"format":"__,___.__" ,
+"no_char": "7 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"MGL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082171",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge Tank 1" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000101053",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SLUDGE STOCKS" ,
+"pttxt":"Sludge tank" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"%" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000086499",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"SSVI" ,
+"pttxt":"Outlet weir" ,
+"format":"___" ,
+"no_char": "3 ",
+"no_deci":"0 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"VAL" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082151",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"HST's" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082153",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FST's" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000082145",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TEMPERATURE" ,
+"pttxt":"FE sample point" ,
+"format":"_,___.__" ,
+"no_char": "6 ",
+"no_deci":"2 " ,
+"code_gp":"" ,
+"code":"" ,
+"unit_meas":"°C" ,
+"read_from":"1"}
+ 
+,{
+"meas_point":"000000075064",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"PW SAMPLE TAKEN" ,
+"pttxt":"FE sample point" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000075064",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"PW SAMPLE TAKEN" ,
+"pttxt":"FE sample point" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000075210",
+"object_id": "THETST",
+"object_desc":"THETFORD STW" ,
+"psort":"PW SAMPLE TAKEN" ,
+"pttxt":"FE sample point" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000102897",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 2" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000102896",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 1" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000082170",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TERTIARY ONLINE" ,
+"pttxt":"BAFF" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000102897",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 2" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000102896",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"COLLECT FROM SHT Y/N" ,
+"pttxt":"Tank 1" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+,{
+"meas_point":"000000082170",
+"object_id": "OVERST",
+"object_desc":"OVER STW" ,
+"psort":"TERTIARY ONLINE" ,
+"pttxt":"BAFF" ,
+"format":"" ,
+"no_char": "0 ",
+"no_deci":"0 " ,
+"code_gp":"QUE-DEC" ,
+"code":"X" ,
+"unit_meas":"" ,
+"read_from":"2"}
+ 
+ 
+ 
+                ],
+                  "jobmeascodes":
+                  [{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"NO" ,
+"code_text":"No"}
+ 
+,{
+"code_gp":"QUE-DEC",
+"code":"YES" ,
+"code_text":"Yes"}
+ 
+ 
+                ],
+"jobloch":
+                  [{
+"order":"000052194208",
+"notification_no": "000012746699",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194251",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194208",
+"notification_no": "000012746665",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194208",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194228",
+"notification_no": "000012746691",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194228",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194229",
+"notification_no": "000012746703",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194229",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194229",
+"notification_no": "000012631921",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052016898",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"WW Out of hours - Telemetry Alarm" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-11-25" ,
+"order_status":"TECO"}
+ 
+,{
+"order":"000052194245",
+"notification_no": "000012746689",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194245",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194246",
+"notification_no": "000012746692",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194246",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194246",
+"notification_no": "000012743468",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052191210",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"WW Treatment  - Telemetry Alarm" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-07-12" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194248",
+"notification_no": "000012746693",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194248",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194248",
+"notification_no": "",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052147287",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-03-08" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194249",
+"notification_no": "000012746697",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194249",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194250",
+"notification_no": "000012746698",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194250",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194251",
+"notification_no": "000012746699",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194251",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194251",
+"notification_no": "000012746665",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194208",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194252",
+"notification_no": "000012746700",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194252",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194252",
+"notification_no": "",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000051686999",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-12-10" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194253",
+"notification_no": "000012746701",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194253",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194253",
+"notification_no": "000012746660",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194224",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Electrical Fault/Investigation" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194254",
+"notification_no": "000012746702",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194254",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194254",
+"notification_no": "000012641912",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052027972",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Repair" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-11-28" ,
+"order_status":"TECO"}
+ 
+,{
+"order":"000052194255",
+"notification_no": "000012746704",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194255",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Mechanical Defect" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194255",
+"notification_no": "000012496455",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000051899108",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"WW Out of hours - Telemetry Alarm" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-10-16" ,
+"order_status":"TECO"}
+ 
+,{
+"order":"000052194256",
+"notification_no": "000012746707",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194256",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Work on Vacuum Systems" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194256",
+"notification_no": "000012354946",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000051777232",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Investigate Odour at Pumping Station" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-09-06" ,
+"order_status":"TECO"}
+ 
+,{
+"order":"000052194257",
+"notification_no": "000012746708",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194257",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Work on Vacuum Systems" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194257",
+"notification_no": "000012398681",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000051812797",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Investigate Odour at Pumping Station" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-09-16" ,
+"order_status":"TECO"}
+ 
+,{
+"order":"000052194258",
+"notification_no": "000012746709",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000052194258",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Work on Vacuum Systems" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2016-09-07" ,
+"order_status":"REL"}
+ 
+,{
+"order":"000052194258",
+"notification_no": "000012360689",
+"not_type":"" ,
+"not_date":"" ,
+"not_time":"" ,
+"not_shtxt":"" ,
+"not_order": "000051781188",
+"meter_no":"" ,
+"meter_rdg":"" ,
+"work_type":"Work on Vacuum Systems" ,
+"order_type":"" ,
+"op_txt":"" ,
+"order_date":"2015-09-07" ,
+"order_status":"TECO"}
+ 
+ 
+ 
+                ],
+                 "jobequipment":
+[{
+"equnr":"000000000002017588" ,
+"obj_type":"3420" ,
+"obj_type_desc":"Reflux Valve" ,
+"start_date":"0000-00-00" ,
+"manfacture":"" ,
+"manparno":"5 NRV WITH WEIGHTED ARM" ,
+"manserno":"" ,
+"user_status_code":"" ,
+"swerk":"NSVW" ,
+"swerk_desc":"Norf/Suff West Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000001983161" ,
+"obj_type":"2616" ,
+"obj_type_desc":"Vacuum Vessel" ,
+"start_date":"0000-00-00" ,
+"manfacture":"HOVAL" ,
+"manparno":"PD5500" ,
+"manserno":"65624 202 322" ,
+"user_status_code":"E0013" ,
+"swerk":"NSVM" ,
+"swerk_desc":"Norf/Suff M & E  Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000002017582" ,
+"obj_type":"4305" ,
+"obj_type_desc":"Induction (LV)" ,
+"start_date":"0000-00-00" ,
+"manfacture":"BROOK CROMPTON" ,
+"manparno":"S284V" ,
+"manserno":"" ,
+"user_status_code":"" ,
+"swerk":"NSVW" ,
+"swerk_desc":"Norf/Suff West Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000002173016" ,
+"obj_type":"2901" ,
+"obj_type_desc":"Gearbox" ,
+"start_date":"2014-08-08" ,
+"manfacture":"" ,
+"manparno":"" ,
+"manserno":"" ,
+"user_status_code":"" ,
+"swerk":"NSVW" ,
+"swerk_desc":"Norf/Suff West Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000002019388" ,
+"obj_type":"3408" ,
+"obj_type_desc":"Gate Valve" ,
+"start_date":"0000-00-00" ,
+"manfacture":"" ,
+"manparno":"" ,
+"manserno":"" ,
+"user_status_code":"" ,
+"swerk":"NSVW" ,
+"swerk_desc":"Norf/Suff West Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000001983044" ,
+"obj_type":"3408" ,
+"obj_type_desc":"Gate Valve" ,
+"start_date":"0000-00-00" ,
+"manfacture":"" ,
+"manparno":"" ,
+"manserno":"" ,
+"user_status_code":"" ,
+"swerk":"NSVM" ,
+"swerk_desc":"Norf/Suff M & E  Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000001983048" ,
+"obj_type":"3025" ,
+"obj_type_desc":"Dry Well Submersible" ,
+"start_date":"0000-00-00" ,
+"manfacture":"" ,
+"manparno":"D100EO3R+DDMMX-M132" ,
+"manserno":"2003/12094 134371" ,
+"user_status_code":"E0013" ,
+"swerk":"NSVM" ,
+"swerk_desc":"Norf/Suff M & E  Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+,{
+"equnr":"000000000001983173" ,
+"obj_type":"3025" ,
+"obj_type_desc":"Dry Well Submersible" ,
+"start_date":"0000-00-00" ,
+"manfacture":"GILKES" ,
+"manparno":"48 V C LH" ,
+"manserno":"806916" ,
+"user_status_code":"" ,
+"swerk":"NSVM" ,
+"swerk_desc":"Norf/Suff M & E  Wastewater" ,
+"profile":"ZEQOG001" ,
+"device":"" ,
+"device_info":"" ,
+"install_date":"" ,
+"install_loc_desc":""}
+ 
+                ],
+                "jobattributes":
+                  [{
+"equnr":"000000000002017588" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"VALVE_SIZE_NB" ,
+"charact_desc":"Valve Size (Inch)" ,
+"value":"5.00 Inch"}
+ 
+,{
+"equnr":"000000000002017588" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002017588" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002017588" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"NOMINAL_BORE" ,
+"charact_desc":"Nominal Bore (mm)" ,
+"value":"130.00 mm"}
+ 
+,{
+"equnr":"000000000001983161" ,
+"classnum":"E26" ,
+"klassentext":"Pressure Vessel" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":"N/A - BELOW 250 BAR/LITRE"}
+ 
+,{
+"equnr":"000000000001983161" ,
+"classnum":"E26" ,
+"klassentext":"Pressure Vessel" ,
+"charact":"VOLUME_M3" ,
+"charact_desc":"Volume (m3)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983161" ,
+"classnum":"E26" ,
+"klassentext":"Pressure Vessel" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983161" ,
+"classnum":"E26" ,
+"klassentext":"Pressure Vessel" ,
+"charact":"WORKING_PRESSURE" ,
+"charact_desc":"Working Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002017582" ,
+"classnum":"E43" ,
+"klassentext":"Power Unit" ,
+"charact":"KW_RATING" ,
+"charact_desc":"Kilowatt Rating (KW)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002017582" ,
+"classnum":"E43" ,
+"klassentext":"Power Unit" ,
+"charact":"STOR" ,
+"charact_desc":"STOR" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002173016" ,
+"classnum":"E29" ,
+"klassentext":"Gearbox" ,
+"charact":"RATIO" ,
+"charact_desc":"Ratio" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002173016" ,
+"classnum":"E29" ,
+"klassentext":"Gearbox" ,
+"charact":"OIL_CAPACITY" ,
+"charact_desc":"Oil Capacity (Litres)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002019388" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"VALVE_SIZE_NB" ,
+"charact_desc":"Valve Size (Inch)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002019388" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002019388" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000002019388" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"NOMINAL_BORE" ,
+"charact_desc":"Nominal Bore (mm)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983044" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"VALVE_SIZE_NB" ,
+"charact_desc":"Valve Size (Inch)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983044" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983044" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983044" ,
+"classnum":"E34" ,
+"klassentext":"Valve" ,
+"charact":"NOMINAL_BORE" ,
+"charact_desc":"Nominal Bore (mm)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DELIVERY_FLANGE_SIZE" ,
+"charact_desc":"Delivery Flange Size (Inch)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"IMPELLOR_TYPE" ,
+"charact_desc":"Impellor Type" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"KW_RATING" ,
+"charact_desc":"Kilowatt Rating (KW)" ,
+"value":"5.50 KW"}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"MAX_FLOW_RATE" ,
+"charact_desc":"Maximum Flow Rate (l/s)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"STATIC_HEAD" ,
+"charact_desc":"Static Head (m)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"SUCTION_HEAD" ,
+"charact_desc":"Suction Head (m)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983048" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DRIVE_BELT_FITTED" ,
+"charact_desc":"Drive Belt Fitted" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DELIVERY_FLANGE_SIZE" ,
+"charact_desc":"Delivery Flange Size (Inch)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"IMPELLOR_TYPE" ,
+"charact_desc":"Impellor Type" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"KW_RATING" ,
+"charact_desc":"Kilowatt Rating (KW)" ,
+"value":"15.00 KW"}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"MAX_FLOW_RATE" ,
+"charact_desc":"Maximum Flow Rate (l/s)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"STATIC_HEAD" ,
+"charact_desc":"Static Head (m)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"SUCTION_HEAD" ,
+"charact_desc":"Suction Head (m)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"TEST_CERTIFICATE_NUMBER" ,
+"charact_desc":"Written Scheme No" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DESIGN_PRESSURE" ,
+"charact_desc":"Design Pressure (bar)" ,
+"value":""}
+ 
+,{
+"equnr":"000000000001983173" ,
+"classnum":"E30" ,
+"klassentext":"Pump" ,
+"charact":"DRIVE_BELT_FITTED" ,
+"charact_desc":"Drive Belt Fitted" ,
+"value":""}
+ 
+ 
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194208","opno": "0010",  "icon_filename":"PRI_RE0A5.png" ,
+"icon_txt":"Within 1 Week" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 1 Week" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194208","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194208","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194208","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194208"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194208"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746665","funcloc": "OVERST" , "funclocdesc": "OVER STW", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194228",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Non%20Return%20Valve%20-%20Raw%20Sewage%20Pump%203",
+      "longtext": "",
+    "address": "Fen End, CAMBRIDGE, CB24 5NE",
+    "postcode": "CB24 5NE",
+              "funcloc": "OVERST-2A-TPS-PS03-NRV001",
+              "equipment": "000000000002017588",
+              "notifno": "000012746691",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:16",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 110000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194228","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194228",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"4" ,
+"priority_desc":"A4 - Within 3 days" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"11:00:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000002017588" ,
+"equipment_desc":"Reflux Valve" ,
+"equipment_gis":"53850000-27080000" ,
+"funcloc_code":"OVERST-2A-TPS-PS03-NRV001" ,
+"funcloc_desc":"Non Return Valve - Raw Sewage Pump 3" ,
+"funcloc_gis":"53850000-27080000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746691",
+"site":"OVERST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194228","opno": "0010",  "icon_filename":"PRI_RE0A4.png" ,
+"icon_txt":"Within 3 Days" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 3 Days" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194228","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194228","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194228"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194228"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746691","funcloc": "OVERST-2A-TPS-PS03-NRV001" , "funclocdesc": "Non Return Valve - Raw Sewage Pump 3", "equipment": "000000000002017588",
+ "equidescr": "Reflux Valve"   }
+]
+},
+    {
+            "orderno":"000052194229",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Vacuum%20Vessel",
+      "longtext": "",
+    "address": "School Lane, WISBECH, PE14 7PA",
+    "postcode": "PE14 7PA",
+              "funcloc": "WALPSP-2A-PUM-PV01-VCV001",
+              "equipment": "000000000001983161",
+              "notifno": "000012746703",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:16",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160909 020000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194229","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194229",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"5" ,
+"priority_desc":"A5 - Within 1 week" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"02:00:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000001983161" ,
+"equipment_desc":"Vacuum Vessel" ,
+"equipment_gis":"55043000-31664900" ,
+"funcloc_code":"WALPSP-2A-PUM-PV01-VCV001" ,
+"funcloc_desc":"Vacuum Vessel" ,
+"funcloc_gis":"55043000-31664900",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746703",
+"site":"WALPSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194229","opno": "0010",  "icon_filename":"PRI_RE0A5.png" ,
+"icon_txt":"Within 1 Week" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 1 Week" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194229","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194229","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194229"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194229"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746703","funcloc": "WALPSP-2A-PUM-PV01-VCV001" , "funclocdesc": "Vacuum Vessel", "equipment": "000000000001983161",
+  "equidescr": "Vacuum Vessel"   }
+]
+},
+    {
+            "orderno":"000052194245",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "motor%20pump%202",
+      "longtext": "",
+    "address": "Fen End, CAMBRIDGE, CB24 5NE",
+    "postcode": "CB24 5NE",
+              "funcloc": "OVERST-2A-TPS-PS02-MOT001",
+              "equipment": "000000000002017582",
+              "notifno": "000012746689",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:17",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 093000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194245","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194245",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"5" ,
+"priority_desc":"A5 - Within 1 week" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"09:30:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000002017582" ,
+"equipment_desc":"Induction (Lv)" ,
+"equipment_gis":"53850000-27080000" ,
+"funcloc_code":"OVERST-2A-TPS-PS02-MOT001" ,
+"funcloc_desc":"Motor - Raw Sewage Pump 2" ,
+"funcloc_gis":"53850000-27080000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746689",
+"site":"OVERST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194245","opno": "0010",  "icon_filename":"PRI_RE0A5.png" ,
+"icon_txt":"Within 1 Week" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 1 Week" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194245","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194245","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194245"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194245"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746689","funcloc": "OVERST-2A-TPS-PS02-MOT001" , "funclocdesc": "Motor - Raw Sewage Pump 2", "equipment": "000000000002017582",
+  "equidescr": "Induction (Lv)"   }
+]
+},
+    {
+            "orderno":"000052194246",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "site",
+      "longtext": "",
+    "address": "Canterbury Way, THETFORD, IP24 1DT",
+    "postcode": "IP24 1DT",
+              "funcloc": "THETST",
+              "equipment": "",
+              "notifno": "000012746692",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:17",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 141100"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194246","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194246",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"3" ,
+"priority_desc":"A3 - By end next day" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"14:11:00" ,
+"duration":"90 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"THETST" ,
+"funcloc_desc":"THETFORD STW" ,
+"funcloc_gis":"58553000-28357000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746692",
+"site":"THETST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194246","opno": "0010",  "icon_filename":"PRI_RE0A3.png" ,
+"icon_txt":"By end Next Day" ,
+"tooltip":"X" ,
+"tooltip_desc":"By end Next Day" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194246","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194246","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194246","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194246"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194246"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746692","funcloc": "THETST" , "funclocdesc": "THETFORD STW", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194248",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "motor",
+      "longtext": "",
+    "address": "Canterbury Way, THETFORD, IP24 1DT",
+    "postcode": "IP24 1DT",
+              "funcloc": "THETST-2C-GDG-PS01-GEA001",
+              "equipment": "000000000002173016",
+              "notifno": "000012746693",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:17",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 154100"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194248","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194248",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"15:41:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000002173016" ,
+"equipment_desc":"Gearbox" ,
+"equipment_gis":"58553000-28357000" ,
+"funcloc_code":"THETST-2C-GDG-PS01-GEA001" ,
+"funcloc_desc":"Gearbox - Grit Return" ,
+"funcloc_gis":"58553000-28357000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746693",
+"site":"THETST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194248","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194248","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194248","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194248"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194248"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746693","funcloc": "THETST-2C-GDG-PS01-GEA001" , "funclocdesc": "Gearbox - Grit Return", "equipment": "000000000002173016",
+  "equidescr": "Gearbox"   }
+]
+},
+    {
+            "orderno":"000052194249",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Process%20Valve%20-%20Drain%20Flow%20Meter%20Chamber",
+      "longtext": "",
+    "address": "Canterbury Way, THETFORD, IP24 1DT",
+    "postcode": "IP24 1DT",
+              "funcloc": "THETST-2C-SCR-IQ01-PCV002",
+              "equipment": "000000000002019388",
+              "notifno": "000012746697",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:18",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 171100"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194249","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194249",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"7" ,
+"priority_desc":"A7 - Within 1 month" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"17:11:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000002019388" ,
+"equipment_desc":"Gate Valve" ,
+"equipment_gis":"58553000-28357000" ,
+"funcloc_code":"THETST-2C-SCR-IQ01-PCV002" ,
+"funcloc_desc":"Process Valve - Drain Flow Meter Chamber" ,
+"funcloc_gis":"58553000-28357000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746697",
+"site":"THETST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194249","opno": "0010",  "icon_filename":"PRI_RE0A7.png" ,
+"icon_txt":"Within 1 Month" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 1 Month" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194249","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194249","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194249"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194249"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746697","funcloc": "THETST-2C-SCR-IQ01-PCV002" , "funclocdesc": "Process Valve - Drain Flow Meter Chamber", "equipment": "000000000002019388",
+  "equidescr": "Gate Valve"   }
+]
+},
+    {
+            "orderno":"000052194250",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Process%20Valve-Pre%20Vac%20Sewer%20Compressor%201",
+      "longtext": "",
+    "address": "Robbs Chase, WISBECH, ",
+    "postcode": "",
+              "funcloc": "OURCSP-2A-PUM-CC01-PCV001",
+              "equipment": "000000000001983044",
+              "notifno": "000012746698",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:18",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 193300"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194250","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194250",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"3" ,
+"priority_desc":"A3 - By end next day" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"19:33:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000001983044" ,
+"equipment_desc":"Gate Valve" ,
+"equipment_gis":"55120700-30383400" ,
+"funcloc_code":"OURCSP-2A-PUM-CC01-PCV001" ,
+"funcloc_desc":"Process Valve-Pre Vac Sewer Compressor 1" ,
+"funcloc_gis":"55120700-30383400",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746698",
+"site":"OURCSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194250","opno": "0010",  "icon_filename":"PRI_RE0A3.png" ,
+"icon_txt":"By end Next Day" ,
+"tooltip":"X" ,
+"tooltip_desc":"By end Next Day" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194250","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194250","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194250"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194250"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746698","funcloc": "OURCSP-2A-PUM-CC01-PCV001" , "funclocdesc": "Process Valve-Pre Vac Sewer Compressor 1", "equipment": "000000000001983044",
+  "equidescr": "Gate Valve"   }
+]
+},
+    {
+            "orderno":"000052194251",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "site",
+      "longtext": "",
+    "address": "Fen End, CAMBRIDGE, CB24 5NE",
+    "postcode": "CB24 5NE",
+              "funcloc": "OVERST",
+              "equipment": "",
+              "notifno": "000012746699",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:19",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 063000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194251","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194251",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"4" ,
+"priority_desc":"A4 - Within 3 days" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"06:30:00" ,
+"duration":"90 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"OVERST" ,
+"funcloc_desc":"OVER STW" ,
+"funcloc_gis":"53850000-27080000",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746699",
+"site":"OVERST"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194251","opno": "0010",  "icon_filename":"PRI_RE0A4.png" ,
+"icon_txt":"Within 3 Days" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 3 Days" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194251","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194251","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194251","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194251"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194251"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746699","funcloc": "OVERST" , "funclocdesc": "OVER STW", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194252",
+            "type": "ZSA1",
+            "priority": "",
+           "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "site",
+      "longtext": "",
+    "address": "Robbs Chase, WISBECH, ",
+    "postcode": "",
+              "funcloc": "OURCSP",
+              "equipment": "",
+              "notifno": "000012746700",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:20",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 223300"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194252","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194252",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"4" ,
+"priority_desc":"A4 - Within 3 days" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"22:33:00" ,
+"duration":"90 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"OURCSP" ,
+"funcloc_desc":"OUTWELL ROBBS CHASE V1SP" ,
+"funcloc_gis":"55120700-30383400",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746700",
+"site":"OURCSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194252","opno": "0010",  "icon_filename":"PRI_RE0A4.png" ,
+"icon_txt":"Within 3 Days" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 3 Days" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194252","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194252","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194252","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194252"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194252"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746700","funcloc": "OURCSP" , "funclocdesc": "OUTWELL ROBBS CHASE V1SP", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194253",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Dry%20Well%20Pump%203",
+      "longtext": "",
+    "address": "Robbs Chase, WISBECH, ",
+    "postcode": "",
+              "funcloc": "OURCSP-2A-PUM-PS03-DWP001",
+              "equipment": "000000000001983048",
+              "notifno": "000012746701",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:22",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160908 210300"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194253","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194253",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-08" ,
+"start_time":"21:03:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000001983048" ,
+"equipment_desc":"Dry Well Submersible" ,
+"equipment_gis":"55120700-30383400" ,
+"funcloc_code":"OURCSP-2A-PUM-PS03-DWP001" ,
+"funcloc_desc":"Dry Well Pump 3" ,
+"funcloc_gis":"55120700-30383400",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746701",
+"site":"OURCSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194253","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194253","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194253","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194253"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194253"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746701","funcloc": "OURCSP-2A-PUM-PS03-DWP001" , "funclocdesc": "Dry Well Pump 3", "equipment": "000000000001983048",
+  "equidescr": "Dry Well Submersible"   }
+]
+},
+    {
+            "orderno":"000052194254",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "site",
+      "longtext": "",
+    "address": "School Lane, WISBECH, PE14 7PA",
+    "postcode": "PE14 7PA",
+              "funcloc": "WALPSP",
+              "equipment": "",
+              "notifno": "000012746702",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:22",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160909 003000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194254","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194254",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"6" ,
+"priority_desc":"A6 - Within 2 weeks" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"00:30:00" ,
+"duration":"90 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"WALPSP" ,
+"funcloc_desc":"WALPOLE-WALNUT ROAD SP" ,
+"funcloc_gis":"55043000-31664900",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746702",
+"site":"WALPSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194254","opno": "0010",  "icon_filename":"PRI_RE0A6.png" ,
+"icon_txt":"Within 2 Weeks" ,
+"tooltip":"X" ,
+"tooltip_desc":"Within 2 Weeks" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194254","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194254","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194254","opno": "0010",  "icon_type":"MEASUREMENTS" ,
+"icon_position":"3 " ,
+"icon_filename":"MEASUREMENTS.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Measurements" ,
+"command":"MPT_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194254"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194254"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746702","funcloc": "WALPSP" , "funclocdesc": "WALPOLE-WALNUT ROAD SP", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194255",
+            "type": "ZSA1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "Dry%20Well%20Pump%204",
+      "longtext": "",
+    "address": "School Lane, WISBECH, PE14 7PA",
+    "postcode": "PE14 7PA",
+              "funcloc": "WALPSP-2A-PUM-PS04-DWP001",
+              "equipment": "000000000001983173",
+              "notifno": "000012746704",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:24",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Mechanical Defect Work"
+,"startdate": "20160909 033000"
+,"enddate": "20160908 000000"
+, "duration": "14.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "14.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194255","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194255",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"3" ,
+"priority_desc":"A3 - By end next day" ,
+"pmactivity_code":"T59" ,
+"pmactivity_desc":"Scheduled Defect" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"03:30:00" ,
+"duration":"90 " ,
+"equipment_code":"000000000001983173" ,
+"equipment_desc":"Dry Well Submersible" ,
+"equipment_gis":"55043000-31664900" ,
+"funcloc_code":"WALPSP-2A-PUM-PS04-DWP001" ,
+"funcloc_desc":"Dry Well Pump 4" ,
+"funcloc_gis":"55043000-31664900",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z5",
+"notifno":"000012746704",
+"site":"WALPSP"}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194255","opno": "0010",  "icon_filename":"PRI_RE0A3.png" ,
+"icon_txt":"By end Next Day" ,
+"tooltip":"X" ,
+"tooltip_desc":"By end Next Day" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194255","opno": "0010",  "icon_type":"JOB_TYPE" ,
+"icon_position":"1 " ,
+"icon_filename":"WT_ZSA1.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Scheduled Order" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+,{ "orderno":"000052194255","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"2 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [ ],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194255"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194255"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746704","funcloc": "WALPSP-2A-PUM-PS04-DWP001" , "funclocdesc": "Dry Well Pump 4", "equipment": "000000000001983173",
+  "equidescr": "Dry Well Submersible"   }
+]
+},
+    {
+            "orderno":"000052194256",
+            "type": "ZCS1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "customer%20vac%20issue",
+      "longtext": "",
+    "address": "Wenny Road 38, CHATTERIS, PE16 6UT",
+    "postcode": "PE16 6UT",
+              "funcloc": "10296538",
+              "equipment": "",
+              "notifno": "000012746707",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:11",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Carry Out Work on Vacuum Systems"
+,"startdate": "20160909 054100"
+,"enddate": "20160908 000000"
+, "duration": "12.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "12.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194256","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194256",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"2" ,
+"priority_desc":"A2 - Same day 12 hrs" ,
+"pmactivity_code":"S71" ,
+"pmactivity_desc":"Vacuum Pots" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"05:41:00" ,
+"duration":"30 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"10296538" ,
+"funcloc_desc":"" ,
+"funcloc_gis":"53981460-28546880",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z1",
+"notifno":"000012746707",
+"site":""}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194256","opno": "0010",  "icon_filename":"PRI_RE0A2.png" ,
+"icon_txt":"Same Day 12 Hours" ,
+"tooltip":"X" ,
+"tooltip_desc":"Same Day 12 Hours" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194256","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"1 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [
+    { "id": "KU0901382328", "type": "KU" , "name": "Andrew Pluck &"  ,
+  "address": "38 Wenny Road,CHATTERIS,PE16 6UT", "postcode":"PE16 6UT",  "telno": "01354669895"  }
+],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194256"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194256"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746707","funcloc": "10296538" , "funclocdesc": "", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194257",
+            "type": "ZCS1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "customer%20vac%20issue",
+      "longtext": "",
+    "address": "St. Marys Square 24, NEWMARKET, CB8 0HZ",
+    "postcode": "CB8 0HZ",
+              "funcloc": "11343606",
+              "equipment": "",
+              "notifno": "000012746708",
+              "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:12",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Carry Out Work on Vacuum Systems"
+,"startdate": "20160909 065000"
+,"enddate": "20160908 000000"
+, "duration": "12.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "12.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194257","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194257",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"2" ,
+"priority_desc":"A2 - Same day 12 hrs" ,
+"pmactivity_code":"S71" ,
+"pmactivity_desc":"Vacuum Pots" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"06:50:00" ,
+"duration":"30 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"11343606" ,
+"funcloc_desc":"" ,
+"funcloc_gis":"56416260-26346170",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z1",
+"notifno":"000012746708",
+"site":""}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+               ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194257","opno": "0010",  "icon_filename":"PRI_RE0A2.png" ,
+"icon_txt":"Same Day 12 Hours" ,
+"tooltip":"X" ,
+"tooltip_desc":"Same Day 12 Hours" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194257","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"1 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [
+    { "id": "KU0902451137", "type": "KU" , "name": "James Bruce Lamont"  ,
+  "address": "24 St. Marys Square,NEWMARKET,CB8 0HZ", "postcode":"CB8 0HZ",  "telno": ""  }
+],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194257"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194257"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746708","funcloc": "11343606" , "funclocdesc": "", "equipment": "",
+  "equidescr": ""   }
+]
+},
+    {
+            "orderno":"000052194258",
+            "type": "ZCS1",
+            "priority": "",
+            "startdate": "00000000 000000",
+            "contact": "",
+    "telno": "",
+       "shorttext": "customer%20vac%20issue",
+      "longtext": "",
+    "address": "St. Peters Road 9, WISBECH, PE14 9EH",
+    "postcode": "PE14 9EH",
+              "funcloc": "15292917",
+              "equipment": "",
+              "notifno": "000012746709",
+             "changed_by": "",
+              "changed_date": "2016-09-07",
+              "changed_time": "15:43:13",
+              "operation":
+                  [{"opno": "0010", "type": "SMEPIS" , "priority": "0010" , "shorttext": "Carry Out Work on Vacuum Systems"
+,"startdate": "20160909 081200"
+,"enddate": "20160908 000000"
+, "duration": "12.0 ","status": "ONSITE" }
+  ],
+ 
+"operationsplit":
+                  [{"opno": "0010", "duration": "12.0 ","assignedto": "00114698" }
+                ],
+ 
+"operationinfo":
+                  [{ "orderno":"000052194258","opno": "0010", "type": "" ,
+                "value1": "00000000" , "value2":"000000"}
+ 
+ 
+                ],
+"jobdets":
+                  [{ "orderno":"000052194258",
+"opno": "0010",
+"plant":"NSAM" ,
+"eworkcentre":"MT032" ,
+"orderplant":"NSAM" ,
+"orderworkcentre":"MT032" ,
+"oworkcentre":"MT032" ,
+"priority_code":"2" ,
+"priority_desc":"A2 - Same day 12 hrs" ,
+"pmactivity_code":"S71" ,
+"pmactivity_desc":"Vacuum Pots" ,
+"oppmactivity_code":"SMEPIS" ,
+"oppmactivity_desc":"WW Maint in shift" ,
+"start_date":"2016-09-09" ,
+"start_time":"08:12:00" ,
+"duration":"30 " ,
+"equipment_code":"" ,
+"equipment_desc":"" ,
+"equipment_gis":"" ,
+"funcloc_code":"15292917" ,
+"funcloc_desc":"1ST METER LINKED TO 79791015" ,
+"funcloc_gis":"55046230-30270460",
+"acpt_date":"",
+"acpt_time":"",
+"onsite_date":"",
+"onsite_time":"",
+"park_date":"",
+"park_time":"",
+"status":"DEPL",
+"status_s":"DEPL",
+"status_l":"Deployed",
+"notif_cat_prof":"0000000Z1",
+"notifno":"000012746709",
+"site":""}
+ 
+ 
+ 
+ 
+                ],
+  "jobdraw":
+                  [
+                ],
+  "jobmeaspoints":
+                  [
+ 
+                ],
+                  "jobmeascodes":
+                  [
+                ],
+"jobloch":
+                  [
+ 
+                ],
+                 "jobequipment":
+[
+                ],
+                "jobattributes":
+                  [
+                ],
+"priorityicons":
+                  [{ "orderno":"000052194258","opno": "0010",  "icon_filename":"PRI_RE0A2.png" ,
+"icon_txt":"Same Day 12 Hours" ,
+"tooltip":"X" ,
+"tooltip_desc":"Same Day 12 Hours" ,
+"command":"NO_COMMAND"}
+ 
+                ],
+                 "jobicons":
+                  [{ "orderno":"000052194258","opno": "0010",  "icon_type":"LOC_HIST_REF" ,
+"icon_position":"1 " ,
+"icon_filename":"LOC_HISTORY.png" ,
+"icon_txt":"" ,
+"tooltip":"X" ,
+"tooltip_desc":"Location History" ,
+"command":"NO_COMMAND",
+"grid":"",
+"grid_vals":""}
+ 
+ 
+                ],
+                 "tconf":
+                  [  ],
+ 
+                 "partner":
+                  [
+    { "id": "KU0902067350", "type": "KU" , "name": "Vincent Allan Aubrey &"  ,
+  "address": "9 St. Peters Road,WISBECH,PE14 9EH", "postcode":"PE14 9EH",  "telno": "01945773018"  }
+],
+                 "userstatus":
+                  [
+    { "type": "OV" , "orderno": "000052194258"  , "opno": "0010", "inact": "", "status": "E0003","statuscode": "DEPL",
+  "statusdesc": "Deployed"  },
+ 
+    { "type": "OR" , "orderno": "000052194258"  , "opno": "", "inact": "", "status": "E0001","statuscode": "INIT",
+  "statusdesc": "Initial"  }
+],
+ 
+"component":
+                  [ ],
+ 
+                 "asset":
+                  [
+    { "id": "1 ",  "notifno": "000012746709","funcloc": "15292917" , "funclocdesc": "1ST METER LINKED TO 79791015", "equipment": "",
+  "equidescr": ""   }
+]
+}
+ 
+]
+}
+

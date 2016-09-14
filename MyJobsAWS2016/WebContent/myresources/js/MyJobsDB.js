@@ -1,7 +1,4 @@
 
-
- 
- 
  
 var w = null;
 var objtype="";	
@@ -850,6 +847,20 @@ function UpdatePhotoEntry(orderno, opno, id, name, desc ,status){
 	html5sql.process("Update MyJobsPhotos set name ='"+name+"', desc = '"+desc+"', status = '"+status+"' where id = '"+id+"'",
 	 function(){
 		buildJobPhotoList()
+	 },
+	 function(error, statement){
+		opMessage("Error: " + error.message + " when inserting Photo" + statement);
+	 }        
+	);
+
+}
+function UpdatePhotoEntryonClose(orderno, opno, id, name, desc ,status){
+	
+	
+
+	html5sql.process("Update MyJobsPhotos set name ='"+name+"', desc = '"+desc+"', status = '"+status+"' where id = '"+id+"'",
+	 function(){
+		//buildJobPhotoList()
 	 },
 	 function(error, statement){
 		opMessage("Error: " + error.message + " when inserting Photo" + statement);
@@ -2002,6 +2013,7 @@ empid=localStorage.getItem("EmployeeID")
 															n = rowsArray.length
 															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'WaitingLiveLink' where id='"+item['id']+"'",
 																	 function(){
+																buildJobDocsTable();
 																		RequestLLFile(params)	
 																	 },
 																	 function(error, statement){
@@ -2045,7 +2057,7 @@ empid=localStorage.getItem("EmployeeID")
 															n = rowsArray.length
 															html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'DownloadingLiveLink' where id='"+rowsArray[0]['id']+"'",
 																	 function(){
-																	
+																buildJobDocsTable();
 																		downlodRequestedFile(dir,fname,rowsArray[0]['id'])
 																	 },
 																	 function(error, statement){
@@ -3282,12 +3294,12 @@ function updateDocumentState(id,status)
 {
 
 	
-	sqlStatement="UPDATE MyFormsResponses SET lastupdated='"+status+"' where id = '"+id+"'";
+	sqlStatement="UPDATE MyFormsResponses SET status='"+status+"' where id = '"+id+"'";
 	
 	html5sql.process(sqlStatement,
 		 function(){
 		
-		
+		//buildJobDocsTable()
 				
 		 },
 		 function(error, statement){
@@ -3313,7 +3325,24 @@ function updatePhotoState(id,status)
 		 }        
 		);
 }
-function updateDocumemntsStatus(url,name,type,size,lastmod,status)
+function updateAttachmentState(id,status)
+{
+
+	
+	sqlStatement="UPDATE MyJobsDocs SET status='"+status+"' where id = '"+id+"'";
+	
+	html5sql.process(sqlStatement,
+		 function(){
+		
+				
+		 },
+		 function(error, statement){
+
+			opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }        
+		);
+}
+function updateAttachmentStatus(url,name,type,size,lastmod,status)
 {
 
 	
@@ -3581,7 +3610,7 @@ opMessage("uploadDocument:"+error+statement)
 function uploadDocument(id){
 	
 	selectedDocId=id;
-	sqlStatement="select formname, formdesc, htmlbody from MyFormsResponses where id = '"+id+"'"
+	sqlStatement="select formname, formdesc, htmlbody,htmlreadonly from MyFormsResponses where id = '"+id+"'"
 	 
 
 
@@ -3589,7 +3618,7 @@ html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
 
 if(rowsArray.length>0){
-	x=unescape(rowsArray[0].htmlbody)
+	x=unescape(rowsArray[0].htmlreadonly)
 	y=unescape(encodeURIComponent(x))
 	
 	formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
@@ -3615,7 +3644,8 @@ function uploadAttachment(id){
 
 html5sql.process(sqlStatement,
 function(transaction, results, rowsArray){
-
+	//updatePhotoState(id,"Sending");
+	
 if(rowsArray.length>0){
 	
 	getBase64FromAttachmentUrl(rowsArray[0].url,rowsArray[0].id,rowsArray[0].name,rowsArray[0].type)	
@@ -3752,10 +3782,9 @@ function InsertFormDetails(url, name,type,desc)
 // need to sort out not a delete if the form already exists
 
 
-function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,mode,type)
+function createFormsResponse(formname, wc,plant,notifno,order,opno,user,content,htmlbody,htmlreadonly,mode,type)
 {
-	
-	
+console.log("saving form"+selectedFormId)	
 if(formname.indexOf("~")>0){
 	x=formname.split("~");
 	formname=x[0]
@@ -3774,14 +3803,15 @@ var fdesc=""
 		sqlStatement="UPDATE  MyFormsResponses set lastupdated='"+type+"',  "+
 		"contents='"+escape(content) +"', "+
 		"htmlbody='"+escape(htmlbody)+"', "+
+		"htmlreadonly='"+escape(htmlreadonly)+"', "+
 		"date='"+getDate()+"', "+
 		"time='"+getTime()+"', "+
 		
-		"state='"+state+"' where id = "+selectedFormId+";"
+		"state='"+state+"', "+"status='Local' where id = "+selectedFormId+";"
 
 	}else{
-		sqlStatement="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody, date , time , state) VALUES ("+
-		"'"+formname+"','"+fdesc+"','"+type+"','"+wc+"','"+plant+"','"+notifno+"','"+order+"','"+opno+"','"+user+"','"+escape(content)+"','"+escape(htmlbody)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"');"
+		sqlStatement="INSERT INTO  MyFormsResponses (formname, formdesc, lastupdated, wc,plant, notifno,orderno , opno, user, contents, htmlbody,htmlreadonly, date , time , state,status) VALUES ("+
+		"'"+formname+"','"+fdesc+"','"+type+"','"+wc+"','"+plant+"','"+notifno+"','"+order+"','"+opno+"','"+user+"','"+escape(content)+"','"+escape(htmlbody)+"','"+escape(htmlreadonly)+"','"+getDate()+"',"+"'"+getTime()+"',"+"'"+state+"',"+"'Local');"
 
 	}	
 		
@@ -3966,7 +3996,31 @@ function createTables(type) {
 
 	//opMessage("Creating The Tables");	
         
-		sqlstatement='CREATE TABLE IF NOT EXISTS MyOrders     			( sysid integer primary key autoincrement,orderno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, startdate TEXT, enddate TEXT, contact TEXT,   telno TEXT,    type TEXT, priority TEXT, address TEXT, workaddress TEXT, house TEXT, houseno TEXT, street TEXT, district TEXT, city TEXT, postcode TEXT,gis TEXT, property TEXT, funcloc TEXT, equipment TEXT, propertygis TEXT, funclocgis TEXT, equipmentgis TEXT, notifno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+		sqlstatement='CREATE TABLE IF NOT EXISTS AssetTableColumns (id integer primary key autoincrement,ColumnNumber integer ,ColumnName TEXT,DisplayName TEXT, ColumnWidth TEXT);' +
+		 'CREATE TABLE IF NOT EXISTS MyJobsParams      		(  id integer primary key autoincrement, name TEXT, key1 TEXT, key2 TEXT, value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+
+	    'delete from AssetTableColumns ; ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (0,"ZPROCTYP","Processing Type","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (1,"ZINSTLOCN","Functional Location","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (2,"HURST","Make","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (3,"MAPAR","Model","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (4,"EQUNR","Equipment Number","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (5,"ZINSLOCDESC","Functional Location Desc","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (6,"ZOTDESC","Equipment Type Desc","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (7,"EQKTU","Equipment Desc","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (8,"EQUNR","Equipment Number","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (9,"ZATSDESC","Asset Type","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (10,"ZPRGDESC","Process Group","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (11,"ZPLGDESC","Plant Group","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (12,"ZSYSDESC","System Code Description","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (13,"ZNCDESC","Function Type Description","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (14,"ZOTDESC","Equipment Type Description","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (15,"EQKTU","EQKTU","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (16,"SERGE","Serial Number","150px"); ' +
+	    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (17,"ZSITE","Site","150px"); ' +
+        'CREATE TABLE IF NOT EXISTS AssetSitesDetails     	( id integer primary key autoincrement,assdesc TEXT, assettag TEXT, asstype TEXT, eqart TEXT, eqktx TEXT, equnr TEXT, herst TEXT, iwerk TEXT, mapar TEXT, ncdesc TEXT, otdesc TEXT, plgrp TEXT, pltxt TEXT, serge TEXT, site TEXT, status TEXT, swerk TEXT, syscode TEXT, sysdesc TEXT, tplnr TEXT, zfl_nc TEXT, zinbdt  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+
+			'CREATE TABLE IF NOT EXISTS MyOrders     			( sysid integer primary key autoincrement,orderno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, startdate TEXT, enddate TEXT, contact TEXT,   telno TEXT,    type TEXT, priority TEXT, address TEXT, workaddress TEXT, house TEXT, houseno TEXT, street TEXT, district TEXT, city TEXT, postcode TEXT,gis TEXT, property TEXT, funcloc TEXT, equipment TEXT, propertygis TEXT, funclocgis TEXT, equipmentgis TEXT, notifno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyOperations 			( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      type TEXT,     priority TEXT,  shorttext TEXT, startdate TEXT, enddate TEXT, duration TEXT, status TEXT, assignedto TEXT, apptstart TEXT, apptend TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyOperationsSplit 		( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      assignedto TEXT,  duration TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyPartners   			( sysid integer primary key autoincrement,orderno TEXT, notifno TEXT, id TEXT,        type TEXT,     name TEXT,      address TEXT,   postcode TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -3988,7 +4042,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, fullname TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, workcenter TEXT, scenario TEXT, fullname TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, maintplant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+													
 					 'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -3997,7 +4051,7 @@ function createTables(type) {
 					 'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
-					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, formdesc TEXT,user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, htmlbody TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+					 'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, formdesc TEXT, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT, plant TEXT, notifno TEXT, orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, htmlbody TEXT, htmlreadonly TEXT, state TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 
 					 'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
 					 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
@@ -4163,7 +4217,7 @@ function dropTables() {
 
 
 		sqlstatement=	'DROP TABLE IF EXISTS MyOrders;'+
-		'DROP TABLE IF EXISTS MyAjax;'+
+						'DROP TABLE IF EXISTS MyAjax;'+
 						'DROP TABLE IF EXISTS MyOperations;'+
 						'DROP TABLE IF EXISTS MyOperationsSplit;'+
 						'DROP TABLE IF EXISTS MyPartners;'+
@@ -4509,8 +4563,9 @@ function loadDemoData() {
 						requestDEMOData('MyJobsVehicles.json');
 						requestDEMOData('MyJobsVehiclesDefault.json');
 						requestDEMOData('MyJobsDG5Codes.json');
+						requestDEMOData('AssetSitesDetails.json');
+						requestDEMOData('MyJobsParams.json');
 						
-					
 						//requestDEMOData('GASSurvey.json');
 					
 						//requestDEMOData('GASSurveyHdr.json');
@@ -4665,7 +4720,13 @@ function requestDEMOData(page){
 		opMessage("DEMOLoad "+page);
 		
 		$.getJSON("TestData/"+page,function(data,status){ 	
-			
+			 if (page == 'AssetSitesDetails.json') {
+		            refAssetSitesDetailsCB(data);
+		        }
+			 if(page=='MyJobsParams.json'){
+					paramCB(data);
+					
+				}
 			if(page=='MyJobsOrders.json'){
 				
 				orderCB(data);
@@ -4756,6 +4817,64 @@ function requestDEMOData(page){
   .fail(function(data,status) {
 	  opMessage( "error:"+status+":"+data );
   })
+}
+function refAssetSitesDetailsCB(AssetSitesDetails) {
+	   
+    var sqlstatement = "";
+
+    var first = 0;
+    if (AssetSitesDetails.assetdetails.length > 0) {
+
+        if (syncReferenceDetsUpdated) {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + ', AssetSitesDetails:' + String(AssetSitesDetails.assetdetails.length));
+        } else {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + 'AssetSitesDetails:' + String(AssetSitesDetails.assetdetails.length));
+        }
+        opMessage("Deleting Existing AssetSitesDetails");
+        sqlstatement += 'DELETE FROM AssetSitesDetails;';
+        opMessage("Loading " + AssetSitesDetails.assetdetails.length + " AssetSitesDetails");
+        for (var cntx = 0; cntx < AssetSitesDetails.assetdetails.length ; cntx++) {
+        	
+        	
+        	
+        	
+        	
+        	
+            sqlstatement += 'INSERT INTO AssetSitesDetails ( assdesc ,assettag ,asstype ,eqart ,eqktx ,equnr ,herst ,iwerk ,mapar ,ncdesc ,otdesc ,plgrp ,pltxt ,serge ,site ,status ,swerk ,syscode ,sysdesc ,tplnr ,zfl_nc ,zinbdt ) VALUES ( ' +
+            '"' + AssetSitesDetails.assetdetails[cntx].assdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].assettag + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].asstype + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].eqart + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].eqktx + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].equnr + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].herst + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].iwerk + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].mapar + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].ncdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].otdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].plgrp + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].pltxt + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].serge + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].site + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].status + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].swerk + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].syscode + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].sysdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].tplnr + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].zfl_nc + '",' +
+             '"' + AssetSitesDetails.assetdetails[cntx].zinbdt + '");';
+        }
+
+
+        html5sql.process(sqlstatement,
+             function () {
+                 opMessage("Success - Finished Loading AssetSitesDetails");
+             },
+             function (error, statement) {
+                 opMessage("Error: " + error.message + " when processing " + statement);
+             }
+        );
+    }
 }
 function orderCB(MyOrders){
 
@@ -5214,7 +5333,9 @@ function InsertOrder(sqlstatement,orderno,changeddatetime, jdets){
 						
 						html5sql.process(sqlstatement1+sqlstatement,
 								 function(transaction, results, rowsArray){
-						
+							//sendJobPhotos(CurrentOrderNo,CurrentOpNo)
+							//sendJobAttachments(CurrentOrderNo,CurrentOpNo)
+							//sendJobForms(CurrentOrderNo,CurrentOpNo)
 								
 			
 										
@@ -6469,7 +6590,7 @@ var MyEmployeeID=""
 			}else{
 				localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'Users:'+String(MyUsers.user.length));
 			}
-
+			
 			opMessage("Deleting Existing Users");
 			sqlstatement+='DELETE FROM MyRefUsers;';
 			opMessage("Loading"+MyUsers.user.length+" Existing Users");
@@ -6477,6 +6598,8 @@ var MyEmployeeID=""
 				{	
 				if(MyUsers.user[cntx].userid==localStorage.getItem('MobileUser')){
 					localStorage.setItem('EmployeeID',MyUsers.user[cntx].employeeno)
+					localStorage.setItem('EmployeeWorkCenter',MyUsers.user[cntx].workcenter)
+					localStorage.setItem('EmployeeScenario',MyUsers.user[cntx].scenario)
 					localStorage.setItem('MobileFullname', MyUsers.user[cntx].firstname +" "+ MyUsers.user[cntx].lastname)
 				}
 				sqlstatement+='INSERT INTO MyRefUsers (userid , scenario , plant , workcenter , plannergroup , plannergroupplant, storagegroup, storageplant, partner, partnerrole, funclocint, funcloc, compcode, employeeno, equipment, firstname, lastname, telno ) VALUES ('+ 
@@ -6502,13 +6625,13 @@ var MyEmployeeID=""
 			
 			html5sql.process(sqlstatement,
 				 function(){
-						sqlstatement="UPDATE MyUserDets SET employeeid = '"+localStorage.getItem('EmployeeID')+"', fullname='"+MyUsers.users[cntx].firstname +" "+ MyUsers.user[cntx].lastname+"' WHERE mobileuser = '"+localStorage.getItem('MobileUser')+"';";
+						sqlstatement="UPDATE MyUserDets SET employeeid = '"+localStorage.getItem('EmployeeID')+"', fullname='"+localStorage.getItem('MobileFullname')+"', workcenter='"+localStorage.getItem('EmployeeWorkCenter')+"', scenario='"+localStorage.getItem('EmployeeScenario')+"' WHERE mobileuser = '"+localStorage.getItem('MobileUser')+"';";
 						
 						html5sql.process(sqlstatement,
 						 function(){
 						},
 						 function(error, statement){
-							opMessage("Error: " + error.message + " when updateing Pincode " + statement);
+							opMessage("Error: " + error.message + " when updateing EmployeeID " + statement);
 						 }        
 						);
 				 },
@@ -7468,3 +7591,171 @@ function DeleteOldPhotos(orderlist){
 	console.log("Delete Old Photos")
 	
 }
+function UpdateJobDetClose(orderno, opno){
+	status="CLOSED";
+	html5sql.process("update  myjobdets set status = '"+status+"', status_s = '"+status+"', status_l =  '"+status+"' ,tconf_date = '"+statusUpdateDate+"', tconf_time = '"+statusUpdateTime+"' where  orderno = '"+orderno+"' and opno = '"+ opno+"';",
+			function(){
+		buildJobs();
+					
+			},
+			function(error, statement){
+			opMessage("Error: " + error.message + " when insertOperationStatus processing " + statement);          
+			
+			}
+		);
+}
+function sendJobPhotos(orderno,opno){
+	var sqlstatement="";
+
+	sqlstatement+='SELECT  p.id as id,p.url as url, p.name as name, p.orderno as orderno, p.opno as opno, p.status as status '
+	sqlstatement+=' from MyJobsPhotos p where   p.orderno = "'+orderno+'"  and p.opno = "'+opno+'";'
+
+
+
+	opMessage("Processing Photos");
+
+
+	html5sql.process(sqlstatement,
+	function(transaction, results, rowsArray){
+	if( rowsArray.length > 0) {
+	for (var n = 0; n < rowsArray.length; n++) {
+	item = rowsArray[n];
+	if(item.status!="Sent"){
+
+	getBase64FromImageUrl(item.url,item.id,item.name)
+	UpdatePhotoEntryonClose(item.orderno,item.opno, item.id, item.name, "","Sending")
+	//same as other without build list
+	}
+
+	}
+
+
+	 
+	}
+
+	},
+	 function(error, statement){
+	 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+	 }   
+	);
+
+
+
+
+	}
+function sendJobAttachments(orderno,opno){
+	var sqlstatement="";
+
+	sqlstatement+='SELECT  p.id as id,p.url as url,p.name as name,p.type as type, p.orderno as orderno, p.opno as opno, p.status as status '
+	sqlstatement+=' from MyJobsDocs p where   p.orderno = "'+orderno+'"  and p.opno = "'+opno+'";'
+
+
+
+	opMessage("Processing Photos");
+
+
+	html5sql.process(sqlstatement,
+	function(transaction, results, rowsArray){
+	if( rowsArray.length > 0) {
+	for (var n = 0; n < rowsArray.length; n++) {
+	item = rowsArray[n];
+	if(item.status!="Sent"){
+
+		getBase64FromAttachmentUrl(item.url,item.id,item.name,item.type,"close")
+	//UpdatePhotoEntryonClose(item.orderno,item.opno, item.id, item.name, "","Sending")
+	//same as other without build list
+	}
+
+	}
+
+
+	 
+	}
+
+	},
+	 function(error, statement){
+	 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+	 }   
+	);
+
+
+
+
+	}
+function sendJobForms(orderno,opno){
+	var sqlstatement="";
+
+	sqlstatement+='SELECT  p.id as id,p.formdesc as formdesc,p.formname as formname,p.htmlbody as htmlbody,p.htmlreadonly as htmlreadonly, p.orderno as orderno, p.opno as opno, p.status as status '
+	sqlstatement+=' from MyFormsResponses p where   p.orderno = "'+orderno+'"  and p.opno = "'+opno+'";'
+
+
+
+	opMessage("Processing Photos");
+
+
+	html5sql.process(sqlstatement,
+	function(transaction, results, rowsArray){
+	if( rowsArray.length > 0) {
+	for (var n = 0; n < rowsArray.length; n++) {
+	item = rowsArray[n];
+	if(item.status!="Sent"){
+		x=unescape(item.htmlreadonly)
+		y=unescape(encodeURIComponent(x))
+		
+		formHTML=window.btoa(HTMLFormStart+y+HTMLFormEnd)
+		
+		createBase64FormXML(formHTML,item.formdesc+".html",item.id,item.formdesc,"close")	
+		
+	}
+
+	}
+
+
+	 
+	}
+
+	},
+	 function(error, statement){
+	 window.console&&console.log("Error: " + error.message + " when processing " + statement);
+	 }   
+	);
+
+
+
+
+	}
+function paramCB(data){
+	var sqlstatement="";		
+	
+		if(data.params.length>0){
+				if(syncReferenceDetsUpdated){
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+', Params:'+String(data.params.length));
+				}else{
+					localStorage.setItem('LastSyncReferenceDetails',localStorage.getItem('LastSyncReferenceDetails')+'Params:'+String(data.params.length));
+				}
+
+				opMessage("Deleting Existing PParameters");
+				sqlstatement+='DELETE FROM MyJobsParams;';
+				opMessage("Loading"+data.params.length+" Existing Params");
+				for(var cntx=0; cntx < data.params.length ; cntx++)
+					{	
+
+					sqlstatement+=' INSERT INTO MyJobsParams (name , key1 , key2 , value ) VALUES ('+ 
+						'"'+data.params[cntx].name +'",'+  
+						'"'+data.params[cntx].key1 +'",'+   
+						'"'+data.params[cntx].key2 +'",'+ 
+						'"'+data.params[cntx].value+'");';			
+					}	
+				
+				html5sql.process(sqlstatement,
+					 function(){
+							
+					 },
+					 function(error, statement){
+						 opMessage("Error: " + error.message + " when processing Parm loading " + statement);
+					 }        
+				);
+
+
+		}
+	}

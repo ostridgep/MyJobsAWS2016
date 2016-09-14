@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/site.css" rel="stylesheet" />
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.js"></script>
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+         <title>Risk Assessment Confined Spaces</title>
+</head>
+<body>
+<div class="container" id="MyForm">
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-15">
+                <div class="row">
+                  
+                </div>
+                <div class="row">
+                    <h1><b>Risk Assessment Confined Spaces</b></h1>
+                </div>
+                <table class="table table-bordered">
+                <tr>
+                            <td width="25%"><label class="feedback-label">Team/Area</td>
+                            <td width="25%"><label class="feedback-label">Manager</td>
+                            <td width="30%"><label class="feedback-label">Date risk assessment originally completed</td>
+                            <td width="30%"><label class="feedback-label">Rev No.</td>
+                        </tr>
+                        <tr>
+                            <td width="25%"><input type="text" class="feedback-input" id="team_area" /></td>
+                            <td width="25%"><input type="text" class="feedback-input" id="manager" /></td>
+                            <td width="25%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly/></td>
+                            <td width="25%"><input type="text" class="feedback-input" id="rev_no" /></td>
+                            </tr>
+                            <tr>
+                            </table>
+                            
+                            <table class="table table-bordered">
+                <tr>
+                            <td colspan="2" width="25%"><label class="feedback-label"><b>Who could be Harmed?</b></td>
+                            <td colspan="4" width="75%"><label class="feedback-label"><b>Common hazards</b></td></tr>
+                          
+                        </tr>
+                        <tr>
+                            <td width="20%"><input type="text" class="feedback-input"  /></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Animal/Insect</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Lifting and handling injuries</label>  </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label">Employees</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Contact with electricity</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Person struck by moving vehicle</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                             <tr>
+                            <td width="20%"><label class="feedback-label"></label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Contact with machinery</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">  Road traffic collision</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label">Contractors</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Drowned or asphyxiated</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Slip,trip fall same level</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label"></label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Exposed to explosion</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Struck by moving object</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label">Public</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Exposed to fire</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> Trapped by something collapsing</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label"></label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Exposed to harmful substance</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Other hazard-Please specify</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-label">Others</label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label">Fall from Height</label> </td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            <td width="20%"><label class="feedback-label"> </label></td>
+                            <td width="5%"><input type="text" class="feedback-input"  /></td>
+                            </tr>
+                            </table>
+                            <table class="table table-bordered">
+                			<tr>
+                            <th colspan="5" ><label class="feedback-label">Managers responsible for people who may enter confined spaces shall ensure</th>
+                            
+                        </tr>
+                        <tr>
+                            <td colspan="2" width="25%"><label type="text" class="feedback-label" >Control measures </label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Monitoring Arrangements</label></td>
+                            <td width="5%"><label type="text" class="feedback-label">In place?</label></td>
+                            <td width="25%"><label type="text" class="feedback-label"> Comments / actions required with timescales </label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >a)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">You are familiar with the requirements of the Mgt of confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Evidence of briefings to team</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label"> Records held in Littlecoates Depot</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >b)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">confined spaces are risk assessed</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Active management - evidence of completion</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label"> Act Management sheets</label></td>
+                            </tr>
+                             <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >c)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">Team members working in or involved in confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Active management - evidence of completion</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label"> Act Management sheets</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >d)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">Team members who work in confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Active Management</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Records held in Littlecoates Depot</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >e)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">Team members who issue site asses authorization</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Competency quiz records must be kept as a record of employee briefing and understanding</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Records held in Littlecoates Depot</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >f)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">Team members who issue permits for confined space entries have+� completed the advanced confined space permit writing course  (3 yearly refresher)� completed the appropriate level of confined space training� completed the one day general permit writing course - all permit writers will be required to attend this training, however, it is not necessary to have completed this prior to writing advanced permits � at least 1 years experience in confined space work� been appointed at least annually and records kept Confined space permits are only required for HIGH RISK entries</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Training recordsActive Management</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Act Management sheets</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >g)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">That a member of the safety team is contacted at the planning stage for all NC4 entries </label></td>
+                            <td width="20%"><label type="text" class="feedback-label"></label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">As required</label></td>
+                            </tr>
+                             <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >h)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">That contractors carrying out confined space</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Active management</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Active management</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >i)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">That employees and contractors carrying out defined HIGH RISK confined space entries have been issued with a confined space permit before work commences</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Active management</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Active management</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >j)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">That team members going into NC2 and above confined spaces are health assessed prior to appointment and this is refreshed every 3 years see Management of Health Surveillance</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">H&S passport entry/Active Management</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">Active management</label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-label" >k)</label></td>
+                            <td width="35%"><label type="text" class="feedback-label">Appropriate signage is in place for confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-label">Site safety inspections</label></td>
+                            <td width="5%"><label type="text" class="feedback-input"> Y</label></td>
+                            <td width="25%"><label type="text" class="feedback-label">SSI register</label></td>
+                            </tr>
+                            </table>
+</div>
+</div>
+</div>
+                            <button onclick="printPDF();">PDF</button>
+</body>
+<script>
+$(function () {
+	 $("#date").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+})
+var specialElementHandlers = {
+	'#editor': function(element, renderer){
+		return true;
+	}
+};
+
+
+ 
+
+function demoFromHTML() {
+    var doc = new jsPDF('p', 'pt', 'letter');
+    doc.fromHTML($('#MyForm').get(0), 15, 15, {
+    	'width': 170, 
+    	'elementHandlers': specialElementHandlers
+    });
+            doc.save('sample-file.pdf');
+}
+function printPDF() {
+    var printDoc = new jsPDF();
+    printDoc.fromHTML($('#pdf').get(0), 10, 10, {'width': 180});
+    printDoc.autoPrint();
+    printDoc.output("dataurlnewwindow"); // this opens a new popup,  after this the PDF opens the print window view but there are browser inconsistencies with how this is handled
+}
+</script>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+         <title>Confined Spaces Self Risk Assessement</title>
+</head>
+<body>
+<div class="container">
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-15">
+                <div class="row">
+                  
+                </div>
+                <div class="row">
+                    <h1><b>Confined Spaces Classification Risk Assessement</b></h1>
+                </div>
+                <form class="form-inline"  id="MyJobsForm" >
+            <input id="FormName" name="FormName" value="ConfSpaceSA" hidden>
+            <div class="well row">
+                        <table class="table table-bordered">
+                        <tr>
+                             <td width="15%"><label class="feedback-labelnoicon " ><b>Assessor</b></label></td>
+                             <td width="35%"><input type="text" class="feedback-inputnoicon" placeholder="employeeName" merge="~mobilefullname" id="assessor" name="assessor" /></td>
+                             <td width="15%"><label class="feedback-labelnoicon " ><b>Task</b></label></td>
+                             <td width="35%"><input type="text" class="feedback-inputnoicon" id="task" name="task" /></td>
+                               </tr>
+                               <tr>
+                             <td width="15%"><label class="feedback-labelnoicon" ><b>Date</b></label></td>
+                             <td width="35%"><input type="text" class="feedback-input" placeholder="Date" id="date_assessed" name="date_assessed" /></td>
+                             <td width="15%"><label class="feedback-labelnoicon " ><b>Location</b></label></td>
+                             <td width="35%"><input type="text" class="feedback-inputnoicon " placeholder="Functional Location" merge="funcloc_code" id="func_loc_assessed" name="func_loc_assessed" /></td>
+                               </tr>
+                               </table>
+                               <div class="header"><p><b>Firstly, consider the following to either eliminate or reduce the risk of harm:</b></p></div>
+                               <table class="table table-bordered">
+                        <tr>
+                             <td width="20%"><label class="feedback-labelnoicon " ><b>Can I?</b></label></td>                         
+                             <td width="25%"><label class="feedback-labelnoicon " ><b>How?</b></label></td>  
+                              <td width="35%"><label class="feedback-labelnoicon " ><b>Actions taken / comments</b></label></td>                           
+                               </tr>
+                               <tr>
+                             <td width="20%"><label class="feedback-labelnoicon " >Eliminate</label></td>
+                             <td width="25%"><label class="feedback-labelnoicon " >Remove the need for entry by achieving the same result in a different way?</label></td>
+                             <td width="35%"><textarea class="feedback-inputnoicon" id="textarea1" name="textarea1">
+</textarea> </td>
+                             
+                               </tr>
+                               <tr>
+                             <td rowspan="5" width="20%"><label class="feedback-labelnoicon " >Reduce the chance of danger by:</label></td></tr>                         
+                             <tr><td width="25%"><label class="feedback-labelnoicon " >Cleaning / pumping out / flushing contents?</label></td> 
+                             <td width="35%"><textarea class="feedback-inputnoicon" id="textarea2" name="textarea2">
+</textarea> </td> </tr> 
+                              <tr><td width="25%"><label class="feedback-labelnoicon " >Purging?</label></td> 
+                              <td width="35%"><textarea class="feedback-inputnoicon" id="textarea3" name="textarea3">
+</textarea> </tr> 
+                        
+                              <tr><td width="25%"><label class="feedback-labelnoicon " >Using forced air ventilation?</label></td> 
+                              <td width="35%"><textarea class="feedback-inputnoicon" id="textarea4" name="textarea4">
+</textarea> </td></tr>  
+                              <tr><td width="25%"><label class="feedback-labelnoicon " >Opening up confined space as much as possible - removing covers, etc?</label></td>
+                              <td width="35%"><textarea class="feedback-inputnoicon" id="textarea5" name="textarea5">
+</textarea> </td> </tr>                        
+                               
+                               <tr>
+                             <td width="20%"><label class="feedback-labelnoicon " >Isolate</label></td>
+                             <td width="25%"><label class="feedback-labelnoicon " >Incoming flows, flows through pipes, mechanical and electrical equipment?</label></td>
+                             <td width="35%"><textarea class="feedback-inputnoicon" id="textarea6" name="textarea6">
+</textarea> </td>
+                             
+                               </tr>
+                               </table>
+                               <div class="header"><p><b>Then, score each parameter against the conditions provided - if in doubt, score high. Multiply your scores and compare with risk classification.</b></p></div>
+                               <table class="table table-bordered">
+                               <tr>
+                             <td width="25%"><label class="feedback-labelnoicon " ><b>Chance of a hazardous atmosphere which will causeharm score</b></label></td>                       
+                             <td width="1%"><input type="text" class="feedback-inputnoicon " ></td>
+                             <td width="25%"><label class="feedback-labelnoicon " ><b>Access / egress score</b></label></td>
+                              <td width="15%"><label class="feedback-labelnoicon " ><b>TOTAL SCORE</b></label></td>
+                              <td width="15%"><label class="feedback-labelnoicon " ><b>Classification (use tablebelow)</b></label></td>
+                               </tr>
+                               <tr>
+                               <td width="25%"><input class="feedback-inputnoicon" id="score1" name="score1" ></td>
+                                <td width="1%"><label class="feedback-labelnoicon" ><h1><b>x</b></h1></label></td>
+                               <td width="25%"><input class="feedback-inputnoicon" id="score2" name="score2" ></td>
+                               <td width="15%"><input class="feedback-inputnoicon" id="score3" name="score3" ></td>
+                               <td width="15%"><input class="feedback-inputnoicon" id="score4" name="score4" ></td>
+                               </tr>
+                               </table>
+                               <div class=""><p style="text-indent:20em;"><b> (Multiply the scores)</b></p></div>
+                               <table class="table table-bordered">
+                               <tr>
+                                <td colspan="3"> <label class="feedback-labelnoicon"><b>Scoring guidance:</b></label></td>
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon">Chance of hazardous atmosphere which will cause harm:</label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " ><b>Remote (no foreseeable risk)</b> - <b>SCORE 0</b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " >(an enclosed space not a confined space)</label></td>
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Small chance </b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " ><b>SCORE 2</b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " ></label></td>
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Likely </b> </label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " ><b>SCORE 5R</b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " >(R - formal rescue arrangements are required)</label></td>
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Near certain (full BA)</b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " ><b>SCORE 10R</b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " >(R - formal rescue arrangements are required)</label></td>
+                                </tr>
+                                <tr>
+                                <td colspan="3" width="25%"><label class="feedback-labelnoicon"><b>Access / egress:</b></label></td>
+                               
+                                </tr>
+                                 <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Good </b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " >can egress within 15 secs. e.g. up to 3 metre ladder or 6 metre stairway <b>SCORE 2</b></label></td>
+                               
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Fair</b> </label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " > can egress within 1 minute e.g. up to 6 metre ladder or 12 metre stairway<b> SCORE 4</b></label></td>
+                               
+                                </tr>
+                                <tr>
+                                <td width="25%"><label class="feedback-labelnoicon"><b>Poor </b></label></td>
+                               <td width="25%"><label class="feedback-labelnoicon " > greater than 1 minute to egress, no stairway<b> SCORE 6</b></label></td>
+                               
+                                </tr>
+                                  </table>
+                               
+                             
+                               <table class="table table-bordered">
+                               <tr>
+                                <td colspan="2" width="25%"><label class="feedback-labelnoicon"><b>Risk Classification Guidance </b></label></td></tr>
+                                <tr>
+                             <td width="50%"><label class="feedback-labelnoicon " ><b>score 4 = NC1</b><br/> Gas monitor / lone worker arrangements</label></td>                         
+                             <td width="50%"><label class="feedback-labelnoicon " ><b>score 8 to 12 = NC2</b> <br/>Local rescue arrangements in place (score 10R-treat as NC3)</label></td>                                 
+                               </tr>
+                               <tr>
+                                <tr>
+                             <td width="50%"><label class="feedback-labelnoicon " ><b>score 10R to 30R = NC3</b> <br/><b>Attached to which line at all times vertical lift only</b><br/>1.Suitable rescue arrangements in place<br/> 2.No confined space permit required<br/><font color="red"> NOT Attached to winch line at all times HIGHRISK entry</font><br/>1.Full on site rescue team required<br/><font color="red" >2.PERMIT Required</font></label></td>                         
+                             <td width="50%"><label class="feedback-labelnoicon " ><b>score greater than 30R  - Above NC4</b><br/><b> HIGH RISK complex entries<br/>1.Full BA Entries</b><br/><font color="red" >2.PERMIT Required</font><br/>3.Full on site rescue team required<br/>4.Safety team must be involved in agreeing safe system of work</b></label></td>                                 
+                               </tr>
+                               </table>
+                               <div class=""><p><b>Guidance on the completion of the Classification Risk Assessment</b></p></div>
+                               <div class=""><p>1. Do not use this form unless you have been trained.  Training will be given either by your line manager and/or during your formal re-training / assessment</p></div>
+                               <div class=""><p>2. This form should be used to assess and classify low risk (NC1) confined spacesat least every three years.  Manager shall keep records for at least six years.</p></div>
+                               <div class=""><p>3. For all confined spaces other than low risk (NC1), the form shall be completed prior to each entry to determine the risk level and therefore the controls required for safe working</p></div>
+                               <div class=""><p>4. If carrying out a number of entries into the same confined space over one day and conditions have not changed between each entry then it is only necessary to complete one form.  If the job runs into a second day however, a new form must be completed.</p></div>
+                               <div class=""><p>5. Before attempting to calculate a score (to determine National Classification) it is very important that you first consider whether you can either eliminate going into the confined space or reduce the risk of harm to as low as is reasonably practicable.  Completion of the table at the top of the form will helpyou with this.  In many cases this will result in lowering the risk in the confinedspace and make the job easier and safer for yourself and other team members.</p></div>
+                               <div class=""><p>6. Completion of the scoring system is straightforward - simply assess the chances of a hazardous atmosphere and access/egress into the confined spaceand multiply the two numbers together to get the total score.</p></div>
+                               <div class=""><p>7. Remember, when assessing the chance of a hazardous atmosphere you need to consider the likelihood of it causing harm. For example, small amounts of hydrogen sulphide which quickly dilutes will not cause harm but a hazardous gas throughout the working area will be a problem. In a similar way, working in a very shallow sewer manhole you may encounter some hazardous gas but you can quickly get yourself out of the hazard area by simply standing up in most cases, so again there is not a likely risk it will cause you harm.</p></div>
+ <div class=""><p>8. Use the total score to assign a risk classification using the guidance table on the form.  Carry out the work using the controls for that risk classification.</p></div>
+  <div class=""><p>9. For NC4 entries please ensure that a member of the safety team has been contacted prior to the permit being issued.</p></div>
+   <div class=""><p>10. Completed forms should be retained by the originator for at least three monthsfor audit purposes.  Should an accident occur relating to the confined space task, the completed form must be passed to the line manager for retention.</p></div>
+ <div class=""><p>11. If in any doubt contact your manager.</p></div>
+
+ </form>
+
+
+ <script>
+ $(function () {
+	 $("#date_assessed").datepicker({
+         dateFormat: "dd/mm/yy"
+     });
+$("#date_assessed").datepicker("setDate",new Date());
+
+ })
+$(window).resize(function() {
+	return
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
+function loadCompleted(){
+	 
+}
+function isComplete(){
+return "COMPLETE"
+}	
+ </script>
+</body>
+</html>

@@ -1,44 +1,9 @@
-<!DOCTYPE >
-<html>
-<head>
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>MyJobs - Jobs</title>
 
-<script src="resources/sap-ui-core.js" type="text/javascript"
-	id="sap-ui-bootstrap" 
-	
-	data-sap-ui-libs="sap.m,sap.ui.commons"
-	data-sap-ui-theme="sap_bluecrystal">
-	
-</script>
-<script src="myresources/js/jscoord-1.1.1.js"></script> 
-<script src="myresources/js/html5sql.js"></script>  
-<script src="myresources/js/assetRecord.js"></script> 
- <script src="myresources/js/AssetList.js"></script> 
-<script src="myresources/js/bgsync.js"></script>
-<script src="myresources/js/MyJobsDB.js"></script>
-<script src="myresources/js/MyJobsUtils.js"></script>
-<script src="myresources/js/DG5.js"></script>
-<script src="myresources/js/NotificationFunctions.js"></script>
 
-<script src="myresources/js/jSignature.js"></script>
 
-<script src="myresources/js/plugins/jSignature.CompressorSVG.js"></script>
-<script src="myresources/js/plugins/jSignature.UndoButton.js"></script> 
-<script src="myresources/js/plugins/signhere/jSignature.SignHere.js"></script> 
-<script src="myresources/js/Globals.js"></script>
-<script src="myresources/js/DlgForms.js"></script>
 
-<script src="myresources/js/eqAttributes.js"></script>
 
-<script src="myresources/js/documents.js"></script>
-<script src="myresources/js/NewNotif.js"></script>
-<script src="myresources/js/webPage.js"></script>
-<script src="myresources/TL/js/main.js"></script> 
-
-<script src="myresources/js/html2canvas.min.js"></script> 
-<link rel="stylesheet" href="myresources/TL/css/style.css"> <!-- Resource style -->
 
 
 <style>
@@ -5853,26 +5818,7 @@ function rebuildTimeConfs()
 		oSplitApp.setDefaultTransitionNameDetail("fade");	
 	}
 
-	oSplitApp.placeAt("body");
-	oSplitApp.onAfterRendering = function() {  
-		
-		selectListDefault() 
-		
-
-        }  
 	
-</script>
-</head>
-<body id="body" class="sapUiBody">
-<script>
-$(function() {
-	startBGSync()
-	
-	
-	BuildNotificationTypes()
-	//BuildTCEmployees()
-
-	});
 function selectListDefault(){
 
 	firstItem = sap.ui.getCore().getElementById("JobList").getItems()[0];   
@@ -7021,7 +6967,3 @@ function loadScript(src) {
 }
 
 
-</script>
-</body>
-
-</html>

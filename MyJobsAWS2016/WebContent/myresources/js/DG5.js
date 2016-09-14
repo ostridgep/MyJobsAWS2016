@@ -342,8 +342,14 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                 				customTextOn:"Yes",
                                 				customTextOff:"No",
                                                 change:[function(evt){ 
+                                                	 	   sap.ui.getCore().getElementById("Close_WD_Group").setEnabled(this.getState())   
+                                                	 	   sap.ui.getCore().getElementById("Close_WD_Code").setEnabled(this.getState())   
+                                                	 	   sap.ui.getCore().getElementById("Close_WD_Assignment").setEnabled(this.getState())  
+                                                	 	   sap.ui.getCore().getElementById("Close_WD_StartDate").setEnabled(this.getState())   
+                                                	 	   sap.ui.getCore().getElementById("Close_WD_Special").setEnabled(this.getState())  
                                                     	   sap.ui.getCore().getElementById("Close_Variance").setEnabled(this.getState())   
                                                     	   sap.ui.getCore().getElementById("Close_Reason").setEnabled(this.getState())   
+                                                    	   sap.ui.getCore().getElementById("Close_WD_Operable").setEnabled(this.getState())  
                                                        
                                                        
                                                 }]
@@ -351,9 +357,9 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
                                          })
                                                 ]
                                          }),
-                                         new sap.ui.layout.form.FormElement("FEClose_Variance",{
-                                                label: "Variance",
-                                                fields: [new sap.m.Select('Close_Variance',{
+                                         new sap.ui.layout.form.FormElement("FEClose_WD_Group",{
+                                                label: "Work Type Group",
+                                                fields: [new sap.m.Select('Close_WD_Group',{
                                                        
                                                        items: [
                                                               
@@ -361,16 +367,116 @@ var oLayout1a = new sap.ui.layout.form.GridLayout();
 
                                                        change: function(oControlEvent) {
                                                               
-                                                              //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                    	   BuildCloseWDCodes(oControlEvent.getParameter("selectedItem").getKey(),"NOTSELECTED");
                                                        }
                                                 }),
                                                 ]
                                          }),
+                                         new sap.ui.layout.form.FormElement("FEClose_WD_Code",{
+                                             label: "Work Type Code",
+                                             fields: [new sap.m.Select('Close_WD_Code',{
+                                                    
+                                                    items: [
+                                                           
+                                                    ],
+
+                                                    change: function(oControlEvent) {
+                                                           
+                                                           //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                    }
+                                             }),
+                                             ]
+                                      }),
+                                      
+                                   new sap.ui.layout.form.FormElement("FEClose_WD_Assignment",{
+                                       label: "Assignment",
+                                       fields: [new sap.m.Select('Close_WD_Assignment',{
+                                              
+                                              items: [
+                                                     
+                                              ],
+
+                                              change: function(oControlEvent) {
+                                                     
+                                                     //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                              }
+                                       }),
+                                       ]
+                                }),
+                                new sap.ui.layout.form.FormElement("FEClose_WD_StartDate",{
+                                    label: "Start Date",
+                                    fields: [new sap.m.DateTimeInput('Close_WD_StartDate',{
+									width : "99%",
+									displayFormat : "yyyy/MM/dd",
+									valueFormat : "yyyy-MM-dd",
+									type : "Date",
+									dateValue : new Date()
+								})
+                                    ]
+                                }),
+                                new sap.ui.layout.form.FormElement({
+                                    label: "Special Requirements",
+                                    fields: [ new sap.m.Switch("Close_WD_Special",{
+                                  
+                                    
+                    				customTextOn:"Yes",
+                    				customTextOff:"No",
+                                    change:[function(evt){ 
+                                    	 	    
+                                           
+                                           
+                                    }]
+                                    
+                             })
+                                    ]
+                             }),
+                                         new sap.ui.layout.form.FormElement("FEClose_Variance",{
+                                             label: "Variance",
+                                             fields: [new sap.m.Select('Close_Variance',{
+                                                    
+                                                    items: [
+                                                           
+                                                    ],
+
+                                                    change: function(oControlEvent) {
+                                                           
+                                                           //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                    }
+                                             }),
+                                             ]
+                                      }),                                         
                                          new sap.ui.layout.form.FormElement("FEClose_Reason",{
                                                 label: "Reason",
                                                 fields: [new sap.m.Input("Close_Reason",{type: sap.m.InputType.Input, enabled: true})
                                                 ]
                                          }),
+                                         new sap.ui.layout.form.FormElement("FEClose_WD_Operable",{
+                                             label: "Is The Asset Operable",
+                                             fields: [new sap.m.Select('Close_WD_Operable',{
+                                                    
+                                                    items: [
+
+        													new sap.ui.core.Item({
+        														key: "NA", 
+        														text: "N/A"
+        													}),
+        													new sap.ui.core.Item({
+        														key: "Yes", 
+        														text: "Yes"
+        													}),
+        													new sap.ui.core.Item({
+        														key: "NO", 
+        														text: "No"
+        													})  
+                                                    ],
+
+                                                    change: function(oControlEvent) {
+                                                           
+                                                           //BuildPriorities(oControlEvent.getParameter("selectedItem").getKey());
+                                                    }
+                                             }),
+                                             ]
+                                      }),
 
                                   ],
                                   layoutData: new sap.ui.core.VariantLayoutData({

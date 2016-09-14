@@ -5,7 +5,7 @@ var MBform=""
 jQuery.sap.require("sap.m.MessageBox");
 function checkConnection() {
     var networkState = navigator.connection.type;
-    var states = {};
+    /*var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
     states[Connection.ETHERNET] = 'Ethernet connection';
     states[Connection.WIFI]     = 'WiFi connection';
@@ -13,14 +13,19 @@ function checkConnection() {
     states[Connection.CELL_3G]  = 'Cell 3G connection';
     states[Connection.CELL_4G]  = 'Cell 4G connection';
     states[Connection.CELL]     = 'Cell generic connection';
-    states[Connection.NONE]     = 'No network connection';
-
+    states[Connection.NONE]     = 'No network connection';*/
+    if(networkState == '4g' || networkState== '3g' || networkState== 'cellular'){
+    	return true;
+    }
+    else{
+    	return false;
+    }
     //alert('Connection type: ' + states[networkState]);
 }
 function isFastConnection() {
     var networkState = navigator.connection.type;
 
-    var states = {};
+   /* var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
     states[Connection.ETHERNET] = 'Ethernet connection';
     states[Connection.WIFI]     = 'WiFi connection';
@@ -36,13 +41,18 @@ function isFastConnection() {
     	return true;
     }else{
     	return false;
+    }*/
+    if(networkState == '4g' || networkState== '3g' || networkState== 'cellular'){
+    	return true;
     }
-    
+    else{
+    	return false;
+    }
 }
 function isCellConnection() {
     var networkState = navigator.connection.type;
 
-    var states = {};
+    /*var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
     states[Connection.ETHERNET] = 'Ethernet connection';
     states[Connection.WIFI]     = 'WiFi connection';
@@ -57,8 +67,13 @@ function isCellConnection() {
     	return true;
     }else{
     	return false;
+    }*/
+    if(networkState == '4g' || networkState== '3g' || networkState== 'cellular'){
+    	return true;
     }
-    
+    else{
+    	return false;
+    }
 }
 var formMessageBox = new sap.m.Dialog("dlgMessageBox",{
     title:"",
@@ -557,3 +572,243 @@ function getURLParameters(paramName)
     }
 
 }
+function CreateMatrix(selectedJob,StatusColour,StatusText,priorityiconsToDisplay,iconsToDisplay,showAttributes){
+	   var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+	id : "matrix1",
+	layoutFixed : false,
+		width : '800px',
+		columns : 7,
+		widths : ['30px', '10px', '350px', '10px', '30px','10px', '50px'] });
+	   oCell_header = new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:3
+		});
+	   var oLabel_header = new sap.ui.commons.Label({
+			text : decodeURIComponent(selectedJob.orderdesc) }).addStyleClass("Labelstyle");
+	   oLabel_header.setDesign(sap.ui.commons.LabelDesign.Bold);
+	   oCell_header.addContent(oLabel_header);
+	   oCell_header1 = new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:3
+		});
+	   var displayJobNo=selectedJob.orderno;
+	   var oLabel_header1 = new sap.ui.commons.Label({
+			text : displayJobNo.replace(/^[0]+/g,"")+"-"+selectedJob.opno}).addStyleClass("Labelstyle");
+	   oLabel_header1.setDesign(sap.ui.commons.LabelDesign.Bold);
+	   oCell_header1.addContent(oLabel_header1);
+	   
+	   oMatrix.createRow(oCell_header,"",oCell_header1);
+		var oLabel = new sap.ui.commons.Label({
+			text : 'Start Date' }).addStyleClass("Labelstyle");
+
+		var tf_startdate = new sap.ui.commons.TextField({
+			editable : false,
+			value: formatDate(selectedJob.startdate),
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+
+		oLabel.setLabelFor(tf_startdate);  
+		var oLabel_enddate = new sap.ui.commons.Label({
+			text : 'End Date' }).addStyleClass("Labelstyle");
+
+		var tf_enddate = new sap.ui.commons.TextField({
+			editable : false,
+			value:formatDate(selectedJob.enddate),
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+
+		oLabel.setLabelFor(tf_enddate); 
+		oMatrix.createRow(oLabel,"", tf_startdate,"", oLabel_enddate,"", tf_enddate);
+		var oLabel_site = new sap.ui.commons.Label({
+			text : 'Site' }).addStyleClass("Labelstyle");
+
+		var tf_site = new sap.ui.commons.TextField({
+			editable : false,
+			value: selectedJob.site,
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+		var oLabel_reduration = new sap.ui.commons.Label({
+			text : 'RE Duration' }).addStyleClass("Labelstyle");
+
+		var tf_reduration = new sap.ui.commons.TextField({
+			editable : false, 
+			value:selectedJob.reduration,
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+		oMatrix.createRow(oLabel_site,"", tf_site,"", oLabel_reduration,"", tf_reduration);
+		
+		oCell = new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:1
+		});
+		var oLabel_address = new sap.ui.commons.Label({
+			text : 'Address' }).addStyleClass("Labelstyle");
+		var tf_address = new sap.ui.commons.TextField({
+			editable : false,
+			value:selectedJob.address,
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+		
+		oCell.addContent(tf_address);
+		var label_notif = new sap.ui.commons.Label({
+			text : 'Notification'}).addStyleClass("Labelstyle");
+		var dispnotifno=selectedJob.notifno;
+		var tf_notif = new sap.ui.commons.TextField({
+			editable : false,
+			value:dispnotifno.replace(/^[0]+/g,"")}).addStyleClass("LabelText");
+		oMatrix.createRow(oLabel_address,"",oCell,"",label_notif,"",tf_notif);
+		
+		var label_funcloc = new sap.ui.commons.Label({
+			text : 'FuncLoc' }).addStyleClass("Labelstyle");
+		oCell1 = new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:1
+		});
+		var tf_funcloc = new sap.ui.commons.TextField({
+			editable : false,
+			value:selectedJob.funcloc_code+"-"+selectedJob.funcloc_desc,
+			wrapping:true,
+			width:"350px"}).addStyleClass("LabelText");
+		oCell1.addContent(tf_funcloc);
+		var displaystatus=new sap.ui.core.HTML({content: "<H2 id='JobHead_Status'><Font color='"+StatusColour+"'>"+StatusText+"</font></H2>"});
+		
+		oMatrix.createRow(label_funcloc,"",oCell1,"",displaystatus);
+		var label_equipment = new sap.ui.commons.Label({
+			text : 'Equipment' }).addStyleClass("Labelstyle");
+var dispEquipmentNo=selectedJob.equipment_code;
+		var tf_equipment = new sap.ui.commons.TextField({
+			editable : false,
+			value:dispEquipmentNo.replace(/^[0]+/g,"")+"-"+selectedJob.equipment_desc,
+			wrapping :true,
+			width:"350px"}).addStyleClass("LabelText");
+var displayAttr=new sap.ui.core.HTML({content: ""+showAttributes+"<img src='images/historyicon.png' alt='History' height='42' width='42' onclick='getAssetHistory(\""+selectedJob.funcloc_code+"\")'>"});
+		
+		oMatrix.createRow(label_equipment,"", tf_equipment,"", displayAttr);
+		oCellicon = new sap.ui.commons.layout.MatrixLayoutCell({
+			colSpan:7
+		});
+		var displayIcons=new sap.ui.core.HTML({content: ""+priorityiconsToDisplay+iconsToDisplay+""});
+		oCellicon.addContent(displayIcons);
+		oMatrix.createRow(oCellicon);
+		return oMatrix;
+}
+function prefixZeroes(value){
+ if(value.length >= 12){
+                 return value;
+ }
+ else{
+                 for( ;value.length < 12; ){
+                                 value = "0"+value;
+                 }
+                 return value;
+ }
+}
+function buildTimeline(lt){
+
+
+	TLArray=[]
+	TLUserDets=["SYSTEM,"]
+	TLName=""
+	TLEntry="";
+	xxx=lt.split(String.fromCharCode(13,10))
+	for (var n=0;n <xxx.length;n++){
+	TLLine=xxx[n];
+
+
+	if((TLLine.substring(2,3)==".")&&
+	(TLLine.substring(5,6)==".")&&
+	(TLLine.substring(13,14)==":")&&
+	(TLLine.substring(16,17)==":")){
+	//Its a New Entry
+	console.log("Its a Name Entry")
+	TLArray.push(TLEntry)
+
+	TLDateTime=TLLine.substring(0,19)
+	TLName=TLLine.substring(20)
+	TLUserDets.push(TLDateTime+"'"+TLName)
+	TLEntry=""
+	}else{
+	TLEntry+=TLLine
+	TLEntry+="<BR>"
+	}
+
+
+
+	}
+	TLArray.push(TLEntry)
+	tl='<section id="cd-timeline" class="cd-container">'
+
+
+	cnt=0
+
+	while(cnt < TLArray.length){
+	xx=TLUserDets[cnt].split(",")
+	if(xx[0]=="SYSTEM"){
+	TLImg="myresources/TL/img/message.svg"
+	}else{
+	TLImg="myresources/TL/img/user.svg"
+	}
+	tl+='<div class="cd-timeline-block">'
+	tl+='<div class="cd-timeline-img cd-picture">'
+	tl+='<img src="'+TLImg+'" >'
+	tl+='</div>'
+
+	tl+='<div class="cd-timeline-content">'
+	tl+='<P>'+TLArray[cnt]+'</P>'
+
+
+	tl+='<span class="cd-date">'+TLUserDets[cnt]+'</span>'
+	tl+='</div>'
+	tl+='</div>'
+	         cnt++;
+	   }
+	tl+='</section> '
+	return(tl)
+	}
+
+var formSelectList = new sap.m.Dialog({
+    title:"Please Select",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+  
+                                new sap.m.Button( {
+                                    text: "Cancel",
+                                    type: sap.m.ButtonType.Reject,
+                                    tap: [ function(oEvt) {         
+                                               
+                                    formSelectList.close()} ]   
+                                })
+                                ],                                
+    content:[
+new sap.m.TileContainer("selectTC",{
+tiles:
+[
+
+]
+
+})
+            ],
+            beforeOpen:function(){
+             
+                
+            },
+           contentWidth:"95%",
+        contentHeight: "95%",
+     })
+function showSelectTileCointainer(selectListID){
+
+sap.ui.getCore().getElementById('selectTC').destroyTiles();
+sl=sap.ui.getCore().getElementById(selectListID).getItems()
+
+for(var cntx=0; cntx < sl.length ; cntx++)
+{
+sap.ui.getCore().getElementById('selectTC').addTile(new sap.m.StandardTile({title:sl[cntx].getText(),press:[ function(){sap.ui.getCore().getElementById(selectListID).setSelectedKey(this.data("slKey"));formSelectList.close()}]}).data("slKey", sl[cntx].getKey()))
+
+
+}
+
+formSelectList.open()
+}
+
+
+
+
+
+

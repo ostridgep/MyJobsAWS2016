@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+        <title>Management of Electrical Safety</title>
+</head>
+<body>
+<STYLE>
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+</STYLE>
+<div class="container">
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-15">
+                <div class="row">
+                  
+                </div>
+                <div class="row">
+                    <h1><b>Management of Electrical Safety</b></h1>
+                </div>
+                 <div class="row">
+                    <h1><b>Live Diagnostic Testing Checklist</b></h1>
+                </div>
+               <form   id="MyJobsForm" >
+                <input id="FormName" name="FormName" value="ElecSafeLiveDiag" hidden>
+ 
+                <table class="table table-bordered">
+                <tr>
+                            <td width="30%"><label class="feedback-labelnoicon">Location:</td>
+                            <td width="30%"><label class="feedback-labelnoicon">Description of Task:</td>
+                            <td width="30%"><label class="feedback-labelnoicon">Date:</td>
+                            
+                           
+                        </tr>
+                        <tr>
+                         <td width="30%"><input type="text" class="feedback-inputnoicon" merge="funcloc_code" id="funcloc_elect_safety" name="funcloc_elect_safety"  /></td>
+                         <td width="30%"><input type="text" class="feedback-inputnoicon" id="desp_elect_safety" name="desp_elect_safety" /></td>
+                          <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date_elect_safety" name="date_elect_safety" /></td>
+                           </tr>
+                           
+                            <tr>
+                            <td  width="30%"><label class="feedback-labelnoicon">Person carrying out task:</td>
+                             <td width="30%"><label class="feedback-labelnoicon">Safety person:</td>
+                             <td width="30%"><label class="feedback-labelnoicon"></td>
+                            
+                           
+                            </tr>
+                            <tr>
+                            <td  width="30%"><input type="text" class="feedback-inputnoicon" merge="~mobilefullname" id="user_elect_safety" name="user_elect_safety" /></td>
+                              <td width="30%"><input type="text" class="feedback-inputnoicon" id="person_elect_safety" name="person_elect_safety" placeholder="Print name and sign (mandatory)"/></td>
+                              <td width="30%"><label class="feedback-labelnoicon"></td>
+                             </tr>
+                             </table>
+                             <table class="table table-bordered">
+                              <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">1</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Have you read and understood the Live Diagnostic Checklist Guidance?</td>
+                            <td>
+                             <input type="TEXT" id="toggle1" name="toggle1" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button1" name="button1" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton1" name="togglebutton1" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton2" name="togglebutton2" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">2</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Have all other means to do the task without the need for energising the circuit been considered?</td>
+                            <td>
+                             <input type="TEXT" id="toggle2" name="toggle2" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button2" name="button2" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton3" name="togglebutton3" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton4" name="togglebutton4" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">3</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Have you been appointed as either a category 1, 2 or 3 electrician?</td>
+                            <td>
+                             <input type="TEXT" id="toggle3" name="toggle3" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button1" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton5" name="togglebutton5" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton6"  name="togglebutton6" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">4</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Is the isolation point for panel(s)/circuit known and identified?</td>
+                            <td>
+                             <input type="TEXT" id="toggle4" name="toggle4" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button4" name="button4" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton7" name="togglebutton7" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton8" name="togglebutton8" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">5</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Is rubber matting to BS921 (IEC 61111 Class 0) in place to stand on?</td>
+                            <td>
+                             <input type="TEXT" id="toggle5" name="toggle5" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button5" name=""button5 style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton9" name="togglebutton9" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton10" name="togglebutton10" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">6</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Can you energise the panel or circuit without danger to personnel or damage to the equipment?</td>
+                            <td>
+                             <input type="TEXT" id="toggle7" name="toggle6" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button6" name="button6" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton11" name="togglebutton11" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton12" name="togglebutton12" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">7</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Can you energise the panel or circuit without danger to personnel or damage to the equipment?</td>
+                            <td>
+                             <input type="TEXT" id="toggle7" name="toggle7" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button7" name="button7" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton13" name="togglebutton13" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton14" name="togglebutton14" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">8</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Have all steps been taken to ensure third parties cannot enter hazard area?</td>
+                            <td>
+                             <input type="TEXT" id="toggle8" name="toggle8" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button8" name="button8" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton15" name="togglebutton15" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton16" name="togglebutton16" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">9</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Are danger notices displayed?</td>
+                            <td>
+                             <input type="TEXT" id="toggle9" name="toggle9" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button9" name="button9" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton17" name="togglebutton17" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton18" name="togglebutton18" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                         <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">10</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Is second person aware of their duties? e.g. not to be involved in the testing, isolation point and actions to be carried out in the event of an emergency</td>
+                            <td>
+                             <input type="TEXT" id="toggle10" name="toggle10" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button10" name="10" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton19" name="togglebutton19" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton20" name="togglebutton20" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">11</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Are Face visor (conforming to ASTM F2178 minimum) and electrical gloves  (EN 60903 minimum class 0) to be worn during the testing?</td>
+                            <td>
+                             <input type="TEXT" id="toggle11" name="toggle11" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button11" name="button11" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton21" name="togglebutton21" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton22" name="togglebutton22" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">12</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Are loose items that could conduct - cause circuits, removed or secured (includes things which could fall out of pockets when leaning over)</td>
+                            <td>
+                             <input type="TEXT" id="toggle12" name="toggle12" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button12" name="button12" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton23" name="togglebutton23" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton24" name="togglebutton24" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">13</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Are panel doors/covers secured?</td>
+                            <td>
+                             <input type="TEXT" id="toggle13" name="toggle13" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button13" name="button13" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton25" name="togglebutton25" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton26" name="togglebutton26" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                            <td width="5%"><label class="feedback-labelnoicon">14</td>
+                            <td width="55%"><label class="feedback-labelnoicon">Have you fitted temporary screens or shrouds while isolated / dead to protect yourself from adjacent live circuits?</td>
+                            <td>
+                             <input type="TEXT" id="toggle14" name="toggle14" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="button14" name="button14" style="margin-left: 10px">
+                                
+                               <button type="button" id="togglebutton26" name="togglebutton26" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" id="togglebutton27" name="togglebutton27" onclick ='document.getElementById("toggle1").value="YES";this.active=true ;' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                          <td colspan="3" width="100%"><label class="alert alert-danger">If any of the above are answered <b>NO - DO NOT PROCEED</b> without taking further precautions which should be derived from a Site Specific Task Risk Assessment, details of which must be documented below.</label></td>  
+                         
+                        </tr> 
+                         <tr>
+                             <td colspan="3">
+                               <textarea rows="4"  class="feedback-inputnoicon" id="textarea_precautions" name="textarea_precautions" placeholder="Enter text here...">
+</textarea></td>
+                               </tr>
+                             </table>
+                             <div class="alert alert-danger"><b>Remember-avoid live testing if at all possible! </b></div>
+                              <div class="header"><b>Retain completed forms for at least three months for audit purposes.</b></div>
+                              <div class=""><b>Live Diagnostic Testing</b></div>
+                               <div class=""><p>To be used for the testing of exposed (not IP2X) live low voltage (up to 1000 volts AC or up to 1500 volts DC) equipment for the purpose of determining its condition, performance or operation (including the testing of supply synchronisation units - G59 testing).</p></div>
+                              <div class=""><p>Battery and electrical systems which do not exceed 55 volts, for example, vehicle, mobile plant and remote monitoring systems are exempt from the need for live diagnostic testing checklist.</p></div>
+                               <div class=""><p>1. It should only be used as a last resort for fault finding.</br>2. Live diagnostic checklist is not required for circuits specifically designed for safe testing, i.e. control panels with safety test switches, circuits not exceeding 55 volts, or where all electrical equipment is shielded to at least the IP2X standard.</br>3. It can only be carried out by category 1, 2 or 3 electricians.</br>4. The Live Diagnostic Testing checklist shall be fully completed before any live diagnostic testing takes place.</br>5. Please remember that the second person is there for safety purposes only and should not be involved in the work. This person does not necessarily need to be an electrician but must be over 18 years of age, and able to:</br>1. ensure that others (3rd parties) are kept at a safe distance.</br>2. raise the alarm, if there is a problem</br>isolate the electrical supply (if safe to do so) in an emergency</br>3.administer emergency first aid if required</p></div>
+                                
+
+ <script>
+        $(function () {
+        	initFields();
+
+       	 
+})
+
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});function initFields(){
+	
+
+  	 $("#date_elect_safety").datepicker({
+         dateFormat: "dd/mm/yy"
+     });
+$("#date_elect_safety").datepicker("setDate",new Date());
+$(".btn-group > .btn").click(function () {
+    $(this).addClass("active").siblings().removeClass("active");
+    $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+});
+}
+function loadCompleted(){
+	 
+}
+function isComplete()
+{
+	   
+	    
+	    return "COMPLETE"
+}	
+        </script>
+        </body>
+</html>

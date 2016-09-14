@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+    	alert("Calling")
+    	var jqxhr = $.post( "http://192.168.1.20/PhotoUpload.php",
+    			{
+    			fname: "Pul.txt",
+    			content:"kajshfjksdhfskjhfaskjfksaj"
+    			},
+    			
+    			
+    			function(data) {
+    		  alert( "success".data );
+    		})
+    		  .done(function() {
+    		    alert( "second success" );
+    		  })
+    		  .fail(function() {
+    		    alert( "error" );
+    		  })
+    		  .always(function() {
+    		    alert( "finished" );
+    		});
+    		 
+    		
+    });
+});
+</script>
+</head>
+<body>
+
+<button>Send an HTTP POST request to a page and get the result back</button>
+
+</body>
+</html>

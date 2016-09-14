@@ -7,13 +7,14 @@ var getPhotoCaller="DOC"
 var selectedDocTable=""
 var selectedPhoto=""
 var selectedPhotoID=0;
+var selectedPhotoState="Local";
 var selectedPhotoSize=0;
 var DeviceStorageDirectory;
 var AppDocDirectory;
 var attachFilename=""
 var selectedDocId="";
 var selectedFormId="";
-
+var NewFormflag=false;
 	var selectedPhotoType=""
 	var GlobalDirectory=""
 	var appDirectory=""
@@ -112,6 +113,7 @@ var formDownloadFiles = new sap.m.Dialog("dlgDownloadFiles",{
 							  } ]
 					}),
 					new sap.m.Button( {
+						icon:"sap-icon://sys-cancel",
 					    text: "Cancel",
 					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {		  
@@ -215,11 +217,11 @@ html5sql.process("SELECT * FROM MyJobsPhotos where id = '"+selectedPhotoID+"'",
 		
 			if( rowsArray.length>0) {
 				sap.ui.getCore().getElementById('NewPhotoName').setValue(rowsArray[0].name)
-				sap.ui.getCore().getElementById('NewPhotoDetails').setValue(rowsArray[0].desc)
+				//sap.ui.getCore().getElementById('NewPhotoDetails').setValue(rowsArray[0].desc)
 				selectedPhoto=rowsArray[0].url;
 			 }else{
 				sap.ui.getCore().getElementById('NewPhotoName').setValue("")
-				sap.ui.getCore().getElementById('NewPhotoDetails').setValue("")
+				//sap.ui.getCore().getElementById('NewPhotoDetails').setValue("")
 			 }
 			
 			  window.resolveLocalFileSystemURL(selectedPhoto, function(oFile) {
@@ -285,27 +287,27 @@ function getBase64FromImageUrl(imageUri,id,name) {
 	
 	getFileContentAsBase64(imageUri,function(base64Image){
 		b64=base64Image.split(",")
-		  createBase64XML(b64[1],x[x.length-1],id,name,"image/jpeg")
+		  createBase64XML(b64[1],x[x.length-1],id,name,"image/jpeg","photo")
 		});
 
 }
-function getBase64FromAttachmentUrl(url,id,name,type) {
+function getBase64FromAttachmentUrl(url,id,name,type,flag) {
 	
 	
 
 	
 	getFileContentAsBase64(url,function(base64){
 		  b64=base64.split(",")
-		  createBase64XML(b64[1],name,id,name,type)
+		  createBase64XML(b64[1],name,id,name,type,"attachment",flag)
 		});
 
 }
-function createBase64XML(base64,fn,id,name,mimetype){
+function createBase64XML(base64,fn,id,name,mimetype,ftype,flag){
 	var filename = name;
 	xx=fn.split(".")
 	yy=name.split(".")
 	if(yy.length<2){
-		name+="."+xx[1] //append the Extenstion from fn if no extention on name
+		//name+="."+xx[1] //append the Extenstion from fn if no extention on name
 		filename = name+"."+xx[1]
 	}
 	fileType = "JPEG image"
@@ -338,10 +340,10 @@ function createBase64XML(base64,fn,id,name,mimetype){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 
-	sendPhotoToServer(id,fn,xmlstring)
+	sendPhotoToServer(id,fn,xmlstring,ftype,flag)
 	
 }
-function createBase64FormXML(base64,fn,id,name){
+function createBase64FormXML(base64,fn,id,name,flag){
 	dt=getFileUploadDT()
 	uploadfn=CurrentOrderNo+'0010-'+dt+'-'+fn
 	var xmlstring =  '<uploadRequest userName="'+localStorage.getItem('MobileUser')+'" userRole="Y008 Desc" userMyalmScenario="Y008" machineName="'+localStorage.getItem('MobileUser')+'">'+
@@ -370,7 +372,7 @@ function createBase64FormXML(base64,fn,id,name){
 					  '</fileContent>'+
 					  '</uploadRequest>'
 	console.log(base64)
-	sendDocToServer(id,uploadfn,xmlstring)
+	sendDocToServer(id,uploadfn,xmlstring,flag)
 	
 }
 function writer(X){
@@ -390,6 +392,7 @@ var formFileName = new sap.m.Dialog("dlgFileName",{
 
 
 				new sap.m.Button( {
+					icon:"sap-icon://sys-save",
 				    text: "Save",
 				    type: 	sap.m.ButtonType.Accept,
 				    press: [ function(oEvt) {	
@@ -403,6 +406,7 @@ var formFileName = new sap.m.Dialog("dlgFileName",{
 						  } ]
 				}),
 				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		
@@ -452,48 +456,53 @@ new sap.m.Button( "btnPhotoDelete",{
     	
 		  } ]
 }),
-new sap.m.Button( {
+new sap.m.Button( "btnPhotoUpload",{
     text: "UpLoad",
-    type: 	sap.m.ButtonType.Reject,
-    tap: [ function(oEvt) {	
-    	if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
-			DisplayErrorMessage("Attach Photo", "Name is Mandatory")
-			}else{
-				if (selectedPhotoID==0){
-		    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
-		    	}else{
-		    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local")
-		    	}
-				if(!isCellConnection())	{
-					DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
-					}else{
-						getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
-					
-					}
-		    	formPhotoDetails.close()
-			}
-    	
-    	//formPhotoDetails.close()
-		  } ]
+    type: sap.m.ButtonType.Reject,
+    tap: [ function(oEvt) {
+    if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
+DisplayErrorMessage("Attach Photo", "Name is Mandatory")
+}else{
+status="Local"
+if(!isCellConnection()) {
+DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
+}else{
+status="Sending"
+getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
+
+}
+if (selectedPhotoID==0){
+    CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), "" , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), status)
+    }else{
+    UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), "",status)
+    }
+    formPhotoDetails.close()
+}
+     
+    //formPhotoDetails.close()
+  } ]
 }),
+new sap.m.Button( "btnPhotoSave",{
+	icon:"sap-icon://sys-save",
+    text: "Save",
+    type: sap.m.ButtonType.Accept,
+    tap: [ function(oEvt) {
+    if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
+DisplayErrorMessage("Attach Photo", "Name is Mandatory")
+}else{
+if (selectedPhotoID==0){
+    CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), "" , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
+    }else{
+    UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), "","Local" )
+    }
+    formPhotoDetails.close()
+}
+    
+  } ]
+}),
+				
 				new sap.m.Button( {
-				    text: "Save",
-				    type: 	sap.m.ButtonType.Accept,
-				    tap: [ function(oEvt) {	
-				    	if (sap.ui.getCore().getElementById('NewPhotoName').getValue().length<1){
-							DisplayErrorMessage("Attach Photo", "Name is Mandatory")
-							}else{
-								if (selectedPhotoID==0){
-						    		CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue() , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), "Local")
-						    	}else{
-						    		UpdatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhotoID, sap.ui.getCore().getElementById('NewPhotoName').getValue(), sap.ui.getCore().getElementById('NewPhotoDetails').getValue(),"Local" )
-						    	}
-						    	formPhotoDetails.close()
-							}
-				    	
-						  } ]
-				}),
-				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
@@ -513,13 +522,8 @@ new sap.m.Button( {
 				 				height: "300px"
 				 			}),
 				 			new sap.m.Label({text:"Name"}),
-				 			new sap.m.Input("NewPhotoName",{ type: sap.m.InputType.Input, maxLength:30,width:"300px"}),
-				 			new sap.m.Label({text:"Details"}),
-				 			new sap.m.TextArea("NewPhotoDetails",{
-				 				
-				 				height:"200px",
-				 				width:"300px"
-				 					})
+				 			new sap.m.Input("NewPhotoName",{ type: sap.m.InputType.Input, maxLength:30,width:"300px"})
+				 			
 							]
  				})
 
@@ -528,14 +532,25 @@ new sap.m.Button( {
             contentWidth:"360px",
             contentHeight: "60%",
             beforeOpen:function(){
-            	if (selectedPhotoID==0){
-            		sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(false)
-            	}else{
-            		sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(true)
-            	}
-            	buildPhotoDetails()
-            	
-            }
+                if(selectedPhotoState!="Local"){
+                sap.ui.getCore().getElementById('NewPhotoName').setEditable(false)
+                sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(false)
+                sap.ui.getCore().getElementById('btnPhotoSave').setVisible(false)
+                sap.ui.getCore().getElementById('btnPhotoUpload').setVisible(false)
+                }else{
+                sap.ui.getCore().getElementById('NewPhotoName').setEditable(true)
+                sap.ui.getCore().getElementById('btnPhotoSave').setVisible(true)
+                sap.ui.getCore().getElementById('btnPhotoUpload').setVisible(true)
+                 
+                if (selectedPhotoID==0){
+                sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(false)
+                }else{
+                sap.ui.getCore().getElementById('btnPhotoDelete').setVisible(true)
+                }
+                }
+                buildPhotoDetails()
+                 
+                }
  })
 var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
     
@@ -544,6 +559,7 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
     buttons: [
    
 				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
@@ -558,9 +574,10 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 			maxContainerCols : 2,
 			content : [
 			           new sap.m.Label({text:""}),
-					 new sap.m.Button( {
+					 new sap.m.Button("Rename" ,{
+						 icon:"sap-icon://form",
 					    text: "Rename",
-					    type: 	sap.m.ButtonType.Accept,
+					    type: 	sap.m.ButtonType.Default,
 					    tap: [ function(oEvt) {	
 					    	formFormFunctions.close() 
 					    	
@@ -572,7 +589,8 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 							  } ]
 					 }),
 					 new sap.m.Label({text:""}),
-					 new sap.m.Button( {
+					 new sap.m.Button("Delete",{
+						 icon:"sap-icon://delete",
 						    text: "Delete",
 						    type: 	sap.m.ButtonType.Reject,
 						    tap: [ function(oEvt) {		  
@@ -584,7 +602,8 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 								  } ]
 						 }),
 						 new sap.m.Label({text:""}),
-						 new sap.m.Button( {
+						 new sap.m.Button( "Upload",{
+							 icon:"sap-icon://upload",
 							    text: "Upload",
 							    type: 	sap.m.ButtonType.Accept,
 							    tap: [ function(oEvt) {	
@@ -603,9 +622,10 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 									  } ]
 							 	}),	
 							 	 new sap.m.Label({text:""}),
-					 new sap.m.Button( {
+					 new sap.m.Button("Edit",{
+						 icon:"sap-icon://edit",
 					    text: "Edit",
-					    type: 	sap.m.ButtonType.Accept,
+					    type: 	sap.m.ButtonType.Emphasized,
 					    tap: [ function(oEvt) {	
 					    	
 					    	
@@ -646,11 +666,12 @@ var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
     buttons: [
    
 				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
 						 
-				    	formFormFunctions.close()
+				    	formAttachmentFunctions.close()
 						  } ]
 				})	
 				],					
@@ -660,22 +681,10 @@ var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
 			minWidth : 1024,
 			maxContainerCols : 2,
 			content : [
-new sap.m.Label({text:""}),
-new sap.m.Button( {
-   text: "Network Status",
-   type: 	sap.m.ButtonType.Reject,
-   tap: [ function(oEvt) {	
-   	formAttachmentFunctions.close() 
-   	
-   	checkConnection();
-   	
-	    	
-   
-   	
-		  } ]
-}),
+
 			           new sap.m.Label({text:""}),
 					 new sap.m.Button( {
+						icon:"sap-icon://delete",
 					    text: "Delete",
 					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {	
@@ -691,6 +700,7 @@ new sap.m.Button( {
 
 						 new sap.m.Label({text:""}),
 						 new sap.m.Button( {
+							 icon:"sap-icon://upload",
 							    text: "Upload",
 							    type: 	sap.m.ButtonType.Accept,
 							    tap: [ function(oEvt) {	
@@ -725,6 +735,7 @@ var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
     buttons: [
    
 				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
@@ -754,7 +765,7 @@ var formGetDoc = new sap.m.Dialog("dlgGetDoc",{
 					    text: "Form",
 					    type: 	sap.m.ButtonType.Reject,
 					    tap: [ function(oEvt) {	
-					    	
+					    	NewFormflag=true;
 					    		formGetDoc.close() 
 						    	MandatedForms= [];
 				   				formToOpen="Forms/formsindex.html"
@@ -795,6 +806,7 @@ var formGetPhoto = new sap.m.Dialog("dlgGetPhoto",{
     buttons: [
    
 				new sap.m.Button( {
+					icon:"sap-icon://sys-cancel",
 				    text: "Cancel",
 				    type: 	sap.m.ButtonType.Reject,
 				    tap: [ function(oEvt) {		  
@@ -957,6 +969,7 @@ function buildDocumentList(){
 		    	        															evt.getParameter("listItem").getCells()[2].getText(),
 		    	        															evt.getParameter("listItem").getCells()[3].getText(),
 		    	        															"Local")
+		    	        															buildJobDocsTable();
 		    	        															formDocuments.close()
 		    	        												}
 	    	        													
@@ -965,7 +978,7 @@ function buildDocumentList(){
 	    	            										columns:[
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:""}),
 	    	            										        	 hAlign: 'Left',width: '5%', minScreenWidth : "" , demandPopin: false}),
-	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Finename"}),
+	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Filename"}),
 	    	            										        	 hAlign: 'Left',width: '35%', minScreenWidth : "" , demandPopin: false}),
 	    	            										         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
 	    	            										        	 hAlign: 'Left',width: '15%',minScreenWidth : "" , demandPopin: true}),
@@ -989,7 +1002,7 @@ function buildDocumentList(){
 	return docsTabBar
 }
 function buildDocumentTables(){
-	buildGlobalDownloads(cordova.file.externalRootDirectory+"/Documents")
+	buildGlobalDownloads(cordova.file.externalRootDirectory+"Documents")
 	//buildPrivateDownloads()
 	//buildPrivateUploads()
 	
@@ -1178,9 +1191,20 @@ function buildGlobalDownloads(dir)
 	privatephotos = new Array()
 	var opTable = sap.ui.getCore().getElementById("DocumentsGlobalTable");
 	opTable.destroyItems();
-	GlobalDirectory=dir
-if(dir!=cordova.file.externalRootDirectory+"/Documents"){
-	
+	prevDir=dir;
+if(dir!=cordova.file.externalRootDirectory+"Documents"){
+	if(dir!=""){
+		X=dir.split("/");
+		uDir=""
+		for(n=0;n<=X.length-3;n++){
+	    	uDir+=X[n]+"/"
+	    }
+	    uDir+=X[X.length-2]
+	prevDir=""
+	    for(n=0;n<=X.length-2;n++){
+	    	prevDir+=X[n]+"/"
+	    }
+	    prevDir+=X[X.length-1]
 		opTable.addItem (new sap.m.ColumnListItem({
 			cells : 
 				[
@@ -1189,11 +1213,12 @@ if(dir!=cordova.file.externalRootDirectory+"/Documents"){
 	            new sap.m.Text({text: ""}),
 	            new sap.m.Text({text: ""}),
 				new sap.m.Text({text: ""}),
-				new sap.m.Text({text: GlobalDirectory})
+				new sap.m.Text({text: uDir})
 		 		]
 			}));
 }
-
+}
+GlobalDirectory=prevDir;
 	try {
 		window.resolveLocalFileSystemURL(dir, function (dirEntry) {
 	    	
@@ -1251,7 +1276,7 @@ function docsGDReadSuccess(entries) {
                     new sap.m.Text({text: ""}),
                     new sap.m.Text({text:""}),
         			new sap.m.Text({text: ""}),
-        			new sap.m.Text({text: GlobalDirectory+entries[i].name+"/"})
+        			new sap.m.Text({text: GlobalDirectory+"/"+entries[i].name})
         	 		]
         		}));
             
@@ -1416,7 +1441,7 @@ function downloadAll()
     		fileDownloadCnt=0;
     		
     	
-    		updateDocumemntsStatus("*","","","","","DELETE")
+    		updateAttachmentStatus("*","","","","","DELETE")
     		
     		
     		
@@ -1468,11 +1493,22 @@ function RequestLLFile(params)
     
 
 }
-function sendPhotoToServer(id,fname,content){
+function sendPhotoToServer(id,fname,content,ftype,flag){
 	xmlname=getFileUploadName()+".xml"
-	
+	if(ftype=="photo"){
 	updatePhotoState(id,"Sending")
-	buildJobDocsTable()
+	}
+	else{
+if(flag=="close"){
+	updateAttachmentState(id,"Sending")	
+		}
+		
+else{
+	updateAttachmentState(id,"Sending")	
+		buildJobDocsTable()
+}
+	}
+
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xmlname,
@@ -1486,24 +1522,52 @@ function sendPhotoToServer(id,fname,content){
 		})
 		  .done(function() {
 			 
-			  updatePhotoState(id,"Sent")
-			  buildJobDocsTable()
+			  if(ftype=="photo"){
+					updatePhotoState(id,"Sent")
+					}
+					else{
+						if(flag=="close"){
+							updateAttachmentState(id,"Sent")	
+								}
+								
+						else{
+							updateAttachmentState(id,"Sent")	
+								buildJobDocsTable()
+						}
+					}
+		
 		  })
 		  .fail(function() {
 			  
-			  updatePhotoState(id,"Failed To Send")
-			  buildJobDocsTable()
+			  if(ftype=="photo"){
+					updatePhotoState(id,"Failed to Send")
+					}
+					else{
+						if(flag=="close"){
+							updateAttachmentState(id,"Failed to Send")	
+								}
+								
+						else{
+							updateAttachmentState(id,"Failed to Send")	
+								buildJobDocsTable()
+						}
+					}
+			  
 		  })
 		  .always(function() {
 			 
 		});
 	}
-function sendDocToServer(id,fname,content){
+function sendDocToServer(id,fname,content,flag){
 	
 	xmlname=getFileUploadName()+".xml"
-	
+	if(flag=="close"){
+		updateDocumentState(id,"Sending")
+	}
+	else{
 	updateDocumentState(id,"Sending")
 	buildJobDocsTable()
+	}
 	var jqxhr = $.post( localStorage.getItem("DOCSERVER")+'PhotoUpload.php',
 			{
 			fname: xmlname,
@@ -1516,14 +1580,22 @@ function sendDocToServer(id,fname,content){
 				
 		})
 		  .done(function() {
-			 
+			  if(flag=="close"){
+					updateDocumentState(id,"Sent")
+				}
+			  else{
 			  updateDocumentState(id,"Sent")
 			   buildJobDocsTable()
+			  }
 		  })
 		  .fail(function() {
-			  
+			  if(flag=="close"){
+					updateDocumentState(id,"Failed To Send")
+				}
+			  else{
 			  updateDocumentState(id,"Failed To Send")
 			   buildJobDocsTable()
+			  }
 		  })
 		  .always(function() {
 			 
@@ -1759,7 +1831,7 @@ function transferRequestedFile(fileName,dir,id) {
     	opMessage("Downloading LL "+entry.fullPath)
     	html5sql.process("UPDATE MyJobDetsDraw SET zurl = '"+cordova.file.externalApplicationStorageDirectory + dir +fileName+"' where id='"+id+"'",
 				 function(){
-				 
+    		buildJobDocsTable();
 				 },
 				 function(error, statement){
 					 
@@ -1770,7 +1842,7 @@ function transferRequestedFile(fileName,dir,id) {
 		function (error) {
 	    	html5sql.process("UPDATE MyJobDetsDraw SET zurl = 'Download Failed' where id='"+id+"'",
 					 function(){
-					 
+	    		buildJobDocsTable();
 					 },
 					 function(error, statement){
 						 

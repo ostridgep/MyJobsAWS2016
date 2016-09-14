@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+         <title>Risk Assessment Confined Spaces</title>
+</head>
+<body>
+<div class="container">
+ <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#riskassessment" aria-controls="riskassessmenttab" role="tab" data-toggle="tab">Risk Assessment</a></li>
+                                <li role="presentation"><a href="#stopandthink" aria-controls="stopandthink" role="tab" data-toggle="tab">STOP and THINK Sheet</a></li>
+                                
+                            </ul>
+  <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="riskassessment">                          
+ 
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-15">
+                <div class="row">
+                  
+                </div>
+                <div class="row">
+                    <h1><b>Risk Assessment Confined Spaces</b></h1>
+                </div>
+                <form   id="MyJobsForm" >
+                <input id="FormName" name="FormName" value="RiskAssCS" hidden>
+ 
+               <table class="table table-bordered">
+                <tr>
+                            <td width="34%"><label class="feedback-labelnoicon">Team/Area</td>
+                            <td width="34%"><label class="feedback-labelnoicon">Manager</td>
+                            <td width="20%"><label class="feedback-labelnoicon">Date risk assessment originally completed</td>
+                            <td width="12%"><label class="feedback-labelnoicon">Rev No.</td>
+                        </tr>
+                        <tr>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" id="team_area" /></td>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" merge="~mobilefullname" id="manager" /></td>
+                            <td width="25%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly/></td>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" id="rev_no" /></td>
+                            </tr>
+                            <tr>
+                            </table>
+                            
+                            <table class="table table-bordered">
+                <tr>
+                            <td colspan="2" width="25%"><label class="feedback-labelnoicon"><b>Who could be Harmed?</b></td>
+                            <td colspan="4" width="75%"><label class="feedback-labelnoicon"><b>Common hazards</b></td></tr>
+                          
+                        </tr>
+                        <tr>
+                            <td width="20%"><label class="feedback-labelnoicon"  /></td>
+                            <td width="5%"><label class="feedback-labelnoicon" ></label></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Animal/Insect</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Lifting and handling injuries</label>  </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon">Employees</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Contact with electricity</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Person struck by moving vehicle</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                             <tr>
+                            <td width="20%"><label class="feedback-labelnoicon"></label></td>
+                            <td width="5%"><label class="feedback-labelnoicon" ></label></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Contact with machinery</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon">  Road traffic collision</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon">Contractors</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Drowned or asphyxiated</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Slip,trip fall same level</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon"></label></td>
+                            <td width="5%"><label class="feedback-labelnoicon"> </label></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Exposed to explosion</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Struck by moving object</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon">Public</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Exposed to fire</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> Trapped by something collapsing</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon"></label></td>
+                            <td width="5%"><label class="feedback-labelnoicon"></label></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Exposed to harmful substance</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Other hazard-Please specify</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            </tr>
+                            <tr>
+                            <td width="20%"><label class="feedback-labelnoicon">Others</label></td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon">Fall from Height</label> </td>
+                            <td width="5%"><input type="checkbox" class="feedback-checkbox"  /></td>
+                            <td width="20%"><label class="feedback-labelnoicon"> </label></td>
+                            <td width="5%"><label class="feedback-labelnoicon"></label></td>
+                            </tr>
+                            </table>
+                            <table id="select_table" class="table table-bordered">
+                			<tr>
+                            <th colspan="5" ><label class="alert alert-danger">Managers responsible for people who may enter confined spaces shall ensure</th>
+                            
+                        </tr>
+                        <tr>
+                            <td colspan="2" width="25%"><label type="text" class="feedback-labelnoicon" >Control measures </label></td>
+                            <td width="25%"><label type="text" class="feedback-labelnoicon">Monitoring Arrangements</label></td>
+                            <td width="5%"><label type="text" class="feedback-labelnoicon">In place?</label></td>
+                            <td width="25%"><label type="text" class="feedback-labelnoicon"> Comments / actions required with timescales </label></td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >a)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">You are familiar with the requirements of the Mgt of confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Evidence of briefings to team</label></td>
+                            <td width="5%"><select id="select_1" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >b)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">confined spaces are risk assessed</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Active management - evidence of completion</label></td>
+                            <td width="5%"><select id="select_2" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                             <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >c)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Team members working in or involved in confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Active management - evidence of completion</label></td>
+                            <td width="5%"><select id="select_3" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >d)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Team members who work in confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Active Management</label></td>
+                            <td width="5%"><select id="select_4" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >e)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Team members who issue site asses authorization</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Competency quiz records must be kept as a record of employee briefing and understanding</label></td>
+                            <td width="5%"><select id="select_5" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >f)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Team members who issue permits for confined space entries have<br/>1.completed the advanced confined space permit writing course  (3 yearly refresher)<br/>2. completed the appropriate level of confined space training<br/>3. completed the one day general permit writing course - all permit writers will be required to attend this training, however, it is not necessary to have completed this prior to writing advanced permits <br/>4.at least 1 years experience in confined space work<br/>5. been appointed at least annually and records kept Confined space permits are only required for HIGH RISK entries</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Training recordsActive Management</label></td>
+                            <td width="5%"><select id="select_6" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >g)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">That a member of the safety team is contacted at the planning stage for all NC4 entries </label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon"></label></td>
+                            <td width="5%"><select id="select_7" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                             <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >h)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">That contractors carrying out confined space</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Active management</label></td>
+                            <td width="5%"><select id="select_8" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >i)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">That employees and contractors carrying out defined HIGH RISK confined space entries have been issued with a confined space permit before work commences</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Active management</label></td>
+                            <td width="5%"><select id="select_9" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >j)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">That team members going into NC2 and above confined spaces are health assessed prior to appointment and this is refreshed every 3 years see Management of Health Surveillance</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">H&S passport entry/Active Management</label></td>
+                            <td width="5%"><select id="select_10" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;">Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" >k)</label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Appropriate signage is in place for confined spaces</label></td>
+                            <td width="20%"><label type="text" class="feedback-labelnoicon">Site safety inspections</label></td>
+                            <td width="5%"><select id="select_11" ONCHANGE="changecolor(this,this.value)">
+  <option value="Y" style= "background-color:green;" >Yes</option>
+  <option value="N" style="background-color: red;">No</option>
+  <option value="N/A" style="background-color: white;">NA</option>
+</select></td>
+                            <td width="25%"><textarea class="feedback-inputnoicon">
+</textarea> </td>
+                            </tr>
+                            <tr>
+                             <td colspan="5" width="1%"><label type="text" class="header" >If there is anything else you need to tell your team members to keep them safe it should be recorded here (you must cut and paste this information into the Stop and Think Sheet)</label></td></tr>
+                             <tr>
+                             <td colspan="5" <td ><textarea class="feedback-inputnoicon">
+</textarea> </td></tr>
+                            </table>
+                            </table>
+                            <table class="table table-bordered">
+                            <tr>
+                             <td rowspan="2" width="25%"><label type="text" class="feedback-labelnoicon" >Overall assessment of residual risk</label></td>
+                            <td width="25%"><label type="text" class="feedback-labelnoicon">Likelihood of injury</label></td>
+                            <td width="25%"><label type="text" class="feedback-labelnoicon">Severity of potential injury</label></td>
+                            <td width="25%"><label type="text" class="feedback-labelnoicon"> Residual Risk Status</label></td>
+                            </tr>
+                            <tr>
+                            <td id="1" width="25%"><select id="select_risk" ONCHANGE="changetext(this.value)">
+  <option value="VU"  >Very Unlikely</option>
+  <option value="U" >Unlikely</option>
+  <option value="VL" >Very Likely</option>
+  <option value="AC" >Almost Certain</option>
+</select></td>
+                            <td width="25%"><select id="select_injury">
+  <option value="VU"  >No effect or trivial</option>
+  <option value="U" >Minor injury or illness</option>
+  <option value="VL" >Lost time injury or illness</option>
+  <option value="AC" >Major injury or illness</option>
+    <option value="AC" >Fatal or disabling injury or illness</option>
+</select></td>
+                            <td width="25%"><input id="residual_status" type="text" class="feedback-inputnoicon"></td></tr>
+                            </table>
+                            <table class="table table-bordered">
+                            <tr>
+                             <td width="1%"><label type="text" class="feedback-labelnoicon" ></label></td>
+                            <td width="35%"><label type="text" class="feedback-labelnoicon">Reviewer(s)</label></td>
+                            <td width="30%"><label type="text" class="feedback-labelnoicon">Date next review due</label></td>
+                            <td width="30%"><label type="text" class="feedback-labelnoicon"> Date review completed</label></td>
+                            
+                            </tr>
+                            <tr>
+                            <td width="1%"><label type="text" class="feedback-inputnoicon">1</label></td>
+                            <td width="35%"><input type="text" class="feedback-inputnoicon"></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                           
+                            <tr>
+                            <td colspan="4" width="100%"><label type="text" class="feedback-labelnoicon"> Detail any changes here</label></td></tr>
+                            <tr> <td colspan="4" width="100%"><textarea class="feedback-inputnoicon"></textarea> </td></tr>
+                            </tr>
+                            <tr>
+                            <td width="1%"><label type="text" class="feedback-inputnoicon">2</label></td>
+                            <td width="35%"><input type="text" class="feedback-inputnoicon"></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                            </tr>
+                             <tr>
+                            <td colspan="4" width="100%"><label type="text" class="feedback-labelnoicon"> Detail any changes here</label></td></tr>
+                            <tr> <td colspan="4" width="100%"><textarea class="feedback-inputnoicon"></textarea> </td></tr>
+                            </tr>
+                             <tr>
+                            <td width="1%"><label type="text" class="feedback-inputnoicon">3</label></td>
+                            <td width="35%"><input type="text" class="feedback-inputnoicon"></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                           </tr>
+                            <tr>
+                            <td colspan="4" width="100%"><label type="text" class="feedback-labelnoicon"> Detail any changes here</label></td></tr>
+                            <tr> <td colspan="4" width="100%"><textarea class="feedback-inputnoicon"></textarea> </td></tr>
+                            </tr>
+                            <tr>
+                            <td width="1%"><label type="text" class="feedback-inputnoicon">4</label></td>
+                            <td width="35%"><input type="text" class="feedback-inputnoicon"></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                            <td width="30%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly></td>
+                          </tr>
+                            <tr>
+                            <tr>
+                            <td colspan="3" width="100%"><label type="text" class="feedback-labelnoicon"> Detail any changes here</label></td></tr>
+                             <tr><td colspan="3" width="100%"><textarea class="feedback-inputnoicon"></textarea> </td></tr>
+                            </tr>
+                             <td colspan="4" width="0.5%"><label type="text" class="feedback-inputnoicon">This is a model risk assessment - it must be made team/site specific.</label></td>
+                            </tr>
+                             
+                            </table></div>
+                            </div> </div>
+                            <div role="tabpanel" class="tab-pane" id="stopandthink">
+                            <div class="well row" style="margin-top: 10px">
+            <div class="col-md-15">
+                <div class="row">
+                  
+                </div>
+                <div class="row">
+                    <h1><b>STOP and THINK Sheet Confined Spaces</b></h1>
+                </div>
+                <table class="table table-bordered">
+                <tr>
+                            <td width="34%"><label class="feedback-labelnoicon">Team/Area</td>
+                            <td width="34%"><label class="feedback-labelnoicon">Manager</td>
+                            <td width="20%"><label class="feedback-labelnoicon">Date originally completed</td>
+
+                        </tr>
+                        <tr>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" id="team_area" /></td>
+                            <td width="25%"><input type="text" class="feedback-inputnoicon" merge="~mobilefullname" id="manager" /></td>
+                            <td width="25%"><input type="text" class="feedback-input" placeholder="Date" id="date" readonly/></td>
+                            </tr>
+                            <tr>
+                            </table>
+                            <table class="table table-bordered">
+                		<tr>
+                            <td width="100%"><label class="alert alert-danger">Stop and Think - before you undertake the task:-</td>
+                        </tr>
+                        <tr>
+                            <td width="100%"><label class="feedback-labelnoicon">Complete an initial "reality check" to consider any extra hazards such as weather, time of day, lighting, location of site, prior to undertaking the task</td>
+                        </tr>
+                        <tr>
+                            <td width="100%"><label class="feedback-labelnoicon">Take immediate corrective action to remove any hazards</td>
+                        </tr>
+                        <tr>
+                            <td width="100%"><label class="feedback-labelnoicon">Where you cannot adhere to the control measures or you identify other significant hazards that are not listed - <font color="red"> STOP </font> and complete a site specific task risk assessment & if nessesary seek advice</td>
+                        </tr>
+                        <tr>
+                            <td width="100%"><label class="feedback-labelnoicon">Avoid rushing, complacency, distractions, poor communications, tiredness, lack of planning, inexperience and bad habits. It is important that we take the time to do the task safely</td>
+                        </tr>
+</table>
+<table class="table table-bordered">
+                		<tr>
+                            <td width="20%"><label class="header">Activity</td>
+                            <td width="20%"><label class="header">Hazard</td>
+                            <td width="60%"><label class="header">What do I need to do to work safely?</td>
+                        </tr>                            
+                          <tr>
+                            <td rowspan="8" width="20%"><label class="feedback-labelnoicon">Prior to working in a confined space</td>
+                            <td rowspan="8" width="20%"><label class="feedback-labelnoicon">Noxious atmosphere <br/>Fire <br/>Explosion</labelbr/>Drowning/suffocation<br/>Failure of equipment</td>
+                            <td width="60%"><label class="feedback-labelnoicon">You must have completed the City & Guilds confined space training and be retrained and assessed every three years, medical clearance is also required for NC2 and above</td>
+                        </tr>
+                        <tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure you are briefed on and follow the Confined Space work instruction</td>
+                        </tr> 
+                        <tr
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure you are briefed on and follow the "Use of Gas Monitors" Toolbox Talk</label></td>
+                        </tr>
+                        <tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure you are briefed on and follow the "Hydrogen Sulphide" toolbox talk</label></td>
+                        </tr>
+                        <tr
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure that you are briefed on guidance of relevant safety equipment</label></td>
+                        </tr>
+                        <tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Risk assess all confined space entries using the classification risk assessment form</label></td>
+                        </tr>
+                        <tr
+                            <td width="60%"><label class="feedback-labelnoicon">Carry out pre-use checks of safety equipment - checking equipment is within service and calibration date</label></td>
+                        </tr>
+                        <tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Risk assess all confined space entries using the classification risk assessment form</label></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><label class="header">Activity</td>
+                            <td width="20%"><label class="header">Hazard</td>
+                            <td width="60%"><label class="header">What do I need to do to work safely?</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" width="20%"><label class="feedback-labelnoicon">Opening a void into a confined space</label></td>
+                            <td rowspan="2" width="20%"><label class="feedback-labelnoicon">Fall into void</label></td>
+                            <td width="60%"><label class="feedback-labelnoicon">Use permanent or portable edge protection equipment</label></td>
+                        </tr>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Use work positioning equipment - only if trained and specifically authorised to use it</label></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><label class="header">Activity</td>
+                            <td width="20%"><label class="header">Hazard</td>
+                            <td width="60%"><label class="header">What do I need to do to work safely?</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" width="20%"><label class="feedback-labelnoicon">Opening a void into a confined space</label></td>
+                            <td rowspan="3" width="20%"><label class="feedback-labelnoicon">Noxious atmosphere being overcome by fumes</label></td>
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure you are briefed on the "Confined space awareness" toolbox</label></td>
+                        </tr>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Where practical, keep confined spaces locked off</label></td>
+                        </tr>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Make sure that appropriate confined spaces signage is displayed</label></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><label class="header">Activity</td>
+                            <td width="20%"><label class="header">Hazard</td>
+                            <td width="60%"><label class="header">What do I need to do to work safely?</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="9" width="20%"><label class="feedback-labelnoicon">Working within a confined space</label></td>
+                            <td rowspan="9" width="20%"><label class="feedback-labelnoicon">Heat stress<br/>Gas/fume hazard<br/>Lack of Oxygen</label></td>
+                            <td width="60%"><label class="feedback-labelnoicon">Complete the classification risk assessment before entry</label></td>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Used forced air ventilation to provide cooling air and dilute fumes</label></td>
+                        </tr>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Isolate pumps and flows</label></td>
+                        </tr>
+						<tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Clean the confined space (e.g. tank, well) before entry</label></td>
+                        </tr>
+ 				<tr><td width="60%"><label class="feedback-labelnoicon">Monitor atmosphere prior to entry and continually when working in the confined space</label></td>
+                        </tr>
+ 
+			 <tr><td width="60%"><label class="feedback-labelnoicon">Liaise with OMC to ensure that no known discharges or jetting work activities are being carried out on the local network</label></td>
+                        </tr>
+ 
+ 				<tr> <td width="60%"><label class="feedback-labelnoicon">Check weather conditions</label></td>
+                        </tr>
+                         <tr>
+                                     <td width="60%"><label class="feedback-labelnoicon">Plan work to ensure regular breaks</label></td>
+                        </tr>
+             <tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Take on regular fluids</label></td>
+                        </tr>
+<tr>
+                            <td width="20%"><label class="header">Activity</td>
+                            <td width="20%"><label class="header">Hazard</td>
+                            <td width="60%"><label class="header">What do I need to do to work safely?</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="6" width="20%"><label class="feedback-labelnoicon">Any work-related activities requiring escape sets or full BA</label></td>
+                            <td rowspan="6" width="20%"><label class="feedback-labelnoicon">Unfamiliarity with using equipment<br/>Out-of-date or faulty equipment<br/>Unfit to operate equipment</label></td>
+                            <td width="60%"><label class="feedback-labelnoicon">Only use escape sets if you have been trained and appointed</label></td>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Carry out pre-use checks on equipment - ensure that the equipment is within its annual service date</label></td>
+                        </tr>
+                        <tr>
+                            
+                            <td width="60%"><label class="feedback-labelnoicon">Quarantine and report any defective equipment</label></td>
+                        </tr>
+						<tr>
+                            <td width="60%"><label class="feedback-labelnoicon">Ensure you have had any required health assessment e.g. NC2 and above three yearly health assessment is requried</label></td>
+                        </tr>
+ 				<tr><td width="60%"><label class="feedback-labelnoicon">Full BA wearers must receive face fit testing</label></td>
+                        </tr>
+ 
+			 <tr><td width="60%"><label class="feedback-labelnoicon">Maintain your equipment in accordance with the training received</label></td>
+                        </tr>
+   <tr>
+                             <td colspan="3" ><label type="text" class="header" >If there is anything else I need to know to work safely? Manager may input additional controls</label></td></tr>
+                             <tr>
+                             <td colspan="3" <td ><textarea class="feedback-inputnoicon">
+</textarea> </td></tr>
+ 
+ 				             
+                    </table>
+</form>                            
+</body>
+<script>
+$(function () {
+	 $("#date").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date").datepicker("setDate",new Date());
+ $("#date1").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date1").datepicker("setDate",new Date());
+ $("#date2").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date2").datepicker("setDate",new Date());
+ $("#date3").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date3").datepicker("setDate",new Date());
+ $("#date4").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date4").datepicker("setDate",new Date());
+ $("#date5").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date5").datepicker("setDate",new Date());
+ $("#date6").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date6").datepicker("setDate",new Date());
+ $("#date7").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date7").datepicker("setDate",new Date());
+ $("#date8").datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+$("#date8").datepicker("setDate",new Date());
+	 $("#select_injury").attr('title', 'If any of the requierd control measures or monitoring arrangements are not in place you must re-assess the predefined severity of potential injury to determine if the residual risk status is still tolerable using the five dropdown options avaliable');
+	 $("#select_risk").attr('title','If any of the requierd control measures or monitoring arrangements are not in place you must re-assess the predefined severity of potential injury to determine if the residual risk status is still tolerable using the five dropdown options avaliable');
+})
+
+function changecolor(id,value){
+	if(value=="Y")
+		 $(id).css('background-color', 'green');
+	if(value=="N")
+		 $(id).css('background-color', 'red');
+	if(value=="N/A")
+		 $(id).css('background-color', 'white');
+}
+function changetext(value){
+	if(value=="VU"){
+		 $(residual_status).css('background-color', 'green');
+		 $(residual_status).val('LOW - no further action required');
+	}
+		
+	if(value=="U"){
+		 $(residual_status).css('background-color', 'orange');
+			$(residual_status).val('MEDIUM - Introduce further employee and manager requirements if possible to reduce risk');
+	}
+		
+	if(value=="VL"){
+		$(residual_status).css('background-color', 'orange');
+		$(residual_status).val('MEDIUM - Introduce further employee and manager requirements if possible to reduce risk');
+	}
+
+if(value=="AC"){
+	$(residual_status).css('background-color', 'red');
+	$(residual_status).val('HIGH - stop process or activity until further controls have been implemented');
+}
+	 
+}
+$(window).resize(function() {
+	
+	console.log("scrolling 1 to "+document.activeElement.id)
+		location.href="#"
+		location.href="#"+document.activeElement.id
+
+	});
+function loadCompleted(){
+	 
+}
+function isComplete()
+{
+	   
+	    
+	    return "COMPLETE"
+}	
+</script>
+</html>

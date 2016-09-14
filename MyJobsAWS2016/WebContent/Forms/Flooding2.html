@@ -93,8 +93,8 @@
                              <label style="margin-left: 16px" type="text" class="feedback-input col-md-9 col-sm-8">Has flooding caused pollution with measureable impact?</label>
                                 <input type="TEXT" id="measurableimpactV" name="measurableimpactV"  HIDDEN value="NO">
                                 <div class="btn-group btn-toggle" id="measurableimpact" style="margin-left: 10px">                              
-                                    <button id ="measurableimpactYES" type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; ' class="btn btn-lg btn-default">Yes</button>
-                                    <button id ="measurableimpactNO" type="button" onclick = 'document.getElementById("measurableimpactV").value="NO";' class="btn btn-lg btn-primary active">No</button>
+                                    <button id ="measurableimpactYES" type="button" onclick = 'document.getElementById("measurableimpactV").value="YES"; parent.oSwitchPollution.setState(true); parent.oSwitchPollution.setEnabled(false);parent.addMandatedForm("Pollution.html");' class="btn btn-lg btn-default">Yes</button>
+                                    <button id ="measurableimpactNO" type="button" onclick = 'document.getElementById("measurableimpactV").value="NO";parent.oSwitchPollution.setState(false);parent.oSwitchPollution.setEnabled(true);parent.removeMandatedForm("Pollution.html");' class="btn btn-lg btn-primary active">No</button>
                                 </div>
 
                         </div>
@@ -430,7 +430,6 @@ var ref = window.open(url, '_blank', 'location=yes');
 
  function isComplete()
  {
-	
 	    var locCount = $('#location tr').length;
 	    var elem = document.getElementById('MyJobsForm').elements;
 		cnt = 0;
