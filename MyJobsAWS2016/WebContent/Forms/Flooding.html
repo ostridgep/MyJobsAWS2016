@@ -392,8 +392,8 @@
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(){
-    	alert("ggg")
-    	ref=cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system')
+    	
+    	ref=parent.cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system')
     	
     	window.plugins.clipboard.paste(function (text) { 
     		document.getElementById("gridref").value=text; 
