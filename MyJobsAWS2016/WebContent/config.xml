@@ -43,39 +43,49 @@
     <preference name="iosPersistentFileLocation"  value="Library" />
     <preference name="AndroidExtraFilesystems"    value="files,files-external,documents,sdcard,cache,cache-external,root" />
     <preference name="SplashScreen" value="splash"/>
-<preference name="SplashScreenDelay" value="3000"/>
-<preference name="AutoHideSplashScreen" value="false"/>
+    <preference name="SplashScreenDelay" value="3000"/>
+    <preference name="AutoHideSplashScreen" value="false"/>
     <!-- Plugins -->
-<gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
-
-    <!-- Core plugins -->
-    <gap:plugin name="org.apache.cordova.inappbrowser" spec="0.6.0" source="pgb" />
-    <gap:plugin name="org.apache.cordova.battery-status" />
-    <gap:plugin name="org.apache.cordova.camera"/>
-    <gap:plugin name="org.apache.cordova.media-capture" />
-    <gap:plugin name="org.apache.cordova.console" />
-    <gap:plugin name="org.apache.cordova.contacts" />
-    <gap:plugin name="org.apache.cordova.device" />
-    <gap:plugin name="org.apache.cordova.device-motion" />
-    <gap:plugin name="org.apache.cordova.device-orientation" />
-    <gap:plugin name="org.apache.cordova.dialogs" />
-    <gap:plugin name="com.ionic.keyboard" />
+	<gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
+	<gap:plugin name="cordova-plugin-customurlscheme" source="npm">
+	  <param name="URL_SCHEME" value="myjobshost" />
+	</gap:plugin>
+	<gap:plugin name="com.ionic.keyboard" />
     <gap:plugin name="cordova-plugin-splashscreen" spec="2.1.0" source="pgb" />
     <gap:plugin name="com.venkykowshik.startapp" spec="0.0.1" source="pgb" />
-   <gap:plugin name="uk.co.whiteoctober.cordova.appversion" spec="0.1.4" source="pgb" />
+    <gap:plugin name="uk.co.whiteoctober.cordova.appversion" spec="0.1.4" source="pgb" />
 
-    <gap:plugin name="org.apache.cordova.geolocation" />
-    <gap:plugin name="org.apache.cordova.globalization" />
 	<gap:plugin name="cordova-plugin-device" spec="1.0.1" source="pgb" />
-    <gap:plugin name="org.apache.cordova.media" />
-    <gap:plugin name="org.apache.cordova.network-information" />
+
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>   
     <plugin name="cordova-plugin-whitelist" />
-    <gap:plugin name="org.apache.cordova.file"  />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
     <gap:plugin name="com.cordova.plugins.fileopener" spec="1.0.1" source="pgb" />
     <gap:plugin name="com.synconset.imagepicker" spec="1.0.4" source="pgb" />
-    <gap:plugin name="org.apache.cordova.vibration" />
+    
+    
+    <!-- Core plugins -->
+    <plugin name="cordova-plugin-battery-status" />
+    <plugin name="cordova-plugin-inappbrowser" />
+    <plugin name="cordova-plugin-camera" />
+    <plugin name="cordova-plugin-media-capture" />
+    <plugin name="cordova-plugin-console" />
+    <plugin name="cordova-plugin-contacts" />
+    <plugin name="cordova-plugin-device" />
+    <plugin name="cordova-plugin-device-motion" />
+    <plugin name="cordova-plugin-device-orientation" />
+    <plugin name="cordova-plugin-dialogs" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-file-transfer" />
+    <plugin name="cordova-plugin-geolocation" />
+    <plugin name="cordova-plugin-globalization" />
+    <plugin name="cordova-plugin-inappbrowser" />
+    <plugin name="cordova-plugin-media" />
+    <plugin name="cordova-plugin-network-information" />
+    <plugin name="cordova-plugin-splashscreen" />
+    <plugin name="cordova-plugin-vibration" />
+    
+   
+
 	<gap:splash src="splash.png" gap:platform="ios" width="320" height="480" />
 	<gap:splash src="splash.png" gap:platform="ios" width="640" height="960" />
 	<gap:splash src="splash.png" gap:platform="ios" width="640" height="1136" />
