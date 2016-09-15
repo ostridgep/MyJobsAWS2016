@@ -2147,7 +2147,7 @@ var detailFooterAWS = new sap.m.Bar({
 								  }
 								  
 								 
-								  //ref1=
+								  
 								 
 								  
 								
