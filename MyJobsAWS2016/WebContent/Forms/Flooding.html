@@ -7,7 +7,7 @@
         <script src="js/jqui.1.9.2.js"></script>
         <script src="js/bs.3.1.1.js"></script>
         <script src="js/functions.js"></script>
-		<script type="text/javascript" src="cordova.js"></script>
+		
         <link rel="stylesheet" href="css/bs.3.1.1.css" />
         <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
        
@@ -393,6 +393,7 @@
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(){
+    	alert("ggg")
     	ref=cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system')
     	
     	window.plugins.clipboard.paste(function (text) { 
