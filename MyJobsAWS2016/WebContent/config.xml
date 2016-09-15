@@ -46,7 +46,7 @@
 <preference name="SplashScreenDelay" value="3000"/>
 <preference name="AutoHideSplashScreen" value="false"/>
     <!-- Plugins -->
-
+<gap:plugin name="com.verso.cordova.clipboard" spec="0.1.0" source="pgb" />
 
     <!-- Core plugins -->
     <gap:plugin name="org.apache.cordova.inappbrowser" spec="0.6.0" source="pgb" />

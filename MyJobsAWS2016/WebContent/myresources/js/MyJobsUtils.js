@@ -4,7 +4,7 @@ var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
 function getClipboard(){
-	window.plugins.clipboard.paste(function (text) {
+	cordova.plugins.clipboard.paste(function (text) {
 		return text;
 		
 		});
