@@ -393,35 +393,18 @@
     
 function openGoogleMapsGetLocation(){
     	
-    	ref=parent.cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system') 
-    	alert("Back")
-    //	 window.open('myjobsmap://?MYJOBS=getlocation','_system') 
-  //		alert("back")
-    	parent.cordova.plugins.clipboard.paste(function (text) {
-    		alert("copy"+text)
-    		document.getElementById("gridref").value=text; 
-    		});
-    	 x=parent.getClipboard()
-  		 alert(x)
-/*
+    	ref=window.open('myjobsmap://?MYJOBS=getlocation','_system') 
+    	ref.addEventListener('loadstart', function(event) { 
+    		alert("back"); 
+    		parent.cordova.plugins.clipboard.paste(function (text) {
+        		alert("copy"+text)
+        		document.getElementById("gridref").value=text; 
+        		});
+    	});
+  
     	var ref = window.open(url, '_blank', 'location=yes');
 
-// attach listener to loadstart
-	ref.addEventListener('loadstart', function(event) { 
-	    var urlClosePage = "http://mobileapp/close/";
-	    var urlCancelPage = "http://mobileapp/cancel/";
-	    if (event.url == urlClosePage) {
-	    	
-	    	document.getElementById("gridref").value=localStorage.getItem('mapLocation')
-	    ref.close();    
-	    }
-	    if (event.url == urlCancelPage) {
-	    	
-	    
-	    ref.close();    
-	    }
-	});
-	*/
+
 }
     
  // This function is called once all data is loaded
