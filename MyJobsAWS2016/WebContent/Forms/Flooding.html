@@ -393,9 +393,10 @@
     
 function openGoogleMapsGetLocation(){
     	
-    	
-    	 window.open('myjobsmap://?MYJOBS=getlocation','_system') 
-  		alert("back")
+    	ref=parent.cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system') 
+    	alert("Back")
+    //	 window.open('myjobsmap://?MYJOBS=getlocation','_system') 
+  //		alert("back")
     	parent.cordova.plugins.clipboard.paste(function (text) {
     		alert("copy"+text)
     		document.getElementById("gridref").value=text; 
