@@ -394,8 +394,10 @@
 function openGoogleMapsGetLocation(){
     	
     	
-    	 window.open('myjobsmap://?MYJOBS=getlocation','_system')    	
-    	window.plugins.clipboard.paste(function (text) { 
+    	 window.open('myjobsmap://?MYJOBS=getlocation','_system') 
+    	 alert("xxxx-"+window.clipboardData.getData('Text'))
+    	parent.window.plugins.clipboard.paste(function (text) {
+    		alert("copy"+text)
     		document.getElementById("gridref").value=text; 
     		});
 /*
