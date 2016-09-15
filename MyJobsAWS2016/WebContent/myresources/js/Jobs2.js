@@ -2148,11 +2148,7 @@ var detailFooterAWS = new sap.m.Bar({
 								  
 								 
 								  //ref1=
-								  ref1.addEventListener('exit', function(event) {
-		
-		
-		}); 
-								  ref1.show();
+								 
 								  
 								
 								  }else if (currentFuncLoc_GIS.length>6)
