@@ -3,6 +3,13 @@ var MB2Type=""
 var MBform=""
 	var MB2fname=""
 jQuery.sap.require("sap.m.MessageBox");
+function getClipboard(){
+	window.plugins.clipboard.paste(function (text) {
+		return text;
+		
+		});
+	return 'null'
+}
 function checkConnection() {
     var networkState = navigator.connection.type;
     /*var states = {};
