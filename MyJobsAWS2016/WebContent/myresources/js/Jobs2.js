@@ -2138,7 +2138,7 @@ var detailFooterAWS = new sap.m.Bar({
 								 
 								  x=convertToLatLon(currentEquipment_GIS)
 								  if( localStorage.getItem('MAPTYPE')=='MyJobsMaps'){
-									  window.open('myjobsmap://?MYJOBS=plotjob|'+x[1]+'|'+x[0], "_system", 'location=yes,closebuttoncaption=Return')
+									  ref1=cordova.InAppBrowser.open('myjobsmap://?MYJOBS=plotjob|'+x[1]+'|'+x[0], "_system", 'location=yes,closebuttoncaption=Return')
 								  }else{
 									  localStorage.setItem('latlon',x[0]+','+x[1])
 									  localStorage.setItem('mapJob',CurrentOrderNo+"-"+CurrentOpNo)
