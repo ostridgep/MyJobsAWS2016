@@ -399,6 +399,14 @@ function openGoogleMapsGetLocation(){
 	    		alert("2:"+text); 
 	    		});
 			alert(event.url); });
+		ref.addEventListener('loadstop', function(event) { 
+			alert("loadstop:"+event.url); 
+	    		});
+		ref.addEventListener('loadstart', function(event) { 
+			alert("loadstart:"+event.url); 
+	    		});
+			
+
     	
 }
     
