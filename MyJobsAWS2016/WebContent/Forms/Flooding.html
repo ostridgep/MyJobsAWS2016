@@ -392,19 +392,11 @@
     setRoomEmpty()
     
 function openGoogleMapsGetLocation(){
-    	
-    	ref=window.open('myjobsmap://?MYJOBS=getlocation','_system') 
-    	ref.addEventListener('loadstart', function(event) { 
-    		alert("back"); 
-    		parent.cordova.plugins.clipboard.paste(function (text) {
-        		alert("copy"+text)
-        		document.getElementById("gridref").value=text; 
-        		});
-    	});
-  
-    	var ref = window.open(url, '_blank', 'location=yes');
-
-
+    	cordova.InAppBrowser.open('myjobsmap://?MYJOBS=getlocation','_system')
+		alert("back"); 
+    	window.plugins.clipboard.paste(function (text) { 
+    		alert(text); 
+    		});
 }
     
  // This function is called once all data is loaded
