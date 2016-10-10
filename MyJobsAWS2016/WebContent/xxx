@@ -1,0 +1,411 @@
+	function orderCB(MyOrders){
+
+	var sqlDelete="";
+	OrdersProcessed=[]
+	jdetops=[];
+	var sqlstatement="";
+	var sqlstatements=[];
+	var ordernos=[];
+	var changeddatetime=[];
+	var orderlist="";
+	opMessage("Receied Orders Count ="+MyOrders.order.length);
+
+
+	if(MyOrders.order.length==0){
+		setSyncingIndicator(false)
+	}
+
+	if(MyOrders.order.length>0){
+		if(syncTransactionalDetsUpdated){
+			localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+', Orders:'+String(MyOrders.order.length));
+		}else{
+			localStorage.setItem('LastSyncTransactionalDetails',localStorage.getItem('LastSyncTransactionalDetails')+'Orders:'+String(MyOrders.order.length));
+		}
+		opMessage("Deleting Existing Orders");
+		sqlstatementMP ='DELETE FROM MyJobDetsMPoints;'+
+		'DELETE FROM MyJobDetsLoch;'+
+		'DELETE FROM MyJobDetsMPCodes;'+
+		'DELETE FROM MyJobsDetsEQ;'+
+		'DELETE FROM MyJobsDetsATTR;';
+
+
+
+
+
+		for(var cntx=0; cntx < MyOrders.order.length ; cntx++)
+		{
+			if(cntx>0){
+				orderlist+=","	
+			}else{
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobmeascodes.length ; opscnt++)
+				{
+					sqlstatementMP+='INSERT INTO MyJobDetsMPCodes (code_gp,code,code_text) VALUES ('+
+
+					'"'+MyOrders.order[cntx].jobmeascodes[opscnt].code_gp+  '","'+ MyOrders.order[cntx].jobmeascodes[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeascodes[opscnt].code_text+'");';
+
+
+				}
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobmeaspoints.length ; opscnt++)
+				{	
+
+					sqlstatementMP+='INSERT INTO MyJobDetsMPoints (meas_point, object_id, object_desc, psort,pttxt,format,no_char,no_deci,code_gp,code,unit_meas,read_from) VALUES ('+
+					'"'+MyOrders.order[cntx].jobmeaspoints[opscnt].meas_point+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].object_id+  '","'+MyOrders.order[cntx].jobmeaspoints[opscnt].object_desc+  '",'+
+					'"'+MyOrders.order[cntx].jobmeaspoints[opscnt].psort+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].pttxt+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].format+  '",'+  
+					'"'+MyOrders.order[cntx].jobmeaspoints[opscnt].no_char+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].no_deci+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].code_gp+  '",'+
+					'"'+MyOrders.order[cntx].jobmeaspoints[opscnt].code+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].unit_meas+  '","'+ MyOrders.order[cntx].jobmeaspoints[opscnt].read_from+'");';
+
+				}
+
+
+				for(var opscnt=0; opscnt < MyOrders.order[cntx].jobloch.length ; opscnt++)
+				{	
+
+					sqlstatementMP+='INSERT INTO MyJobDetsloch (orderno, notification_no, not_type, not_date,not_time,not_shtxt,not_order,meter_no,meter_rdg,work_type,order_type,op_txt, order_date, order_status) VALUES ('+
+					'"'+MyOrders.order[cntx].jobloch[opscnt].order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].notification_no+  '","'+MyOrders.order[cntx].jobloch[opscnt].not_type+  '",'+
+					'"'+MyOrders.order[cntx].jobloch[opscnt].not_date+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_time+  '","'+ MyOrders.order[cntx].jobloch[opscnt].not_shtxt+  '",'+  
+					'"'+MyOrders.order[cntx].jobloch[opscnt].not_order+  '","'+ MyOrders.order[cntx].jobloch[opscnt].meter_no+  '",'+  
+					'"'+MyOrders.order[cntx].jobloch[opscnt].meter_rdg+  '","'+ MyOrders.order[cntx].jobloch[opscnt].work_type+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_type+  '",'+
+					'"'+MyOrders.order[cntx].jobloch[opscnt].op_txt+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_date+  '","'+ MyOrders.order[cntx].jobloch[opscnt].order_status+'");';
+
+				}
+
+			}
+
+			orderlist+="'"+MyOrders.order[cntx].orderno+"'"
+			ordernos.push(MyOrders.order[cntx].orderno)
+			changeddatetime.push(MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time)
+
+			stext=MyOrders.order[cntx].shorttext.replace(/%2A%20/g,"%0D%0A")
+			stext=stext.replace("\/", "");;
+			stext=stext.replace(/&/g, "");;
+			//alert(MyOrders.order[cntx].longtext)
+			ltext=MyOrders.order[cntx].longtext.replace(/%2A%20/g,"%0D%0A")
+			ltext=ltext.replace(/%E2%80%A2/g,"%2D")				
+			ltext=ltext.replace(/ %2A /g,"%0D%0A")
+			ltext=ltext.replace(/%C2/g,"")				
+			ltext=ltext.replace(/%3C%28%3E/g,"")	
+			ltext=ltext.replace(/%3C%29%3E/g,"")		
+			ltext=ltext.replace(/%E2%80%99/g,"")
+			//alert(ltext)
+			sqlstatement='INSERT INTO MyOrders (orderno , changedby, changeddatetime, shorttext , longtext , startdate ,  enddate ,contact , telno , type , priority , address ,workaddress, house, houseno, street, district, city, postcode, gis,  property, funcloc, equipment, propertygis, funclocgis, equipmentgis, notifno) VALUES ('+
+			'"'+MyOrders.order[cntx].orderno+ '","'+ MyOrders.order[cntx].changed_by+ '","'+ MyOrders.order[cntx].changed_date+MyOrders.order[cntx].changed_time+ '","'+ stext + '","'+ ltext + '","'+ MyOrders.order[cntx].startdate + '","'+ MyOrders.order[cntx].enddate + '","'+MyOrders.order[cntx].contact+'",'+ 
+			'"'+MyOrders.order[cntx].telno + '","'+MyOrders.order[cntx].type + '","'+MyOrders.order[cntx].priority + '","'+MyOrders.order[cntx].address + '","'+MyOrders.order[cntx].workaddress+ '","'+MyOrders.order[cntx].house+'",'+ 
+			'"'+MyOrders.order[cntx].houseno+ '","'+MyOrders.order[cntx].street+ '","'+MyOrders.order[cntx].district+ '","'+MyOrders.order[cntx].city+ '","'+MyOrders.order[cntx].postcode+ '","'+MyOrders.order[cntx].gis+'",'+ 
+			'"'+MyOrders.order[cntx].property+  '","'+MyOrders.order[cntx].funcloc+  '","'+MyOrders.order[cntx].equipment+'",'+ 
+			'"'+MyOrders.order[cntx].propertygis+  '","'+MyOrders.order[cntx].funclocgis+  '","'+MyOrders.order[cntx].equipmentgis+ '","'+MyOrders.order[cntx].notifno+'");';
+			//Loop and write Draw Files to DB
+			//Loop and write JobDets
+			tcdates=[]
+			var orderJdets=MyOrders.order[cntx].orderno
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].jobdets.length ; pcnt++)
+			{
+				orderJdets+=","+MyOrders.order[cntx].jobdets[pcnt].opno;
+				if(MyOrders.order[cntx].jobdets[pcnt].orderno.length>1){	
+					if (MyOrders.order[cntx].jobdets[pcnt].acpt_date.length>6){
+
+						tcdates.push(MyOrders.order[cntx].jobdets[pcnt].acpt_date+"|"+MyOrders.order[cntx].jobdets[pcnt].acpt_time);
+					}
+					if (MyOrders.order[cntx].jobdets[pcnt].onsite_date.length>6){
+
+						tcdates.push(MyOrders.order[cntx].jobdets[pcnt].onsite_date+"|"+MyOrders.order[cntx].jobdets[pcnt].onsite_time);
+					}
+					if (MyOrders.order[cntx].jobdets[pcnt].park_date.length>6){
+
+						tcdates.push(MyOrders.order[cntx].jobdets[pcnt].park_date+"|"+MyOrders.order[cntx].jobdets[pcnt].park_time);
+					}
+
+					tcdates.sort()
+
+					if(tcdates.length>0){
+						x=tcdates[tcdates.length-1].split("|");
+						tconfd=x[0]
+						tconft=x[1]
+					}else{
+						tconfd=""
+							tconft=""
+					}	
+
+					sqlstatement+='INSERT INTO MyJobDets (orderno, opno, notifno, plant, orderplant, orderworkcentre, eworkcentre, oworkcentre, priority_code, priority_desc, pmactivity_code, pmactivity_desc,oppmactivity_code, oppmactivity_desc, start_date, start_time, duration, equipment_code, equipment_desc, equipment_gis, funcloc_code, funcloc_desc, funcloc_gis, acpt_date, acpt_time, onsite_date, onsite_time, park_date, park_time, tconf_date, tconf_time, status, status_l, status_s, notif_cat_profile, site) VALUES ('+
+					'"'+MyOrders.order[cntx].jobdets[pcnt].orderno+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].opno+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].notifno+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].plant+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].orderplant+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].orderworkcentre+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].eworkcentre+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].oworkcentre+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].priority_code+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].priority_desc+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].pmactivity_code+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].pmactivity_desc+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].oppmactivity_code+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].oppmactivity_desc+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].start_date+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].start_time+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].duration+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].equipment_code+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].equipment_desc+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].equipment_gis+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].funcloc_code+'","'+ 
+					MyOrders.order[cntx].jobdets[pcnt].funcloc_desc+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].funcloc_gis+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].acpt_date+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].acpt_time+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].onsite_date+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].onsite_time+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].park_date+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].park_time+'","'+
+					tconfd+'","'+
+					tconft+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].status+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].status_l+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].status_s+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].notif_cat_prof+'","'+
+					MyOrders.order[cntx].jobdets[pcnt].site+'");';
+
+
+				}
+
+			}
+			//opMessage("Loading "+MyOrders.order[cntx].operation.length+" Operations");
+			for(var opscnt=0; opscnt < MyOrders.order[cntx].jobdraw.length ; opscnt++)
+			{	
+
+				sqlstatement+='INSERT INTO MyJobDetsDraw (orderno , zact, zite , zmandatoryfield , zurl , nodeid, fname, mime ) VALUES ('+
+				'"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].zact+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].zite+  '","'+MyOrders.order[cntx].jobdraw[opscnt].zmandatoryfield+  '",'+
+				'"'+MyOrders.order[cntx].jobdraw[opscnt].zurl+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].nodeid+  '","'+ MyOrders.order[cntx].jobdraw[opscnt].fname+  '","'+  MyOrders.order[cntx].jobdraw[opscnt].mime +'");';
+
+
+			}
+			//loop Job Equipment
+
+			for(var opscnt=0; opscnt < MyOrders.order[cntx].jobequipment.length ; opscnt++)
+			{	
+
+				sqlstatementMP+='INSERT INTO MyJobsDetsEQ (equnr, obj_type , obj_type_desc , start_date ,manfacture ,manparno ,manserno ,user_status_code ,swerk  ,swerk_desc ,profile  ,device  ,device_info  ,install_date  , install_loc_desc ) VALUES ('+
+				'"'+MyOrders.order[cntx].jobequipment[opscnt].equnr+  '","'+ 
+				MyOrders.order[cntx].jobequipment[opscnt].obj_type+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].obj_type_desc+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].start_date+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].manfacture+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].manparno+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].manserno+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].user_status_code+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].swerk+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].swerk_desc+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].profile+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].device+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].device_info+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].install_date+  '","'+
+				MyOrders.order[cntx].jobequipment[opscnt].install_loc_desc+  '");';
+
+
+
+			}
+			//loop Job Attribute
+
+			for(var opscnt=0; opscnt < MyOrders.order[cntx].jobattributes.length ; opscnt++)
+			{	
+
+				sqlstatementMP+='INSERT INTO MyJobsDetsATTR (equnr  ,classnum  ,klassentext  ,charact  ,charact_desc ,value ) VALUES ('+
+				'"'+MyOrders.order[cntx].jobattributes[opscnt].equnr+  '","'+ 
+				MyOrders.order[cntx].jobattributes[opscnt].classnum+  '","'+
+				MyOrders.order[cntx].jobattributes[opscnt].klassentext+  '","'+
+				MyOrders.order[cntx].jobattributes[opscnt].charact+  '","'+
+				MyOrders.order[cntx].jobattributes[opscnt].charact_desc+  '","'+
+				MyOrders.order[cntx].jobattributes[opscnt].value+  '");';
+
+
+
+			}
+			for(var opscnt=0; opscnt < MyOrders.order[cntx].operation.length ; opscnt++)
+			{	
+
+				sqlstatement+='INSERT INTO MyOperations (orderno , opno, type , priority , shorttext , startdate, enddate, duration , status, apptstart, apptend) VALUES ('+
+				'"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].operation[opscnt].opno+  '","'+ MyOrders.order[cntx].operation[opscnt].type+  '","'+MyOrders.order[cntx].operation[opscnt].priority+  '",'+
+				'"'+MyOrders.order[cntx].operation[opscnt].shorttext+  '","'+ MyOrders.order[cntx].operation[opscnt].startdate+  '","'+ MyOrders.order[cntx].operation[opscnt].enddate+  '","'+  MyOrders.order[cntx].operation[opscnt].duration+  '",'+
+				'"'+MyOrders.order[cntx].operation[opscnt].status+  '","'+ MyOrders.order[cntx].operation[opscnt].apptstart+  '","'+ MyOrders.order[cntx].operation[opscnt].apptend+'");';
+
+			}
+
+			//opMessage("Loading "+MyOrders.order[cntx].opsplit.length+" Operations Split");
+
+
+			for(var opscnt=0; opscnt < MyOrders.order[cntx].operationsplit.length ; opscnt++)
+			{	
+
+				sqlstatement+='INSERT INTO MyOperationsSplit (orderno , opno, assignedto, duration) VALUES ('+
+				'"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].operationsplit[opscnt].opno+  '","'+ MyOrders.order[cntx].operationsplit[opscnt].assignedto+  '","'+ MyOrders.order[cntx].operationsplit[opscnt].duration+'");';
+
+			}
+			//opMessage("Loading "+MyOrders.order[cntx].partner.length+" Partners");
+
+			//Loop and write partners to DB
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].partner.length ; pcnt++)
+			{	
+				sqlstatement+='INSERT INTO MyPartners (orderno , id, type , name , address , postcode , telno, notifno) VALUES ('+ 
+				'"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].partner[pcnt].id+  '","'+  MyOrders.order[cntx].partner[pcnt].type+  '","'+ MyOrders.order[cntx].partner[pcnt].name+  '",'+
+				'"'+MyOrders.order[cntx].partner[pcnt].address+  '","'+  MyOrders.order[cntx].partner[pcnt].postcode+  '","'+ MyOrders.order[cntx].partner[pcnt].telno+  '","'+ ""+'");';
+			}
+
+			//Loop and write components to DB
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].component.length ; pcnt++)
+			{	
+
+				sqlstatement+='INSERT INTO Mymaterials (orderno , id, material , description , qty) VALUES ('+ 
+				'"'+MyOrders.order[cntx].orderno+  '","'+ MyOrders.order[cntx].component[pcnt].item+  '","'+  MyOrders.order[cntx].component[pcnt].material+  '","'+
+				MyOrders.order[cntx].component[pcnt].description+  '","'+ MyOrders.order[cntx].component[pcnt].quantity+  '");';
+			}				
+
+
+			//opMessage("Loading "+MyOrders.order[cntx].userstatus.length+" UserStatus");
+			//Loop and write userstatus to DB
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].userstatus.length ; pcnt++)
+			{	
+				sqlstatement+='INSERT INTO MyUserStatus (type , orderno, opno , inact , status , statuscode , statusdesc) VALUES ('+
+				'"'+MyOrders.order[cntx].userstatus[pcnt].type+  '","'+  MyOrders.order[cntx].userstatus[pcnt].orderno+  '","'+ MyOrders.order[cntx].userstatus[pcnt].opno+  '",'+
+				'"'+MyOrders.order[cntx].userstatus[pcnt].inact+  '","'+  MyOrders.order[cntx].userstatus[pcnt].status+  '","'+  MyOrders.order[cntx].userstatus[pcnt].statuscode+  '",'+
+				'"'+MyOrders.order[cntx].userstatus[pcnt].statusdesc+'");';
+			}
+
+			//opMessage("Loading "+MyOrders.order[cntx].operationinfo.length+" OperationInfo");
+			//Loop and write userstatus to DB
+
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].operationinfo.length ; pcnt++)
+			{
+
+
+
+				sqlstatement+='INSERT INTO MyOperationInfo (orderno, opno , type , value1 , value2) VALUES ('+
+				'"'+MyOrders.order[cntx].operationinfo[pcnt].orderno+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].opno+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].type+  '",'+ 
+				'"'+MyOrders.order[cntx].operationinfo[pcnt].value1+  '","'+  MyOrders.order[cntx].operationinfo[pcnt].value2+'");';
+			}
+
+			//Loop and write priorityicons
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].jobicons.length ; pcnt++)
+			{
+				if (MyOrders.order[cntx].orderno==	MyOrders.order[cntx].jobicons[pcnt].orderno){	
+					val2=MyOrders.order[cntx].jobicons[pcnt].tooltip_desc.replace(/,/g," ")	
+					sqlstatement+='INSERT INTO MyOperationInfo (orderno, opno , type , value1 , value2) VALUES ('+
+					'"'+MyOrders.order[cntx].jobicons[pcnt].orderno+  '","'+  MyOrders.order[cntx].jobicons[pcnt].opno+  '","'+  "JOBICON"+  '",'+ 
+					'"'+MyOrders.order[cntx].jobicons[pcnt].icon_filename+  '","'+  val2+'");';
+
+				}
+			}
+			//Loop and write Jobicons
+			for(var pcnt=0; pcnt < MyOrders.order[cntx].priorityicons.length ; pcnt++)
+			{
+				if (MyOrders.order[cntx].orderno==	MyOrders.order[cntx].priorityicons[pcnt].orderno){					
+					sqlstatement+='INSERT INTO MyOperationInfo (orderno, opno , type , value1 , value2) VALUES ('+
+					'"'+MyOrders.order[cntx].priorityicons[pcnt].orderno+  '","'+  MyOrders.order[cntx].priorityicons[pcnt].opno+  '","'+  "PRIORITYICON"+  '",'+ 
+					'"'+MyOrders.order[cntx].priorityicons[pcnt].icon_filename+  '","'+  MyOrders.order[cntx].priorityicons[pcnt].tooltip_desc+'");';
+
+				}
+			}				
+
+			//Loop and write Assets to DB
+
+
+			//opMessage("Loading "+MyOrders.order[cntx].asset.length+" Assets");
+			for(var acnt=0; acnt < MyOrders.order[cntx].asset.length ; acnt++)
+			{
+				if (MyOrders.order[cntx].asset[acnt].equipment.length>0){
+					sqlstatement+='INSERT INTO MyAssets (orderno , id, type , name ) VALUES ('+
+					'"'+MyOrders.order[cntx].orderno+  '","'+   MyOrders.order[cntx].asset[acnt].equipment+  '","'+   'EQ'+  '","'+   MyOrders.order[cntx].asset[acnt].equidescr+'");';
+				}
+				if (MyOrders.order[cntx].asset[acnt].funcloc.length>0){
+					sqlstatement+='INSERT INTO MyAssets (orderno , id, type , name ) VALUES ('+ 
+					'"'+MyOrders.order[cntx].orderno+  '","'+   MyOrders.order[cntx].asset[acnt].funcloc+  '","'+  'FL'+  '","'+   MyOrders.order[cntx].asset[acnt].funclocdesc+'");';
+				}
+			}
+			//Loop and write TConfs to DB
+
+
+			//opMessage("Loading "+MyOrders.order[cntx].tconf.length+" TimeConfs");
+
+			for(var acnt=0; acnt < MyOrders.order[cntx].tconf.length ; acnt++)
+			{	
+				if(MyOrders.order[cntx].tconf[acnt].description=="Travel"){
+					tcType = "Travel";
+					tcDesc="";
+				}else{
+					tcType = "Work";
+					tcDesc=MyOrders.order[cntx].tconf[acnt].description;
+				}
+				if(MyOrders.order[cntx].tconf[acnt].final==""){
+					tcFinal="";
+				}else{
+					tcFinal="Yes";
+				}
+				sqlstatement+='INSERT INTO MyTimeConfs (orderno , opno,type, confno , description , date , time , enddate, endtime, duration, empid, final,datestamp, user, state ) VALUES ('+
+				'"'+MyOrders.order[cntx].orderno+  '","'+   MyOrders.order[cntx].tconf[acnt].activity+  '","'+   tcType+  '","'+   MyOrders.order[cntx].tconf[acnt].confno+  '","'+  tcDesc+  '","'+  MyOrders.order[cntx].tconf[acnt].date+  '","'+  MyOrders.order[cntx].tconf[acnt].time+  '",'+ 
+				'"'+MyOrders.order[cntx].tconf[acnt].enddate+  '","'+  MyOrders.order[cntx].tconf[acnt].endtime+  '","'+  MyOrders.order[cntx].tconf[acnt].duration+  '","'+  MyOrders.order[cntx].tconf[acnt].empid+  '","'+  tcFinal+  '","","","");';
+
+
+			}
+			if(OrdersProcessed.indexOf(MyOrders.order[cntx].orderno)==-1){
+				sqlstatements.push(sqlstatement);
+				OrdersProcessed.push(MyOrders.order[cntx].orderno)
+				jdetops.push(orderJdets)
+			}
+			sqlstatement=""
+
+
+
+
+
+
+		}
+		for(var cntx=0; cntx < ordernos.length ; cntx++)
+		{
+
+			InsertOrder(sqlstatements[cntx],ordernos[cntx],changeddatetime[cntx],jdetops[cntx])
+		}
+		sqldeleteorders="delete from MyOrders WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyOperations WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyOperationsSplit WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyJobDets WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyPartners  WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyMaterials  WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyAssets  WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyTimeConfs WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyUserStatus WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyOperationInfo WHERE orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyStatus where state='SERVER' and orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyJobDetsDraw where orderno NOT IN ("+orderlist+");"
+		sqldeleteorders+="DELETE FROM MyFormsResponses WHERE lastupdated <> 'SENDING' and orderno NOT IN ("+orderlist+");"
+
+		html5sql.process(sqldeleteorders,
+				function(transaction, results, rowsArray){
+			var path = window.location.pathname;
+			var page = path.split("/").pop();
+			if(page=="Jobs.html"){
+
+				refreshJobList()
+			}else if(page=="Home.html"){
+
+				setCounts()
+			}
+			setSyncingIndicator(false)
+			html5sql.process(sqlstatementMP,
+					function(){
+
+			},
+			function(error, statement){
+
+				opMessage("Error: " + error.message + " when processing " + statement);
+			}        
+			)
+			DeleteOldPhotos(orderlist)
+		},
+		function(error, statement){
+			opMessage("Error: " + error.message + " when processing " + statement);
+
+		}        
+		);
+
+
+
+	}
+
+}

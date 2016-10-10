@@ -1,0 +1,44 @@
+MyRefUserStatusProfiles
+MyRefOrderTypes
+MyRefNotifTypes
+
+
+
+
+
+
+
+DG5 Refdata calls
+
+No need for Notifications
+
+Need to check Addresss on jobs
+
+Appbar service needs a Scenario Filter
+
+AW1 replatforming
+
+Posts To Do
+
+
+sendSAPData("MyJobsCreateVehicleDefect.htm",newVehicleCheck,"UPDATE MyVehicleCheck SET state = 'NEW' WHERE id='"+item['id']+"'");
+sendSAPData("MyJobsCreateVehicleMileage.htm",newVehicleCheck,"UPDATE MyVehicleCheck SET state = 'NEW' WHERE id='"+item['id']+"'");
+sendSAPData("MyJobsCreateEODNotification.htm",newEODDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");
+-------sendSAPData("MyJobsCreateNewJob2.htm",newNotifDets,"UPDATE MyNotifications SET notifno = 'NEW' WHERE id='"+item['id']+"'");									
+-------sendSAPData("MyJobsUpdateStatus.htm",newStatusDets,"UPDATE MyStatus SET state = 'NEW' where id='"+item['id']+"'");
+sendSAPData("MyJobsUpdateNotif.htm",newCloseDets,"UPDATE MyJobClose SET state = 'NEW' WHERE id='"+item['id']+"'");
+sendSAPData("MyJobsDG5Create.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");		
+sendSAPData("MyJobsPIACreate.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");							
+
+-------sendSAPData("MyJobsCreateCFEED.htm",params,"UPDATE MyFormsResponses SET lastupdated = 'COMPLETE' WHERE id='"+rowsArray[0].id+"'");
+-------sendSAPData("MyJobsCreateTConf.htm",newTConfDets,"UPDATE MyTimeConfs SET confno = 'NEW' WHERE id='"+item['id']+"'");
+-------sendSAPData("MyJobsCreateMPDoc.htm",newMPDoc,"UPDATE MyMpointDocs SET state = 'NEW' WHERE id='"+item['id']+"'");
+							
+							
+							LiveLink Stuff
+							
+							Photo Upload
+							
+							File Attach Upload
+							
+							

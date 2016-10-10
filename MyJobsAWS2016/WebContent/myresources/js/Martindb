@@ -1,0 +1,4193 @@
+var w = null;
+var objtype = "";
+var objid = "";
+var objshorttext = "";
+var objaddress = "";
+var objswerk = "";
+var currentlySyncing = false
+var SAPServerPrefix = "";
+var SAPServerSuffix = "";
+
+var parTrace = "ON";
+var syncDetsSet = false;
+var demoDataLoaded = 0;
+var syncTransactionalDetsUpdated = false;
+var syncReferenceDetsUpdated = false;
+var syncStatusType = sap.m.ButtonType.Accept;
+var xmlDoc = "";
+var sqlMyJobsDocs;
+
+
+function setUserAgent(window, userAgent) {
+    if (window.navigator.userAgent != userAgent) {
+        var userAgentProp = { get: function () { return userAgent; } };
+        try {
+            Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
+        } catch (e) {
+            window.navigator = Object.create(navigator, {
+                userAgent: userAgentProp
+            });
+        }
+    }
+}
+function isTablet(customUA) {
+    var ua = customUA || navigator.userAgent;
+
+    if (device.os.name === device.os.OS.IOS) {
+        return /ipad/i.test(ua);
+    }
+}
+
+function convertDate(dt) {
+    var fdt = "";
+    fdt = dt.substring(0, 4) + "-" + dt.substring(4, 6) + "-" + dt.substring(6, 9) + dt.substring(9, 11) + ":" + dt.substring(11, 13);
+
+    return fdt;
+}
+
+function setSyncingIndicator(state) {
+
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
+    if (page == "Home.html") {
+        sap.ui.getCore().byId("LastSyncMess").setText(formatDateTime(localStorage.getItem("LastSyncedDT")));
+        if (state) {
+            sap.ui.getCore().getElementById("LastSyncMess").setType(syncStatusType)
+            sap.ui.getCore().getElementById("LastSyncMess").setVisible(false)
+            sap.ui.getCore().getElementById("syncIndicator").setVisible(true)
+        } else {
+            sap.ui.getCore().getElementById("LastSyncMess").setType(syncStatusType)
+            sap.ui.getCore().getElementById("LastSyncMess").setVisible(true)
+            sap.ui.getCore().getElementById("syncIndicator").setVisible(false)
+
+        }
+    }
+}
+function testAzure2() {
+    requestAzureData("SystemCodesDescriptionZSYS004", "username=hello")
+}
+
+function testAzure1() {
+
+    getAssetRecordsWithWhereClause();
+    //requestAzureData("ZACAT001AssetCaptureCategory", "");
+    //requestAzureData("ZPRG002ProcessGroupCodes", "");
+    //requestAzureData("PlantGroupCodesZPLG003", "");
+    //requestAzureData("SystemCodesDescriptionZSYS004", "");
+    //requestAzureData("FunctionTypeCodesZNAM005", "");
+    //requestAzureData("EquipmentTypeCodesZEGI006", "");
+    //requestAzureData("PlantGroupProcessGroupCodesZPLG_PRG007", "");
+    //requestAzureData("AssetTypeCodesZAST008", "");
+    //requestAzureData("EGINameCodeMappingZAEGI_NC", "");
+    //requestAzureData("DecommissionStatusZDECOMSTAT", "");
+    // requestAzureData("ZGW_MAM_SITE_REFDATA", "");
+    //requestAzureData("ZGW_MAM30_090_GETLIST_T3", "");
+    //requestAzureData("ZGW_MAM30_VEHICLE", "");
+    //requestAzureData("ZGW_MAM30_ADOBE_PREPOP_SRV", "");
+    //requestAzureData("ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV", "");
+    //requestAzureData("ZGW_MAM30_SEWER_TECH_T3", "");
+    //requestAzureData("ZGW_MAM30_RFV_T3_SRV", "");
+    //requestAzureData("ZGW_MAM30_VERSION_DEPLOY", "");
+    // requestAzureData("ZG_MAM30_APPBAR_CTRL_SRV", "");
+    //requestAzureData("ZGW_MAM30_REFDATA_T3_SRVActivity", "");
+    //requestAzureData("ZGW_MAM30_REFDATA_T3_SRVNotifTypes", "");
+    //requestAzureData("ZGW_MAM30_REFDATA_T3_SRVPAICode", "");
+    //requestAzureData("ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF", "");
+    //requestAzureData("ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPS", "");
+    //requestAzureData("ZGW_MAM30_031_REFDATA_T3_SRVManufacturer", "");
+    //requestAzureData("ZGW_MAM30_031_REFDATA_T3_SRVModel", "");
+    //requestAzureData("ZGW_MAM30_031_REFDATA_T3_SRVObjType", "");
+    //requestAzureData("ZGW_MAM30_031_REFDATA_T3_SRVPlant", "");
+    //requestAzureData("ZGW_MAM30_031_REFDATA_T3_SRVProfile", "");
+    //requestAzureData("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code", "");
+    //requestAzureData("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel", "");
+
+    //ref data with parameters:
+    //  requestAzureData("ZGW_MAM30_REFDATA_T3_SRVNotifTypes", "WHERE notiftype<>'Z1'");
+
+    //transactional calls below have parameters
+
+    //requestAzureData("ZGW_MAM_ASSETDATA_T3", "AISTST,ALBWSP");//pass up to 4 sites with comma separator
+    //requestAzureData("ZGW_MAM_EXTRACT_ASSET_DATA", "20160812");//I assume you will only need to filter on "Zlastmodify gt " so just pass the date
+    // requestAzureData("ZGW_GET_JOB_DETAILS", "PSMITH11");//The user whoes jobs you want
+    //requestAzureData("ZGW_MAM_MAINT_PARAM", "Name eq 'TEST' and Key1 eq 'KEY1' and Key2 eq '1'");//the filter you want to use
+    //requestAzureData("ZGW_MAM30_CHECK_SURVEY", "GAINWW");//One Site
+    //requestAzureData("ZGW_MAM30_USER_VALIDATE_SRV", "UserId='PSMITH11',Password=''");//The user you want to check in UPPERCASE with blank password
+    //  requestAzureData("ZGW_MAM30_USER_VALIDATE_SRV", "UserId='SOMEUSER',Password='pwd'");//The user you want to check in UPPERCASE and password
+
+    //Posts Follow:
+    //var myjson = {};
+    //myjson["Message"] = "";
+    //myjson["UserId"] = "PSMITH11";
+    //myjson["ActTime"] = "11:00:00";
+    //myjson["ActDate"] = "22.09.2016";
+    //myjson["InactiveStat"] = "ACPTSITEACPTSITE";
+    //myjson["OpNo"] = "0010";
+    //myjson["OrderNo"] = "30529012";
+    //myjson["Status"] = "SITE";
+    //myjson["Stsma"] = "";
+
+
+
+    // postAzureData("ZGW_MAM30_SET_OP_STATUS_ORDER", myjson)
+
+    //    var myjson = {};
+    //    myjson["Messagetype"] = "";
+    //myjson["Message"] = "";
+    //myjson["ConfirmCounter"] = "";
+    //myjson["ConfirmNo"] = "";
+    //myjson["RemWork"] = "";
+    //myjson["LonText"] = "SOME LONG TEXT HERE";
+    //myjson["FinalConfFlag"] = "";
+    //myjson["Reason"] = "";
+    //myjson["PersNo"] = "00100008";
+    //myjson["workCntr"] = "MT023";
+    //myjson["ActType"] = "SMEPIS";
+    //myjson["ExecFinTime"] = "10] = 00] = 00";
+    //myjson["ExecFinDate"] = "22.09.2016";
+    //myjson["ExecStartTime"] = "10] = 00] = 00";
+    //myjson["ExecStartdate"] = "22.09.2016";
+    //myjson["ActWork"] = "";
+    //myjson["ConfText"] = "IM HUNGRY";
+    //myjson["Activity"] = "0010";
+    //myjson["OrderNo"] = "000030529012";
+    //myjson["User"] = "PSMITH11";
+    //myjson["toCeConfirmation"] = [];
+    //myjson["toWsapExtension"] = [];
+
+
+    //  postAzureData("ZGW_MAM30_005_CREATE_TIME_CNF", myjson)
+
+
+    //var myjson = {};
+   
+    //var notfld = {};
+    //notfld["ActTextl11"] = "",
+    //      notfld["ActText11"] = "",
+    //      notfld["ActCode11"] = "",
+    //      notfld["ActCodegrp11"] = "",
+    //      notfld["ActTextl10"] = "",
+    //      notfld["ActText10"] = "",
+    //      notfld["ActCode10"] = "",
+    //      notfld["ActCodegrp10"] = "",
+    //      notfld["ActTextl9"] = "",
+    //      notfld["ActText9"] = "",
+    //      notfld["ActCode9"] = "",
+    //      notfld["ActCodegrp9"] = "",
+    //      notfld["ActTextl8"] = "",
+    //      notfld["ActText8"] = "",
+    //      notfld["ActCode8"] = "",
+    //      notfld["ActCodegrp8"] = "",
+    //      notfld["ActTextl7"] = "",
+    //      notfld["ActText7"] = "",
+    //      notfld["ActCode7"] = "",
+    //      notfld["ActCodegrp7"] = "",
+    //      notfld["ActTextl6"] = "",
+    //      notfld["ActText6"] = "",
+    //      notfld["ActCode6"] = "",
+    //      notfld["ActCodegrp6"] = "",
+    //      notfld["ActTextl5"] = "",
+    //      notfld["ActText5"] = "",
+    //      notfld["ActCode5"] = "",
+    //      notfld["ActCodegrp5"] = "",
+    //      notfld["ActTextl4"] = "",
+    //      notfld["ActText4"] = "TEST LONG TEXT",
+    //      notfld["ActCode4"] = "LT",
+    //      notfld["ActCodegrp4"] = "CUST040",
+    //      notfld["ActTextl3"] = "",
+    //      notfld["ActText3"] = "YES",
+    //      notfld["ActCode3"] = "CS02",
+    //      notfld["ActCodegrp3"] = "CUST030",
+    //      notfld["ActTextl2"] = "",
+    //      notfld["ActText2"] = "YES",
+    //      notfld["ActCode2"] = "Y",
+    //      notfld["ActCodegrp2"] = "CUST020",
+    //      notfld["ActTextl1"] = "",
+    //      notfld["ActText1"] = "YES",
+    //      notfld["ActCode1"] = "Y",
+    //      notfld["ActCodegrp1"] = "CUST010",
+    //                notfld["UserStatusH"] = "0010";
+    //notfld["Plant"] = "LSAM";
+    //notfld["MainWorkCtr"] = "MT023";
+    //notfld["OrderId"] = "30528007";
+    //notfld["ReportedBy"] = "PSMITH11";
+    //notfld["ShortText"] = "TRIAL";
+
+   
+    //myjson["Notflds"] = notfld;
+    //myjson["Message"] = "";
+    //myjson["UserId"] = "";
+    //myjson["NotifType"] = "ZC";;
+    //myjson["MessageType"] = "";
+    //myjson["NotifNo"] = "";
+
+    //postAzureData("ZGW_MAM30_011_CREATE_CFEED", myjson)
+
+    //var myjson = {};
+    //myjson["Message"] = "";
+    //myjson["MessageType"]= "";
+    //myjson["UserId"] = "CLEMOS";
+    //myjson["Longtext"] = "NEED A PLUMBER TO HELP MEWITH THIS";
+    //myjson["Qmart"] = "Z2";
+    //myjson["FunctLoc"] = "12275944";
+    //myjson["CodeGroup"] = "MA";
+    //myjson["Coding"] = "SX";
+    //myjson["ShortText"] = "PLUMBER ASSIST";
+    //myjson["ReportedBy"] = "CLEMOS";
+    //myjson["NotifNo"] = "";
+
+    //postAzureData("ZGW_MAM30_NOTIFICATION_SRV_PlumbAssitJob", myjson)
+
+
+    //var myjson = {};
+    //var header = {};
+    //header["BreakDown"] = "";
+    //header["EquipStatus"] = "";
+    //header["UserId"] = "PSMITH11";
+    //header["AssigToMe"] = "";
+    //header["SpecReqt"] = "";
+    //header["Assignment"] = "";
+    //header["ReportedBy"] = "100514";
+    //header["Priority"] = "";
+    //header["PriorityType"] = "";
+    //header["ActiivityText"] = "";
+    //header["ActivityCode"] = "";
+    //header["ActivityCodeGrp"] = "";
+    //header["ActCatType"] = "";
+    //header["EndTime"] = "";
+    //header["EndDate"] = "";
+    //header["FuncLoc"] = "";
+    //header["Equipment"] = "";
+    //header["CodeGroup"] = "";
+    //header["StartTime"] = "";
+    //header["Coding"] = "";
+    //header["ShortText"] = "DAY END TRAVEL/27.02.2013/00100514";
+    //header["LongText"] = "";
+    //header["StartDate"] = ""
+
+    //myjson["Header"] = header;
+
+    //myjson["Abcindic"] = "";
+    //myjson["FunclocCreate"] = "";
+    //myjson["FunclocDesc"] = "";
+    //myjson["FunclocDisp"] = "";
+    //myjson["FunctLoc"] = "";
+    //myjson["Notiftmez"] = "";
+    //myjson["SalesGrp"] = "";
+    //myjson["SalesOffice"] = "";
+    //myjson["Devicedata"] = "";
+    //myjson["DeleteFlag"] = "";
+    //myjson["Serialno"] = "";
+    //myjson["PmWkctr"] = "";
+    //myjson["CatType"] = "";
+    //myjson["AddrNumber"] = "";
+    //myjson["DistrChan"] = "";
+    //myjson["SalesOrg"] = "";
+    //myjson["Division"] = "";
+    //myjson["PurchDate"] = "";
+    //myjson["PurchNoC"] = "";
+    //myjson["SalesOrd"] = "";
+    //myjson["Reftime"] = "";
+    //myjson["Refdate"] = "";
+    //myjson["Longtxtexist"] = "";
+    //myjson["NotifNo"] = "";
+    //myjson["Prilang"] = "";
+    //myjson["Planplant"] = "";
+    //myjson["LocAcc"] = "";
+    //myjson["EquipmentDesc"] = "";
+    //myjson["Catprofile"] = "";
+    //myjson["EquipmentCreate"] = "";
+    //myjson["Assembly"] = "";
+    //myjson["AssemblyDesc"] = "";
+    //myjson["Comptime"] = "";
+    //myjson["Breakdown"] = "";
+    //myjson["Strmlfndate"] = "";
+    //myjson["Endmlfndate"] = "";
+    //myjson["Compdate"] = "";
+    //myjson["Strmlfntime"] = "";
+    //myjson["Endmlfntime"] = "";
+    //myjson["Downtime"] = "";
+    //myjson["ObjectNo"] = "";
+    //myjson["Unit"] = "";
+    //myjson["IsocodeUnit"] = "";
+    //myjson["Plangroup"] = "";
+    //myjson["CustNo"] = "";
+    //myjson["Mntplan"] = "";
+    //myjson["MntcallNo"] = "";
+    //myjson["Maintitem"] = "";
+    //myjson["MatlDesc"] = "";
+    //myjson["ShortText"] = "";
+    //myjson["Priotype"] = "";
+    //myjson["Priority"] = "";
+    //myjson["Material"] = "";
+    //myjson["Notiftime"] = "";
+    //myjson["NotifDate"] = "";
+    //myjson["Reportedby"] = "";
+    //myjson["Orderid"] = "";
+    //myjson["Desstdate"] = "";
+    //myjson["Dessttime"] = "";
+    //myjson["Desenddate"] = "";
+    //myjson["Desendtm"] = "";
+    //myjson["Sortfield"] = "";
+    //myjson["Maintplant"] = "";
+    //myjson["Maintloc"] = "";
+    //myjson["Maintroom"] = "";
+    //myjson["Plsectn"] = "";
+    //myjson["PpWkctr"] = "";
+    //myjson["BusArea"] = "";
+    //myjson["CoArea"] = "";
+    //myjson["Costcenter"] = "";
+    //myjson["WbsElement"] = "";
+    //myjson["AssetNo"] = "";
+    //myjson["SubNumber"] = "";
+    //myjson["Stdgord"] = "";
+    //myjson["Stlmtorder"] = "";
+    //myjson["CompCode"] = "";
+    //myjson["SalesOrgLocAcc"] = "";
+    //myjson["DivisionLocAcc"] = "";
+    //myjson["DistChanLocAcc"] = "";
+    //myjson["AddrNoLocAcc"] = "";
+    //myjson["DocNumber"] = "";
+    //myjson["ItmNumber"] = "";
+    //myjson["Scenario"] = "";
+    //myjson["Refobjecttype"] = "";
+    //myjson["Refobjectkey"] = "";
+    //myjson["Refreltype"] = "";
+    //myjson["XaStatProf"] = "";
+    //myjson["MnWkCtr"] = "";
+    //myjson["Plant"] = "";
+    //myjson["EnhancementFlag"] = "";
+    //myjson["EquipmentDisplay"] = "";
+    //myjson["FunclocDisplay"] = "";
+    //myjson["NotifSortno"] = "";
+    //myjson["NotifPushed"] = "";
+    //myjson["NotifNoDisplay"] = "";
+    //myjson["OrderidDisplay"] = "";
+    //myjson["ActCatTyp"] = "A";
+    //myjson["ActCodegrp"] = "DENDTRVL";
+    //myjson["ActCode"] = "DE01";
+    //myjson["ActText"] = "";
+    //myjson["MessageType"] = "";
+    //myjson["Message"] = "";
+    //myjson["NotifType"] = "Z7";
+    //myjson["ActStartDate"] = "15.08.2016";
+    //myjson["ActStartTime"] = "";
+    //myjson["ActEndDate"] = "15.08.2016";
+    //myjson["ActEndTime"] = "";
+    //myjson["User"] = "";
+    //myjson["Equip"] = "";
+    //myjson["Descript"] = "";
+    //myjson["Dcattyp"] = "";
+    //myjson["DcodeGrp"] = "";
+    //myjson["Dcode"] = "";
+    //myjson["DLCatTyp"] = "";
+    //myjson["DLCodeGrp"] = "";
+    //myjson["DLCode"] = "";
+    //myjson["CauseText"] = "";
+    //myjson["CauseCatTyp"] = "";
+    //myjson["CauseCodeGrp"] = "";
+    //myjson["CauseCode"] = ""
+
+
+    //postAzureData("ZGW_MAM30_NOTIFICATION_NotifHeader", myjson)
+
+    //var myjson = {};
+    //var jobHeader = {};
+    //jobHeader["BreakDown"] = "";
+    //jobHeader["EquipStatus"] = "";
+    //jobHeader["UserId"] = "";
+    //jobHeader["AssigToMe"] = "";
+    //jobHeader["SpecReqt"] = "";
+    //jobHeader["Assignment"] = "";
+    //jobHeader["ReportedBy"] = "";
+    //jobHeader["Priority"] = "";
+    //jobHeader["PriorityType"] = "";
+    //jobHeader["ActiivityText"] = "";
+    //jobHeader["ActivityCode"] = "";
+    //jobHeader["ActivityCodeGrp"] = "";
+    //jobHeader["ActCatType"] = "";
+    //jobHeader["EndTime"] = "";
+    //jobHeader["EndDate"] = "14.08.2016";
+    //jobHeader["FuncLoc"] = "11182683";
+    //jobHeader["Equipment"] = "";
+    //jobHeader["CodeGroup"] = "WF";
+    //jobHeader["StartTime"] = "";
+    //jobHeader["Coding"] = "AD";
+    //jobHeader["ShortText"] = "NEW NOTIFICATION";
+    //jobHeader["LongText"] = "SOME LONG TEXT FOR THE NOTIFICATION";
+    //jobHeader["StartDate"] = "14.08.2016"
+    //myjson["JobHeader"] = jobHeader;
+    //myjson["Message"] = "";
+    //myjson["Qmart"] = "Z1";
+    //myjson["Messagetype"] = ""
+
+    //postAzureData("ZGW_MAM30_NOTIFICATION_CreateNewJob", myjson)
+
+
+    
+ //   var myjson = {};
+ //   var i_PIA = {};
+ //   i_PIA["Zsampsentlabd3"] = "",
+ //   i_PIA["Zsampsentlabd2"] = "",
+ //   i_PIA["Zsampsentlabd1"] = "",
+ //  i_PIA["Zsampsentlabpt"] = "",
+ //  i_PIA["Zsampsentlabup"] = "",
+ //  i_PIA["Zonsitenh3d3"] = "",
+ //  i_PIA["Zonsitenh3d2"] = "204.00",
+ //  i_PIA["Zonsitenh3d1"] = "203.00",
+ // i_PIA[  "Zonsitenh3pt"] = "202.00",
+ // i_PIA["Zonsitenh3up"] = "201.00",
+ // i_PIA[  "Zdistfrptdisd3"] = "105",
+ //  i_PIA["Zdistfrptdisd2"] = "104",
+ //  i_PIA["Zdistfrptdisd1"] = "103",
+ //  i_PIA["Zdistfrptdispt"] = "102",
+ // i_PIA[  "Zdistfrptdisup"] = "101",
+ // i_PIA[  "Zaeicdx"] = "FAINT SMELL/ODOUR",
+ //  i_PIA["Zaeicd"] = "1",
+ //  i_PIA["Zamicdx"] = "MINOR AACCESS/REAR OF PROPERTIES",
+ //  i_PIA["Zamicd"] = "1",
+ //  i_PIA["Zsqm"] = "1",
+ //  i_PIA["Zsmptkn"] = "X",
+ //  i_PIA["Zwcwcdx"] = "< 1M",
+ //  i_PIA["Zwcwcd"] = "1",
+ //  i_PIA["Zwctcdx"] = "CANAL",
+ //  i_PIA["Zwctcd"] = "2",
+ //  i_PIA["Zdiscdx"] = "CSO",
+ //  i_PIA["Zdiscd"] = "2",
+ //  i_PIA["Zpsiteval"] = "PAULS AREA2",
+ //  i_PIA["Zpsitecdx"] = "AREA NAME",
+ //  i_PIA["Zpsitecd"] = "AN",
+ // i_PIA[  "Aufnr"] = "30528003"
+ //   myjson["I_PIA"] = i_PIA;
+   
+ //   var i_HDR = {};
+ //   i_HDR["Zarootca"] = "C3",
+ //   i_HDR["Zaflsrc"] = "AP",
+ //   i_HDR["Zaipflcd"] = "04",
+ //   i_HDR["Zaatwea"] = "DR",
+ //   i_HDR["Zaattim"] = "10] =00] =00",
+ //   i_HDR["Zaatdat"] = "08.05.2016",
+ //   i_HDR["Zaspill"] = "1",
+ //   i_HDR["Zacomm"] = "",
+ //   i_HDR["Aenam"] = "",
+ //   i_HDR["Aedat"] = "",
+ //   i_HDR["Ernam"] = "",
+ //   i_HDR["Erdat"] = "",
+ //   i_HDR["Zacomp"] = "00100516",
+ //   i_HDR["Zaintim"] = "09] =00] =00",
+ //   i_HDR["Zaindat"] = "07.05.2016",
+ //   i_HDR["Zadlindh"] = "",
+ //   i_HDR["Zaefgr"] = "111,222",
+ //   i_HDR["Zacacd"] = "B",
+ //   i_HDR["Zapsas"] = "GRAFWW",
+ //   i_HDR["Zaaref"] = "AREF",
+ //   i_HDR["Aufnr"] = "30528003"
+ //   myjson["I_HDR"] = i_HDR;
+	
+ //   myjson["I_AUFNR"] = "30528003",
+ //   myjson["I_ZASTYP"] = "05",
+ //   myjson["I_ZAWEAT"] = "01",
+ //   myjson["I_ZAESSTA"] = "02",
+ //   myjson["I_LONG_TEXT"] = "LT",
+ //   myjson["I_NOTIF_NO"] = "",
+ //   myjson["I_TYPE"] = "D",
+ //   myjson["I_OPTION"] = "C",
+ //   myjson["I_SETORDER_DG5"] = "X",
+ //   myjson["I_USERID"] = "POSTRIDGE2",
+ //   myjson["toText"] = []
+    
+ //   var ToTimeDepth = [];
+ //   var timeDepth = {};
+ //   timeDepth["Zaselect"] = "",
+ //   timeDepth["Comments"] = "COMMENTS DEPTH1",
+ //   timeDepth["Zdpridcdx"] = "",
+ //   timeDepth["Zdepthcd"] = "1",
+ //   timeDepth["Zdprircdx"] = "",
+ //   timeDepth["Zroomcd"] = "BA",
+ //   timeDepth["Zaditem"] = "",
+ //   timeDepth["Zaitem"] = "000001",
+ //   timeDepth["Aufnr"] = "30528003"
+ //   ToTimeDepth.push(timeDepth);
+
+ //   myjson["toTimeDepth"] = ToTimeDepth;
+
+ //   var ToTlineItem = [];
+ //   var tlineItem = {};
+	
+ //       tlineItem["Depth"] = "",
+ //       tlineItem["Severity"] = "2",
+ //       tlineItem["Zaselect"] = "",
+ //       tlineItem["Zacomm"] = "COMMENTS1",
+ //       tlineItem["Zagrdrf"] = "",
+ //       tlineItem["City1"] = "",
+ //       tlineItem["Zaposcd"] = "",
+ //       tlineItem["Zapltxt"] = "",
+ //       tlineItem["Zaparish"] = "",
+ //       tlineItem["StrSuppl2"] = "",
+ //       tlineItem["City2"] = "",
+ //       tlineItem["Zahouse"] = "",
+ //       tlineItem["Zastreet"] = "",
+ //       tlineItem["Zadlindl"] = "",
+ //       tlineItem["Zapymdn"] = "",
+ //       tlineItem["Zapyrdat"] = "",
+ //       tlineItem["Zapymrq"] = "",
+ //       tlineItem["Zapymd"] = "",
+ //       tlineItem["Zaincident"] = "",
+ //       tlineItem["Zatplnr"] = "MILFSP",
+ //       tlineItem["Zafsty"] = "3",
+ //       tlineItem["Zaftyp"] = "1",
+ //       tlineItem["Zaitem"] = "000001",
+ //       tlineItem["Aufnr"] = "30528003"
+ //ToTlineItem.push(tlineItem);
+ //   myjson["toTlineItem"] = ToTlineItem;
+ //   myjson["toRetTab"] =  []
+    
+    //   postAzureData("ZGW_MAM30_DG5_PIA_UPDATE", myjson)
+
+   // var myjson = {};
+   // myjson["NotifNo"]= "",
+   // myjson["MeasDoc"]= "",
+   // myjson["ErrType"]= "",
+   // myjson["NotifType"]= "ZV",
+   //myjson[ "CheckType"]= "",
+   // myjson["User"]= "CLEMOS",
+   // myjson["MeasCodeGrp"]= "VVEH-CHK",
+   // myjson["MeasReadBy"]= "PSMITH11",
+   // myjson["MeasLongText"]= "NO PROBLEM WITH THE VEHICLE",
+   // myjson["MeasText"]= "READING TAKEN",
+   // myjson["MeasValCode"]= "N",
+   // myjson["MeasReading"]= "10123",
+   // myjson["MeasTime"]= "",
+   // myjson["MeasDate"]= "14.08.2016",
+   // myjson["MeasEquip"]= "1003722",
+   // myjson["MeasPointCat"]= "M",
+   // myjson["MeasPoint"]= "33448"
+
+   // postAzureData("ZGW_MAM30_VEHICLE_SRV_VehicleChkUpd", myjson)
+
+ //   var myjson = {};
+ //   myjson[ "ObjStatus"] = "E0017";
+ //  myjson["UserId"] = "CLEMOS";
+ // myjson[ "LongText"] = "SOME LONG TEXT HERE TO DESCRIBE WHERE THE NEW EQUIPMENT IS TO BE     INSTALLED";
+ // myjson[ "EquipNo"] = "";
+ //  myjson["MessageType"] = "";
+ // myjson[ "Message"] = "";
+ // myjson[ "Shtxt"] = "NEW EQUIPMENT TEST";
+ // myjson[ "InstLocn"] = "FOULST-2E-BIO-CM01-CMB001";
+ // myjson[ "ObjType"] = "";
+ // myjson[ "Swerk"] = "ESAM";
+ //myjson[  "UserStatus"] = "E0017";
+ //myjson[  "Manufacturer"] = "ABAC";
+ // myjson[ "Manparno"] = "2800B-100-FM3";
+ // myjson[ "Manserno"] = "2R00060 ABC";
+ // myjson[ "StartDate"] = "26.02.2013";
+ // myjson[ "Newmanu"] = "";
+ // myjson[ "Newmanparno"] = "";
+ // myjson[ "EqunrUpd"] = "";
+ // myjson[ "UserStatusUpd"] = "1"
+ //      postAzureData("ZGW_EQUIPMENT", myjson)
+
+    //var myjson = {};
+    //myjson["Message"] = "",
+    //myjson["MessageType"] = "",
+    //myjson["UserId"] = "PSMITH11",
+    //myjson["ZassetTag"] = "PDS1234",
+    //myjson["FlocNo"] = "LEACSP"
+    //postAzureData("ZGW_MAM30_030_CHANGE_T3_SRV_ChangeFuncLoc", myjson)
+
+   // var myjson = {};
+   // myjson["User"] = "CLEMOS",
+   //myjson["Systcond"] = "",
+   //myjson["Funcloc"] = "BHSJWB-1H-FIN-PS04-MOT003",
+   //myjson["Equipno"] = "2009",
+   //myjson["Message"] = "",
+   //myjson["MessageType"] = "",
+   //myjson["OrderId"] = "30220527"
+
+    // postAzureData("ZGW_MAM30_030_CHANGE_T3_OrdDet", myjson)
+
+//    var myjson = {};
+//    myjson["Sernr"] = "95M213292X",
+//    myjson["Owner"] = "PSMITH11",
+//    myjson["UserId"] = "CLEMOS",
+//    myjson["MessageType"] = "",
+//    myjson["Message"] = ""
+//    postAzureData("ZGW_EQUIPMENT_SRV_UpdEquipSortField", myjson)
+
+//    var myjson = {};
+//    myjson["Message"] = "",
+//        myjson["MessageType"] = "",
+//        myjson["LongText"] = "LONG TEXT",
+//        myjson["UserId"] = "PSMITH11",
+//        myjson["SpecReqt"] = "X",
+//        myjson["StartDate"] = "14.08.2016",
+//        myjson["Assignment"] = "",
+//        myjson["Wktycd"] = "XG",
+//        myjson["Wktygp"] = "SB",
+//        myjson["Orderno"] = "30528005"
+//    postAzureData("ZGW_MAM30_CREATE_ADD_WRK", myjson)
+
+//    var myjson = {};
+//    myjson["Message"] = "",
+//myjson["MessageType"] = "",
+//myjson["UserId"] = "PSMITH11",
+//myjson["MrTime"] = "11:12",
+//myjson["MrRecorded"] = "3220",
+//myjson["SchedDate"] = "",
+//myjson["MrDate"] = "18.04.2016",
+//myjson["MrType"] = "",
+//myjson["MrReason"] = "",
+//myjson["Device"] = "97M575073M"
+//    postAzureData("ZGW_MAM30_METER_READING", myjson)
+
+
+
+   // ZGW_MAM30_CRM_ACTIVITY_REQUEST is not available in D !!!!!!
+  //  var myjson = {};
+  //  myjson["Description"] = "METE05TP - RELOCATE METER REQUEST DEL1";
+  // myjson["PostingDate"] = "27.02.2013";
+  // myjson["ProductName"] = "REQ001PTP";
+  // myjson["Location"] = "13545132";
+  // myjson["LocationDesc"] = "Test";
+  // myjson["PartnerNo"] = "";
+  // myjson["StDate"] ="27.02.2013";
+  // myjson["StTime"] = "15:00:00";
+  // myjson["Suser"] = "CLEMOS";
+  // myjson["MessageType"] = "";
+  //myjson["Message"] = "";
+  // myjson["LongText"] = "SOME LONG TEXTR";
+  // myjson["UserId"] = "CLEMOS"
+  //  postAzureData("ZGW_MAM30_CRM_ACTIVITY_REQUEST", myjson)
+
+    //var myjson = {};
+    //myjson["ShortText"] = "READ BY ME",
+    //   myjson["ReadingTime"] = "PT00H00M00S",
+    //   myjson["ReadingDate"] = "27.02.2016",
+    //   myjson["MeasPoint"] = "33851",
+    //   myjson["Equipment"] = "",
+    //   myjson["FuncLoc"] = "BARNWW",
+    //   myjson["Userid"] = "PSMITH11",
+    //   myjson["Reader"] = "PSMITH11",
+    //   myjson["RecordedValue"] = "100.03",
+    //   myjson["ValuationCode"] = "",
+    //   myjson["Meas_doc"] = "",
+    //   myjson["Message"] = "",
+    //   myjson["Message_type"] = ""
+    //postAzureData("ZGW_MAM30_040_CREATE", myjson)
+
+    //var myjson = {};
+    //myjson["Zsite"] = "";
+    //myjson["MsgTyp"] = "";
+    //myjson["Message"] = "";
+
+    //var ToSurvey = [];
+    //var survey = {};
+
+    //survey["Zncdesc"] = "BOOSTER PUMP";
+    //survey["Zascat"] = "A";
+    //survey["ZzflNc"] = "30BOO";
+    //survey["ZzwWw"] = "W";
+    //survey["ZsiteDesc"] = "GAINSBOROUGH NEW WW - 02";
+    //survey["Zsite"] = "GAINWW";
+    //survey["Eqktx"] = "N/A";
+    //survey["Equnr"] = "000000000000123456";
+    //survey["Zsitesgnoff"] = "";
+    //survey["Zsurvsub"] = "";
+    //survey["Zsurv"] = "S123";
+    //survey["Zrecnum"] = "TESTASSETUPLOAD";
+    //survey["Herst"] = "SEEPEX";
+    //survey["Mapar"] = "M2020A";
+    //survey["Zinstlocn"] = "GAINWW-1H-FIN-PS02-BOO004";
+    //survey["Zinslocdesc1"] = "BOOSTER PUMP";
+    //survey["Zinslocdesc2"] = "-";
+    //survey["Zinslocdesc3"] = "HIGHLIFT PUMP  5";
+    //survey["Zinslocdesc"] = "BOOSTER PUMP - HIGHLIFT PUMP  5";
+    //survey["ZzeqptEgi"] = "3003";
+    //survey["Zotdesc"] = "CENTRIFUGAL HORIZONTAL SPINDLE PUMP";
+    //survey["Zprg"] = "1H";
+    //survey["Zprgdesc"] = "TREATED WATER PUMPING";
+    //survey["Zplgrp"] = "FIN";
+    //survey["Zplgdesc"] = "FINAL WATER PUMPING";
+    //survey["Zsyscode"] = "";
+    //survey["Zsysdesc"] = "N/A";
+    //survey["Zparlocn"] = "";
+    //survey["Zpequnr"] = "";
+    //survey["Zparecnum"] = "";
+    //survey["Zdecom"] = "";
+    //survey["Zdecomr"] = "";
+    //survey["Zeqdecom"] = "";
+    //survey["Ernam"] = "";
+    //survey["Termab"] = "00000000";
+    //survey["Erfzeit"] = "PT00H00M00S";
+    //survey["Zowner"] = "";
+    //survey["Zproctyp"] = "";
+    //survey["Zcomflg"] = "";
+    //survey["Inbdt"] = "00000000";
+    //survey["Zsern1"] = "";
+    //survey["Serge"] = "";
+    //survey["Zzassettag"] = "";
+    //survey["Zdocflg"] = "";
+    //survey["StatusProfile"] = "";
+    //survey["Estat"] = "";
+    //survey["StatusTxt"] = "N/A";
+    //survey["Zcomments1"] = "";
+    //survey["Zcomments2"] = "";
+    //survey["Zdocpath"] = "";
+    //survey["ZGpsnmea"] = "";
+    //survey["ZcapSurv"] = "";
+    //survey["Zproj"] = "";
+    //survey["ZcheckOut"] = "";
+    //survey["ZchkoutBy"] = "";
+    //survey["ZchkoutDate"] = "00000000";
+    //survey["Deleted"] = "";
+    //survey["Zasstype"] = "";
+    //survey["Zassdesc"] = "";
+    //survey["Ziwerk"] = "";
+    //survey["Zswerk"] = ""
+    //ToSurvey.push(survey);
+    //myjson["toSurvey"] = ToSurvey;
+    //postAzureData("ZGW_MAM30_ASSET_SURVEY_UPL", myjson)
+
+
+    //var myjson = {};
+    //myjson["ZCHKOUT_BY"] = "PSMITH";
+    //myjson["ZSURV"] = "S_CAPDELTEST1201506191447276336";
+    //myjson["ZSITE"] = "ABBEWT";
+
+    //myjson["toSurvey"] = [];
+  
+    //postAzureData("ZGW_MAM30_DWNLD_SURVEY_SRV", myjson)
+
+    // getAssets();
+
+}
+function getAssets() {//The server keeps deleted records for MaxDaysSinceLastDownload  days (currently 90 days).
+    //If the client hasn't synced Assets for more than 90 days
+    //then we must empty the local asset table and download it all again.
+    var lastSyncReference = localStorage.getItem('LastSyncReference');
+
+    var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    var firstDate = new Date();//today
+    var secondDate = new Date(lastSyncReference.substring(0, 4), lastSyncReference.substring(4, 6) - 1, lastSyncReference.substring(6, 8));
+
+    var daysSinceLastDownload = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+
+    var MaxDaysSinceLastDownload = 90;
+
+    html5sql.process(
+		["select count(*) AS REC from AssetSitesDetails"],
+		function (transaction, results, rowsArray) {
+		    if (daysSinceLastDownload > MaxDaysSinceLastDownload || rowsArray[0].REC == 0) {
+		        //get all records
+		        var recordsRetrieved = -1;
+		        var currentEquipNum = 0;
+		        var numRecordsToGet = 10000;
+
+		        getAssetsRecursive("ZGW_MAM_EXTRACT_ASSET_DATA", currentEquipNum + numRecordsToGet)
+		    }
+		    else {
+		        //get deltas
+		        var datestring = getDate();
+
+		        getAssetRecords("ZGW_MAM_EXTRACT_ASSET_DATA", "?" + datestring, function (data) {
+		            recordsRetrieved = data.length;
+
+		            if (recordsRetrieved > 0) {
+		                addRecordstoDb(data, function () {
+		                    //Get last equipment number
+		                    getBiggestZequnr(function (BiggestZequnr) {
+		                        console.log("BiggestZequnr=" + BiggestZequnr);
+		                    })
+		                })
+		            }
+		            else {
+		                console.log("No Records found");
+		            }
+
+		        });
+		    }
+		},
+		 function (error, statement) {
+		     window.console && console.log("Error: " + error.message + " when processing " + statement);
+		 }
+	);
+
+
+
+}
+function getAssetsRecursive(currentEquipNum, numRecordsToGet) {
+    getAssetRecords("ZGW_MAM_EXTRACT_ASSET_DATA", "?" + currentEquipNum + "?" + numRecordsToGet, function (data) {
+        recordsRetrieved = data.length;
+
+        if (recordsRetrieved > 0) {
+            addRecordstoDb(data, function () {
+                //Get last equipment number
+                getBiggestZequnr(function (BiggestZequnr) {
+                    console.log("BiggestZequnr=" + BiggestZequnr);
+                    getAssetsRecursive(BiggestZequnr, numRecordsToGet);
+                })
+            })
+
+
+
+        }
+        else {
+            alert("done");
+        }
+
+    });
+}
+
+function getAssetRecordsWithWhereClause() {
+    var datestring = "20140801";
+    getAssetRecords("ZGW_MAM_EXTRACT_ASSET_DATA", "?" + datestring + "?" + "WHERE zzflNc='44LIG' " , function (data) {
+        recordsRetrieved = data.length;
+
+        if (recordsRetrieved > 0) {
+            console.log("got " + recordsRetrieved + " Records");
+        }
+        else {
+            console.log("No Records found");
+        }
+
+    });
+
+    var numrecords = 3;
+    var equipmentNumberBiggerthan = 2000;
+    getAssetRecords("ZGW_MAM_EXTRACT_ASSET_DATA", "?" + equipmentNumberBiggerthan + "?" + numrecords + "?" + "WHERE zzflNc='44LIG' ", function (data) {
+        recordsRetrieved = data.length;
+
+        if (recordsRetrieved > 0) {
+            console.log("got " + recordsRetrieved + " Records");
+        }
+        else {
+            console.log("No Records found");
+        }
+
+    });
+
+
+}
+
+function getAssetRecords(page, params, callback) {
+    //var myurl = "https://AMPService.azurewebsites.net/api/" + page + params;//"real" azure
+     var myurl = "http://10.193.123.32/AMPServiceService/api/" + page + params;//My local version
+
+    $.ajax({
+        dataType: "json",
+        url: myurl,
+        headers: {
+            "ZUMO-API-VERSION": "2.0.0"
+        },
+        timeout: 3000000
+    }).done(function (data) {
+        callback(data);
+    }).fail(function (data, xhr, status) {
+        opMessage(page + status + data);
+        if (status != "parsererror") {
+            if (status == "timeout") {
+                opMessage(page + status);
+            }
+        }
+    }).always(function () {
+        opMessage("Complete" + page);
+    });
+}
+
+function addRecordstoDb(data, callback) {
+
+    var sqlstatement = "";
+
+    // var myarray = [{ 'sql': 'DELETE FROM MODEL', 'data': [] }];
+    var myarray = [];
+
+    for (var cntx = 0; cntx < data.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO AssetSitesDetails ( assdesc ,assettag ,asstype ,eqart ,eqktx ,equnr ,herst ,iwerk ,mapar ,ncdesc ,otdesc ,plgrp ,pltxt ,serge ,site ,status ,swerk ,syscode ,sysdesc ,tplnr ,zfl_nc ,zinbdt ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', 'data': [
+            data[cntx].zassdesc,
+       data[cntx].zassettag,
+       data[cntx].zasstype,
+       data[cntx].zeqart,
+       data[cntx].zeqktx,
+       data[cntx].zequnr,
+       data[cntx].zherst,
+       data[cntx].ziwerk,
+       data[cntx].zmapar,
+       data[cntx].zncdesc,
+       data[cntx].zotdesc,
+       data[cntx].zplgrp,
+       data[cntx].zpltxt,
+       data[cntx].zserge,
+       data[cntx].zsite,
+       data[cntx].zstatus,
+       data[cntx].zswerk,
+       data[cntx].zsyscode,
+       data[cntx].zsysdesc,
+       data[cntx].ztplnr,
+       data[cntx].zzflnc,
+        data[cntx].zinbdt]
+        })
+    }
+    console.log(myarray[0]);
+    opMessage("Success - Built asset array - " + myarray.length + " rows");
+    html5sql.process(
+          myarray
+        ,
+         function () {
+             opMessage("Success - Finished Loading Model");
+             console.log("Added record to db");
+             callback();
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+
+function getBiggestZequnr(callback) {
+    var sqlstatement = 'SELECT  equnr as numRecords  FROM ASSETSITESDETAILS ORDER BY equnr desc limit 1';
+
+
+    html5sql.process(sqlstatement,
+                         function (transaction, results, rowsArray) {
+                             callback(rowsArray[0].numRecords)
+                         },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("Delete", error.message)
+                     }
+            );
+}
+
+function postAzureData(page, postData) {
+
+
+    // var myurl = "https://AMPService.azurewebsites.net/api/" + page + "?" +  localStorage.getItem('MobileUser');
+    var myurl = "http://10.193.123.32/AMPServiceService/api/" + page + "?" + localStorage.getItem('MobileUser'); //"SMUNJEWAR2";
+
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=UTF-8",
+        url: myurl,
+        data: JSON.stringify(postData),
+        headers: {
+            "ZUMO-API-VERSION": "2.0.0"
+        },
+        timeout: 3000000
+    }).done(function (data) {
+        opMessage("call success" + page);
+        chooseCB(data, page);
+    }).fail(function (data, xhr, status) {
+        opMessage(page + status + data);
+        if (status != "parsererror") {
+            if (status == "timeout") {
+                opMessage(page + status);
+            }
+        }
+    }).always(function () {
+        opMessage("Complete" + page);
+    });
+}
+
+
+function requestAzureData(page, params) {
+    if (params.length > 0) {
+
+        var myurl = "https://AMPService.azurewebsites.net/api/" + page + "?" + params;//"real" azure
+        //var myurl = "http://10.193.123.32/AMPServiceService/api/" + page + "?" + params;//My local version
+    }
+    else {
+        var myurl = "https://AMPService.azurewebsites.net/api/" + page;//"real" azure
+        // var myurl = "http://10.193.123.32/AMPServiceService/api/" + page;//My local version
+    }
+
+    $.ajax({
+        dataType: "json",
+        url: myurl,
+        headers: {
+            "ZUMO-API-VERSION": "2.0.0"
+            // ,"My-Second-Header":"second value"
+        },
+        timeout: 3000000
+    }).done(function (data) {
+        opMessage("call success" + page);
+        chooseCB(data, page);
+    }).fail(function (data, xhr, status) {
+        opMessage(page + status + data);
+        if (status != "parsererror") {
+            if (status == "timeout") {
+                opMessage(page + status);
+            }
+        }
+    }).always(function () {
+        opMessage("Complete" + page);
+    });
+}
+
+function chooseCB(mydata, page) {
+    switch (page) {
+        case "ZACAT001AssetCaptureCategory":
+            ZACAT001AssetCaptureCategoryCB(mydata);
+            break;
+        case "ZPRG002ProcessGroupCodes":
+            ZPRG002ProcessGroupCodesCB(mydata);
+            break;
+        case "PlantGroupCodesZPLG003":
+            PlantGroupCodesZPLG003CB(mydata);
+            break;
+        case "SystemCodesDescriptionZSYS004":
+            SystemCodesDescriptionZSYS004CB(mydata);
+            break;
+        case "FunctionTypeCodesZNAM005":
+            FunctionTypeCodesZNAM005CB(mydata);
+            break;
+        case "EquipmentTypeCodesZEGI006":
+            EquipmentTypeCodesZEGI006CB(mydata);
+            break;
+        case "PlantGroupProcessGroupCodesZPLG_PRG007":
+            PlantGroupProcessGroupCodesZPLG_PRG007CB(mydata);
+            break;
+        case "AssetTypeCodesZAST008":
+            AssetTypeCodesZAST008CB(mydata);
+            break;
+        case "EGINameCodeMappingZAEGI_NC":
+            EGINameCodeMappingZAEGI_NCCB(mydata);
+            break;
+        case "DecommissionStatusZDECOMSTAT":
+            DecommissionStatusZDECOMSTATCB(mydata);
+            break;
+        case "ZGW_MAM_SITE_REFDATA":
+            ZGW_MAM_SITE_REFDATACB(mydata);
+            break;
+        case "ZGW_MAM30_090_GETLIST_T3":
+            ZGW_MAM30_090_GETLIST_T3CB(mydata);
+            break;
+        case "ZGW_MAM30_VEHICLE":
+            ZGW_MAM30_VEHICLECB(mydata);
+            break;
+        case "ZGW_MAM30_ADOBE_PREPOP_SRV":
+            ZGW_MAM30_ADOBE_PREPOP_SRVCB(mydata);
+            break;
+        case "ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV":
+            ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRVCB(mydata);
+            break;
+        case "ZGW_MAM30_SEWER_TECH_T3":
+            ZGW_MAM30_SEWER_TECH_T3CB(mydata);
+            break;
+        case "ZGW_MAM30_RFV_T3_SRV":
+            ZGW_MAM30_RFV_T3_SRVCB(mydata);
+            break;
+        case "ZGW_MAM30_VERSION_DEPLOY":
+            ZGW_MAM30_VERSION_DEPLOYCB(mydata);
+            break;
+        case "ZG_MAM30_APPBAR_CTRL_SRV":
+            ZG_MAM30_APPBAR_CTRL_SRVCB(mydata);
+            break;
+        case "ZGW_MAM30_REFDATA_T3_SRVActivity":
+            ZGW_MAM30_REFDATA_T3_SRVActivityCB(mydata);
+            break;
+        case "ZGW_MAM30_REFDATA_T3_SRVNotifTypes":
+            ZGW_MAM30_REFDATA_T3_SRVNotifTypesCB(mydata);
+            break;
+        case "ZGW_MAM30_REFDATA_T3_SRVPAICode":
+            ZGW_MAM30_REFDATA_T3_SRVPAICodeCB(mydata);
+            break;
+        case "ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF":
+            ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCFCB(mydata);
+            break;
+        case "ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPS":
+            ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB(mydata);
+            break;
+        case "ZGW_MAM30_031_REFDATA_T3_SRVManufacturer":
+            ZGW_MAM30_031_REFDATA_T3_SRVManufacturerCB(mydata);
+            break;
+        case "ZGW_MAM30_031_REFDATA_T3_SRVModel":
+            ZGW_MAM30_031_REFDATA_T3_SRVModelCB(mydata);
+            break;
+        case "ZGW_MAM30_031_REFDATA_T3_SRVObjType":
+            ZGW_MAM30_031_REFDATA_T3_SRVObjTypeCB(mydata);
+            break;
+        case "ZGW_MAM30_031_REFDATA_T3_SRVPlant":
+            ZGW_MAM30_031_REFDATA_T3_SRVPlantCB(mydata);
+            break;
+        case "ZGW_MAM30_031_REFDATA_T3_SRVProfile":
+            ZGW_MAM30_031_REFDATA_T3_SRVProfileCB(mydata);
+            break;
+        case "ZGW_MAM_EXTRACT_ASSET_DATA":
+            ZGW_MAM_EXTRACT_ASSET_DATACB(mydata);
+            break;
+        case "ZGW_MAM_ASSETDATA_T3":
+            ZGW_MAM_ASSETDATA_T3CB(mydata);
+            break;
+        case "ZGW_GET_JOB_DETAILS":
+            ZGW_GET_JOB_DETAILSCB(mydata);
+            break;
+        case "ZGW_MAM_MAINT_PARAM":
+            ZGW_MAM_MAINT_PARAMCB(mydata);
+            break;
+        case "ZGW_MAM30_CHECK_SURVEY":
+            ZGW_MAM30_CHECK_SURVEYCB(mydata);
+            break;
+        case "ZGW_MAM30_USER_VALIDATE_SRV":
+            ZGW_MAM30_USER_VALIDATE_SRVCB(mydata);
+            break;
+        case "ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code":
+            ZGW_MAM30_DG5_PIA_CODES_T3Dg5CodeCB(mydata);
+            break;
+        case "ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel":
+            ZGW_MAM30_DG5_PIA_CODES_T3Dg5RelCB(mydata);
+            break;
+        default:
+            genericPostCB(mydata, page);
+    }
+}
+
+
+function ZACAT001AssetCaptureCategoryCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZACAT001AssetCaptureCategory records from Azure");
+        alert("Got " + data.length + " ZACAT001AssetCaptureCategory records from Azure");
+    }
+    else {
+        opMessage("ZACAT001AssetCaptureCategory table is empty");
+        alert("ZACAT001AssetCaptureCategory table is empty");
+    }
+}
+function ZPRG002ProcessGroupCodesCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZPRG002ProcessGroupCodes records from Azure");
+        alert("Got " + data.length + " ZPRG002ProcessGroupCodes records from Azure");
+    }
+    else {
+        opMessage("ZPRG002ProcessGroupCodes table is empty");
+        alert("ZPRG002ProcessGroupCodes table is empty");
+    }
+}
+function PlantGroupCodesZPLG003CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " PlantGroupCodesZPLG003 records from Azure");
+        alert("Got " + data.length + " PlantGroupCodesZPLG003 records from Azure");
+    }
+    else {
+        opMessage("PlantGroupCodesZPLG003 table is empty");
+        alert("PlantGroupCodesZPLG003 table is empty");
+    }
+}
+function SystemCodesDescriptionZSYS004CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " SystemCodesDescriptionZSYS004 records from Azure");
+        alert("Got " + data.length + " SystemCodesDescriptionZSYS004 records from Azure");
+    }
+    else {
+        opMessage("SystemCodes table is empty");
+        alert("SystemCodes table is empty");
+    }
+}
+function FunctionTypeCodesZNAM005CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " FunctionTypeCodesZNAM005 records from Azure");
+        alert("Got " + data.length + " FunctionTypeCodesZNAM005 records from Azure");
+    }
+    else {
+        opMessage("FunctionTypeCodesZNAM005 table is empty");
+        alert("FunctionTypeCodesZNAM005 table is empty");
+    }
+}
+function EquipmentTypeCodesZEGI006CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " EquipmentTypeCodesZEGI006 records from Azure");
+        alert("Got " + data.length + " EquipmentTypeCodesZEGI006 records from Azure");
+    }
+    else {
+        opMessage("EquipmentTypeCodesZEGI006 table is empty");
+        alert("EquipmentTypeCodesZEGI006 table is empty");
+    }
+}
+function PlantGroupProcessGroupCodesZPLG_PRG007CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " PlantGroupProcessGroupCodesZPLG_PRG007 records from Azure");
+        alert("Got " + data.length + " PlantGroupProcessGroupCodesZPLG_PRG007 records from Azure");
+    }
+    else {
+        opMessage("PlantGroupProcessGroupCodesZPLG_PRG007 table is empty");
+        alert("PlantGroupProcessGroupCodesZPLG_PRG007 table is empty");
+    }
+}
+function AssetTypeCodesZAST008CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " AssetTypeCodesZAST008 records from Azure");
+        alert("Got " + data.length + " AssetTypeCodesZAST008 records from Azure");
+    }
+    else {
+        opMessage("AssetTypeCodesZAST008 table is empty");
+        alert("AssetTypeCodesZAST008 table is empty");
+    }
+}
+function EGINameCodeMappingZAEGI_NCCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " EGINameCodeMappingZAEGI_NC records from Azure");
+        alert("Got " + data.length + " EGINameCodeMappingZAEGI_NC records from Azure");
+    }
+    else {
+        opMessage("EGINameCodeMappingZAEGI_NC table is empty");
+        alert("EGINameCodeMappingZAEGI_NC table is empty");
+    }
+}
+function DecommissionStatusZDECOMSTATCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " DecommissionStatusZDECOMSTAT records from Azure");
+        alert("Got " + data.length + " DecommissionStatusZDECOMSTAT records from Azure");
+    }
+    else {
+        opMessage("DecommissionStatusZDECOMSTAT table is empty");
+        alert("DecommissionStatusZDECOMSTAT table is empty");
+    }
+}
+function ZGW_MAM_SITE_REFDATACB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM_SITE_REFDATA records from Azure");
+        alert("Got " + data.length + " ZGW_MAM_SITE_REFDATA records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM_SITE_REFDATA table is empty");
+        alert("ZGW_MAM_SITE_REFDATA table is empty");
+    }
+}
+
+/////
+
+
+
+function ZGW_MAM30_090_GETLIST_T3CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_090_GETLIST_T3 records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_090_GETLIST_T3 records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_090_GETLIST_T3 returned no records");
+        alert("ZGW_MAM30_090_GETLIST_T3 returned no records");
+    }
+}
+
+function ZGW_MAM30_VEHICLECB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_VEHICLE records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_VEHICLE records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_VEHICLE returned no records");
+        alert("ZGW_MAM30_VEHICLE returned no records");
+    }
+}
+
+function ZGW_MAM30_ADOBE_PREPOP_SRVCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_ADOBE_PREPOP_SRV records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_ADOBE_PREPOP_SRV records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_ADOBE_PREPOP_SRV returned no records");
+        alert("ZGW_MAM30_ADOBE_PREPOP_SRV returned no records");
+    }
+}
+
+function ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRVCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV returned no records");
+        alert("ZGW_MAM30_ADOBE_PREPOP_GIS_T3_SRV returned no records");
+    }
+}
+
+function ZGW_MAM30_SEWER_TECH_T3CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_SEWER_TECH_T3 records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_SEWER_TECH_T3 records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_SEWER_TECH_T3 returned no records");
+        alert("ZGW_MAM30_SEWER_TECH_T3 returned no records");
+    }
+}
+
+function ZGW_MAM30_RFV_T3_SRVCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_RFV_T3_SRV records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_RFV_T3_SRV records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_RFV_T3_SRV returned no records");
+        alert("ZGW_MAM30_RFV_T3_SRV returned no records");
+    }
+}
+
+function ZGW_MAM30_VERSION_DEPLOYCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_VERSION_DEPLOY records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_VERSION_DEPLOY records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_VERSION_DEPLOY returned no records");
+        alert("ZGW_MAM30_VERSION_DEPLOY returned no records");
+    }
+}
+
+function ZG_MAM30_APPBAR_CTRL_SRVCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZG_MAM30_APPBAR_CTRL_SRV_MyMenuBar records from Azure");
+        alert("Got " + data.length + " ZG_MAM30_APPBAR_CTRL_SRV_MyMenuBar records from Azure");
+    }
+    else {
+        opMessage("ZG_MAM30_APPBAR_CTRL_SRV_MyMenuBar returned no records");
+        alert("ZG_MAM30_APPBAR_CTRL_SRV_MyMenuBar returned no records");
+    }
+}
+function ZGW_MAM30_REFDATA_T3_SRVActivityCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVActivity records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVActivity records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_REFDATA_T3_SRVActivity returned no records");
+        alert("ZGW_MAM30_REFDATA_T3_SRVActivity returned no records");
+    }
+}
+
+function ZGW_MAM30_REFDATA_T3_SRVNotifTypesCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVNotifTypes records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVNotifTypes records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_REFDATA_T3_SRVNotifTypes returned no records");
+        alert("ZGW_MAM30_REFDATA_T3_SRVNotifTypes returned no records");
+    }
+}
+
+function ZGW_MAM30_REFDATA_T3_SRVPAICodeCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVPAICode records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_REFDATA_T3_SRVPAICode records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_REFDATA_T3_SRVPAICode returned no records");
+        alert("ZGW_MAM30_REFDATA_T3_SRVPAICode returned no records");
+    }
+}
+function ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCFCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF returned no records");
+        alert("ZGW_MAM30_016_GETDETAIL_CFEED_SRVCodeGPCF returned no records");
+    }
+}
+
+function ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB returned no records");
+        alert("ZGW_MAM30_016_GETDETAIL_CFEED_SRVScenCodeGPSCB returned no records");
+    }
+}
+
+function ZGW_MAM30_031_REFDATA_T3_SRVManufacturerCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3Manufacturer_SRV records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVManufacturer records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_031_REFDATA_T3_SRVManufacturer returned no records");
+        alert("ZGW_MAM30_031_REFDATA_T3_SRVManufacturer returned no records");
+    }
+}
+
+function ZGW_MAM30_031_REFDATA_T3_SRVModelCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVModel records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVModel records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_031_REFDATA_T3_SRVModel returned no records");
+        alert("ZGW_MAM30_031_REFDATA_T3_SRVModel returned no records");
+    }
+}
+
+function ZGW_MAM30_031_REFDATA_T3_SRVObjTypeCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVObjType records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVObjType records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_031_REFDATA_T3_SRVObjType returned no records");
+        alert("ZGW_MAM30_031_REFDATA_T3_SRVObjType returned no records");
+    }
+}
+
+function ZGW_MAM30_031_REFDATA_T3_SRVPlantCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVPlant records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVPlant records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_031_REFDATA_T3_SRVPlant returned no records");
+        alert("ZGW_MAM30_031_REFDATA_T3_SRVPlant returned no records");
+    }
+}
+
+function ZGW_MAM30_031_REFDATA_T3_SRVProfileCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVProfile records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_031_REFDATA_T3_SRVProfile records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_031_REFDATA_T3_SRVProfile returned no records");
+        alert("ZGW_MAM30_031_REFDATA_T3_SRVProfile returned no records");
+    }
+}
+
+function ZGW_MAM_EXTRACT_ASSET_DATACB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM_EXTRACT_ASSET_DATACB records from Azure");
+        alert("Got " + data.length + " ZGW_MAM_EXTRACT_ASSET_DATACB records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM_EXTRACT_ASSET_DATACB returned no records");
+        alert("ZGW_MAM_EXTRACT_ASSET_DATACB returned no records");
+    }
+}
+
+function ZGW_MAM_ASSETDATA_T3CB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM_ASSETDATA_T3 records from Azure");
+        alert("Got " + data.length + " ZGW_MAM_ASSETDATA_T3 records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM_ASSETDATA_T3 returned no records");
+        alert("ZGW_MAM_ASSETDATA_T3 returned no records");
+    }
+}
+
+function ZGW_GET_JOB_DETAILSCB(data) {
+    if (data.tojobdet.results.length > 0) {
+        opMessage("Got " + data.tojobdet.results.length + " tojobdet.results ZGW_GET_JOB_DETAILS records from Azure");
+        alert("Got " + data.tojobdet.results.length + " tojobdet.results ZGW_GET_JOB_DETAILS records from Azure");
+    }
+    else {
+        opMessage("ZGW_GET_JOB_DETAILS returned no records");
+        alert("ZGW_GET_JOB_DETAILS returned no records");
+    }
+}
+function ZGW_MAM_MAINT_PARAMCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM_MAINT_PARAM records from Azure");
+        alert("Got " + data.length + " ZGW_MAM_MAINT_PARAM records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM_MAINT_PARAM returned no records");
+        alert("ZGW_MAM_MAINT_PARAM returned no records");
+    }
+}
+function ZGW_MAM30_CHECK_SURVEYCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_CHECK_SURVEY records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_CHECK_SURVEY records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_CHECK_SURVEY returned no records");
+        alert("ZGW_MAM30_CHECK_SURVEY returned no records");
+    }
+}
+function ZGW_MAM30_USER_VALIDATE_SRVCB(data) {
+    if (data != null) {
+        alert(data.message + data.messageType);
+    }
+    else {
+        opMessage("No data");
+        alert("No data");
+    }
+}
+
+function genericPostCB(data,page) {
+    if (data != null) {
+        alert(page + "    " + data);
+    }
+    else {
+        opMessage(page + "    " + " No data");
+        alert(page + "    " +"No data");
+    }
+}
+
+function ZGW_MAM30_DG5_PIA_CODES_T3Dg5CodeCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code returned no records");
+        alert("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code returned no records");
+    }
+}
+
+
+function ZGW_MAM30_DG5_PIA_CODES_T3Dg5RelCB(data) {
+    if (data.length > 0) {
+        opMessage("Got " + data.length + " ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel records from Azure");
+        alert("Got " + data.length + " ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel records from Azure");
+    }
+    else {
+        opMessage("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel returned no records");
+        alert("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel returned no records");
+    }
+}
+
+
+function refAssetsSitesCB(AssetSites) {
+    var sqlstatement = "";
+    var first = 0;
+    if (AssetSites.assetsites.length > 0) {
+        SetLastSyncDetails('LASTSYNC_REFERENCE');
+        setSyncingIndicator(true);
+        if (syncReferenceDetsUpdated) {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + ', AssetsSites:' + String(AssetSites.assetsites.length));
+        } else {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + 'AssetsSites:' + String(AssetSites.assetsites.length));
+        }
+        opMessage("Deleting Existing AssetSites");
+        sqlstatement += 'DELETE FROM AssetSites;';
+        opMessage("Loading " + AssetSites.assetsites.length + " AssetSites");
+        for (var cntx = 0; cntx < AssetSites.assetsites.length ; cntx++) {
+
+            sqlstatement += 'INSERT INTO AssetSites ( site , desc, bunit ) VALUES ( ' +
+                '"' + AssetSites.assetsites[cntx].site + '",' +
+                '"' + AssetSites.assetsites[cntx].desc + '",' +
+                '"' + AssetSites.assetsites[cntx].bunit + '");';
+
+        }
+
+        html5sql.process(sqlstatement,
+             function () {
+                 opMessage("Success - Finished Loading AssetSites");
+
+             },
+             function (error, statement) {
+                 opMessage("Error: " + error.message + " when processing " + statement);
+             }
+        );
+
+
+    }
+}
+
+
+function refAssetSitesDetailsCB(AssetSitesDetails) {
+    populateAssetUpload(AssetSitesDetails);
+    var sqlstatement = "";
+
+    var first = 0;
+    if (AssetSitesDetails.assetdetails.length > 0) {
+
+        if (syncReferenceDetsUpdated) {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + ', AssetSitesDetails:' + String(AssetSitesDetails.assetdetails.length));
+        } else {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + 'AssetSitesDetails:' + String(AssetSitesDetails.assetdetails.length));
+        }
+        opMessage("Deleting Existing AssetSitesDetails");
+        sqlstatement += 'DELETE FROM AssetSitesDetails;';
+        opMessage("Loading " + AssetSitesDetails.assetdetails.length + " AssetSitesDetails");
+        for (var cntx = 0; cntx < AssetSitesDetails.assetdetails.length ; cntx++) {
+            sqlstatement += 'INSERT INTO AssetSitesDetails ( assdesc ,assettag ,asstype ,eqart ,eqktx ,equnr ,herst ,iwerk ,mapar ,ncdesc ,otdesc ,plgrp ,pltxt ,serge ,site ,status ,swerk ,syscode ,sysdesc ,tplnr ,zfl_nc ,zinbdt ) VALUES ( ' +
+            '"' + AssetSitesDetails.assetdetails[cntx].assdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].assettag + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].asstype + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].eqart + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].eqktx + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].equnr + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].herst + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].iwerk + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].mapar + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].ncdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].otdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].plgrp + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].pltxt + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].serge + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].site + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].status + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].swerk + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].syscode + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].sysdesc + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].tplnr + '",' +
+            '"' + AssetSitesDetails.assetdetails[cntx].zfl_nc + '",' +
+             '"' + AssetSitesDetails.assetdetails[cntx].zinbdt + '");';
+        }
+
+
+        html5sql.process(sqlstatement,
+             function () {
+                 opMessage("Success - Finished Loading AssetSitesDetails");
+             },
+             function (error, statement) {
+                 opMessage("Error: " + error.message + " when processing " + statement);
+             }
+        );
+    }
+}
+
+function populateEGIandNameCodeMapping(EGIandNameCodeMappingData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing EGIandNameCodeMapping");
+    sqlstatement += 'DELETE FROM EGIandNameCodeMapping;';
+    opMessage("Loading " + EGIandNameCodeMappingData.EGIandNameCodeMapping.length + " records");
+
+    for (var cntx = 0; cntx < EGIandNameCodeMappingData.EGIandNameCodeMapping.length ; cntx++) {
+        sqlstatement += 'INSERT INTO EGIandNameCodeMapping (ZASCAT ,ZDEFPG,ZZEQPT_EGI ,ZZFL_NC,ZZW_WW) VALUES ( ' +
+        '"' + EGIandNameCodeMappingData.EGIandNameCodeMapping[cntx].ZASCAT + '",' +
+        '"' + EGIandNameCodeMappingData.EGIandNameCodeMapping[cntx].ZDEFPG + '",' +
+        '"' + EGIandNameCodeMappingData.EGIandNameCodeMapping[cntx].ZZEQPT_EGI + '",' +
+        '"' + EGIandNameCodeMappingData.EGIandNameCodeMapping[cntx].ZZFL_NC + '",' +
+        '"' + EGIandNameCodeMappingData.EGIandNameCodeMapping[cntx].ZZW_WW + '");';
+    }
+
+    html5sql.process(sqlstatement,
+         function () {
+             opMessage("Success - Finished Loading EGIandNameCodeMapping");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+
+}
+
+
+function populateManufacturer(ManufacturerData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing Manufacturer");
+    sqlstatement += 'DELETE FROM Manufacturer;';
+    opMessage("Loading " + ManufacturerData.Manufacturer.length + " records");
+
+    for (var cntx = 0; cntx < ManufacturerData.Manufacturer.length ; cntx++) {
+        sqlstatement += 'INSERT INTO Manufacturer (MANUFACTURER) VALUES ( ' +
+        '"' + ManufacturerData.Manufacturer[cntx].MANUFACTURER + '");';
+    }
+
+    html5sql.process(sqlstatement,
+         function () {
+             opMessage("Success - Finished Loading Manufacturer");
+             //   SetLastSyncDetails('LASTSYNC_REFERENCE');
+             //  setSyncingIndicator(false)
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populateModel(ModelData) {
+
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing Model");
+    sqlstatement += 'DELETE FROM Model;';
+    opMessage("Loading " + ModelData.Model.length + " Model records");
+
+    var myarray = [{ 'sql': 'DELETE FROM MODEL', 'data': [] }];
+
+    for (var cntx = 0; cntx < ModelData.Model.length ; cntx++) {
+        myarray.push({ 'sql': 'INSERT INTO Model (EQART ,HERST,MODEL) VALUES  (?, ?,?)', 'data': [ModelData.Model[cntx].EQART, ModelData.Model[cntx].HERST, ModelData.Model[cntx].MODEL] })
+    }
+    opMessage("Success - Built Model array - " + myarray.length + " rows");
+    html5sql.process(
+          myarray
+        ,
+         function () {
+             opMessage("Success - Finished Loading Model");
+             SetLastSyncDetails('LASTSYNC_REFERENCE');
+             setSyncingIndicator(false)
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populateEquipmentTypeCode(EquipmentTypeCodeData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing EquipmentTypeCode");
+    sqlstatement += 'DELETE FROM EquipmentTypeCode;';
+    opMessage("Loading " + EquipmentTypeCodeData.EquipmentTypeCode.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM EquipmentTypeCode', 'data': [] }];
+
+    for (var cntx = 0; cntx < EquipmentTypeCodeData.EquipmentTypeCode.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO EquipmentTypeCode (EARTX ,ZATCODE,ZOTDEF,ZOTDEF_EXT,ZOTDESC,ZZEQPT_EGI) VALUES  (?, ?,?,?,?,?)', 'data':
+    [EquipmentTypeCodeData.EquipmentTypeCode[cntx].EARTX, EquipmentTypeCodeData.EquipmentTypeCode[cntx].ZATCODE,
+     EquipmentTypeCodeData.EquipmentTypeCode[cntx].ZOTDEF, EquipmentTypeCodeData.EquipmentTypeCode[cntx].ZOTDEF_EXT,
+     EquipmentTypeCodeData.EquipmentTypeCode[cntx].ZOTDESC, EquipmentTypeCodeData.EquipmentTypeCode[cntx].ZZEQPT_EGI
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray
+        ,
+         function () {
+             opMessage("Success - Finished Loading EquipmentTypeCode");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+function populateAssetTypeCodes(AssetTypeCodesData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing AssetTypeCodes");
+    sqlstatement += 'DELETE FROM AssetTypeCodes;';
+    opMessage("Loading " + AssetTypeCodesData.AssetTypeCodes.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM AssetTypeCodes', 'data': [] }];
+
+    for (var cntx = 0; cntx < AssetTypeCodesData.AssetTypeCodes.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO AssetTypeCodes (ZATCODE ,ZATDEF1,ZATDEF2,ZATDESC) VALUES  (?,?,?,?)', 'data':
+    [AssetTypeCodesData.AssetTypeCodes[cntx].ZATCODE, AssetTypeCodesData.AssetTypeCodes[cntx].ZATDEF1,
+     AssetTypeCodesData.AssetTypeCodes[cntx].ZATDEF2, AssetTypeCodesData.AssetTypeCodes[cntx].ZATDESC
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading AssetTypeCodes");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populateFunctionTypeCodes(FunctionTypeCodesData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing FunctionTypeCodes");
+    sqlstatement += 'DELETE FROM FunctionTypeCodes;';
+    opMessage("Loading " + FunctionTypeCodesData.FunctionTypeCodes.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM FunctionTypeCodes', 'data': [] }];
+
+    for (var cntx = 0; cntx < FunctionTypeCodesData.FunctionTypeCodes.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO FunctionTypeCodes (EARTX ,ZATCODE,ZNCDEF,ZNCDEF_EXT,ZNCDESC,ZZFL_NC) VALUES  (?,?,?,?,?,?)', 'data':
+    [FunctionTypeCodesData.FunctionTypeCodes[cntx].EARTX, FunctionTypeCodesData.FunctionTypeCodes[cntx].ZATCODE,
+     FunctionTypeCodesData.FunctionTypeCodes[cntx].ZNCDEF, FunctionTypeCodesData.FunctionTypeCodes[cntx].ZNCDEF_EXT,
+     FunctionTypeCodesData.FunctionTypeCodes[cntx].ZNCDESC, FunctionTypeCodesData.FunctionTypeCodes[cntx].ZZFL_NC
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading FunctionTypeCodes");
+
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populatePlantGroupCodes(PlantGroupCodesData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing PlantGroupCodes");
+    sqlstatement += 'DELETE FROM PlantGroupCodes;';
+    opMessage("Loading " + PlantGroupCodesData.PlantGroupCodes.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM PlantGroupCodes', 'data': [] }];
+
+    for (var cntx = 0; cntx < PlantGroupCodesData.PlantGroupCodes.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO PlantGroupCodes (ZPLGDEF1 ,ZPLGDEF2,ZPLGDESC,ZPLGRP,ZZW_WW) VALUES  (?,?,?,?,?)', 'data':
+    [PlantGroupCodesData.PlantGroupCodes[cntx].ZPLGDEF1, PlantGroupCodesData.PlantGroupCodes[cntx].ZPLGDEF2,
+     PlantGroupCodesData.PlantGroupCodes[cntx].ZPLGDESC, PlantGroupCodesData.PlantGroupCodes[cntx].ZPLGRP,
+     PlantGroupCodesData.PlantGroupCodes[cntx].ZZW_WW
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading PlantGroupCodes");
+             //SetLastSyncDetails('LASTSYNC_REFERENCE');
+             //setSyncingIndicator(false)
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populateSystemCodes(SystemCodesData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing SystemCodes");
+    sqlstatement += 'DELETE FROM SystemCodes;';
+    opMessage("Loading " + SystemCodesData.SystemCodes.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM SystemCodes', 'data': [] }];
+
+    for (var cntx = 0; cntx < SystemCodesData.SystemCodes.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO SystemCodes (ZSYSCODE ,ZSYSDEF1,ZSYSDEF2,ZZSYSDESC) VALUES  (?,?,?,?)', 'data':
+    [SystemCodesData.SystemCodes[cntx].ZSYSCODE, SystemCodesData.SystemCodes[cntx].ZSYSDEF1,
+     SystemCodesData.SystemCodes[cntx].ZSYSDEF2, SystemCodesData.SystemCodes[cntx].ZSYSDESC
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading SystemCodes");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+function populateAssetCaptureCategory(AssetCaptureCategoryData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing AssetCaptureCategory");
+    sqlstatement += 'DELETE FROM AssetCaptureCategory;';
+    opMessage("Loading " + AssetCaptureCategoryData.AssetCaptureCategory.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM AssetCaptureCategory', 'data': [] }];
+
+    for (var cntx = 0; cntx < AssetCaptureCategoryData.AssetCaptureCategory.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO AssetCaptureCategory (ZASCAT ,ZATCODE,ZSYSCODE) VALUES  (?,?,?)', 'data':
+    [AssetCaptureCategoryData.AssetCaptureCategory[cntx].ZASCAT, AssetCaptureCategoryData.AssetCaptureCategory[cntx].ZATCODE,
+     AssetCaptureCategoryData.AssetCaptureCategory[cntx].ZSYSCODE
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading AssetCaptureCategory");
+             //SetLastSyncDetails('LASTSYNC_REFERENCE');
+             //setSyncingIndicator(false)
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+
+function populatePlantGroupAndProcessGroupCodes(PlantGroupAndProcessGroupCodesData) {
+    var sqlstatement = "";
+
+    opMessage("Deleting Existing PlantGroupAndProcessGroupCodes");
+    sqlstatement += 'DELETE FROM PlantGroupAndProcessGroupCodes;';
+    opMessage("Loading " + PlantGroupAndProcessGroupCodesData.PlantGroupAndProcessGroupCodes.length + " records");
+
+    var myarray = [{ 'sql': 'DELETE FROM PlantGroupAndProcessGroupCodes', 'data': [] }];
+
+    for (var cntx = 0; cntx < PlantGroupAndProcessGroupCodesData.PlantGroupAndProcessGroupCodes.length ; cntx++) {
+        myarray.push({
+            'sql': 'INSERT INTO PlantGroupAndProcessGroupCodes (ZPLGRP ,ZPRG,ZZW_WW) VALUES  (?,?,?)', 'data':
+    [PlantGroupAndProcessGroupCodesData.PlantGroupAndProcessGroupCodes[cntx].ZPLGRP, PlantGroupAndProcessGroupCodesData.PlantGroupAndProcessGroupCodes[cntx].ZPRG,
+     PlantGroupAndProcessGroupCodesData.PlantGroupAndProcessGroupCodes[cntx].ZZW_WW
+    ]
+        })
+    }
+
+    html5sql.process(
+          myarray,
+         function () {
+             opMessage("Success - Finished Loading PlantGroupAndProcessGroupCodes");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+
+function populateAssetUpload(AssetSitesDetails) {
+    var sqlstatement = "";
+
+    var first = 0;
+
+    opMessage("Deleting Existing AssetUpload");
+    sqlstatement += "DELETE FROM AssetUpload;INSERT INTO SurveyStatus (PKID,ZSITE,SURV_STATUS,START_DATE,DOWNLOAD_DATE) VALUES ('S_PSMITH11201608010906312409','ELMASP','Active','18/07/2016','18/07/2016');";
+    opMessage("Loading" + AssetSitesDetails.assetdetails.length + " Assets");
+
+    for (var cntx = 0; cntx < AssetSitesDetails.assetdetails.length ; cntx++) {
+        sqlstatement += "INSERT INTO AssetUpload (ZASSDESC ,ZZASSETTAG,ZASSTYPE,ZZEQPT_EGI ,EQKTU ,EQUNR ,HURST,ZIWERK,MAPAR ,ZNCDESC" +
+        ',ZOTDESC ,ZPLGRP ,ZPLGDESC ,SERGE ,ZSITE ,STATUS ,ZSWERK ,ZSYSCODE ,ZSYSDESC ,ZINSTLOCN ,ZZFL_NC ,INBDT ) VALUES ( ' +
+        '"' + AssetSitesDetails.assetdetails[cntx].assdesc + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].assettag + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].asstype + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].eqart + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].eqktx + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].equnr + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].herst + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].iwerk + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].mapar + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].ncdesc + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].otdesc + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].plgrp + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].pltxt + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].serge + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].site + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].status + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].swerk + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].syscode + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].sysdesc + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].tplnr + '",' +
+        '"' + AssetSitesDetails.assetdetails[cntx].zfl_nc + '",' +
+         '"' + AssetSitesDetails.assetdetails[cntx].zinbdt + '");';
+    }
+
+    html5sql.process(sqlstatement,
+         function () {
+             // alert("Success - Finished Loading AssetDetails");
+         },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+}
+
+
+function requestSAPData(page, params) {
+
+
+    opMessage(SAPServerPrefix + page);
+    var myurl = SAPServerPrefix + page + SAPServerSuffix + params;
+    var urlStart = myurl.substring(0, 4).toUpperCase();
+    if ((urlStart.ColumnNumberOf("HTTP") == -1) && (urlStart.ColumnNumberOf("HTTPS") == -1)) {
+        console.log("Invalid URL")
+        syncStatusType = sap.m.ButtonType.Reject
+        setSyncingIndicator(false)
+
+        return
+    }
+
+
+    $.ajax({
+
+        dataType: "json",
+        url: myurl,
+
+        timeout: 300000
+    }).done(function () {
+        console.log("success")
+        syncStatusType = sap.m.ButtonType.Accept
+        opMessage("call success" + page);
+    }).fail(function (xhr, status) {
+
+
+        opMessage(page + status)
+        if (status != "parsererror") {
+
+            if (status == "timeout") {
+                syncStatusType = sap.m.ButtonType.Reject
+                setSyncingIndicator(false)
+                opMessage(page + status);
+            }
+        }
+    }).always(function () {
+        console.log("complete")
+        opMessage("Complete" + page);
+
+
+    });
+
+
+
+}
+
+function sendSAPData(page, params, timedOutSQL) {
+    var TimedOut = false;
+    SetLastSyncDetails("LASTSYNC_UPLOAD");
+    localStorage.setItem("SAPCalling", "true")
+    opMessage(page + getTime());
+    console.log(page + getTime())
+
+    var myurl = SAPServerPrefix + page + SAPServerSuffix + params;
+
+    $.ajax({
+        dataType: "json",
+        url: myurl,
+        timeout: 60000
+    }).done(function () {
+        console.log("call success" + page);
+    }).fail(function (xhr, status) {
+
+        if (status != "parsererror") {
+
+            if (status == "timeout") {
+                console.log("TimedOut1" + TimedOut)
+                TimedOut = true;
+                resetSENDINGData(timedOutSQL);
+                console.log(page + status)
+                console.log("TimedOut2" + TimedOut)
+            }
+        }
+    }).always(function () {
+
+        console.log("Complete " + page + " at " + getTime() + " Timedout = " + TimedOut);
+        if (TimedOut == false) {
+            localStorage.setItem("SAPCalling", "false")
+            syncUpload()
+        } else {
+            localStorage.setItem("SAPCalling", "false")
+
+        }
+
+
+    });
+
+    // })
+
+
+}
+function resetSENDINGData(sql) {
+
+    html5sql.process(sql,
+            function (transaction, results, rowsArray) {
+
+            },
+             function (error, statement) {
+                 window.console && console.log("Error: " + error.message + " when processing " + statement);
+             }
+        );
+
+
+
+
+}
+function opMessage(msg) {
+
+    opLog(msg);
+
+}
+function prepLogMessage(msg) {
+
+    nowd = getDate();
+    nowt = getTime();
+    dtstamp = nowd + nowt;
+
+
+    return ('INSERT INTO LogFile (datestamp , type, message ) VALUES ("' + dtstamp + '","I","' + msg + '")');
+
+}
+function opLog(msg) {
+
+    nowd = getDate();
+    nowt = getTime();
+    dtstamp = nowd + nowt;
+
+
+    var sqlstatement = 'INSERT INTO LogFile (datestamp , type, message ) VALUES ("' + dtstamp + '","I","' + msg + '");';
+    if (localStorage.getItem("Trace") == 'ON') {
+        html5sql.process(sqlstatement,
+						 function () {
+						     var A = 1;
+						 },
+						 function (error, statement) {
+						     window.console && console.log("Error: " + error.message + " when processing " + statement);
+						 }
+				);
+
+    }
+}
+function getTraceState() {
+    traceState = "OFF";
+    xtraceState = "";
+    html5sql.process(
+		["SELECT * from MyWorkConfig where paramname = 'TRACE'"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 0) {
+		        traceState = rowsArray[0].paramvalue;
+		    }
+		    localStorage.setItem('Trace', traceState);
+		    $('#traceState').val(traceState);
+		    $('#traceState').selectmenu('refresh', true);
+
+		},
+		 function (error, statement) {
+		     window.console && console.log("Error: " + error.message + " when processing " + statement);
+		 }
+	);
+}
+function databaseExists() {
+
+    html5sql.process(
+		["SELECT * FROM sqlite_master WHERE type='table';"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 10) {
+		        // alert("Database Existsh");
+		        return (true);
+		    }
+		    // alert("Database does not exist")
+		    return (false);
+
+		},
+		 function (error, statement) {
+		     window.console && console.log("Error: " + error.message + " when processing " + statement);
+		     return (false);
+		 }
+	);
+
+}
+function SetLocalStorageChangePage(page) {
+
+    html5sql.process(
+	    ["SELECT * from MyWorkConfig "],
+	    function (transaction, results, rowsArray) {
+	        for (var i = 0; i < rowsArray.length; i++) {
+	            // each row in the rowsArray represents a row retrieved from the
+	            // database
+
+	            if (rowsArray[i].paramname == 'SERVERNAME') {
+	                localStorage.setItem('ServerName', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'SAPSYSTEM') {
+	                localStorage.setItem('SAPSystem', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'SAPCLIENT') {
+	                localStorage.setItem('SAPClient', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'SYNC_REFERENCE_FREQUENCY') {
+	                localStorage.setItem('SyncReferenceFrequency', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'SYNC_TRANSACTIONAL_FREQUENCY') {
+	                localStorage.setItem('SyncTransactionalFrequency', rowsArray[i].paramvalue);
+	            }
+	            if (rowsArray[i].paramname == 'SYNC_UPLOAD_FREQUENCY') {
+	                localStorage.setItem('SyncUploadFrequency', rowsArray[i].paramvalue);
+	            }
+
+	            if (rowsArray[i].paramname == 'LASTSYNC_REFERENCE') {
+	                localStorage.setItem('LastSyncReference', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'LASTSYNC_TRANSACTIONAL') {
+	                localStorage.setItem('LastSyncTransactional', rowsArray[i].paramvalue);
+	            }
+	            if (rowsArray[i].paramname == 'LASTSYNC_UPLOAD') {
+	                localStorage.setItem('LastSyncUpload', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'TRACE') {
+	                localStorage.setItem('Trace', rowsArray[i].paramvalue);
+
+	            }
+	            if (rowsArray[i].paramname == 'ASSET_PATH') {
+	                localStorage.setItem('AssetPath', rowsArray[i].paramvalue);
+
+	            }
+	        }
+	        window.location.href = page
+	    },
+	    function (error, statement) {
+
+	    }
+	);
+
+}
+function SetLocalStorage() {
+
+    html5sql.process(
+        ["SELECT * from MyWorkConfig "],
+        function (transaction, results, rowsArray) {
+            for (var i = 0; i < rowsArray.length; i++) {
+                // each row in the rowsArray represents a row retrieved from the
+                // database
+
+                if (rowsArray[i].paramname == 'SERVERNAME') {
+                    localStorage.setItem('ServerName', rowsArray[i].paramvalue);
+
+                }
+                if (rowsArray[i].paramname == 'SYNC_REFERENCE_FREQUENCY') {
+                    localStorage.setItem('SyncReferenceFrequency', rowsArray[i].paramvalue);
+
+                }
+                if (rowsArray[i].paramname == 'SYNC_TRANSACTIONAL_FREQUENCY') {
+                    localStorage.setItem('SyncTransactionalFrequency', rowsArray[i].paramvalue);
+                }
+                if (rowsArray[i].paramname == 'SYNC_UPLOAD_FREQUENCY') {
+                    localStorage.setItem('SyncUploadFrequency', rowsArray[i].paramvalue);
+                }
+
+                if (rowsArray[i].paramname == 'LASTSYNC_REFERENCE') {
+                    localStorage.setItem('LastSyncReference', rowsArray[i].paramvalue);
+
+                }
+                if (rowsArray[i].paramname == 'LASTSYNC_TRANSACTIONAL') {
+                    localStorage.setItem('LastSyncTransactional', rowsArray[i].paramvalue);
+                }
+                if (rowsArray[i].paramname == 'LASTSYNC_UPLOAD') {
+                    localStorage.setItem('LastSyncUpload', rowsArray[i].paramvalue);
+
+                }
+                if (rowsArray[i].paramname == 'TRACE') {
+                    localStorage.setItem('Trace', rowsArray[i].paramvalue);
+
+                }
+                if (rowsArray[i].paramname == 'ASSET_PATH') {
+                    localStorage.setItem('AssetPath', rowsArray[i].paramvalue);
+
+                }
+            }
+        },
+        function (error, statement) {
+            // hande error here
+        }
+    );
+
+}
+function GetConfigParam(paramName) {
+
+    html5sql.process(
+		["SELECT * from MyWorkConfig where paramname = '" + paramName + "'"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 0) {
+		        if (paramName == "TRACE") {
+		            parTrace = item['paramvalue'];
+		        }
+
+		    }
+
+
+		},
+		 function (error, statement) {
+		     window.console && console.log("Error: " + error.message + " when processing " + statement);
+		 }
+	);
+}
+function updatePinCode(pincode) {
+
+    var user = localStorage.getItem('MobileUser')
+    localStorage.setItem('PinCode', pincode);
+
+    sqlstatement = "UPDATE MyUserDets SET pincode = '" + pincode + "' WHERE mobileuser = '" + user + "';";
+
+    html5sql.process(sqlstatement,
+	 function () {
+	     // alert("Success dropping Tables");
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when updateing Pincode " + statement);
+	 }
+	);
+
+}
+function SetConfigParam(paramName, paramValue) {
+
+    if (paramName == 'SERVERNAME') {
+        localStorage.setItem('ServerName', paramValue);
+    }
+    if (paramName == 'SAPCLIENT') {
+        localStorage.setItem('SAPClient', paramValue);
+    }
+    if (paramName == 'SAPSYSTEM') {
+        localStorage.setItem('SAPSystem', paramValue);
+    }
+    if (paramName == 'SYNC_REFERENCE_FREQUENCY') {
+        localStorage.setItem('SyncReferenceFrequency', paramValue);
+    }
+    if (paramName == 'SYNC_TRANSACTIONAL_FREQUENCY') {
+        localStorage.setItem('SyncTransactionalFrequency', paramValue);
+    }
+    if (paramName == 'SYNC_UPLOAD_FREQUENCY') {
+        localStorage.setItem('SyncUploadFrequency', paramValue);
+    }
+    if (paramName == 'LASTSYNC_REFERENCE') {
+        localStorage.setItem('LastSyncReference', paramValue);
+
+    }
+    if (paramName == 'LASTSYNC_TRANSACTIONAL') {
+        localStorage.setItem('LastSyncTransactional', paramValue);
+    }
+    if (paramName == 'LASTSYNC_UPLOAD') {
+        localStorage.setItem('LastSyncUpload', paramValue);
+
+    }
+
+    if (paramName == 'TRACE') {
+        localStorage.setItem('Trace', paramValue);
+    }
+    if (paramName == 'ASSET_PATH') {
+        localStorage.setItem('AssetPath', paramValue);
+
+    }
+
+    html5sql.process(
+		["SELECT * from MyWorkConfig where paramname = '" + paramName + "'"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 0) {
+		        sqlstatement = "UPDATE MyWorkConfig SET paramvalue = '" + paramValue + "' WHERE paramname = '" + paramName + "';";
+		    } else {
+		        sqlstatement = "INSERT INTO MyWorkConfig (paramname , paramvalue ) VALUES ('" + paramName + "','" + paramValue + "');";
+		    }
+		    html5sql.process(sqlstatement,
+			 function () {
+			     // alert("Success dropping Tables");
+			 },
+			 function (error, statement) {
+			     opMessage("Error: " + error.message + " when SetConfigParam processing " + statement);
+			 }
+			);
+		},
+		function (error, statement) {
+		    opMessage("Error: " + error.message + " when SetConfigParam processing " + statement);
+		}
+	);
+}
+function SetAllConfigParam(p1, v1, p2, v2, p3, v3, p4, v4, p5, v5) {
+    SetConfigParam(p1, v1);
+    SetConfigParam(p2, v2);
+    SetConfigParam(p3, v3);
+    SetConfigParam(p4, v4);
+    SetConfigParam(p5, v5);
+}
+function CreatePhotoEntry(orderno, opno, url, name, desc, size, date, status) {
+
+
+
+    html5sql.process("INSERT INTO MyJobsPhotos (orderno, opno, url, name, desc , size, date, status) VALUES ('" +
+			orderno + "','" + opno + "','" + url + "','" + name + "','" + desc + "','" + size + "','" + date + "','" + status + "');",
+	 function () {
+	     buildJobPhotoList()
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when inserting Photo" + statement);
+	 }
+	);
+
+}
+function UpdatePhotoEntry(orderno, opno, id, name, desc) {
+
+
+
+    html5sql.process("Update MyJobsPhotos set name ='" + name + "', desc = '" + desc + "' where id = '" + id + "'",
+	 function () {
+	     buildJobPhotoList()
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when inserting Photo" + statement);
+	 }
+	);
+
+}
+// *************************************************************************************************************************
+//
+// User Maintenance Functions
+//
+// *************************************************************************************************************************
+function CreateUser(muser, vehiclereg, u, p, employeeid, pincode, maptype, docserver) {
+    opMessage("Creating User " + muser + ":" + vehiclereg + ":" + u + ":" + p + ":" + employeeid);
+
+    html5sql.process("delete from MyUserDets; INSERT INTO MyUserDets (mobileuser , vehiclereg, user, password ,employeeid, pincode, maptype, docserver) VALUES ('" + muser + "','" + vehiclereg + "','" + u + "','" + p + "','" + employeeid + "','" + pincode + "','" + maptype + "','" + docserver + "');",
+	 function () {
+	     //alert("User Created");
+	 },
+	 function (error, statement) {
+	     //debugger;
+	     opMessage("Error: " + error.message + " when drop processing " + statement);
+	 }
+	);
+
+}
+function updateDocServer(docserver) {
+
+    opMessage("Setting DocServer = " + docserver);
+    html5sql.process("UPDATE MyUserDets set docserver = '" + docserver + "' Where user = '" + localStorage.getItem("MobileUser") + "';",
+	 function () {
+	     localStorage.setItem("DOCSERVER", docserver)
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when docserver " + statement);
+	 }
+	);
+
+
+}
+function ChangeUserPW(muser, u, p) {
+
+    opMessage("Changing Password for User " + muser);
+    html5sql.process("UPDATE MyUserDets set password = '" + p + "' Where user = '" + u + "';",
+	 function () {
+	     // alert("Success dropping Tables");
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when drop processing " + statement);
+	 }
+	);
+
+
+}
+function validateUser(u, p) {
+    var wait = true;
+    var retVal = false;
+    opMessage("Changing Password for User " + u);
+    html5sql.process("SELECT * from MyUserDets where user = '" + u + "' and password =  '" + p + "'",
+	 function (transaction, results, rowsArray) {
+	     if (rowsArray.length > 0) {
+	         retval = true;
+	         wait = false;
+	         // alert("hh")
+	     } else {
+	         wait = false;
+	     }
+
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when drop processing " + statement);
+	     wait = false;
+	 }
+	);
+    while (wait == true) {
+    }
+    return (retVal);
+
+}
+function validateUserExists(u, p) {
+
+    opMessage("Checking for User " + u);
+    html5sql.process("SELECT * from MyUserDets where user = '" + u + "' ",
+	 function (transaction, results, rowsArray) {
+	     if (rowsArray.length < 1) {
+	         return (2);
+	     } else if (rowsArray[0].password != p) {
+	         return (1);
+	     } else {
+	         return (0);
+	     }
+
+	 },
+	 function (error, statement) {
+	     opMessage("Error: " + error.message + " when drop processing " + statement);
+	     return (2);
+	 }
+	);
+    return (2);
+
+}
+function CheckSyncInterval(SyncType) {
+
+    var dtNow = getDate() + getTime();
+    if (SyncType == 'REFERENCE') {
+        lastSyncDT = localStorage.getItem('LastSyncReference');
+
+        SyncInterval = localStorage.getItem('SyncReferenceFrequency');
+    }
+    if (SyncType == 'TRANSACTIONAL') {
+        lastSyncDT = localStorage.getItem('LastSyncTransactional');
+        SyncInterval = localStorage.getItem('SyncTransactionalFrequency');
+
+    }
+    if (SyncType == 'UPLOAD') {
+        lastSyncDT = localStorage.getItem('LastSyncUpload');
+        SyncInterval = localStorage.getItem('SyncUploadFrequency');
+
+    }
+
+    var diff = parseDate(dtNow) - parseDate(lastSyncDT);
+
+    // opMessage("Checking Sync Interval:--Type="+SyncType+"--Last
+    // Synced="+lastSyncDT+"--Iterval ="+SyncInterval+"--MS Since Last
+    // Sync="+diff);
+
+
+    if (diff > SyncInterval) {
+
+        return true;
+    } else {
+
+        return false;
+    }
+
+
+}
+function SetLastSyncDetails(paramName) {
+    nowd = getDate();
+    nowt = getTime();
+    paramValue = nowd + nowt;
+    var sqlstatement = "";
+    var lastsync = localStorage.getItem('LastSyncedDT');
+    if (paramName == 'LASTSYNC_REFERENCE') {
+        localStorage.setItem('LastSyncReference', paramValue);
+
+    }
+    if (paramName == 'LASTSYNC_TRANSACTIONAL') {
+        localStorage.setItem('LastSyncTransactional', paramValue);
+
+    }
+    if (paramName == 'LASTSYNC_UPLOAD') {
+        localStorage.setItem('LastSyncUpload', paramValue);
+
+    }
+    if (paramValue > lastsync) {
+        localStorage.setItem('LastSyncedDT', paramValue);
+    }
+    html5sql.process(
+		["SELECT * from MyWorkConfig where paramname = '" + paramName + "'"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 0) {
+		        sqlstatement = "UPDATE MyWorkConfig SET paramvalue = '" + paramValue + "' WHERE paramname = '" + paramName + "';";
+		    } else {
+		        sqlstatement = "INSERT INTO MyWorkConfig (paramname , paramvalue ) VALUES ('" + paramName + "','" + paramValue + "');";
+		    }
+		    html5sql.process(sqlstatement,
+			 function () {
+			     // alert("Success dropping Tables");
+			 },
+			 function (error, statement) {
+			     opMessage("Error: " + error.message + " when Last Sync Update processing " + statement);
+			 }
+			);
+		},
+		function (error, statement) {
+		    opMessage("Error: " + error.message + " when Last Sync Update processing " + statement);
+		}
+	);
+}
+function syncTransactional() {
+    console.log("about sync to Transactional")
+
+    if (!CheckSyncInterval('TRANSACTIONAL')) {
+        setSyncingIndicator(false)
+        return;
+    }
+    console.log("syncing Transactional")
+    opMessage("Synchronizing Transactional Data");
+    setSyncingIndicator(true)
+    console.log("Transactional Call " + getTime())
+    //html5sql.process(
+    //	["SELECT * from MyUserDets"],
+    //	function(transaction, results, rowsArray){
+    //	    if( rowsArray.length > 0) {
+    //	        SAPServerSuffix="?jsonCallback=?&MYJOBSSYSTEM="+localStorage.getItem('SAPSystem')+"&sap-client="+localStorage.getItem('SAPClient')+"&sap-user="+rowsArray[0].user+"&sap-password="+rowsArray[0].password+"&username="+rowsArray[0].user;
+
+    //	        html5sql.process("SELECT * from MyWorkConfig where paramname = 'SERVERNAME'",
+    //				function(transaction, results, rowsArray){
+    //				    if( rowsArray.length > 0) {
+    SetLastSyncDetails("LASTSYNC_TRANSACTIONAL");
+    setSyncingIndicator(false);
+    //				        localStorage.setItem('LastSyncTransactionalDetails','');
+    //				        syncTransactionalDetsUpdated=false;
+    //				        SAPServerPrefix=$.trim(rowsArray[0].paramvalue);
+    //				        currentlySyncing = true;
+    //				        requestSAPData("MyJobsOrders2.htm",'');
+    //				        requestSAPData("MyJobsOrdersObjectsMP.htm",'');
+    //				        requestSAPData("MyJobsNotifications.htm",'');
+    //				        // requestSAPData("MyJobsMessages.htm",'');
+
+
+
+    //				    }
+
+    //				},
+    //				function(error, statement){
+    //				    opMessage("Error: " + error.message + " when syncTransactional processing " + statement); 
+    //				}
+    //			);
+    //	    }
+    //	},
+    //	function(error, statement){
+    //	    opMessage("Error: " + error.message + " when syncTransactional processing " + statement);          
+    //	}
+    //);
+}
+
+function syncUpload() {
+
+
+    SQLStatement = "select 'VehicleCheck' as type, '' as extra,id as id, recordupdated from MyVehicleCheck where state = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'NotificationsZ7' as type,   shorttext as extra,id    as id, recordupdated from MyNotifications where notifno = 'NEW' and type = 'Z7' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'Notifications' as type,   shorttext as extra,id    as id, recordupdated from MyNotifications where notifno = 'NEW' and type <> 'Z7' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'StatusUpdate' as type,  status as extra, id    as id, recordupdated from MyStatus where state = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'JobClose' as type,  '' as extra, id    as id, recordupdated from MyJobClose where state = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'TimeConf' as type,  '' as extra, id    as id, recordupdated from MyTimeConfs where confno = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'MessageRead' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'READ' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'MesssageNew' as type,  '' as extra, id    as id, recordupdated from MyMessages where state = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'MPointDoc' as type,   '' as extra,id    as id, recordupdated from MyMpointDocs where state = 'NEW' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'Flooding' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'Flooding' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'Pollution' as type,   '' as extra,id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'Pollution' "
+    SQLStatement += " 	union "
+    SQLStatement += " 	select 'CustomerFeedback' as type,  '' as extra, id    as id, recordupdated from MyFormsResponses where lastupdated='CLOSED' and formname = 'CustomerFeedback' "
+    SQLStatement += " 		order by recordupdated asc "
+
+    html5sql.process(SQLStatement,
+	 function (transaction, results, rowsArray) {
+	     // alert("ok"+rowsArray.length)
+	     if (rowsArray.length > 0) {
+	         item = rowsArray[0];
+
+	         syncUploadNew(item.id, item.type)
+	     }
+	 },
+	 function (error, statement) {
+	     alert(error + statement)
+	 }
+	);
+
+}
+function syncReference() {
+
+    if (!CheckSyncInterval('REFERENCE')) { return; }
+    opMessage("Synchronizing Reference Data");
+
+
+    html5sql.process(
+		["SELECT * from MyUserDets"],
+		function (transaction, results, rowsArray) {
+		    if (rowsArray.length > 0) {
+		        SAPServerSuffix = "?jsonCallback=?&MYJOBSSYSTEM=" + localStorage.getItem('SAPSystem') + "&sap-client=" + localStorage.getItem('SAPClient') + "&sap-user=" + rowsArray[0].user + "&sap-password=" + rowsArray[0].password + "&username=" + rowsArray[0].mobileuser;
+
+		        html5sql.process("SELECT * from MyWorkConfig where paramname = 'SERVERNAME'",
+					function (transaction, results, rowsArray) {
+					    if (rowsArray.length > 0) {
+					        SetLastSyncDetails("LASTSYNC_REFERENCE");
+					        SetConfigParam("TRACE", 'ON');
+					        localStorage.setItem('LastSyncReferenceDetails', '');
+					        syncReferenceDetsUpdated = false;
+					        SAPServerPrefix = $.trim(rowsArray[0].paramvalue);
+					        opMessage("Sending SAP Request for Ref Data");
+					        //getAssetFiles()
+
+					        //requestDEMOData('EGIandNameCodeMapping.json');
+					        //requestDEMOData('AssetSites.json');
+					        //requestDEMOData('AssetSitesDetails.json');
+					        //requestDEMOData('Manufacturer.json');
+					        //requestDEMOData('Model.json');
+
+
+					        //requestAzureData("MyJobsAssetSites",'');
+					        //requestAzureData("MyJobsAssetDetails",'');
+					        // requestSAPData("MyJobsRefData.htm",'');
+					        // requestSAPData("MyJobsRefDataCodes.htm",'');
+					        // requestSAPData("MyJobsUsers.htm",'');
+					        // requestSAPData("MyJobsVehiclesDefault.htm",'');
+					        // requestSAPData("MyJobsVehicles.htm",'');
+					        //requestDEMOData('MyForms.json');
+					        //requestDEMOData('PE29.json');
+					        //requestDEMOData('MyJobsDG5Codes.json');
+					        // requestSAPDataPJO("getFormsJSON.php",'');
+					        // requestSAPData("MyJobsFunclocs.htm",'');
+					        // requestSAPData("MyJobsEquipment.htm",'');
+					    }
+
+					},
+					function (error, statement) {
+					    opMessage("Error: " + error.message + " when syncTransactional processing " + statement);
+					}
+				);
+		    }
+		},
+		function (error, statement) {
+		    opMessage("Error: " + error.message + " when syncTransactional processing " + statement);
+		}
+	);
+
+
+
+
+
+
+
+}
+
+function downloadfile(fname) {
+    var myurl = SAPServerPrefix + fname + SAPServerSuffix;
+    // alert(myurl+"---------------"+cordova.file.dataDirectory)
+    opMessage(myurl)
+
+    var fileTransfer = new FileTransfer();
+    var uri = encodeURI(myurl);
+    // SetConfigParam("ASSET_PATH","cdvfile://localhost/persistent/")
+    var fileURL = cordova.file.dataDirectory + fname
+
+    fileTransfer.download(
+	    uri,
+	    fileURL,
+	    function (entry) {
+	        opMessage("download complete: " + entry.toURL());
+	    },
+	    function (error) {
+	        opMessage("download error source " + error.source);
+	        opMessage("download error targe", as + error.target);
+	        opMessage("download error code" + error.code);
+	    },
+	    true,
+	    {
+	        headers: {
+
+	        }
+	    }
+	);
+
+}
+function getAssetHistory(fl) {
+    sqlStatement = "select * from MyMenuBar where subitem = 'Asset History'"
+
+    html5sql.process(sqlStatement,
+		function (transaction, results, rowsArray) {
+		    if (rowsArray < 1) {
+
+		        return "";
+		    } else {
+
+		        url = rowsArray[0].command
+
+		        url = url.replace("{SUPUSERNAME}", localStorage.getItem("MobileUser"))
+		        url += "&TPLNR=" + fl
+		        window.open(url, "_blank", 'location=yes,closebuttoncaption=Return')
+		    }
+		    console.log("form done")
+		},
+		 function (error, statement) {
+		     alert("Error: " + error.message + " when FormsResponses processing " + statement);
+		     opMessage("Error: " + error.message + " when FormsResponses processing " + statement);
+		 }
+		);
+}
+
+function createTables(type) {
+    sqlstatement = 'CREATE TABLE IF NOT EXISTS SurveyStatus     		( PKID TEXT primary key, ZSITE TEXT, SURV_STATUS TEXT, START_DATE  TEXT, SUBMITTED TEXT, DOWNLOAD_DATE  TEXT, IsChecked TEXT, ZCAPDEL_SURVEY  TEXT, ZPROJ_CODE  TEXT);' +
+        'CREATE TABLE IF NOT EXISTS AssetUpload     		( PKID integer primary key autoincrement,' +
+        'EQKTU TEXT,EQUNR TEXT,ERFZEIT TEXT ,ERNAM TEXT,ESTAT TEXT ,HURST TEXT ,INBDT TEXT ,MAPAR TEXT,ORIGZINSTLOCN TEXT ,SERGE TEXT ,STATUS TEXT ,STATUS_PROFILE TEXT ,STATUS_TXT TEXT ,SYNCED TEXT int NULL,TERMAB TEXT,Z_GPSNMEA TEXT ,' +
+        'ZASCAT TEXT,ZASSDESC TEXT,ZASSTYPE TEXT ,ZBUSN TEXT,ZCAPDEL_SURVEY TEXT,ZCHECK_OUT TEXT,ZCHECKOUT_DATE TEXT ,ZCHECKOUT_TO TEXT,ZCOMFLG TEXT,ZCOMMENTS1 TEXT ,ZCOMMENTS2 TEXT ,ZDECOM TEXT,ZDECOMR TEXT,ZDELETED TEXT,ZDOCFLG TEXT,' +
+        'ZDOCPATH TEXT ,ZEQDECOM TEXT,ZINSLOCDESC TEXT,ZINSLOCDESC1 TEXT ,ZINSLOCDESC2 TEXT ,ZINSLOCDESC3 TEXT ,ZINSTLOCN TEXT ,ZIWERK TEXT ,ZNCDESC TEXT ,ZOTDESC TEXT,ZOWNER TEXT,ZPARECNUM TEXT,ZPARLOCN TEXT,ZPEQUNR TEXT ,' +
+        'ZPLGDESC TEXT,ZPLGRP TEXT ,ZPRG TEXT ,ZPRGDESC TEXT,ZPROCTYP TEXT ,ZPROJ_CODE TEXT ,ZRECNUM TEXT,ZSERN1 TEXT ,ZSITE TEXT ,ZSITEDESC TEXT,ZSITESGNOFF TEXT,ZSTATUS TEXT ,ZSURV TEXT,ZSURVSUB TEXT,ZSWERK TEXT ,ZSYSCODE TEXT ,' +
+        'ZSYSDESC TEXT,ZZASSETTAG TEXT,ZZEQPT_EGI TEXT ,ZZFL_NC TEXT ,ZZW_WW TEXT );' +
+        'CREATE TABLE IF NOT EXISTS AssetDetails     		( id integer primary key autoincrement,PLAN_PLANT TEXT, MTCE_PLANT TEXT, SITE TEXT, FUNC_LOC TEXT, FUNC_LOC_DESC TEXT, EQUIP TEXT, EQUIP_DESC TEXT, PLANT_GROUP TEXT, ASSET_TYPE TEXT, ASSET_DESC TEXT, MAKE TEXT, MODEL TEXT, SERIAL_NO TEXT, OBJ_TYPE TEXT, EQTYPE_DESC TEXT, EFUNC_TYPE TEXT, FTYPE_DESC TEXT, SYS_CODE TEXT, SCODE_DESC TEXT, ASSET_TAG TEXT, START_UP_DATE TEXT, STATUS TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS AssetSites     		( id integer primary key autoincrement,site TEXT,desc TEXT,bunit TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS AssetSitesDetails     	( id integer primary key autoincrement,assdesc TEXT, assettag TEXT, asstype TEXT, eqart TEXT, eqktx TEXT, equnr TEXT, herst TEXT, iwerk TEXT, mapar TEXT, ncdesc TEXT, otdesc TEXT, plgrp TEXT, pltxt TEXT, serge TEXT, site TEXT, status TEXT, swerk TEXT, syscode TEXT, sysdesc TEXT, tplnr TEXT, zfl_nc TEXT, zinbdt  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS Manufacturer     	( id integer primary key autoincrement,manufacturer TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS Model     	( id integer primary key autoincrement,EQART TEXT, HERST TEXT, MODEL TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS EGIandNameCodeMapping     	( id integer primary key autoincrement,ZASCAT TEXT, ZDEFPG TEXT, ZZEQPT_EGI TEXT,ZZFL_NC TEXT,ZZW_WW TEXT ,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+  'CREATE TABLE IF NOT EXISTS EquipmentTypeCode     	( id integer primary key autoincrement,EARTX  TEXT,ZATCODE  TEXT,ZOTDEF  TEXT,ZOTDEF_EXT  TEXT,ZOTDESC  TEXT,ZZEQPT_EGI TEXT ,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+   'CREATE TABLE IF NOT EXISTS AssetTypeCodes     	( id integer primary key autoincrement,ZATCODE  TEXT,ZATDEF1 TEXT,ZATDEF2  TEXT,ZATDESC  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+    'CREATE TABLE IF NOT EXISTS FunctionTypeCodes     	( id integer primary key autoincrement,EARTX TEXT,ZATCODE TEXT,ZNCDEF  TEXT,ZNCDEF_EXT TEXT,ZNCDESC TEXT, ZZFL_NC TEXT  ,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+    'CREATE TABLE IF NOT EXISTS PlantGroupCodes     	( id integer primary key autoincrement,ZPLGDEF1 TEXT ,ZPLGDEF2 TEXT,ZPLGDESC TEXT,ZPLGRP TEXT,ZZW_WW  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+     'CREATE TABLE IF NOT EXISTS SystemCodes     	( id integer primary key autoincrement,ZSYSCODE TEXT,ZSYSDEF1 TEXT,ZSYSDEF2 TEXT,ZZSYSDESC  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+      'CREATE TABLE IF NOT EXISTS PlantGroupAndProcessGroupCodes     	( id integer primary key autoincrement,ZPLGRP TEXT,ZPRG TEXT,ZZW_WW  TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+       'CREATE TABLE IF NOT EXISTS AssetCaptureCategory     	( id integer primary key autoincrement,ZASCAT  TEXT,ZATCODE  TEXT,ZSYSCODE TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+       'CREATE TABLE IF NOT EXISTS AssetTableColumns (id integer primary key autoincrement,ColumnNumber integer ,ColumnName TEXT,DisplayName TEXT, ColumnWidth TEXT);' +
+
+    'delete from AssetTableColumns ; ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (0,"ZPROCTYP","Processing Type","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (1,"ZINSTLOCN","Functional Location","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (2,"HURST","Make","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (3,"MAPAR","Model","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (4,"EQUNR","Equipment Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (5,"ZINSLOCDESC","Functional Location Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (6,"ZOTDESC","Equipment Type Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (7,"EQKTU","Equipment Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (8,"EQUNR","Equipment Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (9,"ZATSDESC","Asset Type","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (10,"ZPRGDESC","Process Group","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (11,"ZPLGDESC","Plant Group","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (12,"ZSYSDESC","System Code Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (13,"ZNCDESC","Function Type Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (14,"ZOTDESC","Equipment Type Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (15,"EQKTU","EQKTU","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (16,"SERGE","Serial Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (17,"ZSITE","Site","150px"); ' +
+
+
+ // 'CREATE TABLE IF NOT EXISTS MyOrders     			( sysid integer primary key autoincrement,orderno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, startdate TEXT, enddate TEXT, contact TEXT,   telno TEXT,    type TEXT, priority TEXT, address TEXT, workaddress TEXT, house TEXT, houseno TEXT, street TEXT, district TEXT, city TEXT, postcode TEXT,gis TEXT, property TEXT, funcloc TEXT, equipment TEXT, propertygis TEXT, funclocgis TEXT, equipmentgis TEXT, notifno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 //'CREATE TABLE IF NOT EXISTS MyOperations 			( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      type TEXT,     priority TEXT,  shorttext TEXT, startdate TEXT, enddate TEXT, duration TEXT, status TEXT, assignedto TEXT, apptstart TEXT, apptend TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyOperationsSplit 		( sysid integer primary key autoincrement,orderno TEXT, opno TEXT,      assignedto TEXT,  duration TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyPartners   			( sysid integer primary key autoincrement,orderno TEXT, notifno TEXT, id TEXT,        type TEXT,     name TEXT,      address TEXT,   postcode TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyAssets     			( sysid integer primary key autoincrement,orderno TEXT, id TEXT,        type TEXT,     name TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyMaterials     		( sysid integer primary key autoincrement,orderno TEXT, id TEXT, material TEXT, qty TEXT, description TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+               //  'CREATE TABLE IF NOT EXISTS MyUserStatus     		( id integer primary key autoincrement, type TEXT, orderno TEXT, opno TEXT, inact TEXT, status TEXT, statuscode TEXT, statusdesc TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyOperationInfo     	( id integer primary key autoincrement, orderno TEXT, opno TEXT, type TEXT, value1 TEXT, value2 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyNotifications     	( id integer primary key autoincrement, notifno TEXT, changedby TEXT, changeddatetime TEXT, shorttext TEXT, longtext TEXT, cattype TEXT,  pgroup TEXT, pcode TEXT, grouptext TEXT, codetext TEXT, startdate TEXT, starttime TEXT, enddate TEXT, endtime TEXT, type TEXT, priority TEXT, funcloc TEXT,   equipment TEXT, orderno TEXT, reportedon TEXT,   reportedby TEXT, plant TEXT, funclocgis TEXT,   equipmentgis TEXT, assigntome TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyItems     			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, descript TEXT, d_cat_typ TEXT, d_codegrp TEXT, d_code TEXT, dl_cat_typ TEXT, dl_codegrp TEXT, dl_code TEXT, long_text TEXT, stxt_grpcd TEXT ,txt_probcd TEXT  ,txt_grpcd TEXT , txt_objptcd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyCauses      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, cause_id TEXT, cause_text TEXT, cause_cat_typ TEXT, cause_codegrp TEXT, cause_code TEXT, long_text TEXT, txt_causegrp TEXT, txt_causecd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyActivities     		( id integer primary key autoincrement, notifno TEXT, task_id TEXT, item_id TEXT,  act_id TEXT, act_text TEXT, act_cat_typ TEXT, act_codegrp TEXT, act_code TEXT,  start_date TEXT, start_time TEXT ,end_date TEXT  ,end_time TEXT , long_text TEXT, txt_actgrp TEXT, txt_actcd TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyTasks      			( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_text TEXT, task_cat_typ TEXT, task_codegrp TEXT, task_code TEXT, txt_taskgrp TEXT, txt_taskcd TEXT, plnd_start_date TEXT, plnd_start_time TEXT ,plnd_end_date TEXT  ,plnd_end_time TEXT , sla_end_date TEXT  ,sla_end_time TEXT , longtext TEXT, complete TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyEffects      		( id integer primary key autoincrement, notifno TEXT, item_id TEXT, task_id TEXT, effect_cat_typ TEXT, effect_codegrp TEXT, effect_code TEXT, txt_effectgrp TEXT, txt_effectcd TEXT, value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+              //   'CREATE TABLE IF NOT EXISTS MyStatus     			( id integer primary key autoincrement, orderno TEXT, opno TEXT, stsma TEXT, status TEXT, statusdesc, state TEXT, actdate TEXT, acttime TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyTimeConfs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, confno TEXT, type TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT,act_work TEXT, rem_work TEXT, act_type TEXT, work_cntr TEXT, reason TEXT, longtext TEXT, duration TEXT, datestamp TEXT,  user TEXT,  empid TEXT, final TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyMPointDocs     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, funcloc TEXT, equipment TEXT, meas_point TEXT, date TEXT, time TEXT, shorttext TEXT, value TEXT, code TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+
+                 //'CREATE TABLE IF NOT EXISTS MyJobClose             ( id integer primary key autoincrement, orderno TEXT , opno TEXT, notifno TEXT, details TEXT, empid TEXT, work_cntr TEXT, state TEXT , closedate TEXT, closetime TEXT, funcloc  TEXT, equipment TEXT, inshift  TEXT, outofshift  TEXT, pgrp TEXT, pcode TEXT, agrp TEXT, acode TEXT, igrp TEXT, icode TEXT, followon  TEXT, variance TEXT, reason TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyNewJobs     			( id integer primary key autoincrement, type TEXT, defect TEXT, mpoint TEXT, mpval TEXT, shorttext TEXT, longtext TEXT, description TEXT, date TEXT, time TEXT, enddate TEXT, endtime TEXT, funcloc TEXT, equipment TEXT, cattype TEXT, codegroup TEXT, coding TEXT, activitycodegroup TEXT, activitycode TEXT, activitytext TEXT, prioritytype TEXT, priority TEXT, reportedby TEXT, state TEXT, assignment TEXT, spec_reqt TEXT, assig_tome TEXT, userid TEXT, eq_status TEXT, breakdown TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS MyWorkConfig     		( id integer primary key autoincrement, paramname TEXT, paramvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 //'CREATE TABLE IF NOT EXISTS MyWorkSyncDets    		( id integer primary key autoincrement, lastsync TEXT, comments   TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS MyUserDets             ( id integer primary key autoincrement, mobileuser TEXT, vehiclereg TEXT, employeeid TEXT, user TEXT, password TEXT,pincode TEXT,docserver TEXT, maptype TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS MyRefUsers    			(  id integer primary key autoincrement, userid TEXT, scenario TEXT, plant TEXT, workcenter TEXT, plannergroup TEXT, plannergroupplant TEXT, storagegroup TEXT, storageplant TEXT, partner TEXT, partnerrole TEXT, funclocint TEXT, funcloc TEXT, compcode TEXT, employeeno TEXT, equipment TEXT, firstname TEXT, lastname TEXT, telno TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 //'CREATE TABLE IF NOT EXISTS MyRefOrderTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, opstatusprofile TEXT, priorityprofile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyRefNotifTypes     	(  id integer primary key autoincrement, scenario TEXT, type TEXT, description TEXT, statusprofile TEXT, taskstatusprofile TEXT,priority_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyRefPriorityTypes     (  id integer primary key autoincrement, scenario TEXT, type TEXT, priority TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyRefUserStatusProfiles (  id integer primary key autoincrement, scenario TEXT, type TEXT, status TEXT, statuscode TEXT, statusdesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyVehiclesDefault     	(  sysid integer primary key autoincrement, equipment TEXT, reg TEXT, id TEXT, partner TEXT, level TEXT, sequence TEXT,mpoint TEXT,mpointdesc TEXT, mpointlongtext TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyVehicles     		(  sysid integer primary key autoincrement, reg TEXT, id TEXT, partner TEXT, mpoints TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyForms        		(  id integer primary key autoincrement, name TEXT, type TEXT, lastupdated TEXT, url TEXT,description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS MyFormsResponses  		(  id integer primary key autoincrement, user TEXT, formname TEXT, lastupdated TEXT, wc TEXT,plant TEXT,notifno TEXT,orderno TEXT, opno TEXT, date TEXT, time TEXT, contents TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+
+                 //'CREATE TABLE IF NOT EXISTS MyVehicleCheck     	(  id integer primary key autoincrement, equipment TEXT, reg TEXT,  mileage TEXT,  mpoint TEXT,  desc TEXT,  longtext TEXT,  mdate TEXT, mtime TEXT, mreadby TEXT, user TEXT,  state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS MyMessages    			(  id integer primary key autoincrement, msgid TEXT, type TEXT,  date TEXT, time TEXT, msgfromid TEXT, msgfromname TEXT, msgtoid TEXT, msgtoname TEXT, msgsubject TEXT, msgtext TEXT,  expirydate TEXT, state TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 //'CREATE TABLE IF NOT EXISTS Assets     			(  sysid integer primary key autoincrement,type TEXT, id TEXT, eqart TEXT, eqtyp TEXT, shorttext TEXT,  address TEXT, workcenter TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS AssetClassVals     	(  sysid integer primary key autoincrement,type TEXT, id TEXT,  charact TEXT,  valuechar TEXT,  valueto TEXT, valueneutral TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS AssetMeasurementPoints (  sysid integer primary key autoincrement,type TEXT, id TEXT,  mpoint TEXT,  description TEXT,  value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS AssetInstalledEquip    (  sysid integer primary key autoincrement,type TEXT, id TEXT,  eqno TEXT,  description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS LogFile    			( id integer primary key autoincrement, datestamp TEXT, type TEXT, message TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'INSERT INTO LogFile (datestamp , type, message ) VALUES ("20160101","I","Log Created");' +
+                 //'CREATE TABLE IF NOT EXISTS RefNotifprofile  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, notif_type TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS RefCodeGroups  		( id integer primary key autoincrement, scenario TEXT, profile TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS RefCodes  				( id integer primary key autoincrement, scenario TEXT, profile TEXT, code_cat_group TEXT, code TEXT, code_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS HRAbsence     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, type TEXT, days TEXT, status TEXT, comments TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+
+                 //'CREATE TABLE IF NOT EXISTS HRTravel     			( id integer primary key autoincrement, requesteddate TEXT, startdate TEXT, enddate TEXT, travelfrom TEXT, travelto TEXT, status TEXT, comments TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+
+
+                 //'CREATE TABLE IF NOT EXISTS JobAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, item TEXT, task TEXT, value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS StockSearch     		( id integer primary key autoincrement, materialno TEXT, description TEXT, depot TEXT, available TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS SurveyAnswers     		( id integer primary key autoincrement, orderno TEXT, opno TEXT, user TEXT, updateddate TEXT, surveyid TEXT, groupid TEXT, questionid TEXT, name TEXT, answer TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS Survey     			( id integer primary key autoincrement, surveyid TEXT, name TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS SurveyGroup     		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, name TEXT, title TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS SurveyQuestion    		( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questiontype TEXT, defaultvalue TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS SurveySubQuestion  	( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, subquestionid TEXT, subquestiontype TEXT, name TEXT, title TEXT, dependsonid TEXT, dependsonval TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS SurveyQuestionChildren ( id integer primary key autoincrement, surveyid TEXT, groupid TEXT, questionid TEXT, questionvalue TEXT, childquestions TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS FuncLocs			  	( id integer primary key autoincrement, flid TEXT, description TEXT, swerk TEXT, level TEXT, parentid TEXT, children TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS Equipments			  	( id integer primary key autoincrement, eqid TEXT, description TEXT, flid TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS MyMenuBar 		        ( id integer primary key autoincrement, scenario TEXT, level TEXT, item TEXT, position TEXT, type TEXT,  subitem TEXT, command TEXT, item2 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 //'CREATE TABLE IF NOT EXISTS MyJobDets 		        ( id integer primary key autoincrement, orderno TEXT, opno TEXT, notifno TEXT, plant TEXT, orderplant TEXT, orderworkcentre TEXT, eworkcentre TEXT, oworkcentre TEXT,priority_code TEXT,priority_desc TEXT, pmactivity_code TEXT,pmactivity_desc TEXT,oppmactivity_code TEXT,oppmactivity_desc TEXT,start_date TEXT, start_time TEXT,duration TEXT, equipment_code TEXT, equipment_desc TEXT, equipment_gis TEXT, funcloc_code TEXT,funcloc_desc TEXT,funcloc_gis TEXT, site TEXT, acpt_date TEXT, acpt_time TEXT, onsite_date TEXT, onsite_time TEXT,park_date TEXT, park_time TEXT, tconf_date TEXT, tconf_time TEXT, status TEXT, status_l TEXT, status_s TEXT, notif_cat_profile TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+                 //'CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       ( id integer primary key autoincrement, code_gp TEXT, code TEXT, code_text TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+                 //'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       ( id integer primary key autoincrement, meas_point TEXT, object_id TEXT,object_desc TEXT, psort TEXT,pttxt TEXT, format TEXT,no_char TEXT, no_deci TEXT,code_gp TEXT, code TEXT, unit_meas TEXT,read_from TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+                 //'CREATE TABLE IF NOT EXISTS MyJobDetsLoch          ( id integer primary key autoincrement, orderno TEXT, notification_no TEXT,not_type TEXT, not_date TEXT,not_time TEXT, not_shtxt TEXT,not_order TEXT, meter_no TEXT,meter_rdg TEXT, work_type TEXT, order_type TEXT, op_txt TEXRT, order_date TEXT, order_status TEXT, recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+
+                 //'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          ( id integer primary key autoincrement, orderno TEXT, zact TEXT,zite TEXT, zmandatoryfield TEXT,zurl TEXT, nodeid TEXT,fname TEXT, mime TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+               //  'CREATE TABLE IF NOT EXISTS MyAjax		  	 		( id integer primary key autoincrement, adate TEXT,atime TEXT, astate TEXT, acall TEXT,aparams TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+	
+                 //'CREATE TABLE IF NOT EXISTS TSActivities		    ( id integer primary key autoincrement, code TEXT, skill TEXT,  subskill TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS TSNPJobs			    ( id integer primary key autoincrement, jobno TEXT, subtype TEXT,  description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS TSData		    		( id integer primary key autoincrement, date TEXT, job TEXT, skill TEXT, activity TEXT, time TEXT, ot15 TEXT, ot20 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurveyQ			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qtype TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurveyA			    ( id integer primary key autoincrement, type TEXT, qno TEXT,  qkey TEXT, qvalue TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurveyMake		    ( id integer primary key autoincrement, make TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurveyModel		    ( id integer primary key autoincrement, make TEXT, model TEXT, description TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurvey			    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, make TEXT, model TEXT, location TEXT, dv1 TEXT, dv2 TEXT, dv3 TEXT, dv4 TEXT, dv5 TEXT, dv6 TEXT, dv7 TEXT, dv8 TEXT, dv9 TEXT, dv10 TEXT, dv11 TEXT, dv12 TEXT, dv13 TEXT, dv14 TEXT, dv15 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS GASSurveyHDR		    ( id integer primary key autoincrement, orderno TEXT, opno TEXT, date TEXT, signed TEXT, hv1 TEXT, hv2 TEXT, hv3 TEXT, hv4 TEXT, text1 TEXT, text2 TEXT, text3 TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS REFPAICODES			( id integer primary key autoincrement, scenario TEXT, userid TEXT, level TEXT, stsma TEXT, plant TEXT, work_cntr TEXT, catalogue TEXT, codegrp TEXT, kurztext_group TEXT, code TEXT, kurztext_code TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS REFNOTIFICATIONTYPES	( id integer primary key autoincrement, scenario TEXT, userid TEXT, level_number TEXT, notiftype TEXT, notifdesc TEXT, notifprofile TEXT, priotype TEXT,priority TEXT, prioritydesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS REFVARIANCESRFV		( id integer primary key autoincrement, scenario TEXT, userid TEXT, plant TEXT, work_cntr TEXT, job_activity TEXT, dev_reason TEXT, dev_reas_txt TEXT, mandate TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS REFACTIVITY			( id integer primary key autoincrement, scenario TEXT, work_center TEXT, activity TEXT, activity_desc TEXT, action TEXT, deflt TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS DG5REL					( id integer primary key autoincrement, catalogue TEXT, codegrp TEXT, code TEXT, codedesc TEXT, dg5rel TEXT, piarel TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS DG5CODES			    ( id integer primary key autoincrement, type TEXT, level TEXT, coderef TEXT, description TEXT, code TEXT, codedesc TEXT,parenttype TEXT, parentcode TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 //'CREATE TABLE IF NOT EXISTS CFCODES			    ( id integer primary key autoincrement, level TEXT, catalog_type TEXT, code_cat_group TEXT, codegroup TEXT, codegroup_text TEXT, long_text TEXT,code TEXT, codedesc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+                 'CREATE TABLE IF NOT EXISTS MyJobsDocs			    ( id integer primary key autoincrement, url TEXT, name TEXT, type TEXT, size TEXT, lastmod TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));' +
+                 'CREATE TABLE IF NOT EXISTS MyJobsPhotos			( id integer primary key autoincrement, orderno TEXT, opno TEXT, url TEXT, name TEXT, desc TEXT, size TEXT, date TEXT, status TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'
+    //'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			( id integer primary key autoincrement, equnr TEXT, obj_type TEXT, obj_type_desc TEXT, start_date TEXT,manfacture TEXT,manparno TEXT,manserno TEXT,user_status_code TEXT,swerk TEXT ,swerk_desc TEXT,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+    //'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			( id integer primary key autoincrement, equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc TEXT,value TEXT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+    //  'CREATE TABLE IF NOT EXISTS Properties			    ( id integer primary key autoincrement, funcloc TEXT ,description TEXT ,street TEXT ,district TEXT ,city TEXT,postcode TEXT,easting TEXT,northing TEXT,lat FLOAT,lon FLOAT,recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'
+
+
+
+
+    //'CREATE VIEW viewoperationstatus as SELECT orderno, opno, statusdesc FROM myuserstatus where type = "OV" GROUP BY orderno, opno Order by id desc ;'+
+
+    //'CREATE VIEW viewprioritycodes as select myrefordertypes.scenario, myrefordertypes.type as ordertype, myrefordertypes.priorityprofile, myrefprioritytypes.priority as priority, myrefprioritytypes.description as prioritydesc from myrefordertypes left join myrefprioritytypes on myrefordertypes.priorityprofile = myrefprioritytypes.type where myrefordertypes.scenario = myrefprioritytypes.scenario;';
+
+    var a = sqlstatement;
+    html5sql.process(sqlstatement,
+                     function () {
+                         demoDataLoaded = type;
+
+                         SetConfigParam("TRACE", "OFF");
+                         SetConfigParam("SYNC_REFERENCE_FREQUENCY", "8400000");
+                         SetConfigParam("SYNC_TRANSACTIONAL_FREQUENCY", "600000");
+                         SetConfigParam("SYNC_UPLOAD_FREQUENCY", "2000");
+                         SetConfigParam("LASTSYNC_REFERENCE", "20130316170000");
+                         SetConfigParam("LASTSYNC_TRANSACTIONAL", "20130316224900");
+                         SetConfigParam("LASTSYNC_UPLOAD", "20130316214900");
+                         SetConfigParam("SERVERNAME", "xxxx://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
+                         SetConfigParam("SAPCLIENT", "120");
+                         SetConfigParam("SAPSYSTEM", "");
+
+                         busycreateDB.close()
+                         formLogin.open()
+                         try {
+                             window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buildDirs, buildDirsErrorHandler);
+                         }
+                         catch (err) {
+                             // Not in Cordova
+                         }
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when create processing " + statement);
+                     }
+            );
+
+
+}
+
+function buildDirsErrorHandler(error) {
+
+    alert("Failed to create The Directories: " + error);
+}
+function buildDirs(fs) {
+
+
+
+    var entry = fs;
+    alert("fs=" + fs)
+    entry.getDirectory("MyJobs", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir " + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs " + error);
+    		});
+
+    entry.getDirectory("MyJobs/Global", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Global" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Global " + error);
+    		});
+
+    entry.getDirectory("MyJobs/Private", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Private" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Private " + error);
+    		});
+
+    entry.getDirectory("MyJobs/Private/Download", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Private-Download" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Private-Download" + error);
+    		});
+
+    entry.getDirectory("MyJobs/Private/Upload", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Private-Upload" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Private-Upload" + error);
+    		});
+
+    entry.getDirectory("MyJobs/Private/Photos", { create: true, exclusive: false },
+            function (dir) {
+                console.log("Created dir Private-Photos" + dir.name);
+            }, function (error) {
+                console.log("error Creating Di MyJobs-Private-Photos" + error);
+            });
+
+    entry.getDirectory("MyJobs/Global/Download", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Global-Download" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Global-Download" + error);
+    		});
+
+    entry.getDirectory("MyJobs/Global/Upload", { create: true, exclusive: false },
+    		function (dir) {
+    		    console.log("Created dir Global-Upload" + dir.name);
+    		}, function (error) {
+    		    console.log("error Creating Di MyJobs-Global-Upload" + error);
+    		});
+    //AssetCapture
+    entry.getDirectory("MyJobs/Private/Photos/ASC", { create: true, exclusive: false },
+           function (dir) {
+               console.log("Created dir Private-Photos-ASC" + dir.name);
+           }, function (error) {
+               console.log("error Creating Di MyJobs-Private-Photos-ASC" + error);
+           });
+}
+
+function dropTables() {
+
+
+    sqlstatement = 'DROP TABLE IF EXISTS MyOrders;' +
+                    'DROP TABLE IF EXISTS MyOperations;' +
+                    'DROP TABLE IF EXISTS MyOperationsSplit;' +
+                    'DROP TABLE IF EXISTS MyPartners;' +
+                    'DROP TABLE IF EXISTS MyAssets;' +
+                    'DROP TABLE IF EXISTS AssetDetails;' +
+                    'DROP TABLE IF EXISTS MyMaterials;' +
+
+                    'DROP TABLE IF EXISTS MyOperationInfo;' +
+                    'DROP TABLE IF EXISTS MyNotifications;' +
+                    'DROP TABLE IF EXISTS MyItems;' +
+                    'DROP TABLE IF EXISTS MyCauses;' +
+                    'DROP TABLE IF EXISTS MyActivities;' +
+                    'DROP TABLE IF EXISTS MyTasks;' +
+                    'DROP TABLE IF EXISTS MyEffects;' +
+
+                    'DROP TABLE IF EXISTS MyTimeConfs;' +
+                    'DROP TABLE IF EXISTS MyMPointDocs;' +
+                    'DROP TABLE IF EXISTS MyJobClose;' +
+                    'DROP TABLE IF EXISTS MyNewJobs;' +
+                    'DROP TABLE IF EXISTS MyWorkConfig;' +
+                    'DROP TABLE IF EXISTS MyRefUsers;' +
+                    'DROP TABLE IF EXISTS MyRefOrderTypes;' +
+                    'DROP TABLE IF EXISTS MyRefNotifTypes;' +
+                    'DROP TABLE IF EXISTS MyRefPriorityTypes;' +
+                    'DROP TABLE IF EXISTS MyRefUserStatusProfiles;' +
+                    'DROP TABLE IF EXISTS MyWorkSyncDets;' +
+                    'DROP TABLE IF EXISTS MyUserDets;' +
+                    'DROP TABLE IF EXISTS MyVehicles;' +
+                    'DROP TABLE IF EXISTS MyVehiclesDefault;' +
+                    'DROP TABLE IF EXISTS MyVehicleCheck;' +
+                    'DROP TABLE IF EXISTS MyMessages;' +
+                    'DROP TABLE IF EXISTS Assets;' +
+                    'DROP TABLE IF EXISTS LogFile;' +
+                    'DROP TABLE IF EXISTS AssetClassVals;' +
+                    'DROP TABLE IF AssetInstalledEquip;' +
+                    'DROP TABLE IF AssetMeasurementPoints;' +
+                    'DROP TABLE IF EXISTS RefNotifprofile;' +
+                    'DROP TABLE IF EXISTS RefCodeGroups;' +
+                    'DROP TABLE IF EXISTS RefCodes;' +
+                    'DROP TABLE IF EXISTS HRAbsence;' +
+                    'DROP TABLE IF EXISTS HRTravel;' +
+                    'DROP TABLE IF EXISTS SurveyAnswers;' +
+                    'DROP TABLE IF EXISTS Survey;' +
+                    'DROP TABLE IF EXISTS SurveyGroup;' +
+                    'DROP TABLE IF EXISTS SurveyQuestion;' +
+                    'DROP TABLE IF EXISTS SurveySubQuestion;' +
+                    'DROP TABLE IF EXISTS SurveyQuestionChildren;' +
+                    'DROP TABLE IF EXISTS FuncLocs;' +
+                    'DROP TABLE IF EXISTS Equipments;' +
+                    'DROP TABLE IF EXISTS TSActivities;' +
+                    'DROP TABLE IF EXISTS TSNPJobs;' +
+                    'DROP TABLE IF EXISTS TSData;' +
+                    'DROP TABLE IF EXISTS JobAnswers;' +
+                    'DROP TABLE IF EXISTS GASSurveyQ;' +
+                    'DROP TABLE IF EXISTS GASSurveyA;' +
+                    'DROP TABLE IF EXISTS GASSurveyMake;' +
+                    'DROP TABLE IF EXISTS GASSurveyModel;' +
+                    'DROP TABLE IF EXISTS GASSurvey;' +
+                    'DROP TABLE IF EXISTS GASSurveyHDR;' +
+                    'DROP TABLE IF EXISTS StockSearch;' +
+                    'DROP TABLE IF EXISTS MyMenuBar;' +
+                    'DROP TABLE IF EXISTS MyJobDets;' +
+                                    'DROP TABLE IF EXISTS  REFPAICODES;' +
+                'DROP TABLE IF EXISTS REFNOTIFICATIONTYPES;' +
+                'DROP TABLE IF EXISTS  REFVARIANCESRFV;' +
+                'DROP TABLE IF EXISTS  REFACTIVITY;' +
+                'DROP TABLE IF EXISTS  MyForms;' +
+                'DROP TABLE IF EXISTS  MyFormsResponses;' +
+                'DROP TABLE IF EXISTS  DG5REL;' +
+                'DROP TABLE IF EXISTS  DG5CODES;' +
+                'DROP TABLE IF EXISTS  CFCODES;' +
+                'DROP TABLE IF EXISTS  MyJobsDetsEQ;' +
+                'DROP TABLE IF EXISTS  MyJobsDetsATTR;' +
+
+                'DROP TABLE IF EXISTS  MyJobsDocs;' +
+                'DROP TABLE IF EXISTS  MyJobsPhotos;' +
+                'DROP TABLE IF EXISTS  MyJobDetsMPoints;' +
+                'DROP TABLE IF EXISTS  MyJobDetsLoch;' +
+                'DROP TABLE IF EXISTS  MyJobDetsMPCodes;' +
+                'DROP TABLE IF EXISTS  MyJobDetsDraw;' +
+
+                    'DROP VIEW IF EXISTS viewoperationstatus;' +
+                    'DROP TABLE IF EXISTS viewprioritycodes;';
+
+    html5sql.process(sqlstatement,
+     function () {
+         // alert("Success dropping Tables");
+     },
+     function (error, statement) {
+
+     }
+);
+}
+
+
+
+
+
+
+
+
+
+function loadDemoData() {
+    SetLastSyncDetails('LASTSYNC_REFERENCE');
+    setSyncingIndicator(true);
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
+
+    resetTables(
+     function () {
+         SetConfigParam("TRACE", "ON");
+         SetConfigParam("SYNC_REFERENCE_FREQUENCY", "8400000");
+         SetConfigParam("SYNC_TRANSACTIONAL_FREQUENCY", "600000");
+         SetConfigParam("SYNC_UPLOAD_FREQUENCY", "300");
+         SetConfigParam("LASTSYNC_REFERENCE", "20180316170000");
+         SetConfigParam("LASTSYNC_TRANSACTIONAL", "20180316224900");
+         SetConfigParam("LASTSYNC_UPLOAD", "20180316214900");
+         SetConfigParam("SERVERNAME", "XXXX://awssvstol411.globalinfra.net:8000/sap/bc/bsp/sap/zbsp_myjobsall/");
+         SetConfigParam("SAPCLIENT", "120");
+         requestDEMOData('Model.json');
+         requestDEMOData('AssetSitesDetails.json');
+         requestDEMOData('EGIandNameCodeMapping.json');
+         requestDEMOData('Manufacturer.json');
+         requestDEMOData('EquipmentTypeCode.json');
+         requestDEMOData('AssetTypeCodes.json');
+         requestDEMOData('FunctionTypeCodes.json');
+         requestDEMOData('PlantGroupCodes.json');
+         requestDEMOData('SystemCodes.json');
+         requestDEMOData('AssetCaptureCategory.json');
+         requestDEMOData('PlantGroupAndProcessGroupCodes.json');
+         requestDEMOData('AssetSites.json');
+     }
+);
+}
+function resetTables(callback) {
+    var sqlstatement = "";
+
+    sqlstatement = 'DELETE FROM  AssetCaptureCategory;' +
+         'DELETE FROM  AssetDetails;' +
+        'DELETE FROM  AssetSites;' +
+        'DELETE FROM AssetSitesDetails;' +
+       'delete from AssetTableColumns ; ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (0,"ZPROCTYP","Processing Type","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (1,"ZINSTLOCN","Functional Location","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (2,"HURST","Make","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (3,"MAPAR","Model","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (4,"EQUNR","Equipment Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (5,"ZINSLOCDESC","Functional Location Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (6,"ZOTDESC","Equipment Type Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (7,"EQKTU","Equipment Desc","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (8,"EQUNR","Equipment Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (9,"ZATSDESC","Asset Type","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (10,"ZPRGDESC","Process Group","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (11,"ZPLGDESC","Plant Group","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (12,"ZSYSDESC","System Code Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (13,"ZNCDESC","Function Type Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (14,"ZOTDESC","Equipment Type Description","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (15,"EQKTU","EQKTU","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (16,"SERGE","Serial Number","150px"); ' +
+    'INSERT INTO AssetTableColumns ("ColumnNumber","ColumnName","DisplayName","ColumnWidth") VALUES (17,"ZSITE","Site","150px"); ' +
+
+        'DELETE FROM  AssetTypeCodes;' +
+         'DELETE FROM AssetUpload;' +
+        'DELETE FROM  EGIandNameCodeMapping;' +
+        'DELETE FROM  EquipmentTypeCode;' +
+        'DELETE FROM  FunctionTypeCodes;' +
+
+        'DELETE FROM  Manufacturer;' +
+        'DELETE FROM  Model;' +
+        'DELETE FROM  MyJobsDocs;' +
+					'DELETE FROM  MyJobsPhotos;' +
+                    	'DELETE FROM  MyRefUsers;' +
+                       // 'DELETE FROM  MyUserDets;' +
+                        // 'DELETE FROM  MyWorkConfig;' +
+        'DELETE FROM  PlantGroupAndProcessGroupCodes;' +
+        'DELETE FROM  PlantGroupCodes;' +
+        'DELETE FROM  SurveyStatus;' +
+				   'DELETE FROM  SystemCodes;'
+
+    html5sql.process(sqlstatement,
+     function () {
+         SetConfigParam('LASTSYNC_REFERENCE', "20120101010101");
+         SetConfigParam('LASTSYNC_TRANSACTIONAL', "20120101010101");
+         callback();
+     },
+     function (error, statement) {
+         opMessage("Error: " + error.message + " when delete processing " + statement);
+     }
+);
+}
+function DeleteLog() {
+    html5sql.process("DELETE FROM LogFile",
+                     function () {
+
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+
+}
+function createDB(type) {
+    createTables(type);
+
+    // createAssetTables(type);
+
+
+}
+
+function requestDEMOData(page) {
+
+    opMessage("DEMOLoad " + page);
+
+    $.getJSON("TestData/" + page, function (data, status) {
+        if (page == 'AssetSites.json') {
+            refAssetsSitesCB(data);
+        }
+        if (page == 'AssetSitesDetails.json') {
+            refAssetSitesDetailsCB(data);
+        }
+
+        if (page == 'Manufacturer.json') {
+            populateManufacturer(data);
+        }
+        if (page == 'Model.json') {
+            populateModel(data);
+        }
+        if (page == 'EGIandNameCodeMapping.json') {
+            populateEGIandNameCodeMapping(data);
+        }
+        if (page == 'EquipmentTypeCode.json') {
+            populateEquipmentTypeCode(data);
+        }
+        if (page == 'AssetTypeCodes.json') {
+            populateAssetTypeCodes(data);
+        }
+        if (page == 'FunctionTypeCodes.json') {
+            populateFunctionTypeCodes(data);
+        }
+        if (page == 'PlantGroupCodes.json') {
+            populatePlantGroupCodes(data);
+        }
+        if (page == 'SystemCodes.json') {
+            populateSystemCodes(data);
+        }
+        if (page == 'AssetCaptureCategory.json') {
+            populateAssetCaptureCategory(data);
+        }
+        if (page == 'PlantGroupAndProcessGroupCodes.json') {
+            populatePlantGroupAndProcessGroupCodes(data);
+        }
+
+        //if(page=='MyJobsOrders.json'){
+
+        //    orderCB(data);
+
+        //}
+        //if(page=='MyJobsNotifications.json'){
+
+        //    notificationCB(data);
+
+        //}
+        //if(page=='MyJobsUsers.json'){
+        //    userCB(data);
+
+        //}
+        //if(page=='MyForms.json'){
+        //    formCB(data);
+
+        //}
+        //if(page=='PE29.json'){
+        //    propsCB(data);
+
+        //}
+        //if(page=='MyJobsOrdersObjects.json'){
+        //    orderobjectsCB(data);
+
+        //}
+        //if(page=='MyJobsRefData.json'){
+
+        //    refdataCB(data);
+
+        //}
+        //if(page=='MyJobsRefJobsDataCodes.json'){
+        //    refdatacodesCB(data);
+
+        //}		
+        //if(page=='MyJobsVehicles.json'){
+        //    vehicleCB(data);
+
+        //}
+        //if(page=='MyJobsVehiclesDefault.json'){
+        //    vehicleDefaultCB(data);
+
+        //}
+        //if(page=='MyMessagesData.json'){
+        //    messageCB(data);
+
+        //}	
+        //if(page=='GASSurvey.json'){
+        //    refgasCB(data);
+
+        //}
+        //if(page=='GASSurveyHdr.json'){
+        //    refgashdrCB(data);
+
+        //}
+        //if(page=='funclocs.json'){
+        //    refflocsCB(data);
+
+        //}
+        //if(page=='TimeSheetNPJobs.json'){
+        //    tsnpjobsCB(data);
+
+        //}
+        //if(page=='TimeSheetActivities.json'){
+        //    tsactivitiesCB(data);
+
+        //}
+        //if(page=='MySurveys.json'){
+
+        //    surveysCB(data);
+
+        //}
+        //if(page=='MyJobsDG5Codes.json'){
+
+        //    dg5CB(data);
+
+        //}
+    })
+  .fail(function (data, status) {
+      // alert( "error:"+status+":"+data );
+  })
+}
+
+function userCB(MyUsers) {
+    var sqlstatement = "";
+    var MyEmployeeID = ""
+    if (MyUsers.user.length > 0) {
+        if (syncReferenceDetsUpdated) {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + ', Users:' + String(MyUsers.user.length));
+        } else {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + 'Users:' + String(MyUsers.user.length));
+        }
+
+        opMessage("Deleting Existing Users");
+        sqlstatement += 'DELETE FROM MyRefUsers;';
+        opMessage("Loading" + MyUsers.user.length + " Existing Users");
+        for (var cntx = 0; cntx < MyUsers.user.length ; cntx++) {
+            if (MyUsers.user[cntx].userid == localStorage.getItem('MobileUser')) {
+                localStorage.setItem('EmployeeID', MyUsers.user[cntx].employeeno)
+            }
+            sqlstatement += 'INSERT INTO MyRefUsers (userid , scenario , plant , workcenter , plannergroup , plannergroupplant, storagegroup, storageplant, partner, partnerrole, funclocint, funcloc, compcode, employeeno, equipment, firstname, lastname, telno ) VALUES (' +
+                '"' + MyUsers.user[cntx].userid + '",' +
+                '"' + MyUsers.user[cntx].scenario + '",' +
+                '"' + MyUsers.user[cntx].plant + '",' +
+                '"' + MyUsers.user[cntx].workcenter + '",' +
+                '"' + MyUsers.user[cntx].plannergroup + '",' +
+                '"' + MyUsers.user[cntx].plannergroupplant + '",' +
+                '"' + MyUsers.user[cntx].storagegroup + '",' +
+                '"' + MyUsers.user[cntx].storageplant + '",' +
+                '"' + MyUsers.user[cntx].partner + '",' +
+                '"' + MyUsers.user[cntx].partnerrole + '",' +
+                '"' + MyUsers.user[cntx].funclocint + '",' +
+                '"' + MyUsers.user[cntx].funcloc + '",' +
+                '"' + MyUsers.user[cntx].compcode + '",' +
+                '"' + MyUsers.user[cntx].employeeno + '",' +
+                '"' + MyUsers.user[cntx].equipment + '",' +
+                '"' + MyUsers.user[cntx].firstname + '",' +
+                '"' + MyUsers.user[cntx].lastname + '",' +
+                '"' + MyUsers.user[cntx].telno + '");';
+        }
+
+        html5sql.process(sqlstatement,
+             function () {
+                 sqlstatement = "UPDATE MyUserDets SET employeeid = '" + localStorage.getItem('EmployeeID') + "' WHERE mobileuser = '" + localStorage.getItem('MobileUser') + "';";
+
+                 html5sql.process(sqlstatement,
+                  function () {
+                  },
+                  function (error, statement) {
+                      opMessage("Error: " + error.message + " when updateing Pincode " + statement);
+                  }
+                 );
+             },
+             function (error, statement) {
+                 opMessage("Error: " + error.message + " when processing " + statement);
+             }
+        );
+
+
+    }
+}
+
+function existsInArray(array, val) {
+
+    retv = false;
+    for (var cntx = 0; cntx < array.length ; cntx++) {
+        if (array[cntx] == val) {
+            retv = true;
+            cntx = array.length;
+        }
+    }
+    return retv
+}
+
+
+function refdataCB(MyReference) {
+    var sqlstatement = "";
+
+    opMessage("Callback Reference Data triggured");
+
+    if (MyReference.scenario.length > 0) {
+        if (syncReferenceDetsUpdated) {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + ', Scenarios:' + String(MyReference.scenario.length));
+        } else {
+            localStorage.setItem('LastSyncReferenceDetails', localStorage.getItem('LastSyncReferenceDetails') + 'Scenarios:' + String(MyReference.scenario.length));
+        }
+        opMessage("Deleting Existing Reference Data");
+        sqlstatement += 'DELETE FROM MyRefOrderTypes;';
+        sqlstatement += 'DELETE FROM MyRefNotifTypes;';
+        sqlstatement += 'DELETE FROM MyMenuBar;';
+        sqlstatement += 'DELETE FROM REFPAICODES;';
+        sqlstatement += 'DELETE FROM REFNOTIFICATIONTYPES;';
+        sqlstatement += 'DELETE FROM REFVARIANCESRFV;';
+        sqlstatement += 'DELETE FROM REFACTIVITY;';
+        sqlstatement += 'DELETE FROM MyRefPriorityTypes;';
+        sqlstatement += 'DELETE FROM MyRefUserStatusProfiles;';
+        html5sql.process(sqlstatement,
+                 function () {
+
+
+
+
+                     for (var cntx = 0; cntx < MyReference.scenario.length ; cntx++) {
+                         sqlstatement = "";
+                         opMessage("Loading Scenario " + MyReference.scenario[cntx].scenario + " Reference Data");
+                         // Loop and write MenuBar to DB
+
+                         opMessage("Loading " + MyReference.scenario[cntx].appbar.length + " Menu Bar");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].appbar.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO MyMenuBar (scenario, level ,item, position, type ,subitem ,command, item2) VALUES (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].level + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].item + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].position + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].type + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].subitem + '",' +
+                                  '"' + unescape(MyReference.scenario[cntx].appbar[opscnt].command) + '",' +
+                                  '"' + MyReference.scenario[cntx].appbar[opscnt].item2 + '");';
+                         }
+                         // Loop and write ordertypes to DB
+
+                         opMessage("Loading " + MyReference.scenario[cntx].ordertype.length + " Order Types");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].ordertype.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO MyRefOrderTypes (scenario, type , description, statusprofile ,opstatusprofile ,priorityprofile) VALUES (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].ordertype[opscnt].type + '",' +
+                                  '"' + MyReference.scenario[cntx].ordertype[opscnt].description + '",' +
+                                  '"' + MyReference.scenario[cntx].ordertype[opscnt].statusprofile + '",' +
+                                  '"' + MyReference.scenario[cntx].ordertype[opscnt].opstatusprofile + '",' +
+                                  '"' + MyReference.scenario[cntx].ordertype[opscnt].priorityprofile + '");';
+                         }
+                         // Loop and write notiftypes to DB
+
+
+                         opMessage("Loading " + MyReference.scenario[cntx].notiftype.length + " Notif Types");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].notiftype.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO MyRefNotifTypes (scenario , type , description , statusprofile,	taskstatusprofile , priority_type ) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].notiftype[opscnt].type + '",' +
+                                  '"' + MyReference.scenario[cntx].notiftype[opscnt].description + '",' +
+                                  '"' + MyReference.scenario[cntx].notiftype[opscnt].statusprofile + '",' +
+                                  '"' + MyReference.scenario[cntx].notiftype[opscnt].taskstatusprofile + '",' +
+                                  '"' + MyReference.scenario[cntx].notiftype[opscnt].priority_type + '");';
+                         }
+
+                         // Loop and write paicodes to DB
+
+
+                         opMessage("Loading " + MyReference.scenario[cntx].pai_codes.length + " PAI Codes");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].pai_codes.length ; opscnt++) {
+                             y = unescape(MyReference.scenario[cntx].pai_codes[opscnt].kurztext_code)
+                             x = y.replace(/'/g, "");;
+                             x = x.replace(/"/g, "");;
+                             x = x.replace("\/", " ");;
+                             x = x.replace(/&/g, "");;
+                             sqlstatement += 'INSERT INTO REFPAICODES (scenario , userid , level , stsma,	plant, work_cntr , catalogue , codegrp , kurztext_group,	code , kurztext_code) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].userid + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].level + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].stsma + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].plant + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].work_cntr + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].catalogue + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].codegrp + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].kurztext_group + '",' +
+                                  '"' + MyReference.scenario[cntx].pai_codes[opscnt].code + '",' +
+                                  '"' + x + '");';
+                         }
+                         // Loop and write Notification Types to DB
+
+
+                         opMessage("Loading " + MyReference.scenario[cntx].notification_types.length + " notification Types");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].notification_types.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO REFNOTIFICATIONTYPES (scenario , userid , level_number , notiftype,	notifdesc , notifprofile , priotype , priority,	prioritydesc ) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].userid + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].level_number + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].notiftype + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].notifdesc + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].notifprofile + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].priotype + '",' +
+                                  '"' + MyReference.scenario[cntx].notification_types[opscnt].priority + '",' +
+                                  '"' + unescape(MyReference.scenario[cntx].notification_types[opscnt].prioritydesc) + '");';
+                         }
+                         // Loop and write VariancesRFV to DB
+
+
+                         opMessage("Loading " + MyReference.scenario[cntx].variancesrfv.length + " VariancesRFV");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].variancesrfv.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO REFVARIANCESRFV (scenario , userid , plant , work_cntr,	job_activity , dev_reason , dev_reas_txt , mandate ) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].userid + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].plant + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].work_cntr + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].job_activity + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].dev_reason + '",' +
+                                  '"' + unescape(MyReference.scenario[cntx].variancesrfv[opscnt].dev_reas_txt) + '",' +
+                                  '"' + MyReference.scenario[cntx].variancesrfv[opscnt].mandate + '");';
+                         }
+                         // Loop and write Activity to DB
+
+
+                         opMessage("Loading " + MyReference.scenario[cntx].activity.length + " Activity");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].activity.length ; opscnt++) {
+                             y = MyReference.scenario[cntx].activity[opscnt].activity_desc
+                             x = y.replace(/'/g, "");;
+                             x = x.replace("\/", "");;
+                             x = x.replace(/&/g, "");;
+                             sqlstatement += 'INSERT INTO REFACTIVITY (scenario , work_center , activity , activity_desc,	action , deflt  ) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].activity[opscnt].work_center + '",' +
+                                  '"' + MyReference.scenario[cntx].activity[opscnt].activity + '",' +
+                                  '"' + x + '",' +
+                                  '"' + MyReference.scenario[cntx].activity[opscnt].action + '",' +
+                                  '"' + MyReference.scenario[cntx].activity[opscnt].deflt + '");';
+                         }
+                         // Loop and write prioritytypes to DB
+
+                         opMessage("Loading " + MyReference.scenario[cntx].prioritytype.length + " Priority Types");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].prioritytype.length ; opscnt++) {
+
+                             sqlstatement += 'INSERT INTO MyRefPriorityTypes (scenario, type , priority, description ) VALUES  (' +
+                                  '"' + MyReference.scenario[cntx].scenario + '",' +
+                                  '"' + MyReference.scenario[cntx].prioritytype[opscnt].type + '",' +
+                                  '"' + MyReference.scenario[cntx].prioritytype[opscnt].priority + '",' +
+                                  '"' + MyReference.scenario[cntx].prioritytype[opscnt].description + '");';
+
+                         }
+                         // Loop and write prioritytypes to DB
+                         opMessage("Loading " + MyReference.scenario[cntx].userstatus.length + " Status Profiles");
+                         for (var opscnt = 0; opscnt < MyReference.scenario[cntx].userstatus.length ; opscnt++) {
+                             y = unescape(MyReference.scenario[cntx].userstatus[opscnt].statusdesc)
+                             x = y.replace(/'/g, "");;
+                             x = x.replace("\/", "");;
+                             x = x.replace(/&/g, "");;
+                             sqlstatement += 'INSERT INTO MyRefUserStatusProfiles (scenario, type , status, statuscode, statusdesc ) VALUES  (' +
+                                      '"' + MyReference.scenario[cntx].scenario + '",' +
+                                      '"' + MyReference.scenario[cntx].userstatus[opscnt].type + '",' +
+                                      '"' + MyReference.scenario[cntx].userstatus[opscnt].status + '",' +
+                                      '"' + MyReference.scenario[cntx].userstatus[opscnt].statuscode + '",' +
+                                      '"' + x + '");';
+
+                         }
+
+
+
+                         html5sql.process(sqlstatement,
+                                  function () {
+                                      BuildMenuBar();
+
+                                  },
+                              function (error, statement) {
+                                  // alert("Error: " + error.message + " when
+                                  // processing " + statement);
+                                  opMessage("Error: " + error.message + " when processing " + statement);
+
+                              }
+                             );
+                     }
+
+                 },
+         function (error, statement) {
+             opMessage("Error: " + error.message + " when processing " + statement);
+         }
+    );
+
+
+    }
+
+}
+
+function DeleteOldPhotos(orderlist) {
+    console.log("Delete Old Photos")
+
+}
+
+function insertSurveyStatusRecord(theSite) {
+    var sqlstatement = "select count(*) AS REC from SurveyStatus  where  zsite ='" + theSite + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray[0].REC == 0) {
+                            var now = new Date();
+
+
+                            //TODO wait a millisecond just in case, so we don't create identical records
+
+                            surveyPkid = "S_" + localStorage.getItem("MobileUser") +
+                              now.getFullYear() + ("0" + (now.getMonth() + 1)).slice(-2) + ("0" + (now.getDate())).slice(-2) + ("0" + (now.getHours())).slice(-2) +
+             ("0" + (now.getMinutes())).slice(-2) + ("0" + (now.getSeconds())).slice(-2) + ("0" + (now.getMilliseconds())).slice(-3)
+
+
+                            sqlstatement = "INSERT INTO SurveyStatus (PKID,ZSITE,SURV_STATUS,START_DATE) VALUES ('" +
+                                surveyPkid + "','" + theSite + "','Not Active','" + new Date().toLocaleDateString("en-gb") + "');";
+                            html5sql.process(sqlstatement,
+                      function () {
+
+                      },
+                      function (error, statement) {
+                          opMessage("Error: " + error.message + " when processing " + statement);
+                      }
+                 );
+                        }
+
+
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+
+function submitRecord(callback) {
+
+    //if there is a PKID its an edit, otherwise it's an add
+    EvaluateValueForZPROCTYP(function (zProcTyp) {
+        currentAssetRecord.zproctyp = zProcTyp;
+        var now = new Date();
+        if (currentAssetRecord.recordNumberZRECNUM == null) {
+            currentAssetRecord.recordNumberZRECNUM = localStorage.getItem("MobileUser") +
+                       now.getFullYear() + ("0" + (now.getMonth() + 1)).slice(-2) + ("0" + (now.getDate())).slice(-2) + ("0" + (now.getHours())).slice(-2) +
+                        ("0" + (now.getMinutes())).slice(-2) + ("0" + (now.getSeconds())).slice(-2) + ("0" + (now.getMilliseconds())).slice(-3)
+        }
+        //TODO probably don't need to update SurveyStatus every time.
+        var sqlstatement = 'INSERT INTO AssetUpload (ZASCAT,ZASSDESC ,ZZASSETTAG,ERNAM,TERMAB,ERFZEIT,ZDECOM,ESTAT,ZDECOMR,' +
+            'ZEQDECOM,ZDOCFLG,Z_GPSNMEA,ZINSLOCDESC,ZINSLOCDESC1,ZINSLOCDESC2,ZINSLOCDESC3,ZPARLOCN,ZPEQUNR,ZPARECNUM,ZPRG,' +
+            'ZPRGDESC,ZPROCTYP,ZRECNUM,ZSERN1,ZSITEDESC,ZSITESGNOFF,STATUS,STATUS_TXT,STATUS_PROFILE,ZSURV,ZSURVSUB,ZSTATUS,ZZW_WW,' +
+            'ZCOMMENTS1,ZCOMMENTS2,SYNCED,ZDOCPATH,ZCAPDEL_SURVEY,ZPROJ_CODE,ZCheck_OUT,ZCHECKOUT_TO,ZCHECKOUT_DATE,ZDELETED,  ' +
+            'ZASSTYPE,ZZEQPT_EGI ,EQKTU ,EQUNR ,HURST,ZIWERK,MAPAR ,ZNCDESC' +
+                          ',ZOTDESC ,ZPLGRP ,ZPLGDESC ,SERGE ,ZSITE ,STATUS ,ZSWERK ,ZSYSCODE ,ZSYSDESC ,ZINSTLOCN ,ZZFL_NC ,INBDT ) VALUES ( ' +
+                           '"' + currentAssetRecord.zascatAssetCategory + '",' +
+                          '"' + currentAssetRecord.AssetDescriptionZASSDESC + '",' +
+                          '"' + currentAssetRecord.zzAssetTag + '",' +
+                           '"' + "ERNAM" + '",' +
+                            '"' + "TERMAB" + '",' +
+                            '"' + "ERFZEIT" + '",' +
+                             '"' + "ZDECOM" + '",' +
+                               '"' + "ESTAT" + '",' +
+                                '"' + "ZDECOMR" + '",' +
+                                '"' + "ZEQDECOM" + '",' +
+                                 '"' + "ZDOCFLG" + '",' +
+                                 '"' + currentAssetRecord.z_gpsNmea + '",' +
+                                 '"' + currentAssetRecord.zinsLocDesc1 + " " + currentAssetRecord.zinsLocDesc2 + " " + currentAssetRecord.zinsLocDesc3 + '",' +
+                                 '"' + currentAssetRecord.zinsLocDesc1 + '",' +
+                                 '"' + currentAssetRecord.zinsLocDesc2 + '",' +
+                                 '"' + currentAssetRecord.zinsLocDesc3 + '",' +
+                                 '"' + "ZPARLOCN" + '",' +
+                                 '"' + "ZPEQUNR" + '",' +
+                                 '"' + "ZPARECNUM" + '",' +
+                                 '"' + "ZPRG" + '",' +
+                                 '"' + currentAssetRecord.processGroupZPRG_ZPRGDESC + '",' +
+                                '"' + currentAssetRecord.zproctyp + '",' +
+                                '"' + currentAssetRecord.recordNumberZRECNUM + '",' +
+                                 '"' + "ZSERN1" + '",' +
+                                '"' + "ZSITEDESC" + '",' +
+                                '"' + "ZSITESIGNOFF" + '",' +
+                               '"' + " STATUS" + '",' +
+                                '"' + "STATUS_TXT" + '",' +
+                                '"' + "STATUS_PROFILE" + '",' +
+                                '"' + currentAssetRecord.ZSURV + '",' +
+                                '"' + "ZSURVSUB" + '",' +
+                               '"' + " ZSTATUS" + '",' +
+                                '"' + "ZZW_WW" + '",' +
+                                '"' + " ZCOMMENTS1" + '",' +
+                                '"' + " ZCOMMENTS2" + '",' +
+                                '"' + " SYNCED" + '",' +
+                                '"' + " ZDOCPATH" + '",' +
+                                '"' + " ZCAPDEL_SURVEY" + '",' +
+                                '"' + " ZPROJ_CODE" + '",' +
+                                '"' + " ZCheck_OUT" + '",' +
+                                '"' + " ZCHECKOUT_TO" + '",' +
+                                '"' + " ZCHECKOUT_DATE" + '",' +
+                                '"' + " ZDELETED  " + '",' +
+                          '"' + currentAssetRecord.ZASSTYPE + '",' +
+                          '"' + currentAssetRecord.equipmentTypeCodeZZEQPT_EGI + '",' +
+                         (currentAssetRecord.EquipmentDescriptionEQKTU == null ? "NULL," : '"' + currentAssetRecord.EquipmentDescriptionEQKTU + '",') +
+                          '"' + currentAssetRecord.EQUNR + '",' +
+                          '"' + currentAssetRecord.make + '",' +
+                          '"' + currentAssetRecord.ZIWERK + '",' +
+                          '"' + currentAssetRecord.model + '",' +
+                          '"' + currentAssetRecord.functionTypeZNCDESC + '",' +
+                          '"' + currentAssetRecord.equipmentTypeDescriptionZOTDESC + '",' +
+                          '"' + currentAssetRecord.plantGroupNameZplgrp + '",' +
+                          '"' + currentAssetRecord.plantGroupDescriptionZPLGDESC + '",' +
+                          '"' + currentAssetRecord.sergeSerialNumber + '",' +
+                          '"' + currentAssetRecord.site + '",' +
+                          '"' + currentAssetRecord.STATUS + '",' +
+                          '"' + currentAssetRecord.maintenancePlantZSWERK + '",' +
+                          '"' + currentAssetRecord.SystemCodeZSYSCODE + '",' +
+                          '"' + currentAssetRecord.zsysDescSystemCodeDescription + '",' +
+                          '"' + currentAssetRecord.funcLocStringZINSTLOCN + '",' +
+                          '"' + currentAssetRecord.zzfl_nc + '",' +
+                          '"' + currentAssetRecord.inbdtInstallDate + '");';
+
+        html5sql.process(sqlstatement,
+                         function () {
+
+                             callback(true);
+                         },
+                         function (error, statement) {
+                             opMessage("Error: " + error.message + " when processing " + statement);
+                             callback(false);
+
+                         }
+                );
+
+
+
+    });
+}
+
+
+function deleteRecord() {
+    var sqlstatement = 'DELETE FROM AssetUpload WHERE PKID=' + '"' + currentAssetRecord.pkid + '"';
+
+
+    html5sql.process(sqlstatement,
+                     function () {
+
+                         buildAssetTableRows();
+
+                         showSucessMessage("Delete", "The record was successfully deleted")
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("Delete", error.message)
+
+                     }
+            );
+}
+function unableToLocateRecord() {
+    disableButtonsCreateAsset();
+    var sqlstatement = 'UPDATE AssetUpload SET ZPROCTYP = "UAC" WHERE PKID=' + '"' + currentAssetRecord.pkid + '"';
+
+
+    html5sql.process(sqlstatement,
+                     function () {
+
+                         buildAssetTableRows();
+
+                         showSucessMessage("Submit", 'The asset has been marked as "unable to locate"')
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("Unable to locate", error.message)
+
+                     }
+            );
+}
+
+
+function notAccessibleRecord() {
+    var sqlstatement = 'UPDATE AssetUpload SET ZPROCTYP = "NOA" WHERE PKID=' + '"' + currentAssetRecord.pkid + '"';
+
+
+    html5sql.process(sqlstatement,
+                     function () {
+                         buildAssetTableRows();
+                         showSucessMessage("", 'The asset has been marked as "Not accessible"')
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("", error.message)
+                     }
+            );
+}
+
+function decomRecord() {
+    var sqlstatement = 'UPDATE AssetUpload SET ZPROCTYP = "DC1" WHERE PKID=' + '"' + currentAssetRecord.pkid + '"';
+    html5sql.process(sqlstatement,
+                     function () {
+                         buildAssetTableRows();
+                         showSucessMessageAndClose("", 'The asset has been decommissioned successfully', formDecomAsset)
+                         //showSucessMessage("", 'The asset has been decommissioned successfully')
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("", error.message)
+                     }
+            );
+}
+
+function decomReplaceRecord() {
+    var sqlstatement = 'UPDATE AssetUpload SET ZPROCTYP = "DC2" WHERE PKID=' + '"' + currentAssetRecord.pkid + '"';
+
+
+    html5sql.process(sqlstatement,
+                     function () {
+                         buildAssetTableRows();
+                         action = recordAction.AFTERDECOM;
+                         inputDecomAssetFuncLocPart1.setValue("");
+                         textCommentDecomAsset.setValue("");
+                         DecomAssetFilterDecomAction.setSelectedKey("NOTSELECTED");
+                         showDecomReplaceMessage("", 'The asset has been decommissioned successfully');
+
+                     },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("", error.message)
+                     }
+            );
+}
+
+function getBusinessUnit(siteShortCode, callback) {
+    var sqlstatement = 'SELECT bunit FROM AssetSites WHERE site=' + '"' + siteShortCode + '"';
+
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.businessUnit = rowsArray[0].bunit;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         currentAssetRecord.businessUnit = null;
+                         callback();
+                     }
+            );
+}
+
+function getEquipmentInfo(callback) {
+
+    var sqlstatement = 'SELECT ZATCODE,ZOTDESC,ZOTDEF||ZOTDEF_EXT AS ZOTDEF from  EquipmentTypeCode e  where ZZEQPT_EGI ='
+    sqlstatement += '"' + currentAssetRecord.equipmentTypeCodeZZEQPT_EGI + '"';
+
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.assetTypeCodeZATCODE = rowsArray[0].ZATCODE;
+                            currentAssetRecord.ZotDef = rowsArray[0].ZOTDEF;
+                            currentAssetRecord.equipmentTypeDescriptionZOTDESC = rowsArray[0].ZOTDESC;
+                        }
+                        else {
+                            currentAssetRecord.assetTypeCodeZATCODE = null;
+                            currentAssetRecord.ZotDef = null;
+                            currentAssetRecord.equipmentTypeDescriptionZOTDESC = null;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         showErrorMessage("", error.message)
+
+                     }
+            );
+
+
+}
+
+function getEquipmentTypeCodeZZEQPT_EGI(make, model, callback) {
+
+    var sqlstatement = 'SELECT EQART from  Model  where HERST ='
+    sqlstatement += '"' + make + '" AND Model="' + model + '"';
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.equipmentTypeCodeZZEQPT_EGI = rowsArray[0].EQART;
+                        }
+                        else {
+                            currentAssetRecord.equipmentTypeCodeZZEQPT_EGI = null;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+
+
+}
+function getMakeModelValidity(make, model, callback) {
+
+    var sqlstatement = 'SELECT EQART from  Model  where HERST ='
+    sqlstatement += '"' + make + '" AND Model="' + model + '"';
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            callback(true);
+                        }
+                        else {
+                            callback(false)
+                        }
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+
+function getZZFL_NC(zatCode, callback) {
+    var sqlstatement = "select distinct ZZFL_NC from FunctionTypeCodes  where ZATCODE='" + zatCode + "'";
+
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            //currentAssetRecord.funcLocSub19_22zzfl_nc = rowsArray[0].ZZFL_NC;
+                            currentAssetRecord.zzfl_nc = rowsArray[0].ZZFL_NC;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+
+
+}
+function getFunctionDefinitionZNCDEF(zzfl_nc) {
+
+    var sqlstatement = 'SELECT ZNCDEF|| ZNCDEF_EXT AS ZNCDEF from  FunctionTypeCodes  where ZZFL_NC ='
+    sqlstatement += '"' + zzfl_nc + '"';
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            sap.ui.getCore().getElementById("text_SelectFunctionType").setValue(rowsArray[0].ZNCDEF);
+                        }
+                        else {
+                            sap.ui.getCore().getElementById("text_SelectFunctionType").setValue("");
+                        }
+
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+
+function getZZFL_NC(zatCode, callback) {
+    var sqlstatement = "select distinct ZZFL_NC from FunctionTypeCodes  where ZATCODE='" + zatCode + "'";
+
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            //currentAssetRecord.funcLocSub19_22zzfl_nc = rowsArray[0].ZZFL_NC;
+                            currentAssetRecord.zzfl_nc = rowsArray[0].ZZFL_NC;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+
+
+}
+
+function getAssetCategory(zzeqpt_egi, zzfl_nc, bunit, callback) {
+    var sqlstatement = "select distinct ZASCAT from EGIandNameCodeMapping where  ZZW_WW =";
+    sqlstatement += "'" + bunit + "' AND ZZFL_NC='" + zzfl_nc + "' AND ZZEQPT_EGI='" + zzeqpt_egi + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.zascatAssetCategory = rowsArray[0].ZASCAT;
+                        }
+                        else {
+                            currentAssetRecord.zascatAssetCategory = "E";
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+
+            );
+
+
+}
+
+function getAssetCategoryValidity(zzeqpt_egi, zzfl_nc, bunit, callback) {
+    var sqlstatement = "select distinct ZASCAT from EGIandNameCodeMapping where  ZZW_WW =";
+    sqlstatement += "'" + bunit + "' AND ZZFL_NC='" + zzfl_nc + "' AND ZZEQPT_EGI='" + zzeqpt_egi + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            callback(true);
+                        }
+                        else {
+                            callback(false);
+                        }
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+
+            );
+}
+
+function getPlantGroup(zzeqpt_egi, zzfl_nc, bunit, zascat, callback) {
+    var sqlstatement = "select distinct ZPLGRP,ZPLGDESC from EGIandNameCodeMapping e  inner join PlantGroupCodes p on e.ZDEFPG = p.ZPLGRP where  e.ZZW_WW =";
+    sqlstatement += "'" + bunit + "' AND ZZFL_NC='" + zzfl_nc + "' AND ZZEQPT_EGI='" + zzeqpt_egi + "' AND ZASCAT = '" + zascat + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.plantGroupCodeZplgrp = rowsArray[0].ZPLGRP;
+                            currentAssetRecord.plantGroupDescriptionZPLGDESC = rowsArray[0].ZPLGDESC;
+                        }
+                        else {
+                            currentAssetRecord.plantGroupCodeZplgrp = null;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+function getPlantGroupAndProcessGroupCode(zplgrp, bunit, callback) {
+    var sqlstatement = "select distinct ZPRG from PlantGroupAndProcessGroupCodes where  ZZW_WW =";
+    sqlstatement += "'" + bunit + "' AND ZPLGRP='" + zplgrp + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.processGroupZPRG_ZPRGDESC = rowsArray[0].ZPRG;
+                        }
+                        else {
+                            currentAssetRecordprocessGroupZPRG_ZPRGDESC = null;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         callback();
+                     }
+
+            );
+
+
+}
+
+function getPlantGroupValidity(zplgrp, bunit, callback) {
+    var sqlstatement = "select distinct ZPRG from PlantGroupAndProcessGroupCodes where  ZZW_WW =";
+    sqlstatement += "'" + bunit + "' AND ZPLGRP='" + zplgrp + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            if (currentAssetRecord.processGroupZPRG_ZPRGDESC == rowsArray[0].ZPRG) {
+                                callback(true);
+                            }
+                            else {
+                                callback(false);
+                            }
+                        }
+                        else {
+                            callback(false);
+                        }
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                         callback();
+                     }
+
+            );
+
+
+}
+
+
+function getFunctionalLocationsForSite(site, callback) {
+    var sqlstatement = "select distinct ZINSTLOCN from AssetUpload where zsite =" + "'" + site + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        callback(rowsArray);
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+function GetSystemCodefromAssetCaptureCategory(assetTypeZatcode, zascatAssetCategory, callback) {
+    var sqlstatement = "select distinct a.ZSYSCODE,s.ZZSYSDESC from AssetCaptureCategory a inner join systemcodes s on a.ZSYSCODE=s.ZSYSCODE where  a.ZATCODE =";
+    sqlstatement += "'" + assetTypeZatcode + "' AND a.ZASCAT='" + zascatAssetCategory + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.SystemCodeZSYSCODE = rowsArray[0].ZSYSCODE;
+                            currentAssetRecord.zsysDescSystemCodeDescription = rowsArray[0].ZZSYSDESC;
+                        }
+                        else {
+                            currentAssetRecord.SystemCodeZSYSCODE = null;
+                            currentAssetRecord.zsysDescSystemCodeDescription = null;
+                        }
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}
+
+function GetSurveyID(theSite, callback) {
+    var sqlstatement = "select distinct PKID from SurveyStatus WHERE ZSITE='" + theSite + "'";
+    html5sql.process(sqlstatement,
+                    function (transaction, results, rowsArray) {
+                        if (rowsArray.length > 0) {
+                            currentAssetRecord.ZSURV = rowsArray[0].PKID;
+                        }
+
+                        callback();
+                    },
+                     function (error, statement) {
+                         opMessage("Error: " + error.message + " when processing " + statement);
+                     }
+            );
+}

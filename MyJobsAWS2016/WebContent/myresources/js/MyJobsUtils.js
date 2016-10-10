@@ -608,17 +608,17 @@ function CreateMatrix(selectedJob,StatusColour,StatusText,priorityiconsToDisplay
 
 		var tf_startdate = new sap.ui.commons.TextField({
 			editable : false,
-			value: formatDate(selectedJob.startdate),
+			value: selectedJob.startdate+" "+selectedJob.starttime,// AZURE change formatDate(selectedJob.startdate),
 			wrapping:true,
 			width:"350px"}).addStyleClass("LabelText");
 
 		oLabel.setLabelFor(tf_startdate);  
 		var oLabel_enddate = new sap.ui.commons.Label({
 			text : 'End Date' }).addStyleClass("Labelstyle");
-
+		
 		var tf_enddate = new sap.ui.commons.TextField({
 			editable : false,
-			value:formatDate(selectedJob.enddate),
+			value:selectedJob.enddate, // AZURE change formatDate(selectedJob.enddate),
 			wrapping:true,
 			width:"350px"}).addStyleClass("LabelText");
 

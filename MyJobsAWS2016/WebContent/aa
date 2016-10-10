@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS MyJobDetsMPcodes       (  code_gp , code , code_text );'+	
+'CREATE TABLE IF NOT EXISTS MyJobDetsMPoints       (  meas_point , object_id ,object_desc , psort ,pttxt , format ,no_char , no_deci ,code_gp , code , unit_meas ,read_from );'+					 
+'CREATE TABLE IF NOT EXISTS MyJobDetsLoch          (  orderno , notification_no ,not_type , not_date ,not_time , not_shtxt ,not_order , meter_no ,meter_rdg , work_type , order_type , op_txt TEXRT, order_date , order_status , recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+					 
+'CREATE TABLE IF NOT EXISTS MyJobDetsDraw          (  orderno , zact ,zite , zmandatoryfield ,zurl , nodeid ,fname , mime );'+					 
+'CREATE TABLE IF NOT EXISTS MyJobsDetsEQ			(  equnr , obj_type , obj_type_desc , start_date ,manfacture ,manparno ,manserno ,user_status_code ,swerk TEXT ,swerk_desc ,profile TEXT ,device TEXT ,device_info TEXT ,install_date TEXT , install_loc_desc );'+
+'CREATE TABLE IF NOT EXISTS MyJobsDetsATTR			(  equnr TEXT ,classnum TEXT ,klassentext TEXT ,charact TEXT ,charact_desc ,value );'+
+'CREATE TABLE IF NOT EXISTS MyJobDetsMeasCodes		(  code_gp TEXT ,code TEXT ,code_text TEXT );'+
+'CREATE TABLE IF NOT EXISTS MyJobDetsComps			(  orderno TEXT ,opno TEXT ,material TEXT ,description TEXT ,ent_qty TEXT ,com_qty TEXT ,with_qty TEXT ,upm TEXT ,plant TEXT , stloc TEXT , batch_no TEXT ,req_date TEXT , res_item TEXT );'+
+'CREATE TABLE IF NOT EXISTS MyJobDetsOrderLongText	(  objtype TEXT ,objkey TEXT ,orderno TEXT ,line_number , format_col , recordupdated TIMESTAMP DATETIME DEFAULT(STRFTIME(\'%Y-%m-%d %H:%M:%f\', \'NOW\')));'+
+'CREATE TABLE IF NOT EXISTS MyJobDetsAddress   		(   orderno , opno , address01 , address02 , address03 , address04 , address05 , address06 , address07 , address08 ,address09 , address10 ,address11 ,address12 ,caption01 , caption02 , caption03 , caption04 , caption05 , caption06 , caption07 , caption08 , caption09 ,caption10 ,caption11 ,caption12 );'+													
+'CREATE TABLE IF NOT EXISTS MyJobDetsNotifLongText	(   objtype , objkey , orderno , line_number , format_col , text_line );'+													
+'CREATE TABLE IF NOT EXISTS MyJobDetsOrderOps		(   orderno , operation , comp_date_time , description , status , name );'+													
+'CREATE TABLE IF NOT EXISTS MyJobDetsIconPriority	(   orderno , opno , icon_filename , tooltip , tooltip_desc , command );'+													
+'CREATE TABLE IF NOT EXISTS MyJobDetsIconJob		(   orderno , opno , icon_type , icon_position , icon_filename , icon_txt , tooltip , tooltip_desc , command ,grid , grid_vals );'+													
+
+
+
+
+
+
+
+
+

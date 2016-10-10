@@ -188,6 +188,7 @@ function BuildNotificationUsers(){
 	var FirstVal="";
 	
 		SQLStatement="select * from MyRefUsers where workcenter = '"+localStorage.getItem('EmployeeWorkCenter')+"'"	
+		console.log(SQLStatement)
 		sap.ui.getCore().getElementById("NewAssignToUser").destroyItems();
 	sap.ui.getCore().getElementById("NewAssignToUser").addItem(
 	new sap.ui.core.Item({
@@ -196,12 +197,13 @@ function BuildNotificationUsers(){
 	}))
 		html5sql.process(SQLStatement,
 		 function(transaction, results, rowsArray){
-				//alert(rowsArray.length)
+				alert(rowsArray.length)
 				for (var n = 0; n < rowsArray.length; n++) {
 					item = rowsArray[n];
-					sap.ui.getCore().getElementById("NewType").addItem(
+					console.log(item.userid)
+					sap.ui.getCore().getElementById("NewAssignToUser").addItem(
 							new sap.ui.core.Item({
-								key: item.employeeno+"|"+item.notifprofile+"|"+item.priotype, 
+								key: item.employeeno, // AZURE         +"|"+item.notifprofile+"|"+item.priotype, 
 								text: item.lastname+", "+item.firstname+" ("+item.userid+")"
 							}))
 					
