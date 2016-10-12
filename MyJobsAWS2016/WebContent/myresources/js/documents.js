@@ -610,11 +610,11 @@ var formFormFunctions = new sap.m.Dialog("dlgFormFunctions",{
 							    	
 							    		
 							    	formFormFunctions.close() 
-							    	if(!isCellConnection())	{
-										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
-										}else{
+							    	//if(!isCellConnection())	{
+									//	DisplayErrorMessage("Form Upload","No Suitable Network Connection")
+									//	}else{
 											uploadDocument(selectedFormId)	
-										}
+									//	}
 							    	
 							    	
 							    	
