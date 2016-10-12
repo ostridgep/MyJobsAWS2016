@@ -707,11 +707,11 @@ var formAttachmentFunctions = new sap.m.Dialog("dlgAttachmentFunctions",{
 							    	
 							    		
 							    	formAttachmentFunctions.close() 
-							    	if(!isCellConnection())	{
-										DisplayErrorMessage("Form Upload","No Suitable Network Connection")
-										}else{
+							    	//if(!isCellConnection())	{
+									//	DisplayErrorMessage("Form Upload","No Suitable Network Connection")
+									//	}else{
 											uploadAttachment(selectedFormId)	
-										}
+									//	}
 							    		
 							    	
 							    	
