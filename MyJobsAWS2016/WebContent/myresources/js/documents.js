@@ -464,13 +464,13 @@ new sap.m.Button( "btnPhotoUpload",{
 DisplayErrorMessage("Attach Photo", "Name is Mandatory")
 }else{
 status="Local"
-if(!isCellConnection()) {
-DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
-}else{
+//if(!isCellConnection()) {
+//DisplayErrorMessage("Photo Upload","No Suitable Network Connection")
+//}else{
 status="Sending"
 getBase64FromImageUrl(selectedPhoto,selectedPhotoID,sap.ui.getCore().getElementById('NewPhotoName').getValue())
 
-}
+//}
 if (selectedPhotoID==0){
     CreatePhotoEntry(CurrentOrderNo,CurrentOpNo, selectedPhoto, sap.ui.getCore().getElementById('NewPhotoName').getValue(), "" , selectedPhotoSize, getSAPDate()+" "+getSAPTime(), status)
     }else{
@@ -1493,6 +1493,8 @@ function RequestLLFile(params) //AZURE
     
 
 }
+
+
 function sendPhotoToServer(id,fname,content,ftype,flag){
 	xmlname=getFileUploadName()+".xml"
 	if(ftype=="photo"){

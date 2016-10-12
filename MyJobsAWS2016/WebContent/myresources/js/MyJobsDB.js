@@ -9640,7 +9640,7 @@ function syncUploadAzure(id,type){
 										function(){
 									
 									buildJobDocsTable();
-									requestAzureData("DocumentService", myjson,'FileRequest.php'+params,"UPDATE MyJobDetsDraw SET zurl = 'RequestLiveLink' where id='"+item['id']+"'",item['id'])	
+									requestAzureData("DocumentService", myjson,'MYJOBSFileRequest.php'+params,"UPDATE MyJobDetsDraw SET zurl = 'RequestLiveLink' where id='"+item['id']+"'",item['id'])	
 								},
 								function(error, statement){
 
