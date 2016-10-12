@@ -2763,6 +2763,7 @@ function getAllAssets(pplant,mplant){
 
 
 }
+//AZURE
 function syncReference(){
 
 
@@ -2775,7 +2776,7 @@ function syncReference(){
 			function(transaction, results, rowsArray){
 				if( rowsArray.length > 0) {
 					SAPServerSuffix="?jsonCallback=?&MYJOBSSYSTEM="+localStorage.getItem('SAPSystem')+"&sap-client="+localStorage.getItem('SAPClient')+"&sap-user="+rowsArray[0].user+"&sap-password="+rowsArray[0].password+"&username="+rowsArray[0].mobileuser;
-
+					myScenario = rowsArray[0].scenario
 					html5sql.process("SELECT * from MyWorkConfig where paramname = 'SERVERNAME'",
 							function(transaction, results, rowsArray){
 						if( rowsArray.length > 0) {
@@ -2789,20 +2790,20 @@ function syncReference(){
 							//requestSAPData("MyJobsRefDataCodes.htm",'');
 							// requestSAPData("MyJobsUsers.htm",''); /////////This was the Old SAP Call
 							//requestSAPData("MyJobsAssetPlantsExt.htm",'');
-							requestSAPData("MyJobsVehiclesDefault.htm",'');
+							//requestSAPData("MyJobsVehiclesDefault.htm",'');
 							//requestSAPData("MyJobsVehicles.htm",'');
 							//requestDEMOData('MyForms.json');
-							requestDEMOData('PE29.json');
+							//requestDEMOData('PE29.json');
 							//requestDEMOData('POSTRIDGE2.json');
 							//requestDEMOData('MyJobsDG5Codes.json');
 //Start of Azure
 							requestAzureData("ZGW_MAM_MAINT_PARAM", "Name ne 'ALL'");
 						    requestAzureData("ZGW_MAM30_090_GETLIST_T3", "");             //Users
 							requestAzureData("ZGW_MAM30_VEHICLE", "");                    //vehicles
-							requestAzureData("ZG_MAM30_APPBAR_CTRL_SRV", "WHERE scenario = 'Y008'");             //AppBar
+							requestAzureData("ZG_MAM30_APPBAR_CTRL_SRV", "WHERE scenario = '"+myScenario+"'");             //AppBar
 						    requestAzureData("ZGW_MAM30_REFDATA_T3_SRVActivity", "");     //Activities
-						    requestAzureData("ZGW_MAM30_REFDATA_T3_SRVNotifTypes", "WHERE myalmScenario = 'Y008'");   //NotifTypes
-						    requestAzureData("ZGW_MAM30_REFDATA_T3_SRVPAICode", "WHERE myalmScenario = 'Y008'");      // PAI Codes
+						    requestAzureData("ZGW_MAM30_REFDATA_T3_SRVNotifTypes", "WHERE myalmScenario = '"+myScenario+"'");     //NotifTypes
+						    requestAzureData("ZGW_MAM30_REFDATA_T3_SRVPAICode", "WHERE myalmScenario = '"+myScenario+"'");        // PAI Codes
 						    requestAzureData("ZGW_MAM30_RFV_T3_SRV", "");                 // Variances RFV
 						    requestAzureData("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Code", "");
 						    requestAzureData("ZGW_MAM30_DG5_PIA_CODES_T3Dg5Rel", "");
@@ -2831,7 +2832,36 @@ function syncReference(){
 
 
 }
+//AZURE
+function syncUsersDetails(server){
 
+
+	opMessage("Synchronizing Users Details");
+
+
+
+	html5sql.process("SELECT * from MyWorkConfig where paramname = 'SERVERNAME'",
+			function(transaction, results, rowsArray){
+		if( rowsArray.length > 0) {
+			SAPServerPrefix=$.trim(server);							
+		    requestAzureData("ZGW_MAM30_090_GETLIST_T3", "");             //Users
+			
+		}
+
+	},
+	function(error, statement){
+		opMessage("Error: " + error.message + " when syncTransactional processing " + statement); 
+	}
+	);
+			
+
+
+
+
+
+
+
+}
 
 function getAssetFiles(){
 
@@ -3880,6 +3910,7 @@ function createAWSTConf(order,opno,empid,work_cntr,acttype,reasontype,startdate,
 	}        
 	);
 }
+
 function createMPDocument(order,opno,floc,eq,mpoint,code,val,text)
 {
 
@@ -3895,11 +3926,12 @@ function createMPDocument(order,opno,floc,eq,mpoint,code,val,text)
 	}        
 	);
 }
+
 function updateMPDocument(order,opno,floc,eq,mpoint,code,val,text)
 {
 
 
-	html5sql.process("UPDATE MyMPointDocs set code = '"+code+"' , value = '"+ val+"', shorttext='"+text+"' where orderno = '"+order+"' and opno= '"+opno+"' and meas_point = '"+mpoint +"';",
+	html5sql.process("UPDATE MyMPointDocs set code = '"+code+"' , value = '"+ val+"', shorttext='"+text+"',  where orderno = '"+order+"' and opno= '"+opno+"' and meas_point = '"+mpoint +"';",
 
 			function(){
 
@@ -8239,7 +8271,7 @@ function processVehicles(data,defaultVehicle) {
 						{
 							first=1;
 						}else{
-							console.log("veh:"+v_reg+"->"+v_mpoint)
+							
 							myarray.push({
 								'sql': 'INSERT INTO MyVehicles (id , reg , partner, description , mpoints) VALUES  (?,?,?,?,?)', 'data':
 									[v_eq, v_reg,v_partner,v_description,v_mpoint]
@@ -8255,7 +8287,7 @@ function processVehicles(data,defaultVehicle) {
 					}else{
 
 						v_mpoint+=data[cntx].measmntPoint+':';	
-						console.log(v_mpoint)
+						
 					}
 				}
 				
@@ -9201,7 +9233,7 @@ function syncUploadAzure(id,type){
 								myjson["NotifNo"]= "";
 								myjson["MeasDoc"]= "";
 								myjson["ErrType"]= "";
-								myjson["NotifType"]= "";
+								myjson["NotifType"]= "ZV";
 								myjson["CheckType"]= "";
 								myjson["User"]= item['user'];
 								myjson["MeasCodeGrp"]= "";
@@ -9212,16 +9244,15 @@ function syncUploadAzure(id,type){
 								myjson["MeasTime"]= item['mtime'];
 								myjson["MeasDate"]= item['mdate'];
 								myjson["MeasEquip"]= item['equipment'];
-								myjson["MeasPointCat"]= mpointCat;
 								myjson["MeasPoint"]= item['mpoint'];
-								
+								myjson["MeasPointCat"]= "M";
 								
 								
 								
 
 								sapCalls+=1;
 
-								html5sql.process("UPDATE MyNewJobs SET state = 'SENDING' WHERE id='"+item['id']+"'",
+								html5sql.process("UPDATE MyVehicleCheck SET state = 'SENDING' WHERE id='"+item['id']+"'",
 										function(){
 									if(item['reg'].length<1){
 										myjson["MeasReading"]=""
@@ -9349,13 +9380,13 @@ function syncUploadAzure(id,type){
 							    //myjson["MntcallNo"] = "";
 							    //myjson["Maintitem"] = "";
 							    //myjson["MatlDesc"] = "";
-							    //myjson["ShortText"] = "";
+							    myjson["ShortText"] = item['shorttext'];
 							    //myjson["Priotype"] = "";
 							    //myjson["Priority"] = "";
 							    //myjson["Material"] = "";
 							    //myjson["Notiftime"] = "";
 							    //myjson["NotifDate"] = "";
-							    //myjson["Reportedby"] = "";
+							    myjson["Reportedby"] = localStorage.getItem('EmployeeID');
 							    //myjson["Orderid"] = "";
 							    //myjson["Desstdate"] = "";
 							    //myjson["Dessttime"] = "";
@@ -9396,9 +9427,9 @@ function syncUploadAzure(id,type){
 							    //myjson["NotifPushed"] = "";
 							    //myjson["NotifNoDisplay"] = "";
 							    //myjson["OrderidDisplay"] = "";
-							    //myjson["ActCatTyp"] = "A";
-							    //myjson["ActCodegrp"] = "DENDTRVL";
-							    //myjson["ActCode"] = "DE01";
+							    myjson["ActCatTyp"] = "A";
+							    myjson["ActCodegrp"] = "DENDTRVL";
+							    myjson["ActCode"] = "DE01";
 							    //myjson["ActText"] = "";
 							    //myjson["MessageType"] = "";
 							    //myjson["Message"] = "";
@@ -9407,7 +9438,7 @@ function syncUploadAzure(id,type){
 							    myjson["ActStartTime"] = item['starttime'];
 							    myjson["ActEndDate"] = item['enddate'];
 							    myjson["ActEndTime"] = item['endtime'];
-							    //myjson["User"] = "";
+							    myjson["User"] =localStorage.getItem('MobileUser');
 							    //myjson["Equip"] = "";
 							    //myjson["Descript"] = "";
 							    //myjson["Dcattyp"] = "";
@@ -9695,7 +9726,7 @@ function syncUploadAzure(id,type){
 
 								var myjson = {};
 							    var header = {};
-							    header["NotifNo"] = item['notifno'];
+							   
 							    header["BreakDown"] = "";
 							    header["EquipStatus"] = "";
 							    header["UserId"] = localStorage.getItem('MobileUser');
@@ -9745,7 +9776,8 @@ function syncUploadAzure(id,type){
 							    //myjson["Reftime"] = "";
 							    //myjson["Refdate"] = "";
 							    //myjson["Longtxtexist"] = "";
-							    //myjson["NotifNo"] = "";
+							    
+							    myjson["NotifNo"] = item['notifno'];
 							    //myjson["Prilang"] = "";
 							    //myjson["Planplant"] = "";
 							    //myjson["LocAcc"] = "";
@@ -9834,7 +9866,7 @@ function syncUploadAzure(id,type){
 							    //myjson["Descript"] = "";
 							    myjson["Dcattyp"] = "R";
 							    myjson["DcodeGrp"] = item['agrp'];
-							    myjson["Dcode"] = tem['acode'];
+							    myjson["Dcode"] = item['acode'];
 							    myjson["DLCatTyp"] = "P";
 							    myjson["DLCodeGrp"] = item['pgrp'];
 							    myjson["DLCode"] = item['pcode'];
@@ -9847,7 +9879,7 @@ function syncUploadAzure(id,type){
 
 
 
-								opMessage("Close Notif Update Details="+newCloseDets);
+								opMessage("Close Notif Update Details");
 
 
 								sapCalls+=1;		
@@ -10446,12 +10478,12 @@ function syncUploadAzure(id,type){
 									if(item['code']!="-1"){
 										mpcode=item['code'];
 									}
-								
+								mptime = "PT"+item['time'].substring(0,2)+"H"+item['time'].substring(2,4)+"M"+item['time'].substring(4,7)+"S"
 
 								var myjson = {};
 
 								myjson["ShortText"] = item['shorttext'];
-								myjson["ReadingTime"] = item['time'];
+								myjson["ReadingTime"] = mptime;
 								myjson["ReadingDate"] = item['date'];
 								myjson["MeasPoint"] = item['meas_point'],
 								myjson["Equipment"] = item['equipment'];
@@ -10463,11 +10495,11 @@ function syncUploadAzure(id,type){
 								myjson["Meas_doc"] = "",
 								myjson["Message"] = "",
 								myjson["Message_type"] = ""
-								postAzureData("ZGW_MAM30_040_CREATE", myjson,sql)
+								
 
 								html5sql.process("UPDATE MyMpointDocs SET state = 'SENDING' WHERE id='"+item['id']+"'",
 										function(){
-									sendSAPData("MyJobsCreateMPDoc.htm",newMPDoc,"UPDATE MyMpointDocs SET state = 'NEW' WHERE id='"+item['id']+"'",item['id']);
+									postAzureData("ZGW_MAM30_040_CREATE", myjson,"UPDATE MyMpointDocs SET state = 'NEW' WHERE id='"+item['id']+"'",item['id']);
 
 								},
 								function(error, statement){
@@ -10735,7 +10767,7 @@ function postAzureCB(data,page,recno){
 
 
 
-	if(data.Message.length>0){
+
 
 		opMessage("Processing Update Response: ");
 
@@ -10835,10 +10867,10 @@ function postAzureCB(data,page,recno){
 		}
 //		Handle Close Create Response
 		if (pageName=="ZGW_MAM30_NOTIFICATION_NotifHeaderUpdate"){
-			console.log(type+":"+recno+":"+message+":"+notifno)
-			opMessage("-->Type= "+type);
+			
+			opMessage("-->Type= Close Uppdate");
 			opMessage("-->row= "+recno);
-			opMessage("-->Message= "+sapmessage);
+			
 			opMessage("-->Message= "+message);
 			opMessage("-->NotifNo= "+notifno);
 			sqlstatement+="UPDATE MyJobClose SET state = 'SENT"+recno+"' WHERE id='"+ recno+"';";
@@ -10851,22 +10883,15 @@ function postAzureCB(data,page,recno){
 		}
 		
 //		Handle Vehicle Defect Response
-		if (pageName=="createvehiclemileage"){
-			opMessage("VehicleMilege-->Message= "+message+"-->NotifNo= "+notifno+"-->measdoc= "+measdoc);
+		if (pageName=="ZGW_MAM30_VEHICLE_SRV_VehicleChkUpd"){
+		
+		
+			opMessage("-->NotifNo= "+data.NotifNo);
+			opMessage("-->measdoc= "+data.MeasDoc);
+			
+			sqlstatement+="delete from MyVehicleCheck WHERE id='"+recno+"';";
 
-			if(message=="Success"){
-				sqlstatement+="delete from MyVehicleCheck WHERE id='"+recno+"';";
-			}
-
-		}	
-		if (pageName=="createvehicledefect"){
-			opMessage("-->Message= "+message);
-			opMessage("-->NotifNo= "+notifno);
-			opMessage("-->measdoc= "+measdoc);
-			if(message=="Success"){
-				sqlstatement+="delete from MyVehicleCheck WHERE id='"+recno+"';";
-
-			}
+			
 
 		}	
 //		Handle Time Confirmation Create Response			
@@ -10875,7 +10900,7 @@ function postAzureCB(data,page,recno){
 			opMessage("-->Type= "+data.Messagetype);
 			opMessage("-->Message= "+data.Message);
 			opMessage("-->confno= "+data.ConfirmNo);
-			if(confno!="0000000000"){
+			if(data.ConfirmNo!="0000000000"){
 
 
 
@@ -10888,15 +10913,15 @@ function postAzureCB(data,page,recno){
 
 		}
 //		Handle MPDoc Create Response			
-		if (pageName=="creatempdoc"){
-			console.log(type+":"+message+":"+message_type+":"+mpdocno+":"+recno)
-			opMessage("-->Type= "+type);
-			opMessage("-->confno= "+mpdocno);
-			if(confno!="0000000000"){
+		if (pageName=="ZGW_MAM30_040_CREATE"){
+			
+			opMessage("-->Type= Create MP Doc");
+			opMessage("-->MPDoc= "+data.Meas_doc);
+			if(data.Meas_doc!="0000000000"){
 
 
 
-				sqlstatement+="UPDATE MyMpointdocs SET state = '"+mpdocno+"' WHERE id='"+recno+"';";
+				sqlstatement+="UPDATE MyMpointdocs SET state = '"+data.Meas_doc+"' WHERE id='"+recno+"';";
 
 
 			}else{
@@ -10954,5 +10979,5 @@ function postAzureCB(data,page,recno){
 			opMessage("Error: " + error.message + " when processing " + statement);
 		}        
 		);	
-	}
+
 }
